@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8"/>
+<title>A Test Page</title>
+<link rel="stylesheet" href="style.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="io.js"></script>
+<script src="util.js"></script>
+<script src="parser.js"></script>
+<script src="data.js"></script>
+
+<script>
+
+$( document ).ready(function() {
+  $('#textbox').keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+      submitText($('#textbox').val());
+      $('#textbox').val('');
+    }
+  });    
+  init();
+  setup();
+  setRoom(player.loc);
+  //showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
+  //  msg("You picked " + result + ".");
+  //});
+  $('#textbox').focus();
+});
+</script>
+
+
+</head>
+
+
+
+<body>
+
+
+<div id="main">
+<div id="output">
+</div>
+<div id="input">
+  >
+  <input type="text" name="textbox" id="textbox" />
+</div>
+</div>
+
+<div id="panes" class="sidenav">
+
+<script>
+
+writeExit = function(n) {
+  document.writeln('<td class="compassbutton">');
+  document.writeln('<span class="compassbutton" id="exit' + exits[n].name + '" onclick="clickExit(\'' + exits[n].name + '\')">' + exits[n].abbrev + '</span>');
+  document.writeln('</td>');
+};
+
+document.writeln('<table>');
+for (var i = 0; i < 3; i++) {
+  document.writeln('<tr>');
+  writeExit(0 + 5 * i);
+  writeExit(1 + 5 * i);
+  writeExit(2 + 5 * i);
+  document.writeln('<td></td>');
+  writeExit(3 + 5 * i);
+  writeExit(4 + 5 * i);
+  document.writeln('</tr>');
+}
+document.writeln('</table>');
+
+for (var i = 0; i < inventories.length; i++) {
+  document.writeln('<hr/>');
+  document.writeln('<h6>' + inventories[i].name + ':</h6>');
+  document.writeln('<div id="' + inventories[i].alt + '">');
+  document.writeln('</div>');
+}
+
+</script>
+
+
+</div>
+</body>
+</html> 
