@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="style.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+<script src="settings.js"></script>
 <script src="io.js"></script>
 <script src="util.js"></script>
 <script src="parser.js"></script>
@@ -17,7 +18,7 @@ $( document ).ready(function() {
   $('#textbox').keypress(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){
-      submitText($('#textbox').val());
+      parse($('#textbox').val());
       $('#textbox').val('');
     }
   });    
@@ -28,6 +29,8 @@ $( document ).ready(function() {
   //  msg("You picked " + result + ".");
   //});
   $('#textbox').focus();
+  msg("-------------------");
+  msg("" + player.display);
 });
 </script>
 
@@ -48,9 +51,9 @@ $( document ).ready(function() {
 </div>
 </div>
 
-<div id="panes" class="sidenav">
 
 <script>
+document.writeln('<div id="panes" class="sidenav' + PANES + '">');
 
 writeExit = function(n) {
   document.writeln('<td class="compassbutton">');
@@ -58,18 +61,20 @@ writeExit = function(n) {
   document.writeln('</td>');
 };
 
-document.writeln('<table>');
-for (var i = 0; i < 3; i++) {
-  document.writeln('<tr>');
-  writeExit(0 + 5 * i);
-  writeExit(1 + 5 * i);
-  writeExit(2 + 5 * i);
-  document.writeln('<td></td>');
-  writeExit(3 + 5 * i);
-  writeExit(4 + 5 * i);
-  document.writeln('</tr>');
+if (COMPASS) {
+  document.writeln('<table>');
+  for (var i = 0; i < 3; i++) {
+    document.writeln('<tr>');
+    writeExit(0 + 5 * i);
+    writeExit(1 + 5 * i);
+    writeExit(2 + 5 * i);
+    document.writeln('<td></td>');
+    writeExit(3 + 5 * i);
+    writeExit(4 + 5 * i);
+    document.writeln('</tr>');
+  }
+  document.writeln('</table>');
 }
-document.writeln('</table>');
 
 for (var i = 0; i < inventories.length; i++) {
   document.writeln('<hr/>');
@@ -78,9 +83,8 @@ for (var i = 0; i < inventories.length; i++) {
   document.writeln('</div>');
 }
 
+document.writeln('</div>');
 </script>
 
-
-</div>
 </body>
 </html> 

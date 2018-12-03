@@ -1,58 +1,11 @@
-    // ============  User Interface data  =======================================
-
-    // Change the abbrev values to suit your game (or language)
-    var exits = [
-      {name:'northwest', abbrev:'NW'}, 
-      {name:'north', abbrev:'N'}, 
-      {name:'northeast', abbrev:'NE'}, 
-      {name:'in', abbrev:'In'}, 
-      {name:'up', abbrev:'U'},
-      
-      {name:'west', abbrev:'W'}, 
-      {name:'look', abbrev:'Lk'}, 
-      {name:'east', abbrev:'E'}, 
-      {name:'out', abbrev:'Out'}, 
-      {name:'down', abbrev:'Dn'}, 
-
-      {name:'southwest', abbrev:'SW'}, 
-      {name:'south', abbrev:'S'}, 
-      {name:'southeast', abbrev:'SE'}, 
-      {name:'wait', abbrev:'Z'}, 
-      {name:'help', abbrev:'?'}, 
-    ];
-
-    // Change the name values to alter how items are displayed
-    // You can add (or remove) inventrories too
-    var inventories = [
-      {name:'Items Held', alt:'itemsHeld', verbs:'heldVerbs',
-        test:function(item) {
-          return item.loc == player.name && !item.worn;
-        }
-      },
-      {name:'Items Worn', alt:'itemsWorn', verbs:'wornVerbs',
-        test:function(item) {
-          return item.loc == player.name && item.worn;
-      }
-      },
-      {name:'Items Here', alt:'itemsHere', verbs:'hereVerbs',
-        test:function(item) {
-          return item.loc == player.loc;
-        }
-      },
-    ];
-    
-    setup = function() {
-      //$('#panes').hide();
-      heading(2, 'A Simple Test');
-      msg('This is a test of what we can do.');
-    }
+    // ============  User Interface data  ====================================
 
 
     // ============  World model classes  =======================================
     
     function Item(name, hash) {
       this.name = name;
-      this.display = VISIBLE;
+      this.display = "visible";
       for (var key in hash) {
         this[key] = hash[key];
       }
@@ -60,7 +13,7 @@
     
     function Player(name, hash) {
       Item.call(this, name, hash);
-      this.display = INVISIBLE;
+      this.display = "invisible";
       this.player = true;
     }
 
@@ -176,16 +129,17 @@
     var simpleCommands = {
       look:function() {
         itemAction(room, 'examine');
-        suppressTurnScripts = true;
+        return {suppressTurnScript:true};
       },
       help:function() {
         metamsg('This is an experiment in using JavaScript (and a little jQuery) to create a text game. Currently all interactions are via the pane on the right.');
         metamsg('Use the compass rose at the top to move around. Click "Lk" to look at you current location, "Z" to wait or "?" for help.');
         metamsg('Click an item to interact with it, then click the buttons to select an interaction.');
-        suppressTurnScripts = true;
+        return {suppressTurnScript:true};
       },    
       wait:function() {
         msg('You wait... nothing happens.');
+        return {};
       },
     };
 

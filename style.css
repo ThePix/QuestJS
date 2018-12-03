@@ -95,7 +95,7 @@ span.compassbutton {
 
 
 
-.sidenav {
+.sidenavLeft {
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 160px; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -108,8 +108,23 @@ span.compassbutton {
     font-size: 9pt;
 }
 
+.sidenavRight {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 160px; /* Set the width of the sidebar */
+    float: right;
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    right: 0px;
+    background-color: #ddd;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+    font-size: 9pt;
+}
 
-
+.sidenavNone {
+  display: None;
+}
 
 .item {
     cursor: pointer;
@@ -138,6 +153,7 @@ span.compassbutton {
 /* Style page content */
 #main {
     margin-left: 160px; /* Same as the width of the sidebar */
+    margin-right: 160px; /* Same as the width of the sidebar */
     padding: 0px 10px;
 }
 
