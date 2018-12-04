@@ -1,210 +1,80 @@
-    // ============  User Interface data  ====================================
+// ============  Data  =======================================
+
+// Each entry should be an Item object, or sub-class.
+// These all take a name and a dictionary.
+// The dictionary probably needs a "loc" key for items,
+// which is the name of the start location, or "held" or "worn".
+// Items and rooms can have any number of other attributes, either
+// a string or a function (like a script in Quest).
 
 
-    // ============  World model classes  =======================================
-    
-    function Item(name, hash) {
-      this.name = name;
-      this.display = "visible";
-      for (var key in hash) {
-        this[key] = hash[key];
-      }
-    }
-    
-    function Player(name, hash) {
-      Item.call(this, name, hash);
-      this.display = "invisible";
-      this.player = true;
-    }
+// The "display" attribute controls how an item is displayed.
+// By default it is "visible".
+// Set to "invisible" to exclude from descriptions, but still present.
+// Set to "scenery" to
+// Set to "not here" to have the item not here
 
+var data = [
+  new Room("lounge", {
+    examine:'A smelly room.',
+    east:'kitchen'
+  }),
 
-    function Exit(name, hash) {
-      Item.call(this, name, hash);
-    }
-    Exit.prototype.use = function(self) {
-      if ('msg' in self) {
-        msg(self['msg']);
-      }
-      setRoom(self['name']);
-    }
+  new Room("kitchen", {
+    examine:'A clean room.',
+    west:'lounge',
+    north:new Exit('Garden'),
+  }),
 
-    function Room(name, hash) {
-      Item.call(this, name, hash);
-    }
+  new Room("garden", {
+    examine:'A wild and over-grown garden.',
+    south:function(self) {
+      msg("You head back inside.");
+      setRoom('kitchen');
+    },
+  }),
 
-    function Turnscript(name, hash) {
-      Item.call(this, name, hash);
-    }
+  new TakableItem("ball", {
+    loc:'Held',
+    examine:'A red ball.',
+    drop:function(self) {
+      msg('You drop the stupid ' + self.name + '.');
+      self['loc'] = 'lounge'
+    },
+  }),
 
+  new WearableItem("hat", {
+    loc:'Held',
+    examine:'A black bobble hat.'
+  }),
+  
+  new TakableItem("teapot", {
+    loc:'Held',
+    examine:function(self) {
+      msg('A nasty blue teapot. It is broken.');
+    },
+  }),
+  
+  new UseableItem("chair", {
+    loc:'lounge',
+    examine:'A cheap plastic chair.'
+  }),
 
-    function UseableItem(name, hash) {
-      Item.call(this, name, hash);
-    }
-    UseableItem.prototype.hereVerbs = ['Examine', 'Use'];
+  new UseableTakableItem("device", {
+    loc:'lounge',
+    display:'not here',
+    examine:function(self) {
+      msg('A nasty blue device. It is broken.');
+    },
+  }),
 
-    function TakableItem(name, hash) {
-      Item.call(this, name, hash);
-    }
-    TakableItem.prototype.heldVerbs = ['Examine', 'Drop'];
-    TakableItem.prototype.hereVerbs = ['Examine', 'Take'];
-    TakableItem.prototype.drop = function(self) {
-      msg('You drop the ' + self.name + '.');
-      self['loc'] = currentRoom.name;
-    }
-    TakableItem.prototype.take = function(self) {
-      msg('You take the ' + self.name + '.');
-      self['loc'] = player.name;
-    }
-    
-    function UseableTakableItem(name, hash) {
-      Item.call(this, name, hash);
-    }
-    UseableTakableItem.prototype = Object.create(TakableItem.prototype);
-    UseableTakableItem.prototype.heldVerbs = ['Examine', 'Drop', 'Use'];
-    UseableTakableItem.prototype.hereVerbs = ['Examine', 'Take', 'Use'];
-
-
-    function WearableItem(name, hash) {
-      Item.call(this, name, hash);
-    }
-    WearableItem.prototype = Object.create(TakableItem.prototype);
-    WearableItem.prototype.heldVerbs = ['Examine', 'Drop', 'Wear'];
-    WearableItem.prototype.wornVerbs = ['Examine', 'Remove'];
-    WearableItem.prototype.wear = function(self) {
-      msg('You put on the ' + self.name + '.');
-      self['worn'] = true;
-    }
-    WearableItem.prototype.remove = function(self) {
-      msg('You take off the ' + self.name + '.');
-      self['worn'] = false;
-    }
-
-    function SwitchableItem(name, hash) {
-      Item.call(this, name, hash);
-    }
-    SwitchableItem.prototype.hereVerbs = ['Examine', 'Turn on'];
-    SwitchableItem.prototype.switchon = function(self) {
-      msg('You turn the ' + self.name + ' on.');
-      self['switchedon'] = true;
-      self['hereVerbs'] = ['Examine', 'Turn off'];
-    }
-    SwitchableItem.prototype.switchoff = function(self) {
-      msg('You turn the ' + self.name + ' off.');
-      self['switchedon'] = false;
-      self['hereVerbs'] = ['Examine', 'Turn on'];
-    }
-
-    function SwitchableTakableItem(name, hash) {
-      Item.call(this, name, hash);
-    }
-    SwitchableTakableItem.prototype = Object.create(TakableItem.prototype);
-    SwitchableTakableItem.prototype.heldVerbs = ['Examine', 'Drop', 'Turn on'];
-    SwitchableTakableItem.prototype.hereVerbs = ['Examine', 'Take', 'Turn off'];
-    SwitchableItem.prototype.switchon = function(self) {
-      msg('You turn the ' + self.name + ' on.');
-      self['switchedon'] = true;
-      self['hereVerbs'] = ['Examine', 'Turn off'];
-    }
-    SwitchableItem.prototype.switchoff = function(self) {
-      msg('You turn the ' + self.name + ' off.');
-      self['switchedon'] = false;
-      self['hereVerbs'] = ['Examine', 'Turn on'];
-    }
-
-    
-    function EdibleItem(name, hash) {
-      Item.call(this, name, hash);
-    }
-    EdibleItem.prototype = Object.create(TakableItem.prototype);
-    EdibleItem.prototype.heldVerbs = ['Examine', 'Drop', 'Eat'];
-    EdibleItem.prototype.eat = function(self) {
-      msg('You eat the ' + self.name + '.');
-      self['loc'] = null;
-    }
-    
-
-
-    // ============  Data  =======================================
-    
-    var simpleCommands = {
-      look:function() {
-        itemAction(room, 'examine');
-        return {suppressTurnScript:true};
-      },
-      help:function() {
-        metamsg('This is an experiment in using JavaScript (and a little jQuery) to create a text game. Currently all interactions are via the pane on the right.');
-        metamsg('Use the compass rose at the top to move around. Click "Lk" to look at you current location, "Z" to wait or "?" for help.');
-        metamsg('Click an item to interact with it, then click the buttons to select an interaction.');
-        return {suppressTurnScript:true};
-      },    
-      wait:function() {
-        msg('You wait... nothing happens.');
-        return {};
-      },
-    };
-
-
-
-    var data = [
-      new Room("Lounge", {
-        examine:'A smelly room.',
-        east:'Kitchen'
-      }),
-    
-      new Room("Kitchen", {
-        examine:'A clean room.',
-        west:'Lounge',
-        north:new Exit('Garden'),
-      }),
-    
-      new Room("Garden", {
-        examine:'A wild and over-grown garden.',
-        south:function(self) {
-          msg("You head back inside.");
-          setRoom('Kitchen');
-        },
-      }),
-    
-      new TakableItem("Ball", {
-        loc:'Held',
-        examine:'A red ball.',
-        drop:function(self) {
-          msg('You drop the stupid ' + self.name + '.');
-          self['loc'] = 'Lounge'
-        },
-      }),
-
-      new WearableItem("Hat", {
-        loc:'Held',
-        examine:'A black bobble hat.'
-      }),
-      
-      new TakableItem("Teapot", {
-        loc:'Held',
-        examine:function(self) {
-          msg('A nasty blue teapot. It is broken.');
-        },
-      }),
-      
-      new UseableItem("Chair", {
-        loc:'Lounge',
-        examine:'A cheap plastic chair.'
-      }),
-
-      new UseableTakableItem("Device", {
-        loc:'Lounge',
-        examine:function(self) {
-          msg('A nasty blue device. It is broken.');
-        },
-      }),
-
-      new Turnscript("TS_Test", {
-        run:function(self) {
-          msg('Turn script!');
-        },
-      }),
-      
-      new Player("Me", {
-        loc:'Lounge',
-      }),
-    ];
+  new Turnscript("TS_Test", {
+    run:function(self) {
+      msg('Turn script!');
+    },
+  }),
+  
+  new Player("me", {
+    loc:'lounge',
+  }),
+];

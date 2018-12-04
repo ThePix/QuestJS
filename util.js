@@ -61,6 +61,43 @@ itemAction = function(item, action) {
 isPresent = function(item) {
   return item.loc == player.loc || item.loc == player.name;
 };
+isHeldOrWorn = function(item) {
+  return item.loc == player.name;
+};
+isHeld = function(item) {
+  return (item.loc == player.name) && !item.worn;
+};
+isHere = function(item) {
+  return (item.loc == player.loc);
+};
+isWorn = function(item) {
+  return (item.loc == player.name) && item.worn;
+};
+
+isNotNotHere = function(item) {
+  return item.display != "not here";
+};
+
+
+scope = function(fn) {
+  msg("HERE:" + fn.name);
+  return data.filter(isNotNotHere).filter(fn);
+  //return data.filter(function(el) { return fn(el)  && (el.display != "not here") });
+}
+
+
+formatList = function(itemArray) {
+  var s = itemArray.map(function(el) { return el.name; }).join(", ");
+
+  var lastIndex = s.lastIndexOf(",");
+  if (lastIndex === -1) { return s; }
+  
+  return s.substring(0, lastIndex) + " and" + s.substring(lastIndex + 1);
+}
+  
+
+
+
 
 
 var player;

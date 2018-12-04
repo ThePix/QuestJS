@@ -132,6 +132,24 @@ clickItemAction = function(itemName, action) {
 
 
 
+// These will probably disappear and become part of the parser, but currently handle button clicks.
+
+var simpleCommands = {
+  look:function() {
+    itemAction(room, 'examine');
+    return {suppressTurnScript:true};
+  },
+  help:function() {
+    metamsg('This is an experiment in using JavaScript (and a little jQuery) to create a text game. Currently all interactions are via the pane on the right.');
+    metamsg('Use the compass rose at the top to move around. Click "Lk" to look at you current location, "Z" to wait or "?" for help.');
+    metamsg('Click an item to interact with it, then click the buttons to select an interaction.');
+    return {suppressTurnScript:true};
+  },    
+  wait:function() {
+    msg('You wait... nothing happens.');
+    return {};
+  },
+};
 
 
 // ============  UI  =======================================

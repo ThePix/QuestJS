@@ -1,7 +1,7 @@
     const IGNORED_WORDS = ["", "the", "a", "an"];
     
-    const PANES = 'Right';  //Can be set to Left, Right or None.
-    const COMPASS = false;
+    const PANES = 'Left';  //Can be set to Left, Right or None.
+    const COMPASS = true;
     
     // Change the abbrev values to suit your game (or language)
     const exits = [
@@ -25,7 +25,7 @@
     ];
 
     // Change the name values to alter how items are displayed
-    // You can add (or remove) inventrories too
+    // You can add (or remove) inventories too
     const inventories = [
       {name:'Items Held', alt:'itemsHeld', verbs:'heldVerbs',
         test:function(item) {
@@ -43,10 +43,13 @@
         }
       },
     ];
-    
+
+    // Thid function will be called at the start of the game, so can be used
+    // to give a title and introduce your game.
     setup = function() {
-      //$('#panes').hide();
       heading(2, 'A Simple Test');
       msg('This is a test of what we can do.');
+      parse("take hat from box");
+      parse("ask mary about hats");
     }
 

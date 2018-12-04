@@ -1,50 +1,100 @@
 
 
+// For disambig we need to be able to halt the process part way through, ask a question, then come back to it.
+// This means saving the state we have got to, in cmd
+
+var cmd;
 
 
+// The "parse" function should be sent either the text the player typed or,
+// if just asked to disambig, an object?
 parse = function(inputText) {
-  cmd = {string:inputText};
-  var s = inputText.toLowerCase().split(' ').filter(el => !IGNORED_WORDS.includes(el)).join(' ');
-  cmd.cmdString = s;
-  var candidates = commands.filter(function(el) {
-    return el.regex.test(s);
-  });
-  if (candidates.length == 0) {
-    errormsg(0, "I don't even know where to begin with that.");
-    return;
+  if (typeof inputText == "string") {
+    cmd = {string:inputText};
+    var s = inputText.toLowerCase().split(' ').filter(el => !IGNORED_WORDS.includes(el)).join(' ');
+    cmd.cmdString = s;
+    var candidates = commands.filter(function(el) {
+      return el.regex.test(s);
+    });
+    if (candidates.length == 0) {
+      errormsg(0, "I don't even know where to begin with that.");
+      return;
+    }
+    
+
+    // We now want to match potential objects
+    // This will help us narrow down the candidates (maybe)
+    var error = "So I kind of get what you want to do, but not what you want to do it with.";
+    
+    //matchedCandidates is an array of dictionaries,
+    //each one containing a command and some matched objects if applicable
+    var matchedCandidates = [];
+    candidates.forEach(function(el) {
+      // matchItemsToCmd will attempt to fit the objects, returns a dictionary if successful
+      // or an error message otherwise. Could have more than one object,
+      // either because multiple were specified or because it was ambiguous (or both)
+      // We just keep the last error message as hopefully the most relevant.
+      res = matchItemsToCmd(cmd.cmdString, el);
+      if (typeof res == "string") {
+        error = res;
+      }
+      else {
+        matchedCandidates.push(matchItemsToCmd(el));
+      }
+    });
+    if (matchedCandidates.length == 0) {
+      errormsg(0, error);
+      return;
+    }
+    
+    // pick between matchedCandidates based on score
+    cmd.command = matchedCandidates[0];
+    if (matchedCandidates.length > 1) {
+      for (var i = 1; i < matchedCandidates.length; i++) {
+        // give preference to later commands
+        if (cmd.command.score <= matchedCandidates.score) {
+          cmd.command = matchedCandidates;
+        }
+      }
+    }
+  
+    // At this point we have cmd with the inital string, "string", the modified string, "cmdString", and
+    // a dictionary, "command". We need to go though the objects in the dictionary to see how well
+    // they match items.
   }
-  var error = "So I kind of get what you want to do, but not what you want to do it with.";
-  candidates.forEach(function(el) {
-    // matchItemsToCmd will atempt to fit the objects, returns a dictionary if successful
-    // or an error message otherwise. Could have more than one object
-    // We just keep the last error message as hopefully the most relevant.
-    res = matchItemsToCmd(el);
-    if (typeof res == "string") {
-      error = res;
+
+  
+};
+
+
+// We want to see if this command is a good match to the string
+// This will involve trying to matching objects, according to the
+// values in the command
+// If matching fails, we return a command specific error
+// If it succeeds we return a dictionary containing:
+// - the command
+// - the matched objects
+// - a rating of how good the match is
+
+matchItemsToCmd = function(s, cmd) {
+  msg("matchItemsToCmd: " + cmd.name);
+  arr = cmd.regex.exec(s);
+  for (var i = 1; i < arr.length; i++) {
+    if (typeof cmd.matchUps[i - 1] == "string") {
+      msg("Not looking for: " + arr[i]);
     }
     else {
-      cmd.candidates.push(matchItemsToCmd(el));
+      msg("Looking for: " + arr[i] + ", scope:" + cmd.matchUps[i - 1].name);
     }
-  };
-  if (cmd.candidates.length == 0) {
-    errormsg(0, error);
-    return;
   }
-  if (cmd.candidates.length > 1) {
-    l = cmd.candidates.map(function(el)) return el.name; );
-    errormsg(0, "I cannot decide quite what you mean, torn between " + l.join(", ")toLowerCase() + " (if you can inform the coders, hopefully this can be resolved in an update sometime).");
-    return;
-  }
-  
-    
-  return {cmd:el};
-});
+  return "Some error";
+};
 
-  
-  cmd.command = found;
-  msg(cmd.command.regex.exec(s));
-  cmd.command.script();
-}
+
+
+
+
+
 
 // A command has an arbitrary name, a regex or pattern
 // and a script as a minimum.
@@ -53,6 +103,7 @@ parse = function(inputText) {
 
 function Cmd(name, hash) {
   this.name = name;
+  this.matchUps = [];
   for (var key in hash) {
     this[key] = hash[key];
   }
@@ -85,7 +136,6 @@ var commands = [
       itemAction(room, 'examine');
       suppressTurnScripts = true;
     },
-    matchUps:[]
   }),
   new Cmd('Wait', {
     pattern:'wait;z',
@@ -93,16 +143,20 @@ var commands = [
       itemAction(room, 'examine');
       suppressTurnScripts = true;
     },
-    matchUps:[]
   }),
   new Cmd('Take', {
     pattern:'take #object#',
     script:function(object, text) {
       itemAction(object, 'take');
     },
-    matchUps:[
-      {name:'object', find:function(name) {} },
-    ]
+    matchUps:[isHere]
+  }),
+  new Cmd('Take/from', {
+    pattern:'take #object1# from #object2#',
+    script:function(object, text) {
+      itemAction(object, 'take');
+    },
+    matchUps:[isHere, isHere]
   }),
   new AltVerbCmd('Get', 'Take', 'get'),
   new VerbCmd('Drop', {
@@ -110,9 +164,7 @@ var commands = [
     script:function(object, text) {
       itemAction(object, 'drop');
     },
-    matchUps:[
-      {name:'object', find:function(name) {} },
-    ]
+    matchUps:[isHeld]
   }),
   new Cmd('Ask/about', {
     pattern:'ask #object# about #text#',
@@ -120,10 +172,7 @@ var commands = [
       itemAction(room, 'examine');
       suppressTurnScripts = true;
     },
-    matchUps:[
-      {name:'object'},
-      {name:'text'}
-    ]
+    matchUps:[isHere, 'text']
   }),
 ];
 
@@ -153,7 +202,8 @@ _pattern2Regexp = function(s) {
   var ary2 = [];
   ary.forEach(function(el) {
     s = '^' + el.trim() + '$';
-    s = s.replace(/#([object|text]\w*)#/g, "(?<$1>.*)");
+    //s = s.replace(/#([object|text]\w*)#/g, "(?<$1>.*)");
+    s = s.replace(/#([object|text]\w*)#/g, "(.*)");
     ary2.push(s);
   });
   return new RegExp(ary2.join('|'));
