@@ -20,7 +20,7 @@ It should be possible to create an additional program that will extract data fro
 Components
 ----------
 
-## User Interface
+### User Interface
 
 This is where I started, and is pretty much done. There are no status attributes, but that is trivial to add. The panes are on the left, but can be flipped to the right in CSS. It originally used AngularJS, but I ran into promblems, and was using it for so little, it was easier to remove it. It does use JQuery.
 
@@ -29,7 +29,7 @@ style.css
 io.js
 
 
-## World Model
+### World Model
 
 The world model is a set of objects that define some default behaviour. The world itself is an array of objects of those classes. Objects can override functions in the class to give unique behavior.
 
@@ -38,7 +38,7 @@ Currently objects are references by their name attributes, which are strings. It
 data.js
 
 
-## Parser
+### Parser
 
 Having had a quick read around, I can find no better way to parse player input than searching through an array of commands and testing regexs. JavaScript supports regexs exactly as Quest does (as far as I can tell), so these can be copied straight across. Translating patterns is not straight forward. For example, "get #object#;take #object#" needs to become /^(get|take) (?<object>.*)$/. Tricking if you have multiple objects.
   
@@ -47,10 +47,17 @@ This is in a very early state.
 parser.js
 
 
-## Editor
+### Editor
 
 No progress as yet. It may not be done in JavaScript (how do I save from JS?).
 
 ## General functions
 
 util.js
+
+
+### Settings
+
+The user can make changes here to modify how the game looks ad plays. Currently allows the panes to be on the right, left or off; the inventories to ber set up, the compass rose to be turned off and labels given. Also a setup function where the title and introduction can be defined, as well as other stuff.
+
+settings.js
