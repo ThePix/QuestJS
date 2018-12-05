@@ -117,7 +117,7 @@ init = function() {
     if (!el.alias) {
       el.alias = el.name;
     }
-    el.name = el.name.replace(/\W/g, "");
+    //el.name = el.name.replace(/\W/g, "");
     if (el.loc == "Held") {
       el.loc = player.name;
     }

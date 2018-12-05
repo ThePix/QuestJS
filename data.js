@@ -43,9 +43,14 @@ var data = [
     },
   }),
 
-  new WearableItem("hat", {
+  new WearableItem("red hat", {
     loc:'Held',
-    examine:'A black bobble hat.'
+    examine:'A red bobble hat.'
+  }),
+  
+  new WearableItem("blue hat", {
+    loc:'Held',
+    examine:'A blue bobble hat.'
   }),
   
   new TakableItem("teapot", {

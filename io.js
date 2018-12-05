@@ -215,8 +215,11 @@ showMenu = function(title, options, fn) {
   clicksDisabled = true;
   $('#textbox').prop('disabled', true);
   msg(title, 'menutitle');
-  for (var i = 0; i < options.length; i++) {
-    msg('<a class="menuoption" onclick="menuResponse(' + i + ')">' + options[i] + '</a>');
+  for (var s, i = 0; i < options.length; i++) {
+    s = '<a class="menuoption" onclick="menuResponse(' + i + ')">';
+    s += (typeof options[i] == "string" ? options[i] : options[i].name);
+    s += '</a>';
+    msg(s);
   }
 };
 

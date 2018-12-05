@@ -4,6 +4,10 @@
 // This means saving the state we have got to, in cmd
 
 
+// Need to support ALL
+// and ALL BUT ???
+
+
 // NOTES AND LIMITATIONS
 // This can only handle single commands
 // Lists of multiple objects must be separated by JOINER_REGEX (i.e., "and" or comma)
@@ -16,49 +20,46 @@
 
 var parser = {};
 
+  parser.currentCommand;
 
   // The "parse" function should be sent either the text the player typed or,
   // if just asked to disambig, an object?
   parser.parse = function(inputText) {
-    var res;
     if (typeof inputText == "string") {
-      res = this.convertInputTextToCommandCandidate(inputText);
-      if (typeof res == "string") {
-        errormsg(0, res);
+      parser.currentCommand = parser.convertInputTextToCommandCandidate(inputText);
+      if (typeof currentCommand == "string") {
+        errormsg(0, currentCommand);
         return;
       }
     }
-    else {
-      res = inputText;
-    }
-    // At this point we have a dictionary, res, with the inital string, "string", the modified string, "cmdString", and
+    // At this point we have a dictionary, currentCommand, with the inital string, "string", the modified string, "cmdString", and
     // a dictionary, "command". We need to go though the objects in the dictionary to see how well
-    // res.inputString    the initial string
-    // res.cmdString      the sanitised string
-    // res.cmd            the matched command
-    // res.objects        a list (of a list of a list), one member per capture group in the regex
-    // res.objects[0]     a list (of a list), one member per object name given by the player for capture group 0
-    // res.objects[0][0]  a list of possible object matches for each object name given by the player for the first object name in capture group 0
-    
-    // Need to disambiguate, until each of the lowest level lists has exactly one member
-    var flag;
-    //for (var i = 0; i < res.objects.length; i++) {
-    //  for (var j = 0; j < res.objects[i].length; j++) {
-    //    if (res.objects[i][j].length > 1) {
-    //      res.disambiguate1 = i;
-    //      res.disambiguate2 = j;
-    //      disambiguate(res.objects[i][j]) {
-    msg("----");
-    msg(res);
-    msg(res.inputString);
-    msg(res.cmdString);
-    msg(res.cmd.name);
-    msg(res.objects.length);
-    msg(res.objects[0].name);
-    msg(res.objects[0][0].name);
-    msg(res.objects[0][0][0].name);
+    // .inputString    the initial string
+    // .cmdString      the sanitised string
+    // .cmd            the matched command
+    // .objects        a list (of a list of a list), one member per capture group in the regex
+    // .objects[0]     a list (of a list), one member per object name given by the player for capture group 0
+    // .objects[0][0]  a list of possible object matches for each object name given by the player for the first object name in capture group 0
 
-    
+    // Need to disambiguate, until each of the lowest level lists has exactly one member
+    var flag = false;
+    for (var i = 0; i < parser.currentCommand.objects.length; i++) {
+      for (var j = 0; j < parser.currentCommand.objects[i].length; j++) {
+        if (parser.currentCommand.objects[i][j].length > 1) {
+          flag = true;
+          parser.currentCommand.disambiguate1 = i;
+          parser.currentCommand.disambiguate2 = j;
+          showMenu("Which do you mean?", parser.currentCommand.objects[i][j], function(result) {
+            parser.currentCommand.objects[parser.currentCommand.disambiguate1][parser.currentCommand.disambiguate2] = [result];
+            msg("You picked " + result.name + ".");
+            parser.parse(null);
+          });
+        }
+      }
+    }
+    if (!flag) {
+      msg("all done!");
+    }
   };
 
 
