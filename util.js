@@ -78,11 +78,10 @@ isNotNotHere = function(item) {
   return item.display != "not here";
 };
 
-
+// To use, do something like this:
+// var listOfOjects = scope(isHeld);
 scope = function(fn) {
-  msg("HERE:" + fn.name);
   return data.filter(isNotNotHere).filter(fn);
-  //return data.filter(function(el) { return fn(el)  && (el.display != "not here") });
 }
 
 

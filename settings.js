@@ -1,4 +1,5 @@
     const IGNORED_WORDS = ["", "the", "a", "an"];
+    const JOINER_REGEX = /\,|\band\b/;
     
     const PANES = 'Left';  //Can be set to Left, Right or None.
     const COMPASS = true;
@@ -44,12 +45,17 @@
       },
     ];
 
-    // Thid function will be called at the start of the game, so can be used
+    // This function will be called at the start of the game, so can be used
     // to give a title and introduce your game.
     setup = function() {
       heading(2, 'A Simple Test');
       msg('This is a test of what we can do.');
-      parse("take hat from box");
-      parse("ask mary about hats");
+      //[objs, score] = findInScope("ch", [scope(isHere), scope(isPresent)]);
+      //msg(objs.length);
+      //msg(score);
+      //parse("take hat, teapot and chair");
+      //parse("take hat, teapot2 and ball");
+      parser.parse("take hat, teapot and ball from chair");
+      //parse("ask mary about hats");
     }
 
