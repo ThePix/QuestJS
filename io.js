@@ -1,47 +1,90 @@
 // ============  Output  =======================================
 
-var nextid = 0;
+
 msg = function(s, cssClass) {
   if (cssClass == undefined) {
-    $('#output').append('<p id="n' + nextid + '">' + s + '</p>');
+    $('#output').append('<p id="n' + io.nextid + '">' + s + '</p>');
   }
   else {
-    $('#output').append('<p id="n' + nextid + '" class="' + cssClass + '">' + s + '</p>');
+    $('#output').append('<p id="n' + io.nextid + '" class="' + cssClass + '">' + s + '</p>');
   }
-  nextid++;
+  io.nextid++;
 };
 metamsg = function(s) {
-  $('#output').append('<p id="n' + nextid + '" class="meta">' + s + '</p>');
-  nextid++;
+  $('#output').append('<p id="n' + io.nextid + '" class="meta">' + s + '</p>');
+  io.nextid++;
 };
 errormsg = function(errno, s) {
-  $('#output').append('<p id="n' + nextid + '" class="error"><span class="error' + errno + '">' + s + '</span></p>');
-  nextid++;
+  $('#output').append('<p id="n' + io.nextid + '" class="error"><span class="error' + errno + '">' + s + '</span></p>');
+  io.nextid++;
 };
 debugmsg = function(dbgno, s) {
-  $('#output').append('<p id="n' + nextid + '" class="debug"><span class="debug' + dbgno + '">' + s + '</span></p>');
-  nextid++;
+  $('#output').append('<p id="n' + io.nextid + '" class="debug"><span class="debug' + dbgno + '">' + s + '</span></p>');
+  io.nextid++;
 };
 heading = function(level, s) {
-  $('#output').append('<h' + level + ' id="n' + nextid + '">' + s + '</h' + level + '>');
-  nextid++;
+  $('#output').append('<h' + level + ' id="n' + io.nextid + '">' + s + '</h' + level + '>');
+  io.nextid++;
 };
 
 
 
+clearScreen = function() {
+  for (var i = 0; i < io.nextid; i++) {
+    $('#n' + i).remove();
+  }
+};
+
+//showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
+//  msg("You picked " + result + ".");
+//});
+  
+showMenu = function(title, options, fn) {
+  io.menuStartId = io.nextid;
+  io.menuFn = fn;
+  io.menuOptions = options;
+  io.inputDisabled = true;
+  $('#textbox').prop('disabled', true);
+  msg(title, 'menutitle');
+  for (var s, i = 0; i < options.length; i++) {
+    s = '<a class="menuoption" onclick="io.menuResponse(' + i + ')">';
+    s += (typeof options[i] == "string" ? options[i] : options[i].name);
+    s += '</a>';
+    msg(s);
+  }
+};
 
 // ============  Input  =======================================
 
 
 
 
+var io = {};
 
 
+io.nextid = 0;
+io.inputDisabled = false;
 
-var clicksDisabled = false;
+io.menuStartId;
+io.menuFn;
+io.menuOptions;
+
+io.currentItemList = [];
+
+
+io.menuResponse = function(n) {
+  io.inputDisabled = false;
+  $('#textbox').prop('disabled', false);
+  for (var i = io.menuStartId; i < io.nextid; i++) {
+    $('#n' + i).remove();
+  }
+  io.menuFn(io.menuOptions[n]);
+};
+
+
 
 clickExit = function(dir) {
-  if (clicksDisabled) { return };
+  if (io.inputDisabled) { return };
 
   var failed = false;      
   dir = dir.toLowerCase();
@@ -78,7 +121,7 @@ clickExit = function(dir) {
 };
 
 clickAction = function(action) {
-  if (clicksDisabled) { return };
+  if (io.inputDisabled) { return };
 
   var failed = false;
   debugmsg(3, "Trying to do " + action)
@@ -93,20 +136,20 @@ clickAction = function(action) {
 };
 
 clickItem = function(itemName) {
-  if (clicksDisabled) { return };
+  if (io.inputDisabled) { return };
 
-  for (var i = 0; i < currentItemList.length; i++) {
-    if (currentItemList[i] == itemName) {
-      $('.' + currentItemList[i] + '-actions').toggle();
+  for (var i = 0; i < io.currentItemList.length; i++) {
+    if (io.currentItemList[i] == itemName) {
+      $('.' + io.currentItemList[i] + '-actions').toggle();
     }
     else {
-      $('.' + currentItemList[i] + '-actions').hide();
+      $('.' + io.currentItemList[i] + '-actions').hide();
     }
   }
 };
 
 clickItemAction = function(itemName, action) {
-  if (clicksDisabled) { return };
+  if (io.inputDisabled) { return };
 
   var failed = false;
   var item = findInData(itemName);
@@ -154,7 +197,6 @@ var simpleCommands = {
 
 // ============  UI  =======================================
 
-var currentItemList = [];
 
 
 updateUIItems = function() {
@@ -162,7 +204,7 @@ updateUIItems = function() {
     $('#' + inventories[i].alt).empty();
   }
 
-  currentItemList = [];
+  io.currentItemList = [];
   for (var j = 0; j < data.length; j++) {
     if (data[j].display == "visible") {
       for (var i = 0; i < inventories.length; i++) {
@@ -177,7 +219,7 @@ updateUIItems = function() {
 
 _appendItem = function(item, attName, htmlDiv) {
   $('#' + htmlDiv).append('<p class="item" onclick="clickItem(\'' + item.name + '\')">' + item.name + '</p>');
-  currentItemList.push(item.name);
+  io.currentItemList.push(item.name);
   if (item[attName]) {
     for (var j = 0; j < item[attName].length; j++) {
       $('#' + htmlDiv).append('<div class="' + item.name + '-actions"><p class="itemaction" onclick="clickItemAction(\'' + item.name + '\', \'' + item[attName][j] + '\')">' + item[attName][j] + '</p></div>');
@@ -210,42 +252,10 @@ endTurnUI = function() {
 
 
 
-var menuStartId;
-var menuFn;
-var menuOptions;
-
-  //showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
-  //  msg("You picked " + result + ".");
-  //});
 
 
-showMenu = function(title, options, fn) {
-  menuStartId = nextid;
-  menuFn = fn;
-  menuOptions = options;
-  clicksDisabled = true;
-  $('#textbox').prop('disabled', true);
-  msg(title, 'menutitle');
-  for (var s, i = 0; i < options.length; i++) {
-    s = '<a class="menuoption" onclick="menuResponse(' + i + ')">';
-    s += (typeof options[i] == "string" ? options[i] : options[i].name);
-    s += '</a>';
-    msg(s);
-  }
-};
-
-menuResponse = function(n) {
-  clicksDisabled = false;
-  $('#textbox').prop('disabled', false);
-  for (var i = menuStartId; i < nextid; i++) {
-    $('#n' + i).remove();
-  }
-  menuFn(menuOptions[n]);
-};
 
 
-clearScreen = function() {
-  for (var i = 0; i < nextid; i++) {
-    $('#n' + i).remove();
-  }
-};
+
+
+

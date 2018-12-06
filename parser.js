@@ -24,7 +24,6 @@ var parser = {};
   // This allows us to keep trying to process a single command until all the
   //  disambiguations have been resolved.
   parser.parse = function(inputText) {
-    debugmsg(1, "inputText=" + inputText);
     if (inputText) {
       var res = parser.convertInputTextToCommandCandidate(inputText);
       if (typeof res == "string") {
@@ -44,19 +43,33 @@ var parser = {};
           parser.currentCommand.disambiguate2 = j;
           showMenu(CMD_DISAMBIG_MSG, parser.currentCommand.objects[i][j], function(result) {
             parser.currentCommand.objects[parser.currentCommand.disambiguate1][parser.currentCommand.disambiguate2] = [result];
-            debugmsg(1, "You picked " + result.name + ".");
             parser.parse(null);
           });
         }
       }
     }
     if (!flag) {
-      debugmsg(1, "all done!");
-      parser.inspect();
-      endTurn({});
+      parser.execute();
     }
   };
+  
+  // You can use this to bypass all the text matching when you know what the object and command are
+  parser.quickCmd = function(cmd, item) {
+    parser.currentCommand = {
+      cmdString:cmd.name + " " + item.name,
+      cmd:cmd,
+      objects:[[[item]]]
+    }
+    parser.execute();
+  }
 
+  // Do it!
+  parser.execute = function() {
+    debugmsg(1, "all done!");
+    parser.inspect();
+    endTurn({});
+  }    
+  
 
   // This will return a dictionary, with these keys:
   // .inputString    the initial string
@@ -90,20 +103,16 @@ var parser = {};
       // We just keep the last error message as hopefully the most relevant.
       // NB: Inside function so cannot use 'this'
       res = parser.matchItemsToCmd(cmdString, el);
-      //msg("... done "  + res.score);
       if (res.score == -1) {
         error = res.error;
-        debugmsg(1, "error=" + error);
       }
       else {
         matchedCandidates.push(res);
       }
     });
     if (matchedCandidates.length == 0) {
-      debugmsg(1, "returning error");
       return error;
     }
-    debugmsg(1, "all good");
     
     // pick between matchedCandidates based on score
     var command = matchedCandidates[0];
@@ -139,6 +148,9 @@ var parser = {};
     var res = {cmd:cmd, objectTexts:[], objects:[]};
     res.score = cmd.score ? cmd.score : 0; 
     var arr = cmd.regex.exec(s);
+    var fallbackScope = scope(isPresent);
+    
+
     for (var i = 1; i < arr.length; i++) {
       var score = 0;
       res.objectTexts.push(arr[i]);
@@ -146,9 +158,11 @@ var parser = {};
         res.objects.push(arr[i]);
         score = 1;
       }
+      
       else if (CMD_ALL_REGEX.test(arr[i]) || CMD_ALL_EXCLUDE_REGEX.test(arr[i])) {
         // Handle ALL and ALL BUT
-        var list = cmd.objects[i - 1].scope ? scope(cmd.objects[i - 1].scope) : scope(isPresent);
+        var list = cmd.objects[i - 1].scope ? scope(cmd.objects[i - 1].scope) : fallbackScope;
+        var exclude = [player];
         if (list.length == 0) {
           res.error = cmd.nothingForAll ? cmd.nothingForAll : CMD_NOTHING;
           res.score = -1;
@@ -156,12 +170,18 @@ var parser = {};
         }
         if (CMD_ALL_EXCLUDE_REGEX.test(arr[i])) {
           // if this is ALL BUT we need to remove some things from the list
+          // excludes must be in isPresent
+          // if it is ambiguous or not recognised it does not get added to the list
           var s = arr[i].replace(CMD_ALL_EXCLUDE_REGEX, "").trim();
           var objectNames = s.split(CMD_JOINER_REGEX).map(function(el){ return el.trim() });
-          debugmsg(1, objectNames);
-          
-          
+          for (var j = 0; j < objectNames.length; j++) {
+            items = parser.findInList(objectNames[j], fallbackScope);
+            if (items.length == 1) {
+              exclude.push(items[0]);
+            }
+          }
         }
+        list = list.filter(function(el) { return !exclude.includes(el); });
         if (list.length > 1 && !cmd.objects[i - 1].multiple) {
           res.error = CMD_NO_MULTIPLES;
           res.score = -1;
@@ -170,6 +190,7 @@ var parser = {};
         score = 2;
         res.objects.push(list.map(function(el) {return [el]}));
       }
+      
       else {
         var objectNames = arr[i].split(CMD_JOINER_REGEX).map(function(el){ return el.trim() });
         if (objectNames.length > 1 && !cmd.objects[i - 1].multiple) {
@@ -177,15 +198,7 @@ var parser = {};
           res.score = -1;
           return res;
         }
-        var scopes;
-        if (cmd.objects[i - 1].scope) {
-          var scope1 = scope(cmd.objects[i - 1].scope);
-          var scope2 = scope(isPresent);
-          scopes = [scope1, scope2];
-        }
-        else {
-          scopes = [scope(isPresent)];
-        }
+        var scopes = cmd.objects[i - 1].scope ? [scope(cmd.objects[i - 1].scope), fallbackScope] : scopes = [fallbackScope];
         var objs = [];
         var obs2;
         for (var j = 0; j < objectNames.length; j++) {
@@ -215,7 +228,6 @@ var parser = {};
   // or 1 if in the third list).
   // If not found the score will be 0, and an empty array returned.
   parser.findInScope = function(s, listOfLists) {
-    //msg("[" + s + "]");
     var objs;
     for (var i = 0; i < listOfLists.length; i++) {
       objs = this.findInList(s, listOfLists[i]);
@@ -254,8 +266,18 @@ var parser = {};
     if (s == item.name) {
       return 3;
     }
+    if (item.alt && item.alt.includes(s)) {
+      return 3;
+    }
     if (new RegExp("\\b" + s).test(item.name)) {
       return 1;
+    }
+    if (item.alt) {
+      for (var i = 0; i < item.alt.length; i++) {
+        if (new RegExp("\\b" + s).test(item.alt[i])) {
+          return 1;
+        }
+      }
     }
     return -1;
   }
@@ -281,7 +303,37 @@ var parser = {};
     debugmsg(1, s);
   }
 
+  // Should be called during the initialisation process
+  // Any patterns are converted to RegExp objects.      
+  parser.initCommands = function() {
+    commands.forEach(function(el) {
+      if (el.verb) {
+        el.regex = el.regex + " #object#";
+      }
+      if (typeof el.pattern == 'string') {
+        el.regex = parser.pattern2Regexp(el.pattern);
+      }
+      if (!(el.regex instanceof RegExp)) {
+        alert("No regex for " + el.name);
+      }
+    });  
+  }
 
+  // Convert a pattern in the form:
+  // ask #object# about #text#
+  // to a regex like:
+  // ^ask (?<object>.*) about (?<text>.*)$
+  parser.pattern2Regexp = function(s) {
+    var ary = s.split(';');
+    var ary2 = [];
+    ary.forEach(function(el) {
+      s = '^' + el.trim() + '$';
+      //s = s.replace(/#([object|text]\w*)#/g, "(?<$1>.*)");
+      s = s.replace(/#([object|text]\w*)#/g, "(.+)");
+      ary2.push(s);
+    });
+    return new RegExp(ary2.join('|'));
+  }
 
 
 
@@ -372,36 +424,5 @@ var commands = [
 ];
 
     
-// Should be called during the initialisation process
-// Any patterns are converted to RegExp objects.      
-initCommands = function() {
-  commands.forEach(function(el) {
-    if (el.verb) {
-      el.regex = el.regex + " #object#";
-    }
-    if (typeof el.pattern == 'string') {
-      el.regex = _pattern2Regexp(el.pattern);
-    }
-    if (!(el.regex instanceof RegExp)) {
-      alert("No regex for " + el.name);
-    }
-  });  
-}
 
-// Convert a pattern in the form:
-// ask #object# about #text#
-// to a regex like:
-// ^ask (?<object>.*) about (?<text>.*)$
-_pattern2Regexp = function(s) {
-  var ary = s.split(';');
-  var ary2 = [];
-  ary.forEach(function(el) {
-    s = '^' + el.trim() + '$';
-    //s = s.replace(/#([object|text]\w*)#/g, "(?<$1>.*)");
-    s = s.replace(/#([object|text]\w*)#/g, "(.+)");
-    ary2.push(s);
-  });
-  return new RegExp(ary2.join('|'));
-}
 
-initCommands();

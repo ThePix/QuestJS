@@ -1,19 +1,3 @@
-// ============  Data  =======================================
-
-// Each entry should be an Item object, or sub-class.
-// These all take a name and a dictionary.
-// The dictionary probably needs a "loc" key for items,
-// which is the name of the start location, or "held" or "worn".
-// Items and rooms can have any number of other attributes, either
-// a string or a function (like a script in Quest).
-
-
-// The "display" attribute controls how an item is displayed.
-// By default it is "visible".
-// Set to "invisible" to exclude from descriptions, but still present.
-// Set to "scenery" to
-// Set to "not here" to have the item not here
-
 var data = [
   new Room("lounge", {
     examine:'A smelly room.',
@@ -54,9 +38,27 @@ var data = [
   }),
   
   new TakableItem("teapot", {
-    loc:'Held',
+    loc:'lounge',
+    alt:['kettle'],
     examine:function(self) {
       msg('A nasty blue teapot. It is broken.');
+    },
+  }),
+  
+  new TakableItem("cup", {
+    loc:'lounge',
+    examine:'A nasty blue cupteapot.',
+  }),
+  
+  new TakableItem("lamp", {
+    loc:'lounge',
+    examine:'A broken lamp.',
+  }),
+  
+  new TakableItem("knife", {
+    loc:'lounge',
+    examine:function(self) {
+      msg('A sharp knife.');
     },
   }),
   
