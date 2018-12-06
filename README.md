@@ -5,6 +5,7 @@ Quest 5 is written in C#, with some Visual Basic, has its own scripting language
 * No lag between turns
 * No need to support legacy games in the app
 * Authors can upload games to their own web site
+* Updates are far easier to publish without legacy support
 
 Alex had some experiments into this before he quit. QuestJS was hoped to convert a Quest .quest file to pure JavaScript. QuestKit was supposed to do pretty much the same as this. Arguably Squiffy is another attempt, being entirely JavaScript, though without a parser.
 
@@ -20,9 +21,39 @@ It should be possible to create an additional program that will extract data fro
 
 No. This is something that will be required at some point, but I will not be addressing for a while. It could be written in a cross-platform language such as Java or Python (if there is a decent UI for Python). It would not be designed to run games, you would do that in your browser, which should make it much easier.
 
+How far it will support scripting is questionable. Writing code should be fine, writing in a GUI as in Quest 5 may or may not happen.
+
 ### Language support?
 
-Hopefully it will readily support languages other than English, though I am unsure how that will be done. The Quest way will probably not work.
+Hopefully it will readily support languages other than English, though I am unsure how that will be done. The current Quest way will probably not work. Currently it is being done via constants in settings.js
+
+### Other features?
+
+Things that I intend to support
+
+- TextProcessor
+- Advanced world model
+
+Things I want but as yet have no idea how
+
+- Save/load game
+- Change scripts
+- UNDO and OOPS
+
+Things that are currently low priority, but probably relatively easy to do yourself
+
+- Timers
+- Images, videos, sounds
+
+Things that are currently low priority
+
+- Hyperlinks
+- Map
+- Walkthrough
+
+
+
+
 
 
 
@@ -37,6 +68,8 @@ page.html
 style.css
 io.js
 
+The panes can be switch or removed, the inventories modified, the compass turned off and the command line turned off in the settings file (see below). You can scroll back though your previous commands. Shift-arrow will move you in the compass direction.
+
 
 ### World Model
 
@@ -47,15 +80,16 @@ Currently objects are references by their name attributes, which are strings. It
 data.js
 world.js
 
+Requires alternative names.
+
 
 ### Parser
 
 Having had a quick read around, I can find no better way to parse player input than searching through an array of commands and testing regexs. JavaScript supports regexs exactly as Quest does (as far as I can tell), so these can be copied straight across. Translating patterns is not straight forward. For example, "get #object#;take #object#" needs to become /^(get|take) (?<object>.*)$/. Tricking if you have multiple objects.
-  
-This is in a very early state.
 
 parser.js
 
+Unlike Quest 5, the parser in context sensitive, and will try to guess what you mean based on the objects present. The parser will get all the commands with a matching Regex, then try and match objects, and score each from that, and will go with the highest scoring. You can add a score to a command to make it higher (or lower) priority.
 
 ### Editor
 
