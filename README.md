@@ -11,6 +11,10 @@ Alex had some experiments into this before he quit. QuestJS was hoped to convert
 
 Whether this will get anywhere I do not know, but I am learning about JavaScript a lot!
 
+A further advantage is that there is a lot of JavaScript code out there that we can add to a project. For example, for rolling dice:
+
+https://github.com/GreenImp/rpg-dice-roller
+
 ### Will it be possible to convert existing games?
 
 Short answer: No!
