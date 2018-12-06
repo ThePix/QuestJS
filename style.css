@@ -50,7 +50,7 @@ body {
 .debug {
   font-size: 10pt;
   color: grey;
-  display: none;
+  /*display: none;*/
 }
 .debug2::before {
   content: "NOTE: ";

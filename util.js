@@ -130,18 +130,19 @@ init = function() {
 };
 
 
-
-
+// Call after the player takes a turn, sending it a dictionary, result
+// It will run turn scripts unless result.suppressTurnScripts or result.commandFailed
 endTurn = function(result) {
   debugmsg(5, "... done (failed=" + result.commandFailed + ")");
-  if (!result.suppressTurnScripts && !result.commandFailed) {
-    RunTurnScripts();
+  if (result.errormsg) { errormsg(0, result.errormsg); }
+  if (!result.suppressTurnScripts && !result.commandFailed && ! result.errormsg) {
+    runTurnScripts();
   }
-  setTimeout("window.scrollTo(0,document.getElementById('main').scrollHeight);",1);
+  endTurnUI();
 };
 
 
-RunTurnScripts = function() {
+runTurnScripts = function() {
   debugmsg(5, "Running turnscripts");
   for (var i = 0; i < data.length; i++) {
     if (typeof data[i]["run"] === "function"){
@@ -152,3 +153,6 @@ RunTurnScripts = function() {
   }
   debugmsg(5, "... turnscripts done");
 };
+
+// This will report what the values in the parser.currentCommand object are
+

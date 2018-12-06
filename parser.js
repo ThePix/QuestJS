@@ -1,8 +1,5 @@
 
 
-// For disambig we need to be able to halt the process part way through, ask a question, then come back to it.
-// This means saving the state we have got to, in cmd
-
 
 // Need to support ALL
 // and ALL BUT ???
@@ -22,24 +19,20 @@ var parser = {};
 
   parser.currentCommand;
 
-  // The "parse" function should be sent either the text the player typed or,
-  // if just asked to disambig, an object?
+  // The "parse" function should be sent either the text the player typed or null.
+  // If sent null it will continue to work with the current vales in currentCommand.
+  // This allows us to keep trying to process a single command until all the
+  //  disambiguations have been resolved.
   parser.parse = function(inputText) {
-    if (typeof inputText == "string") {
-      parser.currentCommand = parser.convertInputTextToCommandCandidate(inputText);
-      if (typeof currentCommand == "string") {
-        errormsg(0, currentCommand);
+    debugmsg(1, "inputText=" + inputText);
+    if (inputText) {
+      var res = parser.convertInputTextToCommandCandidate(inputText);
+      if (typeof res == "string") {
+        endTurn({errormsg:res})
         return;
       }
+      parser.currentCommand = res;
     }
-    // At this point we have a dictionary, currentCommand, with the inital string, "string", the modified string, "cmdString", and
-    // a dictionary, "command". We need to go though the objects in the dictionary to see how well
-    // .inputString    the initial string
-    // .cmdString      the sanitised string
-    // .cmd            the matched command
-    // .objects        a list (of a list of a list), one member per capture group in the regex
-    // .objects[0]     a list (of a list), one member per object name given by the player for capture group 0
-    // .objects[0][0]  a list of possible object matches for each object name given by the player for the first object name in capture group 0
 
     // Need to disambiguate, until each of the lowest level lists has exactly one member
     var flag = false;
@@ -49,22 +42,31 @@ var parser = {};
           flag = true;
           parser.currentCommand.disambiguate1 = i;
           parser.currentCommand.disambiguate2 = j;
-          showMenu("Which do you mean?", parser.currentCommand.objects[i][j], function(result) {
+          showMenu(CMD_DISAMBIG_MSG, parser.currentCommand.objects[i][j], function(result) {
             parser.currentCommand.objects[parser.currentCommand.disambiguate1][parser.currentCommand.disambiguate2] = [result];
-            msg("You picked " + result.name + ".");
+            debugmsg(1, "You picked " + result.name + ".");
             parser.parse(null);
           });
         }
       }
     }
     if (!flag) {
-      msg("all done!");
+      debugmsg(1, "all done!");
+      parser.inspect();
+      endTurn({});
     }
   };
 
 
+  // This will return a dictionary, with these keys:
+  // .inputString    the initial string
+  // .cmdString      the sanitised string
+  // .cmd            the matched command object
+  // .objects        a list (of a list of a list), one member per capture group in the command regex
+  // .objects[0]     a list (of a list), one member per object name given by the player for capture group 0
+  // .objects[0][0]  a list of possible object matches for each object name given by the player for the first object name in capture group 0
   parser.convertInputTextToCommandCandidate = function(inputText) {
-    var s = inputText.toLowerCase().split(' ').filter(el => !IGNORED_WORDS.includes(el)).join(' ');
+    var s = inputText.toLowerCase().split(' ').filter(el => !CMD_IGNORED_WORDS.includes(el)).join(' ');
     var cmdString = s;
     
     // Get a list of candidate commands that match the regex
@@ -72,7 +74,7 @@ var parser = {};
       return el.regex.test(s);
     });
     if (candidates.length == 0) {
-      return "I don't even know where to begin with that.";
+      return CMD_NOT_KNOWN_MSG;
     }
 
     // We now want to match potential objects
@@ -91,14 +93,17 @@ var parser = {};
       //msg("... done "  + res.score);
       if (res.score == -1) {
         error = res.error;
+        debugmsg(1, "error=" + error);
       }
       else {
         matchedCandidates.push(res);
       }
     });
     if (matchedCandidates.length == 0) {
+      debugmsg(1, "returning error");
       return error;
     }
+    debugmsg(1, "all good");
     
     // pick between matchedCandidates based on score
     var command = matchedCandidates[0];
@@ -137,21 +142,56 @@ var parser = {};
     for (var i = 1; i < arr.length; i++) {
       var score = 0;
       res.objectTexts.push(arr[i]);
-      if (typeof cmd.matchUps[i - 1] == "string") {
-        res.objects.push([]);
+      if (cmd.objects[i - 1].text) {
+        res.objects.push(arr[i]);
         score = 1;
       }
+      else if (CMD_ALL_REGEX.test(arr[i]) || CMD_ALL_EXCLUDE_REGEX.test(arr[i])) {
+        // Handle ALL and ALL BUT
+        var list = cmd.objects[i - 1].scope ? scope(cmd.objects[i - 1].scope) : scope(isPresent);
+        if (list.length == 0) {
+          res.error = cmd.nothingForAll ? cmd.nothingForAll : CMD_NOTHING;
+          res.score = -1;
+          return res;
+        }
+        if (CMD_ALL_EXCLUDE_REGEX.test(arr[i])) {
+          // if this is ALL BUT we need to remove some things from the list
+          var s = arr[i].replace(CMD_ALL_EXCLUDE_REGEX, "").trim();
+          var objectNames = s.split(CMD_JOINER_REGEX).map(function(el){ return el.trim() });
+          debugmsg(1, objectNames);
+          
+          
+        }
+        if (list.length > 1 && !cmd.objects[i - 1].multiple) {
+          res.error = CMD_NO_MULTIPLES;
+          res.score = -1;
+          return res;
+        }
+        score = 2;
+        res.objects.push(list.map(function(el) {return [el]}));
+      }
       else {
-        //msg("Looking for: " + arr[i] + ", scope:" + cmd.matchUps[i - 1].name);
-        var objectNames = arr[i].split(JOINER_REGEX).map(function(el){ return el.trim() });
-        var scope1 = scope(cmd.matchUps[i - 1]);
-        var scope2 = scope(isPresent);
+        var objectNames = arr[i].split(CMD_JOINER_REGEX).map(function(el){ return el.trim() });
+        if (objectNames.length > 1 && !cmd.objects[i - 1].multiple) {
+          res.error = CMD_NO_MULTIPLES;
+          res.score = -1;
+          return res;
+        }
+        var scopes;
+        if (cmd.objects[i - 1].scope) {
+          var scope1 = scope(cmd.objects[i - 1].scope);
+          var scope2 = scope(isPresent);
+          scopes = [scope1, scope2];
+        }
+        else {
+          scopes = [scope(isPresent)];
+        }
         var objs = [];
         var obs2;
         for (var j = 0; j < objectNames.length; j++) {
-          [objs2, n] = this.findInScope(objectNames[j], [scope1, scope2]);
+          [objs2, n] = this.findInScope(objectNames[j], scopes);
           if (n == 0) {
-            res.error = cmd.noobjecterror ? cmd.noobjecterror : "Not finding any object '" + objectNames[j] + "'.";
+            res.error = (cmd.noobjecterror ? cmd.noobjecterror : CMD_OBJECT_UNKNOWN_MSG).replace('%', objectNames[j]);
             res.score = -1;
             return res;
           }
@@ -220,16 +260,39 @@ var parser = {};
     return -1;
   }
 
-//}
+  // For debugging only
+  // Prints details about the parser.currentCommand so you can
+  // see what the parser has made of the player's input
+  parser.inspect = function() {
+    s = "PARSER RESULT:<br/>";
+    s += "Input text: " + parser.currentCommand.string + "<br/>";
+    s += "Matched command: " + parser.currentCommand.cmd.name + "<br/>";
+    s += "Matched regex: " + parser.currentCommand.cmd.regex + "<br/>";
+    s += "Match score: " + parser.currentCommand.score + "<br/>";
+    s += "Objects/texts:" + "<br/>";
+    for (var i = 0; i < parser.currentCommand.objects.length; i++) {
+      if (typeof parser.currentCommand.objects[i] == "string") {
+        s += "&nbsp;&nbsp;&nbsp;&nbsp;Text: " + parser.currentCommand.objects[i] + "<br/>";
+      }
+      else {
+        s += "&nbsp;&nbsp;&nbsp;&nbsp;Objects:" + parser.currentCommand.objects[i].map(function(el) { return el[0].name }).join(", ") + "<br/>";
+      }
+    }
+    debugmsg(1, s);
+  }
+
+
+
+
 
 // A command has an arbitrary name, a regex or pattern
 // and a script as a minimum.
-
+// nothingForAll   If the player uses ALL and there is nothing there, use this error message
 
 
 function Cmd(name, hash) {
   this.name = name;
-  this.matchUps = [];
+  this.objects = [];
   for (var key in hash) {
     this[key] = hash[key];
   }
@@ -275,14 +338,17 @@ var commands = [
     script:function(object, text) {
       itemAction(object, 'take');
     },
-    matchUps:[isHere]
+    objects:[{scope:isHere, multiple:true}]
   }),
   new Cmd('Take/from', {
     pattern:'take #object1# from #object2#',
     script:function(object, text) {
       itemAction(object, 'take');
     },
-    matchUps:[isHere, isHere]
+    objects:[
+      {scope:isHere, multiple:true},
+      {scope:isHere},
+    ]
   }),
 //  new AltVerbCmd('Get', 'Take', 'get'),
 //  new VerbCmd('Drop', {
@@ -290,7 +356,7 @@ var commands = [
 //    script:function(object, text) {
 //      itemAction(object, 'drop');
 //    },
-//    matchUps:[isHeld]
+//    objects:[{scope:isHeld, multiple:true}]
 //  }),
   new Cmd('Ask/about', {
     pattern:'ask #object# about #text#',
@@ -298,7 +364,10 @@ var commands = [
       itemAction(room, 'examine');
       suppressTurnScripts = true;
     },
-    matchUps:[isHere, 'text']
+    objects:[
+      {scope:isHere},
+      {text:true},
+    ]
   }),
 ];
 

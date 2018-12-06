@@ -14,24 +14,70 @@
 <script src="data.js"></script>
 
 <script>
+var savedCommands = ['help'];
+var savedCommandsPos = 0;
 
 $( document ).ready(function() {
-  $('#textbox').keypress(function(event){
+  $('#textbox').keydown(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){
-      parse($('#textbox').val());
+      var s = $('#textbox').val();
+      if (CMD_ECHO) { msg(s); }
+      savedCommands.push(s);
+      savedCommandsPos = savedCommands.length;
+      parser.parse(s);
+      $('#textbox').val('');
+    }
+    if(keycode == '37'){
+      // left arrow
+      if (event.shiftKey) {
+        if (CMD_ECHO) { msg("west"); }
+        parser.parse("west");
+        $('#textbox').val('');
+      }
+    }
+    if(keycode == '38'){
+      // up arrow
+      if (event.shiftKey) {
+        if (CMD_ECHO) { msg("north"); }
+        parser.parse("north");
+        $('#textbox').val('');
+      }
+      else {
+        savedCommandsPos -= 1;
+        if (savedCommandsPos < 0) { savedCommandsPos = 0; }
+        $('#textbox').val(savedCommands[savedCommandsPos]);
+      }
+    }
+    if(keycode == '39'){
+      // right arrow
+      if (event.shiftKey) {
+        if (CMD_ECHO) { msg("east"); }
+        parser.parse("east");
+        $('#textbox').val('');
+      }
+    }
+    if(keycode == '40'){
+      // down arrow
+      if (event.shiftKey) {
+        if (CMD_ECHO) { msg("south"); }
+        parser.parse("south");
+        $('#textbox').val('');
+      }
+      else {
+        savedCommandsPos += 1;
+        if (savedCommandsPos >= savedCommands.length) { savedCommandsPos = savedCommands.length - 1; }
+        $('#textbox').val(savedCommands[savedCommandsPos]);
+      }
+    }
+    if(keycode == '27'){
+      // ESC
       $('#textbox').val('');
     }
   });    
   init();
   setup();
   setRoom(player.loc);
-  //showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
-  //  msg("You picked " + result + ".");
-  //});
-  $('#textbox').focus();
-  msg("-------------------");
-  msg("" + player.display);
 });
 </script>
 

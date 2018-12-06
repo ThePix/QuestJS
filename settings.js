@@ -1,8 +1,18 @@
-    const IGNORED_WORDS = ["", "the", "a", "an"];
-    const JOINER_REGEX = /\,|\band\b/;
+    const CMD_IGNORED_WORDS = ["", "the", "a", "an"];
+    const CMD_JOINER_REGEX = /\,|\band\b/;
+    const CMD_ALL_REGEX = /^(all|everything)$/;
+    const CMD_ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
+    
+    const CMD_ECHO = true;
+    const CMD_NOT_KNOWN_MSG = "I don't even know where to begin with that.";
+    const CMD_OBJECT_UNKNOWN_MSG = "Not finding any object '%'.";
+    const CMD_DISAMBIG_MSG = "Which do you mean?";
+    const CMD_NO_MULTIPLES = "You cannot use multiple objects with that command.";
+    const CMD_NOTHING = "Nothing there to do that with.";
     
     const PANES = 'Left';  //Can be set to Left, Right or None.
     const COMPASS = true;
+    const TEXT_INPUT = true;
     
     // Change the abbrev values to suit your game (or language)
     const exits = [
@@ -53,9 +63,10 @@
       //[objs, score] = findInScope("ch", [scope(isHere), scope(isPresent)]);
       //msg(objs.length);
       //msg(score);
-      //parse("take hat, teapot and chair");
-      //parse("take hat, teapot2 and ball");
-      parser.parse("take hat, teapot and ball from chair");
-      //parse("ask mary about hats");
+      parser.parse("take red hat, teapot and chair");
+      //parser.parse("take hat, teapot2 and ball");
+      //parser.parse("take hat, teapot and ball from chair");
+      parser.parse("ask ball about hats");
+      parser.parse("take all but teapot and chair");
     }
 

@@ -202,11 +202,22 @@ updateUIExits = function(room) {
 };
 
 
+// This should be called after each turn to ensure we are at the end of the page and the text box has the focus
+endTurnUI = function() {
+  setTimeout("window.scrollTo(0,document.getElementById('main').scrollHeight);",1);
+  if (TEXT_INPUT) { $('#textbox').focus(); }
+}
+
 
 
 var menuStartId;
 var menuFn;
 var menuOptions;
+
+  //showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
+  //  msg("You picked " + result + ".");
+  //});
+
 
 showMenu = function(title, options, fn) {
   menuStartId = nextid;
