@@ -11,6 +11,9 @@ const CMD_DISAMBIG_MSG = "Which do you mean?";
 const CMD_NO_MULTIPLES = "You cannot use multiple objects with that command.";
 const CMD_NOTHING = "Nothing there to do that with.";
 
+const BUG_PANE_CMD_NOT_FOUND = "Cannot find that command. This is a bug; please alert the creator.";
+const BUG_PANE_ITEM_NOT_FOUND = "Cannot find that item. This is a bug; please alert the Quest coders.";
+
 // UI options
 const PANES = 'Left';  //Can be set to Left, Right or None.
 const COMPASS = true;
@@ -48,7 +51,12 @@ const inventories = [
   {name:'Items Worn', alt:'itemsWorn', verbs:'wornVerbs',
     test:function(item) {
       return item.loc == player.name && item.worn;
-  }
+    }
+  },
+  {name:'Spells known', alt:'spells', verbs:'spellVerbs',
+    test:function(item) {
+      return item.loc == "spellbook";
+    }
   },
   {name:'Items Here', alt:'itemsHere', verbs:'hereVerbs',
     test:function(item) {

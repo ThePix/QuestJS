@@ -152,6 +152,9 @@ var parser = {};
     
 
     for (var i = 1; i < arr.length; i++) {
+      if (cmd.objects[i - 1].ignore) {
+        continue;
+      }
       var score = 0;
       res.objectTexts.push(arr[i]);
       if (cmd.objects[i - 1].text) {
@@ -384,6 +387,16 @@ var commands = [
       itemAction(room, 'examine');
       suppressTurnScripts = true;
     },
+  }),
+  new Cmd('Examine', {
+    regex:/^(x|look at|examine) (.+)$/,
+    script:function(object, text) {
+      itemAction(object, 'examine');
+    },
+    objects:[
+      {ignore:true},
+      {scope:isPresent}
+    ]
   }),
   new Cmd('Take', {
     pattern:'take #object#',

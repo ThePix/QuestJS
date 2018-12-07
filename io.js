@@ -69,6 +69,7 @@ io.menuStartId;
 io.menuFn;
 io.menuOptions;
 
+// A list of htmlNames for items currently display in the inventory panes
 io.currentItemList = [];
 
 
@@ -93,7 +94,7 @@ clickExit = function(dir) {
   }
   else {
     msg("Heading " + dir);
-    currentRoom = findInData(player.loc);
+    currentRoom = getObject(player.loc);
 
     if (!(dir in currentRoom)) {
       errormsg(1, "Unsupported direction '" + dir + "' for location");
@@ -152,25 +153,19 @@ clickItemAction = function(itemName, action) {
   if (io.inputDisabled) { return };
 
   var failed = false;
-  var item = findInData(itemName);
-  action = action.toLowerCase();
-  if (!(action in item)) {
-    errormsg(1, "Unsupported verb '" + action + "' for object")
-    failed = true;
+  var item = getObject(itemName, true);
+  var cmd = getCommand(action);
+  if (cmd == undefined) {
+    errormsg(10, BUG_PANE_CMD_NOT_FOUND);
   }
-  else if (typeof item[action] == 'string') {
-    msg(item[action]);
-  }
-  else if (typeof item[action] === "function"){
-    var fn = item[action];
-    fn(item);
-    updateUIItems();
+  else if (item == undefined) {
+    errormsg(10, BUG_PANE_ITEM_NOT_FOUND);
   }
   else {
-    errormsg(1, "Unsupported type for verb");
-    failed = true;
+    debugmsg(4, item.name);
+    debugmsg(4, cmd.name);
+    parser.quickCmd(cmd, item);
   }
-  endTurn({commandFailed:failed});
 };
 
 
@@ -218,11 +213,11 @@ updateUIItems = function() {
 };
 
 _appendItem = function(item, attName, htmlDiv) {
-  $('#' + htmlDiv).append('<p class="item" onclick="clickItem(\'' + item.name + '\')">' + item.name + '</p>');
-  io.currentItemList.push(item.name);
+  $('#' + htmlDiv).append('<p class="item" onclick="clickItem(\'' + item.htmlName + '\')">' + item.name + '</p>');
+  io.currentItemList.push(item.htmlName);
   if (item[attName]) {
     for (var j = 0; j < item[attName].length; j++) {
-      $('#' + htmlDiv).append('<div class="' + item.name + '-actions"><p class="itemaction" onclick="clickItemAction(\'' + item.name + '\', \'' + item[attName][j] + '\')">' + item[attName][j] + '</p></div>');
+      $('#' + htmlDiv).append('<div class="' + item.htmlName + '-actions"><p class="itemaction" onclick="clickItemAction(\'' + item.htmlName + '\', \'' + item[attName][j] + '\')">' + item[attName][j] + '</p></div>');
     }
   }
   else {

@@ -18,16 +18,22 @@ isPlayer = function(item) {
 };
 
 
-findInData = function(name) {
-  var found = data.find(function(element) {
-    return element.name == name;
+getObject = function(name, useHtmlName) {
+  var found = data.find(function(el, useHtmlName) {
+    return (useHtmlName ? el.htmlName : el.name) == name;
   });
   return found;
 };
 
+getCommand = function(name) {
+  var found = commands.find(function(el) {
+    return el.name == name;
+  });
+  return found;
+};
 
 setRoom = function(roomName) {
-  room = findInData(roomName);
+  room = getObject(roomName);
   if (room === undefined) {
     return "Failed to find room '" + roomName + "'.";
   }
@@ -108,7 +114,7 @@ init = function() {
   if (typeof player == "undefined") {
     errormsg(9, "No player object found. This will not go well...");
   }
-  currentRoom = findInData(player.loc);
+  currentRoom = getObject(player.loc);
   if (typeof currentRoom == "undefined") {
     errormsg(9, "No room object found (looking for '" + player.loc + "'). This will not go well...");
   }
@@ -116,7 +122,8 @@ init = function() {
     if (!el.alias) {
       el.alias = el.name;
     }
-    //el.name = el.name.replace(/\W/g, "");
+    el.htmlName = el.name.replace(/\W/g, "");
+    //TODO: Make htmlName unique
     if (el.loc == "Held") {
       el.loc = player.name;
     }
@@ -150,5 +157,11 @@ runTurnScripts = function() {
   }
 };
 
-// This will report what the values in the parser.currentCommand object are
 
+randomInt = function(n) {
+  return Math.floor(Math.random() * n);
+};
+
+randomChance = function(percentile) {
+  return randomInt(100) <= percentile;
+};

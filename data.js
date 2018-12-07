@@ -1,3 +1,13 @@
+function SpellItem(name, hash) {
+  Item.call(this, name, hash);
+}
+SpellItem.prototype.spellVerbs = ['Examine', 'Cast'];
+SpellItem.prototype.cast = function(self) {
+  msg('You cast <i>' + self.name + '</i>.');
+}
+
+
+
 var data = [
   new Room("lounge", {
     examine:'A smelly room.',
@@ -18,6 +28,15 @@ var data = [
     },
   }),
 
+//  new Room("spellbook", {
+//    examine:'A wild and over-grown garden.',
+//  }),
+
+//  new SpellItem("charm", {
+//    loc:'spellbook',
+//    examine:'Charm will make the target thonk you are his or her friend.',
+//  }),
+
   new TakableItem("ball", {
     loc:'Held',
     examine:'A red ball.',
@@ -27,10 +46,10 @@ var data = [
     },
   }),
 
-  new WearableItem("red hat", {
-    loc:'Held',
-    examine:'A red bobble hat.'
-  }),
+//  new WearableItem("red hat", {
+//    loc:'Held',
+//    examine:'A red bobble hat.'
+//  }),
   
   new WearableItem("blue hat", {
     loc:'Held',
