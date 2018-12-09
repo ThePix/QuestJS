@@ -8,6 +8,9 @@ SpellItem.prototype.cast = function(self) {
 
 
 
+
+
+
 var data = [
   new Room("lounge", {
     examine:'A smelly room.',
@@ -17,7 +20,7 @@ var data = [
   new Room("kitchen", {
     examine:'A clean room.',
     west:'lounge',
-    north:new Exit('Garden'),
+    north:new Exit('garden'),
   }),
 
   new Room("garden", {
@@ -46,10 +49,10 @@ var data = [
     },
   }),
 
-//  new WearableItem("red hat", {
-//    loc:'Held',
-//    examine:'A red bobble hat.'
-//  }),
+  new WearableItem("red hat", {
+    loc:'Held',
+    examine:'A red bobble hat.'
+  }),
   
   new WearableItem("blue hat", {
     loc:'Held',
@@ -66,7 +69,6 @@ var data = [
   
   new TakableItem("cup", {
     loc:'lounge',
-    examine:'A nasty blue cupteapot.',
   }),
   
   new TakableItem("lamp", {

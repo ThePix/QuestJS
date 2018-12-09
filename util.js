@@ -1,7 +1,12 @@
 // ============  Utilities  =======================================
 
 
+// Stores the current player object
+var player;
 
+
+
+// Returns the string with the first letter capitalised
 sentenceCase = function(str) {
   return str.replace(/[a-z]/i, function (letter) {
     return letter.toUpperCase();
@@ -9,15 +14,13 @@ sentenceCase = function(str) {
 };
 
 
-
-
-
-// This is a method to allow the Array.find method to use it
+// This is a method to allow the Array.find method to find the player
 isPlayer = function(item) {
   return item.player;
 };
 
 
+// Gets the object with the given name (or htmlName name)
 getObject = function(name, useHtmlName) {
   var found = data.find(function(el, useHtmlName) {
     return (useHtmlName ? el.htmlName : el.name) == name;
@@ -25,6 +28,8 @@ getObject = function(name, useHtmlName) {
   return found;
 };
 
+
+// Gets the command with the given name
 getCommand = function(name) {
   var found = commands.find(function(el) {
     return el.name == name;
@@ -32,38 +37,48 @@ getCommand = function(name) {
   return found;
 };
 
+
+// Gets the current room object
+getCurrentRoom = function() {
+  return getObject(player.loc, false);
+};
+
+
+// If the given attribute is a string it is printed, if it is a
+// function it is called. Otherwise an error is generated.
+msgOrRun = function(item, attname, isMultiple) {
+  if (typeof item[attname] == "string") {
+    msg((isMultiple ? item.name + ": " : "") + item[attname]);
+  }
+  else if (typeof item[attname] === "function"){
+    item[attname](item);
+  }
+  else {
+    errormsg(ERR_GAME_BUG, CMD_MSG_OR_RUN_ERROR);
+  }
+};
+
+
+// Sets the current room to the one named
 setRoom = function(roomName) {
   room = getObject(roomName);
   if (room === undefined) {
-    return "Failed to find room '" + roomName + "'.";
+    errormsg(ERR_GAME_BUG, CMD_FAILED_TO_FIND_ROOM + ": " + roomName + ".");
+    return false;
   }
   //clearScreen();
   player.loc = room.name;
   heading(4, room.name);
-  itemAction(room, "examine");
-  updateUIExits(room);
+  msgOrRun(room, "examine");
   updateUIItems();
+  return true;
 };
 
 
-itemAction = function(item, action) {
-  if (!(action in item)) {
-    errormsg(1, "Unsupported verb '" + action + "' for object");
-  }
-  else if (typeof item[action] == "string") {
-    msg(item[action]);
-  }
-  else if (typeof item[action] === "function"){
-    var fn = item[action];
-    fn(item);
-    updateHtml();
-  }
-  else {
-    errormsg(1, "Unsupported type for verb");
-  }
-};
 
 
+
+// Scope functions
 isPresent = function(item) {
   return item.loc == player.loc || item.loc == player.name;
 };
@@ -88,42 +103,45 @@ isNotNotHere = function(item) {
 // var listOfOjects = scope(isHeld);
 scope = function(fn) {
   return data.filter(isNotNotHere).filter(fn);
-}
+};
 
 
+
+// Creates a string that lists the items by name
 formatList = function(itemArray) {
   var s = itemArray.map(function(el) { return el.name; }).join(", ");
 
   var lastIndex = s.lastIndexOf(",");
   if (lastIndex === -1) { return s; }
-  
+
   return s.substring(0, lastIndex) + " and" + s.substring(lastIndex + 1);
-}
-  
+};
+
+
+// Lists the properties of the given object
+// Useful for debugging only
+listProperties = function(obj) {
+  return Object.keys(obj).join(", ");
+};
 
 
 
-
-
-var player;
-
-
+// Must be called before the ame starts to perform varius housekeeping jobs
 init = function() {
-  // Housekeeping...
   player = data.find(isPlayer);
   if (typeof player == "undefined") {
-    errormsg(9, "No player object found. This will not go well...");
+    errormsg(ERR_GAME_BUG, "No player object found. This will not go well...");
   }
   currentRoom = getObject(player.loc);
   if (typeof currentRoom == "undefined") {
-    errormsg(9, "No room object found (looking for '" + player.loc + "'). This will not go well...");
+    errormsg(ERR_GAME_BUG, "No room object found (looking for '" + player.loc + "'). This will not go well...");
   }
   data.forEach(function (el) {
     if (!el.alias) {
       el.alias = el.name;
     }
     el.htmlName = el.name.replace(/\W/g, "");
-    //TODO: Make htmlName unique
+    // TODO: Make htmlName unique
     if (el.loc == "Held") {
       el.loc = player.name;
     }
@@ -132,25 +150,26 @@ init = function() {
       el.worn = true;
     }
   });
-  parser.initCommands();
+  parser.initCommands(exits);
 };
 
 
-// Call after the player takes a turn, sending it a dictionary, result
-// It will run turn scripts unless result.suppressTurnScripts or result.commandFailed
+// Call after the player takes a turn, sending it a result, SUCCESS, SUCCESS_NO_TURNSCRIPTS or FAILED
+// If you want ten turns to pass you would be better calling runTurnScripts directly
 endTurn = function(result) {
-  if (result.errormsg) { errormsg(0, result.errormsg); }
-  if (!result.suppressTurnScripts && !result.commandFailed && ! result.errormsg) {
+  if (result == SUCCESS) {
     runTurnScripts();
   }
   endTurnUI();
 };
 
 
+// Runs turnscipts
+// Turnscripts are just objects in the data array with a "run" attribute set to a function.
 runTurnScripts = function() {
   for (var i = 0; i < data.length; i++) {
     if (typeof data[i]["run"] === "function"){
-      if ((("loc" in data[i]) && IsPresent(data[i])) || !("loc" in data[i])) {
+      if (((("loc" in data[i]) && IsPresent(data[i])) || !("loc" in data[i])) && data[i].runTurnscript) {
         data[i]["run"]();
       }
     }
@@ -158,10 +177,13 @@ runTurnScripts = function() {
 };
 
 
+// Returns a random number from 1 to n
 randomInt = function(n) {
   return Math.floor(Math.random() * n);
 };
 
+
+// Returns true percentile out of 100 times, false otherwise
 randomChance = function(percentile) {
   return randomInt(100) <= percentile;
 };

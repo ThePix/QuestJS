@@ -27,7 +27,8 @@ var parser = {};
     if (inputText) {
       var res = parser.convertInputTextToCommandCandidate(inputText);
       if (typeof res == "string") {
-        endTurn({errormsg:res})
+        errormsg(ERR_PARSER, res);
+        endTurn(FAILED)
         return;
       }
       parser.currentCommand = res;
@@ -37,14 +38,19 @@ var parser = {};
     var flag = false;
     for (var i = 0; i < parser.currentCommand.objects.length; i++) {
       for (var j = 0; j < parser.currentCommand.objects[i].length; j++) {
-        if (parser.currentCommand.objects[i][j].length > 1) {
-          flag = true;
-          parser.currentCommand.disambiguate1 = i;
-          parser.currentCommand.disambiguate2 = j;
-          showMenu(CMD_DISAMBIG_MSG, parser.currentCommand.objects[i][j], function(result) {
-            parser.currentCommand.objects[parser.currentCommand.disambiguate1][parser.currentCommand.disambiguate2] = [result];
-            parser.parse(null);
-          });
+        if (parser.currentCommand.objects[i][j] instanceof Array) {
+          if (parser.currentCommand.objects[i][j].length == 1) {
+            parser.currentCommand.objects[i][j] = parser.currentCommand.objects[i][j][0];
+          }
+          else {
+            flag = true;
+            parser.currentCommand.disambiguate1 = i;
+            parser.currentCommand.disambiguate2 = j;
+            showMenu(CMD_DISAMBIG_MSG, parser.currentCommand.objects[i][j], function(result) {
+              parser.currentCommand.objects[parser.currentCommand.disambiguate1][parser.currentCommand.disambiguate2] = result;
+              parser.parse(null);
+            });
+          }
         }
       }
     }
@@ -54,20 +60,22 @@ var parser = {};
   };
   
   // You can use this to bypass all the text matching when you know what the object and command are
+  // Used by the panes when the player clicks on a verb for an item
   parser.quickCmd = function(cmd, item) {
     parser.currentCommand = {
-      cmdString:cmd.name + " " + item.name,
+      cmdString:(item ? cmd.name + " " + item.name : cmd.name),
       cmd:cmd,
-      objects:[[[item]]]
+      objects:(item ? [[item]] : []),
     }
     parser.execute();
   }
 
   // Do it!
   parser.execute = function() {
-    debugmsg(1, "all done!");
     parser.inspect();
-    endTurn({});
+    outcome = parser.currentCommand.cmd.script(parser.currentCommand.cmd, parser.currentCommand.objects);
+    debugmsg(DBG_PARSER, "Result=" + outcome);
+    endTurn(outcome);
   }    
   
 
@@ -77,7 +85,8 @@ var parser = {};
   // .cmd            the matched command object
   // .objects        a list (of a list of a list), one member per capture group in the command regex
   // .objects[0]     a list (of a list), one member per object name given by the player for capture group 0
-  // .objects[0][0]  a list of possible object matches for each object name given by the player for the first object name in capture group 0
+  // .objects[0][0]  a list of possible object matches for each object name given by the player for the
+  //                      first object name in capture group 0
   parser.convertInputTextToCommandCandidate = function(inputText) {
     var s = inputText.toLowerCase().split(' ').filter(el => !CMD_IGNORED_WORDS.includes(el)).join(' ');
     var cmdString = s;
@@ -94,7 +103,7 @@ var parser = {};
     // This will help us narrow down the candidates (maybe)
     //matchedCandidates is an array of dictionaries,
     //each one containing a command and some matched objects if applicable
-    var error = "So I kind of get what you want to do, but not what you want to do it with.";
+    var error = CMD_GENERAL_OBJ_ERROR;
     var matchedCandidates = [];
     candidates.forEach(function(el) {
       // matchItemsToCmd will attempt to fit the objects, returns a dictionary if successful
@@ -294,44 +303,51 @@ var parser = {};
     s += "Matched command: " + parser.currentCommand.cmd.name + "<br/>";
     s += "Matched regex: " + parser.currentCommand.cmd.regex + "<br/>";
     s += "Match score: " + parser.currentCommand.score + "<br/>";
-    s += "Objects/texts:" + "<br/>";
+    s += "Objects/texts (" + parser.currentCommand.objects.length + "):" + "<br/>";
     for (var i = 0; i < parser.currentCommand.objects.length; i++) {
       if (typeof parser.currentCommand.objects[i] == "string") {
         s += "&nbsp;&nbsp;&nbsp;&nbsp;Text: " + parser.currentCommand.objects[i] + "<br/>";
       }
       else {
-        s += "&nbsp;&nbsp;&nbsp;&nbsp;Objects:" + parser.currentCommand.objects[i].map(function(el) { return el[0].name }).join(", ") + "<br/>";
+        s += "&nbsp;&nbsp;&nbsp;&nbsp;Objects:" + parser.currentCommand.objects[i].map(function(el) { return el.name }).join(", ") + "<br/>";
       }
     }
-    debugmsg(1, s);
+    debugmsg(DBG_PARSER, s);
   }
 
   // Should be called during the initialisation process
   // Any patterns are converted to RegExp objects.      
-  parser.initCommands = function() {
+  parser.initCommands = function(exits) {
     commands.forEach(function(el) {
       if (el.verb) {
         el.regex = el.regex + " #object#";
       }
-      if (typeof el.pattern == 'string') {
+      if (typeof el.pattern == "string") {
         el.regex = parser.pattern2Regexp(el.pattern);
       }
       if (!(el.regex instanceof RegExp)) {
         alert("No regex for " + el.name);
       }
-    });  
+    });
+    exits.forEach(function(el) {
+      if (!el.nocmd) {
+        regex = "^(" + CMD_GO + ")(" + el.name + "|" + el.abbrev.toLowerCase() + ")$";
+        cmd = new ExitCmd(el.name, {
+          regex:new RegExp(regex),
+        });
+        commands.push(cmd);
+      }
+    });
   }
 
   // Convert a pattern in the form:
-  // ask #object# about #text#
-  // to a regex like:
-  // ^ask (?<object>.*) about (?<text>.*)$
+  // ask #object# about #text# to a regex.
+  // Cannot cope with multiple options
   parser.pattern2Regexp = function(s) {
     var ary = s.split(';');
     var ary2 = [];
     ary.forEach(function(el) {
       s = '^' + el.trim() + '$';
-      //s = s.replace(/#([object|text]\w*)#/g, "(?<$1>.*)");
       s = s.replace(/#([object|text]\w*)#/g, "(.+)");
       ary2.push(s);
     });
@@ -340,18 +356,77 @@ var parser = {};
 
 
 
-// A command has an arbitrary name, a regex or pattern
+// A command has an arbitrary name, a regex or pattern, 
 // and a script as a minimum.
+// regex           A regex to match against
+// pattern         An alternative to a regex, will be converted to a regex at runtime
+//                 A command must have either a pattern or a regex
+// objects         An array of matches in the regex (see wiki)
+// script          This will be run on a successful match
+// att             If there is no script, then this attribute on the object will be used
 // nothingForAll   If the player uses ALL and there is nothing there, use this error message
+// noTurnscripts   Set to true to prevent turnscripts firing even when this command is successful
 
 
 function Cmd(name, hash) {
   this.name = name;
   this.objects = [];
+  this.script = function(cmd, objects) {
+    object = objects[0][0];
+    if (object[cmd.att]) {
+      msgOrRun(object, cmd.att);
+      return (cmd.noTurnscripts ? SUCCESS_NO_TURNSCRIPTS : SUCCESS);
+    }
+    else if (object[cmd.name.toLowerCase]) {
+      msgOrRun(object, cmd.name.toLowerCase);
+      return (cmd.noTurnscripts ? SUCCESS_NO_TURNSCRIPTS : SUCCESS);
+    }
+    else {
+      errormsg(ERR_GAME_BUG, CMD_NO_ATT_ERROR);
+      return FAILED;
+    }
+  };
   for (var key in hash) {
     this[key] = hash[key];
   }
 }
+
+function ExitCmd(name, hash) {
+  Cmd.call(this, name, hash);
+  this.exitCmd = true;
+  this.objects = [{ignore:true}, {ignore:true}, ],
+  this.script = function(cmd, objects) {
+    msg("Heading " + cmd.name);
+    currentRoom = getObject(player.loc);
+
+    if (!(cmd.name in currentRoom)) {
+      errormsg(ERR_PLAYER, CMD_NOT_THAT_WAY);
+      return FAILED;
+    }
+    else {
+      ex = currentRoom[cmd.name];
+      if (typeof ex == "string") {
+        setRoom(ex)
+        return SUCCESS;
+      }
+      else if (typeof ex === "function"){
+        ex(currentRoom);
+        return SUCCESS;
+      }
+      else if (typeof ex === "object"){
+        var fn = ex.use;
+        fn(ex);
+        return SUCCESS;
+      }
+      else {
+        errormsg(ERR_GAME_BUG, CMD_UNSUPPORTED_DIR);
+        return FAILED;
+      }
+    }
+    
+  };
+}
+
 
 function VerbCmd(name, hash) {
   Cmd.call(this, name, hash);
@@ -374,25 +449,27 @@ function AltVerbCmd(name, altcmd, pattern) {
 
 
 var commands = [
+  new Cmd('Help', {
+    regex:/^help|\?$/,
+    script:helpScript,
+  }),    
+  
   new Cmd('Look', {
-    regex:/^look$/,
+    regex:/^l|look$/,
     script:function() {
-      itemAction(room, 'examine');
-      suppressTurnScripts = true;
+      msgOrRun(room, 'examine');
+      return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
   new Cmd('Wait', {
     pattern:'wait;z',
     script:function() {
-      itemAction(room, 'examine');
-      suppressTurnScripts = true;
+      metamsg("Still to be implemented");
     },
   }),
   new Cmd('Examine', {
     regex:/^(x|look at|examine) (.+)$/,
-    script:function(object, text) {
-      itemAction(object, 'examine');
-    },
+    att:'examine',
     objects:[
       {ignore:true},
       {scope:isPresent}
@@ -400,15 +477,20 @@ var commands = [
   }),
   new Cmd('Take', {
     pattern:'take #object#',
-    script:function(object, text) {
-      itemAction(object, 'take');
+    script:function(cmd, objects) {
+      debugmsg(1, "HERE!!!");
+      debugmsg(1, cmd.name);
+      debugmsg(1, objects[0][0].name);
+      for (var i = 0; i < objects[0].length; i++) {
+        msgOrRun(objects[0][i], 'take', objects[0].length > 1);
+      }
     },
     objects:[{scope:isHere, multiple:true}]
   }),
   new Cmd('Take/from', {
     pattern:'take #object1# from #object2#',
     script:function(object, text) {
-      itemAction(object, 'take');
+      msgOrRun(object, 'take');
     },
     objects:[
       {scope:isHere, multiple:true},
@@ -419,14 +501,14 @@ var commands = [
 //  new VerbCmd('Drop', {
 //    pattern:'drop',
 //    script:function(object, text) {
-//      itemAction(object, 'drop');
+//      msgOrRun(object, 'drop');
 //    },
 //    objects:[{scope:isHeld, multiple:true}]
 //  }),
   new Cmd('Ask/about', {
     pattern:'ask #object# about #text#',
     script:function(object, text) {
-      itemAction(room, 'examine');
+      msgOrRun(room, 'examine');
       suppressTurnScripts = true;
     },
     objects:[

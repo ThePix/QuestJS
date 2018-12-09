@@ -5,7 +5,6 @@
 <title>A Test Page</title>
 <link rel="stylesheet" href="style.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
 <script src="settings.js"></script>
 <script src="io.js"></script>
 <script src="util.js"></script>
@@ -100,37 +99,7 @@ $( document ).ready(function() {
 
 
 <script>
-document.writeln('<div id="panes" class="sidenav' + PANES + '">');
-
-writeExit = function(n) {
-  document.writeln('<td class="compassbutton">');
-  document.writeln('<span class="compassbutton" id="exit' + exits[n].name + '" onclick="clickExit(\'' + exits[n].name + '\')">' + exits[n].abbrev + '</span>');
-  document.writeln('</td>');
-};
-
-if (COMPASS) {
-  document.writeln('<table>');
-  for (var i = 0; i < 3; i++) {
-    document.writeln('<tr>');
-    writeExit(0 + 5 * i);
-    writeExit(1 + 5 * i);
-    writeExit(2 + 5 * i);
-    document.writeln('<td></td>');
-    writeExit(3 + 5 * i);
-    writeExit(4 + 5 * i);
-    document.writeln('</tr>');
-  }
-  document.writeln('</table>');
-}
-
-for (var i = 0; i < inventories.length; i++) {
-  document.writeln('<hr/>');
-  document.writeln('<h6>' + inventories[i].name + ':</h6>');
-  document.writeln('<div id="' + inventories[i].alt + '">');
-  document.writeln('</div>');
-}
-
-document.writeln('</div>');
+  io.createPanes();
 </script>
 
 </body>
