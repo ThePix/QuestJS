@@ -15,6 +15,9 @@ const CMD_NO_ATT_ERROR = "It does not work like that.";
 const CMD_NOT_THAT_WAY = "You can't go that way.";
 const CMD_UNSUPPORTED_DIR = "Unsupported type for direction";
 const CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
+const CMD_NOT_CONTAINER = "That's not a container";
+const CMD_NOT_CARRYING = "You're not carrying it";
+const CMD_DONE = "Done";
 
 const CMD_MSG_OR_RUN_ERROR = "Unsupported type for msgOrRun"
 const CMD_FAILED_TO_FIND_ROOM = "Failed to find room"
@@ -38,9 +41,17 @@ const ERR_PLAYER = 24;      // Player is typing something not allowed
 const DBG_PARSER = 21;      // Debug message from the parser
 
 
+const THIRD_PERSON = {subjective:"it", objective:"it", possessive: "its"};
+const MALE = {subjective:"he", objective:"him", possessive: "his"};
+const FEMALE = {subjective:"she", objective:"her", possessive: "her"};
+const PLURAL = {subjective:"they", objective:"them", possessive: "their"};
+const FIRST_PERSON = {subjective:"I", objective:"me", possessive: "my"};
+const SECOND_PERSON = {subjective:"you", objective:"you", possessive: "your"};
+
 const DEFAULT_RESPONSES = {
   take:"You can't take it.",
   examine:"It's not important.",
+  wear:"That's not something you can wear.",
 };
 
 
@@ -96,6 +107,78 @@ helpScript = function() {
   metamsg('Click an item to interact with it, then click the buttons to select an interaction.');
   return SUCCESS_NO_TURNSCRIPTS;
 };
+
+
+const CONJUGATIONS_I = [
+  { name:"be", value:"am"},
+  { name:"_be", value:"'m"},
+];
+const CONJUGATIONS_YOU = [
+  { name:"be", value:"are"},
+  { name:"_be", value:"'re"},
+];
+const CONJUGATIONS_WE = [
+  { name:"be", value:"are"},
+  { name:"_be", value:"'re"},
+];
+const CONJUGATIONS_THEY = [
+  { name:"be", value:"are"},
+  { name:"_be", value:"'re"},
+];
+const CONJUGATIONS_IT = [
+  { name:"be", value:"is"},
+  { name:"have", value:"has"},
+  { name:"can", value:"can"},
+  { name:"mould", value:"moulds"},
+  { name:"*ould", value:"ould"},
+  { name:"must", value:"must"},
+  { name:"can_t", value:"can't"},
+  { name:"won_t", value:"won't"},
+  { name:"cannot", value:"cannot"},
+  { name:"@n_t", value:"n't"},
+  { name:"_ve", value:"'s"},
+  { name:"_be", value:"'s"},
+  { name:"*ay", value:"ays"},
+  { name:"*oy", value:"oys"},
+  { name:"*ey", value:"eys"},
+  { name:"*y", value:"ies"},
+  { name:"*ss", value:"sses"},
+  { name:"*s", value:"sses"},
+  { name:"*sh", value:"shes"},
+  { name:"*ch", value:"ches"},
+  { name:"*o", value:"oes"},
+  { name:"*x", value:"xes"},
+  { name:"*z", value:"zes"},
+  { name:"*", value:"s"},
+];
+
+
+
+
+conjugate = function(item, verb) {
+  var gender = item.pronouns.subjective;
+  if (gender == "he" || genders == "she") { gender = "it" };
+  arr = window["CONJUGATIONS_" + gender.toUpperCase()];
+
+  if (!arr) {errormsg(ERR_QUEST_BUG, "No conjugations found: CONJUGATIONS_" + gender.toUpperCase();
+  
+            if (DictionaryContains (dict, verb)) {
+                return (DictionaryItem (dict, verb))
+            }
+            foreach (ending, dict) {
+                if (Left (ending, 1) = "@" and EndsWith (verb, Mid (ending, 2))) {
+                  return (Conjugate (obj, Left (verb, LengthOf(verb) - LengthOf(ending) + 1)) + DictionaryItem (dict, ending))
+                }
+                else if (Left (ending, 1) = "*" and EndsWith (verb, Mid (ending, 2))) {
+                    return (Left (verb, LengthOf(verb) - LengthOf(ending) + 1) + DictionaryItem (dict, ending))
+                }
+            }
+        }
+    return (verb)
+};
+
+
+
 
 
 

@@ -19,7 +19,7 @@ var data = [
 
   new Room("kitchen", {
     examine:'A clean room.',
-    west:'lounge',
+    west:"lounge",
     north:new Exit('garden'),
   }),
 
@@ -45,7 +45,7 @@ var data = [
     examine:'A red ball.',
     drop:function(self) {
       msg('You drop the stupid ' + self.name + '.');
-      self['loc'] = 'lounge'
+      self['loc'] = "lounge"
     },
   }),
 
@@ -60,36 +60,44 @@ var data = [
   }),
   
   new TakableItem("teapot", {
-    loc:'lounge',
+    loc:"lounge",
     alt:['kettle'],
     examine:function(self) {
       msg('A nasty blue teapot. It is broken.');
     },
   }),
   
-  new TakableItem("cup", {
-    loc:'lounge',
+  new Item("chest", {
+    container:true,
+    loc:"lounge",
   }),
   
-  new TakableItem("lamp", {
-    loc:'lounge',
-    examine:'A broken lamp.',
+  new TakableItem("boots", {
+    loc:"lounge",
+    pronouns:PLURAL,
+    examine:"Some old boots.",
   }),
   
   new TakableItem("knife", {
-    loc:'lounge',
-    examine:function(self) {
-      msg('A sharp knife.');
+    loc:"lounge",
+    sharp:false,
+    examine:function(item) {
+      if (item.sharp) {
+        msg("A really sharp knife.");
+      }
+      else {
+        msg("A blunt knife.");
+      }
     },
   }),
   
   new UseableItem("chair", {
-    loc:'lounge',
+    loc:"lounge",
     examine:'A cheap plastic chair.'
   }),
 
   new UseableTakableItem("device", {
-    loc:'lounge',
+    loc:"lounge",
     display:'not here',
     examine:function(self) {
       msg('A nasty blue device. It is broken.');
@@ -103,6 +111,6 @@ var data = [
   }),
   
   new Player("me", {
-    loc:'lounge',
+    loc:"lounge",
   }),
 ];

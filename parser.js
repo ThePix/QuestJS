@@ -201,6 +201,7 @@ var parser = {};
         }
         score = 2;
         res.objects.push(list.map(function(el) {return [el]}));
+        res.all = true;
       }
       
       else {
@@ -303,6 +304,7 @@ var parser = {};
     s += "Matched command: " + parser.currentCommand.cmd.name + "<br/>";
     s += "Matched regex: " + parser.currentCommand.cmd.regex + "<br/>";
     s += "Match score: " + parser.currentCommand.score + "<br/>";
+    if (parser.currentCommand.all) { s += "Player typed ALL<br/>"; }
     s += "Objects/texts (" + parser.currentCommand.objects.length + "):" + "<br/>";
     for (var i = 0; i < parser.currentCommand.objects.length; i++) {
       if (typeof parser.currentCommand.objects[i] == "string") {
@@ -371,19 +373,24 @@ var parser = {};
 function Cmd(name, hash) {
   this.name = name;
   this.objects = [];
+  // This is the default script for commands
   this.script = function(cmd, objects) {
-    object = objects[0][0];
-    if (object[cmd.att]) {
-      msgOrRun(object, cmd.att);
-      return (cmd.noTurnscripts ? SUCCESS_NO_TURNSCRIPTS : SUCCESS);
+    var attName = cmd.att ? cmd.att : cmd.name.toLowerCase();
+    var success = false;
+    for (var i = 0; i < objects[0].length; i++) {
+      if (!objects[0][i][attName]) {
+        errormsg(ERR_GAME_BUG, CMD_NO_ATT_ERROR + " (" + objects[0][i].name + ").");
+      }
+      else {
+        var result = msgOrRun(objects[0][i], attName, (objects[0].length > 1 || parser.currentCommand.all));
+        success = result || success;
+      }
     }
-    else if (object[cmd.name.toLowerCase]) {
-      msgOrRun(object, cmd.name.toLowerCase);
+    if (success) {
       return (cmd.noTurnscripts ? SUCCESS_NO_TURNSCRIPTS : SUCCESS);
     }
     else {
-      errormsg(ERR_GAME_BUG, CMD_NO_ATT_ERROR);
-      return FAILED;
+      return FAILED; 
     }
   };
   for (var key in hash) {
@@ -468,7 +475,7 @@ var commands = [
     },
   }),
   new Cmd('Examine', {
-    regex:/^(x|look at|examine) (.+)$/,
+    regex:/^(look at|look|examine|exam|ex|x) (.+)$/,
     att:'examine',
     objects:[
       {ignore:true},
@@ -476,16 +483,49 @@ var commands = [
     ]
   }),
   new Cmd('Take', {
-    pattern:'take #object#',
+    regex:/^(take|get|pick up) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isHere, multiple:true},
+    ],
+  }),
+  new Cmd('Drop', {
+    regex:/^(drop) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isHeld, multiple:true},
+    ],
+  }),
+  new Cmd('Put/in', {
+    regex:/^(put|place|drop) (.+) (in to|into|in) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isHeld, multiple:true},
+      {ignore:true},
+      {scope:isPresent},
+    ],
     script:function(cmd, objects) {
-      debugmsg(1, "HERE!!!");
-      debugmsg(1, cmd.name);
-      debugmsg(1, objects[0][0].name);
-      for (var i = 0; i < objects[0].length; i++) {
-        msgOrRun(objects[0][i], 'take', objects[0].length > 1);
+      var attName = cmd.att ? cmd.att : cmd.name.toLowerCase();
+      var success = false;
+      var container = objects[1][0];
+      if (!container.container) {
+        errormsg(ERR_PLAYER, CMD_NOT_CONTAINER + " (" + container.name + ").");
+        return FAILED; 
       }
+      // TODO: Check if full
+      for (var i = 0; i < objects[0].length; i++) {
+        if (objects[0][i].loc != player.name) {
+          errormsg(ERR_GAME_BUG, CMD_NOT_CARRYING + " (" + objects[0][i].name + ")." + objects[0][i].loc);
+        }
+        else {
+          objects[0][i].loc = container.name;
+          msg(prefix(objects[0][i], objects[0].length > 1 || parser.currentCommand.all) + CMD_DONE);
+          success = true;
+        }
+      }
+      if (success) { updateUIItems(); }
+      return success ? SUCCESS : FAILED; 
     },
-    objects:[{scope:isHere, multiple:true}]
   }),
   new Cmd('Take/from', {
     pattern:'take #object1# from #object2#',
