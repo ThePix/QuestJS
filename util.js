@@ -282,7 +282,7 @@ runTurnScripts = function() {
 
 const BACK_REGEX = /\[.+?\]/;
 setBackground = function() {
-  room = getCurrentRoom();
+  room = getObject(player.loc);
   background = getObject("background");
   if (background == undefined) {
     background = new Item("background", {

@@ -26,6 +26,7 @@ const ERROR_MSG_OR_RUN = "Unsupported type for msgOrRun"
 const ERROR_NO_ROOM = "Failed to find room"
 
 const DEFAULT_DESCRIPTION = "It's just scenery.";
+const TITLE = "A First Step...";
 
 const PRONOUNS = {
   thirdperson:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its"},

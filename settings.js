@@ -47,7 +47,8 @@ const INVENTORIES = [
 // This function will be called at the start of the game, so can be used
 // to give a title and introduce your game.
 setup = function() {
-  heading(2, 'A Simple Test');
+  heading(2, TITLE);
+  document.title = TITLE;
   msg('This is a test of what we can do.');
   //[objs, score] = findInScope("ch", [scope(isHere), scope(isPresent)]);
   //msg(objs.length);

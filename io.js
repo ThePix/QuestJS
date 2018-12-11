@@ -1,6 +1,10 @@
 // ============  Output  =======================================
 
-
+// Various output functions
+// The idea is that you can have them display different - or not at all
+// So error messages can be displayed in red, meta-data (help., etc)
+// is grey, and debug messages can be turned on and off as required
+// Note that debug and error messages need a number first
 msg = function(s, cssClass) {
   if (cssClass == undefined) {
     $("#output").append('<p id="n' + io.nextid + '">' + s + "</p>");
@@ -28,16 +32,18 @@ heading = function(level, s) {
 };
 
 
-
+// Clears the screen
 clearScreen = function() {
   for (var i = 0; i < io.nextid; i++) {
     $('#n' + i).remove();
   }
 };
 
-//showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
-//  msg("You picked " + result + ".");
-//});
+
+// Use like this:
+//      showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
+//        msg("You picked " + result + ".");
+//      });
 showMenu = function(title, options, fn) {
   io.menuStartId = io.nextid;
   io.menuFn = fn;
@@ -60,7 +66,7 @@ showMenu = function(title, options, fn) {
 // This should be called after each turn to ensure we are at the end of the page and the text box has the focus
 endTurnUI = function() {
   // set the EXITS
-  room = getCurrentRoom();
+  room = getObject(player.loc);
   for (var i = 0; i < EXITS.length; i++) {
     if (EXITS[i].name in room || ['Look', 'Help', 'Wait'].includes(EXITS[i].name)) {
       $('#exit' + EXITS[i].name).show();
@@ -210,3 +216,73 @@ io.createPanes = function() {
 
   document.writeln('</div>');
 };
+
+
+
+
+
+io.savedCommands = ['help'];
+io.savedCommandsPos = 0;
+
+$( document ).ready(function() {
+  $('#textbox').keydown(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+      var s = $('#textbox').val();
+      if (CMD_ECHO) { msg(s); }
+      io.savedCommands.push(s);
+      io.savedCommandsPos = io.savedCommands.length;
+      parser.parse(s);
+      $('#textbox').val('');
+    }
+    if(keycode == '37'){
+      // left arrow
+      if (event.shiftKey) {
+        if (CMD_ECHO) { msg("west"); }
+        parser.parse("west");
+        $('#textbox').val('');
+      }
+    }
+    if(keycode == '38'){
+      // up arrow
+      if (event.shiftKey) {
+        if (CMD_ECHO) { msg("north"); }
+        parser.parse("north");
+        $('#textbox').val('');
+      }
+      else {
+        io.savedCommandsPos -= 1;
+        if (io.savedCommandsPos < 0) { io.savedCommandsPos = 0; }
+        $('#textbox').val(io.savedCommands[io.savedCommandsPos]);
+      }
+    }
+    if(keycode == '39'){
+      // right arrow
+      if (event.shiftKey) {
+        if (CMD_ECHO) { msg("east"); }
+        parser.parse("east");
+        $('#textbox').val('');
+      }
+    }
+    if(keycode == '40'){
+      // down arrow
+      if (event.shiftKey) {
+        if (CMD_ECHO) { msg("south"); }
+        parser.parse("south");
+        $('#textbox').val('');
+      }
+      else {
+        io.savedCommandsPos += 1;
+        if (io.savedCommandsPos >= io.savedCommands.length) { io.savedCommandsPos = io.savedCommands.length - 1; }
+        $('#textbox').val(io.savedCommands[io.savedCommandsPos]);
+      }
+    }
+    if(keycode == '27'){
+      // ESC
+      $('#textbox').val('');
+    }
+  });    
+  init();
+  setup();
+  setRoom(player.loc, false);
+});

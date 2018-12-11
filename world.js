@@ -22,7 +22,7 @@ function Item(name, hash) {
       return false;
     }
     msg(prefix(item, isMultiple) + "You drop " + itemNameWithThe(item) + ".");
-    item.loc = currentRoom.name;
+    item.loc = getObject(player.loc).name;
     updateUIItems();
     return true;
   }
@@ -64,7 +64,7 @@ function Item(name, hash) {
       return false;
     }
     msg(prefix(item, isMultiple) + "You put on " + itemNameWithThe(item) + ".");
-    item.loc = currentRoom.name;
+    item.loc = getObject(player.loc).name;
     item.worn = true;
     updateUIItems();
     return true;
