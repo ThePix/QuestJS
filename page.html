@@ -6,11 +6,15 @@
 <link rel="stylesheet" href="style.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="settings.js"></script>
+<script>
+  document.writeln('<script src="' + LANG_FILENAME + '"></scr' + "ipt>");
+</script>
 <script src="io.js"></script>
 <script src="util.js"></script>
 <script src="world.js"></script>
 <script src="parser.js"></script>
 <script src="data.js"></script>
+
 
 <script>
 var savedCommands = ['help'];
@@ -76,7 +80,7 @@ $( document ).ready(function() {
   });    
   init();
   setup();
-  setRoom(player.loc);
+  setRoom(player.loc, false);
 });
 </script>
 

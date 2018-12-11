@@ -4,21 +4,95 @@ function Item(name, hash) {
   this.name = name;
   this.display = "visible";
   this.hereVerbs = ['Examine'];
-  this.pronouns = THIRD_PERSON;
+  this.pronouns = PRONOUNS.thirdperson;
   for (var key in DEFAULT_RESPONSES) {
     this[key] = DEFAULT_RESPONSES[key];
   }
   for (var key in hash) {
     this[key] = hash[key];
   }
+  
+  this.drop = function(item, isMultiple) {
+    if (item.worn) {
+      msg(prefix(item, isMultiple) + "You're wearing " + item.pronoun.subjective + ".");
+      return false;
+    }
+    if (item.loc != player.name) {
+      msg(prefix(item, isMultiple) + "You don't have " + item.pronoun.subjective + ".");
+      return false;
+    }
+    msg(prefix(item, isMultiple) + "You drop " + itemNameWithThe(item) + ".");
+    item.loc = currentRoom.name;
+    updateUIItems();
+    return true;
+  }
+  
+  this.take = function(item, isMultiple) {
+    if (!isPresent(item)) {
+      msg(prefix(item, isMultiple) + sentenceCase(item.pronoun.subjective) + "'s not here.");
+      return false;
+    }
+    if (!item.takable) {
+      msg(prefix(item, isMultiple) + "You can't take " + item.pronoun.subjective + ".");
+      return false;
+    }
+    if (item.loc == player.name) {
+      msg(prefix(item, isMultiple) + "You already have " + item.pronoun.subjective + ".");
+      return false;
+    }      
+    msg(prefix(item, isMultiple) + "You take " + itemNameWithThe(item) + ".");
+    item.loc = player.name;
+    updateUIItems();
+    return true;
+  }
+
+  this.wear = function(item, isMultiple) {
+    if (!isPresent(item)) {
+      msg(prefix(item, isMultiple) + sentenceCase(item.pronoun.subjective) + "'s not here.");
+      return false;
+    }
+    if (!item.takable) {
+      msg(prefix(item, isMultiple) + "You can't take " + item.pronoun.subjective + ".");
+      return false;
+    }
+    if (item.worn) {
+      msg(prefix(item, isMultiple) + "You're already wearing " + item.pronoun.subjective + ".");
+      return false;
+    }
+    if (item.loc != player.name) {
+      msg(prefix(item, isMultiple) + "You don't have " + item.pronoun.subjective + ".");
+      return false;
+    }
+    msg(prefix(item, isMultiple) + "You put on " + itemNameWithThe(item) + ".");
+    item.loc = currentRoom.name;
+    item.worn = true;
+    updateUIItems();
+    return true;
+  }
+  
+  this.remove = function(item, isMultiple) {
+    if (!item.worn) {
+      msg(prefix(item, isMultiple) + "You're not wearing " + item.pronoun.subjective + ".");
+      return false;
+    }
+    msg(prefix(item, isMultiple) + "You take " + itemNameWithThe(item) + " off.");
+    item.loc = player.name;
+    item.worn = false;
+    updateUIItems();
+    return true;
+  }
 }
+
+
 
 function Player(name, hash) {
   Item.call(this, name, hash);
-  this.pronouns = SECOND_PERSON;
+  this.pronouns = PRONOUNS.secondperson;
   this.display = "invisible";
   this.player = true;
 }
+
+
 
 function Exit(name, hash) {
   Item.call(this, name, hash);
@@ -44,6 +118,24 @@ function Turnscript(name, hash) {
 
 
 
+function NpcItem(name, hash) {
+  Item.call(this, name, hash);
+  this.hereVerbs = ['Look at'];
+};
+
+function MaleNpcItem(name, hash) {
+  NpcItem.call(this, name, hash);
+  this.pronouns = PRONOUNS.male;
+};
+
+function FemaleNpcItem(name, hash) {
+  NpcItem.call(this, name, hash);
+  this.pronouns = PRONOUNS.female;
+};
+
+
+
+
 function UseableItem(name, hash) {
   Item.call(this, name, hash);
   this.hereVerbs = ['Examine', 'Use'];
@@ -54,30 +146,6 @@ function TakableItem(name, hash) {
   this.heldVerbs = ['Examine', 'Drop'];
   this.hereVerbs = ['Examine', 'Take'];
   this.takable = true;
-  this.drop = function(item, isMultiple) {
-    if (item.worn) {
-      msg(prefix(item, isMultiple) + "You're wearing it.");
-      return false;
-    }
-    if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + "You don't have it.");
-      return false;
-    }
-    msg(prefix(item, isMultiple) + "You drop the " + item.name + ".");
-    item.loc = currentRoom.name;
-    updateUIItems();
-    return true;
-  }
-  this.take = function(item, isMultiple) {
-    if (item.loc == player.name) {
-      msg(prefix(item, isMultiple) + "You already have it.");
-      return false;
-    }      
-    msg(prefix(item, isMultiple) + "You take the " + item.name + ".");
-    item.loc = player.name;
-    updateUIItems();
-    return true;
-  }
 };
 
 function UseableTakableItem(name, hash) {
@@ -91,32 +159,6 @@ function WearableItem(name, hash) {
   this.heldVerbs = ['Examine', 'Drop', 'Wear'];
   this.wornVerbs = ['Examine', 'Remove'];
   this.wearable = true;
-  this.wear = function(item, isMultiple) {
-    if (item.worn) {
-      msg(prefix(item, isMultiple) + "You're already wearing it.");
-      return false;
-    }
-    if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + "You don't have it.");
-      return false;
-    }
-    msg(prefix(item, isMultiple) + "You put on the " + item.name + ".");
-    item.loc = currentRoom.name;
-    item.worn = true;
-    updateUIItems();
-    return true;
-  }
-  this.remove = function(item, isMultiple) {
-    if (!item.worn) {
-      msg(prefix(item, isMultiple) + "You're not wearing it.");
-      return false;
-    }
-    msg(prefix(item, isMultiple) + "You take off the " + item.name + ".");
-    item.loc = player.name;
-    item.worn = false;
-    updateUIItems();
-    return true;
-  }
 };
 
 function SwitchableItem(name, hash) {

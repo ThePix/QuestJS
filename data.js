@@ -12,15 +12,20 @@ SpellItem.prototype.cast = function(self) {
 
 
 var data = [
-  new Room("lounge", {
-    examine:'A smelly room.',
-    east:'kitchen'
+  
+  new Player("me", {
+    loc:"lounge",
   }),
 
   new Room("kitchen", {
     examine:'A clean room.',
     west:"lounge",
     north:new Exit('garden'),
+  }),
+
+  new Room("lounge", {
+    examine:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
+    east:'kitchen'
   }),
 
   new Room("garden", {
@@ -31,14 +36,15 @@ var data = [
     },
   }),
 
-//  new Room("spellbook", {
-//    examine:'A wild and over-grown garden.',
-//  }),
+  new Room("spellbook", {
+    examine:'A ancient tomb.',
+  }),
 
-//  new SpellItem("charm", {
-//    loc:'spellbook',
-//    examine:'Charm will make the target thonk you are his or her friend.',
-//  }),
+  new SpellItem("charm", {
+    loc:'spellbook',
+    spellVerbs:["Cast"],
+    examine:'Charm will make the target thonk you are his or her friend.',
+  }),
 
   new TakableItem("ball", {
     loc:'Held',
@@ -74,7 +80,7 @@ var data = [
   
   new TakableItem("boots", {
     loc:"lounge",
-    pronouns:PLURAL,
+    pronouns:PRONOUNS.plural,
     examine:"Some old boots.",
   }),
   
@@ -96,6 +102,26 @@ var data = [
     examine:'A cheap plastic chair.'
   }),
 
+  new UseableItem("chair", {
+    loc:"kitchen",
+    examine:'A cheap plastic chair.'
+  }),
+
+  new UseableItem("chair", {
+    loc:"kitchen",
+    examine:'A cheap plastic chair.'
+  }),
+
+  new UseableItem("chair", {
+    loc:"kitchen",
+    examine:'A cheap plastic chair.'
+  }),
+
+  new FemaleNpcItem("Mary", {
+    loc:"lounge",
+    examine:'An attractive young lady.'
+  }),
+
   new UseableTakableItem("device", {
     loc:"lounge",
     display:'not here',
@@ -110,7 +136,4 @@ var data = [
     },
   }),
   
-  new Player("me", {
-    loc:"lounge",
-  }),
 ];

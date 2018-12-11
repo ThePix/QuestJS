@@ -18,6 +18,10 @@
 var parser = {};
 
   parser.currentCommand;
+  // Stores the current values for it, him, etc.
+  // put hat in box
+  // x it
+  parser.pronouns = {};
 
   // The "parse" function should be sent either the text the player typed or null.
   // If sent null it will continue to work with the current vales in currentCommand.
@@ -73,6 +77,12 @@ var parser = {};
   // Do it!
   parser.execute = function() {
     parser.inspect();
+    // 
+    if (parser.currentCommand.objects.length > 0) {
+      for (var i = 0; i < parser.currentCommand.objects[0].length; i++) {
+        parser.pronouns[parser.currentCommand.objects[0][i].pronouns.objective] = parser.currentCommand.objects[0][i];
+      }
+    }
     outcome = parser.currentCommand.cmd.script(parser.currentCommand.cmd, parser.currentCommand.objects);
     debugmsg(DBG_PARSER, "Result=" + outcome);
     endTurn(outcome);
@@ -241,6 +251,14 @@ var parser = {};
   // or 1 if in the third list).
   // If not found the score will be 0, and an empty array returned.
   parser.findInScope = function(s, listOfLists) {
+    debugmsg(1, "looking for " + s);
+    // First handle IT etc.
+    for (key in PRONOUNS) {
+      if (s == PRONOUNS[key].objective && parser.pronouns[PRONOUNS[key].objective]) {
+        return [parser.pronouns[PRONOUNS[key].objective], 1];
+      }
+    }
+        
     var objs;
     for (var i = 0; i < listOfLists.length; i++) {
       objs = this.findInList(s, listOfLists[i]);
@@ -319,7 +337,7 @@ var parser = {};
 
   // Should be called during the initialisation process
   // Any patterns are converted to RegExp objects.      
-  parser.initCommands = function(exits) {
+  parser.initCommands = function(EXITS) {
     commands.forEach(function(el) {
       if (el.verb) {
         el.regex = el.regex + " #object#";
@@ -331,7 +349,7 @@ var parser = {};
         alert("No regex for " + el.name);
       }
     });
-    exits.forEach(function(el) {
+    EXITS.forEach(function(el) {
       if (!el.nocmd) {
         regex = "^(" + CMD_GO + ")(" + el.name + "|" + el.abbrev.toLowerCase() + ")$";
         cmd = new ExitCmd(el.name, {
@@ -472,6 +490,13 @@ var commands = [
     pattern:'wait;z',
     script:function() {
       metamsg("Still to be implemented");
+    },
+  }),
+  new Cmd('test', {
+    pattern:'test',
+    script:function() {
+      background = getObject("background");
+      metamsg(JSON.stringify(background));
     },
   }),
   new Cmd('Examine', {

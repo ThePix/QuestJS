@@ -59,14 +59,14 @@ showMenu = function(title, options, fn) {
 
 // This should be called after each turn to ensure we are at the end of the page and the text box has the focus
 endTurnUI = function() {
-  // set the exits
+  // set the EXITS
   room = getCurrentRoom();
-  for (var i = 0; i < exits.length; i++) {
-    if (exits[i].name in room || ['Look', 'Help', 'Wait'].includes(exits[i].name)) {
-      $('#exit' + exits[i].name).show();
+  for (var i = 0; i < EXITS.length; i++) {
+    if (EXITS[i].name in room || ['Look', 'Help', 'Wait'].includes(EXITS[i].name)) {
+      $('#exit' + EXITS[i].name).show();
     }
     else {
-      $('#exit' + exits[i].name).hide();
+      $('#exit' + EXITS[i].name).hide();
     }
   }
   // scroll to end
@@ -78,16 +78,16 @@ endTurnUI = function() {
 
 
 updateUIItems = function() {
-  for (var i = 0; i < inventories.length; i++) {
-    $('#' + inventories[i].alt).empty();
+  for (var i = 0; i < INVENTORIES.length; i++) {
+    $('#' + INVENTORIES[i].alt).empty();
   }
 
   io.currentItemList = [];
   for (var j = 0; j < data.length; j++) {
     if (data[j].display == "visible") {
-      for (var i = 0; i < inventories.length; i++) {
-        if (inventories[i].test(data[j])) {
-          io.appendItem(data[j], inventories[i].verbs, inventories[i].alt);
+      for (var i = 0; i < INVENTORIES.length; i++) {
+        if (INVENTORIES[i].test(data[j])) {
+          io.appendItem(data[j], INVENTORIES[i].verbs, INVENTORIES[i].alt);
         }
       }
     }
@@ -152,10 +152,10 @@ io.clickItemAction = function(itemName, action) {
   var item = getObject(itemName, true);
   var cmd = getCommand(action);
   if (cmd == undefined) {
-    errormsg(10, BUG_PANE_CMD_NOT_FOUND);
+    errormsg(ERR_GAME_BUG, CMD_PANE_CMD_NOT_FOUND);
   }
   else if (item == undefined) {
-    errormsg(10, BUG_PANE_ITEM_NOT_FOUND);
+    errormsg(ERR_GAME_BUG, CMD_PANE_ITEM_NOT_FOUND);
   }
   else {
     debugmsg(4, item.name);
@@ -173,7 +173,7 @@ io.appendItem = function(item, attName, htmlDiv) {
     }
   }
   else {
-    errormsg(1, "No " + attName + " for " + item.name );
+    errormsg(ERR_GAME_BUG, "No " + attName + " for " + item.name );
   }
 };
 
@@ -182,7 +182,7 @@ io.createPanes = function() {
 
   writeExit = function(n) {
     document.writeln('<td class="compassbutton">');
-    document.writeln('<span class="compassbutton" id="exit' + exits[n].name + '" onclick="io.clickExit(\'' + exits[n].name + '\')">' + exits[n].abbrev + '</span>');
+    document.writeln('<span class="compassbutton" id="exit' + EXITS[n].name + '" onclick="io.clickExit(\'' + EXITS[n].name + '\')">' + EXITS[n].abbrev + '</span>');
     document.writeln('</td>');
   };
 
@@ -201,10 +201,10 @@ io.createPanes = function() {
     document.writeln('</table>');
   }
 
-  for (var i = 0; i < inventories.length; i++) {
+  for (var i = 0; i < INVENTORIES.length; i++) {
     document.writeln('<hr/>');
-    document.writeln('<h6>' + inventories[i].name + ':</h6>');
-    document.writeln('<div id="' + inventories[i].alt + '">');
+    document.writeln('<h6>' + INVENTORIES[i].name + ':</h6>');
+    document.writeln('<div id="' + INVENTORIES[i].alt + '">');
     document.writeln('</div>');
   }
 

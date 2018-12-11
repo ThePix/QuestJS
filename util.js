@@ -6,7 +6,6 @@
 var player;
 
 
-
 // ============  Random Utilities  =======================================
 
 // Returns a random number from 1 to n
@@ -47,8 +46,26 @@ formatList = function(itemArray) {
 };
 
 
+// Gets an array of strings, extracting each regex match from this string.
+String.prototype.scan = function (re) {
+  var s = this;
+  var m, r = [];
+  while (m = re.exec(s)) {
+    s = s.replace(m[0], "");
+    r.push(m[0]);
+  }
+  return r;
+};
+
+
+
+
+
+
+
 
 // ============  Object Utilities  =======================================
+
 
 
 // This is a method to allow the Array.find method to find the player
@@ -58,7 +75,7 @@ isPlayer = function(item) {
 
 // Gets the object with the given name (or htmlName name)
 getObject = function(name, useHtmlName) {
-  var found = data.find(function(el, useHtmlName) {
+  var found = data.find(function(el) {
     return (useHtmlName ? el.htmlName : el.name) == name;
   });
   return found;
@@ -78,6 +95,12 @@ getCommand = function(name) {
 };
 
 
+itemNameWithThe = function(item) {
+  if (item.properName) {
+    return item.name;
+  }
+  return "the " + item.name;
+}
 
 
 
@@ -86,7 +109,7 @@ getCommand = function(name) {
 
 // Scope functions
 isPresent = function(item) {
-  return item.loc == player.loc || item.loc == player.name;
+  return isHere(item) || isHeldOrWorn(item);
 };
 isHeldOrWorn = function(item) {
   return item.loc == player.name;
@@ -95,7 +118,7 @@ isHeld = function(item) {
   return (item.loc == player.name) && !item.worn;
 };
 isHere = function(item) {
-  return (item.loc == player.loc);
+  return item.loc == player.loc || item.loc == "Ubiquitous";
 };
 isWorn = function(item) {
   return (item.loc == player.name) && item.worn;
@@ -124,6 +147,10 @@ listProperties = function(obj) {
 };
 
 
+// To inspect an object use JSON.stringify(car)
+
+
+
 
 
 
@@ -142,55 +169,87 @@ msgOrRun = function(item, attname, isMultiple) {
     return item[attname](item, isMultiple);
   }
   else {
-    errormsg(ERR_GAME_BUG, CMD_MSG_OR_RUN_ERROR);
+    errormsg(ERR_GAME_BUG, ERROR_MSG_OR_RUN);
     return false;
   }
 };
 
 
 // Sets the current room to the one named
-setRoom = function(roomName) {
+setRoom = function(roomName, suppressOutput) {
   room = getObject(roomName);
   if (room === undefined) {
-    errormsg(ERR_GAME_BUG, CMD_FAILED_TO_FIND_ROOM + ": " + roomName + ".");
+    errormsg(ERR_GAME_BUG, ERROR_NO_ROOM + ": " + roomName + ".");
     return false;
   }
   //clearScreen();
   player.loc = room.name;
-  heading(4, room.name);
-  msgOrRun(room, "examine");
+  setBackground();
+  if (!suppressOutput) {
+    heading(4, room.name);
+    msgOrRun(room, "examine");
+  }
   updateUIItems();
   return true;
 };
 
 
 
-// Must be called before the ame starts to perform varius housekeeping jobs
+// Must be called before the game starts to perform various housekeeping jobs
 init = function() {
+  // Sort out the player
   player = data.find(isPlayer);
   if (typeof player == "undefined") {
-    errormsg(ERR_GAME_BUG, "No player object found. This will not go well...");
+    errormsg(ERR_GAME_BUG, ERROR_NO_PLAYER);
   }
-  currentRoom = getObject(player.loc);
-  if (typeof currentRoom == "undefined") {
-    errormsg(ERR_GAME_BUG, "No room object found (looking for '" + player.loc + "'). This will not go well...");
-  }
+  
+  // Go through each item
   data.forEach(function (el) {
-    if (!el.alias) {
-      el.alias = el.name;
-    }
-    el.htmlName = el.name.replace(/\W/g, "");
-    // TODO: Make htmlName unique
-    if (el.loc == "Held") {
-      el.loc = player.name;
-    }
-    else if (el.loc == "Worn") {
-      el.loc = player.name;
-      el.worn = true;
-    }
+    initItem(el);
   });
-  parser.initCommands(exits);
+  
+  // Go through each command
+  parser.initCommands(EXITS);
+  
+  // Set up the UI
+  endTurnUI();
 };
+
+
+
+// Every item or room should have this called for them.
+// That will be done at the start, but you need to do it yourself 
+// if creating items on the fly.
+initItem = function(item) {
+  // Give every object an alias
+  if (!item.alias) {
+    item.alias = item.name;
+  }
+  
+  // Give every object a unique htmlName
+  var htmlName = item.name.replace(/\W/g, "");
+  while (o = getObject(htmlName, true)) {
+    md = /(\d+)$/.exec(htmlName);
+    if (md) {
+      count = parseInt(md[0]) + 1;
+      htmlName = htmlName.replace(/(\d+)$/, "" + count);
+    }
+    else {
+      htmlName += "0";
+    }
+  }
+  item.htmlName = htmlName;
+  
+  // Sort out the location
+  if (item.loc == "Held") {
+    item.loc = player.name;
+  }
+  else if (item.loc == "Worn") {
+    item.loc = player.name;
+    item.worn = true;
+  }
+};
+
 
 
 // Call after the player takes a turn, sending it a result, SUCCESS, SUCCESS_NO_TURNSCRIPTS or FAILED
@@ -204,7 +263,8 @@ endTurn = function(result) {
 
 
 // Runs turnscipts
-// Turnscripts are just objects in the data array with a "run" attribute set to a function.
+// Turnscripts are just objects in the data array with a "run" attribute set to a function
+// and a Boolean "runTurnscript".
 runTurnScripts = function() {
   for (var i = 0; i < data.length; i++) {
     if (typeof data[i]["run"] === "function"){
@@ -214,3 +274,37 @@ runTurnScripts = function() {
     }
   }
 };
+
+
+// Call this when entering a new room
+// It will set the alt names of the Ubiquitous background object
+// to any objects highlighted in the room description.
+
+const BACK_REGEX = /\[.+?\]/;
+setBackground = function() {
+  room = getCurrentRoom();
+  background = getObject("background");
+  if (background == undefined) {
+    background = new Item("background", {
+      loc:'Ubiquitous',
+      display:'invisible',
+      examine:DEFAULT_DESCRIPTION,
+    });
+    data.push(background);
+  }
+  background.alt = [];
+  if (typeof room.examine == 'string') {
+    if (!room.backgroundNames) {
+      room.backgroundNames = [];
+      while (md = BACK_REGEX.exec(room.examine)) {
+        var arr = md[0].substring(1, md[0].length - 1).split(":");
+        room.examine = room.examine.replace(md[0], arr[0]);
+        for (var j = 0; j < arr.length; j++) {
+          room.backgroundNames.push(arr[j]);
+        }
+      }
+    }
+    background.alt = room.backgroundNames;
+  }
+}
+
