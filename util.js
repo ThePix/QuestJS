@@ -74,12 +74,22 @@ isPlayer = function(item) {
 };
 
 // Gets the object with the given name (or htmlName name)
-getObject = function(name, useHtmlName) {
+// Returns undefined if not found
+// Reports failure if reportError is true (useful for debugging)
+getObject = function(name, useHtmlName, reportError) {
   var found = data.find(function(el) {
     return (useHtmlName ? el.htmlName : el.name) == name;
   });
+  if (!found && reportError) {
+    errormsg("Object not found: " + name);
+  }
   return found;
 };
+
+
+
+
+
 
 // Gets the current room object
 getCurrentRoom = function() {
@@ -123,10 +133,32 @@ isHere = function(item) {
 isWorn = function(item) {
   return (item.loc == player.name) && item.worn;
 };
-
 isNotNotHere = function(item) {
   return item.display != "not here";
 };
+
+isIn = function(item, loc) {
+  if (item.loc == loc) { return true; }
+  if (!item.loc) { return false; }
+  container = getObject(item.loc);
+  return isIn(container, loc);
+}
+
+isReachable = function(item, loc) {
+  if (item.loc == loc) { return true; }
+  if (!item.loc) { return false; }
+  container = getObject(item.loc);
+  if (container.closed) { return false; }
+  return isIn(container, loc);
+}
+
+isVisible = function(item, loc) {
+  if (item.loc == loc) { return true; }
+  if (!item.loc) { return false; }
+  container = getObject(item.loc);
+  if (container.closed && !container.transparent) { return false; }
+  return isIn(container, loc);
+}
 
 // To use, do something like this:
 // var listOfOjects = scope(isHeld);

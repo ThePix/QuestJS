@@ -224,7 +224,7 @@ io.createPanes = function() {
 io.savedCommands = ['help'];
 io.savedCommandsPos = 0;
 
-$( document ).ready(function() {
+$(document).ready(function() {
   $('#textbox').keydown(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){
@@ -284,5 +284,5 @@ $( document ).ready(function() {
   });    
   init();
   setup();
-  setRoom(player.loc, false);
+  setRoom(player.loc);
 });
