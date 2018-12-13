@@ -293,14 +293,14 @@ var parser = {};
 
 
   parser.scoreObjectMatch = function(s, item) {
-    // TODO: may want to check alts too
-    if (s == item.name) {
+    var itemName = item.name.toLowerCase();
+    if (s == itemName) {
       return 3;
     }
     if (item.alt && item.alt.includes(s)) {
       return 3;
     }
-    if (new RegExp("\\b" + s).test(item.name)) {
+    if (new RegExp("\\b" + s).test(itemName)) {
       return 1;
     }
     if (item.alt) {

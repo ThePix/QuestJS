@@ -1,1 +1,4 @@
-<b>Some</b> text
+<items>
+  <item><name>hat</name></item>
+  <item><name>teapot</name></item>
+</items>

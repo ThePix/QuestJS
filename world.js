@@ -14,14 +14,14 @@ function Item(name, hash) {
   
   this.drop = function(item, isMultiple) {
     if (item.worn) {
-      msg(prefix(item, isMultiple) + "You're wearing " + item.pronoun.subjective + ".");
+      msg(prefix(item, isMultiple) + CMD_WEARING(item));
       return false;
     }
     if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + "You don't have " + item.pronoun.subjective + ".");
+      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
       return false;
     }
-    msg(prefix(item, isMultiple) + "You drop " + itemNameWithThe(item) + ".");
+    msg(prefix(item, isMultiple) + CMD_DROP_SUCCESSFUL(item));
     item.loc = getObject(player.loc).name;
     updateUIItems();
     return true;
@@ -29,18 +29,18 @@ function Item(name, hash) {
   
   this.take = function(item, isMultiple) {
     if (!isPresent(item)) {
-      msg(prefix(item, isMultiple) + sentenceCase(item.pronoun.subjective) + "'s not here.");
+      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
       return false;
     }
     if (!item.takable) {
-      msg(prefix(item, isMultiple) + "You can't take " + item.pronoun.subjective + ".");
+      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
       return false;
     }
     if (item.loc == player.name) {
-      msg(prefix(item, isMultiple) + "You already have " + item.pronoun.subjective + ".");
+      msg(prefix(item, isMultiple) + CMD_ALREADY_HAVE(item));
       return false;
     }      
-    msg(prefix(item, isMultiple) + "You take " + itemNameWithThe(item) + ".");
+    msg(prefix(item, isMultiple) + CMD_TAKE_SUCCESSFUL(item));
     item.loc = player.name;
     updateUIItems();
     return true;
@@ -48,22 +48,22 @@ function Item(name, hash) {
 
   this.wear = function(item, isMultiple) {
     if (!isPresent(item)) {
-      msg(prefix(item, isMultiple) + sentenceCase(item.pronoun.subjective) + "'s not here.");
+      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
       return false;
     }
     if (!item.takable) {
-      msg(prefix(item, isMultiple) + "You can't take " + item.pronoun.subjective + ".");
+      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
       return false;
     }
     if (item.worn) {
-      msg(prefix(item, isMultiple) + "You're already wearing " + item.pronoun.subjective + ".");
+      msg(prefix(item, isMultiple) + CMD_ALREADY_WEARING(item.pronoun.subjective));
       return false;
     }
     if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + "You don't have " + item.pronoun.subjective + ".");
+      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
       return false;
     }
-    msg(prefix(item, isMultiple) + "You put on " + itemNameWithThe(item) + ".");
+    msg(prefix(item, isMultiple) + CMD_WEAR_SUCCESSFUL(item));
     item.loc = getObject(player.loc).name;
     item.worn = true;
     updateUIItems();
@@ -72,10 +72,10 @@ function Item(name, hash) {
   
   this.remove = function(item, isMultiple) {
     if (!item.worn) {
-      msg(prefix(item, isMultiple) + "You're not wearing " + item.pronoun.subjective + ".");
+      msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
       return false;
     }
-    msg(prefix(item, isMultiple) + "You take " + itemNameWithThe(item) + " off.");
+    msg(prefix(item, isMultiple) + CMD_REMOVE_SUCCESSFUL(item));
     item.loc = player.name;
     item.worn = false;
     updateUIItems();

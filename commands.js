@@ -112,6 +112,7 @@ var commands = [
     pattern:'wait;z',
     script:function() {
       metamsg("Still to be implemented");
+      return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
   new Cmd('test', {
@@ -119,6 +120,7 @@ var commands = [
     script:function() {
       background = getObject("background");
       metamsg(JSON.stringify(background));
+      return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
   new Cmd('Examine', {
@@ -156,18 +158,23 @@ var commands = [
       var success = false;
       var container = objects[1][0];
       if (!container.container) {
-        errormsg(ERR_PLAYER, CMD_NOT_CONTAINER + " (" + container.name + ").");
+        errormsg(ERR_PLAYER, CMD_NOT_CONTAINER(container));
         return FAILED; 
       }
-      // TODO: Check if full
       for (var i = 0; i < objects[0].length; i++) {
-        if (objects[0][i].loc != player.name) {
-          errormsg(ERR_GAME_BUG, CMD_NOT_CARRYING + " (" + objects[0][i].name + ")." + objects[0][i].loc);
+        var flag = true;
+        if (container.checkCapacity) {
+          flag = container.checkCapacity(objects[0][i]);
         }
-        else {
-          objects[0][i].loc = container.name;
-          msg(prefix(objects[0][i], objects[0].length > 1 || parser.currentCommand.all) + CMD_DONE);
-          success = true;
+        if (flag) {
+          if (objects[0][i].loc != player.name) {
+            CMD_NOT_CARRYING(objects[0][i]);
+          }
+          else {
+            objects[0][i].loc = container.name;
+            msg(prefix(objects[0][i], objects[0].length > 1 || parser.currentCommand.all) + CMD_DONE);
+            success = true;
+          }
         }
       }
       if (success) { updateUIItems(); }

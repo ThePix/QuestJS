@@ -167,6 +167,20 @@ scope = function(fn) {
 };
 
 
+// For dubugging only!!!
+_scopeReport = function(o) {
+  if (typeof o == "string") {
+    o = getObject(o, false, true);
+  }
+  s = "<b>" + o.name + "</b><br/>";
+  s += "held: " + isHeld(o) + "<br/>";
+  s += "here: " + isHere(o) + "<br/>";
+  s += "held or worn: " + isHeldOrWorn(o) + "<br/>";
+  s += "present: " + isPresent(o) + "<br/>";
+  s += "reachable: " + isReachable(o) + "<br/>";
+  s += "visible: " + isVisible(o) + "<br/>";
+  msg(s);
+}
 
 
 

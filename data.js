@@ -61,7 +61,7 @@ var data = [
   }),
   
   new WearableItem("blue hat", {
-    loc:'Held',
+    loc:'Worn',
     examine:'A blue bobble hat.'
   }),
   
@@ -102,21 +102,33 @@ var data = [
     examine:'A cheap plastic chair.'
   }),
 
-  new UseableItem("chair", {
+  new Item("glass cabinet", {
+    container:true,
+    closed:true,
+    locked:true,
+    transparent:true,
     loc:"kitchen",
-    examine:'A cheap plastic chair.'
+    examine:'A cabinet with a glass front'
   }),
 
-  new UseableItem("chair", {
+  new UseableItem("open box", {
+    container:true,
     loc:"kitchen",
-    examine:'A cheap plastic chair.'
+    examine:'A big cardboard box.'
   }),
 
-  new UseableItem("chair", {
-    loc:"kitchen",
-    examine:'A cheap plastic chair.'
+  new UseableItem("ornate doll", {
+    loc:"glass cabinet",
+    examine:'A fancy doll, eighteenth century.'
   }),
 
+  new UseableItem("camera", {
+    loc:"open box",
+    examine:'A cheap digital camera.'
+  }),
+
+  
+  
   new FemaleNpcItem("Mary", {
     loc:"lounge",
     examine:'An attractive young lady.'

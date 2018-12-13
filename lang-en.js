@@ -15,11 +15,54 @@ const CMD_NO_ATT_ERROR = "It does not work like that.";
 const CMD_NOT_THAT_WAY = "You can't go that way.";
 const CMD_UNSUPPORTED_DIR = "Unsupported type for direction";
 const CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
-const CMD_NOT_CONTAINER = "That's not a container";
-const CMD_NOT_CARRYING = "You're not carrying it";
 const CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should as you just clicked it. Please alert the game author about this bug."
 const CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should as it was listed. Please alert this as a bug in Quest."
 const CMD_DONE = "Done";
+
+
+
+
+CMD_NOT_CONTAINER = function(item) {
+  return sentenceCase(itemNameWithThe(item)) + " is not a container";
+};
+
+
+
+CMD_NOT_CARRYING = function(item) {
+  return "You're not carrying " + item.pronouns.objective + ".";
+};
+CMD_WEARING = function(item) {
+  return "You're wearing " + item.pronouns.objective + ".";
+};
+CMD_NOT_HERE = function(item) {
+  return sentenceCase(item.pronouns.subjective) + "'s not here.";
+};
+CMD_NOT_WEARING = function(item) {
+  return "You not wearing " + item.pronouns.objective + ".";
+};
+CMD_CANNOT_TAKE = function(item) {
+  return "You can't take " + item.pronouns.objective + ".";
+};
+CMD_ALREADY_HAVE = function(item) {
+  return "You already have " + item.pronouns.objective + ".";
+};
+CMD_ALREADY_WEARING = function(item) {
+  return "You're already wearing " + item.pronouns.objective + ".";
+};
+CMD_TAKE_SUCCESSFUL = function(item) {
+  return "You take " + itemNameWithThe(item) + ".";
+};
+CMD_DROP_SUCCESSFUL = function(item) {
+  return "You drop " + itemNameWithThe(item) + ".";
+};
+CMD_WEAR_SUCCESSFUL = function(item) {
+  return "You put on " + itemNameWithThe(item) + ".";
+};
+CMD_REMOVE_SUCCESSFUL = function(item) {
+  return "You take " + itemNameWithThe(item) + " off.";
+};
+
+
 
 const ERROR_NO_PLAYER = "No player object found. This will not go well...";
 const ERROR_MSG_OR_RUN = "Unsupported type for msgOrRun"
@@ -28,12 +71,12 @@ const ERROR_NO_ROOM = "Failed to find room"
 const DEFAULT_DESCRIPTION = "It's just scenery.";
 
 const PRONOUNS = {
-  thirdperson:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its"},
-  male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his"},
-  female:{subjective:"she", objective:"her", possessive: "hers", poss_adj: "her"},
-  plural:{subjective:"they", objective:"them", possessive: "theirs", poss_adj: "their"},
-  firstperson:{subjective:"I", objective:"me", possessive: "mine", poss_adj: "my"},
-  secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your"},
+  thirdperson:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
+  male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his", reflexive:"himself"},
+  female:{subjective:"she", objective:"her", possessive: "hers", poss_adj: "her", reflexive:"herself"},
+  plural:{subjective:"they", objective:"them", possessive: "theirs", poss_adj: "their", reflexive:"theirselves"},
+  firstperson:{subjective:"I", objective:"me", possessive: "mine", poss_adj: "my", reflexive:"myself"},
+  secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your", reflexive:"yourself"},
 };
 
 

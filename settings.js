@@ -4,6 +4,7 @@ const TITLE = "A First Step...";
 const PANES = 'Left';  //Can be set to Left, Right or None.
 const COMPASS = true;
 const TEXT_INPUT = true;
+const CURSOR = ">";
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 
 const SUCCESS = 1;
@@ -46,22 +47,6 @@ const INVENTORIES = [
 
 
 
-           function loadXMLDoc(dname)
-            {
-                if (window.XMLHttpRequest)
-                {
-                    xhttp=new XMLHttpRequest();
-                }
-                else
-                {
-                    xhttp=new ActiveXObject("Microsoft.XMLDOM");
-                }
-
-                xhttp.open("GET",dname,false);
-                xhttp.send();
-                return xhttp.responseXML;
-            }
-
 
 // This function will be called at the start of the game, so can be used
 // to give a title and introduce your game.
@@ -77,7 +62,9 @@ setup = function() {
   //parser.parse("take hat, teapot2 and ball");
   //parser.parse("take blue hat, teapot and ball from chair");
   //parser.parse("ask ball about hats");
-  //parser.parse("take all but kettle and chair");
-  xmlDoc=loadXMLDoc("data.xml");
-  msg(xmlDoc);
+  parser.parse("put ball in chest");
+  //_scopeReport("ornate doll");
+  //_scopeReport("camera");
+  //_scopeReport("blue hat");
+  //_scopeReport("red hat");
 }
