@@ -137,6 +137,8 @@ isNotNotHere = function(item) {
   return item.display != "not here";
 };
 
+// Is the given item in the location named
+// or in a container in that location?
 isIn = function(item, loc) {
   if (item.loc == loc) { return true; }
   if (!item.loc) { return false; }
@@ -144,20 +146,27 @@ isIn = function(item, loc) {
   return isIn(container, loc);
 }
 
+// Is the given item in the location named
+// or in an open container in that location?
 isReachable = function(item, loc) {
+  debugmsg(DBG_UTIL, loc);
   if (item.loc == loc) { return true; }
   if (!item.loc) { return false; }
   container = getObject(item.loc);
+  if (!container.container) { return false; }
   if (container.closed) { return false; }
-  return isIn(container, loc);
+  return isReachable(container, loc);
 }
 
+// Is the given item in the location named
+// or in an open or transparent container in that location?
 isVisible = function(item, loc) {
   if (item.loc == loc) { return true; }
   if (!item.loc) { return false; }
   container = getObject(item.loc);
+  if (!container.container) { return false; }
   if (container.closed && !container.transparent) { return false; }
-  return isIn(container, loc);
+  return isVisible(container, loc);
 }
 
 // To use, do something like this:
@@ -177,9 +186,11 @@ _scopeReport = function(o) {
   s += "here: " + isHere(o) + "<br/>";
   s += "held or worn: " + isHeldOrWorn(o) + "<br/>";
   s += "present: " + isPresent(o) + "<br/>";
-  s += "reachable: " + isReachable(o) + "<br/>";
-  s += "visible: " + isVisible(o) + "<br/>";
-  msg(s);
+  s += "reachable here: " + isReachable(o, player.loc) + "<br/>";
+  s += "visible here: " + isVisible(o, player.loc) + "<br/>";
+  s += "reachable held: " + isReachable(o, player.name) + "<br/>";
+  s += "visible held: " + isVisible(o, player.name) + "<br/>";
+  debugmsg(DBG_UTIL, s);
 }
 
 

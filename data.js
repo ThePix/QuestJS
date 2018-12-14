@@ -1,13 +1,21 @@
 function SpellItem(name, hash) {
   Item.call(this, name, hash);
+  this.spellVerbs = ['Examine', 'Cast'];
+  this.cast = function(self) {
+    msg('You cast <i>' + self.name + '</i>.');
+  }
+  this.icon = function() {
+    return ('<img src="spell12.png" />');
+  }
 }
-SpellItem.prototype.spellVerbs = ['Examine', 'Cast'];
-SpellItem.prototype.cast = function(self) {
-  msg('You cast <i>' + self.name + '</i>.');
+
+
+function Weapon(name, hash) {
+  Item.call(this, name, hash);
+  this.icon = function() {
+    return ('<img src="weapon12.png" />');
+  }
 }
-
-
-
 
 
 
@@ -73,7 +81,7 @@ var data = [
     },
   }),
   
-  new Item("chest", {
+  new Container("chest", {
     container:true,
     loc:"lounge",
   }),
@@ -84,7 +92,7 @@ var data = [
     examine:"Some old boots.",
   }),
   
-  new TakableItem("knife", {
+  new Weapon("knife", {
     loc:"lounge",
     sharp:false,
     examine:function(item) {
@@ -102,18 +110,17 @@ var data = [
     examine:'A cheap plastic chair.'
   }),
 
-  new Item("glass cabinet", {
-    container:true,
+  new Container("glass cabinet", {
     closed:true,
     locked:true,
     transparent:true,
-    loc:"kitchen",
+    loc:"lounge",
     examine:'A cabinet with a glass front'
   }),
 
-  new UseableItem("open box", {
-    container:true,
-    loc:"kitchen",
+  new Container("open box", {
+    loc:"lounge",
+    closed:false,
     examine:'A big cardboard box.'
   }),
 

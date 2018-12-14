@@ -8,9 +8,123 @@ function Item(name, hash) {
   for (var key in DEFAULT_RESPONSES) {
     this[key] = DEFAULT_RESPONSES[key];
   }
+  
   for (var key in hash) {
     this[key] = hash[key];
   }
+
+
+  this.icon = function() {
+    return "";
+  }
+  
+  this.drop = function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
+    return false;
+  }
+  
+  this.take = function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
+    return false;
+  }
+
+  this.wear = function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_WEAR(item));
+    return false;
+  }
+  
+  this.remove = function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
+    return false;
+  }
+  
+  this.open = function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
+    return false;
+  }
+
+  this.close = function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
+    return false;
+  }
+  
+  this.setPropertyIfNew = function(name, value) {
+    if (!this[name]) {
+      this[name] = value;
+    }
+  }
+}
+
+
+
+function Player(name, hash) {
+  Item.call(this, name, hash);
+  this.pronouns = PRONOUNS.secondperson;
+  this.display = "invisible";
+  this.player = true;
+}
+
+
+
+function Exit(name, hash) {
+  Item.call(this, name, hash);
+  this.use = function(self) {
+    if ('msg' in self) {
+      msg(self.msg);
+    }
+    setRoom(self.name);
+  }
+}
+
+
+
+function Room(name, hash) {
+  Item.call(this, name, hash);
+};
+
+
+
+function Turnscript(name, hash) {
+  Item.call(this, name, hash);
+  this.runTurnscript = true;
+  this.display = "invisible";
+};
+
+
+
+
+
+function NpcItem(name, hash) {
+  Item.call(this, name, hash);
+  this.hereVerbs = ['Look at'];
+  this.icon = function() {
+    return ('<img src="npc12.png" />');
+  }
+};
+
+function MaleNpcItem(name, hash) {
+  NpcItem.call(this, name, hash);
+  this.pronouns = PRONOUNS.male;
+};
+
+function FemaleNpcItem(name, hash) {
+  NpcItem.call(this, name, hash);
+  this.pronouns = PRONOUNS.female;
+};
+
+
+
+
+function UseableItem(name, hash) {
+  Item.call(this, name, hash);
+  this.hereVerbs = ['Examine', 'Use'];
+};
+
+function TakableItem(name, hash) {
+  Item.call(this, name, hash);
+  this.heldVerbs = ['Examine', 'Drop'];
+  this.hereVerbs = ['Examine', 'Take'];
+  this.takable = true;
   
   this.drop = function(item, isMultiple) {
     if (item.worn) {
@@ -45,7 +159,23 @@ function Item(name, hash) {
     updateUIItems();
     return true;
   }
+};
 
+function UseableTakableItem(name, hash) {
+  TakableItem.call(this, name, hash);
+  this.heldVerbs = ['Examine', 'Drop', 'Use'];
+  this.hereVerbs = ['Examine', 'Take', 'Use'];
+};
+
+function WearableItem(name, hash) {
+  TakableItem.call(this, name, hash);
+  this.heldVerbs = ['Examine', 'Drop', 'Wear'];
+  this.wornVerbs = ['Examine', 'Remove'];
+  this.wearable = true;
+  this.icon = function() {
+    return ('<img src="garment12.png" />');
+  }
+  
   this.wear = function(item, isMultiple) {
     if (!isPresent(item)) {
       msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
@@ -81,85 +211,48 @@ function Item(name, hash) {
     updateUIItems();
     return true;
   }
-}
+};
 
 
-
-function Player(name, hash) {
+function Container(name, hash) {
   Item.call(this, name, hash);
-  this.pronouns = PRONOUNS.secondperson;
-  this.display = "invisible";
-  this.player = true;
-}
-
-
-
-function Exit(name, hash) {
-  Item.call(this, name, hash);
-  this.use = function(self) {
-    if ('msg' in self) {
-      msg(self.msg);
+  this.hereVerbs = ['Examine', 'Open'];
+  this.container = true,
+  this.closed = true,
+  
+  this.open = function(item, isMultiple) {
+    if (!item.closed) {
+      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+      return false;
     }
-    setRoom(self.name);
+    if (item.locked) {
+      msg(prefix(item, isMultiple) + CMD_LOCKED(item));
+      return false;
+    }
+    item.hereVerbs = ['Examine', 'Close'];
+    item.closed = false;
+    msg(prefix(item, isMultiple) + CMD_OPEN_SUCCESSFUL(item));
+    return true;
   }
-}
-
-function Room(name, hash) {
-  Item.call(this, name, hash);
-};
-
-function Turnscript(name, hash) {
-  Item.call(this, name, hash);
-  this.runTurnscript = true;
-  this.display = "invisible";
-};
-
-
-
-
-
-function NpcItem(name, hash) {
-  Item.call(this, name, hash);
-  this.hereVerbs = ['Look at'];
-};
-
-function MaleNpcItem(name, hash) {
-  NpcItem.call(this, name, hash);
-  this.pronouns = PRONOUNS.male;
-};
-
-function FemaleNpcItem(name, hash) {
-  NpcItem.call(this, name, hash);
-  this.pronouns = PRONOUNS.female;
+  
+  this.close = function(item, isMultiple) {
+    if (item.closed) {
+      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+      return false;
+    }
+    item.hereVerbs = ['Examine', 'Open'];
+    item.closed = true;
+    msg(prefix(item, isMultiple) + CMD_CLOSE_SUCCESSFUL(item));
+    return true;
+  }
+  
+  this.icon = function() {
+    return ('<img src="' + (this.closed ? 'closed' : 'opened') + '12.png" />');
+  }
 };
 
 
 
-
-function UseableItem(name, hash) {
-  Item.call(this, name, hash);
-  this.hereVerbs = ['Examine', 'Use'];
-};
-
-function TakableItem(name, hash) {
-  Item.call(this, name, hash);
-  this.heldVerbs = ['Examine', 'Drop'];
-  this.hereVerbs = ['Examine', 'Take'];
-  this.takable = true;
-};
-
-function UseableTakableItem(name, hash) {
-  TakableItem.call(this, name, hash);
-  this.heldVerbs = ['Examine', 'Drop', 'Use'];
-  this.hereVerbs = ['Examine', 'Take', 'Use'];
-};
-
-function WearableItem(name, hash) {
-  TakableItem.call(this, name, hash);
-  this.heldVerbs = ['Examine', 'Drop', 'Wear'];
-  this.wornVerbs = ['Examine', 'Remove'];
-  this.wearable = true;
-};
 
 function SwitchableItem(name, hash) {
   Item.call(this, name, hash);

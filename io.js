@@ -171,11 +171,14 @@ io.clickItemAction = function(itemName, action) {
 };
 
 io.appendItem = function(item, attName, htmlDiv) {
-  $('#' + htmlDiv).append('<p class="item" onclick="io.clickItem(\'' + item.htmlName + '\')">' + item.name + "</p>");
+  $('#' + htmlDiv).append('<p class="item" onclick="io.clickItem(\'' + item.htmlName + '\')">' + item.icon() + item.name + "</p>");
   io.currentItemList.push(item.htmlName);
   if (item[attName]) {
     for (var j = 0; j < item[attName].length; j++) {
-      $('#' + htmlDiv).append('<div class="' + item.htmlName + '-actions"><p class="itemaction" onclick="io.clickItemAction(\'' + item.htmlName + '\', \'' + item[attName][j] + '\')">' + item[attName][j] + '</p></div>');
+      s = '<div class="' + item.htmlName + '-actions itemaction" onclick="io.clickItemAction(\'' + item.htmlName + '\', \'' + item[attName][j] + '\')">';
+      s += item[attName][j];
+      s += '</div>';
+      $('#' + htmlDiv).append(s);
     }
   }
   else {

@@ -16,6 +16,7 @@ const ERR_GAME_BUG = 22;    // A bug in the game the creator needs to sort out
 const ERR_PARSER = 23;      // Player is typing something unintelligible
 const ERR_PLAYER = 24;      // Player is typing something not allowed
 const DBG_PARSER = 21;      // Debug message from the parser
+const DBG_UTIL = 22;        // Debug message from util
 
 
 
@@ -25,7 +26,7 @@ const DBG_PARSER = 21;      // Debug message from the parser
 const INVENTORIES = [
   {name:'Items Held', alt:'itemsHeld', verbs:'heldVerbs',
     test:function(item) {
-      return item.loc == player.name && !item.worn;
+      return isVisible(item, player.name) && !item.worn;
     }
   },
   {name:'Items Worn', alt:'itemsWorn', verbs:'wornVerbs',
@@ -40,7 +41,7 @@ const INVENTORIES = [
   },
   {name:'Items Here', alt:'itemsHere', verbs:'hereVerbs',
     test:function(item) {
-      return item.loc == player.loc;
+      return isVisible(item, player.loc);
     }
   },
 ];
@@ -63,8 +64,8 @@ setup = function() {
   //parser.parse("take blue hat, teapot and ball from chair");
   //parser.parse("ask ball about hats");
   parser.parse("put ball in chest");
-  //_scopeReport("ornate doll");
-  //_scopeReport("camera");
-  //_scopeReport("blue hat");
-  //_scopeReport("red hat");
+  _scopeReport("ornate doll");
+  _scopeReport("camera");
+  _scopeReport("blue hat");
+  _scopeReport("red hat");
 }

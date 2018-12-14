@@ -138,6 +138,7 @@ var commands = [
       {scope:isHere, multiple:true},
     ],
   }),
+  
   new Cmd('Drop', {
     regex:/^(drop) (.+)$/,
     objects:[
@@ -145,6 +146,7 @@ var commands = [
       {scope:isHeld, multiple:true},
     ],
   }),
+  
   new Cmd('Put/in', {
     regex:/^(put|place|drop) (.+) (in to|into|in) (.+)$/,
     objects:[
@@ -154,7 +156,6 @@ var commands = [
       {scope:isPresent},
     ],
     script:function(cmd, objects) {
-      var attName = cmd.att ? cmd.att : cmd.name.toLowerCase();
       var success = false;
       var container = objects[1][0];
       if (!container.container) {
@@ -181,6 +182,41 @@ var commands = [
       return success ? SUCCESS : FAILED; 
     },
   }),
+  
+  new Cmd('Open', {
+    regex:/^(open) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isPresent, multiple:true},
+    ],
+    script:function(cmd, objects) {
+      var success = false;
+      var isMultiple = objects[0].length > 1 || parser.currentCommand.all;
+      for (var i = 0; i < objects[0].length; i++) {
+        success = success || objects[0][i].open(objects[0][i], isMultiple);
+      }
+      if (success) { updateUIItems(); }
+      return success ? SUCCESS : FAILED; 
+    },
+  }),
+  
+  new Cmd('Close', {
+    regex:/^(close) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isPresent, multiple:true},
+    ],
+    script:function(cmd, objects) {
+      var success = false;
+      var isMultiple = objects[0].length > 1 || parser.currentCommand.all;
+      for (var i = 0; i < objects[0].length; i++) {
+        success = success || objects[0][i].close(objects[0][i], isMultiple);
+      }
+      if (success) { updateUIItems(); }
+      return success ? SUCCESS : FAILED; 
+    },
+  }),
+  
   new Cmd('Take/from', {
     pattern:'take #object1# from #object2#',
     script:function(object, text) {

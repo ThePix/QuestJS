@@ -43,12 +43,30 @@ CMD_NOT_WEARING = function(item) {
 CMD_CANNOT_TAKE = function(item) {
   return "You can't take " + item.pronouns.objective + ".";
 };
+CMD_CANNOT_WEAR = function(item) {
+  return "You can't wear " + item.pronouns.objective + ".";
+};
+CMD_CANNOT_OPEN = function(item) {
+  return "You can't open " + item.pronouns.objective + ".";
+};
+CMD_CANNOT_CLOSE = function(item) {
+  return "You can't close " + item.pronouns.objective + ".";
+};
+
 CMD_ALREADY_HAVE = function(item) {
   return "You already have " + item.pronouns.objective + ".";
 };
 CMD_ALREADY_WEARING = function(item) {
   return "You're already wearing " + item.pronouns.objective + ".";
 };
+CMD_ALREADY = function(item) {
+  return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
+};
+CMD_LOCKED = function(item) {
+  return sentenceCase(item.pronouns.subjective) + " " + conjugate(item, "'be") + " locked.";
+};
+
+
 CMD_TAKE_SUCCESSFUL = function(item) {
   return "You take " + itemNameWithThe(item) + ".";
 };
@@ -60,6 +78,12 @@ CMD_WEAR_SUCCESSFUL = function(item) {
 };
 CMD_REMOVE_SUCCESSFUL = function(item) {
   return "You take " + itemNameWithThe(item) + " off.";
+};
+CMD_OPEN_SUCCESSFUL = function(item) {
+  return "You open " + itemNameWithThe(item) + ".";
+};
+CMD_CLOSE_SUCCESSFUL = function(item) {
+  return "You close " + itemNameWithThe(item) + ".";
 };
 
 
