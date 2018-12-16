@@ -170,6 +170,9 @@ io.clickItemAction = function(itemName, action) {
   }
 };
 
+
+// Add the item to the DIV named htmlDiv
+// The item will be given verbs from its attName attribute
 io.appendItem = function(item, attName, htmlDiv) {
   $('#' + htmlDiv).append('<p class="item" onclick="io.clickItem(\'' + item.htmlName + '\')">' + item.icon() + item.name + "</p>");
   io.currentItemList.push(item.htmlName);
@@ -184,8 +187,17 @@ io.appendItem = function(item, attName, htmlDiv) {
   else {
     errormsg(ERR_GAME_BUG, "No " + attName + " for " + item.name );
   }
+  if (item.container && item.open) {
+    l = scope(isInside, item);
+    msg("inside: " + formatList(l));
+    // for (var i = 0; i < l.length; i++) {
+      // io.appendItem(l[i], attName, htmlDiv, true);
+    // }
+  }
 };
 
+// Creates the panes on the left or right
+// Should only be called once, when the page is first built
 io.createPanes = function() {
   document.writeln('<div id="panes" class="sidenav' + PANES + '">');
 
@@ -226,7 +238,6 @@ io.createPanes = function() {
 
 io.savedCommands = ['help'];
 io.savedCommandsPos = 0;
-
 $(document).ready(function() {
   $('#textbox').keydown(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);

@@ -5,7 +5,7 @@ function SpellItem(name, hash) {
     msg('You cast <i>' + self.name + '</i>.');
   }
   this.icon = function() {
-    return ('<img src="spell12.png" />');
+    return ('<img src="images/spell12.png" />');
   }
 }
 
@@ -13,7 +13,7 @@ function SpellItem(name, hash) {
 function Weapon(name, hash) {
   Item.call(this, name, hash);
   this.icon = function() {
-    return ('<img src="weapon12.png" />');
+    return ('<img src="images/weapon12.png" />');
   }
 }
 

@@ -98,7 +98,7 @@ function NpcItem(name, hash) {
   Item.call(this, name, hash);
   this.hereVerbs = ['Look at'];
   this.icon = function() {
-    return ('<img src="npc12.png" />');
+    return ('<img src="images/npc12.png" />');
   }
 };
 
@@ -173,7 +173,7 @@ function WearableItem(name, hash) {
   this.wornVerbs = ['Examine', 'Remove'];
   this.wearable = true;
   this.icon = function() {
-    return ('<img src="garment12.png" />');
+    return ('<img src="images/garment12.png" />');
   }
   
   this.wear = function(item, isMultiple) {
@@ -247,7 +247,7 @@ function Container(name, hash) {
   }
   
   this.icon = function() {
-    return ('<img src="' + (this.closed ? 'closed' : 'opened') + '12.png" />');
+    return ('<img src="images/' + (this.closed ? 'closed' : 'opened') + '12.png" />');
   }
 };
 

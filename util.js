@@ -128,13 +128,16 @@ isHeld = function(item) {
   return (item.loc == player.name) && !item.worn;
 };
 isHere = function(item) {
-  return item.loc == player.loc || item.loc == "Ubiquitous";
+  return item.loc === player.loc || item.loc === "Ubiquitous";
 };
 isWorn = function(item) {
   return (item.loc == player.name) && item.worn;
 };
 isNotNotHere = function(item) {
   return item.display != "not here";
+};
+isInside = function(item, container) {
+  return item.loc == container.name;
 };
 
 // Is the given item in the location named
@@ -171,8 +174,10 @@ isVisible = function(item, loc) {
 
 // To use, do something like this:
 // var listOfOjects = scope(isHeld);
-scope = function(fn) {
-  return data.filter(isNotNotHere).filter(fn);
+// Hopefully this works too
+// var listOfOjects = scope(isInside, container);
+scope = function(fn, param) {
+  return data.filter(isNotNotHere).filter(fn, param);
 };
 
 

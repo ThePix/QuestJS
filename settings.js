@@ -24,26 +24,14 @@ const DBG_UTIL = 22;        // Debug message from util
 // Change the name values to alter how items are displayed
 // You can add (or remove) inventories too
 const INVENTORIES = [
-  {name:'Items Held', alt:'itemsHeld', verbs:'heldVerbs',
-    test:function(item) {
-      return isVisible(item, player.name) && !item.worn;
-    }
-  },
-  {name:'Items Worn', alt:'itemsWorn', verbs:'wornVerbs',
-    test:function(item) {
-      return item.loc == player.name && item.worn;
-    }
-  },
-  {name:'Spells known', alt:'spells', verbs:'spellVerbs',
+  {name:'Items Held', alt:'itemsHeld', verbs:'heldVerbs', test:isHeld },
+  {name:'Items Worn', alt:'itemsWorn', verbs:'wornVerbs', test:isWorn },
+  {name:'Spells known', alt:'spells', verbs:'spellVerbs', 
     test:function(item) {
       return item.loc == "spellbook";
     }
   },
-  {name:'Items Here', alt:'itemsHere', verbs:'hereVerbs',
-    test:function(item) {
-      return isVisible(item, player.loc);
-    }
-  },
+  {name:'Items Here', alt:'itemsHere', verbs:'hereVerbs', test:isHere },
 ];
 
 
@@ -63,9 +51,15 @@ setup = function() {
   //parser.parse("take hat, teapot2 and ball");
   //parser.parse("take blue hat, teapot and ball from chair");
   //parser.parse("ask ball about hats");
-  parser.parse("put ball in chest");
-  _scopeReport("ornate doll");
-  _scopeReport("camera");
-  _scopeReport("blue hat");
-  _scopeReport("red hat");
+  //parser.parse("put ball in chest");
+  //_scopeReport("ornate doll");
+  //_scopeReport("camera");
+  //_scopeReport("blue hat");
+  //_scopeReport("red hat");
+  msg("isHeld: " + formatList(scope(isHeld)));
+  msg("isHere: " + formatList(scope(isHere)));
+  msg("isInside: " + formatList(scope(isInside, getObject("open box"))));
+  msg(player.loc);
+  msg(getObject("garden").loc);
+  
 }
