@@ -9,7 +9,7 @@
 // This can only handle single commands
 // Lists of multiple objects must be separated by JOINER_REGEX (i.e., "and" or comma)
 // Item names cannot include the word "and" or commas
-// Commands look in their specified scope first, then isPresent as the fallback.
+// Commands look in their specified scope first, then isVisible as the fallback.
 // It will try to match the beginning of a word to the object name given.
 //    If the player does GET H, then it will disambiguate between any objects beginning with H
 // A match is scored by whether the objects are in the right place (+2), wrong place but here (+1).
@@ -167,7 +167,7 @@ var parser = {};
     var res = {cmd:cmd, objectTexts:[], objects:[]};
     res.score = cmd.score ? cmd.score : 0; 
     var arr = cmd.regex.exec(s);
-    var fallbackScope = scope(isPresent);
+    var fallbackScope = scope(isVisible);
     
 
     for (var i = 1; i < arr.length; i++) {
@@ -192,7 +192,7 @@ var parser = {};
         }
         if (CMD_ALL_EXCLUDE_REGEX.test(arr[i])) {
           // if this is ALL BUT we need to remove some things from the list
-          // excludes must be in isPresent
+          // excludes must be in isVisible
           // if it is ambiguous or not recognised it does not get added to the list
           var s = arr[i].replace(CMD_ALL_EXCLUDE_REGEX, "").trim();
           var objectNames = s.split(CMD_JOINER_REGEX).map(function(el){ return el.trim() });

@@ -56,10 +56,16 @@ setup = function() {
   //_scopeReport("camera");
   //_scopeReport("blue hat");
   //_scopeReport("red hat");
-  msg("isHeld: " + formatList(scope(isHeld)));
-  msg("isHere: " + formatList(scope(isHere)));
-  msg("isInside: " + formatList(scope(isInside, getObject("open box"))));
-  msg(player.loc);
-  msg(getObject("garden").loc);
+  
+  // msg("isHeld: " + formatList(scope(isHeld)));
+  // msg("isHere: " + formatList(scope(isHere)));
+  // msg("isInside: " + formatList(scope(isInside, getObject("open box"))));
+  //msg("isVisible: " + formatList(scope(isVisible, "open box")));
+  //msg("isVisible: " + formatList(scope(isVisible, "lounge")));
+  // msg("boots isVisible: " + isVisible(getObject("boots")));
+  // msg("ball isVisible: " + isVisible(getObject("ball")));
+  // msg("open box isVisible: " + isVisible(getObject("open box")));
+  // msg("ornate doll isVisible: " + isVisible(getObject("ornate doll")));
+  //msg("isInside: " + formatList(scope(isInside, "open box")));
   
 }

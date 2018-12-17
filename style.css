@@ -80,7 +80,7 @@ body {
 td.compassbutton {
     border: black solid 1px;
     padding: 2px;
-    background-color: silver;
+    background-color: #c0c0ff;
     width: 23px;
     height: 15px;
 }  
@@ -102,7 +102,7 @@ span.compassbutton {
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
-    background-color: #ddd;
+    background-color: #fdf;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
     font-size: 9pt;
@@ -116,7 +116,7 @@ span.compassbutton {
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     right: 0px;
-    background-color: #ddd;
+    background-color: #fdf;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
     font-size: 9pt;
@@ -130,17 +130,23 @@ span.compassbutton {
     cursor: pointer;
     border: black solid 1px;
     padding: 2px;
-    background-color: silver;
+    padding-bottom: 0px;
+    background-color: #c0c0ff;
     width: 140px;
     margin-left: 5px;
     margin-bottom: 0px;
+}
+.subitem {
+    background-color: #a0a0ff;
+    width: 140px;
+    margin-top: 0px;
 }
 .itemaction {
     cursor: pointer;
     border: black solid 1px;
     border-top: none;
     padding: 2px;
-    background-color: silver;
+    background-color: #e0e0ff;
     width: 100px;
     margin-left: 15px;
     margin-top: 0px;

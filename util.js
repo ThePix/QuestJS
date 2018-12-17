@@ -119,65 +119,61 @@ itemNameWithThe = function(item) {
 
 // Scope functions
 isPresent = function(item) {
-  return isHere(item) || isHeldOrWorn(item);
+  return (isHere(item) || isHeldOrWorn(item)) && item.display != "not here";
 };
 isHeldOrWorn = function(item) {
-  return item.loc == player.name;
+  return item.loc == player.name && item.display != "not here";
 };
 isHeld = function(item) {
-  return (item.loc == player.name) && !item.worn;
+  return (item.loc == player.name) && !item.worn && item.display != "not here";
 };
 isHere = function(item) {
-  return item.loc === player.loc || item.loc === "Ubiquitous";
+  return item.loc === player.loc && item.display != "not here";
 };
 isWorn = function(item) {
   return (item.loc == player.name) && item.worn;
 };
-isNotNotHere = function(item) {
-  return item.display != "not here";
-};
-isInside = function(item, container) {
-  return item.loc == container.name;
+
+// Requires an extra parameter, so used like this:
+// scope(isInside, container);
+isInside = function(item) {
+  return item.loc == this.name;
 };
 
-// Is the given item in the location named
-// or in a container in that location?
-isIn = function(item, loc) {
-  if (item.loc == loc) { return true; }
-  if (!item.loc) { return false; }
-  container = getObject(item.loc);
-  return isIn(container, loc);
-}
 
 // Is the given item in the location named
 // or in an open container in that location?
-isReachable = function(item, loc) {
-  debugmsg(DBG_UTIL, loc);
-  if (item.loc == loc) { return true; }
-  if (!item.loc) { return false; }
+// Includes "Ubiquitous" items, but not "not here" items
+isReachable = function(item) {
+  if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
+  if (!item.loc || item.display == "not here") { return false; }
   container = getObject(item.loc);
+  debugmsg(1, "container=" + container.name);
   if (!container.container) { return false; }
   if (container.closed) { return false; }
-  return isReachable(container, loc);
+  return isVisible(container);
 }
 
 // Is the given item in the location named
 // or in an open or transparent container in that location?
-isVisible = function(item, loc) {
-  if (item.loc == loc) { return true; }
-  if (!item.loc) { return false; }
+// Includes "Ubiquitous" items, but not "not here" items
+// This is the fallback for the parser scope
+isVisible = function(item) {
+  if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
+  if (!item.loc || item.display == "not here") { return false; }
   container = getObject(item.loc);
+  debugmsg(1, "container=" + container.name);
   if (!container.container) { return false; }
   if (container.closed && !container.transparent) { return false; }
-  return isVisible(container, loc);
+  return isVisible(container);
 }
 
 // To use, do something like this:
 // var listOfOjects = scope(isHeld);
 // Hopefully this works too
-// var listOfOjects = scope(isInside, container);
-scope = function(fn, param) {
-  return data.filter(isNotNotHere).filter(fn, param);
+// var listOfOjects = scope(isInside, container.loc);
+scope = function(fn, p) {
+  return data.filter(fn, p);
 };
 
 

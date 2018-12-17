@@ -121,6 +121,7 @@ var data = [
   new Container("open box", {
     loc:"lounge",
     closed:false,
+    hereVerbs:['Examine', 'Close'],
     examine:'A big cardboard box.'
   }),
 

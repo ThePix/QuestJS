@@ -173,8 +173,8 @@ io.clickItemAction = function(itemName, action) {
 
 // Add the item to the DIV named htmlDiv
 // The item will be given verbs from its attName attribute
-io.appendItem = function(item, attName, htmlDiv) {
-  $('#' + htmlDiv).append('<p class="item" onclick="io.clickItem(\'' + item.htmlName + '\')">' + item.icon() + item.name + "</p>");
+io.appendItem = function(item, attName, htmlDiv, isSubItem) {
+  $('#' + htmlDiv).append('<p class="item' + (isSubItem ? ' subitem' : '') + '" onclick="io.clickItem(\'' + item.htmlName + '\')">' + item.icon() + item.name + "</p>");
   io.currentItemList.push(item.htmlName);
   if (item[attName]) {
     for (var j = 0; j < item[attName].length; j++) {
@@ -187,12 +187,11 @@ io.appendItem = function(item, attName, htmlDiv) {
   else {
     errormsg(ERR_GAME_BUG, "No " + attName + " for " + item.name );
   }
-  if (item.container && item.open) {
+  if (item.container && !item.closed) {
     l = scope(isInside, item);
-    msg("inside: " + formatList(l));
-    // for (var i = 0; i < l.length; i++) {
-      // io.appendItem(l[i], attName, htmlDiv, true);
-    // }
+    for (var i = 0; i < l.length; i++) {
+      io.appendItem(l[i], attName, htmlDiv, true);
+    }
   }
 };
 
@@ -224,7 +223,7 @@ io.createPanes = function() {
 
   for (var i = 0; i < INVENTORIES.length; i++) {
     document.writeln('<hr/>');
-    document.writeln('<h6>' + INVENTORIES[i].name + ':</h6>');
+    document.writeln('<h4>' + INVENTORIES[i].name + ':</h4>');
     document.writeln('<div id="' + INVENTORIES[i].alt + '">');
     document.writeln('</div>');
   }
