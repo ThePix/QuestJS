@@ -164,8 +164,6 @@ io.clickItemAction = function(itemName, action) {
     errormsg(ERR_GAME_BUG, CMD_PANE_ITEM_NOT_FOUND);
   }
   else {
-    debugmsg(4, item.name);
-    debugmsg(4, cmd.name);
     parser.quickCmd(cmd, item);
   }
 };

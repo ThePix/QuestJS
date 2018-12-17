@@ -1,3 +1,163 @@
+
+const TAKABLE = {
+  heldVerbs:['Examine', 'Drop'],
+  
+  hereVerbs:['Examine', 'Take'],
+  
+  takable:true,
+  
+  drop:function(item, isMultiple) {
+    if (item.worn) {
+      msg(prefix(item, isMultiple) + CMD_WEARING(item));
+      return false;
+    }
+    if (item.loc != player.name) {
+      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
+      return false;
+    }
+    msg(prefix(item, isMultiple) + CMD_DROP_SUCCESSFUL(item));
+    item.loc = getObject(player.loc).name;
+    updateUIItems();
+    return true;
+  },
+  
+  take:function(item, isMultiple) {
+    if (!isPresent(item)) {
+      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
+      return false;
+    }
+    if (!item.takable) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
+      return false;
+    }
+    if (item.loc == player.name) {
+      msg(prefix(item, isMultiple) + CMD_ALREADY_HAVE(item));
+      return false;
+    }      
+    msg(prefix(item, isMultiple) + CMD_TAKE_SUCCESSFUL(item));
+    item.loc = player.name;
+    updateUIItems();
+    return true;
+  },
+};
+
+
+const WEARABLE = {
+  heldVerbs:['Examine', 'Drop', 'Wear'],
+  
+  wornVerbs:['Examine', 'Remove'],
+  
+  wearable:true,
+  
+  icon:function() {
+    return ('<img src="images/garment12.png" />');
+  },
+  
+  wear:function(item, isMultiple) {
+    if (!isPresent(item)) {
+      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
+      return false;
+    }
+    if (!item.takable) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
+      return false;
+    }
+    if (item.worn) {
+      msg(prefix(item, isMultiple) + CMD_ALREADY_WEARING(item.pronoun.subjective));
+      return false;
+    }
+    if (item.loc != player.name) {
+      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
+      return false;
+    }
+    msg(prefix(item, isMultiple) + CMD_WEAR_SUCCESSFUL(item));
+    item.loc = player.name;
+    item.worn = true;
+    updateUIItems();
+    return true;
+  },
+  
+  remove:function(item, isMultiple) {
+    if (!item.worn) {
+      msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
+      return false;
+    }
+    msg(prefix(item, isMultiple) + CMD_REMOVE_SUCCESSFUL(item));
+    item.loc = player.name;
+    item.worn = false;
+    updateUIItems();
+    return true;
+  },
+};
+
+
+const CONTAINER = {
+  hereVerbs:['Examine', 'Open'],
+  container:true,
+  closed:true,
+  
+  open:function(item, isMultiple) {
+    if (!item.closed) {
+      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+      return false;
+    }
+    if (item.locked) {
+      msg(prefix(item, isMultiple) + CMD_LOCKED(item));
+      return false;
+    }
+    item.hereVerbs = ['Examine', 'Close'];
+    item.closed = false;
+    msg(prefix(item, isMultiple) + CMD_OPEN_SUCCESSFUL(item));
+    return true;
+  },
+  
+  close:function(item, isMultiple) {
+    if (item.closed) {
+      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+      return false;
+    }
+    item.hereVerbs = ['Examine', 'Open'];
+    item.closed = true;
+    msg(prefix(item, isMultiple) + CMD_CLOSE_SUCCESSFUL(item));
+    return true;
+  },
+  
+  icon:function() {
+    return ('<img src="images/' + (this.closed ? 'closed' : 'opened') + '12.png" />');
+  },
+};
+
+const SWITCHABLE = {
+  hereVerbs = ['Examine', 'Turn on'],
+  
+  switchon:function(item, isMultiple) {
+    if (item.switchedon) {
+      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+      return false;
+    }
+    msg('You turn the ' + item.name + ' on.');
+    item.switchedon = true;
+    item.hereVerbs = ['Examine', 'Turn off'];
+    return true;
+  },
+  
+  switchoff:function(item, isMultiple) {
+    if (!item.switchedon) {
+      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+      return false;
+    }
+    msg('You turn the ' + item.name + ' off.');
+    item.switchedon = false;
+    item.hereVerbs = ['Examine', 'Turn on'];
+    return true;
+  },
+};
+
+
+
+
+
+
 // ============  World model classes  =======================================
   
 function Item(name, hash) {
@@ -9,8 +169,10 @@ function Item(name, hash) {
     this[key] = DEFAULT_RESPONSES[key];
   }
   
-  for (var key in hash) {
-    this[key] = hash[key];
+  this.init = function(h) {
+    for (var key in h) {
+      this[key] = h[key];
+    }
   }
 
 
@@ -53,6 +215,8 @@ function Item(name, hash) {
       this[name] = value;
     }
   }
+  
+  this.init(hash);
 }
 
 
@@ -62,6 +226,7 @@ function Player(name, hash) {
   this.pronouns = PRONOUNS.secondperson;
   this.display = "invisible";
   this.player = true;
+  this.init(hash);
 }
 
 
@@ -74,6 +239,7 @@ function Exit(name, hash) {
     }
     setRoom(self.name);
   }
+  this.init(hash);
 }
 
 
@@ -88,6 +254,7 @@ function Turnscript(name, hash) {
   Item.call(this, name, hash);
   this.runTurnscript = true;
   this.display = "invisible";
+  this.init(hash);
 };
 
 
@@ -105,11 +272,13 @@ function NpcItem(name, hash) {
 function MaleNpcItem(name, hash) {
   NpcItem.call(this, name, hash);
   this.pronouns = PRONOUNS.male;
+  this.init(hash);
 };
 
 function FemaleNpcItem(name, hash) {
   NpcItem.call(this, name, hash);
   this.pronouns = PRONOUNS.female;
+  this.init(hash);
 };
 
 
@@ -120,46 +289,14 @@ function UseableItem(name, hash) {
   this.hereVerbs = ['Examine', 'Use'];
 };
 
+
 function TakableItem(name, hash) {
   Item.call(this, name, hash);
-  this.heldVerbs = ['Examine', 'Drop'];
-  this.hereVerbs = ['Examine', 'Take'];
-  this.takable = true;
-  
-  this.drop = function(item, isMultiple) {
-    if (item.worn) {
-      msg(prefix(item, isMultiple) + CMD_WEARING(item));
-      return false;
-    }
-    if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
-      return false;
-    }
-    msg(prefix(item, isMultiple) + CMD_DROP_SUCCESSFUL(item));
-    item.loc = getObject(player.loc).name;
-    updateUIItems();
-    return true;
-  }
-  
-  this.take = function(item, isMultiple) {
-    if (!isPresent(item)) {
-      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
-      return false;
-    }
-    if (!item.takable) {
-      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
-      return false;
-    }
-    if (item.loc == player.name) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY_HAVE(item));
-      return false;
-    }      
-    msg(prefix(item, isMultiple) + CMD_TAKE_SUCCESSFUL(item));
-    item.loc = player.name;
-    updateUIItems();
-    return true;
-  }
+  this.init(TAKABLE);
+  this.init(hash);
 };
+
+
 
 function UseableTakableItem(name, hash) {
   TakableItem.call(this, name, hash);
@@ -168,121 +305,29 @@ function UseableTakableItem(name, hash) {
 };
 
 function WearableItem(name, hash) {
-  TakableItem.call(this, name, hash);
-  this.heldVerbs = ['Examine', 'Drop', 'Wear'];
-  this.wornVerbs = ['Examine', 'Remove'];
-  this.wearable = true;
-  this.icon = function() {
-    return ('<img src="images/garment12.png" />');
-  }
-  
-  this.wear = function(item, isMultiple) {
-    if (!isPresent(item)) {
-      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
-      return false;
-    }
-    if (!item.takable) {
-      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
-      return false;
-    }
-    if (item.worn) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY_WEARING(item.pronoun.subjective));
-      return false;
-    }
-    if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
-      return false;
-    }
-    msg(prefix(item, isMultiple) + CMD_WEAR_SUCCESSFUL(item));
-    item.loc = getObject(player.loc).name;
-    item.worn = true;
-    updateUIItems();
-    return true;
-  }
-  
-  this.remove = function(item, isMultiple) {
-    if (!item.worn) {
-      msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
-      return false;
-    }
-    msg(prefix(item, isMultiple) + CMD_REMOVE_SUCCESSFUL(item));
-    item.loc = player.name;
-    item.worn = false;
-    updateUIItems();
-    return true;
-  }
+  Item.call(this, name, hash);
+  this.init(TAKABLE);
+  this.init(WEARABLE);
+  this.init(hash);
 };
-
 
 function Container(name, hash) {
   Item.call(this, name, hash);
-  this.hereVerbs = ['Examine', 'Open'];
-  this.container = true,
-  this.closed = true,
-  
-  this.open = function(item, isMultiple) {
-    if (!item.closed) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
-      return false;
-    }
-    if (item.locked) {
-      msg(prefix(item, isMultiple) + CMD_LOCKED(item));
-      return false;
-    }
-    item.hereVerbs = ['Examine', 'Close'];
-    item.closed = false;
-    msg(prefix(item, isMultiple) + CMD_OPEN_SUCCESSFUL(item));
-    return true;
-  }
-  
-  this.close = function(item, isMultiple) {
-    if (item.closed) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
-      return false;
-    }
-    item.hereVerbs = ['Examine', 'Open'];
-    item.closed = true;
-    msg(prefix(item, isMultiple) + CMD_CLOSE_SUCCESSFUL(item));
-    return true;
-  }
-  
-  this.icon = function() {
-    return ('<img src="images/' + (this.closed ? 'closed' : 'opened') + '12.png" />');
-  }
+  this.init(CONTAINER);
+  this.init(hash);
 };
-
-
-
 
 function SwitchableItem(name, hash) {
   Item.call(this, name, hash);
-  this.hereVerbs = ['Examine', 'Turn on'];
-  this.switchon = function(self) {
-    msg('You turn the ' + self.name + ' on.');
-    self['switchedon'] = true;
-    self['hereVerbs'] = ['Examine', 'Turn off'];
-  };
-  this.switchoff = function(self) {
-    msg('You turn the ' + self.name + ' off.');
-    self['switchedon'] = false;
-    self['hereVerbs'] = ['Examine', 'Turn on'];
-  };
+  this.init(SWITCHABLE);
+  this.init(hash);
 };
 
 function SwitchableTakableItem(name, hash) {
-  TakableItem.call(this, name, hash);
-  this.heldVerbs = ['Examine', 'Drop', 'Turn on'];
-  this.hereVerbs = ['Examine', 'Take', 'Turn off'];
-  this.switchon = function(self) {
-    msg('You turn the ' + self.name + ' on.');
-    self['switchedon'] = true;
-    self['hereVerbs'] = ['Examine', 'Turn off'];
-  };
-  this.switchoff = function(self) {
-    msg('You turn the ' + self.name + ' off.');
-    self['switchedon'] = false;
-    self['hereVerbs'] = ['Examine', 'Turn on'];
-  };
+  Item.call(this, name, hash);
+  this.init(TAKABLE);
+  this.init(SWITCHABLE);
+  this.init(hash);
 };
 
 function EdibleItem(name, hash) {

@@ -131,6 +131,7 @@ var commands = [
       {scope:isPresent}
     ]
   }),
+  
   new Cmd('Take', {
     regex:/^(take|get|pick up) (.+)$/,
     objects:[
@@ -141,6 +142,22 @@ var commands = [
   
   new Cmd('Drop', {
     regex:/^(drop) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isHeld, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Wear', {
+    regex:/^(wear|don|put on) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isHeld, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Remove', {
+    regex:/^(remove|doff|take off) (.+)$/,
     objects:[
       {ignore:true},
       {scope:isHeld, multiple:true},

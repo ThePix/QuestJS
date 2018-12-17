@@ -43,29 +43,4 @@ setup = function() {
   heading(2, TITLE);
   document.title = TITLE;
   msg('This is a test of what we can do.');
-  //[objs, score] = findInScope("ch", [scope(isHere), scope(isPresent)]);
-  //msg(objs.length);
-  //msg(score);
-  //parser.parse("take red hat, teapot and chair");
-  //parser.parse("x it");
-  //parser.parse("take hat, teapot2 and ball");
-  //parser.parse("take blue hat, teapot and ball from chair");
-  //parser.parse("ask ball about hats");
-  //parser.parse("put ball in chest");
-  //_scopeReport("ornate doll");
-  //_scopeReport("camera");
-  //_scopeReport("blue hat");
-  //_scopeReport("red hat");
-  
-  // msg("isHeld: " + formatList(scope(isHeld)));
-  // msg("isHere: " + formatList(scope(isHere)));
-  // msg("isInside: " + formatList(scope(isInside, getObject("open box"))));
-  //msg("isVisible: " + formatList(scope(isVisible, "open box")));
-  //msg("isVisible: " + formatList(scope(isVisible, "lounge")));
-  // msg("boots isVisible: " + isVisible(getObject("boots")));
-  // msg("ball isVisible: " + isVisible(getObject("ball")));
-  // msg("open box isVisible: " + isVisible(getObject("open box")));
-  // msg("ornate doll isVisible: " + isVisible(getObject("ornate doll")));
-  //msg("isInside: " + formatList(scope(isInside, "open box")));
-  
 }
