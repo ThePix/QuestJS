@@ -89,8 +89,21 @@ CMD_CLOSE_SUCCESSFUL = function(item) {
 
 
 const ERROR_NO_PLAYER = "No player object found. This will not go well...";
-const ERROR_MSG_OR_RUN = "Unsupported type for msgOrRun"
-const ERROR_NO_ROOM = "Failed to find room"
+const ERROR_MSG_OR_RUN = "Unsupported type for msgOrRun";
+const ERROR_NO_ROOM = "Failed to find room";
+const ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
+const ERROR_INIT_REPEATED_NAME = function(item) {
+  return "The item name `" + item.name + "` is used at least twice (you will see this message once for each time it is used).";
+};
+const ERROR_INIT_UNKNOWN_LOC = function(item) {
+  return "The item `" + item.name + "` is in an unknown location (" + item.loc + ")";
+};
+const ERROR_INIT_UNKNOWN_EXIT = function(dir, room, loc) {
+  return "The exit `" + dir + "` in room '" + room.name + "' is to an unknown location (" + loc + ")"
+};
+
+
+
 
 const DEFAULT_DESCRIPTION = "It's just scenery.";
 
@@ -103,12 +116,6 @@ const PRONOUNS = {
   secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your", reflexive:"yourself"},
 };
 
-
-const DEFAULT_RESPONSES = {
-  take:"You can't take it.",
-  examine:"It's not important.",
-  wear:"That's not something you can wear.",
-};
 
 
 // Change the abbrev values to suit your game (or language)
@@ -210,7 +217,6 @@ conjugate = function(item, verb) {
   }
   for (var i = 0; i < arr.length; i++) {
     if (arr[i].name == verb) {
-      msg("spocific word found");
       return arr[i].value;
     }
   }
@@ -229,12 +235,15 @@ conjugate = function(item, verb) {
 };
 
 
-pronounVerb = function(item, verb) {
-  return sentenceCase(item.pronoun.objective) + " " + conjugate(item, verb);
+pronounVerb = function(item, verb, capitalise) {
+  s = item.pronouns.subjective + " " + conjugate(item, verb);
+  s = s.replace(" '", "'");  // yes this is a hack!
+  return capitalise ? sentenceCase(s) : s;
 };
 
-nounVerb = function(item, verb) {
-  return sentenceCase(item.name) + " " + conjugate(item, verb);
+nounVerb = function(item, verb, capitalise) {
+  s = item.name + " " + conjugate(item, verb);
+  return capitalise ? sentenceCase(s) : s;
 };
 
 

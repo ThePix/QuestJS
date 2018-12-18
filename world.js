@@ -1,3 +1,50 @@
+const DEFAULT_ITEM = {
+  display:"visible",
+  
+  hereVerbs:['Examine'],
+  
+  pronouns:PRONOUNS.thirdperson,
+
+  icon:function() {
+    return "";
+  },
+  
+  drop:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
+    return false;
+  },
+  
+  take:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
+    return false;
+  },
+
+  wear:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_WEAR(item));
+    return false;
+  },
+  
+  remove:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
+    return false;
+  },
+  
+  open:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
+    return false;
+  },
+
+  close:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
+    return false;
+  },
+  
+  askabout:function(text) {
+    msg("You can ask " + this.pronouns.objective + " about " + text + " all you like, but " + pronounVerb(this, "'be") + " not about to reply.");
+    return false;
+  }
+};
+
 
 const TAKABLE = {
   heldVerbs:['Examine', 'Drop'],
@@ -127,8 +174,10 @@ const CONTAINER = {
   },
 };
 
+
+
 const SWITCHABLE = {
-  hereVerbs = ['Examine', 'Turn on'],
+  hereVerbs:['Examine', 'Turn on'],
   
   switchon:function(item, isMultiple) {
     if (item.switchedon) {
@@ -154,187 +203,66 @@ const SWITCHABLE = {
 };
 
 
-
-
-
-
-// ============  World model classes  =======================================
-  
-function Item(name, hash) {
-  this.name = name;
-  this.display = "visible";
-  this.hereVerbs = ['Examine'];
-  this.pronouns = PRONOUNS.thirdperson;
-  for (var key in DEFAULT_RESPONSES) {
-    this[key] = DEFAULT_RESPONSES[key];
-  }
-  
-  this.init = function(h) {
-    for (var key in h) {
-      this[key] = h[key];
-    }
-  }
-
-
-  this.icon = function() {
-    return "";
-  }
-  
-  this.drop = function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
-    return false;
-  }
-  
-  this.take = function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
-    return false;
-  }
-
-  this.wear = function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_WEAR(item));
-    return false;
-  }
-  
-  this.remove = function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
-    return false;
-  }
-  
-  this.open = function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
-    return false;
-  }
-
-  this.close = function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
-    return false;
-  }
-  
-  this.setPropertyIfNew = function(name, value) {
-    if (!this[name]) {
-      this[name] = value;
-    }
-  }
-  
-  this.init(hash);
+const PLAYER = {
+  pronouns:PRONOUNS.secondperson,
+  display:"invisible",
+  player:true,
 }
 
-
-
-function Player(name, hash) {
-  Item.call(this, name, hash);
-  this.pronouns = PRONOUNS.secondperson;
-  this.display = "invisible";
-  this.player = true;
-  this.init(hash);
-}
-
-
-
-function Exit(name, hash) {
-  Item.call(this, name, hash);
-  this.use = function(self) {
-    if ('msg' in self) {
-      msg(self.msg);
-    }
-    setRoom(self.name);
+const TURNSCRIPT = function(isRunning, fn) {
+  res = {
+    display:"invisible",
   }
-  this.init(hash);
-}
-
-
-
-function Room(name, hash) {
-  Item.call(this, name, hash);
+  res.runTurnscript = isRunning;
+  res.turnscript = fn;
+  return res;
 };
 
 
 
-function Turnscript(name, hash) {
-  Item.call(this, name, hash);
-  this.runTurnscript = true;
-  this.display = "invisible";
-  this.init(hash);
-};
-
-
-
-
-
-function NpcItem(name, hash) {
-  Item.call(this, name, hash);
-  this.hereVerbs = ['Look at'];
-  this.icon = function() {
-    return ('<img src="images/npc12.png" />');
-  }
-};
-
-function MaleNpcItem(name, hash) {
-  NpcItem.call(this, name, hash);
-  this.pronouns = PRONOUNS.male;
-  this.init(hash);
-};
-
-function FemaleNpcItem(name, hash) {
-  NpcItem.call(this, name, hash);
-  this.pronouns = PRONOUNS.female;
-  this.init(hash);
-};
-
-
-
-
-function UseableItem(name, hash) {
-  Item.call(this, name, hash);
-  this.hereVerbs = ['Examine', 'Use'];
-};
-
-
-function TakableItem(name, hash) {
-  Item.call(this, name, hash);
-  this.init(TAKABLE);
-  this.init(hash);
-};
-
-
-
-function UseableTakableItem(name, hash) {
-  TakableItem.call(this, name, hash);
-  this.heldVerbs = ['Examine', 'Drop', 'Use'];
-  this.hereVerbs = ['Examine', 'Take', 'Use'];
-};
-
-function WearableItem(name, hash) {
-  Item.call(this, name, hash);
-  this.init(TAKABLE);
-  this.init(WEARABLE);
-  this.init(hash);
-};
-
-function Container(name, hash) {
-  Item.call(this, name, hash);
-  this.init(CONTAINER);
-  this.init(hash);
-};
-
-function SwitchableItem(name, hash) {
-  Item.call(this, name, hash);
-  this.init(SWITCHABLE);
-  this.init(hash);
-};
-
-function SwitchableTakableItem(name, hash) {
-  Item.call(this, name, hash);
-  this.init(TAKABLE);
-  this.init(SWITCHABLE);
-  this.init(hash);
-};
-
-function EdibleItem(name, hash) {
-  TakableItem.call(this, name, hash);
-  this.heldVerbs = ['Examine', 'Drop', 'Eat'];
-  this.eat = function(self) {
-    msg('You eat the ' + self.name + ".");
-    self['loc'] = null;
+const NPC_OBJECT = function(isFemale) {
+  res = {
+    hereVerbs:['Examine', 'Talk to'],
+    icon:function() {
+      return ('<img src="images/npc12.png" />');
+    },
   };
+  res.pronouns = isFemale ? PRONOUNS.female : PRONOUNS.male;
+  res.askabout = function(text) {
+    msg("You ask " + this.name + " about " + text + ".");
+    if (this.askoptions[text]) {
+      msgOrRun(this.askoptions, text);
+      return true;
+    }
+    else {
+      msg(nounVerb(this, "have", true) + " nothing to say on the subject.");
+      return false;
+    }
+  }
+  return res;
 };
+
+
+
+
+// Use this to create a new item (as opposed to a room).
+// It adds various defaults that apply only to items
+createItem = function (name, listOfHashes) {
+  listOfHashes.unshift(DEFAULT_ITEM);
+  return createObject(name, listOfHashes);
+}
+
+
+
+createObject = function (name, listOfHashes) {
+  item = {};
+  item.name = name;
+  for (var i = 0; i < listOfHashes.length; i++) {
+    for (var key in listOfHashes[i]) {
+      item[key] = listOfHashes[i][key];
+    }
+  }
+  return item;
+}
+
+

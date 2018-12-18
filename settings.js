@@ -6,17 +6,8 @@ const COMPASS = true;
 const TEXT_INPUT = true;
 const CURSOR = ">";
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
+const PRE_RELEASE = true;  // Some extra testing is done on start up when this is true
 
-const SUCCESS = 1;
-const SUCCESS_NO_TURNSCRIPTS = 2;
-const FAILED = -1;
-
-const ERR_QUEST_BUG = 21;   // A bug in Quest I need to sort out
-const ERR_GAME_BUG = 22;    // A bug in the game the creator needs to sort out
-const ERR_PARSER = 23;      // Player is typing something unintelligible
-const ERR_PLAYER = 24;      // Player is typing something not allowed
-const DBG_PARSER = 21;      // Debug message from the parser
-const DBG_UTIL = 22;        // Debug message from util
 
 
 
@@ -38,9 +29,10 @@ const INVENTORIES = [
 
 
 // This function will be called at the start of the game, so can be used
-// to give a title and introduce your game.
+// to introduce your game.
 setup = function() {
-  heading(2, TITLE);
-  document.title = TITLE;
   msg('This is a test of what we can do.');
+  parser.parse("ask mary about house");
+  parser.parse("ask mary about basement");
+  parser.parse("ask coin about house");
 }

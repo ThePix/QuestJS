@@ -6,6 +6,19 @@
 var player;
 
 
+const SUCCESS = 1;
+const SUCCESS_NO_TURNSCRIPTS = 2;
+const FAILED = -1;
+
+const ERR_QUEST_BUG = 21;   // A bug in Quest I need to sort out
+const ERR_GAME_BUG = 22;    // A bug in the game the creator needs to sort out
+const ERR_PARSER = 23;      // Player is typing something unintelligible
+const ERR_PLAYER = 24;      // Player is typing something not allowed
+const DBG_PARSER = 21;      // Debug message from the parser
+const DBG_UTIL = 22;        // Debug message from util
+
+
+
 // ============  Random Utilities  =======================================
 
 // Returns a random number from 1 to n
@@ -148,7 +161,6 @@ isReachable = function(item) {
   if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
   if (!item.loc || item.display == "not here") { return false; }
   container = getObject(item.loc);
-  debugmsg(1, "container=" + container.name);
   if (!container.container) { return false; }
   if (container.closed) { return false; }
   return isVisible(container);
@@ -162,7 +174,6 @@ isVisible = function(item) {
   if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
   if (!item.loc || item.display == "not here") { return false; }
   container = getObject(item.loc);
-  debugmsg(1, "container=" + container.name);
   if (!container.container) { return false; }
   if (container.closed && !container.transparent) { return false; }
   return isVisible(container);
@@ -261,6 +272,21 @@ init = function() {
     errormsg(ERR_GAME_BUG, ERROR_NO_PLAYER);
   }
   
+  // Create a background item if it does not exist
+  background = getObject("background");
+  if (background == undefined) {
+    background = createItem("background", [{
+      loc:'Ubiquitous',
+      display:'invisible',
+      examine:DEFAULT_DESCRIPTION,
+      background:true,
+    }]);
+    data.push(background);
+  }
+  if (!background.background) {
+      errormsg(ERR_GAME_BUG, ERROR_INIT_BACKGROUND);
+  }
+
   // Go through each item
   data.forEach(function (el) {
     initItem(el);
@@ -271,6 +297,8 @@ init = function() {
   
   // Set up the UI
   endTurnUI();
+  heading(2, TITLE);
+  document.title = TITLE;
 };
 
 
@@ -279,9 +307,22 @@ init = function() {
 // That will be done at the start, but you need to do it yourself 
 // if creating items on the fly.
 initItem = function(item) {
-  // Give every object an alias
+  if (PRE_RELEASE) {
+    var l = data.filter(function(el) {
+      return el.name == item.name;
+    });      
+    if (l.length > 1) {
+      errormsg(ERR_GAME_BUG, ERROR_INIT_REPEATED_NAME(item));
+      return false;
+    }
+  }
+  
+  // Give every object an alias and list alias (used in the inventories)
   if (!item.alias) {
     item.alias = item.name;
+  }
+  if (!item.listalias) {
+    item.listalias = sentenceCase(item.alias);
   }
   
   // Give every object a unique htmlName
@@ -306,6 +347,24 @@ initItem = function(item) {
     item.loc = player.name;
     item.worn = true;
   }
+  if (PRE_RELEASE) {
+    if (item.loc && !getObject(item.loc) && item.loc != "Ubiquitous") {
+      errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_LOC(item));
+    }
+    for (var i = 0; i < EXITS.length; i++) {
+      var ex = item[EXITS[i].name];
+      if (typeof ex == "string") {
+        if (!getObject(ex)) {
+          errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_EXIT(EXITS[i].name, item, ex));
+        }
+      }
+      if (typeof ex == "object") {
+        if (!getObject(ex.name)) {
+          errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_EXIT(EXITS[i].name, item, ex.name));
+        }
+      }
+    }
+  }
 };
 
 
@@ -321,13 +380,13 @@ endTurn = function(result) {
 
 
 // Runs turnscipts
-// Turnscripts are just objects in the data array with a "run" attribute set to a function
+// Turnscripts are just objects in the data array with a "turnscript" attribute set to a function
 // and a Boolean "runTurnscript".
 runTurnScripts = function() {
   for (var i = 0; i < data.length; i++) {
-    if (typeof data[i]["run"] === "function"){
+    if (typeof data[i]["turnscript"] === "function"){
       if (((("loc" in data[i]) && IsPresent(data[i])) || !("loc" in data[i])) && data[i].runTurnscript) {
-        data[i]["run"]();
+        data[i]["turnscript"]();
       }
     }
   }
@@ -342,14 +401,6 @@ const BACK_REGEX = /\[.+?\]/;
 setBackground = function() {
   room = getObject(player.loc);
   background = getObject("background");
-  if (background == undefined) {
-    background = new Item("background", {
-      loc:'Ubiquitous',
-      display:'invisible',
-      examine:DEFAULT_DESCRIPTION,
-    });
-    data.push(background);
-  }
   background.alt = [];
   if (typeof room.examine == 'string') {
     if (!room.backgroundNames) {
@@ -366,3 +417,17 @@ setBackground = function() {
   }
 }
 
+
+
+function Exit(name, hash) {
+  this.name = name;
+  this.use = function(self) {
+    if ('msg' in self) {
+      msg(self.msg);
+    }
+    setRoom(self.name);
+  }
+  for (var key in hash) {
+    item[key] = hash[key];
+  }
+}

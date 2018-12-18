@@ -1,159 +1,126 @@
-function SpellItem(name, hash) {
-  Item.call(this, name, hash);
-  this.spellVerbs = ['Examine', 'Cast'];
-  this.cast = function(self) {
+const SPELL = {
+  spellVerbs:['Examine', 'Cast'],
+  cast:function(self) {
     msg('You cast <i>' + self.name + '</i>.');
-  }
-  this.icon = function() {
+  },
+  icon:function() {
     return ('<img src="images/spell12.png" />');
-  }
+  },
 }
 
-
-function Weapon(name, hash) {
-  Item.call(this, name, hash);
-  this.icon = function() {
+const WEAPON = {
+  icon:function() {
     return ('<img src="images/weapon12.png" />');
-  }
+  }  
 }
-
-
 
 var data = [
   
-  new Player("me", {
-    loc:"lounge",
-  }),
+  createItem("me", [
+    PLAYER,
+    { loc:"lounge", }
+  ]),
 
-  new Room("kitchen", {
+  createObject("kitchen", [{
     examine:'A clean room.',
     west:"lounge",
     north:new Exit('garden'),
-  }),
+  }]),
 
-  new Room("lounge", {
+  createObject("lounge", [{
     examine:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
     east:'kitchen'
-  }),
+  }]),
 
-  new Room("garden", {
+  createObject("garden", [{
     examine:'A wild and over-grown garden.',
     south:function(self) {
       msg("You head back inside.");
       setRoom('kitchen');
     },
-  }),
+  }]),
 
-  new Room("spellbook", {
+  createObject("spellbook", [{
     examine:'A ancient tomb.',
-  }),
+  }]),
 
-  new SpellItem("charm", {
-    loc:'spellbook',
-    spellVerbs:["Cast"],
-    examine:'Charm will make the target thonk you are his or her friend.',
-  }),
+  createItem("charm", [
+    SPELL,
+    {loc:'spellbook', examine:"Charm will make the target think you are his or her friend.",}
+  ]),
 
-  new TakableItem("ball", {
-    loc:'Held',
-    examine:'A red ball.',
-    drop:function(self) {
-      msg('You drop the stupid ' + self.name + '.');
-      self['loc'] = "lounge"
-    },
-  }),
 
-  new WearableItem("red hat", {
-    loc:'Held',
-    examine:'A red bobble hat.'
-  }),
+
+
   
-  new WearableItem("blue hat", {
-    loc:'Worn',
-    examine:'A blue bobble hat.'
-  }),
+
   
-  new TakableItem("teapot", {
-    loc:"lounge",
-    alt:['kettle'],
-    examine:function(self) {
-      msg('A nasty blue teapot. It is broken.');
-    },
-  }),
+  createItem("boots", [
+    TAKABLE,
+    WEARABLE,
+    { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
+  ]),
   
-  new Container("chest", {
-    container:true,
-    loc:"lounge",
-  }),
+
   
-  new TakableItem("boots", {
-    loc:"lounge",
-    pronouns:PRONOUNS.plural,
-    examine:"Some old boots.",
-  }),
-  
-  new Weapon("knife", {
-    loc:"lounge",
-    sharp:false,
-    examine:function(item) {
+  createItem("knife", [
+    TAKABLE,
+    WEAPON,
+    { loc:"lounge", sharp:false, examine:function(item) {
       if (item.sharp) {
         msg("A really sharp knife.");
       }
       else {
         msg("A blunt knife.");
-      }
-    },
-  }),
-  
-  new UseableItem("chair", {
-    loc:"lounge",
-    examine:'A cheap plastic chair.'
-  }),
+      } },
+    }
+  ]),
 
-  new Container("glass cabinet", {
-    closed:true,
-    locked:true,
-    transparent:true,
-    loc:"lounge",
-    examine:'A cabinet with a glass front'
-  }),
 
-  new Container("open box", {
-    loc:"lounge",
-    closed:false,
-    hereVerbs:['Examine', 'Close'],
-    examine:'A big cardboard box.'
-  }),
+  createItem("glass cabinet", [
+    CONTAINER,
+    { loc:"lounge", examine:"A cabinet with a glass front", locked:true, transparent:true, }
+  ]),
 
-  new UseableItem("ornate doll", {
-    loc:"glass cabinet",
-    examine:'A fancy doll, eighteenth century.'
-  }),
 
-  new UseableItem("camera", {
-    loc:"open box",
-    examine:'A cheap digital camera.'
-  }),
+  createItem("cardboard box", [
+    CONTAINER,
+    { loc:"lounge", examine:"A big cardboard box.", closed:false, hereVerbs:['Examine', 'Close'], }
+  ]),
+
+
+  createItem("ornate doll", [
+    TAKABLE,
+    { loc:"glass cabinet", examine:"A fancy doll, eighteenth century." }
+  ]),
+
+
+
+  createItem("camera", [
+    TAKABLE,
+    { loc:"lounge", examine:"A cheap digital camera.", alias:"hat", listalias:"microscope" }
+  ]),
 
   
   
-  new FemaleNpcItem("Mary", {
-    loc:"lounge",
-    examine:'An attractive young lady.'
-  }),
+  createItem("Mary", [
+    NPC_OBJECT(true),
+    { loc:"lounge", examine:"An attractive young lady.", askoptions:{
+      house:"'I like it,' says Mary.",
+      garden:"'Needs some work,' Mary says with a sign.",
+    } }
+  ]),
 
-  new UseableTakableItem("device", {
-    loc:"lounge",
-    display:'not here',
-    examine:function(self) {
-      msg('A nasty blue device. It is broken.');
-    },
-  }),
-
-  new Turnscript("TS_Test", {
-    run:function(self) {
+  createItem("TS_Test", [
+    TURNSCRIPT(true, function(self) {
       msg('Turn script!');
-    },
-  }),
+    }),
+  ]),
+
+ 
+  createItem("coin", [
+    TAKABLE,
+    { loc:"lounge", examine: "A gold coin."  }
+  ]),
   
 ];

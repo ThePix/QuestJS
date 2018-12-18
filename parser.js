@@ -1,10 +1,3 @@
-
-
-
-// Need to support ALL
-// and ALL BUT ???
-
-
 // NOTES AND LIMITATIONS
 // This can only handle single commands
 // Lists of multiple objects must be separated by JOINER_REGEX (i.e., "and" or comma)
@@ -251,7 +244,6 @@ var parser = {};
   // or 1 if in the third list).
   // If not found the score will be 0, and an empty array returned.
   parser.findInScope = function(s, listOfLists) {
-    debugmsg(1, "looking for " + s);
     // First handle IT etc.
     for (key in PRONOUNS) {
       if (s == PRONOUNS[key].objective && parser.pronouns[PRONOUNS[key].objective]) {
@@ -293,7 +285,7 @@ var parser = {};
 
 
   parser.scoreObjectMatch = function(s, item) {
-    var itemName = item.name.toLowerCase();
+    var itemName = item.alias.toLowerCase();
     if (s == itemName) {
       return 3;
     }

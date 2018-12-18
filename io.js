@@ -172,7 +172,7 @@ io.clickItemAction = function(itemName, action) {
 // Add the item to the DIV named htmlDiv
 // The item will be given verbs from its attName attribute
 io.appendItem = function(item, attName, htmlDiv, isSubItem) {
-  $('#' + htmlDiv).append('<p class="item' + (isSubItem ? ' subitem' : '') + '" onclick="io.clickItem(\'' + item.htmlName + '\')">' + item.icon() + item.name + "</p>");
+  $('#' + htmlDiv).append('<p class="item' + (isSubItem ? ' subitem' : '') + '" onclick="io.clickItem(\'' + item.htmlName + '\')">' + item.icon() + item.listalias + "</p>");
   io.currentItemList.push(item.htmlName);
   if (item[attName]) {
     for (var j = 0; j < item[attName].length; j++) {

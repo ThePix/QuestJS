@@ -253,13 +253,16 @@ var commands = [
 //    objects:[{scope:isHeld, multiple:true}]
 //  }),
   new Cmd('Ask/about', {
-    pattern:'ask #object# about #text#',
-    script:function(object, text) {
-      msgOrRun(room, 'examine');
-      suppressTurnScripts = true;
+    regex:/^(ask) (.+) (about) (.+)$/,
+    script:function(cmd, arr) {
+      success = arr[0][0].askabout(arr[1]);
+//      msg("You ask " + arr[0][0].name + " about " + arr[1] + ".*");
+      return success ? SUCCESS : FAILED; 
     },
     objects:[
+      {ignore:true},
       {scope:isHere},
+      {ignore:true},
       {text:true},
     ]
   }),
