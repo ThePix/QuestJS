@@ -163,3 +163,16 @@ span.compassbutton {
     padding: 0px 10px;
 }
 
+
+
+
+
+
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+
+.ui-dialog-titlebar {
+  background-image: none;
+  background-color: #c0c0ff;
+}

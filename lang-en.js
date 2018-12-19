@@ -92,8 +92,11 @@ const ERROR_NO_PLAYER = "No player object found. This will not go well...";
 const ERROR_MSG_OR_RUN = "Unsupported type for msgOrRun";
 const ERROR_NO_ROOM = "Failed to find room";
 const ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
-const ERROR_INIT_REPEATED_NAME = function(item) {
-  return "The item name `" + item.name + "` is used at least twice (you will see this message once for each time it is used).";
+const ERROR_INIT_REPEATED_NAME = function(name) {
+  return "Attempting to use the name `" + name + "`, there there is already an item with that name in the world.";
+};
+const ERROR_INIT_DISALLOWED_NAME = function(name) {
+  return "Attempting to use the disallowed name `" + name + "`; a name can only include letters and digits - no spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.";
 };
 const ERROR_INIT_UNKNOWN_LOC = function(item) {
   return "The item `" + item.name + "` is in an unknown location (" + item.loc + ")";
@@ -150,7 +153,7 @@ helpScript = function() {
     metamsg("To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.");
   }
   if (TEXT_INPUT) {
-    metamsg("Type command in the command bar to interact with the world. To move, use the eight coompass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
+    metamsg("Type commands in the command bar to interact with the world. To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
     metamsg("You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object). ");
     metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong. You can use [SHIFT] with the arrow keys to move north, south, east or west.");
   }

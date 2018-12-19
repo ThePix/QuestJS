@@ -289,17 +289,15 @@ var parser = {};
     if (s == itemName) {
       return 3;
     }
-    if (item.alt && item.alt.includes(s)) {
+    if (item.alt.includes(s)) {
       return 3;
     }
     if (new RegExp("\\b" + s).test(itemName)) {
       return 1;
     }
-    if (item.alt) {
-      for (var i = 0; i < item.alt.length; i++) {
-        if (new RegExp("\\b" + s).test(item.alt[i])) {
-          return 1;
-        }
+    for (var i = 0; i < item.alt.length; i++) {
+      if (new RegExp("\\b" + s).test(item.alt[i])) {
+        return 1;
       }
     }
     return -1;

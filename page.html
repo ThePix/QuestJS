@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <title>A Test Page</title>
-<link rel="stylesheet" href="style.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="style.css"/>
 <script src="util.js"></script>
 <script src="settings.js"></script>
 <script>
@@ -12,9 +14,8 @@
 </script>
 <script src="io.js"></script>
 <script src="world.js"></script>
+<script src="templates.js"></script>
 <script src="parser.js"></script>
-<script src="commands.js"></script>
-<script src="data.js"></script>
 </head>
 
 
@@ -36,5 +37,13 @@
   io.createPanes();
 </script>
 
+<div id="dialog" style="display:none;">
+</div>
+
 </body>
 </html> 
+
+<script src="commands.js"></script>
+<script src="data.js"></script>
+
+

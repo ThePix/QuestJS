@@ -14,23 +14,25 @@ const WEAPON = {
   }  
 }
 
-var data = [
   
   createItem("me", [
     PLAYER,
-    { loc:"lounge", }
-  ]),
+    { loc:"lounge", examine:function(item) {
+      msg("A " + (item.isFemale ? "chick" : "guy") + " called " + item.fullname + ", who is a " + item.job.name);
+      },
+    }
+  ]);
 
   createObject("kitchen", [{
     examine:'A clean room.',
     west:"lounge",
     north:new Exit('garden'),
-  }]),
+  }]);
 
   createObject("lounge", [{
     examine:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
     east:'kitchen'
-  }]),
+  }]);
 
   createObject("garden", [{
     examine:'A wild and over-grown garden.',
@@ -38,16 +40,16 @@ var data = [
       msg("You head back inside.");
       setRoom('kitchen');
     },
-  }]),
+  }]);
 
   createObject("spellbook", [{
     examine:'A ancient tomb.',
-  }]),
+  }]);
 
   createItem("charm", [
     SPELL,
     {loc:'spellbook', examine:"Charm will make the target think you are his or her friend.",}
-  ]),
+  ]);
 
 
 
@@ -59,7 +61,7 @@ var data = [
     TAKABLE,
     WEARABLE,
     { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
-  ]),
+  ]);
   
 
   
@@ -74,32 +76,32 @@ var data = [
         msg("A blunt knife.");
       } },
     }
-  ]),
+  ]);
 
 
-  createItem("glass cabinet", [
+  createItem("glass_cabinet", [
     CONTAINER,
-    { loc:"lounge", examine:"A cabinet with a glass front", locked:true, transparent:true, }
-  ]),
+    { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front", locked:true, transparent:true, }
+  ]);
 
 
-  createItem("cardboard box", [
+  createItem("cardboard_box", [
     CONTAINER,
-    { loc:"lounge", examine:"A big cardboard box.", closed:false, hereVerbs:['Examine', 'Close'], }
-  ]),
+    { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false, hereVerbs:['Examine', 'Close'], }
+  ]);
 
 
-  createItem("ornate doll", [
+  createItem("ornate_doll", [
     TAKABLE,
-    { loc:"glass cabinet", examine:"A fancy doll, eighteenth century." }
-  ]),
+    { loc:"glass_cabinet", alias:"ornate doll", examine:"A fancy doll, eighteenth century." }
+  ]);
 
 
 
   createItem("camera", [
     TAKABLE,
     { loc:"lounge", examine:"A cheap digital camera.", alias:"hat", listalias:"microscope" }
-  ]),
+  ]);
 
   
   
@@ -109,18 +111,16 @@ var data = [
       house:"'I like it,' says Mary.",
       garden:"'Needs some work,' Mary says with a sign.",
     } }
-  ]),
+  ]);
 
   createItem("TS_Test", [
     TURNSCRIPT(true, function(self) {
       msg('Turn script!');
     }),
-  ]),
+  ]);
 
  
   createItem("coin", [
     TAKABLE,
     { loc:"lounge", examine: "A gold coin."  }
-  ]),
-  
-];
+  ]);

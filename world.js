@@ -1,248 +1,3 @@
-const DEFAULT_ITEM = {
-  display:"visible",
-  
-  hereVerbs:['Examine'],
-  
-  pronouns:PRONOUNS.thirdperson,
-
-  icon:function() {
-    return "";
-  },
-  
-  drop:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
-    return false;
-  },
-  
-  take:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
-    return false;
-  },
-
-  wear:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_WEAR(item));
-    return false;
-  },
-  
-  remove:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
-    return false;
-  },
-  
-  open:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
-    return false;
-  },
-
-  close:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
-    return false;
-  },
-  
-  askabout:function(text) {
-    msg("You can ask " + this.pronouns.objective + " about " + text + " all you like, but " + pronounVerb(this, "'be") + " not about to reply.");
-    return false;
-  }
-};
-
-
-const TAKABLE = {
-  heldVerbs:['Examine', 'Drop'],
-  
-  hereVerbs:['Examine', 'Take'],
-  
-  takable:true,
-  
-  drop:function(item, isMultiple) {
-    if (item.worn) {
-      msg(prefix(item, isMultiple) + CMD_WEARING(item));
-      return false;
-    }
-    if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
-      return false;
-    }
-    msg(prefix(item, isMultiple) + CMD_DROP_SUCCESSFUL(item));
-    item.loc = getObject(player.loc).name;
-    updateUIItems();
-    return true;
-  },
-  
-  take:function(item, isMultiple) {
-    if (!isPresent(item)) {
-      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
-      return false;
-    }
-    if (!item.takable) {
-      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
-      return false;
-    }
-    if (item.loc == player.name) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY_HAVE(item));
-      return false;
-    }      
-    msg(prefix(item, isMultiple) + CMD_TAKE_SUCCESSFUL(item));
-    item.loc = player.name;
-    updateUIItems();
-    return true;
-  },
-};
-
-
-const WEARABLE = {
-  heldVerbs:['Examine', 'Drop', 'Wear'],
-  
-  wornVerbs:['Examine', 'Remove'],
-  
-  wearable:true,
-  
-  icon:function() {
-    return ('<img src="images/garment12.png" />');
-  },
-  
-  wear:function(item, isMultiple) {
-    if (!isPresent(item)) {
-      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
-      return false;
-    }
-    if (!item.takable) {
-      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
-      return false;
-    }
-    if (item.worn) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY_WEARING(item.pronoun.subjective));
-      return false;
-    }
-    if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
-      return false;
-    }
-    msg(prefix(item, isMultiple) + CMD_WEAR_SUCCESSFUL(item));
-    item.loc = player.name;
-    item.worn = true;
-    updateUIItems();
-    return true;
-  },
-  
-  remove:function(item, isMultiple) {
-    if (!item.worn) {
-      msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
-      return false;
-    }
-    msg(prefix(item, isMultiple) + CMD_REMOVE_SUCCESSFUL(item));
-    item.loc = player.name;
-    item.worn = false;
-    updateUIItems();
-    return true;
-  },
-};
-
-
-const CONTAINER = {
-  hereVerbs:['Examine', 'Open'],
-  container:true,
-  closed:true,
-  
-  open:function(item, isMultiple) {
-    if (!item.closed) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
-      return false;
-    }
-    if (item.locked) {
-      msg(prefix(item, isMultiple) + CMD_LOCKED(item));
-      return false;
-    }
-    item.hereVerbs = ['Examine', 'Close'];
-    item.closed = false;
-    msg(prefix(item, isMultiple) + CMD_OPEN_SUCCESSFUL(item));
-    return true;
-  },
-  
-  close:function(item, isMultiple) {
-    if (item.closed) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
-      return false;
-    }
-    item.hereVerbs = ['Examine', 'Open'];
-    item.closed = true;
-    msg(prefix(item, isMultiple) + CMD_CLOSE_SUCCESSFUL(item));
-    return true;
-  },
-  
-  icon:function() {
-    return ('<img src="images/' + (this.closed ? 'closed' : 'opened') + '12.png" />');
-  },
-};
-
-
-
-const SWITCHABLE = {
-  hereVerbs:['Examine', 'Turn on'],
-  
-  switchon:function(item, isMultiple) {
-    if (item.switchedon) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
-      return false;
-    }
-    msg('You turn the ' + item.name + ' on.');
-    item.switchedon = true;
-    item.hereVerbs = ['Examine', 'Turn off'];
-    return true;
-  },
-  
-  switchoff:function(item, isMultiple) {
-    if (!item.switchedon) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
-      return false;
-    }
-    msg('You turn the ' + item.name + ' off.');
-    item.switchedon = false;
-    item.hereVerbs = ['Examine', 'Turn on'];
-    return true;
-  },
-};
-
-
-const PLAYER = {
-  pronouns:PRONOUNS.secondperson,
-  display:"invisible",
-  player:true,
-}
-
-const TURNSCRIPT = function(isRunning, fn) {
-  res = {
-    display:"invisible",
-  }
-  res.runTurnscript = isRunning;
-  res.turnscript = fn;
-  return res;
-};
-
-
-
-const NPC_OBJECT = function(isFemale) {
-  res = {
-    hereVerbs:['Examine', 'Talk to'],
-    icon:function() {
-      return ('<img src="images/npc12.png" />');
-    },
-  };
-  res.pronouns = isFemale ? PRONOUNS.female : PRONOUNS.male;
-  res.askabout = function(text) {
-    msg("You ask " + this.name + " about " + text + ".");
-    if (this.askoptions[text]) {
-      msgOrRun(this.askoptions, text);
-      return true;
-    }
-    else {
-      msg(nounVerb(this, "have", true) + " nothing to say on the subject.");
-      return false;
-    }
-  }
-  return res;
-};
-
-
 
 
 // Use this to create a new item (as opposed to a room).
@@ -255,6 +10,14 @@ createItem = function (name, listOfHashes) {
 
 
 createObject = function (name, listOfHashes) {
+  if (/\W/.test(name)) {
+    errormsg(ERR_GAME_BUG, ERROR_INIT_DISALLOWED_NAME(name));
+    return null;
+  }
+  if (getObject(name)) {
+    errormsg(ERR_GAME_BUG, ERROR_INIT_REPEATED_NAME(name));
+    return null;
+  }
   item = {};
   item.name = name;
   for (var i = 0; i < listOfHashes.length; i++) {
@@ -262,7 +25,224 @@ createObject = function (name, listOfHashes) {
       item[key] = listOfHashes[i][key];
     }
   }
+  
+  // Give every object an alias and list alias (used in the inventories)
+  if (!item.alias) {
+    item.alias = item.name;
+  }
+  if (!item.listalias) {
+    item.listalias = sentenceCase(item.alias);
+  }
+  if (!item.alt) {
+    item.alt = [];
+  }
+  
+  // Sort out the location
+  if (item.loc == "Held") {
+    item.loc = player.name;
+  }
+  else if (item.loc == "Worn") {
+    item.loc = player.name;
+    item.worn = true;
+  }
+  else if (item.loc == "Here") {
+    item.loc = player.loc;
+    item.worn = true;
+  }
+  
+  if (world.isCreated) {
+    initItem(item);
+  }
+  
+  world.data.push(item);
   return item;
 }
 
 
+getPlayer = function() {
+  return world.data.find(function(item) {
+  return item.player;
+})};
+
+
+// Gets the object with the given name
+// Returns undefined if not found
+// Reports failure if reportError is true (useful for debugging)
+getObject = function(name, reportError) {
+  var found = world.data.find(function(el) {
+    return el.name == name;
+  });
+  if (!found && reportError) {
+    errormsg("Object not found: " + name);
+  }
+  return found;
+};
+
+var world = {};
+world.data = [];
+world.isCreated = false;
+
+
+
+world.init = function() {
+  this.data.forEach(function (el) {
+    world.initItem(el);
+  });
+  this.isCreated = true;
+}
+
+
+
+// Every item or room should have this called for them.
+// That will be done at the start, but you need to do it yourself 
+// if creating items on the fly.
+world.initItem = function(item) {
+  if (PRE_RELEASE) {
+    if (item.loc && !getObject(item.loc) && item.loc != "Ubiquitous") {
+      errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_LOC(item));
+    }
+    for (var i = 0; i < EXITS.length; i++) {
+      var ex = item[EXITS[i].name];
+      if (typeof ex == "string") {
+        if (!getObject(ex)) {
+          errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_EXIT(EXITS[i].name, item, ex));
+        }
+      }
+      if (typeof ex == "object") {
+        if (!getObject(ex.name)) {
+          errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_EXIT(EXITS[i].name, item, ex.name));
+        }
+      }
+    }
+  }
+};
+
+
+// Runs turnscipts
+// Turnscripts are just objects in the world.data array with a "turnscript" attribute set to a function
+// and a Boolean "runTurnscript".
+world.runTurnScripts = function() {
+  for (var i = 0; i < this.data.length; i++) {
+    var item = this.data[i];
+    if (typeof item.turnscript === "function"){
+      if (((("loc" in item) && IsPresent(item)) || !("loc" in item)) && item.runTurnscript) {
+        item.turnscript();
+      }
+    }
+  }
+};
+
+
+
+
+
+// Sets the current room to the one named
+setRoom = function(roomName, suppressOutput) {
+  room = getObject(roomName);
+  if (room === undefined) {
+    errormsg(ERR_GAME_BUG, ERROR_NO_ROOM + ": " + roomName + ".");
+    return false;
+  }
+  //clearScreen();
+  player.loc = room.name;
+  setBackground();
+  if (!suppressOutput) {
+    heading(4, room.name);
+    msgOrRun(room, "examine");
+  }
+  updateUIItems();
+  return true;
+};
+
+
+
+// Must be called before the game starts to perform various housekeeping jobs
+init = function() {
+  // Sort out the player
+  player = getPlayer();
+  if (typeof player == "undefined") {
+    errormsg(ERR_GAME_BUG, ERROR_NO_PLAYER);
+  }
+  
+  // Create a background item if it does not exist
+  background = getObject("background");
+  if (background == undefined) {
+    background = createItem("background", [{
+      loc:'Ubiquitous',
+      display:'invisible',
+      examine:DEFAULT_DESCRIPTION,
+      background:true,
+    }]);
+  }
+  if (!background.background) {
+      errormsg(ERR_GAME_BUG, ERROR_INIT_BACKGROUND);
+  }
+
+  // Go through each item
+  world.init();
+  
+  // Go through each command
+  parser.initCommands(EXITS);
+  
+  // Set up the UI
+  endTurnUI();
+  heading(2, TITLE);
+  document.title = TITLE;
+};
+
+
+
+
+
+
+
+// Call after the player takes a turn, sending it a result, SUCCESS, SUCCESS_NO_TURNSCRIPTS or FAILED
+// If you want ten turns to pass you would be better calling runTurnScripts directly
+endTurn = function(result) {
+  if (result == SUCCESS) {
+    world.runTurnScripts();
+  }
+  endTurnUI();
+};
+
+
+
+
+// Call this when entering a new room
+// It will set the alt names of the Ubiquitous background object
+// to any objects highlighted in the room description.
+
+const BACK_REGEX = /\[.+?\]/;
+setBackground = function() {
+  room = getObject(player.loc);
+  background = getObject("background");
+  background.alt = [];
+  if (typeof room.examine == 'string') {
+    if (!room.backgroundNames) {
+      room.backgroundNames = [];
+      while (md = BACK_REGEX.exec(room.examine)) {
+        var arr = md[0].substring(1, md[0].length - 1).split(":");
+        room.examine = room.examine.replace(md[0], arr[0]);
+        for (var j = 0; j < arr.length; j++) {
+          room.backgroundNames.push(arr[j]);
+        }
+      }
+    }
+    background.alt = room.backgroundNames;
+  }
+}
+
+
+
+function Exit(name, hash) {
+  this.name = name;
+  this.use = function(self) {
+    if ('msg' in self) {
+      msg(self.msg);
+    }
+    setRoom(self.name);
+  }
+  for (var key in hash) {
+    item[key] = hash[key];
+  }
+}

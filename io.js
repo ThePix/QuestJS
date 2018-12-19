@@ -32,6 +32,29 @@ heading = function(level, s) {
 };
 
 
+
+
+
+// If the given attribute is a string it is printed, if it is a
+// function it is called. Otherwise an error is generated.
+// It isMultiple is true, the object name is prefixed.
+msgOrRun = function(item, attname, isMultiple) {
+  if (typeof item[attname] == "string") {
+    msg(prefix(item, isMultiple) + item[attname]);
+    return true;
+  }
+  else if (typeof item[attname] === "function"){
+    return item[attname](item, isMultiple);
+  }
+  else {
+    errormsg(ERR_GAME_BUG, ERROR_MSG_OR_RUN);
+    return false;
+  }
+};
+
+
+
+
 // Clears the screen
 clearScreen = function() {
   for (var i = 0; i < io.nextid; i++) {
@@ -66,7 +89,7 @@ showMenu = function(title, options, fn) {
 // This should be called after each turn to ensure we are at the end of the page and the text box has the focus
 endTurnUI = function() {
   // set the EXITS
-  room = getObject(player.loc);
+  room = getObject(player.loc, true);
   for (var i = 0; i < EXITS.length; i++) {
     if (EXITS[i].name in room || ['Look', 'Help', 'Wait'].includes(EXITS[i].name)) {
       $('#exit' + EXITS[i].name).show();
@@ -89,11 +112,12 @@ updateUIItems = function() {
   }
 
   io.currentItemList = [];
-  for (var j = 0; j < data.length; j++) {
-    if (data[j].display == "visible") {
+  for (var j = 0; j < world.data.length; j++) {
+    var item = world.data[j];
+    if (item.display == "visible") {
       for (var i = 0; i < INVENTORIES.length; i++) {
-        if (INVENTORIES[i].test(data[j])) {
-          io.appendItem(data[j], INVENTORIES[i].verbs, INVENTORIES[i].alt);
+        if (INVENTORIES[i].test(item)) {
+          io.appendItem(item, INVENTORIES[i].verbs, INVENTORIES[i].alt);
         }
       }
     }
@@ -118,7 +142,7 @@ io.inputDisabled = false;
 io.menuStartId;
 io.menuFn;
 io.menuOptions;
-// A list of htmlNames for items currently display in the inventory panes
+// A list of names for items currently display in the inventory panes
 io.currentItemList = [];
 
 io.menuResponse = function(n) {
@@ -172,11 +196,11 @@ io.clickItemAction = function(itemName, action) {
 // Add the item to the DIV named htmlDiv
 // The item will be given verbs from its attName attribute
 io.appendItem = function(item, attName, htmlDiv, isSubItem) {
-  $('#' + htmlDiv).append('<p class="item' + (isSubItem ? ' subitem' : '') + '" onclick="io.clickItem(\'' + item.htmlName + '\')">' + item.icon() + item.listalias + "</p>");
-  io.currentItemList.push(item.htmlName);
+  $('#' + htmlDiv).append('<p class="item' + (isSubItem ? ' subitem' : '') + '" onclick="io.clickItem(\'' + item.name + '\')">' + item.icon() + item.listalias + "</p>");
+  io.currentItemList.push(item.name);
   if (item[attName]) {
     for (var j = 0; j < item[attName].length; j++) {
-      s = '<div class="' + item.htmlName + '-actions itemaction" onclick="io.clickItemAction(\'' + item.htmlName + '\', \'' + item[attName][j] + '\')">';
+      s = '<div class="' + item.name + '-actions itemaction" onclick="io.clickItemAction(\'' + item.name + '\', \'' + item[attName][j] + '\')">';
       s += item[attName][j];
       s += '</div>';
       $('#' + htmlDiv).append(s);
@@ -228,8 +252,6 @@ io.createPanes = function() {
 
   document.writeln('</div>');
 };
-
-
 
 
 
