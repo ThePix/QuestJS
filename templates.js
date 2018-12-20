@@ -1,3 +1,13 @@
+const DEFAULT_ROOM = {
+  beforeEnter:function() {},
+  beforeEnterFirst:function() {},
+  afterEnter:function() {},
+  afterEnterFirst:function() {},
+  onExit:function() {},
+  visited:0,
+};
+
+
 const DEFAULT_ITEM = {
   display:"visible",
   
@@ -36,6 +46,16 @@ const DEFAULT_ITEM = {
 
   close:function(item, isMultiple) {
     msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
+    return false;
+  },
+  
+  read:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_READ(item));
+    return false;
+  },
+  
+  eat:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + CMD_CANNOT_EAT(item));
     return false;
   },
   

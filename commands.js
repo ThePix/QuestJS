@@ -43,10 +43,9 @@ function ExitCmd(name, hash) {
   this.exitCmd = true;
   this.objects = [{ignore:true}, {ignore:true}, ],
   this.script = function(cmd, objects) {
-    msg("Heading " + cmd.name);
     currentRoom = getObject(player.loc);
 
-    if (!(cmd.name in currentRoom)) {
+    if (!hasExit(currentRoom, cmd.name)) {
       errormsg(ERR_PLAYER, CMD_NOT_THAT_WAY);
       return FAILED;
     }
@@ -62,7 +61,7 @@ function ExitCmd(name, hash) {
       }
       else if (typeof ex === "object"){
         var fn = ex.use;
-        fn(ex);
+        fn(ex, cmd.name);
         return SUCCESS;
       }
       else {
@@ -158,6 +157,22 @@ var commands = [
   
   new Cmd('Remove', {
     regex:/^(remove|doff|take off) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isHeld, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Read', {
+    regex:/^(read) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isHeld, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Eat', {
+    regex:/^(eat) (.+)$/,
     objects:[
       {ignore:true},
       {scope:isHeld, multiple:true},

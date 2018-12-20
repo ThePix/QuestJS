@@ -91,7 +91,7 @@ endTurnUI = function() {
   // set the EXITS
   room = getObject(player.loc, true);
   for (var i = 0; i < EXITS.length; i++) {
-    if (EXITS[i].name in room || ['Look', 'Help', 'Wait'].includes(EXITS[i].name)) {
+    if (hasExit(room, EXITS[i].name) || ['Look', 'Help', 'Wait'].includes(EXITS[i].name)) {
       $('#exit' + EXITS[i].name).show();
     }
     else {

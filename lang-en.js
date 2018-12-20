@@ -52,6 +52,12 @@ CMD_CANNOT_OPEN = function(item) {
 CMD_CANNOT_CLOSE = function(item) {
   return "You can't close " + item.pronouns.objective + ".";
 };
+CMD_CANNOT_READ = function(item) {
+  return "Nothing worth reading there.";
+};
+CMD_CANNOT_EAT = function(item) {
+  return pronounVerb(item, "'be") + " not something you can eat.";
+};
 
 CMD_ALREADY_HAVE = function(item) {
   return "You already have " + item.pronouns.objective + ".";
@@ -65,6 +71,7 @@ CMD_ALREADY = function(item) {
 CMD_LOCKED = function(item) {
   return sentenceCase(item.pronouns.subjective) + " " + conjugate(item, "'be") + " locked.";
 };
+CMD_LOCKED_EXIT = "That way is locked.";
 
 
 CMD_TAKE_SUCCESSFUL = function(item) {

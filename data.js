@@ -23,23 +23,30 @@ const WEAPON = {
     }
   ]);
 
-  createObject("kitchen", [{
+  createRoom("kitchen", [{
     examine:'A clean room.',
     west:"lounge",
-    north:new Exit('garden'),
+    north:new Exit("garden", { locked:true, lockedmsg:"It seems to be locked." }),
+    afterEnterFirst:function() {
+      msg("A fresh smell here!" + this.name);
+    }
   }]);
+  
 
-  createObject("lounge", [{
+  createRoom("lounge", [{
     examine:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
     east:'kitchen'
   }]);
 
-  createObject("garden", [{
+  createRoom("garden", [{
     examine:'A wild and over-grown garden.',
-    south:function(self) {
+    south:function(room) {
       msg("You head back inside.");
       setRoom('kitchen');
     },
+    onExit:function() {
+      msg("You leave the garden.");
+    }
   }]);
 
   createObject("spellbook", [{
@@ -54,6 +61,21 @@ const WEAPON = {
 
 
 
+  
+  createItem("book", [
+    TAKABLE,
+    { loc:"lounge", examine:"A leather-bound book.", heldVerbsX:["Read"], read:function(item) {
+        if (isHeld(item)) {
+          msg ("It is not in a language you understand.");
+          return true;
+        }          
+        else {
+          msg ("You're not holding it.");
+          return false;
+        }          
+      }
+    }
+  ]);
   
 
   
