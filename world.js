@@ -67,6 +67,18 @@ createObject = function (name, listOfHashes) {
 
 
 
+// We can only save in string format, so functions are not saved
+// When retrieving, you need that actual object, and then overwrite
+// any attributes that might have changed.
+object2String(object) {
+  s = "name: " + object.name;
+  
+  
+string2Object(string) {
+  obj = getObject(0
+}
+
+
 // Sort out inventory verb lists
 
 resolveVerbs = function(item) {
@@ -336,3 +348,5 @@ function Exit(name, hash) {
     this[key] = hash[key];
   }
 }
+
+

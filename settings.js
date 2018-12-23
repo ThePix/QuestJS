@@ -87,10 +87,10 @@ setup = function() {
 
 const DISABLED = true;
 var professions = [
-  {name:"Agricultural labourer", bonus:"strength"},
-  {name:"Software engineer", bonus:"intelligence"},
+  {name:"Farm hand", bonus:"strength"},
+  {name:"Scribe", bonus:"intelligence"},
   {name:"Exotic dancer", bonus:"agility"},
-  {name:"Salesman", bonus:"charisma"},
+  {name:"Merchant", bonus:"charisma"},
 ];
 
 $(function() {
@@ -98,13 +98,13 @@ $(function() {
     var p = getPlayer();
     p.job = professions[0];
     p.isFemale = true;
-    p.fullname = "Mary Tester";
+    p.fullname = "Shaala";
     return; 
   }
   var diag = $("#dialog");
   diag.prop("title", "Who are you?");
   var s;
-  s = '<p>Name: <input id="namefield" type="text" value="Gal Axy" /></p>';
+  s = '<p>Name: <input id="namefield" type="text" value="Zoxx" /></p>';
   s += '<p>Male: <input type="radio" id="male" name="sex" value="male">&nbsp;&nbsp;&nbsp;&nbsp;';
   s += 'Female<input type="radio" id="female" name="sex" value="female" checked></p>';
   s += '<p>Job:<select id="job">'
