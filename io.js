@@ -98,12 +98,30 @@ endTurnUI = function() {
       $('#exit' + EXITS[i].name).hide();
     }
   }
+  updateStatus();
   // scroll to end
   setTimeout("window.scrollTo(0,document.getElementById('main').scrollHeight);",1);
   // give focus to command bar
   if (TEXT_INPUT) { $('#textbox').focus(); }
 }
 
+
+
+updateStatus = function() {
+  $("#status-pane").empty();
+  for (var i = 0; i < STATUS.length; i++) {
+    if (typeof STATUS[i] == "string") {
+      if (player[STATUS[i]]) {
+        s = '<tr><td width="' + STATUS_WIDTH_LEFT + '">' + sentenceCase(STATUS[i]) + "</td>";
+        s += '<td width="' + STATUS_WIDTH_RIGHT + '">' + player[STATUS[i]] + "</td></tr>";
+        $("#status-pane").append(s);
+      }
+    }
+    else if (typeof STATUS[i] == "function") {
+      $("#status-pane").append("<tr>" + STATUS[i]() + "</tr>");
+    }
+  }
+};
 
 
 updateUIItems = function() {
@@ -243,6 +261,13 @@ io.createPanes = function() {
     document.writeln('</table>');
   }
 
+  if (STATUS_PANE) {
+    document.writeln('<hr/>');
+    document.writeln('<h4>' + STATUS_PANE + ':</h4>');
+    document.writeln('<table id="status-pane">');
+    document.writeln('</table>');
+  }
+  
   for (var i = 0; i < INVENTORIES.length; i++) {
     document.writeln('<hr/>');
     document.writeln('<h4>' + INVENTORIES[i].name + ':</h4>');
@@ -318,4 +343,5 @@ $(document).ready(function() {
   init();
   setup();
   setRoom(player.loc);
+  updateStatus();
 });

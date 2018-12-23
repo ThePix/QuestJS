@@ -3,6 +3,9 @@ const TITLE = "A First Step...";
 // UI options
 const PANES = 'Left';  //Can be set to Left, Right or None.
 const COMPASS = true;
+const STATUS_PANE = "Status";  // Set to false to turn off
+const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
+const STATUS_WIDTH_RIGHT = 40;
 const TEXT_INPUT = true;
 const CURSOR = ">";
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
@@ -10,6 +13,13 @@ const PRE_RELEASE = true;  // Some extra testing is done on start up when this i
 
 
 
+
+var STATUS = [
+  "hitpoints",
+  function() { return "<td>Spell points:</td><td>3</td>"; },
+  function() { return "<td>Health points:</td><td>" + player.hitpoints + "</td>"; },
+  function() { return '<td rowspan="2">' + player.status + "</td>"; },
+];
 
 
 // Change the name values to alter how items are displayed
@@ -33,6 +43,8 @@ const INVENTORIES = [
 setup = function() {
   msg('This is a test of what we can do.');
   parser.parse("ask mary about house");
+  player.hitpoints = 20;
+  player.status = "You are feeling fine"
   //parser.parse("ask mary about basement");
   //parser.parse("ask coin about house");
 }
