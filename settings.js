@@ -38,16 +38,51 @@ const INVENTORIES = [
 
 
 
+
+
+
+
+
+
+
+
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 setup = function() {
   msg('This is a test of what we can do.');
-  parser.parse("ask mary about house");
+  //parser.parse("ask mary about house");
   player.hitpoints = 20;
-  player.status = "You are feeling fine"
+  player.status = "You are feeling fine";
+  addTPDirective("fancy", function(arr, params) {
+    return '<span style="font-family:Montserrat">' + arr.join(":") + "</span>"; 
+  });
+  addTPDirective("fancy2", function(arr, params) {
+    var font = arr.shift();
+    return '<span style="font-family:' + font + '">' + arr.join(":") + "</span>"; 
+  });
+  addTPDirective("title", function(arr, params) {
+    return TITLE; 
+  });
+  msg(processtext("Some example {s:italic and {u:bold} text}. {back:red:And red too!} {random:one:two:three} and some {fancy2:Montserrat:more text} here in {title}. HP={show:player:hitpoints}. {if:player:hitpoints:YES} {img:box24.png:A simple box}"));
   //parser.parse("ask mary about basement");
   //parser.parse("ask coin about house");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const DISABLED = true;

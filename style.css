@@ -1,19 +1,70 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat|ZCOOL+XiaoWei');
+
 body {
-    color: black;
-    font-family: Sans-Serif;
+  color: black;
+  font-family: 'Montserrat', sans-serif;;
 }
 
 
-.meta {
-  color: grey;
+
+/* Style page content */
+#main {
+  margin-left: 160px; /* Same as the width of the sidebar */
+  margin-right: 160px; /* Same as the width of the sidebar */
+  padding: 0px 10px;
+  font-family: 'ZCOOL XiaoWei', serif;
 }
 
+
+
+
+
+/* The command bar  */
+#textbox {
+  border:none;
+  outline: none;
+}
+
+
+
+
+
+
+
+/* Side panes */
+.sidepanes {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 160px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  background-color: #fdf;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
+  font-size: 9pt;
+  font-family: 'Montserrat', sans-serif;;
+}
+.sidepanesLeft {
+  left: 0;
+}
+.sidepanesRight {
+  right: 0px;
+}
+.sidepanesNone {
+  display: None;
+}
+
+
+
+
+
+
+// Used by showMenu
 .menutitle {
   color: grey;
   font-style: italic;
   margin-left: 20px;
 }
-
 .menuoption {
   color:blue;
   cursor: pointer;
@@ -22,11 +73,10 @@ body {
 }
 
 
-#textbox {
-  border:none;
-  outline: none;
+/* Varous msg options */
+.meta {
+  color: grey;
 }
-
 .error {
   font-weight: bold;
   font-size: 10pt;
@@ -40,13 +90,10 @@ body {
   content: "CODE ERROR: ";
   font-style: italic;
 }
-
-}
 .error10::before {
   content: "FATAL ERROR: ";
   font-style: italic;
 }
-
 .debug {
   font-size: 10pt;
   color: grey;
@@ -56,19 +103,10 @@ body {
   content: "NOTE: ";
   font-style: italic;
 }
-
-
-.debug2::before {
-  content: "DEBUG: ";
-  font-style: italic;
-}
-
 .debug3::before {
   content: "CODE-DEBUG: ";
   font-style: italic;
 }
-
-
 .debug5::before {
   content: "LOG: ";
   font-style: italic;
@@ -77,6 +115,7 @@ body {
 
 
 
+/* Compass */
 td.compassbutton {
     border: black solid 1px;
     padding: 2px;
@@ -84,8 +123,6 @@ td.compassbutton {
     width: 23px;
     height: 15px;
 }  
-
-
 span.compassbutton {
     cursor: pointer;
     text-align: center;
@@ -94,38 +131,7 @@ span.compassbutton {
 }  
 
 
-
-.sidenavLeft {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 160px; /* Set the width of the sidebar */
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
-    left: 0;
-    background-color: #fdf;
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 20px;
-    font-size: 9pt;
-}
-
-.sidenavRight {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 160px; /* Set the width of the sidebar */
-    float: right;
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
-    right: 0px;
-    background-color: #fdf;
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 20px;
-    font-size: 9pt;
-}
-
-.sidenavNone {
-  display: None;
-}
-
+/* Items in inventories */
 .item {
     cursor: pointer;
     border: black solid 1px;
@@ -156,22 +162,12 @@ span.compassbutton {
 
 
 
-/* Style page content */
-#main {
-    margin-left: 160px; /* Same as the width of the sidebar */
-    margin-right: 160px; /* Same as the width of the sidebar */
-    padding: 0px 10px;
-}
 
 
-
-
-
-
+/* For dialog panels */
 .no-close .ui-dialog-titlebar-close {
   display: none;
 }
-
 .ui-dialog-titlebar {
   background-image: none;
   background-color: #c0c0ff;

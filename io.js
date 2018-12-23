@@ -238,7 +238,7 @@ io.appendItem = function(item, attName, htmlDiv, isSubItem) {
 // Creates the panes on the left or right
 // Should only be called once, when the page is first built
 io.createPanes = function() {
-  document.writeln('<div id="panes" class="sidenav' + PANES + '">');
+  document.writeln('<div id="panes" class="sidepanes sidepanes' + PANES + '">');
 
   writeExit = function(n) {
     document.writeln('<td class="compassbutton">');
