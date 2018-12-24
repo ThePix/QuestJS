@@ -105,6 +105,9 @@ const ERROR_INIT_REPEATED_NAME = function(name) {
 const ERROR_INIT_DISALLOWED_NAME = function(name) {
   return "Attempting to use the disallowed name `" + name + "`; a name can only include letters and digits - no spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.";
 };
+const ERROR_USING_CREATE_OBJECT = function(name) {
+  return "Attempting to use createObject with `" + name + "` after set up. To ensure games save properly you should use cloneObject to create ites during play.";
+};
 const ERROR_INIT_UNKNOWN_LOC = function(item) {
   return "The item `" + item.name + "` is in an unknown location (" + item.loc + ")";
 };

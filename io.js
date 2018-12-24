@@ -7,10 +7,10 @@
 // Note that debug and error messages need a number first
 msg = function(s, cssClass) {
   if (cssClass == undefined) {
-    $("#output").append('<p id="n' + io.nextid + '">' + s + "</p>");
+    $("#output").append('<p id="n' + io.nextid + '">' + processtext(s) + "</p>");
   }
   else {
-    $("#output").append('<p id="n' + io.nextid + '" class="' + cssClass + '">' + s + "</p>");
+    $("#output").append('<p id="n' + io.nextid + '" class="' + cssClass + '">' + processtext(s) + "</p>");
   }
   io.nextid++;
 };
@@ -132,7 +132,7 @@ updateUIItems = function() {
   io.currentItemList = [];
   for (var j = 0; j < world.data.length; j++) {
     var item = world.data[j];
-    if (item.display == "visible") {
+    if (item.display >= DSPY_LIST_EXCLUDE) {
       for (var i = 0; i < INVENTORIES.length; i++) {
         if (INVENTORIES[i].test(item)) {
           io.appendItem(item, INVENTORIES[i].verbs, INVENTORIES[i].alt);

@@ -9,7 +9,7 @@ const DEFAULT_ROOM = {
 
 
 const DEFAULT_ITEM = {
-  display:"visible",
+  display:DSPY_DISPLAY,
   
   hereVerbs:['Examine'],
   
@@ -225,13 +225,13 @@ const SWITCHABLE = {
 
 const PLAYER = {
   pronouns:PRONOUNS.secondperson,
-  display:"invisible",
+  display:DSPY_SCENERY,
   player:true,
 }
 
 const TURNSCRIPT = function(isRunning, fn) {
   res = {
-    display:"invisible",
+    display:DSPY_HIDDEN,
   }
   res.runTurnscript = isRunning;
   res.turnscript = fn;

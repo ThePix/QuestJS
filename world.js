@@ -15,7 +15,30 @@ createRoom = function (name, listOfHashes) {
 }
 
 
+
+// Use this to create new items during play.
+cloneObject = function(item, loc) {
+  var clone = {};
+  for (var key in item) {
+    clone[key] = item[key];
+  }
+  clone.name = findUniqueName(item.name);
+  if (!clone.proto) {
+    clone.proto = item;
+  }
+  if (loc != undefined) {
+    clone.loc = loc;
+  }
+}  
+
+
+
 createObject = function (name, listOfHashes) {
+  if (world.isCreated) {
+    errormsg(ERR_GAME_BUG, ERROR_USING_CREATE_OBJECT(name));
+    return null;
+  }
+
   if (/\W/.test(name)) {
     errormsg(ERR_GAME_BUG, ERROR_INIT_DISALLOWED_NAME(name));
     return null;
@@ -57,9 +80,9 @@ createObject = function (name, listOfHashes) {
     item.worn = true;
   }
   
-  if (world.isCreated) {
-    initItem(item);
-  }
+  //if (world.isCreated) {
+  //  initItem(item);
+  //}
   
   world.data.push(item);
   return item;
@@ -70,12 +93,12 @@ createObject = function (name, listOfHashes) {
 // We can only save in string format, so functions are not saved
 // When retrieving, you need that actual object, and then overwrite
 // any attributes that might have changed.
-object2String(object) {
+object2String = function(object) {
   s = "name: " + object.name;
+}
   
-  
-string2Object(string) {
-  obj = getObject(0
+string2Object = function(string) {
+  obj = getObject(0);
 }
 
 
@@ -230,7 +253,7 @@ init = function() {
   if (background == undefined) {
     background = createItem("background", [{
       loc:'Ubiquitous',
-      display:'invisible',
+      display:DSPY_SCENERY,
       examine:DEFAULT_DESCRIPTION,
       background:true,
     }]);

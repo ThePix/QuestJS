@@ -63,9 +63,11 @@ setup = function() {
   addTPDirective("title", function(arr, params) {
     return TITLE; 
   });
-  msg(processtext("Some example {s:italic and {u:bold} text}. {back:red:And red too!} {random:one:two:three} and some {fancy2:Montserrat:more text} here in {title}. HP={show:player:hitpoints}. {if:player:hitpoints:YES} {img:box24.png:A simple box}"));
+  msg("Some example {s:italic and {u:bold} text}. {back:red:And red too!} {random:one:two:three} and some {fancy2:Montserrat:more text} here in {title}. HP={show:player:hitpoints}. {if:player:hitpoints:YES} {img:box24.png:A simple box}");
   //parser.parse("ask mary about basement");
   //parser.parse("ask coin about house");
+  
+  msg(findUniqueName("boots"));
 }
 
 

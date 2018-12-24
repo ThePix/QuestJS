@@ -14,8 +14,17 @@ const ERR_QUEST_BUG = 21;   // A bug in Quest I need to sort out
 const ERR_GAME_BUG = 22;    // A bug in the game the creator needs to sort out
 const ERR_PARSER = 23;      // Player is typing something unintelligible
 const ERR_PLAYER = 24;      // Player is typing something not allowed
+const ERR_TP = 25;
 const DBG_PARSER = 21;      // Debug message from the parser
 const DBG_UTIL = 22;        // Debug message from util
+
+const DSPY_DISPLAY = 10;    // Item accessible and in lists and inventories
+const DSPY_LIST_EXCLUDE = 9;// Item accessible and in inventories, but not lists
+const DSPY_INV_EXCLUDE = 8; // Item accessible and in lists, but not inventories
+const DSPY_SCENERY = 5;     // Item exist and accessible, but not mentioned at all
+const DSPY_HIDDEN = 2;      // Item exists here, but not accessible (inc turnscripts)
+const DSPY_NOT_HERE = 1;    // Item does not exist yet, but is ready to
+const DSPY_DELETED = 0;     // Item no longer exists
 
 
 
@@ -102,10 +111,42 @@ getCommand = function(name) {
 
 itemNameWithThe = function(item) {
   if (item.properName) {
-    return item.name;
+    return item.alias;
   }
   return "the " + item.name;
 }
+
+itemNameWithA = function(item) {
+  if (item.indefArticle) {
+    return item.indefArticle + " " + item.name;
+  }
+  if (item.properName) {
+    return item.name;
+  }
+  if (item.pronouns == PRONOUNS.plural) {
+    return "some " + item.name;
+  }
+  if (/^[aeiou]/i.test(item.name)) {
+    return "an " + item.name;
+  }
+  return "a " + item.name;
+}
+
+
+findUniqueName = function(s) {
+  debugmsg(0, "Trying " + s);
+  if (!getObject(s)) {
+    return (s);
+  }
+  else {
+    var res = /(\d+)$/.exec(s);
+    if (!res) {
+      return findUniqueName(s + "0");
+    }
+    var n = parseInt(res[0]) + 1;
+    return findUniqueName(s.replace(/(\d+)$/, "" + n));
+  }
+} 
 
 
 
@@ -114,16 +155,16 @@ itemNameWithThe = function(item) {
 
 // Scope functions
 isPresent = function(item) {
-  return (isHere(item) || isHeldOrWorn(item)) && item.display != "not here";
+  return (isHere(item) || isHeldOrWorn(item)) && item.display >= DSPY_SCENERY;
 };
 isHeldOrWorn = function(item) {
-  return item.loc == player.name && item.display != "not here";
+  return item.loc == player.name && item.display >= DSPY_SCENERY;
 };
 isHeld = function(item) {
-  return (item.loc == player.name) && !item.worn && item.display != "not here";
+  return (item.loc == player.name) && !item.worn && item.display >= DSPY_SCENERY;
 };
 isHere = function(item) {
-  return item.loc === player.loc && item.display != "not here";
+  return item.loc === player.loc && item.display >= DSPY_SCENERY;
 };
 isWorn = function(item) {
   return (item.loc == player.name) && item.worn;
@@ -141,7 +182,7 @@ isInside = function(item) {
 // Includes "Ubiquitous" items, but not "not here" items
 isReachable = function(item) {
   if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
-  if (!item.loc || item.display == "not here") { return false; }
+  if (!item.loc || item.display >= DSPY_SCENERY) { return false; }
   container = getObject(item.loc);
   if (!container.container) { return false; }
   if (container.closed) { return false; }
@@ -154,7 +195,7 @@ isReachable = function(item) {
 // This is the fallback for the parser scope
 isVisible = function(item) {
   if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
-  if (!item.loc || item.display == "not here") { return false; }
+  if (!item.loc || item.display >= DSPY_SCENERY) { return false; }
   container = getObject(item.loc);
   if (!container.container) { return false; }
   if (container.closed && !container.transparent) { return false; }

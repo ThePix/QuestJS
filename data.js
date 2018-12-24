@@ -84,6 +84,18 @@ const WEAPON = {
     WEARABLE,
     { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
   ]);
+  createItem("boots0", [
+    TAKABLE,
+    WEARABLE,
+    { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
+  ]);
+  
+  createItem("boots1", [
+    TAKABLE,
+    WEARABLE,
+    { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
+  ]);
+  
   
 
   
