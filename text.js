@@ -1,4 +1,6 @@
-processtext = function(str, params) {
+"use strict";
+
+function processtext(str, params) {
   if (params == undefined) {
     params = {};
   }
@@ -18,7 +20,7 @@ processtext = function(str, params) {
 // Should take a string array as a parameter (the input text,
 // excluding the curly braces, name and colon),
 // and return a string.
-addTPDirective = function(name, fn) {
+function addTPDirective(name, fn) {
   tp.text_processors[name] = fn;
 }
 
@@ -28,9 +30,9 @@ var tp = {};
 tp.usedStrings = [];
   
 tp.processtext = function(str, params) {
-  s = tp.findFirstToken(str);
+  var s = tp.findFirstToken(str);
   if (s) {
-    arr = s.split(":");
+    var arr = s.split(":");
     var left = arr.shift();
     if (typeof tp.text_processors[left] != "function") {
       errormsg(ERR_TP, "Attempting to use unknown text processor directive '" + left + "' (<i>" + params.toOriginalString + "</i>)");

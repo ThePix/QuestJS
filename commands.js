@@ -9,6 +9,7 @@
 // nothingForAll   If the player uses ALL and there is nothing there, use this error message
 // noTurnscripts   Set to true to prevent turnscripts firing even when this command is successful
 
+"use strict";
 
 function Cmd(name, hash) {
   this.name = name;

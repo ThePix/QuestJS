@@ -1,3 +1,5 @@
+"use strict";
+
 // ============  Utilities  =======================================
 
 // Should all be language neutral
@@ -31,12 +33,12 @@ const DSPY_DELETED = 0;     // Item no longer exists
 // ============  Random Utilities  =======================================
 
 // Returns a random number from 1 to n
-randomInt = function(n) {
+function randomInt(n) {
   return Math.floor(Math.random() * n);
 };
 
 // Returns true percentile out of 100 times, false otherwise
-randomChance = function(percentile) {
+function randomChance(percentile) {
   return randomInt(100) <= percentile;
 };
 
@@ -45,20 +47,20 @@ randomChance = function(percentile) {
 // ============  String Utilities  =======================================
 
 // Returns the string with the first letter capitalised
-sentenceCase = function(str) {
+function sentenceCase(str) {
   return str.replace(/[a-z]/i, function (letter) {
     return letter.toUpperCase();
   }).trim();
 };
 
 // If isMultiple is true, returns the item name to be prefixed to the command response
-prefix = function(item, isMultiple) {
+function prefix(item, isMultiple) {
   if (!isMultiple) { return ""; }
   return sentenceCase(item.name) + ": ";
 }
 
 // Creates a string that lists the items by name
-formatList = function(itemArray) {
+function formatList(itemArray) {
   var s = itemArray.map(function(el) { return el.name; }).join(", ");
 
   var lastIndex = s.lastIndexOf(",");
@@ -92,16 +94,22 @@ String.prototype.scan = function (re) {
 
 
 
+function getPlayer() {
+  return world.data.find(function(item) {
+    return item.player;
+  });
+};
+
 
 
 
 // Gets the current room object
-getCurrentRoom = function() {
+function getCurrentRoom() {
   return getObject(player.loc);
 };
 
 // Gets the command with the given name
-getCommand = function(name) {
+function getCommand(name) {
   var found = commands.find(function(el) {
     return el.name == name;
   });
@@ -109,14 +117,14 @@ getCommand = function(name) {
 };
 
 
-itemNameWithThe = function(item) {
+function itemNameWithThe(item) {
   if (item.properName) {
     return item.alias;
   }
   return "the " + item.name;
 }
 
-itemNameWithA = function(item) {
+function itemNameWithA(item) {
   if (item.indefArticle) {
     return item.indefArticle + " " + item.name;
   }
@@ -133,46 +141,31 @@ itemNameWithA = function(item) {
 }
 
 
-findUniqueName = function(s) {
-  debugmsg(0, "Trying " + s);
-  if (!getObject(s)) {
-    return (s);
-  }
-  else {
-    var res = /(\d+)$/.exec(s);
-    if (!res) {
-      return findUniqueName(s + "0");
-    }
-    var n = parseInt(res[0]) + 1;
-    return findUniqueName(s.replace(/(\d+)$/, "" + n));
-  }
-} 
-
 
 
 
 // ============  Scope Utilities  =======================================
 
 // Scope functions
-isPresent = function(item) {
+function isPresent(item) {
   return (isHere(item) || isHeldOrWorn(item)) && item.display >= DSPY_SCENERY;
 };
-isHeldOrWorn = function(item) {
+function isHeldOrWorn(item) {
   return item.loc == player.name && item.display >= DSPY_SCENERY;
 };
-isHeld = function(item) {
+function isHeld(item) {
   return (item.loc == player.name) && !item.worn && item.display >= DSPY_SCENERY;
 };
-isHere = function(item) {
+function isHere(item) {
   return item.loc === player.loc && item.display >= DSPY_SCENERY;
 };
-isWorn = function(item) {
+function isWorn(item) {
   return (item.loc == player.name) && item.worn;
 };
 
 // Requires an extra parameter, so used like this:
 // scope(isInside, container);
-isInside = function(item) {
+function isInside(item) {
   return item.loc == this.name;
 };
 
@@ -180,7 +173,7 @@ isInside = function(item) {
 // Is the given item in the location named
 // or in an open container in that location?
 // Includes "Ubiquitous" items, but not "not here" items
-isReachable = function(item) {
+function isReachable(item) {
   if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
   if (!item.loc || item.display >= DSPY_SCENERY) { return false; }
   container = getObject(item.loc);
@@ -193,7 +186,7 @@ isReachable = function(item) {
 // or in an open or transparent container in that location?
 // Includes "Ubiquitous" items, but not "not here" items
 // This is the fallback for the parser scope
-isVisible = function(item) {
+function isVisible(item) {
   if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
   if (!item.loc || item.display >= DSPY_SCENERY) { return false; }
   container = getObject(item.loc);
@@ -206,13 +199,13 @@ isVisible = function(item) {
 // var listOfOjects = scope(isHeld);
 // Hopefully this works too
 // var listOfOjects = scope(isInside, container.loc);
-scope = function(fn, p) {
+function scope(fn, p) {
   return world.data.filter(fn, p);
 };
 
 
 // For dubugging only!!!
-_scopeReport = function(o) {
+function _scopeReport(o) {
   if (typeof o == "string") {
     o = getObject(o, true);
   }
@@ -234,7 +227,7 @@ _scopeReport = function(o) {
 
 // Lists the properties of the given object
 // Useful for debugging only
-listProperties = function(obj) {
+function listProperties(obj) {
   return Object.keys(obj).join(", ");
 };
 

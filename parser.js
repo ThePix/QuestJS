@@ -8,6 +8,8 @@
 // A match is scored by whether the objects are in the right place (+2), wrong place but here (+1).
 // You can also give a command a score attribute to boost (or reduce) its success.
 
+"use strict";
+
 var parser = {};
 
   parser.currentCommand;
@@ -341,8 +343,8 @@ var parser = {};
     });
     EXITS.forEach(function(el) {
       if (!el.nocmd) {
-        regex = "^(" + CMD_GO + ")(" + el.name + "|" + el.abbrev.toLowerCase() + ")$";
-        cmd = new ExitCmd(el.name, {
+        var regex = "^(" + CMD_GO + ")(" + el.name + "|" + el.abbrev.toLowerCase() + ")$";
+        var cmd = new ExitCmd(el.name, {
           regex:new RegExp(regex),
         });
         commands.push(cmd);

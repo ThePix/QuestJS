@@ -1,15 +1,15 @@
-
+"use strict";
 
 // Use this to create a new item (as opposed to a room).
 // It adds various defaults that apply only to items
-createItem = function (name, listOfHashes) {
+function createItem(name, listOfHashes) {
   listOfHashes.unshift(DEFAULT_ITEM);
   return createObject(name, listOfHashes);
 }
 
 // Use this to create a new item (as opposed to a room).
 // It adds various defaults that apply only to items
-createRoom = function (name, listOfHashes) {
+function createRoom(name, listOfHashes) {
   listOfHashes.unshift(DEFAULT_ROOM);
   return createObject(name, listOfHashes);
 }
@@ -17,12 +17,12 @@ createRoom = function (name, listOfHashes) {
 
 
 // Use this to create new items during play.
-cloneObject = function(item, loc) {
+function cloneObject(item, loc) {
   var clone = {};
   for (var key in item) {
     clone[key] = item[key];
   }
-  clone.name = findUniqueName(item.name);
+  clone.name = world.findUniqueName(item.name);
   if (!clone.proto) {
     clone.proto = item;
   }
@@ -33,7 +33,7 @@ cloneObject = function(item, loc) {
 
 
 
-createObject = function (name, listOfHashes) {
+function createObject(name, listOfHashes) {
   if (world.isCreated) {
     errormsg(ERR_GAME_BUG, ERROR_USING_CREATE_OBJECT(name));
     return null;
@@ -47,7 +47,7 @@ createObject = function (name, listOfHashes) {
     errormsg(ERR_GAME_BUG, ERROR_INIT_REPEATED_NAME(name));
     return null;
   }
-  item = {};
+  var item = {};
   item.name = name;
   for (var i = 0; i < listOfHashes.length; i++) {
     for (var key in listOfHashes[i]) {
@@ -93,18 +93,17 @@ createObject = function (name, listOfHashes) {
 // We can only save in string format, so functions are not saved
 // When retrieving, you need that actual object, and then overwrite
 // any attributes that might have changed.
-object2String = function(object) {
+function object2String(object) {
   s = "name: " + object.name;
 }
   
-string2Object = function(string) {
+function string2Object(string) {
   obj = getObject(0);
 }
 
 
 // Sort out inventory verb lists
-
-resolveVerbs = function(item) {
+function resolveVerbs(item) {
   for (var i = 0; i < INVENTORIES.length; i++) {
     var att = INVENTORIES[i].verbs;
     var attX = att + "X";
@@ -129,17 +128,11 @@ resolveVerbs = function(item) {
 
 
 
-getPlayer = function() {
-  return world.data.find(function(item) {
-    return item.player;
-  });
-};
-
 
 // Gets the object with the given name
 // Returns undefined if not found
 // Reports failure if reportError is true (useful for debugging)
-getObject = function(name, reportError) {
+function getObject(name, reportError) {
   var found = world.data.find(function(el) {
     return el.name == name;
   });
@@ -152,6 +145,25 @@ getObject = function(name, reportError) {
 var world = {};
 world.data = [];
 world.isCreated = false;
+
+
+
+world.findUniqueName = function(s) {
+  debugmsg(0, "Trying " + s);
+  if (!getObject(s)) {
+    return (s);
+  }
+  else {
+    var res = /(\d+)$/.exec(s);
+    if (!res) {
+      return world.findUniqueName(s + "0");
+    }
+    var n = parseInt(res[0]) + 1;
+    return world.findUniqueName(s.replace(/(\d+)$/, "" + n));
+  }
+} 
+
+
 
 
 
@@ -208,12 +220,12 @@ world.runTurnScripts = function() {
 
 
 // Sets the current room to the one named
-setRoom = function(roomName, suppressOutput) {
+function setRoom(roomName, suppressOutput) {
   if (player.loc == roomName && player.hasAlreadyBeenSetup) {
     // Already here, do nothing
     return false;
   }
-  room = getObject(roomName);
+  var room = getObject(roomName);
   if (room === undefined) {
     errormsg(ERR_GAME_BUG, ERROR_NO_ROOM + ": " + roomName + ".");
     return false;
@@ -222,7 +234,7 @@ setRoom = function(roomName, suppressOutput) {
   var oldRoom = getObject(player.loc);
   
   player.loc = room.name;
-  setBackground();
+  world.setBackground();
   if (!suppressOutput) {
     if (player.hasAlreadyBeenSetup) oldRoom.onExit();
     room.beforeEnter();
@@ -241,7 +253,7 @@ setRoom = function(roomName, suppressOutput) {
 
 
 // Must be called before the game starts to perform various housekeeping jobs
-init = function() {
+function init() {
   // Sort out the player
   player = getPlayer();
   if (typeof player == "undefined") {
@@ -249,7 +261,7 @@ init = function() {
   }
   
   // Create a background item if it does not exist
-  background = getObject("background");
+  var background = getObject("background");
   if (background == undefined) {
     background = createItem("background", [{
       loc:'Ubiquitous',
@@ -282,7 +294,7 @@ init = function() {
 
 // Call after the player takes a turn, sending it a result, SUCCESS, SUCCESS_NO_TURNSCRIPTS or FAILED
 // If you want ten turns to pass you would be better calling runTurnScripts directly
-endTurn = function(result) {
+function endTurn(result) {
   if (result == SUCCESS) {
     world.runTurnScripts();
   }
@@ -296,15 +308,16 @@ endTurn = function(result) {
 // It will set the alt names of the Ubiquitous background object
 // to any objects highlighted in the room description.
 
-const BACK_REGEX = /\[.+?\]/;
-setBackground = function() {
-  room = getObject(player.loc);
-  background = getObject("background");
+world.BACK_REGEX = /\[.+?\]/;
+world.setBackground = function() {
+  var room = getObject(player.loc);
+  var background = getObject("background");
   background.alt = [];
+  var md;
   if (typeof room.examine == 'string') {
     if (!room.backgroundNames) {
       room.backgroundNames = [];
-      while (md = BACK_REGEX.exec(room.examine)) {
+      while (md = world.BACK_REGEX.exec(room.examine)) {
         var arr = md[0].substring(1, md[0].length - 1).split(":");
         room.examine = room.examine.replace(md[0], arr[0]);
         for (var j = 0; j < arr.length; j++) {
@@ -317,7 +330,7 @@ setBackground = function() {
 }
 
 
-hasExit = function(room, dir) {
+function hasExit(room, dir) {
   if (!room[dir]) { return false; }
   var ex = room[dir];
   if (typeof ex !== "object") { return true; }
@@ -328,7 +341,7 @@ hasExit = function(room, dir) {
 // Lock or unlock the exit indicated
 // Returns false if the exit does not exist or is not an Exit object
 // Returns true if successful
-setExitLock = function(room, dir, locked) {
+function setExitLock(room, dir, locked) {
   if (!room[dir]) { return false; }
   var ex = room[dir];
   if (typeof ex !== "object") { return false; }
@@ -339,7 +352,7 @@ setExitLock = function(room, dir, locked) {
 // Lock or unlock the exit indicated
 // Returns false if the exit does not exist or is not an Exit object
 // Returns true if successful
-setExitNonexistent = function(room, dir, hidden) {
+function setExitNonexistent(room, dir, hidden) {
   if (!room[dir]) { return false; }
   var ex = room[dir];
   if (typeof ex !== "object") { return false; }

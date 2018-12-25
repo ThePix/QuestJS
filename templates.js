@@ -1,3 +1,5 @@
+"use strict";
+
 const DEFAULT_ROOM = {
   beforeEnter:function() {},
   beforeEnterFirst:function() {},
@@ -230,7 +232,7 @@ const PLAYER = {
 }
 
 const TURNSCRIPT = function(isRunning, fn) {
-  res = {
+  var res = {
     display:DSPY_HIDDEN,
   }
   res.runTurnscript = isRunning;
@@ -241,7 +243,7 @@ const TURNSCRIPT = function(isRunning, fn) {
 
 
 const NPC_OBJECT = function(isFemale) {
-  res = {
+  var res = {
     hereVerbs:['Examine', 'Talk to'],
     icon:function() {
       return ('<img src="images/npc12.png" />');

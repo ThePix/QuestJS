@@ -1,0 +1,216 @@
+  <object name="academy,_lower_courtyard">
+    <inherit name="editor_room" />
+    <alias>Academy, Lower Courtyard</alias>
+    <description><![CDATA[Water tumbles into a pool in the centre of the courtyard, from the Upper courtyard to the north, cascading over artfully arranged rocks. To either side, wide stairs lead upwards.Doors to the east and west lead into the academy chambers, whilst the main entrance is to the south, a huge arched gateway, beyond which you can see the countryside; a lake and mountains beyond.]]></description>
+    <exit alias="north" to="academy,_upper_courtyard">
+      <inherit name="northdirection" />
+    </exit>
+    <exit alias="up" to="academy,_upper_courtyard">
+      <inherit name="updirection" />
+    </exit>
+    <exit alias="west" to="academy,_ritual_observation_platform">
+      <inherit name="westdirection" />
+    </exit>
+  </object>
+  <object name="academy,_upper_courtyard">
+    <inherit name="editor_room" />
+    <alias>Academy, Upper Courtyard</alias>
+    <description><![CDATA[A fountain plays in the centre of the courtyard, a curious arrangement of spheres, cones and cubes, in a square pool, all of pure white marble. To the south is the lower courtyard, and arranged around the three sides are the chambers of the academy, and behind them, the towers of power.]]></description>
+    <exit alias="south" to="academy,_lower_courtyard">
+      <inherit name="southdirection" />
+    </exit>
+    <exit alias="down" to="academy,_lower_courtyard">
+      <inherit name="downdirection" />
+    </exit>
+    <exit alias="east" to="academy,_hall_of_nature">
+      <inherit name="eastdirection" />
+    </exit>
+  </object>
+  <object name="academy,_great_hall">
+    <inherit name="editor_room" />
+    <alias>Academy, Great Hall</alias>
+    <description><![CDATA[The Great Hall is where the students and staff eat. The east and west sides are lined with pillars supporting the vaulted roof, and from each arch hangs a chandelier. Between the pillars are two long lines of tables, each with benches set of either side.]]></description>
+    <inside />
+    <exit alias="north" to="academy,_hall_of_nature">
+      <inherit name="northdirection" />
+    </exit>
+    <exit alias="west" to="academy,_battlements">
+      <inherit name="westdirection" />
+    </exit>
+  </object>
+  <object name="academy,_room_of_potency">
+    <inherit name="editor_room" />
+    <alias>Academy, Room of Potency</alias>
+    <description><![CDATA[The most striking feature of this room is the giant phallus in the centre of the room. For a moment you wonder if it is a statue, then it twitches a bit, and suddenly it is spirting... well, cum, presumably, into the air. Dragging your eyes off the monstrous cock, the room is octagonal, with a high wooden, roof. The only exit is back north; the other seven walls are hung with tapestries depicting men and woman - or satyrs and nymphs - in various sexual positions.]]></description>
+    <inside />
+  </object>
+  <object name="academy,_lecture_hall">
+    <inherit name="editor_room" />
+    <alias>Academy, Lecture Hall</alias>
+    <description><![CDATA[The hall is a quarter circle, with nine tiers of seat, all facing the northeast corner. The seats are basic; a custon on a stone step, with no provision for students to lean on anything to make notes. Steps along the straight walls lead up to the two exits, west and south.]]></description>
+    <inside />
+    <exit alias="south" to="academy,_hall_of_nature">
+      <inherit name="southdirection" />
+    </exit>
+  </object>
+  <object name="academy,_hall_of_nature">
+    <inherit name="editor_room" />
+    <alias>Academy, Hall of Nature</alias>
+    <description><![CDATA[The Hall of Nature seems to be a place for students to meet and socialise. A large planter in the middle has an impressive variety of flowers and shrubs, none of which you recognise. The pink flowers are especially impressive. There are smaller planters in each corner, with wooden seats incorporated into the design. A door south leads to the Great Hall, and to the north to the lecture theatre, or you can go west, into the courtyard.]]></description>
+    <inside />
+    <exit alias="west" to="academy,_upper_courtyard">
+      <inherit name="westdirection" />
+    </exit>
+    <exit alias="north" to="academy,_lecture_hall">
+      <inherit name="northdirection" />
+    </exit>
+    <exit alias="south" to="academy,_great_hall">
+      <inherit name="southdirection" />
+    </exit>
+  </object>
+  <object name="academy,_dormitory">
+    <inherit name="editor_room" />
+    <alias>Academy, Dormitory</alias>
+    <description><![CDATA[Not quite what you're used to back home, the dormitory is a single room, with perhaps a dozen double bunk beds down each side. The beds are very plain, with white sheets; each looks neatly made. There is a small chest on either side of each one, and windows between each bed, to the west, looking out onto a wide valley and to the east, overlooking the lower courtyard. The main door is north, but there is a small door in the southeast corner that leads on to the battlements.]]></description>
+    <inside />
+    <exit alias="east" to="academy,_battlements">
+      <inherit name="eastdirection" />
+    </exit>
+  </object>
+  <object name="academy,_battlements">
+    <inherit name="editor_room" />
+    <alias>Academy, Battlements</alias>
+    <description><![CDATA[A narrow walkway, open on the north side, between the two wings, crossing the gateway. From here you can look down on the courtyards, to watch the waters spray from the fountain in the upper pool, then cascade down into the lower pool. Looking south, you can see the road down to the town, and beyond that a tranquil lake, surrounded by imposing mountains.]]></description>
+    <exit alias="east" to="academy,_great_hall">
+      <inherit name="eastdirection" />
+    </exit>
+    <exit alias="west" to="academy,_dormitory">
+      <inherit name="westdirection" />
+    </exit>
+  </object>
+  <object name="academy,_ritual_observation_platform">
+    <inherit name="editor_room" />
+    <alias>Academy, Ritual Observation Platform</alias>
+    <description><![CDATA[This i a raised area that looks on to the two rituals rooms to north and south. Wooden benches off the bare minimum of comfort to spectators.]]></description>
+    <inside />
+    <exit alias="east" to="academy,_lower_courtyard">
+      <inherit name="eastdirection" />
+    </exit>
+    <exit alias="south" to="academy,_ritual_room_a">
+      <inherit name="southdirection" />
+    </exit>
+    <exit alias="north" to="academy,_ritual_room_b">
+      <inherit name="northdirection" />
+    </exit>
+  </object>
+  <object name="academy,_ritual_room_a">
+    <inherit name="editor_room" />
+    <alias>Academy, Ritual Room A</alias>
+    <description><![CDATA[This room is square and similar in size to Ritual Room B, but in other ways quite different. Four orbs float, one in each corner, shining brightly, making the white-painted room seem very light and airy. On the floor, you can see a circle of flowers, about three strides across.]]></description>
+    <inside />
+    <exit alias="north" to="academy,_ritual_observation_platform">
+      <inherit name="northdirection" />
+    </exit>
+  </object>
+  <object name="academy,_ritual_room_b">
+    <inherit name="editor_room" />
+    <alias>Academy, Ritual Room B</alias>
+    <description><![CDATA[This room is square and dark, and feels kind of oppressive. In the centre is a slab of dark stone, flat on the top, but irregularly shaped. Manacles are attached at four points. The walls are covered in runes, some huge, some tiny, painted in black on the dark grey of the stone. You keep thinking you see them move out of the corner of your eye.]]></description>
+    <inside />
+    <exit alias="south" to="academy,_ritual_observation_platform">
+      <inherit name="southdirection" />
+    </exit>
+  </object>
+  <object name="academy,_cleansing_room">
+    <inherit name="editor_room" />
+    <alias>Academy, Cleansing Room</alias>
+    <description><![CDATA[TODO]]></description>
+    <inside />
+  </object>
+  <object name="market_square">
+    <inherit name="editor_room" />
+    <alias>Market Square</alias>
+    <description><![CDATA[The market square is a large open area, currently devoid of any market.]]></description>
+    <exit alias="north" to="alchemy_shop">
+      <inherit name="northdirection" />
+    </exit>
+  </object>
+  <object name="alchemy_shop">
+    <inherit name="editor_room" />
+    <alias>Alchemy Shop</alias>
+    <description><![CDATA[This is a quaint shop, with a frankly bizarre smell. Herbs are hanging from the beams, the walls are all lined with shelves, and each shelf is cramped with bottles, in a variety of shapes and sizes. There is a small counter, behind which a elderly looking lady, with pointed ears, is watching you intendly. {once:'So you're interested in my herbs and potions?' she asks.]]></description>
+    <inside />
+    <exit alias="south" to="market_square">
+      <inherit name="southdirection" />
+    </exit>
+  </object>
+  <object name="bridge">
+    <inherit name="editor_room" />
+    <alias>Bridge</alias>
+    <description><![CDATA[You are stood on a stone bridge across a fast-flowing river. To the east, the river plumets over the lip of a waterfall, crashing noisily on rocks below.]]></description>
+  </object>
+  <object name="spooky_glade">
+    <inherit name="editor_room" />
+    <alias>Spooky Glade</alias>
+    <description><![CDATA[At first glance this glade in the forst seems pleasant and transquil, but you cannot help feel something is not right. The trees seem a little bare of leaves, and more gnarled than you might expect, and the grass looks yellow. You realise you can here no birds singing, or indeed any sign of wildlife here.]]></description>
+  </object>
+  <object name="fallen_tree">
+    <inherit name="editor_room" />
+    <alias>Fallen Tree</alias>
+    <description><![CDATA[The road here is blocked by a huge tree that has fallen diagonally across the road. Blocked to carts anyway; you can easily climb up onto the trunk. From here you can see the road to the south, as it crosses the river, and goes deeper into the forest, and to the north, through the swamp.]]></description>
+  </object>
+  <object name="enchanted_glade">
+    <inherit name="editor_room" />
+    <alias>Enchanted Glade</alias>
+    <description><![CDATA[Desc]]></description>
+  </object>
+  <object name="standing_stones">
+    <inherit name="editor_room" />
+    <alias>Standing Stones</alias>
+    <description><![CDATA[In an open area beside the road stand three massice stones, each getting on for twice your height, and set about two strides from each other. Nothing is growing for some way around them and somehow you can sense the power in them.]]></description>
+  </object>
+  <object name="dancing_lights">
+    <inherit name="editor_room" />
+    <alias>Dancing Lights</alias>
+    <description><![CDATA[In the centre of the clearing some lights are flitting around. {once:Fireflie, you think at first, but when one come close, you can see that it really is just a light; there is no substance to it. }]]></description>
+  </object>
+  <object name="beside_cliff_face">
+    <inherit name="editor_room" />
+    <alias>Beside Cliff face</alias>
+    <description><![CDATA[The road passes a cliff face, and you can see the slanted strata of different coloured rock. A steady tickle of water is running down the rock, forming a damp patch of the road, where the water is soaking into the ground.]]></description>
+  </object>
+  <object name="into_the_swamp">
+    <inherit name="editor_room" />
+    <alias>Into The Swamp</alias>
+    <description><![CDATA[The road here leads into the swamp.]]></description>
+  </object>
+  <object name="broken_road">
+    <inherit name="editor_room" />
+    <alias>Broken Road</alias>
+    <description><![CDATA[The road through the swamp is in serious need of repair, nowhere more so than here, where a large section, perhap twenty strides long, has slid into the bog, leaving little more than a jagged verge to walk along.]]></description>
+  </object>
+  <object name="the_ford">
+    <inherit name="editor_room" />
+    <alias>The Ford</alias>
+    <description><![CDATA[The road here dips below the river. {once:A bridge was too much to ask for! }]]></description>
+  </object>
+  <object name="the_living_bridge">
+    <inherit name="editor_room" />
+    <alias>The Living Bridge</alias>
+    <description><![CDATA[You are stood on a curious bridge that seems to have grown, rather than built. The base - or trunk - is on the south side, and a huge, flattish branch has grown across the river to rest on the otherside. Other branches have been persuaded to provide a ramp up on to the bridge, around the trunk.]]></description>
+  </object>
+  <object name="lily_pond">
+    <inherit name="editor_room" />
+    <alias>Lily Pond</alias>
+    <description><![CDATA[You are in an unusually pleasant part of the swamp, on a grassy bank, over-looking a pond full of lilies, with large white flowers.]]></description>
+  </object>
+  <object name="giant_tree">
+    <inherit name="editor_room" />
+    <alias>Giant Tree</alias>
+    <description><![CDATA[The road detours slightly to go around a huge tree that must have been wider than Amy was tall. It rose up into the sky, towering above all the other trees, straight and proud.]]></description>
+  </object>
+  <object name="bridge">
+    <inherit name="editor_room" />
+    <alias>Bridge</alias>
+    <description><![CDATA[TODO]]></description>
+  </object>

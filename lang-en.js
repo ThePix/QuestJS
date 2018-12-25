@@ -1,4 +1,7 @@
 // Language support
+
+"use strict";
+
 const CMD_IGNORED_WORDS = ["", "the", "a", "an"];
 const CMD_JOINER_REGEX = /\,|\band\b/;
 const CMD_ALL_REGEX = /^(all|everything)$/;
@@ -22,74 +25,74 @@ const CMD_DONE = "Done";
 
 
 
-CMD_NOT_CONTAINER = function(item) {
+function CMD_NOT_CONTAINER(item) {
   return sentenceCase(itemNameWithThe(item)) + " is not a container";
 };
 
 
 
-CMD_NOT_CARRYING = function(item) {
+function CMD_NOT_CARRYING(item) {
   return "You're not carrying " + item.pronouns.objective + ".";
 };
-CMD_WEARING = function(item) {
+function CMD_WEARING(item) {
   return "You're wearing " + item.pronouns.objective + ".";
 };
-CMD_NOT_HERE = function(item) {
+function CMD_NOT_HERE(item) {
   return sentenceCase(item.pronouns.subjective) + "'s not here.";
 };
-CMD_NOT_WEARING = function(item) {
+function CMD_NOT_WEARING(item) {
   return "You not wearing " + item.pronouns.objective + ".";
 };
-CMD_CANNOT_TAKE = function(item) {
+function CMD_CANNOT_TAKE(item) {
   return "You can't take " + item.pronouns.objective + ".";
 };
-CMD_CANNOT_WEAR = function(item) {
+function CMD_CANNOT_WEAR(item) {
   return "You can't wear " + item.pronouns.objective + ".";
 };
-CMD_CANNOT_OPEN = function(item) {
+function CMD_CANNOT_OPEN(item) {
   return "You can't open " + item.pronouns.objective + ".";
 };
-CMD_CANNOT_CLOSE = function(item) {
+function CMD_CANNOT_CLOSE(item) {
   return "You can't close " + item.pronouns.objective + ".";
 };
-CMD_CANNOT_READ = function(item) {
+function CMD_CANNOT_READ(item) {
   return "Nothing worth reading there.";
 };
-CMD_CANNOT_EAT = function(item) {
+function CMD_CANNOT_EAT(item) {
   return pronounVerb(item, "'be") + " not something you can eat.";
 };
 
-CMD_ALREADY_HAVE = function(item) {
+function CMD_ALREADY_HAVE(item) {
   return "You already have " + item.pronouns.objective + ".";
 };
-CMD_ALREADY_WEARING = function(item) {
+function CMD_ALREADY_WEARING(item) {
   return "You're already wearing " + item.pronouns.objective + ".";
 };
-CMD_ALREADY = function(item) {
+function CMD_ALREADY(item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 };
-CMD_LOCKED = function(item) {
+function CMD_LOCKED(item) {
   return sentenceCase(item.pronouns.subjective) + " " + conjugate(item, "'be") + " locked.";
 };
-CMD_LOCKED_EXIT = "That way is locked.";
+const CMD_LOCKED_EXIT = "That way is locked.";
 
 
-CMD_TAKE_SUCCESSFUL = function(item) {
+function CMD_TAKE_SUCCESSFUL(item) {
   return "You take " + itemNameWithThe(item) + ".";
 };
-CMD_DROP_SUCCESSFUL = function(item) {
+function CMD_DROP_SUCCESSFUL(item) {
   return "You drop " + itemNameWithThe(item) + ".";
 };
-CMD_WEAR_SUCCESSFUL = function(item) {
+function CMD_WEAR_SUCCESSFUL(item) {
   return "You put on " + itemNameWithThe(item) + ".";
 };
-CMD_REMOVE_SUCCESSFUL = function(item) {
+function CMD_REMOVE_SUCCESSFUL(item) {
   return "You take " + itemNameWithThe(item) + " off.";
 };
-CMD_OPEN_SUCCESSFUL = function(item) {
+function CMD_OPEN_SUCCESSFUL(item) {
   return "You open " + itemNameWithThe(item) + ".";
 };
-CMD_CLOSE_SUCCESSFUL = function(item) {
+function CMD_CLOSE_SUCCESSFUL(item) {
   return "You close " + itemNameWithThe(item) + ".";
 };
 
@@ -99,19 +102,19 @@ const ERROR_NO_PLAYER = "No player object found. This will not go well...";
 const ERROR_MSG_OR_RUN = "Unsupported type for msgOrRun";
 const ERROR_NO_ROOM = "Failed to find room";
 const ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
-const ERROR_INIT_REPEATED_NAME = function(name) {
+function ERROR_INIT_REPEATED_NAME(name) {
   return "Attempting to use the name `" + name + "`, there there is already an item with that name in the world.";
 };
-const ERROR_INIT_DISALLOWED_NAME = function(name) {
+function ERROR_INIT_DISALLOWED_NAME(name) {
   return "Attempting to use the disallowed name `" + name + "`; a name can only include letters and digits - no spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.";
 };
-const ERROR_USING_CREATE_OBJECT = function(name) {
+function ERROR_USING_CREATE_OBJECT(name) {
   return "Attempting to use createObject with `" + name + "` after set up. To ensure games save properly you should use cloneObject to create ites during play.";
 };
-const ERROR_INIT_UNKNOWN_LOC = function(item) {
+function ERROR_INIT_UNKNOWN_LOC(item) {
   return "The item `" + item.name + "` is in an unknown location (" + item.loc + ")";
 };
-const ERROR_INIT_UNKNOWN_EXIT = function(dir, room, loc) {
+function ERROR_INIT_UNKNOWN_EXIT(dir, room, loc) {
   return "The exit `" + dir + "` in room '" + room.name + "' is to an unknown location (" + loc + ")"
 };
 
@@ -154,7 +157,7 @@ const EXITS = [
 
 
 
-helpScript = function() {
+function helpScript() {
   metamsg("This is an experiment in using JavaScript (and a little jQuery) to create a text game.");
   if (PANES != "None") {
     if (COMPASS) {
@@ -219,7 +222,7 @@ const CONJUGATIONS = {
 
 
 
-conjugate = function(item, verb) {
+function conjugate(item, verb) {
   var gender = item.pronouns.subjective;
   if (gender == "he" || gender == "she") { gender = "it" };
   arr = CONJUGATIONS[gender.toLowerCase()];
@@ -248,13 +251,13 @@ conjugate = function(item, verb) {
 };
 
 
-pronounVerb = function(item, verb, capitalise) {
+function pronounVerb(item, verb, capitalise) {
   s = item.pronouns.subjective + " " + conjugate(item, verb);
   s = s.replace(" '", "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 };
 
-nounVerb = function(item, verb, capitalise) {
+function nounVerb(item, verb, capitalise) {
   s = item.name + " " + conjugate(item, verb);
   return capitalise ? sentenceCase(s) : s;
 };

@@ -1,3 +1,5 @@
+"use strict";
+
 const TITLE = "A First Step...";
 
 // UI options
@@ -48,7 +50,7 @@ const INVENTORIES = [
 
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
-setup = function() {
+ function setup() {
   msg('This is a test of what we can do.');
   //parser.parse("ask mary about house");
   player.hitpoints = 20;
@@ -67,7 +69,6 @@ setup = function() {
   //parser.parse("ask mary about basement");
   //parser.parse("ask coin about house");
   
-  msg(findUniqueName("boots"));
 }
 
 

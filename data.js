@@ -1,3 +1,5 @@
+"use strict";
+
 const SPELL = {
   spellVerbs:['Examine', 'Cast'],
   cast:function(self) {

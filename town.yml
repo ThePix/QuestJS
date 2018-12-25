@@ -1,0 +1,132 @@
+
+
+
+# YamlToQuest
+
+
+
+
+
+- Name: Academy, Lower Courtyard
+  Desc: Water tumbles into a pool in the centre of the courtyard, from the Upper courtyard to the north, cascading over artfully arranged rocks. To either side, wide stairs lead upwards.Doors to the east and west lead into the academy chambers, whilst the main entrance is to the south, a huge arched gateway, beyond which you can see the countryside; a lake and mountains beyond.
+
+- Name: Academy, Upper Courtyard
+  Desc: A fountain plays in the centre of the courtyard, a curious arrangement of spheres, cones and cubes, in a square pool, all of pure white marble. To the south is the lower courtyard, and arranged around the three sides are the chambers of the academy, and behind them, the towers of power.
+  South: Academy, Lower Courtyard
+  Down: Academy, Lower Courtyard
+
+- Name: Academy, Great Hall
+  Inside: true
+  Desc: The Great Hall is where the students and staff eat. The east and west sides are lined with pillars supporting the vaulted roof, and from each arch hangs a chandelier. Between the pillars are two long lines of tables, each with benches set of either side.
+
+- Name: Academy, Room of Potency
+  Inside: true
+  Desc: The most striking feature of this room is the giant phallus in the centre of the room. For a moment you wonder if it is a statue, then it twitches a bit, and suddenly it is spirting... well, cum, presumably, into the air. Dragging your eyes off the monstrous cock, the room is octagonal, with a high wooden, roof. The only exit is back north; the other seven walls are hung with tapestries depicting men and woman - or satyrs and nymphs - in various sexual positions.
+
+- Name: Academy, Lecture Hall
+  Inside: true
+  Desc: The hall is a quarter circle, with nine tiers of seat, all facing the northeast corner. The seats are basic; a custon on a stone step, with no provision for students to lean on anything to make notes. Steps along the straight walls lead up to the two exits, west and south.
+
+- Name: Academy, Hall of Nature
+  Inside: true
+  Desc: The Hall of Nature seems to be a place for students to meet and socialise. A large planter in the middle has an impressive variety of flowers and shrubs, none of which you recognise. The pink flowers are especially impressive. There are smaller planters in each corner, with wooden seats incorporated into the design. A door south leads to the Great Hall, and to the north to the lecture theatre, or you can go west, into the courtyard.
+  West: Academy, Upper Courtyard
+  North: Academy, Lecture Hall
+  South: Academy, Great Hall
+
+- Name: Academy, Dormitory
+  Inside: true
+  Desc: Not quite what you're used to back home, the dormitory is a single room, with perhaps a dozen double bunk beds down each side. The beds are very plain, with white sheets; each looks neatly made. There is a small chest on either side of each one, and windows between each bed, to the west, looking out onto a wide valley and to the east, overlooking the lower courtyard. The main door is north, but there is a small door in the southeast corner that leads on to the battlements.
+
+- Name: Academy, Battlements
+  Desc: A narrow walkway, open on the north side, between the two wings, crossing the gateway. From here you can look down on the courtyards, to watch the waters spray from the fountain in the upper pool, then cascade down into the lower pool. Looking south, you can see the road down to the town, and beyond that a tranquil lake, surrounded by imposing mountains.
+  East: Academy, Great Hall
+  West: Academy, Dormitory
+
+- Name: Academy, Ritual Observation Platform
+  Inside: true
+  Desc: This i a raised area that looks on to the two rituals rooms to north and south. Wooden benches off the bare minimum of comfort to spectators.
+  East: Academy, Lower Courtyard
+
+- Name: Academy, Ritual Room A
+  Inside: true
+  Desc: This room is square and similar in size to Ritual Room B, but in other ways quite different. Four orbs float, one in each corner, shining brightly, making the white-painted room seem very light and airy. On the floor, you can see a circle of flowers, about three strides across.
+  North: Academy, Ritual Observation Platform
+
+- Name: Academy, Ritual Room B
+  Inside: true
+  Desc: This room is square and dark, and feels kind of oppressive. In the centre is a slab of dark stone, flat on the top, but irregularly shaped. Manacles are attached at four points. The walls are covered in runes, some huge, some tiny, painted in black on the dark grey of the stone. You keep thinking you see them move out of the corner of your eye.
+  South: Academy, Ritual Observation Platform
+
+- Name: Academy, Cleansing Room
+  Inside: true
+  Desc: TODO
+
+  
+  
+  
+
+
+
+- Name: Market Square
+  Desc: The market square is a large open area, currently devoid of any market.
+  
+- Name: Alchemy Shop
+  Inside: true
+  Desc: This is a quaint shop, with a frankly bizarre smell. Herbs are hanging from the beams, the walls are all lined with shelves, and each shelf is cramped with bottles, in a variety of shapes and sizes. There is a small counter, behind which a elderly looking lady, with pointed ears, is watching you intendly. {once:'So you're interested in my herbs and potions?' she asks.
+  South: Market Square
+
+
+  
+  
+- Name: Outlook
+  Desc: Stood on the rock gives you a wonderful view of the world below you. Yoy can see the lake, withthe mountains beyond.
+  
+  
+  Name: Bridge
+  Desc: You are stood on a stone bridge across a fast-flowing river. To the east, the river plumets over the lip of a waterfall, crashing noisily on rocks below. 
+  
+- Name: Spooky Glade
+  Desc: At first glance this glade in the forst seems pleasant and transquil, but you cannot help feel something is not right. The trees seem a little bare of leaves, and more gnarled than you might expect, and the grass looks yellow. You realise you can here no birds singing, or indeed any sign of wildlife here.
+  
+  
+- Name: Fallen Tree
+  Desc: The road here is blocked by a huge tree that has fallen diagonally across the road. Blocked to carts anyway; you can easily climb up onto the trunk. From here you can see the road to the south, as it crosses the river, and goes deeper into the forest, and to the north, through the swamp.
+
+- Name: Enchanted Glade
+  Desc: Desc
+
+- Name: Standing Stones
+  Desc: In an open area beside the road stand three massice stones, each getting on for twice your height, and set about two strides from each other. Nothing is growing for some way around them and somehow you can sense the power in them.
+
+- Name: Dancing Lights
+  Desc: In the centre of the clearing some lights are flitting around. {once:Fireflie, you think at first, but when one come close, you can see that it really is just a light; there is no substance to it. }
+
+- Name: Beside Cliff face
+  Desc: The road passes a cliff face, and you can see the slanted strata of different coloured rock. A steady tickle of water is running down the rock, forming a damp patch of the road, where the water is soaking into the ground.
+
+- Name: Into The Swamp
+  Desc: The road here leads into the swamp.
+
+- Name: Broken Road
+  Desc: The road through the swamp is in serious need of repair, nowhere more so than here, where a large section, perhap twenty strides long, has slid into the bog, leaving little more than a jagged verge to walk along.
+
+- Name: The Ford
+  Desc: The road here dips below the river. {once:A bridge was too much to ask for! }
+
+- Name: The Living Bridge
+  Desc: You are stood on a curious bridge that seems to have grown, rather than built. The base - or trunk - is on the south side, and a huge, flattish branch has grown across the river to rest on the otherside. Other branches have been persuaded to provide a ramp up on to the bridge, around the trunk.
+
+- Name: Lily Pond
+  Desc: You are in an unusually pleasant part of the swamp, on a grassy bank, over-looking a pond full of lilies, with large white flowers.
+
+- Name: Giant Tree
+  Desc: The road detours slightly to go around a huge tree that must have been wider than Amy was tall. It rose up into the sky, towering above all the other trees, straight and proud.
+
+- Name: Bridge
+  Desc: TODO
+
+
+  
+  
+  

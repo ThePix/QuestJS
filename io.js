@@ -1,11 +1,13 @@
 // ============  Output  =======================================
 
+"use strict";
+
 // Various output functions
 // The idea is that you can have them display different - or not at all
 // So error messages can be displayed in red, meta-data (help., etc)
 // is grey, and debug messages can be turned on and off as required
 // Note that debug and error messages need a number first
-msg = function(s, cssClass) {
+function msg(s, cssClass) {
   if (cssClass == undefined) {
     $("#output").append('<p id="n' + io.nextid + '">' + processtext(s) + "</p>");
   }
@@ -14,19 +16,19 @@ msg = function(s, cssClass) {
   }
   io.nextid++;
 };
-metamsg = function(s) {
+function metamsg(s) {
   $("#output").append('<p id="n' + io.nextid + '" class="meta">' + s + "</p>");
   io.nextid++;
 };
-errormsg = function(errno, s) {
-  $("#output").append('<p id="n' + io.nextid + '" class="error"><span class="error' + errno + '">' + s + '</span></p>');
+function errormsg(errno, s) {
+  $("#output").append('<p id="n' + io.nextid + '" class="error error' + errno + '">' + s + '</p>');
   io.nextid++;
 };
-debugmsg = function(dbgno, s) {
-  $("#output").append('<p id="n' + io.nextid + '" class="debug"><span class="debug' + dbgno + '">' + s + '</span></p>');
+function debugmsg(dbgno, s) {
+  $("#output").append('<p id="n' + io.nextid + '" class="debug debug' + dbgno + '">' + s + '</p>');
   io.nextid++;
 };
-heading = function(level, s) {
+function heading(level, s) {
   $("#output").append('<h' + level + ' id="n' + io.nextid + '">' + s + '</h' + level + '>');
   io.nextid++;
 };
@@ -38,8 +40,13 @@ heading = function(level, s) {
 // If the given attribute is a string it is printed, if it is a
 // function it is called. Otherwise an error is generated.
 // It isMultiple is true, the object name is prefixed.
-msgOrRun = function(item, attname, isMultiple) {
+function msgOrRun(item, attname, isMultiple) {
   if (typeof item[attname] == "string") {
+    for (var i = 0; i < item[attname].length; i++) {
+      //msgOrRun();
+    }
+  }
+  else if (typeof item[attname] == "string") {
     msg(prefix(item, isMultiple) + item[attname]);
     return true;
   }
@@ -56,7 +63,7 @@ msgOrRun = function(item, attname, isMultiple) {
 
 
 // Clears the screen
-clearScreen = function() {
+function clearScreen() {
   for (var i = 0; i < io.nextid; i++) {
     $('#n' + i).remove();
   }
@@ -67,7 +74,7 @@ clearScreen = function() {
 //      showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
 //        msg("You picked " + result + ".");
 //      });
-showMenu = function(title, options, fn) {
+function showMenu(title, options, fn) {
   io.menuStartId = io.nextid;
   io.menuFn = fn;
   io.menuOptions = options;
@@ -87,9 +94,9 @@ showMenu = function(title, options, fn) {
 
 
 // This should be called after each turn to ensure we are at the end of the page and the text box has the focus
-endTurnUI = function() {
+function endTurnUI() {
   // set the EXITS
-  room = getObject(player.loc, true);
+  var room = getObject(player.loc, true);
   for (var i = 0; i < EXITS.length; i++) {
     if (hasExit(room, EXITS[i].name) || ['Look', 'Help', 'Wait'].includes(EXITS[i].name)) {
       $('#exit' + EXITS[i].name).show();
@@ -107,12 +114,12 @@ endTurnUI = function() {
 
 
 
-updateStatus = function() {
+function updateStatus() {
   $("#status-pane").empty();
   for (var i = 0; i < STATUS.length; i++) {
     if (typeof STATUS[i] == "string") {
       if (player[STATUS[i]]) {
-        s = '<tr><td width="' + STATUS_WIDTH_LEFT + '">' + sentenceCase(STATUS[i]) + "</td>";
+        var s = '<tr><td width="' + STATUS_WIDTH_LEFT + '">' + sentenceCase(STATUS[i]) + "</td>";
         s += '<td width="' + STATUS_WIDTH_RIGHT + '">' + player[STATUS[i]] + "</td></tr>";
         $("#status-pane").append(s);
       }
@@ -124,7 +131,7 @@ updateStatus = function() {
 };
 
 
-updateUIItems = function() {
+function updateUIItems() {
   for (var i = 0; i < INVENTORIES.length; i++) {
     $('#' + INVENTORIES[i].alt).empty();
   }
@@ -218,7 +225,7 @@ io.appendItem = function(item, attName, htmlDiv, isSubItem) {
   io.currentItemList.push(item.name);
   if (item[attName]) {
     for (var j = 0; j < item[attName].length; j++) {
-      s = '<div class="' + item.name + '-actions itemaction" onclick="io.clickItemAction(\'' + item.name + '\', \'' + item[attName][j] + '\')">';
+      var s = '<div class="' + item.name + '-actions itemaction" onclick="io.clickItemAction(\'' + item.name + '\', \'' + item[attName][j] + '\')">';
       s += item[attName][j];
       s += '</div>';
       $('#' + htmlDiv).append(s);
@@ -228,7 +235,7 @@ io.appendItem = function(item, attName, htmlDiv, isSubItem) {
     errormsg(ERR_GAME_BUG, "No " + attName + " for " + item.name );
   }
   if (item.container && !item.closed) {
-    l = scope(isInside, item);
+    var l = scope(isInside, item);
     for (var i = 0; i < l.length; i++) {
       io.appendItem(l[i], attName, htmlDiv, true);
     }
@@ -240,22 +247,16 @@ io.appendItem = function(item, attName, htmlDiv, isSubItem) {
 io.createPanes = function() {
   document.writeln('<div id="panes" class="sidepanes sidepanes' + PANES + '">');
 
-  writeExit = function(n) {
-    document.writeln('<td class="compassbutton">');
-    document.writeln('<span class="compassbutton" id="exit' + EXITS[n].name + '" onclick="io.clickExit(\'' + EXITS[n].name + '\')">' + EXITS[n].abbrev + '</span>');
-    document.writeln('</td>');
-  };
-
   if (COMPASS) {
     document.writeln('<table>');
     for (var i = 0; i < 3; i++) {
       document.writeln('<tr>');
-      writeExit(0 + 5 * i);
-      writeExit(1 + 5 * i);
-      writeExit(2 + 5 * i);
+      io.writeExit(0 + 5 * i);
+      io.writeExit(1 + 5 * i);
+      io.writeExit(2 + 5 * i);
       document.writeln('<td></td>');
-      writeExit(3 + 5 * i);
-      writeExit(4 + 5 * i);
+      io.writeExit(3 + 5 * i);
+      io.writeExit(4 + 5 * i);
       document.writeln('</tr>');
     }
     document.writeln('</table>');
@@ -277,6 +278,15 @@ io.createPanes = function() {
 
   document.writeln('</div>');
 };
+
+
+io.writeExit = function(n) {
+  document.writeln('<td class="compassbutton">');
+  document.writeln('<span class="compassbutton" id="exit' + EXITS[n].name + '" onclick="io.clickExit(\'' + EXITS[n].name + '\')">' + EXITS[n].abbrev + '</span>');
+  document.writeln('</td>');
+};
+
+
 
 
 
