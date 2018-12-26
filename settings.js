@@ -12,7 +12,13 @@ const TEXT_INPUT = true;
 const CURSOR = ">";
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const PRE_RELEASE = true;  // Some extra testing is done on start up when this is true
+const DEBUG = true;
 
+const ROOM_TEMPLATE = [
+  "%",
+  "You can see {objects}.",
+  "You can go {exits}.",
+]
 
 
 
@@ -65,7 +71,7 @@ const INVENTORIES = [
   addTPDirective("title", function(arr, params) {
     return TITLE; 
   });
-  msg("Some example {s:italic and {u:bold} text}. {back:red:And red too!} {random:one:two:three} and some {fancy2:Montserrat:more text} here in {title}. HP={show:player:hitpoints}. {if:player:hitpoints:YES} {img:box24.png:A simple box}");
+  msg("Some example {s:italic and {u:bold} text}. {back:red:And red too!} {random:one:two:three} and some {fancy2:Montserrat:more text} here in {title}. HP={show:player:hitpoints}. {if:player:hitpoints:YES} {img:box24.png:A simple box} And a {cmd:get book:get book command}. Oh, and you can {cmd:drop book} too!");
   //parser.parse("ask mary about basement");
   //parser.parse("ask coin about house");
   

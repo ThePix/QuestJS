@@ -26,22 +26,22 @@ const WEAPON = {
   ]);
 
   createRoom("kitchen", [{
-    examine:'A clean room.',
+    desc:'A clean room.',
     west:"lounge",
     north:new Exit("garden", { locked:true, lockedmsg:"It seems to be locked." }),
     afterEnterFirst:function() {
-      msg("A fresh smell here!" + this.name);
+      msg("A fresh smell here!");
     }
   }]);
   
 
   createRoom("lounge", [{
-    examine:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
+    desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
     east:'kitchen'
   }]);
 
   createRoom("garden", [{
-    examine:'A wild and over-grown garden.',
+    desc:'A wild and over-grown garden.',
     south:function(room) {
       msg("You head back inside.");
       setRoom('kitchen');
@@ -143,7 +143,7 @@ const WEAPON = {
   
   createItem("Mary", [
     NPC_OBJECT(true),
-    { loc:"lounge", examine:"An attractive young lady.", askoptions:{
+    { loc:"lounge", examine:"An attractive young lady.", properName:true, askoptions:{
       house:"'I like it,' says Mary.",
       garden:"'Needs some work,' Mary says with a sign.",
     } }

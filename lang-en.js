@@ -99,7 +99,7 @@ function CMD_CLOSE_SUCCESSFUL(item) {
 
 
 const ERROR_NO_PLAYER = "No player object found. This will not go well...";
-const ERROR_MSG_OR_RUN = "Unsupported type for msgOrRun";
+const ERROR_MSG_OR_RUN = "Unsupported type for printOrRun";
 const ERROR_NO_ROOM = "Failed to find room";
 const ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
 function ERROR_INIT_REPEATED_NAME(name) {

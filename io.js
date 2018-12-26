@@ -25,8 +25,10 @@ function errormsg(errno, s) {
   io.nextid++;
 };
 function debugmsg(dbgno, s) {
-  $("#output").append('<p id="n' + io.nextid + '" class="debug debug' + dbgno + '">' + s + '</p>');
-  io.nextid++;
+  if (DEBUG) {
+    $("#output").append('<p id="n' + io.nextid + '" class="debug debug' + dbgno + '">' + s + '</p>');
+    io.nextid++;
+  }
 };
 function heading(level, s) {
   $("#output").append('<h' + level + ' id="n' + io.nextid + '">' + s + '</h' + level + '>');
@@ -40,11 +42,17 @@ function heading(level, s) {
 // If the given attribute is a string it is printed, if it is a
 // function it is called. Otherwise an error is generated.
 // It isMultiple is true, the object name is prefixed.
-function msgOrRun(item, attname, isMultiple) {
-  if (typeof item[attname] == "string") {
+function printOrRun(item, attname, isMultiple) {
+  if (!item[attname]) {
+    errormsg(ERR_GAME_BUG, "Trying to access an attribute, '" + attname + "', on " + item.name + ", but it does not exist; this is probably a bug.");
+    return flag;
+  }  
+  else if (item[attname].constructor == Array) {
+    var flag = true;
     for (var i = 0; i < item[attname].length; i++) {
-      //msgOrRun();
+      flag = printOrRun(item, item[attname][i], isMultiple) && flag;
     }
+    return flag;
   }
   else if (typeof item[attname] == "string") {
     msg(prefix(item, isMultiple) + item[attname]);
@@ -150,6 +158,9 @@ function updateUIItems() {
   io.clickItem('');
 };
 
+function cmdLink(command, str) {
+  return '<a class="cmdlink" onclick="parser.parse(\'' + command + '\')">' + str + "</a>";
+}
 
 
 // ============  Hidden from creators!  =======================================

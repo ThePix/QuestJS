@@ -23,6 +23,7 @@ var parser = {};
   // This allows us to keep trying to process a single command until all the
   //  disambiguations have been resolved.
   parser.parse = function(inputText) {
+    //msg("Input=" + inputText);
     if (inputText) {
       var res = parser.convertInputTextToCommandCandidate(inputText);
       if (typeof res == "string") {
@@ -78,7 +79,7 @@ var parser = {};
         parser.pronouns[parser.currentCommand.objects[0][i].pronouns.objective] = parser.currentCommand.objects[0][i];
       }
     }
-    outcome = parser.currentCommand.cmd.script(parser.currentCommand.cmd, parser.currentCommand.objects);
+    var outcome = parser.currentCommand.cmd.script(parser.currentCommand.cmd, parser.currentCommand.objects);
     debugmsg(DBG_PARSER, "Result=" + outcome);
     endTurn(outcome);
   }    
@@ -116,7 +117,7 @@ var parser = {};
       // either because multiple were specified or because it was ambiguous (or both)
       // We just keep the last error message as hopefully the most relevant.
       // NB: Inside function so cannot use 'this'
-      res = parser.matchItemsToCmd(cmdString, el);
+      var res = parser.matchItemsToCmd(cmdString, el);
       if (res.score == -1) {
         error = res.error;
       }
@@ -218,7 +219,7 @@ var parser = {};
         }
         var scopes = cmd.objects[i - 1].scope ? [scope(cmd.objects[i - 1].scope), fallbackScope] : scopes = [fallbackScope];
         var objs = [];
-        var obs2;
+        var objs2, n;
         for (var j = 0; j < objectNames.length; j++) {
           [objs2, n] = this.findInScope(objectNames[j], scopes);
           if (n == 0) {
@@ -247,7 +248,7 @@ var parser = {};
   // If not found the score will be 0, and an empty array returned.
   parser.findInScope = function(s, listOfLists) {
     // First handle IT etc.
-    for (key in PRONOUNS) {
+    for (var key in PRONOUNS) {
       if (s == PRONOUNS[key].objective && parser.pronouns[PRONOUNS[key].objective]) {
         return [parser.pronouns[PRONOUNS[key].objective], 1];
       }
@@ -309,7 +310,7 @@ var parser = {};
   // Prints details about the parser.currentCommand so you can
   // see what the parser has made of the player's input
   parser.inspect = function() {
-    s = "PARSER RESULT:<br/>";
+    var s = "PARSER RESULT:<br/>";
     s += "Input text: " + parser.currentCommand.string + "<br/>";
     s += "Matched command: " + parser.currentCommand.cmd.name + "<br/>";
     s += "Matched regex: " + parser.currentCommand.cmd.regex + "<br/>";

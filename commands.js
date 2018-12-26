@@ -17,13 +17,16 @@ function Cmd(name, hash) {
   // This is the default script for commands
   this.script = function(cmd, objects) {
     var attName = cmd.att ? cmd.att : cmd.name.toLowerCase();
+    debugmsg(0, "attName=" + attName);
     var success = false;
     for (var i = 0; i < objects[0].length; i++) {
       if (!objects[0][i][attName]) {
         errormsg(ERR_GAME_BUG, CMD_NO_ATT_ERROR + " (" + objects[0][i].name + ").");
       }
       else {
-        var result = msgOrRun(objects[0][i], attName, (objects[0].length > 1 || parser.currentCommand.all));
+    debugmsg(0, "name=" + objects[0][i].name);
+        var result = printOrRun(objects[0][i], attName, (objects[0].length > 1 || parser.currentCommand.all));
+    debugmsg(0, "result=" + result);
         success = result || success;
       }
     }
@@ -44,14 +47,14 @@ function ExitCmd(name, hash) {
   this.exitCmd = true;
   this.objects = [{ignore:true}, {ignore:true}, ],
   this.script = function(cmd, objects) {
-    currentRoom = getObject(player.loc);
+    var currentRoom = getCurrentRoom();
 
     if (!hasExit(currentRoom, cmd.name)) {
       errormsg(ERR_PLAYER, CMD_NOT_THAT_WAY);
       return FAILED;
     }
     else {
-      ex = currentRoom[cmd.name];
+      var ex = currentRoom[cmd.name];
       if (typeof ex == "string") {
         setRoom(ex)
         return SUCCESS;
@@ -104,7 +107,7 @@ var commands = [
   new Cmd('Look', {
     regex:/^l|look$/,
     script:function() {
-      msgOrRun(room, 'examine');
+      getCurrentRoom().description();
       return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
@@ -123,8 +126,17 @@ var commands = [
       return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
+
   new Cmd('Examine', {
-    regex:/^(look at|look|examine|exam|ex|x) (.+)$/,
+    regex:/^(examine|exam|ex|x) (.+)$/,
+    att:'examine',
+    objects:[
+      {ignore:true},
+      {scope:isPresent}
+    ]
+  }),
+  new Cmd('Look at', {
+    regex:/^(look at|look) (.+)$/,
     att:'examine',
     objects:[
       {ignore:true},
@@ -253,7 +265,7 @@ var commands = [
   new Cmd('Take/from', {
     pattern:'take #object1# from #object2#',
     script:function(object, text) {
-      msgOrRun(object, 'take');
+      printOrRun(object, 'take');
     },
     objects:[
       {scope:isHere, multiple:true},
@@ -264,10 +276,12 @@ var commands = [
 //  new VerbCmd('Drop', {
 //    pattern:'drop',
 //    script:function(object, text) {
-//      msgOrRun(object, 'drop');
+//      printOrRun(object, 'drop');
 //    },
 //    objects:[{scope:isHeld, multiple:true}]
 //  }),
+
+
   new Cmd('Ask/about', {
     regex:/^(ask) (.+) (about) (.+)$/,
     script:function(cmd, arr) {
@@ -280,6 +294,30 @@ var commands = [
       {scope:isHere},
       {ignore:true},
       {text:true},
+    ]
+  }),
+  
+  
+  new Cmd('Inspect', {
+    regex:/^(inspect) (.+)$/,
+    script:function(cmd, arr) {
+      if (DEBUG) {
+        var item = arr[0][0];
+        debugmsg(0, "Name: " + item.name);
+        for (var key in item) {
+          if (item.hasOwnProperty(key)) {
+             debugmsg(0, "--" + key + ": " + item[key]);
+          }
+        }        
+      }
+      else {
+        errormsg(ERR_PLAYER, "Debug commands are not available.");
+      }
+      return SUCCESS_NO_TURNSCRIPTS; 
+    },
+    objects:[
+      {ignore:true},
+      {scope:isPresent},
     ]
   }),
 ];

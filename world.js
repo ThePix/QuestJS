@@ -240,7 +240,7 @@ function setRoom(roomName, suppressOutput) {
     room.beforeEnter();
     if (room.visited == 0) { room.beforeEnterFirst(); }
     heading(4, room.name);
-    msgOrRun(room, "examine");
+    room.description();
     room.afterEnter();
     if (room.visited == 0) { room.afterEnterFirst(); }
     room.visited += 1;
@@ -314,12 +314,12 @@ world.setBackground = function() {
   var background = getObject("background");
   background.alt = [];
   var md;
-  if (typeof room.examine == 'string') {
+  if (typeof room.desc == 'string') {
     if (!room.backgroundNames) {
       room.backgroundNames = [];
-      while (md = world.BACK_REGEX.exec(room.examine)) {
+      while (md = world.BACK_REGEX.exec(room.desc)) {
         var arr = md[0].substring(1, md[0].length - 1).split(":");
-        room.examine = room.examine.replace(md[0], arr[0]);
+        room.desc = room.desc.replace(md[0], arr[0]);
         for (var j = 0; j < arr.length; j++) {
           room.backgroundNames.push(arr[j]);
         }

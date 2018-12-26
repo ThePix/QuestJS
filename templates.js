@@ -7,6 +7,18 @@ const DEFAULT_ROOM = {
   afterEnterFirst:function() {},
   onExit:function() {},
   visited:0,
+  
+  description:function() {
+    for (var i = 0; i < ROOM_TEMPLATE.length; i++) {
+      if (ROOM_TEMPLATE[i] == "%") {
+        printOrRun(this, "desc");
+      }
+      else {
+        msg(ROOM_TEMPLATE[i]);
+      }
+    }
+    return true;
+  }
 };
 
 
@@ -244,7 +256,7 @@ const TURNSCRIPT = function(isRunning, fn) {
 
 const NPC_OBJECT = function(isFemale) {
   var res = {
-    hereVerbs:['Examine', 'Talk to'],
+    hereVerbs:['Look at', 'Talk to'],
     icon:function() {
       return ('<img src="images/npc12.png" />');
     },
@@ -253,7 +265,7 @@ const NPC_OBJECT = function(isFemale) {
   res.askabout = function(text) {
     msg("You ask " + this.name + " about " + text + ".");
     if (this.askoptions[text]) {
-      msgOrRun(this.askoptions, text);
+      printOrRun(this.askoptions, text);
       return true;
     }
     else {

@@ -117,5 +117,41 @@ tp.text_processors = {
   
   once:function(arr, params) {
     return params.tpFirstTime ? arr.join(":") : "";
-  }
+  },
+  
+  cmd:function(arr, params) {
+    if (arr.length == 1) {
+      return cmdLink(arr[0], arr[0]);
+    }
+    else {
+      return cmdLink(arr[0], arr[1]);
+    }
+  },
+  command:function(arr, params) {
+    if (arr.length == 1) {
+      return cmdLink(arr[0], arr[0]);
+    }
+    else {
+      return cmdLink(arr[0], arr[1]);
+    }
+  },
+  
+  objects:function(arr, params) {
+    var listOfOjects = scope(isHereListed);
+    return formatList(listOfOjects, itemNameWithA);
+  },
+  
+  exits:function(arr, params) {
+    var list = [];
+    var room = getCurrentRoom();
+    for (var i = 0; i < EXITS.length; i++) {
+      if (hasExit(room, EXITS[i].name)) {
+        list.push(EXITS[i].name);
+      }
+    }
+    return formatList(list, false, " or");
+  },
+  
+  
+  
 }

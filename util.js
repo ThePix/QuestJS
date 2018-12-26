@@ -60,13 +60,24 @@ function prefix(item, isMultiple) {
 }
 
 // Creates a string that lists the items by name
-function formatList(itemArray) {
-  var s = itemArray.map(function(el) { return el.name; }).join(", ");
+function formatList(itemArray, mappingFunc, lastJoiner) {
+  if (!lastJoiner) { lastJoiner = " and"; }
+  var s = itemArray.map(function(el) {
+    if (typeof el == "string") {
+      return el;
+    }
+    else if (mappingFunc) {
+      return mappingFunc(el);
+    }
+    else {
+      return el.alias;
+    }
+  }).join(", ");
 
   var lastIndex = s.lastIndexOf(",");
   if (lastIndex === -1) { return s; }
 
-  return s.substring(0, lastIndex) + " and" + s.substring(lastIndex + 1);
+  return s.substring(0, lastIndex) + lastJoiner + s.substring(lastIndex + 1);
 };
 
 
@@ -121,23 +132,23 @@ function itemNameWithThe(item) {
   if (item.properName) {
     return item.alias;
   }
-  return "the " + item.name;
+  return "the " + item.alias;
 }
 
 function itemNameWithA(item) {
   if (item.indefArticle) {
-    return item.indefArticle + " " + item.name;
+    return item.indefArticle + " " + item.alias;
   }
   if (item.properName) {
-    return item.name;
+    return item.alias;
   }
   if (item.pronouns == PRONOUNS.plural) {
-    return "some " + item.name;
+    return "some " + item.alias;
   }
-  if (/^[aeiou]/i.test(item.name)) {
-    return "an " + item.name;
+  if (/^[aeiou]/i.test(item.alias)) {
+    return "an " + item.alias;
   }
-  return "a " + item.name;
+  return "a " + item.alias;
 }
 
 
@@ -158,6 +169,9 @@ function isHeld(item) {
 };
 function isHere(item) {
   return item.loc === player.loc && item.display >= DSPY_SCENERY;
+};
+function isHereListed(item) {
+  return item.loc === player.loc && item.display >= DSPY_LIST_EXCLUDE;
 };
 function isWorn(item) {
   return (item.loc == player.name) && item.worn;
