@@ -60,28 +60,9 @@ const INVENTORIES = [
   //parser.parse("ask mary about house");
   player.hitpoints = 20;
   player.status = "You are feeling fine";
-  addTPDirective("fancy", function(arr, params) {
-    return '<span style="font-family:Montserrat">' + arr.join(":") + "</span>"; 
-  });
-  addTPDirective("fancy2", function(arr, params) {
-    var font = arr.shift();
-    return '<span style="font-family:' + font + '">' + arr.join(":") + "</span>"; 
-  });
-  addTPDirective("title", function(arr, params) {
-    return TITLE; 
-  });
-  msg("Some example {s:italic and {u:bold} text}. {back:red:And red too!} {random:one:two:three} and some {fancy2:Montserrat:more text} here in {title}. HP={show:player:hitpoints}. {if:player:hitpoints:YES} {img:box24.png:A simple box} And a {cmd:get book:get book command}. Oh, and you can {cmd:drop book} too!");
-  //parser.parse("ask mary about basement");
-  //parser.parse("ask coin about house");
-  var item = getObject("book");
-  printOrRun(item, [
-    "A simple string",
-    function(item) {
-      msg("You look at the " + item.alias);
-    },
-    "Another string",
-  ]);
-  msg(getObject("glass_cabinet").aliasFunc());
+  //parser.parse("talk to mary");
+  
+  //showStartDiag();
 }
 
 
@@ -100,7 +81,7 @@ const INVENTORIES = [
 
 
 
-
+/*
 const DISABLED = true;
 var professions = [
   {name:"Farm hand", bonus:"strength"},
@@ -151,3 +132,188 @@ $(function() {
     ]
   });
 });
+
+*/
+
+
+
+
+
+const para0Opts = [
+  "a tiny village",
+  "a provincial town",
+  "the slums",
+  "the merchant's quarter"
+];
+
+const para1Opts = [
+  "loving the outdoors",
+  "appreciating the finer things in life",
+  "always hungry",
+  "isolated from children of your own age"
+];
+
+const para2Opts = [
+  "introspective",
+  "precocious",
+  "attractive",
+  "curious",
+];
+
+const para3Opts = [
+  "boy",
+  "girl"
+];
+
+const para4Opts = [
+  "getting into trouble",
+  "with your nose in a book",
+  "stealing things",
+  "getting into fights",
+  "arguing with the local priest"
+];
+
+const para5Opts = [
+  "potion brewing",
+  "crystal magic",
+  "shadow magic",
+  "nature magic"
+];
+
+const para6Opts = [
+  "raven black",
+  "dark brown",
+  "brunette",
+  "dark blond",
+  "blond",
+  "platinum blond",
+  "ginger",
+  "electric blue",
+  "shocking pink",
+];
+
+const para7Opts = [
+  "brown",
+  "green",
+  "hazel",
+  "blue",
+  "aquamarine"
+];
+
+const para8Opts = [
+  "blue",
+  "green",
+  "orange",
+  
+];
+
+
+
+var paraOpts = [];
+
+var paraPositions = [];
+
+function getRandomInt(min, max) {
+   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var wizardMale = true;
+
+function scrollWizard() {
+  wizardMale = !wizardMale;
+  $('#wizardname').html(wizardMale ? 'Master Shalazin' :  'Mistress Shalazin');
+  $('#wizardwitch').html(wizardMale ? 'wizard' :  'witch');
+  $('#wizardhe').html(wizardMale ? 'he' :  'she');
+}
+
+function scrollPara(element) {
+  var paraNumber = parseInt(element.id.replace('para', ''));
+  if (isNaN(paraNumber)) { return; }
+  var para = $('#para' + paraNumber);
+  if (typeof paraPositions[paraNumber] != 'number') {
+    var list = eval('para' + paraNumber + 'Opts');
+    paraOpts[paraNumber] = list;
+    paraPositions[paraNumber] = getRandomInt(0, list.length - 1);
+  }
+  paraPositions[paraNumber]++;
+  if (paraPositions[paraNumber] >= paraOpts[paraNumber].length) {
+    paraPositions[paraNumber] = 0;
+  }
+  para.html(paraOpts[paraNumber][paraPositions[paraNumber]]);
+}    
+
+function setValues() {
+  var p = getPlayer();
+  p.alias = $('#name_input').val();
+  p.isFemale = !wizardMale;
+  p.background = $('#para4').html();
+  p.magic = $('#para5').html();
+  p.hairColour = $('#para6').html();
+  p.eyeColour = $('#para7').html();
+  p.spellColour = $('#para8').html();
+  msg(p.alias);
+  msg($("#diag-inner").text());
+}
+
+/*
+$(document).ready(function () {
+      $('.scrolling').each(function() {
+        scrollPara(this);
+      });
+      that = $("#dialog_window_1");
+      $('#dialog_window_1').dialog({
+         height: 400,
+         width: 640,
+         buttons: {
+            "Done": function() { setValues();}
+        }
+      });
+      $("button[title='Close']")[0].style.display = 'none';
+});
+*/
+function scrollWizard() {
+  wizardMale = !wizardMale;
+  $('#wizardname').html(wizardMale ? 'Master Shalazin' :  'Mistress Shalazin');
+  $('#wizardwitch').html(wizardMale ? 'wizard' :  'witch');
+  $('#wizardhe').html(wizardMale ? 'he' :  'she');
+}
+
+function showStartDiag() {
+
+  var diag = $("#dialog");
+  diag.prop("title", "Who are you?");
+  var s;
+  s = 'Name: <input type="text" id="name_input" value="Skybird"/><br/><br/>'
+  s += '<div id="diag-inner">Born in <span id="para0" class="scrolling" onclick="scrollPara(this)"></span>, you grew up <span id="para1" class="scrolling" onclick="scrollPara(this)"></span>. '
+  s += 'You were a <span id="para2" class="scrolling" onclick="scrollPara(this)"></span> <span id="para3" class="scrolling" onclick="scrollPara(this)"></span>, '
+  s += 'always <span id="para4" class="scrolling" onclick="scrollPara(this)"></span>.'
+  s += 'At the age of seven, you caught the eye of <span id="wizardname" class="scrolling" onclick="scrollWizard();">Master Shalazin</span>, '
+  s += 'a <span id="wizardwitch">wizard</span> '
+  s += 'who specialises in <span id="para5" class="scrolling" onclick="scrollPara(this)"></span>. '
+  s += 'Perhaps <span id="wizardhe">he</span> recognised potential in you, or just a pair of hands willing to work for next to nothing; may be just liked your '
+  s += '<span id="para6" class="scrolling" onclick="scrollPara(this)"></span> hair and <span id="para7" class="scrolling" onclick="scrollPara(this)"></span> eyes. '
+  s += 'Either way, you slowly learnt the basics of magic, and have recently learnt how to turn yourself <span id="para8" class="scrolling" onclick="scrollPara(this)"></span>. '
+  s += 'Perhaps more importantly, you have also learnt how to turn yourself back.</div>'
+
+  diag.html(s);
+  $('.scrolling').each(function() {
+    scrollPara(this);
+  });
+  diag.dialog({
+    modal:true,
+    dialogClass: "no-close",
+    width: 600,
+    height: 600,
+    buttons: [
+      {
+        text: "OK",
+        click: function() {
+          $(this).dialog("close");
+          setValues(this);
+          if (TEXT_INPUT) { $('#textbox').focus(); }
+        }
+      }
+    ]
+  });
+
+}

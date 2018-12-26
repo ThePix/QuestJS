@@ -26,7 +26,7 @@ const CMD_DONE = "Done";
 
 
 function CMD_NOT_CONTAINER(item) {
-  return sentenceCase(item.aliasFunc("the")) + " is not a container";
+  return sentenceCase(item.byname("the")) + " is not a container";
 };
 
 
@@ -78,22 +78,22 @@ const CMD_LOCKED_EXIT = "That way is locked.";
 
 
 function CMD_TAKE_SUCCESSFUL(item) {
-  return "You take " + item.aliasFunc("the") + ".";
+  return "You take " + item.byname("the") + ".";
 };
 function CMD_DROP_SUCCESSFUL(item) {
-  return "You drop " + item.aliasFunc("the") + ".";
+  return "You drop " + item.byname("the") + ".";
 };
 function CMD_WEAR_SUCCESSFUL(item) {
-  return "You put on " + item.aliasFunc("the") + ".";
+  return "You put on " + item.byname("the") + ".";
 };
 function CMD_REMOVE_SUCCESSFUL(item) {
-  return "You take " + item.aliasFunc("the") + " off.";
+  return "You take " + item.byname("the") + " off.";
 };
 function CMD_OPEN_SUCCESSFUL(item) {
-  return "You open " + item.aliasFunc("the") + ".";
+  return "You open " + item.byname("the") + ".";
 };
 function CMD_CLOSE_SUCCESSFUL(item) {
-  return "You close " + item.aliasFunc("the") + ".";
+  return "You close " + item.byname("the") + ".";
 };
 
 
@@ -119,7 +119,7 @@ function ERROR_INIT_UNKNOWN_EXIT(dir, room, loc) {
 };
 
 
-
+const NEVER_MIND = "Never mind.";
 
 const DEFAULT_DESCRIPTION = "It's just scenery.";
 
@@ -225,7 +225,7 @@ const CONJUGATIONS = {
 function conjugate(item, verb) {
   var gender = item.pronouns.subjective;
   if (gender == "he" || gender == "she") { gender = "it" };
-  arr = CONJUGATIONS[gender.toLowerCase()];
+  var arr = CONJUGATIONS[gender.toLowerCase()];
 
   if (!arr) {
     errormsg(ERR_QUEST_BUG, "No conjugations found: CONJUGATIONS_" + gender.toLowerCase());
@@ -252,13 +252,13 @@ function conjugate(item, verb) {
 
 
 function pronounVerb(item, verb, capitalise) {
-  s = item.pronouns.subjective + " " + conjugate(item, verb);
+  var s = item.pronouns.subjective + " " + conjugate(item, verb);
   s = s.replace(" '", "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 };
 
 function nounVerb(item, verb, capitalise) {
-  s = item.alias + " " + conjugate(item, verb);
+  var s = item.alias + " " + conjugate(item, verb);
   return capitalise ? sentenceCase(s) : s;
 };
 

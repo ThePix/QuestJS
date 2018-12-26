@@ -177,3 +177,9 @@ span.compassbutton {
   background-image: none;
   background-color: #c0c0ff;
 }
+
+.scrolling {
+  cursor: pointer;
+  color: blue;
+  background-color: silver;
+}

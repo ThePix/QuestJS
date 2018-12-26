@@ -19,8 +19,8 @@ const WEAPON = {
   
   createItem("me", [
     PLAYER,
-    { loc:"lounge", examine:function(item) {
-      msg("A " + (item.isFemale ? "chick" : "guy") + " called " + item.fullname + ", who is a " + item.job.name);
+    { loc:"lounge", alt:["me", "myself", "player"], examine:function(item) {
+      msg("A " + (item.isFemale ? "chick" : "guy") + " called " + item.alias);
       },
     }
   ]);
@@ -86,18 +86,6 @@ const WEAPON = {
     WEARABLE,
     { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
   ]);
-  createItem("boots0", [
-    TAKABLE,
-    WEARABLE,
-    { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
-  ]);
-  
-  createItem("boots1", [
-    TAKABLE,
-    WEARABLE,
-    { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
-  ]);
-  
   
 
   
@@ -139,6 +127,22 @@ const WEAPON = {
     { loc:"lounge", examine:"A cheap digital camera.", alias:"hat", listalias:"microscope" }
   ]);
 
+  createItem("flashlight", [
+    TAKABLE,
+    SWITCHABLE,
+    { loc:"lounge", examine:"A smal black torch.", alt:["torch"], 
+      byname:function(def){
+        var res = this.alias;
+        if (def) { res = def + " " + this.alias; }
+        if (this.switchedon) { res += " (providing light)"; }
+        return res;
+      },
+      lighting:function() {
+        return this.switchedon ? LIGHT_FULL : LIGHT_NONE;
+      }
+    },
+  ]);
+
   
   
   createItem("Mary", [
@@ -147,6 +151,33 @@ const WEAPON = {
       house:"'I like it,' says Mary.",
       garden:"'Needs some work,' Mary says with a sign.",
     } }
+  ]);
+
+  createItem("Mary_The_Garden", [
+    TOPIC(true),
+    { loc:"Mary", alias:"What's the deal with the garden?", nowShow:["Mary_The_Garden_Again"],
+      script:function() {
+        msg("You ask May about the garden, but she's not talking.");
+      },
+    }
+  ]);
+
+  createItem("Mary_The_Garden_Again", [
+    TOPIC(false),
+    { loc:"Mary", alias:"Seriously, what's the deal with the garden?",
+      script:function() {
+        msg("You ask May about the garden, but she's STILL not talking.");
+      },
+    }
+  ]);
+
+  createItem("Mary_The_Weather", [
+    TOPIC(true),
+    { loc:"Mary", alias:"The weather",
+      script:function() {
+        msg("You talk to Mary about the weather.");
+      },
+    }
   ]);
 
   createItem("TS_Test", [

@@ -76,6 +76,20 @@ const DEFAULT_ITEM = {
   askabout:function(text) {
     msg("You can ask " + this.pronouns.objective + " about " + text + " all you like, but " + pronounVerb(this, "'be") + " not about to reply.");
     return false;
+  },
+  
+  speakto:function(item) {
+    msg("You chat to " + item.byname("the") + " for a few moments, before releasing that " + pronounVerb(this, "'be") + " not about to reply");
+    return false;
+  },
+  
+  // Used in speak to
+  isTopicVisible:function() {
+    return false;
+  },
+  
+  lighting:function() {
+    return LIGHT_NONE;
   }
 };
 
@@ -180,7 +194,7 @@ const CONTAINER = {
   listPrefix:"containing ",
   listSuffix:"",
   
-  aliasFunc:function(def) {
+  byname:function(def) {
     var prefix = "";
     if (def == "the") {
       prefix = _itemThe(this);
@@ -198,7 +212,6 @@ const CONTAINER = {
   },
   
   getContents:function() {
-    debugmsg(0, "this.name=" + this.name);
     return scope(isInside, this);
   },
   
@@ -245,6 +258,7 @@ const CONTAINER = {
 
 const SWITCHABLE = {
   hereVerbs:['Examine', 'Turn on'],
+  switchedon:false,
   
   switchon:function(item, isMultiple) {
     if (item.switchedon) {
@@ -296,6 +310,9 @@ const NPC_OBJECT = function(isFemale) {
   };
   res.pronouns = isFemale ? PRONOUNS.female : PRONOUNS.male;
   res.askabout = function(text) {
+    if (checkCannotSpeak(item)) {
+      return false;
+    }
     msg("You ask " + this.name + " about " + text + ".");
     if (this.askoptions[text]) {
       printOrRun(this.askoptions, text);
@@ -305,7 +322,54 @@ const NPC_OBJECT = function(isFemale) {
       msg(nounVerb(this, "have", true) + " nothing to say on the subject.");
       return false;
     }
-  }
+  };
+  res.speakto = function() {
+    debugmsg(0, "HERE-----------------");
+    if (checkCannotSpeak(this)) {
+      return false;
+    }
+    var topics = scope(isInside, this).filter(el => el.isTopicVisible());
+    //for (var i = 0; i < topics.length; i++) {
+    //  debugmsg(0, topics[i].name + " - " + topics[i].conversationTopic);
+    //}
+    debugmsg(0, "HERE " + topics.length);
+    topics.push(NEVER_MIND);
+    showMenu("Talk to " + this.byname("the") + " about:", topics, function(result) {
+      if (result != NEVER_MIND) {
+        result.runscript();
+      }
+    });
+    
+    return false;
+  };
   return res;
 };
 
+
+const TOPIC = function(fromStart) {
+  var res = {
+    conversationTopic:true,
+    display:DSPY_HIDDEN,
+    showTopic:fromStart,
+    hideTopic:false,
+    hideAfter:true,
+    nowShow:[],
+    nowHide:[],
+    runscript:function() {
+      this.script();
+      this.hideTopic = this.hideAfter;
+      for (var i = 0; i < this.nowShow.length; i++) {
+        var obj = getObject(this.nowShow[i]);
+        obj.showTopic = true;
+      };
+      for (var i = 0; i < this.nowHide.length; i++) {
+        var obj = getObject(this.nowHide[i]);
+        obj.hideTopic = true;
+      };
+    },
+    isTopicVisible:function() {
+      return this.showTopic && !this.hideTopic;
+    }
+  };
+  return res;
+};

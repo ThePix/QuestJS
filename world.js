@@ -49,7 +49,7 @@ function createObject(name, listOfHashes) {
   }
   var item = {
     name:name,
-    aliasFunc:function(def) {
+    byname:function(def) {
       if (def == "the") {
         return _itemThe(this) + this.alias;
       }
@@ -58,6 +58,7 @@ function createObject(name, listOfHashes) {
       }
       return this.alias;
     },
+    lightSource:function() { return LIGHT_NONE; }
   };
   //item.name = name;
   for (var i = 0; i < listOfHashes.length; i++) {

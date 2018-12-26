@@ -28,6 +28,11 @@ const DSPY_HIDDEN = 2;      // Item exists here, but not accessible (inc turnscr
 const DSPY_NOT_HERE = 1;    // Item does not exist yet, but is ready to
 const DSPY_DELETED = 0;     // Item no longer exists
 
+const LIGHT_NONE = 0;
+const LIGHT_SELF = 1;
+const LIGHT_MEAGRE = 2;
+const LIGHT_FULL = 3;
+const LIGHT_EXTREME = 4;
 
 
 // ============  Random Utilities  =======================================
@@ -65,7 +70,7 @@ function prefix(item, isMultiple) {
 function formatList(itemArray, def, lastJoiner) {
   if (!lastJoiner) { lastJoiner = " and"; }
   var s = itemArray.map(function(el) {
-    return (typeof el == "string") ? el : el.aliasFunc(def);
+    return (typeof el == "string") ? el : el.byname(def);
   }).join(", ");
 
   var lastIndex = s.lastIndexOf(",");
@@ -235,3 +240,11 @@ function listProperties(obj) {
 
 
 
+
+
+
+
+function checkCannotSpeak(npc) {
+  
+  return false;
+}

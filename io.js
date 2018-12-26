@@ -44,8 +44,6 @@ function heading(level, s) {
 // It isMultiple is true, the object name is prefixed.
 // TODO: test array with function
 function printOrRun(item, attname, isMultiple) {
-  debugmsg(0, "Start: " + attname);
-
   if (Array.isArray(item[attname])) {
     debugmsg(0, "Array: " + attname);
     var flag = true;
@@ -55,7 +53,6 @@ function printOrRun(item, attname, isMultiple) {
     return flag;
   }
   if (Array.isArray(attname)) {
-    debugmsg(0, "Array: " + attname);
     var flag = true;
     for (var i = 0; i < attname.length; i++) {
       flag = printOrRun(item, attname[i], isMultiple) && flag;
@@ -63,7 +60,6 @@ function printOrRun(item, attname, isMultiple) {
     return flag;
   }
   else if (!item[attname]) {
-    debugmsg(0, "Here: " + attname);
     if (typeof attname === "function"){
       return attname(item, isMultiple);
     }
@@ -109,7 +105,7 @@ function showMenu(title, options, fn) {
   msg(title, 'menutitle');
   for (var s, i = 0; i < options.length; i++) {
     s = '<a class="menuoption" onclick="io.menuResponse(' + i + ')">';
-    s += (typeof options[i] == "string" ? options[i] : options[i].name);
+    s += (typeof options[i] == "string" ? options[i] : options[i].alias);
     s += '</a>';
     msg(s);
   }

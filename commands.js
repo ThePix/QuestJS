@@ -192,6 +192,24 @@ var commands = [
     ],
   }),
   
+  new Cmd('Turn on', {
+    regex:/^(turn on|switch on) (.+)$/,
+    att:"switchon",
+    objects:[
+      {ignore:true},
+      {scope:isHeld, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Turn off', {
+    regex:/^(turn off|switch off) (.+)$/,
+    att:"switchoff",
+    objects:[
+      {ignore:true},
+      {scope:isHeld, multiple:true},
+    ],
+  }),
+  
   new Cmd('Put/in', {
     regex:/^(put|place|drop) (.+) (in to|into|in) (.+)$/,
     objects:[
@@ -294,6 +312,15 @@ var commands = [
       {scope:isHere},
       {ignore:true},
       {text:true},
+    ]
+  }),
+  
+  new Cmd('Talk to', {
+    regex:/^(talk to|talk|speak to|speak|converse with|converse) (.+)$/,
+    att:"speakto",
+    objects:[
+      {ignore:true},
+      {scope:isHere},
     ]
   }),
   
