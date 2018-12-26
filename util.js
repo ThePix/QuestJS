@@ -59,19 +59,13 @@ function prefix(item, isMultiple) {
   return sentenceCase(item.name) + ": ";
 }
 
-// Creates a string that lists the items by name
-function formatList(itemArray, mappingFunc, lastJoiner) {
+// Creates a string from an array. If the array element is a string, that is used,
+// if it is an item, its alias is used. If def is "the" or "a", the alias will be prefixed as appropriate.
+// Items are separated by commas, except the last two, which will use lastJoiner (defaults to " and").
+function formatList(itemArray, def, lastJoiner) {
   if (!lastJoiner) { lastJoiner = " and"; }
   var s = itemArray.map(function(el) {
-    if (typeof el == "string") {
-      return el;
-    }
-    else if (mappingFunc) {
-      return mappingFunc(el);
-    }
-    else {
-      return el.alias;
-    }
+    return (typeof el == "string") ? el : el.aliasFunc(def);
   }).join(", ");
 
   var lastIndex = s.lastIndexOf(",");
@@ -80,7 +74,7 @@ function formatList(itemArray, mappingFunc, lastJoiner) {
   return s.substring(0, lastIndex) + lastJoiner + s.substring(lastIndex + 1);
 };
 
-
+/*
 // Gets an array of strings, extracting each regex match from this string.
 String.prototype.scan = function (re) {
   var s = this;
@@ -94,7 +88,16 @@ String.prototype.scan = function (re) {
 
 
 
-
+function scan(str, re) {
+  var s = str;
+  var m, r = [];
+  while (m = re.exec(s)) {
+    s = s.replace(m[0], "");
+    r.push(m[0]);
+  }
+  return r;
+};
+*/
 
 
 
@@ -128,28 +131,7 @@ function getCommand(name) {
 };
 
 
-function itemNameWithThe(item) {
-  if (item.properName) {
-    return item.alias;
-  }
-  return "the " + item.alias;
-}
 
-function itemNameWithA(item) {
-  if (item.indefArticle) {
-    return item.indefArticle + " " + item.alias;
-  }
-  if (item.properName) {
-    return item.alias;
-  }
-  if (item.pronouns == PRONOUNS.plural) {
-    return "some " + item.alias;
-  }
-  if (/^[aeiou]/i.test(item.alias)) {
-    return "an " + item.alias;
-  }
-  return "a " + item.alias;
-}
 
 
 
@@ -180,6 +162,7 @@ function isWorn(item) {
 // Requires an extra parameter, so used like this:
 // scope(isInside, container);
 function isInside(item) {
+  //msg("this.name=" + this.name);
   return item.loc == this.name;
 };
 

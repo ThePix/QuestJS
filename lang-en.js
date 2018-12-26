@@ -26,7 +26,7 @@ const CMD_DONE = "Done";
 
 
 function CMD_NOT_CONTAINER(item) {
-  return sentenceCase(itemNameWithThe(item)) + " is not a container";
+  return sentenceCase(item.aliasFunc("the")) + " is not a container";
 };
 
 
@@ -78,22 +78,22 @@ const CMD_LOCKED_EXIT = "That way is locked.";
 
 
 function CMD_TAKE_SUCCESSFUL(item) {
-  return "You take " + itemNameWithThe(item) + ".";
+  return "You take " + item.aliasFunc("the") + ".";
 };
 function CMD_DROP_SUCCESSFUL(item) {
-  return "You drop " + itemNameWithThe(item) + ".";
+  return "You drop " + item.aliasFunc("the") + ".";
 };
 function CMD_WEAR_SUCCESSFUL(item) {
-  return "You put on " + itemNameWithThe(item) + ".";
+  return "You put on " + item.aliasFunc("the") + ".";
 };
 function CMD_REMOVE_SUCCESSFUL(item) {
-  return "You take " + itemNameWithThe(item) + " off.";
+  return "You take " + item.aliasFunc("the") + " off.";
 };
 function CMD_OPEN_SUCCESSFUL(item) {
-  return "You open " + itemNameWithThe(item) + ".";
+  return "You open " + item.aliasFunc("the") + ".";
 };
 function CMD_CLOSE_SUCCESSFUL(item) {
-  return "You close " + itemNameWithThe(item) + ".";
+  return "You close " + item.aliasFunc("the") + ".";
 };
 
 
@@ -258,8 +258,30 @@ function pronounVerb(item, verb, capitalise) {
 };
 
 function nounVerb(item, verb, capitalise) {
-  s = item.name + " " + conjugate(item, verb);
+  s = item.alias + " " + conjugate(item, verb);
   return capitalise ? sentenceCase(s) : s;
 };
 
 
+
+
+
+function _itemThe(item) {
+  return item.properName ? "" : "the ";
+}
+
+function _itemA(item) {
+  if (item.indefArticle) {
+    return item.indefArticle + " ";
+  }
+  if (item.properName) {
+    return "";
+  }
+  if (item.pronouns == PRONOUNS.plural) {
+    return "some ";
+  }
+  if (/^[aeiou]/i.test(item.alias)) {
+    return "an ";
+  }
+  return "a ";
+}

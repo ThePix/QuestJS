@@ -47,8 +47,19 @@ function createObject(name, listOfHashes) {
     errormsg(ERR_GAME_BUG, ERROR_INIT_REPEATED_NAME(name));
     return null;
   }
-  var item = {};
-  item.name = name;
+  var item = {
+    name:name,
+    aliasFunc:function(def) {
+      if (def == "the") {
+        return _itemThe(this) + this.alias;
+      }
+      if (def == "a") {
+        return _itemA(this) + this.alias;
+      }
+      return this.alias;
+    },
+  };
+  //item.name = name;
   for (var i = 0; i < listOfHashes.length; i++) {
     for (var key in listOfHashes[i]) {
       item[key] = listOfHashes[i][key];
@@ -180,7 +191,7 @@ world.init = function() {
 // That will be done at the start, but you need to do it yourself 
 // if creating items on the fly.
 world.initItem = function(item) {
-  if (PRE_RELEASE) {
+  if (DEBUG) {
     if (item.loc && !getObject(item.loc) && item.loc != "Ubiquitous") {
       errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_LOC(item));
     }

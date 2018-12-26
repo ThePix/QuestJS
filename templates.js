@@ -176,9 +176,38 @@ const CONTAINER = {
   hereVerbs:['Examine', 'Open'],
   container:true,
   closed:true,
+  openable:true,
+  listPrefix:"containing ",
+  listSuffix:"",
+  
+  aliasFunc:function(def) {
+    var prefix = "";
+    if (def == "the") {
+      prefix = _itemThe(this);
+    }
+    if (def == "a") {
+      prefix = _itemA(this);
+    }
+    var contents = this.getContents();
+    if (contents.length == 0) {
+      return this.alias
+    }
+    else {
+      return prefix + this.alias + " (" + this.listPrefix + formatList(contents, "a") + this.listSuffix + ")";
+    }
+  },
+  
+  getContents:function() {
+    debugmsg(0, "this.name=" + this.name);
+    return scope(isInside, this);
+  },
   
   open:function(item, isMultiple) {
-    if (!item.closed) {
+    if (!item.openable) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
+      return false;
+    }
+    else if (!item.closed) {
       msg(prefix(item, isMultiple) + CMD_ALREADY(item));
       return false;
     }
@@ -193,7 +222,11 @@ const CONTAINER = {
   },
   
   close:function(item, isMultiple) {
-    if (item.closed) {
+    if (!item.openable) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
+      return false;
+    }
+    else if (item.closed) {
       msg(prefix(item, isMultiple) + CMD_ALREADY(item));
       return false;
     }

@@ -17,35 +17,62 @@ game_name = game.attribute("name").to_s
 
 p "Game name is '#{game_name}'"
 
-doc.elements.each("//object") do |obj|
-  parent_name = obj.parent.attribute("name").to_s
-  p "object is '#{obj.attribute("name").to_s}'"
-  p "    parent: '#{parent_name}'"
-  p "    alias: '#{obj.attribute("alias").to_s}'"
-  p "    look: '#{obj.attribute("alias").to_s}'"
-  p "    description: '#{obj.attribute("alias").to_s}'"
-  types = []
-  obj.elements.each("inherit") do |type|
-    types << type.attribute("name").to_s unless type.attribute("name").to_s.match /^editor_/
+
+
+
+class Command
+  def initialize obj
+    @name = obj.attribute("name").to_s.gsub(' ', '_').gsub(/\W/, '')
+    el = obj.elements["pattern"]
+    @pattern = el.text if el
+    el = obj.elements["script"]
+    @script = el.text if el
+    
   end
-  p "    types are '#{types.join ', '}'"
-  
+end
+
+
+doc.elements.each("//command") do |com|
+  Command.new com
  # do stuff
 end
 
-=begin
 
 
-class Room
+class Obj
   attr_reader :alias, :desc, :name, :exits, :inside
+  @@typelist = []
 
-  def initialize name, desc
-    @alias = name
-    @desc = desc
-    @name = name.gsub(' ', '_').gsub(/\W/, '').downcase
-    # p @alias
+  def initialize obj
+    @name = obj.attribute("name").to_s.gsub(' ', '_').gsub(/\W/, '')
+    el = obj.elements["alias"]
+    @alias = el.text if el
+    
+    el = obj.elements["description"]
+    @desc = el.text if el
+    
+    el = obj.elements["look"]
+    @examine = el.text if el
+    
+    @loc = obj.parent.attribute("name").to_s
+    
     @exits = []
-  end
+    @types = []
+    obj.elements.each("inherit") do |type|
+      s = type.attribute("name").to_s
+      @types << s #unless s.match /^editor_/
+      @@typelist << s unless @@typelist.include? s
+    end
+
+    print "object is '#{@name}'\n"
+    print "    parent: '#{@loc}'\n"
+    print "    alias: '#{@alias}'\n"
+    print "    look: '#{@examine}'\n"
+    print "    description: '#{@desc}'\n"
+    print "    types are '#{types.join ', '}'\n"
+
+
+    end
   
   def inside
     @inside = true
@@ -67,14 +94,48 @@ class Room
   
   
   def to_js
-    s = "  createRoom(\"#{@name}\", [{\n"
+    s = ""
+    if (@types.include? "editor_room")
+      s += "  createRoom(\"#{@name}\", [{\n"
+    else
+      s += "  createItem(\"#{@name}\", [{\n"
+    end
+    if (@types.include? "namedmale" || @types.include? "male")
+      s += "    NPC_OBJECT(false),\n"
+    end
+    if (@types.include? "namedfemale" || @types.include? "female")
+      s += "    NPC_OBJECT(true),\n"
+    end
+    if (@types.include? "startingtopic" || @types.include? "topic")
+      s += "    TOPIC,\n"
+    end
+    if (@types.include? "monster")
+      s += "    MONSTER,\n"
+    end
+    
     s += "    desc:\"#{@alias}\",\n"
     s += "    alias:\"#{@alias}\" inside:\"#{@inside}\",\n"
     @exits.each { |exit| s += exit.to_js }
     s += "  }]);\n\n"
     s
   end
+  
+  def self.out
+    p @@typelist
+  end
 end
+
+
+
+doc.elements.each("//object") do |obj|
+  Obj.new obj
+ # do stuff
+end
+
+
+Obj.out
+
+=begin
 
 class Exit
   attr_reader :to, :dir

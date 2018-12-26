@@ -111,6 +111,17 @@ tp.text_processors = {
     return obj[name] ? arr[0] : arr[1];
   },
   
+  else:function(arr, params) {
+    var name = arr.shift();
+    var obj = name == "player" ? player : getObject(name);
+    if (!obj) {
+      errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.toOriginalString + "</i>)");
+      return false;
+    }
+    name = arr.shift();
+    return obj[name] ? arr[1] : arr[0];
+  },
+  
   img:function(arr, params) {
     return '<img src="images/' + arr[0] + '" title="' + arr[1] + '" alt="' + arr[2] + '"/>'; 
   },
@@ -138,7 +149,7 @@ tp.text_processors = {
   
   objects:function(arr, params) {
     var listOfOjects = scope(isHereListed);
-    return formatList(listOfOjects, itemNameWithA);
+    return formatList(listOfOjects, "a");
   },
   
   exits:function(arr, params) {
@@ -149,7 +160,7 @@ tp.text_processors = {
         list.push(EXITS[i].name);
       }
     }
-    return formatList(list, false, " or");
+    return formatList(list, "", " or");
   },
   
   

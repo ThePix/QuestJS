@@ -42,18 +42,36 @@ function heading(level, s) {
 // If the given attribute is a string it is printed, if it is a
 // function it is called. Otherwise an error is generated.
 // It isMultiple is true, the object name is prefixed.
+// TODO: test array with function
 function printOrRun(item, attname, isMultiple) {
-  if (!item[attname]) {
-    errormsg(ERR_GAME_BUG, "Trying to access an attribute, '" + attname + "', on " + item.name + ", but it does not exist; this is probably a bug.");
-    return flag;
-  }  
-  else if (item[attname].constructor == Array) {
+  debugmsg(0, "Start: " + attname);
+
+  if (Array.isArray(item[attname])) {
+    debugmsg(0, "Array: " + attname);
     var flag = true;
     for (var i = 0; i < item[attname].length; i++) {
       flag = printOrRun(item, item[attname][i], isMultiple) && flag;
     }
     return flag;
   }
+  if (Array.isArray(attname)) {
+    debugmsg(0, "Array: " + attname);
+    var flag = true;
+    for (var i = 0; i < attname.length; i++) {
+      flag = printOrRun(item, attname[i], isMultiple) && flag;
+    }
+    return flag;
+  }
+  else if (!item[attname]) {
+    debugmsg(0, "Here: " + attname);
+    if (typeof attname === "function"){
+      return attname(item, isMultiple);
+    }
+    else {
+      msg(attname);
+      return true;
+    }
+  }  
   else if (typeof item[attname] == "string") {
     msg(prefix(item, isMultiple) + item[attname]);
     return true;
