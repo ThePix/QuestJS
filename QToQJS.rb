@@ -69,7 +69,7 @@ class Obj
     print "    alias: '#{@alias}'\n"
     print "    look: '#{@examine}'\n"
     print "    description: '#{@desc}'\n"
-    print "    types are '#{types.join ', '}'\n"
+    print "    types are '#{@types.join ', '}'\n"
 
 
     end
@@ -78,40 +78,58 @@ class Obj
     @inside = true
   end
 
-  def to_s
-    s = "  <object name=\"#{@name}\">\n"
-    s += "    <inherit name=\"editor_room\" />\n"
-    s += "    <alias>#{@alias}</alias>\n"
-    s += "    <description><![CDATA["
-    s += @desc
-    s += "]]></description>\n"
-    s += "    <inside />\n" if @inside
-    @exits.each { |exit| s += exit.to_s }
-    s += "  </object>\n"
-    s
-  end
 
   
   
   def to_js
     s = ""
-    if (@types.include? "editor_room")
+    if @types.include? "editor_room"
       s += "  createRoom(\"#{@name}\", [{\n"
     else
       s += "  createItem(\"#{@name}\", [{\n"
     end
-    if (@types.include? "namedmale" || @types.include? "male")
+    if @types.include?("namedmale") || @types.include?("male")
       s += "    NPC_OBJECT(false),\n"
     end
-    if (@types.include? "namedfemale" || @types.include? "female")
+    if @types.include?("namedfemale") || @types.include?("female")
       s += "    NPC_OBJECT(true),\n"
     end
-    if (@types.include? "startingtopic" || @types.include? "topic")
-      s += "    TOPIC,\n"
+    if @types.include? "startingtopic"
+      s += "    TOPIC(true),\n"
+    end
+    else if @types.include? "topic"
+      s += "    TOPIC(false),\n"
+    end
+    if (@types.include? "surface")
+      s += "    CONTAINER(open),\n"
+    end
+
+    if (@types.include? "lastingspell")
+      s += "    LASTING_SPELL(),\n"
+    end
+    if (@types.include? "nonattackspell")
+      s += "    INSTANT_SPELL(),\n"
+    end
+    if (@types.include? "spell")
+      s += "    SPELL,\n"
+    end
+
+    if (@types.include? "weapon")
+      s += "    WEAPON(),\n"
+    end
+
+    if (@types.include? "monster")
+      s += "    MULTI_MONSTER,\n"
     end
     if (@types.include? "monster")
       s += "    MONSTER,\n"
     end
+    if (@types.include? "monster")
+      s += "    MONSTER_ATTACK,\n"
+    end
+    
+    
+    # plural
     
     s += "    desc:\"#{@alias}\",\n"
     s += "    alias:\"#{@alias}\" inside:\"#{@inside}\",\n"

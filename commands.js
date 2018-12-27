@@ -24,13 +24,12 @@ function Cmd(name, hash) {
         errormsg(ERR_GAME_BUG, CMD_NO_ATT_ERROR + " (" + objects[0][i].name + ").");
       }
       else {
-    debugmsg(0, "name=" + objects[0][i].name);
         var result = printOrRun(objects[0][i], attName, (objects[0].length > 1 || parser.currentCommand.all));
-    debugmsg(0, "result=" + result);
         success = result || success;
       }
     }
     if (success) {
+      updateUIItems();
       return (cmd.noTurnscripts ? SUCCESS_NO_TURNSCRIPTS : SUCCESS);
     }
     else {
@@ -114,8 +113,7 @@ var commands = [
   new Cmd('Wait', {
     pattern:'wait;z',
     script:function() {
-      metamsg("Still to be implemented");
-      return SUCCESS_NO_TURNSCRIPTS;
+      return SUCCESS;
     },
   }),
   new Cmd('test', {
@@ -210,6 +208,31 @@ var commands = [
     ],
   }),
   
+  new Cmd('Open', {
+    regex:/^(open) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isPresent, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Close', {
+    regex:/^(close) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isPresent, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Talk to', {
+    regex:/^(talk to|talk|speak to|speak|converse with|converse) (.+)$/,
+    att:"speakto",
+    objects:[
+      {ignore:true},
+      {scope:isHere},
+    ]
+  }),
+
   new Cmd('Put/in', {
     regex:/^(put|place|drop) (.+) (in to|into|in) (.+)$/,
     objects:[
@@ -240,40 +263,6 @@ var commands = [
             success = true;
           }
         }
-      }
-      if (success) { updateUIItems(); }
-      return success ? SUCCESS : FAILED; 
-    },
-  }),
-  
-  new Cmd('Open', {
-    regex:/^(open) (.+)$/,
-    objects:[
-      {ignore:true},
-      {scope:isPresent, multiple:true},
-    ],
-    script:function(cmd, objects) {
-      var success = false;
-      var isMultiple = objects[0].length > 1 || parser.currentCommand.all;
-      for (var i = 0; i < objects[0].length; i++) {
-        success = success || objects[0][i].open(objects[0][i], isMultiple);
-      }
-      if (success) { updateUIItems(); }
-      return success ? SUCCESS : FAILED; 
-    },
-  }),
-  
-  new Cmd('Close', {
-    regex:/^(close) (.+)$/,
-    objects:[
-      {ignore:true},
-      {scope:isPresent, multiple:true},
-    ],
-    script:function(cmd, objects) {
-      var success = false;
-      var isMultiple = objects[0].length > 1 || parser.currentCommand.all;
-      for (var i = 0; i < objects[0].length; i++) {
-        success = success || objects[0][i].close(objects[0][i], isMultiple);
       }
       if (success) { updateUIItems(); }
       return success ? SUCCESS : FAILED; 
@@ -315,14 +304,6 @@ var commands = [
     ]
   }),
   
-  new Cmd('Talk to', {
-    regex:/^(talk to|talk|speak to|speak|converse with|converse) (.+)$/,
-    att:"speakto",
-    objects:[
-      {ignore:true},
-      {scope:isHere},
-    ]
-  }),
   
   
   new Cmd('Inspect', {

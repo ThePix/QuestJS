@@ -8,6 +8,8 @@ const DEFAULT_ROOM = {
   onExit:NULL_FUNC,
   visited:0,
   
+  lightSource:function() { return LIGHT_FULL; },
+
   description:function() {
     for (var i = 0; i < ROOM_TEMPLATE.length; i++) {
       if (ROOM_TEMPLATE[i] == "%") {
@@ -25,12 +27,16 @@ const DEFAULT_ROOM = {
 const DEFAULT_ITEM = {
   display:DSPY_DISPLAY,
   
-  hereVerbs:['Examine'],
-  
   pronouns:PRONOUNS.thirdperson,
+  
+  lightSource:function() { return LIGHT_NONE; },
 
   icon:function() {
     return "";
+  },
+  
+  getVerbs:function() {
+    return ['Examine'];
   },
   
   drop:function(item, isMultiple) {
@@ -94,22 +100,27 @@ const DEFAULT_ITEM = {
 };
 
 
-const TAKABLE = {
-  heldVerbs:['Examine', 'Drop'],
-  
-  hereVerbs:['Examine', 'Take'],
-  
+const TAKABLE_DICTIONARY = {
+  getVerbs:function() {
+    if (this.loc == player.name) {
+      return ['Examine', 'Drop'];
+    }
+    else {
+      return ['Examine', 'Take'];
+    }
+  },
+
   takable:true,
   
   drop:function(item, isMultiple) {
     if (item.worn) {
       msg(prefix(item, isMultiple) + CMD_WEARING(item));
       return false;
-    }
+    };
     if (item.loc != player.name) {
       msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
       return false;
-    }
+    };
     msg(prefix(item, isMultiple) + CMD_DROP_SUCCESSFUL(item));
     item.loc = getObject(player.loc).name;
     updateUIItems();
@@ -120,15 +131,15 @@ const TAKABLE = {
     if (!isReachable(item)) {
       msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
       return false;
-    }
+    };
     if (!item.takable) {
       msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
       return false;
-    }
+    };
     if (item.loc == player.name) {
       msg(prefix(item, isMultiple) + CMD_ALREADY_HAVE(item));
       return false;
-    }      
+    };   
     msg(prefix(item, isMultiple) + CMD_TAKE_SUCCESSFUL(item));
     item.loc = player.name;
     updateUIItems();
@@ -137,18 +148,30 @@ const TAKABLE = {
 };
 
 
-const WEARABLE = {
-  heldVerbs:['Examine', 'Drop', 'Wear'],
+const TAKABLE = function() {
+  return TAKABLE_DICTIONARY;
+}
+
+
+const WEARABLE = function() {
+  var res = $.extend({}, TAKABLE_DICTIONARY);
+  //var res = TAKABLE_DICTIONARY;
+  res.wearable = true;
   
-  wornVerbs:['Examine', 'Remove'],
-  
-  wearable:true,
-  
-  icon:function() {
-    return ('<img src="images/garment12.png" />');
+  res.getVerbs = function() {
+    if (this.loc == player.name) {
+      return this.worn ? ['Examine', 'Remove'] : ['Examine', 'Drop', 'Wear'];
+    }
+    else {
+      return ['Examine', 'Take'];
+    }
   },
+
+  res.icon = function() {
+    return ('<img src="images/garment12.png" />');
+  };
   
-  wear:function(item, isMultiple) {
+  res.wear = function(item, isMultiple) {
     if (!isPresent(item)) {
       msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
       return false;
@@ -170,9 +193,9 @@ const WEARABLE = {
     item.worn = true;
     updateUIItems();
     return true;
-  },
+  };
   
-  remove:function(item, isMultiple) {
+  res.remove = function(item, isMultiple) {
     if (!item.worn) {
       msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
       return false;
@@ -182,19 +205,30 @@ const WEARABLE = {
     item.worn = false;
     updateUIItems();
     return true;
-  },
+  };
+  return res;
 };
 
 
-const CONTAINER = {
-  hereVerbs:['Examine', 'Open'],
-  container:true,
-  closed:true,
-  openable:true,
-  listPrefix:"containing ",
-  listSuffix:"",
+const CONTAINER = function(alreadyOpen) {
+  var res = {};
+  res.hereVerbs = ['Examine', 'Open'];
+  res.container = true;
+  res.closed = !alreadyOpen;
+  res.openable = true;
+  res.listPrefix = "containing ";
+  res.listSuffix = "";
   
-  byname:function(def) {
+  res.getVerbs = function() {
+    var arr = ['Examine'];
+    if (this.takable) {
+      arr.push(this.loc == player.name ? 'Drop' : 'Take');
+    }
+    arr.push(this.closed ? 'Open' : 'Close');
+    return arr;
+  },
+
+  res.byname = function(def) {
     var prefix = "";
     if (def == "the") {
       prefix = _itemThe(this);
@@ -209,13 +243,13 @@ const CONTAINER = {
     else {
       return prefix + this.alias + " (" + this.listPrefix + formatList(contents, "a") + this.listSuffix + ")";
     }
-  },
+  };
   
-  getContents:function() {
+  res.getContents = function() {
     return scope(isInside, this);
-  },
+  };
   
-  open:function(item, isMultiple) {
+  res.open = function(item, isMultiple) {
     if (!item.openable) {
       msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
       return false;
@@ -228,13 +262,12 @@ const CONTAINER = {
       msg(prefix(item, isMultiple) + CMD_LOCKED(item));
       return false;
     }
-    item.hereVerbs = ['Examine', 'Close'];
     item.closed = false;
     msg(prefix(item, isMultiple) + CMD_OPEN_SUCCESSFUL(item));
     return true;
-  },
+  };
   
-  close:function(item, isMultiple) {
+  res.close = function(item, isMultiple) {
     if (!item.openable) {
       msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
       return false;
@@ -247,40 +280,51 @@ const CONTAINER = {
     item.closed = true;
     msg(prefix(item, isMultiple) + CMD_CLOSE_SUCCESSFUL(item));
     return true;
-  },
+  };
   
-  icon:function() {
+  res.icon = function() {
     return ('<img src="images/' + (this.closed ? 'closed' : 'opened') + '12.png" />');
-  },
+  };
+
+  return res;
 };
 
 
 
-const SWITCHABLE = {
-  hereVerbs:['Examine', 'Turn on'],
-  switchedon:false,
+const SWITCHABLE = function(alreadyOn) {
+  var res = {};
+  res.switchedon = alreadyOn;
   
-  switchon:function(item, isMultiple) {
+  res.getVerbs = function() {
+    var arr = ['Examine'];
+    if (this.takable) {
+      arr.push(this.loc == player.name ? 'Drop' : 'Take');
+    }
+    arr.push(this.switchedon ? 'Turn off' : 'Turn on');
+    return arr;
+  },
+
+  res.switchon = function(item, isMultiple) {
     if (item.switchedon) {
       msg(prefix(item, isMultiple) + CMD_ALREADY(item));
       return false;
     }
     msg('You turn the ' + item.name + ' on.');
     item.switchedon = true;
-    item.hereVerbs = ['Examine', 'Turn off'];
     return true;
-  },
+  };
   
-  switchoff:function(item, isMultiple) {
+  res.switchoff = function(item, isMultiple) {
     if (!item.switchedon) {
       msg(prefix(item, isMultiple) + CMD_ALREADY(item));
       return false;
     }
     msg('You turn the ' + item.name + ' off.');
     item.switchedon = false;
-    item.hereVerbs = ['Examine', 'Turn on'];
     return true;
-  },
+  };
+
+  return res;
 };
 
 
@@ -293,15 +337,16 @@ const PLAYER = {
 const TURNSCRIPT = function(isRunning, fn) {
   var res = {
     display:DSPY_HIDDEN,
+    runTurnscript:function() { return this.isRunning; },
+    isRunning:isRunning,
+    turnscript:fn,
   }
-  res.runTurnscript = isRunning;
-  res.turnscript = fn;
   return res;
 };
 
 
 
-const NPC_OBJECT = function(isFemale) {
+const NPC = function(isFemale) {
   var res = {
     hereVerbs:['Look at', 'Talk to'],
     icon:function() {

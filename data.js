@@ -10,11 +10,23 @@ const SPELL = {
   },
 }
 
-const WEAPON = {
-  icon:function() {
+const LASTING_SPELL = function() {
+  var res = SPELL;
+  return res;
+}  
+
+const INSTANT_SPELL = function() {
+  var res = SPELL;
+  return res;
+}  
+
+const WEAPON = function() {
+  var res = TAKABLE;
+  res.icon = function() {
     return ('<img src="images/weapon12.png" />');
-  }  
-}
+  };
+  return res;
+}  
 
   
 createItem("me",
@@ -65,7 +77,7 @@ createItem("charm",
 
 
 createItem("book", 
-  TAKABLE,
+  TAKABLE(),
   { loc:"lounge", examine:"A leather-bound book.", heldVerbsX:["Read"], read:function(item) {
       if (isHeld(item)) {
         msg ("It is not in a language you understand.");
@@ -82,15 +94,14 @@ createItem("book",
 
 
 createItem("boots", 
-  TAKABLE,
-  WEARABLE,
+  WEARABLE(),
   { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
 );
 
 
 
 createItem("knife",
-  TAKABLE,
+  TAKABLE(),
   WEAPON,
   { loc:"lounge", sharp:false, examine:function(item) {
     if (item.sharp) {
@@ -104,32 +115,32 @@ createItem("knife",
 
 
 createItem("glass_cabinet",
-  CONTAINER,
+  CONTAINER(false),
   { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front", transparent:true, }
 );
 
 
 createItem("cardboard_box",
-  CONTAINER,
+  CONTAINER(false),
   { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false, hereVerbs:['Examine', 'Close'], }
 );
 
 
 createItem("ornate_doll",
-  TAKABLE,
+  TAKABLE(),
   { loc:"glass_cabinet", alias:"ornate doll", examine:"A fancy doll, eighteenth century." }
 );
 
 
 
 createItem("camera",
-  TAKABLE,
+  TAKABLE(),
   { loc:"lounge", examine:"A cheap digital camera.", alias:"hat", listalias:"microscope" }
 );
 
 createItem("flashlight",
-  TAKABLE,
-  SWITCHABLE,
+  TAKABLE(),
+  SWITCHABLE(false),
   { loc:"lounge", examine:"A smal black torch.", alt:["torch"], 
     byname:function(def){
       var res = this.alias;
@@ -146,7 +157,7 @@ createItem("flashlight",
 
 
 createItem("Mary",
-  NPC_OBJECT(true),
+  NPC(true),
   { loc:"lounge", examine:"An attractive young lady.", properName:true, askoptions:{
     house:"'I like it,' says Mary.",
     garden:"'Needs some work,' Mary says with a sign.",
@@ -188,6 +199,6 @@ createItem("TS_Test",
 
 
 createItem("coin",
-  TAKABLE,
+  TAKABLE(),
   { loc:"lounge", examine: "A gold coin."  }
 );

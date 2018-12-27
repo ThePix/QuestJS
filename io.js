@@ -164,7 +164,7 @@ function updateUIItems() {
     if (item.display >= DSPY_LIST_EXCLUDE) {
       for (var i = 0; i < INVENTORIES.length; i++) {
         if (INVENTORIES[i].test(item)) {
-          io.appendItem(item, INVENTORIES[i].verbs, INVENTORIES[i].alt);
+          io.appendItem(item, INVENTORIES[i].alt);
         }
       }
     }
@@ -208,7 +208,7 @@ io.clickExit = function(dir) {
   if (io.inputDisabled) { return };
 
   var failed = false;
-  msg(dir);
+  if (CMD_ECHO) { msg(dir, "inputtext"); }
   parser.quickCmd(getCommand(dir));
 }
 
@@ -238,6 +238,7 @@ io.clickItemAction = function(itemName, action) {
     errormsg(ERR_GAME_BUG, CMD_PANE_ITEM_NOT_FOUND);
   }
   else {
+    if (CMD_ECHO) { msg(action + " " + item.alias, "inputtext"); }
     parser.quickCmd(cmd, item);
   }
 };
@@ -245,24 +246,20 @@ io.clickItemAction = function(itemName, action) {
 
 // Add the item to the DIV named htmlDiv
 // The item will be given verbs from its attName attribute
-io.appendItem = function(item, attName, htmlDiv, isSubItem) {
+io.appendItem = function(item, htmlDiv, isSubItem) {
   $('#' + htmlDiv).append('<p class="item' + (isSubItem ? ' subitem' : '') + '" onclick="io.clickItem(\'' + item.name + '\')">' + item.icon() + item.listalias + "</p>");
   io.currentItemList.push(item.name);
-  if (item[attName]) {
-    for (var j = 0; j < item[attName].length; j++) {
-      var s = '<div class="' + item.name + '-actions itemaction" onclick="io.clickItemAction(\'' + item.name + '\', \'' + item[attName][j] + '\')">';
-      s += item[attName][j];
-      s += '</div>';
-      $('#' + htmlDiv).append(s);
-    }
-  }
-  else {
-    errormsg(ERR_GAME_BUG, "No " + attName + " for " + item.name );
+  var verbs = item.getVerbs();
+  for (var j = 0; j < verbs.length; j++) {
+    var s = '<div class="' + item.name + '-actions itemaction" onclick="io.clickItemAction(\'' + item.name + '\', \'' + verbs[j] + '\')">';
+    s += verbs[j];
+    s += '</div>';
+    $('#' + htmlDiv).append(s);
   }
   if (item.container && !item.closed) {
     var l = scope(isInside, item);
     for (var i = 0; i < l.length; i++) {
-      io.appendItem(l[i], attName, htmlDiv, true);
+      io.appendItem(l[i], htmlDiv, true);
     }
   }
 };
@@ -322,7 +319,7 @@ $(document).ready(function() {
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){
       var s = $('#textbox').val();
-      if (CMD_ECHO) { msg(s); }
+      if (CMD_ECHO) { msg(s, "inputtext"); }
       io.savedCommands.push(s);
       io.savedCommandsPos = io.savedCommands.length;
       parser.parse(s);

@@ -62,7 +62,7 @@ function createObject(name, listOfHashes) {
       }
       return this.alias;
     },
-    lightSource:function() { return LIGHT_NONE; }
+    runTurnscript:function() { return false; }
   };
   //item.name = name;
   for (var i = 0; i < listOfHashes.length; i++) {
@@ -134,7 +134,7 @@ function resolveVerbs(item) {
         errormsg(ERR_GAME_BUG, "Attempting to add to a verb list, but addition is not array for " + item.name + " (" + attX + ")"); 
       }
       else {
-        item[att].push.apply(item[att], item[attX]);
+        item[att] = item[att].concat(item[attX]);
         delete item[attX];
       }
     }

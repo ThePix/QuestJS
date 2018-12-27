@@ -12,7 +12,6 @@ var CMD_ALL_REGEX = /^(all|everything)$/;
 var CMD_ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
 var CMD_GO = "go to |goto |go |head |"
 
-var CMD_ECHO = true;
 var CMD_NOT_KNOWN_MSG = "I don't even know where to begin with that.";
 var CMD_OBJECT_UNKNOWN_MSG = "Not finding any object '%'.";
 var CMD_DISAMBIG_MSG = "Which do you mean?";

@@ -31,7 +31,10 @@ body {
 }
 
 
-
+.inputtext {
+  font-style:italic;
+  color:red;
+}
 
 
 

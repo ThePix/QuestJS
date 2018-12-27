@@ -12,6 +12,7 @@ const TEXT_INPUT = true;
 const CURSOR = ">";
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;
+const CMD_ECHO = true;               // echo commands to the screen
 
 const ROOM_TEMPLATE = [
   "%",
@@ -61,6 +62,9 @@ function setup() {
   player.hitpoints = 20;
   player.status = "You are feeling fine";
   //parser.parse("talk to mary");
+  
+  debugmsg(0, WEARABLE().hereVerbs);
+  debugmsg(0, WEARABLE().heldVerbs);
   
   //showStartDiag();
 }
