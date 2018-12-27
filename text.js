@@ -4,7 +4,7 @@ function processtext(str, params) {
   if (params == undefined) {
     params = {};
   }
-  params.toOriginalString = str;
+  params.tpOriginalString = str;
   if (tp.usedStrings.includes(str)) {
     params.tpFirstTime = false;
   }
@@ -35,7 +35,7 @@ tp.processtext = function(str, params) {
     var arr = s.split(":");
     var left = arr.shift();
     if (typeof tp.text_processors[left] != "function") {
-      errormsg(ERR_TP, "Attempting to use unknown text processor directive '" + left + "' (<i>" + params.toOriginalString + "</i>)");
+      errormsg(ERR_TP, "Attempting to use unknown text processor directive '" + left + "' (<i>" + params.tpOriginalString + "</i>)");
       return false;
     }
     str = str.replace("{" + s + "}", tp.text_processors[left](arr, params));
@@ -51,7 +51,7 @@ tp.findFirstToken = function (s) {
   if (end == -1) { return false; }
   var start = s.lastIndexOf("{", end);
   if (start == -1) {
-    errormsg(ERR_TP, "Failed to find starting curly brace in text processor (<i>" + params.toOriginalString + "</i>)");
+    errormsg(ERR_TP, "Failed to find starting curly brace in text processor (<i>" + params.tpOriginalString + "</i>)");
     return false;
   }
   return s.substring(start + 1, end);
@@ -88,7 +88,7 @@ tp.text_processors = {
     var name = arr.shift();
     var obj = name == "player" ? player : getObject(name);
     if (!obj) {
-      errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.toOriginalString + "</i>)");
+      errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)");
       return false;
     }
     name = arr.shift();
@@ -104,7 +104,7 @@ tp.text_processors = {
     var name = arr.shift();
     var obj = name == "player" ? player : getObject(name);
     if (!obj) {
-      errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.toOriginalString + "</i>)");
+      errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)");
       return false;
     }
     name = arr.shift();
@@ -115,7 +115,7 @@ tp.text_processors = {
     var name = arr.shift();
     var obj = name == "player" ? player : getObject(name);
     if (!obj) {
-      errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.toOriginalString + "</i>)");
+      errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)");
       return false;
     }
     name = arr.shift();
@@ -128,6 +128,10 @@ tp.text_processors = {
   
   once:function(arr, params) {
     return params.tpFirstTime ? arr.join(":") : "";
+  },
+  
+  notonce:function(arr, params) {
+    return params.tpFirstTime ? "" : arr.join(":");
   },
   
   cmd:function(arr, params) {
@@ -149,7 +153,7 @@ tp.text_processors = {
   
   objects:function(arr, params) {
     var listOfOjects = scope(isHereListed);
-    return formatList(listOfOjects, "a");
+    return formatList(listOfOjects, "a", " and", true);
   },
   
   exits:function(arr, params) {

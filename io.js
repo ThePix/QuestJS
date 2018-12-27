@@ -73,7 +73,7 @@ function printOrRun(item, attname, isMultiple) {
     return true;
   }
   else if (typeof item[attname] === "function"){
-    return item[attname](item, isMultiple);
+    return item[attname](isMultiple);
   }
   else {
     errormsg(ERR_GAME_BUG, ERROR_MSG_OR_RUN);
@@ -311,6 +311,18 @@ io.writeExit = function(n) {
 
 
 
+io.keycodes = {
+  97:"southeast",
+  98:"south",
+  99:"southeast",
+  100:"west",
+  101:"look",
+  102:"east",
+  103:"northwest",
+  104:"north",
+  105:"northeast",  
+};
+
 
 io.savedCommands = ['help'];
 io.savedCommandsPos = 0;
@@ -325,10 +337,15 @@ $(document).ready(function() {
       parser.parse(s);
       $('#textbox').val('');
     }
+    if(io.keycodes[keycode]){
+      if (CMD_ECHO) { msg(io.keycodes[keycode], "inputtext"); }
+      setTimeout(function() { $('#textbox').val(''); }, 1);
+      parser.parse(io.keycodes[keycode]);
+    }
     if(keycode == '37'){
       // left arrow
       if (event.shiftKey) {
-        if (CMD_ECHO) { msg("west"); }
+        if (CMD_ECHO) { msg("west", "inputtext"); }
         parser.parse("west");
         $('#textbox').val('');
       }
@@ -336,7 +353,7 @@ $(document).ready(function() {
     if(keycode == '38'){
       // up arrow
       if (event.shiftKey) {
-        if (CMD_ECHO) { msg("north"); }
+        if (CMD_ECHO) { msg("north", "inputtext"); }
         parser.parse("north");
         $('#textbox').val('');
       }
@@ -349,7 +366,7 @@ $(document).ready(function() {
     if(keycode == '39'){
       // right arrow
       if (event.shiftKey) {
-        if (CMD_ECHO) { msg("east"); }
+        if (CMD_ECHO) { msg("east", "inputtext"); }
         parser.parse("east");
         $('#textbox').val('');
       }
@@ -357,7 +374,7 @@ $(document).ready(function() {
     if(keycode == '40'){
       // down arrow
       if (event.shiftKey) {
-        if (CMD_ECHO) { msg("south"); }
+        if (CMD_ECHO) { msg("south", "inputtext"); }
         parser.parse("south");
         $('#textbox').val('');
       }

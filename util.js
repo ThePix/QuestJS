@@ -68,10 +68,10 @@ function prefix(item, isMultiple) {
 // Creates a string from an array. If the array element is a string, that is used,
 // if it is an item, its alias is used. If def is "the" or "a", the alias will be prefixed as appropriate.
 // Items are separated by commas, except the last two, which will use lastJoiner (defaults to " and").
-function formatList(itemArray, def, lastJoiner) {
+function formatList(itemArray, def, lastJoiner, modified) {
   if (!lastJoiner) { lastJoiner = " and"; }
   var s = itemArray.map(function(el) {
-    return (typeof el == "string") ? el : el.byname(def);
+    return (typeof el == "string") ? el : el.byname(def, modified);
   }).join(", ");
 
   var lastIndex = s.lastIndexOf(",");

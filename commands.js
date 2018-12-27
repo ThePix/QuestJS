@@ -133,8 +133,16 @@ var commands = [
       {scope:isPresent}
     ]
   }),
-  new Cmd('Look at', {
+  new Cmd('Look at', {  // used for NPCs
     regex:/^(look at|look) (.+)$/,
+    att:'examine',
+    objects:[
+      {ignore:true},
+      {scope:isPresent}
+    ]
+  }),
+  new Cmd('About', {   //used for spells
+    regex:/^(about) (.+)$/,
     att:'examine',
     objects:[
       {ignore:true},
@@ -269,24 +277,6 @@ var commands = [
     },
   }),
   
-  new Cmd('Take/from', {
-    pattern:'take #object1# from #object2#',
-    script:function(object, text) {
-      printOrRun(object, 'take');
-    },
-    objects:[
-      {scope:isHere, multiple:true},
-      {scope:isHere},
-    ]
-  }),
-//  new AltVerbCmd('Get', 'Take', 'get'),
-//  new VerbCmd('Drop', {
-//    pattern:'drop',
-//    script:function(object, text) {
-//      printOrRun(object, 'drop');
-//    },
-//    objects:[{scope:isHeld, multiple:true}]
-//  }),
 
 
   new Cmd('Ask/about', {

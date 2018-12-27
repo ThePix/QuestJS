@@ -72,15 +72,14 @@ var parser = {};
 
   // Do it!
   parser.execute = function() {
-    parser.inspect();
-    // 
+    //parser.inspect();
     if (parser.currentCommand.objects.length > 0) {
       for (var i = 0; i < parser.currentCommand.objects[0].length; i++) {
         parser.pronouns[parser.currentCommand.objects[0][i].pronouns.objective] = parser.currentCommand.objects[0][i];
       }
     }
     var outcome = parser.currentCommand.cmd.script(parser.currentCommand.cmd, parser.currentCommand.objects);
-    debugmsg(DBG_PARSER, "Result=" + outcome);
+    //debugmsg(DBG_PARSER, "Result=" + outcome);
     endTurn(outcome);
   }    
   

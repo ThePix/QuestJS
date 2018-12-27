@@ -33,14 +33,14 @@ var STATUS = [
 // Change the name values to alter how items are displayed
 // You can add (or remove) inventories too
 const INVENTORIES = [
-  {name:'Items Held', alt:'itemsHeld', verbs:'heldVerbs', test:isHeld },
-  {name:'Items Worn', alt:'itemsWorn', verbs:'wornVerbs', test:isWorn },
-  {name:'Spells known', alt:'spells', verbs:'spellVerbs', 
+  {name:'Items Held', alt:'itemsHeld', test:isHeld },
+  {name:'Items Worn', alt:'itemsWorn', test:isWorn },
+  {name:'Spells known', alt:'spells', 
     test:function(item) {
       return item.loc == "spellbook";
     }
   },
-  {name:'Items Here', alt:'itemsHere', verbs:'hereVerbs', test:isHere },
+  {name:'Items Here', alt:'itemsHere', test:isHere },
 ];
 
 
@@ -63,8 +63,6 @@ function setup() {
   player.status = "You are feeling fine";
   //parser.parse("talk to mary");
   
-  debugmsg(0, WEARABLE().hereVerbs);
-  debugmsg(0, WEARABLE().heldVerbs);
   
   //showStartDiag();
 }

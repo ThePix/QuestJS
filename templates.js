@@ -39,43 +39,43 @@ const DEFAULT_ITEM = {
     return ['Examine'];
   },
   
-  drop:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
+  drop:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_NOT_CARRYING(this));
     return false;
   },
   
-  take:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
+  take:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_TAKE(this));
     return false;
   },
 
-  wear:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_WEAR(item));
+  wear:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_WEAR(this));
     return false;
   },
   
-  remove:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
+  remove:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_NOT_WEARING(this));
     return false;
   },
   
-  open:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
+  open:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_OPEN(this));
     return false;
   },
 
-  close:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
+  close:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_CLOSE(this));
     return false;
   },
   
-  read:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_READ(item));
+  read:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_READ(this));
     return false;
   },
   
-  eat:function(item, isMultiple) {
-    msg(prefix(item, isMultiple) + CMD_CANNOT_EAT(item));
+  eat:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_EAT(this));
     return false;
   },
   
@@ -84,8 +84,8 @@ const DEFAULT_ITEM = {
     return false;
   },
   
-  speakto:function(item) {
-    msg("You chat to " + item.byname("the") + " for a few moments, before releasing that " + pronounVerb(this, "'be") + " not about to reply");
+  speakto:function() {
+    msg("You chat to " + this.byname("the") + " for a few moments, before releasing that " + pronounVerb(this, "'be") + " not about to reply");
     return false;
   },
   
@@ -112,36 +112,36 @@ const TAKABLE_DICTIONARY = {
 
   takable:true,
   
-  drop:function(item, isMultiple) {
-    if (item.worn) {
-      msg(prefix(item, isMultiple) + CMD_WEARING(item));
+  drop:function(isMultiple) {
+    if (this.worn) {
+      msg(prefix(this, isMultiple) + CMD_WEARING(this));
       return false;
     };
-    if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
+    if (this.loc != player.name) {
+      msg(prefix(this, isMultiple) + CMD_NOT_CARRYING(this));
       return false;
     };
-    msg(prefix(item, isMultiple) + CMD_DROP_SUCCESSFUL(item));
-    item.loc = getObject(player.loc).name;
+    msg(prefix(this, isMultiple) + CMD_DROP_SUCCESSFUL(this));
+    this.loc = getObject(player.loc).name;
     updateUIItems();
     return true;
   },
   
-  take:function(item, isMultiple) {
-    if (!isReachable(item)) {
-      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
+  take:function(isMultiple) {
+    if (!isReachable(this)) {
+      msg(prefix(this, isMultiple) + CMD_NOT_HERE(this));
       return false;
     };
-    if (!item.takable) {
-      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
+    if (!this.takable) {
+      msg(prefix(this, isMultiple) + CMD_CANNOT_TAKE(this));
       return false;
     };
-    if (item.loc == player.name) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY_HAVE(item));
+    if (this.loc == player.name) {
+      msg(prefix(this, isMultiple) + CMD_ALREADY_HAVE(this));
       return false;
     };   
-    msg(prefix(item, isMultiple) + CMD_TAKE_SUCCESSFUL(item));
-    item.loc = player.name;
+    msg(prefix(this, isMultiple) + CMD_TAKE_SUCCESSFUL(this));
+    this.loc = player.name;
     updateUIItems();
     return true;
   },
@@ -171,38 +171,38 @@ const WEARABLE = function() {
     return ('<img src="images/garment12.png" />');
   };
   
-  res.wear = function(item, isMultiple) {
-    if (!isPresent(item)) {
-      msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
+  res.wear = function(isMultiple) {
+    if (!isPresent(this)) {
+      msg(prefix(this, isMultiple) + CMD_NOT_HERE(this));
       return false;
     }
-    if (!item.takable) {
-      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
+    if (!this.takable) {
+      msg(prefix(this, isMultiple) + CMD_CANNOT_TAKE(this));
       return false;
     }
-    if (item.worn) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY_WEARING(item.pronoun.subjective));
+    if (this.worn) {
+      msg(prefix(this, isMultiple) + CMD_ALREADY_WEARING(this.pronoun.subjective));
       return false;
     }
-    if (item.loc != player.name) {
-      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
+    if (this.loc != player.name) {
+      msg(prefix(this, isMultiple) + CMD_NOT_CARRYING(this));
       return false;
     }
-    msg(prefix(item, isMultiple) + CMD_WEAR_SUCCESSFUL(item));
-    item.loc = player.name;
-    item.worn = true;
+    msg(prefix(this, isMultiple) + CMD_WEAR_SUCCESSFUL(this));
+    this.loc = player.name;
+    this.worn = true;
     updateUIItems();
     return true;
   };
   
-  res.remove = function(item, isMultiple) {
-    if (!item.worn) {
-      msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
+  res.remove = function(isMultiple) {
+    if (!this.worn) {
+      msg(prefix(this, isMultiple) + CMD_NOT_WEARING(this));
       return false;
     }
-    msg(prefix(item, isMultiple) + CMD_REMOVE_SUCCESSFUL(item));
-    item.loc = player.name;
-    item.worn = false;
+    msg(prefix(this, isMultiple) + CMD_REMOVE_SUCCESSFUL(this));
+    this.loc = player.name;
+    this.worn = false;
     updateUIItems();
     return true;
   };
@@ -210,9 +210,10 @@ const WEARABLE = function() {
 };
 
 
+
+
 const CONTAINER = function(alreadyOpen) {
   var res = {};
-  res.hereVerbs = ['Examine', 'Open'];
   res.container = true;
   res.closed = !alreadyOpen;
   res.openable = true;
@@ -228,7 +229,7 @@ const CONTAINER = function(alreadyOpen) {
     return arr;
   },
 
-  res.byname = function(def) {
+  res.byname = function(def, modified) {
     var prefix = "";
     if (def == "the") {
       prefix = _itemThe(this);
@@ -237,11 +238,11 @@ const CONTAINER = function(alreadyOpen) {
       prefix = _itemA(this);
     }
     var contents = this.getContents();
-    if (contents.length == 0) {
+    if (contents.length == 0 || !modified) {
       return this.alias
     }
     else {
-      return prefix + this.alias + " (" + this.listPrefix + formatList(contents, "a") + this.listSuffix + ")";
+      return prefix + this.alias + " (" + this.listPrefix + formatList(contents, "a", " and", true) + this.listSuffix + ")";
     }
   };
   
@@ -249,36 +250,36 @@ const CONTAINER = function(alreadyOpen) {
     return scope(isInside, this);
   };
   
-  res.open = function(item, isMultiple) {
-    if (!item.openable) {
-      msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
+  res.open = function(isMultiple) {
+    if (!this.openable) {
+      msg(prefix(this, isMultiple) + CMD_CANNOT_OPEN(this));
       return false;
     }
-    else if (!item.closed) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+    else if (!this.closed) {
+      msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    if (item.locked) {
-      msg(prefix(item, isMultiple) + CMD_LOCKED(item));
+    if (this.locked) {
+      msg(prefix(this, isMultiple) + CMD_LOCKED(this));
       return false;
     }
-    item.closed = false;
-    msg(prefix(item, isMultiple) + CMD_OPEN_SUCCESSFUL(item));
+    this.closed = false;
+    msg(prefix(this, isMultiple) + CMD_OPEN_SUCCESSFUL(this));
     return true;
   };
   
-  res.close = function(item, isMultiple) {
-    if (!item.openable) {
-      msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
+  res.close = function(isMultiple) {
+    if (!this.openable) {
+      msg(prefix(this, isMultiple) + CMD_CANNOT_CLOSE(this));
       return false;
     }
-    else if (item.closed) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+    else if (this.closed) {
+      msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    item.hereVerbs = ['Examine', 'Open'];
-    item.closed = true;
-    msg(prefix(item, isMultiple) + CMD_CLOSE_SUCCESSFUL(item));
+    this.hereVerbs = ['Examine', 'Open'];
+    this.closed = true;
+    msg(prefix(this, isMultiple) + CMD_CLOSE_SUCCESSFUL(this));
     return true;
   };
   
@@ -289,6 +290,51 @@ const CONTAINER = function(alreadyOpen) {
   return res;
 };
 
+
+const SURFACE = function() {
+  var res = {};
+  res.container = true;
+  res.listPrefix = "holding ";
+  res.listSuffix = "";
+  res.byname = CONTAINER().byname;
+  res.getContents = CONTAINER().getContents;
+  return res;
+}
+
+
+const OPENABLE = function(alreadyOpen) {
+  var res = {};
+  res.container = true;
+  res.closed = !alreadyOpen;
+  res.openable = true;
+  res.listPrefix = "containing ";
+  res.listSuffix = "";
+  
+  res.getVerbs = function() {
+    var arr = ['Examine'];
+    if (this.takable) {
+      arr.push(this.loc == player.name ? 'Drop' : 'Take');
+    }
+    arr.push(this.closed ? 'Open' : 'Close');
+    return arr;
+  },
+
+  res.byname = function(def, modified) {
+    var s = "";
+    if (def == "the") {
+      s = _itemThe(this);
+    }
+    if (def == "a") {
+      s = _itemA(this);
+    }
+    s += this.alias;
+    if (!closed && modified) { s += " (open)"; }
+    return s;
+  };
+  res.open = CONTAINER().open;
+  res.close = CONTAINER().close;
+  return res;
+}
 
 
 const SWITCHABLE = function(alreadyOn) {
@@ -305,22 +351,22 @@ const SWITCHABLE = function(alreadyOn) {
   },
 
   res.switchon = function(item, isMultiple) {
-    if (item.switchedon) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+    if (this.switchedon) {
+      msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    msg('You turn the ' + item.name + ' on.');
-    item.switchedon = true;
+    msg('You turn the ' + this.name + ' on.');
+    this.switchedon = true;
     return true;
   };
   
-  res.switchoff = function(item, isMultiple) {
-    if (!item.switchedon) {
-      msg(prefix(item, isMultiple) + CMD_ALREADY(item));
+  res.switchoff = function(isMultiple) {
+    if (!this.switchedon) {
+      msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    msg('You turn the ' + item.name + ' off.');
-    item.switchedon = false;
+    msg('You turn the ' + this.name + ' off.');
+    this.switchedon = false;
     return true;
   };
 
@@ -348,14 +394,18 @@ const TURNSCRIPT = function(isRunning, fn) {
 
 const NPC = function(isFemale) {
   var res = {
-    hereVerbs:['Look at', 'Talk to'],
+    pronouns:isFemale ? PRONOUNS.female : PRONOUNS.male,
+    
+    getVerbs:function() {
+      return ['Look at', 'Talk to'];
+    },
+    
     icon:function() {
       return ('<img src="images/npc12.png" />');
     },
   };
-  res.pronouns = isFemale ? PRONOUNS.female : PRONOUNS.male;
   res.askabout = function(text) {
-    if (checkCannotSpeak(item)) {
+    if (checkCannotSpeak(this)) {
       return false;
     }
     msg("You ask " + this.name + " about " + text + ".");

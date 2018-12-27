@@ -8,6 +8,9 @@ const SPELL = {
   icon:function() {
     return ('<img src="images/spell12.png" />');
   },
+  getVerbs:function() {
+    return (this.loc == "spellbook" ? ["About", "Cast"] : ["About", "Learn"]);
+  },
 }
 
 const LASTING_SPELL = function() {
@@ -28,11 +31,25 @@ const WEAPON = function() {
   return res;
 }  
 
+const MONSTER = function() {
+  var res = {};
+  return res;
+}  
+const MULTI_MONSTER = function() {
+  var res = {};
+  return res;
+}  
+const MONSTER_ATTACK = function() {
+  var res = {};
+  return res;
+}  
+
+
   
 createItem("me",
   PLAYER,
-  { loc:"lounge", alt:["me", "myself", "player"], examine:function(item) {
-    msg("A " + (item.isFemale ? "chick" : "guy") + " called " + item.alias);
+  { loc:"lounge", alt:["me", "myself", "player"], examine:function() {
+    msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
   }
 );
@@ -78,8 +95,8 @@ createItem("charm",
 
 createItem("book", 
   TAKABLE(),
-  { loc:"lounge", examine:"A leather-bound book.", heldVerbsX:["Read"], read:function(item) {
-      if (isHeld(item)) {
+  { loc:"lounge", examine:"A leather-bound book.", heldVerbsX:["Read"], read:function() {
+      if (isHeld(this)) {
         msg ("It is not in a language you understand.");
         return true;
       }          
@@ -103,8 +120,8 @@ createItem("boots",
 createItem("knife",
   TAKABLE(),
   WEAPON,
-  { loc:"lounge", sharp:false, examine:function(item) {
-    if (item.sharp) {
+  { loc:"lounge", sharp:false, examine:function() {
+    if (this.sharp) {
       msg("A really sharp knife.");
     }
     else {
@@ -122,13 +139,18 @@ createItem("glass_cabinet",
 
 createItem("cardboard_box",
   CONTAINER(false),
-  { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false, hereVerbs:['Examine', 'Close'], }
+  { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false, }
 );
 
 
 createItem("ornate_doll",
   TAKABLE(),
   { loc:"glass_cabinet", alias:"ornate doll", examine:"A fancy doll, eighteenth century." }
+);
+
+createItem("trapdoor",
+  OPENABLE(false),
+  { loc:"lounge", examine:"A small trapdoor in the floor.", }
 );
 
 
@@ -142,10 +164,10 @@ createItem("flashlight",
   TAKABLE(),
   SWITCHABLE(false),
   { loc:"lounge", examine:"A smal black torch.", alt:["torch"], 
-    byname:function(def){
+    byname:function(def, modified){
       var res = this.alias;
       if (def) { res = def + " " + this.alias; }
-      if (this.switchedon) { res += " (providing light)"; }
+      if (this.switchedon && modified) { res += " (providing light)"; }
       return res;
     },
     lighting:function() {

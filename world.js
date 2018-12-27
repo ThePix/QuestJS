@@ -69,7 +69,6 @@ function createObject(name, listOfHashes) {
     for (var key in listOfHashes[i]) {
       item[key] = listOfHashes[i][key];
     }
-    resolveVerbs(item);
   }
   
   // Give every object an alias and list alias (used in the inventories)
@@ -117,29 +116,6 @@ function string2Object(string) {
   obj = getObject(0);
 }
 
-
-// Sort out inventory verb lists
-function resolveVerbs(item) {
-  for (var i = 0; i < INVENTORIES.length; i++) {
-    var att = INVENTORIES[i].verbs;
-    var attX = att + "X";
-    if (item[attX]) {
-      if (!item[att]) {
-        errormsg(ERR_GAME_BUG, "Attempting to add to a verb list that does not exist for " + item.name + " (" + attX + ")"); 
-      }
-      else if (item[att].constructor !== Array) {
-        errormsg(ERR_GAME_BUG, "Attempting to add to a verb list, but original is not array for " + item.name + " (" + attX + ")"); 
-      }
-      else if (item[attX].constructor !== Array) {
-        errormsg(ERR_GAME_BUG, "Attempting to add to a verb list, but addition is not array for " + item.name + " (" + attX + ")"); 
-      }
-      else {
-        item[att] = item[att].concat(item[attX]);
-        delete item[attX];
-      }
-    }
-  }
-}
 
 
 
@@ -328,7 +304,6 @@ world.BACK_REGEX = /\[.+?\]/;
 world.setBackground = function() {
   var room = getObject(player.loc);
   var background = getObject("background");
-  background.alt = [];
   var md;
   if (typeof room.desc == 'string') {
     if (!room.backgroundNames) {
@@ -341,8 +316,8 @@ world.setBackground = function() {
         }
       }
     }
-    background.alt = room.backgroundNames;
   }
+  background.alt = room.backgroundNames ? room.backgroundNames : [];
 }
 
 

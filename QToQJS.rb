@@ -119,13 +119,13 @@ class Obj
     end
 
     if (@types.include? "monster")
-      s += "    MULTI_MONSTER,\n"
+      s += "    MULTI_MONSTER(),\n"
     end
     if (@types.include? "monster")
-      s += "    MONSTER,\n"
+      s += "    MONSTER(),\n"
     end
     if (@types.include? "monster")
-      s += "    MONSTER_ATTACK,\n"
+      s += "    MONSTER_ATTACK(),\n"
     end
     
     
