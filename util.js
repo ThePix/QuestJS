@@ -34,6 +34,7 @@ const LIGHT_MEAGRE = 2;
 const LIGHT_FULL = 3;
 const LIGHT_EXTREME = 4;
 
+const NULL_FUNC = function() {};
 
 // ============  Random Utilities  =======================================
 
@@ -176,9 +177,10 @@ function isInside(item) {
 // or in an open container in that location?
 // Includes "Ubiquitous" items, but not "not here" items
 function isReachable(item) {
+  debugmsg(0, "in isReachable");
   if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
-  if (!item.loc || item.display >= DSPY_SCENERY) { return false; }
-  container = getObject(item.loc);
+  if (!item.loc || item.display < DSPY_SCENERY) { return false; }
+  var container = getObject(item.loc);
   if (!container.container) { return false; }
   if (container.closed) { return false; }
   return isVisible(container);
@@ -190,8 +192,8 @@ function isReachable(item) {
 // This is the fallback for the parser scope
 function isVisible(item) {
   if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
-  if (!item.loc || item.display >= DSPY_SCENERY) { return false; }
-  container = getObject(item.loc);
+  if (!item.loc || item.display < DSPY_SCENERY) { return false; }
+  var container = getObject(item.loc);
   if (!container.container) { return false; }
   if (container.closed && !container.transparent) { return false; }
   return isVisible(container);

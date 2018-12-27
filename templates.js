@@ -1,11 +1,11 @@
 "use strict";
 
 const DEFAULT_ROOM = {
-  beforeEnter:function() {},
-  beforeEnterFirst:function() {},
-  afterEnter:function() {},
-  afterEnterFirst:function() {},
-  onExit:function() {},
+  beforeEnter:NULL_FUNC,
+  beforeEnterFirst:NULL_FUNC,
+  afterEnter:NULL_FUNC,
+  afterEnterFirst:NULL_FUNC,
+  onExit:NULL_FUNC,
   visited:0,
   
   description:function() {
@@ -117,7 +117,7 @@ const TAKABLE = {
   },
   
   take:function(item, isMultiple) {
-    if (!isPresent(item)) {
+    if (!isReachable(item)) {
       msg(prefix(item, isMultiple) + CMD_NOT_HERE(item));
       return false;
     }

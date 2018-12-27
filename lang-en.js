@@ -1,26 +1,30 @@
 // Language support
 
+// I originally thought to make these constants, but really there is no particular reason they should be
+// and making them variables does allow authors to change them more easily.
+// However, I have left them in uppercase, so they re kind of constant-like.
+
 "use strict";
 
-const CMD_IGNORED_WORDS = ["", "the", "a", "an"];
-const CMD_JOINER_REGEX = /\,|\band\b/;
-const CMD_ALL_REGEX = /^(all|everything)$/;
-const CMD_ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
-const CMD_GO = "go to |goto |go |head |"
+var CMD_IGNORED_WORDS = ["", "the", "a", "an"];
+var CMD_JOINER_REGEX = /\,|\band\b/;
+var CMD_ALL_REGEX = /^(all|everything)$/;
+var CMD_ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
+var CMD_GO = "go to |goto |go |head |"
 
-const CMD_ECHO = true;
-const CMD_NOT_KNOWN_MSG = "I don't even know where to begin with that.";
-const CMD_OBJECT_UNKNOWN_MSG = "Not finding any object '%'.";
-const CMD_DISAMBIG_MSG = "Which do you mean?";
-const CMD_NO_MULTIPLES = "You cannot use multiple objects with that command.";
-const CMD_NOTHING = "Nothing there to do that with.";
-const CMD_NO_ATT_ERROR = "It does not work like that.";
-const CMD_NOT_THAT_WAY = "You can't go that way.";
-const CMD_UNSUPPORTED_DIR = "Unsupported type for direction";
-const CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
-const CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should as you just clicked it. Please alert the game author about this bug."
-const CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should as it was listed. Please alert this as a bug in Quest."
-const CMD_DONE = "Done";
+var CMD_ECHO = true;
+var CMD_NOT_KNOWN_MSG = "I don't even know where to begin with that.";
+var CMD_OBJECT_UNKNOWN_MSG = "Not finding any object '%'.";
+var CMD_DISAMBIG_MSG = "Which do you mean?";
+var CMD_NO_MULTIPLES = "You cannot use multiple objects with that command.";
+var CMD_NOTHING = "Nothing there to do that with.";
+var CMD_NO_ATT_ERROR = "It does not work like that.";
+var CMD_NOT_THAT_WAY = "You can't go that way.";
+var CMD_UNSUPPORTED_DIR = "Unsupported type for direction";
+var CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
+var CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should as you just clicked it. Please alert the game author about this bug."
+var CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should as it was listed. Please alert this as a bug in Quest."
+var CMD_DONE = "Done";
 
 
 
@@ -74,7 +78,7 @@ function CMD_ALREADY(item) {
 function CMD_LOCKED(item) {
   return sentenceCase(item.pronouns.subjective) + " " + conjugate(item, "'be") + " locked.";
 };
-const CMD_LOCKED_EXIT = "That way is locked.";
+var CMD_LOCKED_EXIT = "That way is locked.";
 
 
 function CMD_TAKE_SUCCESSFUL(item) {
@@ -98,10 +102,10 @@ function CMD_CLOSE_SUCCESSFUL(item) {
 
 
 
-const ERROR_NO_PLAYER = "No player object found. This will not go well...";
-const ERROR_MSG_OR_RUN = "Unsupported type for printOrRun";
-const ERROR_NO_ROOM = "Failed to find room";
-const ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
+var ERROR_NO_PLAYER = "No player object found. This will not go well...";
+var ERROR_MSG_OR_RUN = "Unsupported type for printOrRun";
+var ERROR_NO_ROOM = "Failed to find room";
+var ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
 function ERROR_INIT_REPEATED_NAME(name) {
   return "Attempting to use the name `" + name + "`, there there is already an item with that name in the world.";
 };
@@ -119,11 +123,11 @@ function ERROR_INIT_UNKNOWN_EXIT(dir, room, loc) {
 };
 
 
-const NEVER_MIND = "Never mind.";
+var NEVER_MIND = "Never mind.";
 
-const DEFAULT_DESCRIPTION = "It's just scenery.";
+var DEFAULT_DESCRIPTION = "It's just scenery.";
 
-const PRONOUNS = {
+var PRONOUNS = {
   thirdperson:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
   male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his", reflexive:"himself"},
   female:{subjective:"she", objective:"her", possessive: "hers", poss_adj: "her", reflexive:"herself"},
@@ -135,7 +139,7 @@ const PRONOUNS = {
 
 
 // Change the abbrev values to suit your game (or language)
-const EXITS = [
+var EXITS = [
   {name:'northwest', abbrev:'NW'}, 
   {name:'north', abbrev:'N'}, 
   {name:'northeast', abbrev:'NE'}, 
@@ -174,7 +178,7 @@ function helpScript() {
 };
 
 
-const CONJUGATIONS = {
+var CONJUGATIONS = {
   i:[
     { name:"be", value:"am"},
     { name:"_be", value:"'m"},

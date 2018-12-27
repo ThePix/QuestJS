@@ -55,7 +55,7 @@ const INVENTORIES = [
 
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
- function setup() {
+function setup() {
   msg('This is a test of what we can do.');
   //parser.parse("ask mary about house");
   player.hitpoints = 20;

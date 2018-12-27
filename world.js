@@ -2,16 +2,20 @@
 
 // Use this to create a new item (as opposed to a room).
 // It adds various defaults that apply only to items
-function createItem(name, listOfHashes) {
-  listOfHashes.unshift(DEFAULT_ITEM);
-  return createObject(name, listOfHashes);
+function createItem() {
+  var args = Array.prototype.slice.call(arguments);
+  var name = args.shift()
+  args.unshift(DEFAULT_ITEM);
+  return createObject(name, args);
 }
 
 // Use this to create a new item (as opposed to a room).
 // It adds various defaults that apply only to items
-function createRoom(name, listOfHashes) {
-  listOfHashes.unshift(DEFAULT_ROOM);
-  return createObject(name, listOfHashes);
+function createRoom() {
+  var args = Array.prototype.slice.call(arguments);
+  var name = args.shift()
+  args.unshift(DEFAULT_ROOM);
+  return createObject(name, args);
 }
 
 
@@ -275,12 +279,12 @@ function init() {
   // Create a background item if it does not exist
   var background = getObject("background");
   if (background == undefined) {
-    background = createItem("background", [{
+    background = createItem("background", {
       loc:'Ubiquitous',
       display:DSPY_SCENERY,
       examine:DEFAULT_DESCRIPTION,
       background:true,
-    }]);
+    });
   }
   if (!background.background) {
       errormsg(ERR_GAME_BUG, ERROR_INIT_BACKGROUND);
