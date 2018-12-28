@@ -11,6 +11,10 @@ const DEFAULT_ROOM = {
   lightSource:function() { return LIGHT_FULL; },
 
   description:function() {
+    if (checkLighting() < LIGHT_FULL) {
+      this.darkDescription();
+      return true;
+    }
     for (var i = 0; i < ROOM_TEMPLATE.length; i++) {
       if (ROOM_TEMPLATE[i] == "%") {
         printOrRun(this, "desc");
@@ -20,7 +24,11 @@ const DEFAULT_ROOM = {
       }
     }
     return true;
-  }
+  },
+  
+  darkDescription:function() {
+    msg("It is dark.");
+  },
 };
 
 
@@ -90,13 +98,9 @@ const DEFAULT_ITEM = {
   },
   
   // Used in speak to
-  isTopicVisible:function() {
-    return false;
-  },
-  
-  lighting:function() {
-    return LIGHT_NONE;
-  }
+  isTopicVisible:function() { return false; },
+  lighting:function() { return LIGHT_NONE; }
+  res.isBlocking = function(visible) { return false; }
 };
 
 
@@ -242,7 +246,7 @@ const CONTAINER = function(alreadyOpen) {
       return this.alias
     }
     else {
-      return prefix + this.alias + " (" + this.listPrefix + formatList(contents, "a", " and", true) + this.listSuffix + ")";
+      return prefix + this.alias + " (" + this.listPrefix + formatList(contents, {def:"a", joiner:" and", modified:true, nothing:"nothing"}) + this.listSuffix + ")";
     }
   };
   
@@ -286,6 +290,13 @@ const CONTAINER = function(alreadyOpen) {
   res.icon = function() {
     return ('<img src="images/' + (this.closed ? 'closed' : 'opened') + '12.png" />');
   };
+  
+  // Does this
+  res.isBlocking = function(visible) {
+    if (!this.closed) { return false; }
+    if (!visible) { return true; }
+    return !this.transparent;
+  }
 
   return res;
 };
@@ -355,8 +366,12 @@ const SWITCHABLE = function(alreadyOn) {
       msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    msg('You turn the ' + this.name + ' on.');
+    var lighting = checkLighting();
+    msg(CMD_TURN_ON_SUCCESSFUL(this));
     this.switchedon = true;
+    if (lighting != checkLighting()) {
+      getCurrentRoom().description();
+    }
     return true;
   };
   
@@ -365,8 +380,12 @@ const SWITCHABLE = function(alreadyOn) {
       msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    msg('You turn the ' + this.name + ' off.');
+    var lighting = checkLighting();
+    msg(CMD_TURN_OFF_SUCCESSFUL(this));
     this.switchedon = false;
+    if (lighting != checkLighting()) {
+      getCurrentRoom().description();
+    }
     return true;
   };
 

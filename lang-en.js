@@ -98,6 +98,12 @@ function CMD_OPEN_SUCCESSFUL(item) {
 function CMD_CLOSE_SUCCESSFUL(item) {
   return "You close " + item.byname("the") + ".";
 };
+function CMD_TURN_ON_SUCCESSFUL(item) {
+  return "You switch " + item.byname("the") + " on.";
+};
+function CMD_TURN_OFF_SUCCESSFUL(item) {
+  return "You switch " + item.byname("the") + " off.";
+};
 
 
 

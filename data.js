@@ -57,6 +57,7 @@ createItem("me",
 createRoom("kitchen", {
   desc:'A clean room.',
   west:"lounge",
+  down:"basement",
   north:new Exit("garden", { locked:true, lockedmsg:"It seems to be locked." }),
   afterEnterFirst:function() {
     msg("A fresh smell here!");
@@ -77,6 +78,14 @@ createRoom("garden", {
   },
   onExit:function() {
     msg("You leave the garden.");
+  }
+});
+
+createRoom("basement", {
+  desc:'A dank room.',
+  up:'kitchen',
+  lightSource:function() {
+    return getObject("light_switch").switchedon ? LIGHT_FULL : LIGHT_NONE;
   }
 });
 
@@ -163,18 +172,26 @@ createItem("camera",
 createItem("flashlight",
   TAKABLE(),
   SWITCHABLE(false),
-  { loc:"lounge", examine:"A smal black torch.", alt:["torch"], 
+  { loc:"lounge", examine:"A small black torch.", alt:["torch"], 
     byname:function(def, modified){
       var res = this.alias;
       if (def) { res = def + " " + this.alias; }
       if (this.switchedon && modified) { res += " (providing light)"; }
       return res;
     },
-    lighting:function() {
+    lightSource:function() {
       return this.switchedon ? LIGHT_FULL : LIGHT_NONE;
     }
   },
 );
+
+
+
+createItem("light_switch",
+  SWITCHABLE(false),
+  { loc:"basement", examine:"A switch, presumably for the light.", alias:"light switch", },
+);
+
 
 
 

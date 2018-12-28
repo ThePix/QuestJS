@@ -17,7 +17,6 @@ function Cmd(name, hash) {
   // This is the default script for commands
   this.script = function(cmd, objects) {
     var attName = cmd.att ? cmd.att : cmd.name.toLowerCase();
-    debugmsg(0, "attName=" + attName);
     var success = false;
     for (var i = 0; i < objects[0].length; i++) {
       if (!objects[0][i][attName]) {

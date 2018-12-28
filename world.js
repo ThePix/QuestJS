@@ -134,6 +134,19 @@ function getObject(name, reportError) {
   return found;
 };
 
+
+function checkLighting() {
+  var light = getCurrentRoom().lightSource();
+  var listOfOjects = scope(isVisible);
+  for (var i = 0; i < listOfOjects.length; i++) {
+    if (light < listOfOjects[i].lightSource()) {
+      light = listOfOjects[i].lightSource();
+    }
+  }
+  return light;
+}
+
+
 var world = {};
 world.data = [];
 world.isCreated = false;

@@ -66,18 +66,29 @@ function prefix(item, isMultiple) {
 }
 
 // Creates a string from an array. If the array element is a string, that is used,
-// if it is an item, its alias is used. If def is "the" or "a", the alias will be prefixed as appropriate.
-// Items are separated by commas, except the last two, which will use lastJoiner (defaults to " and").
-function formatList(itemArray, def, lastJoiner, modified) {
-  if (!lastJoiner) { lastJoiner = " and"; }
+// if it is an item, its byname is used.
+// options:
+// def:        used by byname, "the" or "a", defaults to none
+// sep:        separator (defaults to comma)
+// joiner:     separator for last two items (just separator if not provided)
+// modified:   item aliases modified (see byname) (defaults to false)
+// nothing:    return this if the list is empty (defaults to empty string)
+function formatList(itemArray, options) {
+  if (options == undefined) { options = {}; }
+  if (itemArray.length == 0) {
+    return options.nothing ? options.nothing : "";
+  }
+  var sep = options.sep ? options.sep + " " : ", ";
   var s = itemArray.map(function(el) {
-    return (typeof el == "string") ? el : el.byname(def, modified);
-  }).join(", ");
+    return (typeof el == "string") ? el : el.byname(options.def, options.modified);
+  }).join(sep);
 
-  var lastIndex = s.lastIndexOf(",");
-  if (lastIndex === -1) { return s; }
-
-  return s.substring(0, lastIndex) + lastJoiner + s.substring(lastIndex + 1);
+  if (options.lastJoiner) {
+    var lastIndex = s.lastIndexOf(",");
+    if (lastIndex === -1) { return s; }
+    s = s.substring(0, lastIndex) + options.lastJoiner + s.substring(lastIndex + 1);
+  }
+  return s;
 };
 
 /*
@@ -225,6 +236,31 @@ function _scopeReport(o) {
   debugmsg(DBG_UTIL, s);
 }
 
+
+function getChain(item, attName) {
+  if (attName == undefined) { attName = "loc"; }
+  
+  var list = [];
+  var current = item;
+  while (current[attName]) {
+    current = getObject(current[attName]);
+    list.push(current);
+  }
+  return list;
+}
+
+function getBlock(item, visible) {
+  list = getChain(item);
+  for (var i = 0; i < list.length; i++) {
+    if (list[i] == player || list[i].name == player.loc) {
+      return null;
+    }
+    if (item.isBlocking(visible)) {
+      return item;
+    }
+  }
+  return true;
+}
 
 
 // ============  Debugging Utilities  =======================================

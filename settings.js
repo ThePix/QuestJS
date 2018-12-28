@@ -16,7 +16,7 @@ const CMD_ECHO = true;               // echo commands to the screen
 
 const ROOM_TEMPLATE = [
   "%",
-  "You can see {objects}.",
+  "You can see {objects} here.",
   "You can go {exits}.",
 ]
 
@@ -63,7 +63,7 @@ function setup() {
   player.status = "You are feeling fine";
   //parser.parse("talk to mary");
   
-  
+  msg("CHAIN: " + formatList(getChain(getObject("ornate_doll"))));
   //showStartDiag();
 }
 
