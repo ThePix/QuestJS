@@ -179,7 +179,7 @@ var parser = {};
       else if (CMD_ALL_REGEX.test(arr[i]) || CMD_ALL_EXCLUDE_REGEX.test(arr[i])) {
         // Handle ALL and ALL BUT
         var list = cmd.objects[i - 1].scope ? scope(cmd.objects[i - 1].scope) : fallbackScope;
-        var exclude = [player];
+        var exclude = [game.player];
         if (list.length == 0) {
           res.error = cmd.nothingForAll ? cmd.nothingForAll : CMD_NOTHING;
           res.score = -1;

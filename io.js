@@ -118,9 +118,8 @@ function showMenu(title, options, fn) {
 // This should be called after each turn to ensure we are at the end of the page and the text box has the focus
 function endTurnUI() {
   // set the EXITS
-  var room = getObject(player.loc, true);
   for (var i = 0; i < EXITS.length; i++) {
-    if (hasExit(room, EXITS[i].name) || ['Look', 'Help', 'Wait'].includes(EXITS[i].name)) {
+    if (hasExit(game.room, EXITS[i].name) || ['Look', 'Help', 'Wait'].includes(EXITS[i].name)) {
       $('#exit' + EXITS[i].name).show();
     }
     else {
@@ -140,9 +139,9 @@ function updateStatus() {
   $("#status-pane").empty();
   for (var i = 0; i < STATUS.length; i++) {
     if (typeof STATUS[i] == "string") {
-      if (player[STATUS[i]]) {
+      if (game.player[STATUS[i]]) {
         var s = '<tr><td width="' + STATUS_WIDTH_LEFT + '">' + sentenceCase(STATUS[i]) + "</td>";
-        s += '<td width="' + STATUS_WIDTH_RIGHT + '">' + player[STATUS[i]] + "</td></tr>";
+        s += '<td width="' + STATUS_WIDTH_RIGHT + '">' + game.player[STATUS[i]] + "</td></tr>";
         $("#status-pane").append(s);
       }
     }
@@ -157,10 +156,10 @@ function updateUIItems() {
   for (var i = 0; i < INVENTORIES.length; i++) {
     $('#' + INVENTORIES[i].alt).empty();
   }
-
+  
   io.currentItemList = [];
-  for (var j = 0; j < world.data.length; j++) {
-    var item = world.data[j];
+  for (var key in w) {
+    var item = w[key];
     if (item.display >= DSPY_LIST_EXCLUDE) {
       for (var i = 0; i < INVENTORIES.length; i++) {
         if (INVENTORIES[i].test(item)) {
@@ -183,6 +182,29 @@ function cmdLink(command, str) {
 
 
 var io = {};
+
+io.mapHeight = 200;
+io.mapWidth = 300;
+
+io.map = function() {
+  var s = '<svg width="' + io.mapWidth + '" height="' + io.mapHeight + '">';
+  s += io.rect(0, 0, io.mapWidth, io.mapHeight, "#f0f0f0");
+  s += io.rect(20, 20, 40, 40, "red");
+  s += io.circle(60, 60, 40, "yellow");
+  
+  
+  s += "</svg>";
+  msg(s); 
+}
+
+
+io.rect = function(x, y, w, h, c) {
+  return '<rect width="' + w + '" height="' + h + '" x="' + x + '" y="' + y + '" style="fill:' + c + ';stroke-width:1;stroke:black" />'
+}
+io.circle = function(x, y, r, c) {
+  return '<circle r="' + r + '" cx="' + x + '" cy="' + y + '" style="fill:' + c + ';stroke-width:1;stroke:black" />'
+}
+
 
 // Each line that is output is given an id, n plus an id number.
 io.nextid = 0;
@@ -229,7 +251,7 @@ io.clickItemAction = function(itemName, action) {
   if (io.inputDisabled) { return };
 
   var failed = false;
-  var item = getObject(itemName, true);
+  var item = w[itemName];
   var cmd = getCommand(action);
   if (cmd == undefined) {
     errormsg(ERR_GAME_BUG, CMD_PANE_CMD_NOT_FOUND);
@@ -257,7 +279,7 @@ io.appendItem = function(item, htmlDiv, isSubItem) {
     $('#' + htmlDiv).append(s);
   }
   if (item.container && !item.closed) {
-    var l = scope(isInside, item);
+    var l = scope(isInside, {container:item});
     for (var i = 0; i < l.length; i++) {
       io.appendItem(l[i], htmlDiv, true);
     }
@@ -391,6 +413,6 @@ $(document).ready(function() {
   });    
   init();
   setup();
-  setRoom(player.loc);
+  setRoom(game.player.loc);
   updateStatus();
 });

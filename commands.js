@@ -45,20 +45,18 @@ function ExitCmd(name, hash) {
   this.exitCmd = true;
   this.objects = [{ignore:true}, {ignore:true}, ],
   this.script = function(cmd, objects) {
-    var currentRoom = getCurrentRoom();
-
-    if (!hasExit(currentRoom, cmd.name)) {
+    if (!hasExit(game.room, cmd.name)) {
       errormsg(ERR_PLAYER, CMD_NOT_THAT_WAY);
       return FAILED;
     }
     else {
-      var ex = currentRoom[cmd.name];
+      var ex = game.room[cmd.name];
       if (typeof ex == "string") {
         setRoom(ex)
         return SUCCESS;
       }
       else if (typeof ex === "function"){
-        ex(currentRoom);
+        ex(game.room);
         return SUCCESS;
       }
       else if (typeof ex === "object"){
@@ -105,7 +103,7 @@ var commands = [
   new Cmd('Look', {
     regex:/^l|look$/,
     script:function() {
-      getCurrentRoom().description();
+      game.room.description();
       return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
@@ -115,11 +113,39 @@ var commands = [
       return SUCCESS;
     },
   }),
+  new Cmd('Inv', {
+    regex:/^inventory|inv|i$/,
+    script:function() {
+      var listOfOjects = scope(isHeld);
+      msg("You are carrying " + formatList(listOfOjects, {def:"a", joiner:" and", modified:true, nothing:"nothing"}) + ".");
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
+  new Cmd('Save', {
+    regex:/^save$/,
+    script:function() {
+      saveGame();
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
+  new Cmd('Load', {
+    regex:/^reload|load$/,
+    script:function() {
+      loadGame();
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
+  new Cmd('Map', {
+    regex:/^map$/,
+    script:function() {
+      io.map();
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
   new Cmd('test', {
     pattern:'test',
     script:function() {
-      background = getObject("background");
-      metamsg(JSON.stringify(background));
+      metamsg(JSON.stringify(w.background));
       return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
@@ -261,7 +287,7 @@ var commands = [
           flag = container.checkCapacity(objects[0][i]);
         }
         if (flag) {
-          if (objects[0][i].loc != player.name) {
+          if (objects[0][i].loc != game.player.name) {
             CMD_NOT_CARRYING(objects[0][i]);
           }
           else {

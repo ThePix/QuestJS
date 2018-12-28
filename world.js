@@ -47,7 +47,7 @@ function createObject(name, listOfHashes) {
     errormsg(ERR_GAME_BUG, ERROR_INIT_DISALLOWED_NAME(name));
     return null;
   }
-  if (getObject(name)) {
+  if (w[name]) {
     errormsg(ERR_GAME_BUG, ERROR_INIT_REPEATED_NAME(name));
     return null;
   }
@@ -62,7 +62,44 @@ function createObject(name, listOfHashes) {
       }
       return this.alias;
     },
-    runTurnscript:function() { return false; }
+    runTurnscript:function() { return false; },
+    
+    isAt:function(loc) {
+      // Not there if dark
+      if (game.dark) { return false; }
+      // Not there if flagged as less than scenery
+      if (this.display <= DSPY_SCENERY) { return false; }
+      return this.loc == loc;
+    },
+    isReachable:function() {
+      // Not reachable if dark
+      if (game.dark) { return false; }
+      // Not reachable if flagged as less than scenery
+      if (this.display <= DSPY_SCENERY) { return false; }
+      // Not reachable if a container blocks it
+      if (getBlock(this, false)) { return false; }
+      return true;
+    },
+    isVisible:function() {
+      // Not reachable if dark
+      if (game.dark) { return false; }
+      // Not reachable if flagged as less than scenery
+      if (this.display <= DSPY_SCENERY) { return false; }
+      // Not reachable if a container blocks it
+      if (getBlock(this, true)) { return false; }
+      return true;
+    },
+    isObvious:function() {
+      // Not reachable if dark
+      if (game.dark) { return false; }
+      // Not reachable if flagged as scenery or less
+      if (this.display < DSPY_SCENERY) { return false; }
+      // Not reachable if a container blocks it
+      if (getBlock(this, true)) { return false; }
+      return true;
+    },
+
+
   };
   //item.name = name;
   for (var i = 0; i < listOfHashes.length; i++) {
@@ -84,14 +121,14 @@ function createObject(name, listOfHashes) {
   
   // Sort out the location
   if (item.loc == "Held") {
-    item.loc = player.name;
+    item.loc = game.player.name;
   }
   else if (item.loc == "Worn") {
-    item.loc = player.name;
+    item.loc = game.player.name;
     item.worn = true;
   }
   else if (item.loc == "Here") {
-    item.loc = player.loc;
+    item.loc = game.player.loc;
     item.worn = true;
   }
   
@@ -99,7 +136,8 @@ function createObject(name, listOfHashes) {
   //  initItem(item);
   //}
   
-  world.data.push(item);
+  //world.data.push(item);
+  w[name] = item;
   return item;
 };
 
@@ -113,7 +151,7 @@ function object2String(object) {
 }
   
 function string2Object(string) {
-  obj = getObject(0);
+  //obj = getObject(0);
 }
 
 
@@ -121,22 +159,9 @@ function string2Object(string) {
 
 
 
-// Gets the object with the given name
-// Returns undefined if not found
-// Reports failure if reportError is true (useful for debugging)
-function getObject(name, reportError) {
-  var found = world.data.find(function(el) {
-    return el.name == name;
-  });
-  if (!found && reportError) {
-    errormsg("Object not found: " + name);
-  }
-  return found;
-};
-
 
 function checkLighting() {
-  var light = getCurrentRoom().lightSource();
+  var light = game.room.lightSource();
   var listOfOjects = scope(isVisible);
   for (var i = 0; i < listOfOjects.length; i++) {
     if (light < listOfOjects[i].lightSource()) {
@@ -147,15 +172,16 @@ function checkLighting() {
 }
 
 
+var w = {}
+
 var world = {};
-world.data = [];
 world.isCreated = false;
 
 
 
 world.findUniqueName = function(s) {
   debugmsg(0, "Trying " + s);
-  if (!getObject(s)) {
+  if (!w[s]) {
     return (s);
   }
   else {
@@ -173,9 +199,9 @@ world.findUniqueName = function(s) {
 
 
 world.init = function() {
-  this.data.forEach(function (el) {
-    world.initItem(el);
-  });
+  for (var key in w) {
+    world.initItem(w[key]);
+  }
   this.isCreated = true;
 }
 
@@ -186,18 +212,18 @@ world.init = function() {
 // if creating items on the fly.
 world.initItem = function(item) {
   if (DEBUG) {
-    if (item.loc && !getObject(item.loc) && item.loc != "Ubiquitous") {
+    if (item.loc && !w[item.loc] && item.loc != "Ubiquitous") {
       errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_LOC(item));
     }
     for (var i = 0; i < EXITS.length; i++) {
       var ex = item[EXITS[i].name];
       if (typeof ex == "string") {
-        if (!getObject(ex)) {
+        if (!w[ex]) {
           errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_EXIT(EXITS[i].name, item, ex));
         }
       }
       if (typeof ex == "object") {
-        if (!getObject(ex.name)) {
+        if (!w[ex.name]) {
           errormsg(ERR_GAME_BUG, ERROR_INIT_UNKNOWN_EXIT(EXITS[i].name, item, ex.name));
         }
       }
@@ -210,8 +236,8 @@ world.initItem = function(item) {
 // Turnscripts are just objects in the world.data array with a "turnscript" attribute set to a function
 // and a Boolean "runTurnscript".
 world.runTurnScripts = function() {
-  for (var i = 0; i < this.data.length; i++) {
-    var item = this.data[i];
+  for (var key in w) {
+    var item = w[key];
     if (typeof item.turnscript === "function"){
       if (((("loc" in item) && IsPresent(item)) || !("loc" in item)) && item.runTurnscript) {
         item.turnscript();
@@ -222,26 +248,35 @@ world.runTurnScripts = function() {
 
 
 
+var game = {
+  update:function(player) {
+    if (player != undefined) {
+      this.player = player;
+    }
+    this.room = w[this.player.loc];
+    this.dark = (checkLighting() < LIGHT_MEAGRE);
+  }   
+};
+
 
 
 // Sets the current room to the one named
 function setRoom(roomName, suppressOutput) {
-  if (player.loc == roomName && player.hasAlreadyBeenSetup) {
+  if (game.player.loc == roomName && game.player.hasAlreadyBeenSetup) {
     // Already here, do nothing
     return false;
   }
-  var room = getObject(roomName);
+  var room = w[roomName];
   if (room === undefined) {
     errormsg(ERR_GAME_BUG, ERROR_NO_ROOM + ": " + roomName + ".");
     return false;
   }
   //clearScreen();
-  var oldRoom = getObject(player.loc);
   
-  player.loc = room.name;
+  game.player.loc = room.name;
   world.setBackground();
   if (!suppressOutput) {
-    if (player.hasAlreadyBeenSetup) oldRoom.onExit();
+    if (game.player.hasAlreadyBeenSetup) game.room.onExit();
     room.beforeEnter();
     if (room.visited == 0) { room.beforeEnterFirst(); }
     heading(4, room.name);
@@ -250,7 +285,9 @@ function setRoom(roomName, suppressOutput) {
     if (room.visited == 0) { room.afterEnterFirst(); }
     room.visited += 1;
   }
-  player.hasAlreadyBeenSetup = true;
+  game.room = room;
+  game.player.hasAlreadyBeenSetup = true;
+  game.update();
   updateUIItems();
   return true;
 };
@@ -260,22 +297,21 @@ function setRoom(roomName, suppressOutput) {
 // Must be called before the game starts to perform various housekeeping jobs
 function init() {
   // Sort out the player
-  player = getPlayer();
-  if (typeof player == "undefined") {
+  game.update(w[PLAYER_NAME]);
+  if (typeof game.player == "undefined") {
     errormsg(ERR_GAME_BUG, ERROR_NO_PLAYER);
   }
   
   // Create a background item if it does not exist
-  var background = getObject("background");
-  if (background == undefined) {
-    background = createItem("background", {
+  if (w.background == undefined) {
+    w.background = createItem("background", {
       loc:'Ubiquitous',
       display:DSPY_SCENERY,
       examine:DEFAULT_DESCRIPTION,
       background:true,
     });
   }
-  if (!background.background) {
+  if (!w.background.background) {
       errormsg(ERR_GAME_BUG, ERROR_INIT_BACKGROUND);
   }
 
@@ -315,30 +351,28 @@ function endTurn(result) {
 
 world.BACK_REGEX = /\[.+?\]/;
 world.setBackground = function() {
-  var room = getObject(player.loc);
-  var background = getObject("background");
   var md;
-  if (typeof room.desc == 'string') {
-    if (!room.backgroundNames) {
-      room.backgroundNames = [];
-      while (md = world.BACK_REGEX.exec(room.desc)) {
+  if (typeof game.room.desc == 'string') {
+    if (!game.room.backgroundNames) {
+      game.room.backgroundNames = [];
+      while (md = world.BACK_REGEX.exec(game.room.desc)) {
         var arr = md[0].substring(1, md[0].length - 1).split(":");
-        room.desc = room.desc.replace(md[0], arr[0]);
+        game.room.desc = game.room.desc.replace(md[0], arr[0]);
         for (var j = 0; j < arr.length; j++) {
-          room.backgroundNames.push(arr[j]);
+          game.room.backgroundNames.push(arr[j]);
         }
       }
     }
   }
-  background.alt = room.backgroundNames ? room.backgroundNames : [];
+  w.background.alt = game.room.backgroundNames ? game.room.backgroundNames : [];
 }
 
 
-function hasExit(room, dir) {
+function hasExit(room, dir, lighting) {
   if (!room[dir]) { return false; }
   var ex = room[dir];
   if (typeof ex !== "object") { return true; }
-  return !ex.hidden;
+  return !ex.isHidden(lighting);
 }
 
 
@@ -367,7 +401,7 @@ function setExitNonexistent(room, dir, hidden) {
 function Exit(name, hash) {
   this.name = name;
   this.use = function(exit, dir) {
-    if (exit.locked) {
+    if (exit.isLocked()) {
       if (exit.lockedmsg) {
         msg(exit.lockedmsg);
       }
@@ -384,6 +418,8 @@ function Exit(name, hash) {
       return true;
     }
   }
+  this.isLocked = function() { return this.locked; }
+  this.isHidden = function(lighting) { return this.hidden || lighting < LIGHT_NONE; }
   for (var key in hash) {
     this[key] = hash[key];
   }

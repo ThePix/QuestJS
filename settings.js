@@ -13,6 +13,7 @@ const CURSOR = ">";
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;
 const CMD_ECHO = true;               // echo commands to the screen
+const PLAYER_NAME = "me";
 
 const ROOM_TEMPLATE = [
   "%",
@@ -25,8 +26,8 @@ const ROOM_TEMPLATE = [
 var STATUS = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },
-  function() { return "<td>Health points:</td><td>" + player.hitpoints + "</td>"; },
-  function() { return '<td rowspan="2">' + player.status + "</td>"; },
+  function() { return "<td>Health points:</td><td>" + game.player.hitpoints + "</td>"; },
+  function() { return '<td rowspan="2">' + game.player.status + "</td>"; },
 ];
 
 
@@ -59,12 +60,14 @@ const INVENTORIES = [
 function setup() {
   msg('This is a test of what we can do.');
   //parser.parse("ask mary about house");
-  player.hitpoints = 20;
-  player.status = "You are feeling fine";
+  game.player.hitpoints = 20;
+  game.player.status = "You are feeling fine";
   //parser.parse("talk to mary");
   
-  msg("CHAIN: " + formatList(getChain(getObject("ornate_doll"))));
+  msg("CHAIN: " + getSaveHeader("test header"));
+  msg("CHAIN: " + getSaveHeader());
   //showStartDiag();
+  io.map();
 }
 
 
@@ -246,14 +249,14 @@ function scrollPara(element) {
 
 function setValues() {
   var p = getPlayer();
-  p.alias = $('#name_input').val();
-  p.isFemale = !wizardMale;
-  p.background = $('#para4').html();
-  p.magic = $('#para5').html();
-  p.hairColour = $('#para6').html();
-  p.eyeColour = $('#para7').html();
-  p.spellColour = $('#para8').html();
-  msg(p.alias);
+  game.player.alias = $('#name_input').val();
+  game.player.isFemale = !wizardMale;
+  game.player.background = $('#para4').html();
+  game.player.magic = $('#para5').html();
+  game.player.hairColour = $('#para6').html();
+  game.player.eyeColour = $('#para7').html();
+  game.player.spellColour = $('#para8').html();
+  msg(game.player.alias);
   msg($("#diag-inner").text());
 }
 

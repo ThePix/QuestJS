@@ -4,9 +4,6 @@
 
 // Should all be language neutral
 
-// Stores the current player object
-var player;
-
 
 const SUCCESS = 1;
 const SUCCESS_NO_TURNSCRIPTS = 2;
@@ -91,31 +88,12 @@ function formatList(itemArray, options) {
   return s;
 };
 
-/*
-// Gets an array of strings, extracting each regex match from this string.
-String.prototype.scan = function (re) {
-  var s = this;
-  var m, r = [];
-  while (m = re.exec(s)) {
-    s = s.replace(m[0], "");
-    r.push(m[0]);
-  }
-  return r;
-};
 
 
-
-function scan(str, re) {
-  var s = str;
-  var m, r = [];
-  while (m = re.exec(s)) {
-    s = s.replace(m[0], "");
-    r.push(m[0]);
-  }
-  return r;
-};
-*/
-
+function getSaveHeader(comment) {
+  var currentdate = new Date();
+  return TITLE + "|" + (comment ? comment : "-") + "|" + currentdate.toLocaleString() + "|";
+}
 
 
 
@@ -125,19 +103,7 @@ function scan(str, re) {
 
 
 
-function getPlayer() {
-  return world.data.find(function(item) {
-    return item.player;
-  });
-};
 
-
-
-
-// Gets the current room object
-function getCurrentRoom() {
-  return getObject(player.loc);
-};
 
 // Gets the command with the given name
 function getCommand(name) {
@@ -160,79 +126,71 @@ function getCommand(name) {
 function isPresent(item) {
   return (isHere(item) || isHeldOrWorn(item)) && item.display >= DSPY_SCENERY;
 };
-function isHeldOrWorn(item) {
-  return item.loc == player.name && item.display >= DSPY_SCENERY;
+function isHeldNotWorn(item) {
+  return item.isAt(game.player.name) && !item.worn;
 };
 function isHeld(item) {
-  return (item.loc == player.name) && !item.worn && item.display >= DSPY_SCENERY;
+  return item.isAt(game.player.name) && item.worn;
 };
 function isHere(item) {
-  return item.loc === player.loc && item.display >= DSPY_SCENERY;
+  return item.loc === game.player.loc && item.display >= DSPY_SCENERY;
 };
 function isHereListed(item) {
-  return item.loc === player.loc && item.display >= DSPY_LIST_EXCLUDE;
+  return item.loc === game.player.loc && item.display > DSPY_SCENERY;
 };
 function isWorn(item) {
-  return (item.loc == player.name) && item.worn;
+  return item.isAt(game.player.name) && item.worn;
 };
 
-// Requires an extra parameter, so used like this:
-// scope(isInside, container);
-function isInside(item) {
-  //msg("this.name=" + this.name);
-  return item.loc == this.name;
+function isInside(item, options) {
+  return item.isAt(options.container.name);
 };
 
 
 // Is the given item in the location named
 // or in an open container in that location?
-// Includes "Ubiquitous" items, but not "not here" items
-function isReachable(item) {
-  debugmsg(0, "in isReachable");
-  if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
-  if (!item.loc || item.display < DSPY_SCENERY) { return false; }
-  var container = getObject(item.loc);
-  if (!container.container) { return false; }
-  if (container.closed) { return false; }
-  return isVisible(container);
+// An item is visible/obvious but not reachable
+// if it is in a closed transparent container
+// An item is visible but not obvious if it is scenery
+function isReachable(item, options) {
+  return item.isReachable();
 }
-
-// Is the given item in the location named
-// or in an open or transparent container in that location?
-// Includes "Ubiquitous" items, but not "not here" items
-// This is the fallback for the parser scope
-function isVisible(item) {
-  if (item.loc == player.loc || item.loc == player.name || item.loc === "Ubiquitous") { return true; }
-  if (!item.loc || item.display < DSPY_SCENERY) { return false; }
-  var container = getObject(item.loc);
-  if (!container.container) { return false; }
-  if (container.closed && !container.transparent) { return false; }
-  return isVisible(container);
+function isVisible(item, options) {
+  return item.isVisible();
+}
+function isObvious(item, options) {
+  return item.isObvious();
 }
 
 // To use, do something like this:
 // var listOfOjects = scope(isHeld);
 // Hopefully this works too
 // var listOfOjects = scope(isInside, container.loc);
-function scope(fn, p) {
-  return world.data.filter(fn, p);
+function scope(fn, options) {
+  var list = [];
+  for (var key in w) {
+    if (fn(w[key], options)) {
+      list.push(w[key]);
+    }
+  }
+  return list;
 };
 
 
 // For dubugging only!!!
 function _scopeReport(o) {
   if (typeof o == "string") {
-    o = getObject(o, true);
+    o = w[o];
   }
   s = "<b>" + o.name + "</b><br/>";
   s += "held: " + isHeld(o) + "<br/>";
   s += "here: " + isHere(o) + "<br/>";
   s += "held or worn: " + isHeldOrWorn(o) + "<br/>";
   s += "present: " + isPresent(o) + "<br/>";
-  s += "reachable here: " + isReachable(o, player.loc) + "<br/>";
-  s += "visible here: " + isVisible(o, player.loc) + "<br/>";
-  s += "reachable held: " + isReachable(o, player.name) + "<br/>";
-  s += "visible held: " + isVisible(o, player.name) + "<br/>";
+  s += "reachable here: " + isReachable(o, game.player.loc) + "<br/>";
+  s += "visible here: " + isVisible(o, game.player.loc) + "<br/>";
+  s += "reachable held: " + isReachable(o, game.player.name) + "<br/>";
+  s += "visible held: " + isVisible(o, game.player.name) + "<br/>";
   debugmsg(DBG_UTIL, s);
 }
 
@@ -243,16 +201,16 @@ function getChain(item, attName) {
   var list = [];
   var current = item;
   while (current[attName]) {
-    current = getObject(current[attName]);
+    current = w[current[attName]];
     list.push(current);
   }
   return list;
 }
 
 function getBlock(item, visible) {
-  list = getChain(item);
+  var list = getChain(item);
   for (var i = 0; i < list.length; i++) {
-    if (list[i] == player || list[i].name == player.loc) {
+    if (list[i] == game.player || list[i].name == game.player.loc) {
       return null;
     }
     if (item.isBlocking(visible)) {

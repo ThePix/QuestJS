@@ -85,7 +85,7 @@ createRoom("basement", {
   desc:'A dank room.',
   up:'kitchen',
   lightSource:function() {
-    return getObject("light_switch").switchedon ? LIGHT_FULL : LIGHT_NONE;
+    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_NONE;
   }
 });
 

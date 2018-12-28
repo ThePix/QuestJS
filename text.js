@@ -86,7 +86,7 @@ tp.text_processors = {
   
   show:function(arr, params) {
     var name = arr.shift();
-    var obj = name == "player" ? player : getObject(name);
+    var obj = name == "player" ? player : w[name];
     if (!obj) {
       errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)");
       return false;
@@ -102,7 +102,7 @@ tp.text_processors = {
   
   if:function(arr, params) {
     var name = arr.shift();
-    var obj = name == "player" ? player : getObject(name);
+    var obj = name == "player" ? game.player : w[name];
     if (!obj) {
       errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)");
       return false;
@@ -113,7 +113,7 @@ tp.text_processors = {
   
   else:function(arr, params) {
     var name = arr.shift();
-    var obj = name == "player" ? player : getObject(name);
+    var obj = name == "player" ? game.player : w[name];
     if (!obj) {
       errormsg(ERR_TP, "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)");
       return false;
@@ -158,9 +158,8 @@ tp.text_processors = {
   
   exits:function(arr, params) {
     var list = [];
-    var room = getCurrentRoom();
     for (var i = 0; i < EXITS.length; i++) {
-      if (hasExit(room, EXITS[i].name)) {
+      if (hasExit(game.room, EXITS[i].name)) {
         list.push(EXITS[i].name);
       }
     }

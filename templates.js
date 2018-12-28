@@ -37,7 +37,10 @@ const DEFAULT_ITEM = {
   
   pronouns:PRONOUNS.thirdperson,
   
+  // Used in speak to
+  isTopicVisible:function() { return false; },
   lightSource:function() { return LIGHT_NONE; },
+  isBlocking:function(visible) { return false; },
 
   icon:function() {
     return "";
@@ -97,16 +100,12 @@ const DEFAULT_ITEM = {
     return false;
   },
   
-  // Used in speak to
-  isTopicVisible:function() { return false; },
-  lighting:function() { return LIGHT_NONE; }
-  res.isBlocking = function(visible) { return false; }
 };
 
 
 const TAKABLE_DICTIONARY = {
   getVerbs:function() {
-    if (this.loc == player.name) {
+    if (this.loc == game.player.name) {
       return ['Examine', 'Drop'];
     }
     else {
@@ -121,12 +120,12 @@ const TAKABLE_DICTIONARY = {
       msg(prefix(this, isMultiple) + CMD_WEARING(this));
       return false;
     };
-    if (this.loc != player.name) {
+    if (this.loc != game.player.name) {
       msg(prefix(this, isMultiple) + CMD_NOT_CARRYING(this));
       return false;
     };
     msg(prefix(this, isMultiple) + CMD_DROP_SUCCESSFUL(this));
-    this.loc = getObject(player.loc).name;
+    this.loc = w[game.player.loc].name;
     updateUIItems();
     return true;
   },
@@ -140,12 +139,15 @@ const TAKABLE_DICTIONARY = {
       msg(prefix(this, isMultiple) + CMD_CANNOT_TAKE(this));
       return false;
     };
-    if (this.loc == player.name) {
+    if (this.loc == game.player.name) {
       msg(prefix(this, isMultiple) + CMD_ALREADY_HAVE(this));
       return false;
     };   
     msg(prefix(this, isMultiple) + CMD_TAKE_SUCCESSFUL(this));
-    this.loc = player.name;
+    this.loc = game.player.name;
+    if (this.display == DSPY_SCENERY) {
+      this.display = DSPY_DISPLAY;
+    }
     updateUIItems();
     return true;
   },
@@ -163,7 +165,7 @@ const WEARABLE = function() {
   res.wearable = true;
   
   res.getVerbs = function() {
-    if (this.loc == player.name) {
+    if (this.loc == game.player.name) {
       return this.worn ? ['Examine', 'Remove'] : ['Examine', 'Drop', 'Wear'];
     }
     else {
@@ -188,12 +190,12 @@ const WEARABLE = function() {
       msg(prefix(this, isMultiple) + CMD_ALREADY_WEARING(this.pronoun.subjective));
       return false;
     }
-    if (this.loc != player.name) {
+    if (this.loc != game.player.name) {
       msg(prefix(this, isMultiple) + CMD_NOT_CARRYING(this));
       return false;
     }
     msg(prefix(this, isMultiple) + CMD_WEAR_SUCCESSFUL(this));
-    this.loc = player.name;
+    this.loc = game.player.name;
     this.worn = true;
     updateUIItems();
     return true;
@@ -205,7 +207,7 @@ const WEARABLE = function() {
       return false;
     }
     msg(prefix(this, isMultiple) + CMD_REMOVE_SUCCESSFUL(this));
-    this.loc = player.name;
+    this.loc = game.player.name;
     this.worn = false;
     updateUIItems();
     return true;
@@ -227,7 +229,7 @@ const CONTAINER = function(alreadyOpen) {
   res.getVerbs = function() {
     var arr = ['Examine'];
     if (this.takable) {
-      arr.push(this.loc == player.name ? 'Drop' : 'Take');
+      arr.push(this.loc == game.player.name ? 'Drop' : 'Take');
     }
     arr.push(this.closed ? 'Open' : 'Close');
     return arr;
@@ -251,7 +253,7 @@ const CONTAINER = function(alreadyOpen) {
   };
   
   res.getContents = function() {
-    return scope(isInside, this);
+    return scope(isInside, {container:this});
   };
   
   res.open = function(isMultiple) {
@@ -324,7 +326,7 @@ const OPENABLE = function(alreadyOpen) {
   res.getVerbs = function() {
     var arr = ['Examine'];
     if (this.takable) {
-      arr.push(this.loc == player.name ? 'Drop' : 'Take');
+      arr.push(this.loc == game.player.name ? 'Drop' : 'Take');
     }
     arr.push(this.closed ? 'Open' : 'Close');
     return arr;
@@ -355,7 +357,7 @@ const SWITCHABLE = function(alreadyOn) {
   res.getVerbs = function() {
     var arr = ['Examine'];
     if (this.takable) {
-      arr.push(this.loc == player.name ? 'Drop' : 'Take');
+      arr.push(this.loc == game.player.name ? 'Drop' : 'Take');
     }
     arr.push(this.switchedon ? 'Turn off' : 'Turn on');
     return arr;
@@ -370,7 +372,7 @@ const SWITCHABLE = function(alreadyOn) {
     msg(CMD_TURN_ON_SUCCESSFUL(this));
     this.switchedon = true;
     if (lighting != checkLighting()) {
-      getCurrentRoom().description();
+      game.room.description();
     }
     return true;
   };
@@ -384,7 +386,7 @@ const SWITCHABLE = function(alreadyOn) {
     msg(CMD_TURN_OFF_SUCCESSFUL(this));
     this.switchedon = false;
     if (lighting != checkLighting()) {
-      getCurrentRoom().description();
+      game.room.description();
     }
     return true;
   };
@@ -442,7 +444,7 @@ const NPC = function(isFemale) {
     if (checkCannotSpeak(this)) {
       return false;
     }
-    var topics = scope(isInside, this).filter(el => el.isTopicVisible());
+    var topics = scope(isInside, {container:this}).filter(el => el.isTopicVisible());
     //for (var i = 0; i < topics.length; i++) {
     //  debugmsg(0, topics[i].name + " - " + topics[i].conversationTopic);
     //}
@@ -473,11 +475,11 @@ const TOPIC = function(fromStart) {
       this.script();
       this.hideTopic = this.hideAfter;
       for (var i = 0; i < this.nowShow.length; i++) {
-        var obj = getObject(this.nowShow[i]);
+        var obj = w[this.nowShow[i]];
         obj.showTopic = true;
       };
       for (var i = 0; i < this.nowHide.length; i++) {
-        var obj = getObject(this.nowHide[i]);
+        var obj = w[this.nowHide[i]];
         obj.hideTopic = true;
       };
     },
