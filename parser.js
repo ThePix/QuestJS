@@ -72,8 +72,8 @@ var parser = {};
 
   // Do it!
   parser.execute = function() {
-    //parser.inspect();
-    if (parser.currentCommand.objects.length > 0) {
+    parser.inspect();
+    if (parser.currentCommand.objects.length > 0 && typeof parser.currentCommand.objects[0] == "object") {
       for (var i = 0; i < parser.currentCommand.objects[0].length; i++) {
         parser.pronouns[parser.currentCommand.objects[0][i].pronouns.objective] = parser.currentCommand.objects[0][i];
       }

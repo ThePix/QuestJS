@@ -68,14 +68,16 @@ function createObject(name, listOfHashes) {
       // Not there if dark
       if (game.dark) { return false; }
       // Not there if flagged as less than scenery
-      if (this.display <= DSPY_SCENERY) { return false; }
+      if (this.display < DSPY_SCENERY) { return false; }
       return this.loc == loc;
     },
     isReachable:function() {
       // Not reachable if dark
       if (game.dark) { return false; }
       // Not reachable if flagged as less than scenery
-      if (this.display <= DSPY_SCENERY) { return false; }
+      if (this.display < DSPY_SCENERY) { return false; }
+      // Reachable if Ubiquitous
+      if (this.loc == "Ubiquitous") { return true; }
       // Not reachable if a container blocks it
       if (getBlock(this, false)) { return false; }
       return true;
@@ -84,7 +86,9 @@ function createObject(name, listOfHashes) {
       // Not reachable if dark
       if (game.dark) { return false; }
       // Not reachable if flagged as less than scenery
-      if (this.display <= DSPY_SCENERY) { return false; }
+      if (this.display < DSPY_SCENERY) { return false; }
+      // Reachable if Ubiquitous
+      if (this.loc == "Ubiquitous") { return true; }
       // Not reachable if a container blocks it
       if (getBlock(this, true)) { return false; }
       return true;
@@ -93,13 +97,39 @@ function createObject(name, listOfHashes) {
       // Not reachable if dark
       if (game.dark) { return false; }
       // Not reachable if flagged as scenery or less
-      if (this.display < DSPY_SCENERY) { return false; }
+      if (this.display <= DSPY_SCENERY) { return false; }
+      // Reachable if Ubiquitous
+      if (this.loc == "Ubiquitous") { return true; }
       // Not reachable if a container blocks it
       if (getBlock(this, true)) { return false; }
       return true;
     },
 
-
+    getSaveString:function() {
+      var s = "";
+      for (var key in this) {
+        if (typeof this[key] != "function" && typeof this[key] != "object") {
+          if (key != "desc" && key != "examine" && key != "name") {
+            s += saveLoad.encode(key, this[key]);
+          }
+          if (key == "desc" && this.mutableDesc) {
+            s += saveLoad.encode(key, this[key]);
+          }
+          if (key == "examine" && this.mutableExamine) {
+            s += saveLoad.encode(key, this[key]);
+          }
+        }
+      }
+      return s;
+    },
+    
+    setLoadString:function(s) {
+      var arr = s.split(";");
+      for (var i = 0; i < arr.length; i++) {
+        var parts = arr[i].split(":");
+        this[parts[0]] = saveLoad.decode(parts[1]);
+      }
+    },
   };
   //item.name = name;
   for (var i = 0; i < listOfHashes.length; i++) {
@@ -160,16 +190,6 @@ function string2Object(string) {
 
 
 
-function checkLighting() {
-  var light = game.room.lightSource();
-  var listOfOjects = scope(isVisible);
-  for (var i = 0; i < listOfOjects.length; i++) {
-    if (light < listOfOjects[i].lightSource()) {
-      light = listOfOjects[i].lightSource();
-    }
-  }
-  return light;
-}
 
 
 var w = {}
@@ -238,10 +258,8 @@ world.initItem = function(item) {
 world.runTurnScripts = function() {
   for (var key in w) {
     var item = w[key];
-    if (typeof item.turnscript === "function"){
-      if (((("loc" in item) && IsPresent(item)) || !("loc" in item)) && item.runTurnscript) {
-        item.turnscript();
-      }
+    if (item.runTurnscript && typeof item.turnscript === "function"){
+      item.turnscript();
     }
   }
 };
@@ -254,8 +272,18 @@ var game = {
       this.player = player;
     }
     this.room = w[this.player.loc];
-    this.dark = (checkLighting() < LIGHT_MEAGRE);
-  }   
+    this.dark = false; // We need to check all objects, so set this to false for now
+    var light = this.room.lightSource();
+    debugmsg(0, "loght1=" + light);
+    var listOfOjects = scope(isVisible);
+    for (var i = 0; i < listOfOjects.length; i++) {
+      if (light < listOfOjects[i].lightSource()) {
+        light = listOfOjects[i].lightSource();
+      }
+    }
+    debugmsg(0, "loght2=" + light);
+    this.dark = (light < LIGHT_MEAGRE);
+  }
 };
 
 

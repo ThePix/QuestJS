@@ -1,6 +1,7 @@
 "use strict";
 
 const TITLE = "A First Step...";
+const VERSION = "1.0";
 
 // UI options
 const PANES = 'Left';  //Can be set to Left, Right or None.
@@ -34,7 +35,7 @@ var STATUS = [
 // Change the name values to alter how items are displayed
 // You can add (or remove) inventories too
 const INVENTORIES = [
-  {name:'Items Held', alt:'itemsHeld', test:isHeld },
+  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn },
   {name:'Items Worn', alt:'itemsWorn', test:isWorn },
   {name:'Spells known', alt:'spells', 
     test:function(item) {
@@ -64,10 +65,18 @@ function setup() {
   game.player.status = "You are feeling fine";
   //parser.parse("talk to mary");
   
-  msg("CHAIN: " + getSaveHeader("test header"));
-  msg("CHAIN: " + getSaveHeader());
   //showStartDiag();
-  io.map();
+  //io.map();
+  //var s = saveTheWorld("my comment");
+  //debugmsg(0, s);
+  //debugmsg(0, JSON.stringify(saveLoad.getHeader(s)));
+  //loadTheWorld(s);
+  
+  //var s = w.lounge.getSaveString();
+  //debugmsg(0, s);
+  //w.lounge.setLoadString(s);
+  //debugmsg(0, JSON.stringify(w.lounge));
+  
 }
 
 

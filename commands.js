@@ -123,17 +123,51 @@ var commands = [
   }),
   new Cmd('Save', {
     regex:/^save$/,
-    script:function() {
-      saveGame();
-      return SUCCESS_NO_TURNSCRIPTS;
+    script:saveLoadScript,
+  }),
+  new Cmd('Save game', {
+    regex:/^(save) (.+)$/,
+    script:function(cmd, arr) {
+      saveGame(arr[0]);
+      return SUCCESS_NO_TURNSCRIPTS; 
     },
+    objects:[
+      {ignore:true},
+      {text:true},
+    ]
   }),
   new Cmd('Load', {
     regex:/^reload|load$/,
+    script:saveLoadScript,
+  }),
+  new Cmd('Load game', {
+    regex:/^(load|reload) (.+)$/,
+    script:function(cmd, arr) {
+      loadGame(arr[0]);
+      return SUCCESS_NO_TURNSCRIPTS; 
+    },
+    objects:[
+      {ignore:true},
+      {text:true},
+    ]
+  }),
+  new Cmd('Dir', {
+    regex:/^dir|directory$/,
     script:function() {
-      loadGame();
+      dirGame();
       return SUCCESS_NO_TURNSCRIPTS;
     },
+  }),
+  new Cmd('Delete game', {
+    regex:/^(delete|del) (.+)$/,
+    script:function(cmd, arr) {
+      deleteGame(arr[0]);
+      return SUCCESS_NO_TURNSCRIPTS; 
+    },
+    objects:[
+      {ignore:true},
+      {text:true},
+    ]
   }),
   new Cmd('Map', {
     regex:/^map$/,
@@ -340,7 +374,7 @@ var commands = [
     },
     objects:[
       {ignore:true},
-      {scope:isPresent},
+      {scope:world},
     ]
   }),
 ];

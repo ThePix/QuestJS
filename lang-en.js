@@ -183,6 +183,14 @@ function helpScript() {
 };
 
 
+function saveLoadScript() {
+  metamsg("To save your progress, type SAVE followed by the name to save with.");
+  metamsg("To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.");
+  metamsg("To see a list of save games, type DIR.");
+  return SUCCESS_NO_TURNSCRIPTS;
+}
+
+
 var CONJUGATIONS = {
   i:[
     { name:"be", value:"am"},

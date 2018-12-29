@@ -11,7 +11,7 @@ const DEFAULT_ROOM = {
   lightSource:function() { return LIGHT_FULL; },
 
   description:function() {
-    if (checkLighting() < LIGHT_FULL) {
+    if (game.dark) {
       this.darkDescription();
       return true;
     }
@@ -178,16 +178,16 @@ const WEARABLE = function() {
   };
   
   res.wear = function(isMultiple) {
-    if (!isPresent(this)) {
+    if (!isVisible(this)) {
       msg(prefix(this, isMultiple) + CMD_NOT_HERE(this));
-      return false;
+      //return false;
     }
     if (!this.takable) {
       msg(prefix(this, isMultiple) + CMD_CANNOT_TAKE(this));
       return false;
     }
     if (this.worn) {
-      msg(prefix(this, isMultiple) + CMD_ALREADY_WEARING(this.pronoun.subjective));
+      msg(prefix(this, isMultiple) + CMD_ALREADY_WEARING(this));
       return false;
     }
     if (this.loc != game.player.name) {
@@ -368,10 +368,11 @@ const SWITCHABLE = function(alreadyOn) {
       msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    var lighting = checkLighting();
+    var lighting = game.dark;
     msg(CMD_TURN_ON_SUCCESSFUL(this));
     this.switchedon = true;
-    if (lighting != checkLighting()) {
+    game.update();
+    if (lighting != game.dark) {
       game.room.description();
     }
     return true;
@@ -382,10 +383,11 @@ const SWITCHABLE = function(alreadyOn) {
       msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    var lighting = checkLighting();
+    var lighting = game.dark;
     msg(CMD_TURN_OFF_SUCCESSFUL(this));
     this.switchedon = false;
-    if (lighting != checkLighting()) {
+    game.update();
+    if (lighting != game.dark) {
       game.room.description();
     }
     return true;
