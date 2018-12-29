@@ -58,6 +58,12 @@ function CMD_CANNOT_OPEN(item) {
 function CMD_CANNOT_CLOSE(item) {
   return "You can't close " + item.pronouns.objective + ".";
 };
+function CMD_CANNOT_LOCK(item) {
+  return "You can't lock " + item.pronouns.objective + ".";
+};
+function CMD_CANNOT_UNLOCK(item) {
+  return "You can't unlock " + item.pronouns.objective + ".";
+};
 function CMD_CANNOT_READ(item) {
   return "Nothing worth reading there.";
 };
@@ -97,6 +103,12 @@ function CMD_OPEN_SUCCESSFUL(item) {
 };
 function CMD_CLOSE_SUCCESSFUL(item) {
   return "You close " + item.byname("the") + ".";
+};
+function CMD_LOCK_SUCCESSFUL(item) {
+  return "You lock " + item.byname("the") + ".";
+};
+function CMD_UNLOCK_SUCCESSFUL(item) {
+  return "You unlock " + item.byname("the") + ".";
 };
 function CMD_TURN_ON_SUCCESSFUL(item) {
   return "You switch " + item.byname("the") + " on.";
@@ -155,7 +167,7 @@ var EXITS = [
   {name:'Look', abbrev:'Lk', nocmd:true}, 
   {name:'east', abbrev:'E'}, 
   {name:'out', abbrev:'Out'}, 
-  {name:'down', abbrev:'Dn'}, 
+  {name:'down', abbrev:'Dn', alt:'d'}, 
 
   {name:'southwest', abbrev:'SW'}, 
   {name:'south', abbrev:'S'}, 

@@ -12,7 +12,7 @@ const DEFAULT_ROOM = {
 
   description:function() {
     if (game.dark) {
-      this.darkDescription();
+      printOrRun(this, "darkDesc");
       return true;
     }
     for (var i = 0; i < ROOM_TEMPLATE.length; i++) {
@@ -80,7 +80,16 @@ const DEFAULT_ITEM = {
     return false;
   },
   
-  read:function(isMultiple) {
+  lock:function() {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_LOCK(this));
+    return false;
+  }
+  unlock:function() {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_UNLOCK(this));
+    return false;
+  }
+
+    read:function(isMultiple) {
     msg(prefix(this, isMultiple) + CMD_CANNOT_READ(this));
     return false;
   },
@@ -350,6 +359,23 @@ const OPENABLE = function(alreadyOpen) {
 }
 
 
+const LOCKED_WITH = function(keyNames) {
+  if (typeof keyNames == "string") { keyNames = [keyNames];
+  if (keyNames == undefined) { keyNames = [];
+  var res = {
+    keyNames:keynames,
+    locked:true,
+    lock:function() {
+      
+    }
+    unlock:function() {
+      
+    }
+  };
+  return res;
+}
+
+
 const SWITCHABLE = function(alreadyOn) {
   var res = {};
   res.switchedon = alreadyOn;
@@ -361,15 +387,18 @@ const SWITCHABLE = function(alreadyOn) {
     }
     arr.push(this.switchedon ? 'Turn off' : 'Turn on');
     return arr;
-  },
+  };
 
-  res.switchon = function(item, isMultiple) {
+  res.switchon = function(isMultiple) {
     if (this.switchedon) {
       msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    var lighting = game.dark;
     msg(CMD_TURN_ON_SUCCESSFUL(this));
+    this.doSwitchon();
+  };
+  res.doSwitchon = function() {
+    var lighting = game.dark;
     this.switchedon = true;
     game.update();
     if (lighting != game.dark) {
@@ -383,8 +412,11 @@ const SWITCHABLE = function(alreadyOn) {
       msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    var lighting = game.dark;
     msg(CMD_TURN_OFF_SUCCESSFUL(this));
+    this.doSwitchoff();
+  };
+  res.doSwitchoff = function() {
+    var lighting = game.dark;
     this.switchedon = false;
     game.update();
     if (lighting != game.dark) {

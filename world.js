@@ -258,7 +258,7 @@ world.initItem = function(item) {
 world.runTurnScripts = function() {
   for (var key in w) {
     var item = w[key];
-    if (item.runTurnscript && typeof item.turnscript === "function"){
+    if (item.runTurnscript() && typeof item.turnscript === "function"){
       item.turnscript();
     }
   }
@@ -267,6 +267,7 @@ world.runTurnScripts = function() {
 
 
 var game = {
+  verbosity:VERBOSE,
   update:function(player) {
     if (player != undefined) {
       this.player = player;
@@ -274,14 +275,12 @@ var game = {
     this.room = w[this.player.loc];
     this.dark = false; // We need to check all objects, so set this to false for now
     var light = this.room.lightSource();
-    debugmsg(0, "loght1=" + light);
     var listOfOjects = scope(isVisible);
     for (var i = 0; i < listOfOjects.length; i++) {
       if (light < listOfOjects[i].lightSource()) {
         light = listOfOjects[i].lightSource();
       }
     }
-    debugmsg(0, "loght2=" + light);
     this.dark = (light < LIGHT_MEAGRE);
   }
 };
@@ -302,20 +301,22 @@ function setRoom(roomName, suppressOutput) {
   //clearScreen();
   
   game.player.loc = room.name;
+  game.update();
   world.setBackground();
   if (!suppressOutput) {
     if (game.player.hasAlreadyBeenSetup) game.room.onExit();
     room.beforeEnter();
     if (room.visited == 0) { room.beforeEnterFirst(); }
     heading(4, room.name);
-    room.description();
+    if ((game.verbosity == TERSE && room.visited == 0) || game.verbosity == VERBOSE) {
+      room.description();
+    }
     room.afterEnter();
     if (room.visited == 0) { room.afterEnterFirst(); }
-    room.visited += 1;
+    room.visited ++;
   }
   game.room = room;
   game.player.hasAlreadyBeenSetup = true;
-  game.update();
   updateUIItems();
   return true;
 };
@@ -396,11 +397,11 @@ world.setBackground = function() {
 }
 
 
-function hasExit(room, dir, lighting) {
+function hasExit(room, dir) {
   if (!room[dir]) { return false; }
   var ex = room[dir];
-  if (typeof ex !== "object") { return true; }
-  return !ex.isHidden(lighting);
+  if (typeof ex !== "object") { return !game.dark; }
+  return !ex.isHidden();
 }
 
 
@@ -447,7 +448,7 @@ function Exit(name, hash) {
     }
   }
   this.isLocked = function() { return this.locked; }
-  this.isHidden = function(lighting) { return this.hidden || lighting < LIGHT_NONE; }
+  this.isHidden = function() { return this.hidden || game.dark; }
   for (var key in hash) {
     this[key] = hash[key];
   }

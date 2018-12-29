@@ -57,7 +57,7 @@ createItem("me",
 createRoom("kitchen", {
   desc:'A clean room.',
   west:"lounge",
-  down:"basement",
+  down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; } }),
   north:new Exit("garden", { locked:true, lockedmsg:"It seems to be locked." }),
   afterEnterFirst:function() {
     msg("A fresh smell here!");
@@ -82,8 +82,9 @@ createRoom("garden", {
 });
 
 createRoom("basement", {
-  desc:'A dank room.',
-  up:'kitchen',
+  desc:"A dank room",
+  darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
+  up:new Exit('kitchen', {isHidden:function() { return false; } }),
   lightSource:function() {
     return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_NONE;
   }
@@ -142,6 +143,7 @@ createItem("knife",
 
 createItem("glass_cabinet",
   CONTAINER(false),
+  LOCKED_WITH("key"),
   { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front", transparent:true, }
 );
 
@@ -159,7 +161,7 @@ createItem("ornate_doll",
 
 createItem("trapdoor",
   OPENABLE(false),
-  { loc:"lounge", examine:"A small trapdoor in the floor.", }
+  { loc:"kitchen", examine:"A small trapdoor in the floor.", }
 );
 
 
@@ -181,7 +183,21 @@ createItem("flashlight",
     },
     lightSource:function() {
       return this.switchedon ? LIGHT_FULL : LIGHT_NONE;
-    }
+    },
+    runTurnscript:function() {
+      return this.switchedon;
+    },
+    turnscript:function() {
+      this.power--;
+      if (this.power == 2) {
+        msg("The torch flickers.");
+      }
+      if (this.power < 0) {
+        msg("The torch flickers and dies.");
+        this.doSwitchoff();
+      }
+    },
+    power:3,
   },
 );
 
@@ -240,4 +256,13 @@ createItem("TS_Test",
 createItem("coin",
   TAKABLE(),
   { loc:"lounge", examine: "A gold coin."  }
+);
+
+// Do we want to flag the lock as opened by this
+// or flag this as opening the lock
+// The lock could be a container or exit
+// and the command will specify the lock
+createItem("key",
+  TAKABLE(),
+  { loc:"lounge", examine: "A small key."  }
 );

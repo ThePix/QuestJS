@@ -72,7 +72,7 @@ var parser = {};
 
   // Do it!
   parser.execute = function() {
-    parser.inspect();
+    //parser.inspect();
     if (parser.currentCommand.objects.length > 0 && typeof parser.currentCommand.objects[0] == "object") {
       for (var i = 0; i < parser.currentCommand.objects[0].length; i++) {
         parser.pronouns[parser.currentCommand.objects[0][i].pronouns.objective] = parser.currentCommand.objects[0][i];
@@ -216,7 +216,10 @@ var parser = {};
           res.score = -1;
           return res;
         }
+        debugmsg(0, "--------");
+        debugmsg(0, "--------" + cmd.objects[i - 1].scope);
         var scopes = cmd.objects[i - 1].scope ? [scope(cmd.objects[i - 1].scope), fallbackScope] : scopes = [fallbackScope];
+        debugmsg(0, "--------");
         var objs = [];
         var objs2, n;
         for (var j = 0; j < objectNames.length; j++) {
@@ -343,7 +346,9 @@ var parser = {};
     });
     EXITS.forEach(function(el) {
       if (!el.nocmd) {
-        var regex = "^(" + CMD_GO + ")(" + el.name + "|" + el.abbrev.toLowerCase() + ")$";
+        var regex = "^(" + CMD_GO + ")(" + el.name + "|" + el.abbrev.toLowerCase()
+        if (el.alt) { regex += "|" + el.alt; }
+        regex += ")$";
         var cmd = new ExitCmd(el.name, {
           regex:new RegExp(regex),
         });

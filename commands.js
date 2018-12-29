@@ -113,6 +113,30 @@ var commands = [
       return SUCCESS;
     },
   }),
+  new Cmd('Brief', {
+    pattern:'brief',
+    script:function() {
+      game.verbosity = BRIEF;
+      metamsg("Game mode is now 'brief'; no room descriptions (except with LOOK).");
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
+  new Cmd('Terse', {
+    pattern:'terse',
+    script:function() {
+      game.verbosity = TERSE;
+      metamsg("Game mode is now 'terse'; room descriptions only shown on first entering and with LOOK.");
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
+  new Cmd('Verbose', {
+    pattern:'verbose',
+    script:function() {
+      game.verbosity = VERBOSE;
+      metamsg("Game mode is now 'verbose'; room descriptions shown everytme you enter a room.");
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
   new Cmd('Inv', {
     regex:/^inventory|inv|i$/,
     script:function() {
@@ -374,7 +398,7 @@ var commands = [
     },
     objects:[
       {ignore:true},
-      {scope:world},
+      {scope:isInWorld},
     ]
   }),
 ];
