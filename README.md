@@ -13,8 +13,7 @@ Alex had some experiments into this before he quit. QuestJS was hoped to convert
 
 ### What is the current status?
 
-As of 23/Dec/18, you can create a decent playable game. The only big omission is the inability to save.
-
+If you are happy to write the files in a text editor (and are using English), then you are good to go. You may need to add some features yourself, but it is pretty much all there. In theory you should be able to zip t all up and upload to textadventures.co.uk, though I have yet to test that.
 
 ### Will it be possible to convert existing games?
 
