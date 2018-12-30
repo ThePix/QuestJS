@@ -220,18 +220,18 @@ createItem("flashlight",
         msg("The torch flickers.");
       }
       if (this.power < 0) {
-        msg("The torch flickers and dies.");
+        msg("The torch flickers and dies.{once: Perhaps there is a charger in the garage?}");
         this.doSwitchoff();
       }
     },
     checkCanSwitchOn () {
       if (this.power < 0) {
-        msg("The torch flickers and dies.");
+        msg("The torch is dead.");
         return false;
       }
       return true;
     },
-    power:3,
+    power:1,
     charge:function(isMultiple) {
       if (game.player.loc != "garage") {
         msg(prefix(this, isMultiple) + "There is nothing to charge the torch with here.");

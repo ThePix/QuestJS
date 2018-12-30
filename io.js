@@ -126,7 +126,7 @@ function endTurnUI() {
       $('#exit' + EXITS[i].name).hide();
     }
   }
-  updateStatus();
+  io.updateStatus();
   // scroll to end
   setTimeout("window.scrollTo(0,document.getElementById('main').scrollHeight);",1);
   // give focus to command bar
@@ -135,41 +135,9 @@ function endTurnUI() {
 
 
 
-function updateStatus() {
-  $("#status-pane").empty();
-  for (var i = 0; i < STATUS.length; i++) {
-    if (typeof STATUS[i] == "string") {
-      if (game.player[STATUS[i]]) {
-        var s = '<tr><td width="' + STATUS_WIDTH_LEFT + '">' + sentenceCase(STATUS[i]) + "</td>";
-        s += '<td width="' + STATUS_WIDTH_RIGHT + '">' + game.player[STATUS[i]] + "</td></tr>";
-        $("#status-pane").append(s);
-      }
-    }
-    else if (typeof STATUS[i] == "function") {
-      $("#status-pane").append("<tr>" + STATUS[i]() + "</tr>");
-    }
-  }
-};
 
 
-function updateUIItems() {
-  for (var i = 0; i < INVENTORIES.length; i++) {
-    $('#' + INVENTORIES[i].alt).empty();
-  }
-  
-  io.currentItemList = [];
-  for (var key in w) {
-    var item = w[key];
-    if (item.display >= DSPY_LIST_EXCLUDE) {
-      for (var i = 0; i < INVENTORIES.length; i++) {
-        if (INVENTORIES[i].test(item)) {
-          io.appendItem(item, INVENTORIES[i].alt);
-        }
-      }
-    }
-  }
-  io.clickItem('');
-};
+
 
 function cmdLink(command, str) {
   return '<a class="cmdlink" onclick="parser.parse(\'' + command + '\')">' + str + "</a>";
@@ -216,6 +184,45 @@ io.menuFn;
 io.menuOptions;
 // A list of names for items currently display in the inventory panes
 io.currentItemList = [];
+
+
+io.updateUIItems = function() {
+  for (var i = 0; i < INVENTORIES.length; i++) {
+    $('#' + INVENTORIES[i].alt).empty();
+  }
+  
+  io.currentItemList = [];
+  for (var key in w) {
+    var item = w[key];
+    if (item.display >= DSPY_LIST_EXCLUDE) {
+      for (var i = 0; i < INVENTORIES.length; i++) {
+        if (INVENTORIES[i].test(item)) {
+          io.appendItem(item, INVENTORIES[i].alt);
+        }
+      }
+    }
+  }
+  io.clickItem('');
+};
+
+
+io.updateStatus = function() {
+  $("#status-pane").empty();
+  for (var i = 0; i < STATUS.length; i++) {
+    if (typeof STATUS[i] == "string") {
+      if (game.player[STATUS[i]]) {
+        var s = '<tr><td width="' + STATUS_WIDTH_LEFT + '">' + sentenceCase(STATUS[i]) + "</td>";
+        s += '<td width="' + STATUS_WIDTH_RIGHT + '">' + game.player[STATUS[i]] + "</td></tr>";
+        $("#status-pane").append(s);
+      }
+    }
+    else if (typeof STATUS[i] == "function") {
+      $("#status-pane").append("<tr>" + STATUS[i]() + "</tr>");
+    }
+  }
+};
+
+
 
 io.menuResponse = function(n) {
   io.inputDisabled = false;
@@ -424,5 +431,5 @@ $(document).ready(function() {
   init();
   setup();
   setRoom(game.player.loc);
-  updateStatus();
+  endTurnUI();
 });

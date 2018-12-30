@@ -288,6 +288,7 @@ var game = {
       }
     }
     this.dark = (light < LIGHT_MEAGRE);
+    io.updateUIItems();
   }
 };
 
@@ -326,7 +327,6 @@ function setRoom(roomName, suppressOutput) {
   }
   game.room = room;
   game.player.hasAlreadyBeenSetup = true;
-  updateUIItems();
   return true;
 };
 
@@ -361,7 +361,7 @@ function init() {
   parser.initCommands(EXITS);
   
   // Set up the UI
-  endTurnUI();
+  //endTurnUI();
   heading(2, TITLE);
   document.title = TITLE;
 };
@@ -453,7 +453,7 @@ function Exit(name, hash) {
       if (exit.msg) {
         msg(exit.msg);
       }
-      setRoom(exit);
+      setRoom(exit.name);
       return true;
     }
   }

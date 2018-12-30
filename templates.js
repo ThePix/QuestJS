@@ -141,7 +141,7 @@ const TAKABLE_DICTIONARY = {
     };
     msg(prefix(this, isMultiple) + CMD_DROP_SUCCESSFUL(this));
     this.loc = w[game.player.loc].name;
-    updateUIItems();
+    game.update();
     return true;
   },
   
@@ -163,7 +163,7 @@ const TAKABLE_DICTIONARY = {
     if (this.display == DSPY_SCENERY) {
       this.display = DSPY_DISPLAY;
     }
-    updateUIItems();
+    game.update();
     return true;
   },
 };
@@ -212,7 +212,7 @@ const WEARABLE = function() {
     msg(prefix(this, isMultiple) + CMD_WEAR_SUCCESSFUL(this));
     this.loc = game.player.name;
     this.worn = true;
-    updateUIItems();
+    game.update();
     return true;
   };
   
@@ -224,7 +224,7 @@ const WEARABLE = function() {
     msg(prefix(this, isMultiple) + CMD_REMOVE_SUCCESSFUL(this));
     this.loc = game.player.name;
     this.worn = false;
-    updateUIItems();
+    game.update();
     return true;
   };
   return res;
@@ -444,7 +444,7 @@ const SWITCHABLE = function(alreadyOn) {
       msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
-    if (!checkCanSwitchOn()) {
+    if (!this.checkCanSwitchOn()) {
       return false;
     }
     msg(CMD_TURN_ON_SUCCESSFUL(this));

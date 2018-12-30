@@ -28,7 +28,7 @@ function Cmd(name, hash) {
       }
     }
     if (success) {
-      updateUIItems();
+      game.update();
       return (cmd.noTurnscripts ? SUCCESS_NO_TURNSCRIPTS : SUCCESS);
     }
     else {
