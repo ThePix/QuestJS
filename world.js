@@ -64,20 +64,26 @@ function createObject(name, listOfHashes) {
     },
     runTurnscript:function() { return false; },
     
+    _isAt:function(loc) {
+      // Reachable if Ubiquitous
+      if (this.loc == "Ubiquitous") { return true; }
+      if (this.loc == loc) { return true; }
+      if (this.altLocs && this.altLocs.includes(loc))  { return true; }
+      return false;
+    },
+    
     isAt:function(loc) {
       // Not there if dark
       if (game.dark) { return false; }
       // Not there if flagged as less than scenery
       if (this.display < DSPY_SCENERY) { return false; }
-      return this.loc == loc;
+      return this._isAt(loc);
     },
     isReachable:function() {
       // Not reachable if dark
       if (game.dark) { return false; }
       // Not reachable if flagged as less than scenery
       if (this.display < DSPY_SCENERY) { return false; }
-      // Reachable if Ubiquitous
-      if (this.loc == "Ubiquitous") { return true; }
       // Not reachable if a container blocks it
       if (getBlock(this, false)) { return false; }
       return true;
@@ -87,8 +93,6 @@ function createObject(name, listOfHashes) {
       if (game.dark) { return false; }
       // Not reachable if flagged as less than scenery
       if (this.display < DSPY_SCENERY) { return false; }
-      // Reachable if Ubiquitous
-      if (this.loc == "Ubiquitous") { return true; }
       // Not reachable if a container blocks it
       if (getBlock(this, true)) { return false; }
       return true;
@@ -98,8 +102,6 @@ function createObject(name, listOfHashes) {
       if (game.dark) { return false; }
       // Not reachable if flagged as scenery or less
       if (this.display <= DSPY_SCENERY) { return false; }
-      // Reachable if Ubiquitous
-      if (this.loc == "Ubiquitous") { return true; }
       // Not reachable if a container blocks it
       if (getBlock(this, true)) { return false; }
       return true;
@@ -272,6 +274,10 @@ var game = {
     if (player != undefined) {
       this.player = player;
     }
+    
+    if (!this.player) {
+      errormsg(ERR_GAME_BUG, ERROR_NO_PLAYER);
+    }
     this.room = w[this.player.loc];
     this.dark = false; // We need to check all objects, so set this to false for now
     var light = this.room.lightSource();
@@ -299,12 +305,15 @@ function setRoom(roomName, suppressOutput) {
     return false;
   }
   //clearScreen();
+
+  if (!suppressOutput) {
+    if (game.player.hasAlreadyBeenSetup) game.room.onExit();
+  }
   
   game.player.loc = room.name;
   game.update();
   world.setBackground();
   if (!suppressOutput) {
-    if (game.player.hasAlreadyBeenSetup) game.room.onExit();
     room.beforeEnter();
     if (room.visited == 0) { room.beforeEnterFirst(); }
     heading(4, room.name);
@@ -326,10 +335,11 @@ function setRoom(roomName, suppressOutput) {
 // Must be called before the game starts to perform various housekeeping jobs
 function init() {
   // Sort out the player
-  game.update(w[PLAYER_NAME]);
-  if (typeof game.player == "undefined") {
-    errormsg(ERR_GAME_BUG, ERROR_NO_PLAYER);
+  if (!w[PLAYER_NAME]) {
+    errormsg(ERR_GAME_BUG, ERROR_NO_PLAYER_FOUND(PLAYER_NAME));
   }
+
+  game.update(w[PLAYER_NAME]);
   
   // Create a background item if it does not exist
   if (w.background == undefined) {
@@ -443,7 +453,7 @@ function Exit(name, hash) {
       if (exit.msg) {
         msg(exit.msg);
       }
-      setRoom(exit.name);
+      setRoom(exit);
       return true;
     }
   }

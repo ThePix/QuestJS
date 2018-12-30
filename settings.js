@@ -76,6 +76,10 @@ function setup() {
   //debugmsg(0, s);
   //w.lounge.setLoadString(s);
   //debugmsg(0, JSON.stringify(w.lounge));
+  debugmsg(0, w.coin._isAt("lounge"));  
+  debugmsg(0, w.coin._isAt("kitchen"));
+  debugmsg(0, getBlock(w.coin, true));  
+  
   
 }
 

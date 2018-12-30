@@ -1,5 +1,38 @@
 "use strict";
 
+
+commands.push(new Cmd('Kick', {
+  regex:/^(kick) (.+)$/,
+  objects:[
+    {ignore:true},
+    {scope:isPresent}
+  ]
+}));
+
+DEFAULT_ITEM.kick = function(isMultiple) {
+  msg(prefix(this, isMultiple) + "You kick " + this.pronouns.objective + ", but nothing happens.");
+  return false;
+}
+
+
+
+commands.push(new Cmd('Charge', {
+  regex:/^(charge) (.+)$/,
+  objects:[
+    {ignore:true},
+    {scope:isHeld}
+  ]
+}));
+
+DEFAULT_ITEM.charge = function(isMultiple) {
+  msg(prefix(this, isMultiple) + pronounVerb(this, "'be", true) + " not something you can charge.");
+  return false;
+}
+
+
+
+
+
 const SPELL = {
   spellVerbs:['Examine', 'Cast'],
   cast:function(self) {
@@ -58,7 +91,7 @@ createRoom("kitchen", {
   desc:'A clean room.',
   west:"lounge",
   down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; } }),
-  north:new Exit("garden", { locked:true, lockedmsg:"It seems to be locked." }),
+  north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
   afterEnterFirst:function() {
     msg("A fresh smell here!");
   }
@@ -70,15 +103,9 @@ createRoom("lounge", {
   east:'kitchen'
 });
 
-createRoom("garden", {
-  desc:'A wild and over-grown garden.',
-  south:function(room) {
-    msg("You head back inside.");
-    setRoom('kitchen');
-  },
-  onExit:function() {
-    msg("You leave the garden.");
-  }
+createRoom("garage", {
+  desc:'An empty garage.',
+  south:new Exit("kitchen", {use:useWithDoor, door:"garage_door", doorName:"kitchen door"},),
 });
 
 createRoom("basement", {
@@ -143,7 +170,7 @@ createItem("knife",
 
 createItem("glass_cabinet",
   CONTAINER(false),
-  LOCKED_WITH("key"),
+  LOCKED_WITH("cabinet_key"),
   { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front", transparent:true, }
 );
 
@@ -197,7 +224,25 @@ createItem("flashlight",
         this.doSwitchoff();
       }
     },
+    checkCanSwitchOn () {
+      if (this.power < 0) {
+        msg("The torch flickers and dies.");
+        return false;
+      }
+      return true;
+    },
     power:3,
+    charge:function(isMultiple) {
+      if (game.player.loc != "garage") {
+        msg(prefix(this, isMultiple) + "There is nothing to charge the torch with here.");
+        return false;
+      }
+      else {
+        msg(prefix(this, isMultiple) + "You charge the torch - it should last for hours now.");
+        this.power = 20;;
+        return true;
+      }
+    },
   },
 );
 
@@ -258,11 +303,27 @@ createItem("coin",
   { loc:"lounge", examine: "A gold coin."  }
 );
 
-// Do we want to flag the lock as opened by this
-// or flag this as opening the lock
-// The lock could be a container or exit
-// and the command will specify the lock
-createItem("key",
+createItem("garage_key",
   TAKABLE(),
-  { loc:"lounge", examine: "A small key."  }
+  { loc:"lounge", examine: "A big key.", alias: "garage key"  }
 );
+
+createItem("cabinet_key",
+  TAKABLE(),
+  { loc:"lounge", examine: "A small key.", alias: "small key"  }
+);
+
+createItem("garage_door",
+  OPENABLE(false),
+  LOCKED_WITH("garage_key"),
+  { loc:"kitchen", examine: "The door to the garage.", alias: "garage door", altLocs:["garage"] }
+);
+
+createItem("charger",
+  { loc:"garage", examine: "A device bigger than a washing machine to charge a torch?", mended:false,
+    use:function() {
+      metamsg("To use the charge, type CHARGE followed by the name of the item you want to charge.");
+    }
+  }
+);
+

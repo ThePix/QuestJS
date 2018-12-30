@@ -231,7 +231,7 @@ io.clickExit = function(dir) {
 
   var failed = false;
   if (CMD_ECHO) { msg(dir, "inputtext"); }
-  parser.quickCmd(getCommand(dir));
+  parser.quickCmd(io.getCommand(dir));
 }
 
 io.clickItem = function(itemName) {
@@ -252,7 +252,7 @@ io.clickItemAction = function(itemName, action) {
 
   var failed = false;
   var item = w[itemName];
-  var cmd = getCommand(action);
+  var cmd = io.getCommand(action);
   if (cmd == undefined) {
     errormsg(ERR_GAME_BUG, CMD_PANE_CMD_NOT_FOUND);
   }
@@ -328,6 +328,16 @@ io.writeExit = function(n) {
   document.writeln('<td class="compassbutton">');
   document.writeln('<span class="compassbutton" id="exit' + EXITS[n].name + '" onclick="io.clickExit(\'' + EXITS[n].name + '\')">' + EXITS[n].abbrev + '</span>');
   document.writeln('</td>');
+};
+
+
+
+// Gets the command with the given name
+io.getCommand = function(name) {
+  var found = commands.find(function(el) {
+    return el.name == name;
+  });
+  return found;
 };
 
 

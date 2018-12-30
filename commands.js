@@ -52,7 +52,7 @@ function ExitCmd(name, hash) {
     else {
       var ex = game.room[cmd.name];
       if (typeof ex == "string") {
-        setRoom(ex)
+        setRoom(ex);
         return SUCCESS;
       }
       else if (typeof ex === "function"){
@@ -61,8 +61,7 @@ function ExitCmd(name, hash) {
       }
       else if (typeof ex === "object"){
         var fn = ex.use;
-        fn(ex, cmd.name);
-        return SUCCESS;
+        return fn(ex, cmd.name);
       }
       else {
         errormsg(ERR_GAME_BUG, CMD_UNSUPPORTED_DIR);
@@ -71,6 +70,30 @@ function ExitCmd(name, hash) {
     }
     
   };
+}
+
+var useWithDoor = function(ex) {
+  var obj = w[ex.door];
+  var doorName = ex.doorName ? ex.doorName : "door"
+  if (!obj.closed) {
+    setRoom(ex.name);
+    return SUCCESS;
+  }
+  if (!obj.locked) {
+    obj.closed = false;
+    msg("You open the " + doorName + " and walk through.");
+    setRoom(ex.name);
+    return SUCCESS;
+  }
+  if (obj.testKeys()) {
+    obj.closed = false;
+    obj.locked = false;
+    msg("You unlock the " + doorName + ", open it and walk through.");
+    setRoom(ex.name);
+    return SUCCESS;
+  }        
+  msg("You try the " + doorName + ", but it is locked.");
+  return FAILED;
 }
 
 
@@ -152,7 +175,7 @@ var commands = [
   new Cmd('Save game', {
     regex:/^(save) (.+)$/,
     script:function(cmd, arr) {
-      saveGame(arr[0]);
+      saveLoad.saveGame(arr[0]);
       return SUCCESS_NO_TURNSCRIPTS; 
     },
     objects:[
@@ -167,7 +190,7 @@ var commands = [
   new Cmd('Load game', {
     regex:/^(load|reload) (.+)$/,
     script:function(cmd, arr) {
-      loadGame(arr[0]);
+      saveLoad.loadGame(arr[0]);
       return SUCCESS_NO_TURNSCRIPTS; 
     },
     objects:[
@@ -178,14 +201,14 @@ var commands = [
   new Cmd('Dir', {
     regex:/^dir|directory$/,
     script:function() {
-      dirGame();
+      saveLoad.dirGame();
       return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
   new Cmd('Delete game', {
     regex:/^(delete|del) (.+)$/,
     script:function(cmd, arr) {
-      deleteGame(arr[0]);
+      saveLoad.deleteGame(arr[0]);
       return SUCCESS_NO_TURNSCRIPTS; 
     },
     objects:[
@@ -309,6 +332,30 @@ var commands = [
   
   new Cmd('Close', {
     regex:/^(close) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isPresent, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Lock', {
+    regex:/^(lock) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isPresent, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Unlock', {
+    regex:/^(unlock) (.+)$/,
+    objects:[
+      {ignore:true},
+      {scope:isPresent, multiple:true},
+    ],
+  }),
+  
+  new Cmd('Use', {
+    regex:/^(use) (.+)$/,
     objects:[
       {ignore:true},
       {scope:isPresent, multiple:true},

@@ -41,6 +41,7 @@ const DEFAULT_ITEM = {
   isTopicVisible:function() { return false; },
   lightSource:function() { return LIGHT_NONE; },
   isBlocking:function(visible) { return false; },
+  testKeys:function(toLock) { return false; },
 
   icon:function() {
     return "";
@@ -83,14 +84,19 @@ const DEFAULT_ITEM = {
   lock:function() {
     msg(prefix(this, isMultiple) + CMD_CANNOT_LOCK(this));
     return false;
-  }
+  },
   unlock:function() {
     msg(prefix(this, isMultiple) + CMD_CANNOT_UNLOCK(this));
     return false;
-  }
+  },
 
-    read:function(isMultiple) {
+  read:function(isMultiple) {
     msg(prefix(this, isMultiple) + CMD_CANNOT_READ(this));
+    return false;
+  },
+  
+  use:function(isMultiple) {
+    msg(prefix(this, isMultiple) + CMD_CANNOT_USE(this));
     return false;
   },
   
@@ -275,8 +281,16 @@ const CONTAINER = function(alreadyOpen) {
       return false;
     }
     if (this.locked) {
-      msg(prefix(this, isMultiple) + CMD_LOCKED(this));
-      return false;
+      if (this.testKeys()) {
+        this.closed = false;
+        msg(prefix(this, isMultiple) + CMD_UNLOCK_SUCCESSFUL(this));
+        msg(prefix(this, isMultiple) + CMD_OPEN_SUCCESSFUL(this));
+        return true;
+      }
+      else {
+        msg(prefix(this, isMultiple) + CMD_LOCKED(this));
+        return false;
+      }
     }
     this.closed = false;
     msg(prefix(this, isMultiple) + CMD_OPEN_SUCCESSFUL(this));
@@ -350,7 +364,7 @@ const OPENABLE = function(alreadyOpen) {
       s = _itemA(this);
     }
     s += this.alias;
-    if (!closed && modified) { s += " (open)"; }
+    if (!this.closed && modified) { s += " (open)"; }
     return s;
   };
   res.open = CONTAINER().open;
@@ -360,16 +374,52 @@ const OPENABLE = function(alreadyOpen) {
 
 
 const LOCKED_WITH = function(keyNames) {
-  if (typeof keyNames == "string") { keyNames = [keyNames];
-  if (keyNames == undefined) { keyNames = [];
+  if (typeof keyNames == "string") { keyNames = [keyNames]; }
+  if (keyNames == undefined) { keyNames = []; }
   var res = {
-    keyNames:keynames,
+    keyNames:keyNames,
     locked:true,
     lock:function() {
-      
-    }
+      if (this.locked) {
+        msg(CMD_ALREADY(this));
+        return false;
+      }
+      if (!this.testKeys(true)) {
+        msg(CMD_NO_KEY(this));
+        return false;
+      }
+      if (!this.closed) {
+        this.closed = true;
+        msg(CMD_CLOSE_SUCCESSFUL(this));
+      }      
+      msg(CMD_LOCK_SUCCESSFUL(this));
+      this.locked = true;
+      return true;
+    },
     unlock:function() {
-      
+      if (!this.locked) {
+        msg(CMD_ALREADY(this));
+        return false;
+      }
+      if (!this.testKeys(false)) {
+        msg(CMD_NO_KEY(this));
+        return false;
+      }
+      msg(CMD_UNLOCK_SUCCESSFUL(this));
+      this.locked = false;
+      return true;
+    },
+    testKeys:function(toLock) {
+      for (var i = 0; i < keyNames.length; i++) {
+        if (!w[keyNames[i]]) {
+          errormsg(ERR_GAME_BUG, ERROR_UNKNOWN_KEY(keyNames[i]));
+          return false;
+        }
+        if (w[keyNames[i]].loc == game.player.name) { 
+          return true; 
+        }
+      }
+      return false;
     }
   };
   return res;
@@ -394,6 +444,9 @@ const SWITCHABLE = function(alreadyOn) {
       msg(prefix(this, isMultiple) + CMD_ALREADY(this));
       return false;
     }
+    if (!checkCanSwitchOn()) {
+      return false;
+    }
     msg(CMD_TURN_ON_SUCCESSFUL(this));
     this.doSwitchon();
   };
@@ -406,6 +459,7 @@ const SWITCHABLE = function(alreadyOn) {
     }
     return true;
   };
+  res.checkCanSwitchOn = function() { return true; }
   
   res.switchoff = function(isMultiple) {
     if (!this.switchedon) {
@@ -474,15 +528,10 @@ const NPC = function(isFemale) {
     }
   };
   res.speakto = function() {
-    debugmsg(0, "HERE-----------------");
     if (checkCannotSpeak(this)) {
       return false;
     }
     var topics = scope(isInside, {container:this}).filter(el => el.isTopicVisible());
-    //for (var i = 0; i < topics.length; i++) {
-    //  debugmsg(0, topics[i].name + " - " + topics[i].conversationTopic);
-    //}
-    debugmsg(0, "HERE " + topics.length);
     topics.push(NEVER_MIND);
     showMenu("Talk to " + this.byname("the") + " about:", topics, function(result) {
       if (result != NEVER_MIND) {

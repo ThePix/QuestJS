@@ -67,8 +67,11 @@ function CMD_CANNOT_UNLOCK(item) {
 function CMD_CANNOT_READ(item) {
   return "Nothing worth reading there.";
 };
+function CMD_CANNOT_USE(item) {
+  return "No obvious way to use " + item.pronouns.objective + ".";
+};
 function CMD_CANNOT_EAT(item) {
-  return pronounVerb(item, "'be") + " not something you can eat.";
+  return pronounVerb(item, "'be", true) + " not something you can eat.";
 };
 
 function CMD_ALREADY_HAVE(item) {
@@ -81,7 +84,10 @@ function CMD_ALREADY(item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 };
 function CMD_LOCKED(item) {
-  return sentenceCase(item.pronouns.subjective) + " " + conjugate(item, "'be") + " locked.";
+  return pronounVerb(item, "'be", true) + " locked.";
+};
+function CMD_NO_KEY(item) {
+  return "You don't have the right key.";
 };
 var CMD_LOCKED_EXIT = "That way is locked.";
 
@@ -123,6 +129,9 @@ var ERROR_NO_PLAYER = "No player object found. This will not go well...";
 var ERROR_MSG_OR_RUN = "Unsupported type for printOrRun";
 var ERROR_NO_ROOM = "Failed to find room";
 var ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
+function ERROR_NO_PLAYER_FOUND(name) {
+  return "No player object found with name `" + name + "`. This will not go well...";
+}
 function ERROR_INIT_REPEATED_NAME(name) {
   return "Attempting to use the name `" + name + "`, there there is already an item with that name in the world.";
 };
@@ -137,6 +146,9 @@ function ERROR_INIT_UNKNOWN_LOC(item) {
 };
 function ERROR_INIT_UNKNOWN_EXIT(dir, room, loc) {
   return "The exit `" + dir + "` in room '" + room.name + "' is to an unknown location (" + loc + ")"
+};
+function ERROR_UNKNOWN_KEY(name) {
+  return "The key name for this container, `" + name + "`, does not match any key in the game.";
 };
 
 
@@ -282,7 +294,7 @@ function conjugate(item, verb) {
 
 function pronounVerb(item, verb, capitalise) {
   var s = item.pronouns.subjective + " " + conjugate(item, verb);
-  s = s.replace(" '", "'");  // yes this is a hack!
+  s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 };
 

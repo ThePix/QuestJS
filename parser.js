@@ -216,10 +216,7 @@ var parser = {};
           res.score = -1;
           return res;
         }
-        debugmsg(0, "--------");
-        debugmsg(0, "--------" + cmd.objects[i - 1].scope);
         var scopes = cmd.objects[i - 1].scope ? [scope(cmd.objects[i - 1].scope), fallbackScope] : scopes = [fallbackScope];
-        debugmsg(0, "--------");
         var objs = [];
         var objs2, n;
         for (var j = 0; j < objectNames.length; j++) {
