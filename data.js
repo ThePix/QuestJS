@@ -256,10 +256,25 @@ createItem("light_switch",
 
 createItem("Mary",
   NPC(true),
-  { loc:"lounge", examine:"An attractive young lady.", properName:true, askoptions:{
-    house:"'I like it,' says Mary.",
-    garden:"'Needs some work,' Mary says with a sign.",
-  } }
+  { loc:"lounge", examine:"An attractive young lady.", properName:true,
+    askoptions:[
+      {regex:/house/, response:"'I like it,' says Mary.", },
+      {regex:/garden/, response:"'Needs some work,' Mary says with a sign.", },
+    ],
+    speakto:function() {
+      switch (this.speaktoCount) {
+        case 0 : msg("You say 'Hello,' to Mary, and she replies in kind."); break;
+        case 1 : msg("You ask Mary how to get upstairs. 'You know,' she replies, 'I have no idea.'"); break;
+        case 2 : msg("'Where do you sleep?' you ask Mary."); msg("'What's \"sleep\"?'"); break;
+        default: msg("You wonder what you can talk to Mary about."); break;
+      }
+    },
+  }
+);
+
+createItem("straw_boater",
+  WEARABLE(false),
+  { loc:"Mary", examine: "A straw boater.", worn:true }
 );
 
 createItem("Mary_The_Garden",

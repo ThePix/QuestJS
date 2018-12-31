@@ -66,6 +66,8 @@ function setup() {
   //parser.parse("talk to mary");
   
   //showStartDiag();
+  msg("Wearing: " + formatList(w.Mary.getWearing()));
+  msg("Holding: " + formatList(w.Mary.getHolding()));
 }
 
 
