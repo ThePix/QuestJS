@@ -199,7 +199,7 @@ var EXITS = [
 
 function helpScript() {
   metamsg("This is an experiment in using JavaScript (and a little jQuery) to create a text game.");
-  if (PANES != "None") {
+  if (PANES !== "None") {
     if (COMPASS) {
       metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
     }
@@ -272,7 +272,7 @@ var CONJUGATIONS = {
 
 function conjugate(item, verb) {
   var gender = item.pronouns.subjective;
-  if (gender == "he" || gender == "she") { gender = "it" };
+  if (gender === "he" || gender === "she") { gender = "it" };
   var arr = CONJUGATIONS[gender.toLowerCase()];
 
   if (!arr) {
@@ -280,7 +280,7 @@ function conjugate(item, verb) {
     return verb;
   }
   for (var i = 0; i < arr.length; i++) {
-    if (arr[i].name == verb) {
+    if (arr[i].name === verb) {
       return arr[i].value;
     }
   }
@@ -325,7 +325,7 @@ function _itemA(item) {
   if (item.properName) {
     return "";
   }
-  if (item.pronouns == PRONOUNS.plural) {
+  if (item.pronouns === PRONOUNS.plural) {
     return "some ";
   }
   if (/^[aeiou]/i.test(item.alias)) {

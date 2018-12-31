@@ -40,7 +40,7 @@ const SPELL = {
     return ('<img src="images/spell12.png" />');
   },
   getVerbs:function() {
-    return (this.loc == "spellbook" ? ["About", "Cast"] : ["About", "Learn"]);
+    return (this.loc === "spellbook" ? ["About", "Cast"] : ["About", "Learn"]);
   },
 }
 
@@ -214,7 +214,7 @@ createItem("flashlight",
     },
     turnscript:function() {
       this.power--;
-      if (this.power == 2) {
+      if (this.power === 2) {
         msg("The torch flickers.");
       }
       if (this.power < 0) {
@@ -231,7 +231,7 @@ createItem("flashlight",
     },
     power:1,
     charge:function(isMultiple) {
-      if (game.player.loc != "garage") {
+      if (game.player.loc !== "garage") {
         msg(prefix(this, isMultiple) + "There is nothing to charge the torch with here.");
         return false;
       }

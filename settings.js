@@ -39,7 +39,7 @@ const INVENTORIES = [
   {name:'Items Worn', alt:'itemsWorn', test:isWorn },
   {name:'Spells known', alt:'spells', 
     test:function(item) {
-      return item.loc == "spellbook";
+      return item.loc === "spellbook";
     }
   },
   {name:'Items Here', alt:'itemsHere', test:isHere },
@@ -66,21 +66,6 @@ function setup() {
   //parser.parse("talk to mary");
   
   //showStartDiag();
-  //io.map();
-  //var s = saveTheWorld("my comment");
-  //debugmsg(0, s);
-  //debugmsg(0, JSON.stringify(saveLoad.getHeader(s)));
-  //loadTheWorld(s);
-  
-  //var s = w.lounge.getSaveString();
-  //debugmsg(0, s);
-  //w.lounge.setLoadString(s);
-  //debugmsg(0, JSON.stringify(w.lounge));
-  debugmsg(0, w.coin._isAt("lounge"));  
-  debugmsg(0, w.coin._isAt("kitchen"));
-  debugmsg(0, getBlock(w.coin, true));  
-  
-  
 }
 
 
@@ -141,7 +126,7 @@ $(function() {
           $(this).dialog("close");
           var p = getPlayer();
           job = $("#job").val();
-          p.job = professions.find(function(el) { return el.name == job; });
+          p.job = professions.find(function(el) { return el.name === job; });
           p.isFemale = $("#female").is(':checked');
           p.fullname = $("#namefield").val();
           if (TEXT_INPUT) { $('#textbox').focus(); }
@@ -248,7 +233,7 @@ function scrollPara(element) {
   var paraNumber = parseInt(element.id.replace('para', ''));
   if (isNaN(paraNumber)) { return; }
   var para = $('#para' + paraNumber);
-  if (typeof paraPositions[paraNumber] != 'number') {
+  if (typeof paraPositions[paraNumber] !== 'number') {
     var list = eval('para' + paraNumber + 'Opts');
     paraOpts[paraNumber] = list;
     paraPositions[paraNumber] = getRandomInt(0, list.length - 1);
