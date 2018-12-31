@@ -81,7 +81,7 @@ function prefix(item, isMultiple) {
 // options:
 // def:        used by byname, "the" or "a", defaults to none
 // sep:        separator (defaults to comma)
-// joiner:     separator for last two items (just separator if not provided)
+// lastJoiner: separator for last two items (just separator if not provided)
 // modified:   item aliases modified (see byname) (defaults to false)
 // nothing:    return this if the list is empty (defaults to empty string)
 function formatList(itemArray, options) {

@@ -50,71 +50,6 @@ const DEFAULT_ITEM = {
   getVerbs:function() {
     return ['Examine'];
   },
-  
-  drop:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_NOT_CARRYING(this));
-    return false;
-  },
-  
-  take:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_TAKE(this));
-    return false;
-  },
-
-  wear:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_WEAR(this));
-    return false;
-  },
-  
-  remove:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_NOT_WEARING(this));
-    return false;
-  },
-  
-  open:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_OPEN(this));
-    return false;
-  },
-
-  close:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_CLOSE(this));
-    return false;
-  },
-  
-  lock:function() {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_LOCK(this));
-    return false;
-  },
-  unlock:function() {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_UNLOCK(this));
-    return false;
-  },
-
-  read:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_READ(this));
-    return false;
-  },
-  
-  use:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_USE(this));
-    return false;
-  },
-  
-  eat:function(isMultiple) {
-    msg(prefix(this, isMultiple) + CMD_CANNOT_EAT(this));
-    return false;
-  },
-  
-  askabout:function(text) {
-    msg("You can ask " + this.pronouns.objective + " about " + text + " all you like, but " + pronounVerb(this, "'be") + " not about to reply.");
-    return false;
-  },
-  
-  speakto:function() {
-    msg("You chat to " + this.byname("the") + " for a few moments, before releasing that " + pronounVerb(this, "'be") + " not about to reply");
-    return false;
-  },
-  
 };
 
 
@@ -260,10 +195,10 @@ const CONTAINER = function(alreadyOpen) {
     }
     var contents = this.getContents();
     if (contents.length == 0 || !modified) {
-      return this.alias
+      return prefix + this.alias
     }
     else {
-      return prefix + this.alias + " (" + this.listPrefix + formatList(contents, {def:"a", joiner:" and", modified:true, nothing:"nothing"}) + this.listSuffix + ")";
+      return prefix + this.alias + " (" + this.listPrefix + formatList(contents, {def:"a", lastJoiner:" and", modified:true, nothing:"nothing"}) + this.listSuffix + ")";
     }
   };
   
@@ -334,6 +269,8 @@ const SURFACE = function() {
   res.listSuffix = "";
   res.byname = CONTAINER().byname;
   res.getContents = CONTAINER().getContents;
+  res.listPrefix = "with ";
+  res.listSuffix = " on it";
   return res;
 }
 

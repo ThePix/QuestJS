@@ -78,7 +78,7 @@ var parser = {};
         parser.pronouns[parser.currentCommand.objects[0][i].pronouns.objective] = parser.currentCommand.objects[0][i];
       }
     }
-    var outcome = parser.currentCommand.cmd.script(parser.currentCommand.cmd, parser.currentCommand.objects);
+    var outcome = parser.currentCommand.cmd.script(parser.currentCommand.objects);
     //debugmsg(DBG_PARSER, "Result=" + outcome);
     endTurn(outcome);
   }    
@@ -180,6 +180,14 @@ var parser = {};
         // Handle ALL and ALL BUT
         var list = cmd.objects[i - 1].scope ? scope(cmd.objects[i - 1].scope) : fallbackScope;
         var exclude = [game.player];
+        
+        // anything flagged as scenery should be excluded
+        for (var j = 0; j < list.length; j++) {
+          if (list[j].display <= DSPY_SCENERY) {
+            exclude.push(list[j]);
+          }
+        }
+        
         if (list.length == 0) {
           res.error = cmd.nothingForAll ? cmd.nothingForAll : CMD_NOTHING;
           res.score = -1;
@@ -220,7 +228,7 @@ var parser = {};
         var objs = [];
         var objs2, n;
         for (var j = 0; j < objectNames.length; j++) {
-          [objs2, n] = this.findInScope(objectNames[j], scopes);
+          [objs2, n] = this.findInScope(objectNames[j], scopes, cmd);
           if (n == 0) {
             res.error = (cmd.noobjecterror ? cmd.noobjecterror : CMD_OBJECT_UNKNOWN_MSG).replace('%', objectNames[j]);
             res.score = -1;
@@ -245,7 +253,7 @@ var parser = {};
   // (if there are three lists, the score will be 3 if found in the first list, 2 in the second,
   // or 1 if in the third list).
   // If not found the score will be 0, and an empty array returned.
-  parser.findInScope = function(s, listOfLists) {
+  parser.findInScope = function(s, listOfLists, cmd) {
     // First handle IT etc.
     for (var key in PRONOUNS) {
       if (s == PRONOUNS[key].objective && parser.pronouns[PRONOUNS[key].objective]) {
@@ -255,7 +263,7 @@ var parser = {};
         
     var objs;
     for (var i = 0; i < listOfLists.length; i++) {
-      objs = this.findInList(s, listOfLists[i]);
+      objs = this.findInList(s, listOfLists[i], cmd);
       if (objs.length > 0) {
         return [objs, listOfLists.length - i];
       }
@@ -268,12 +276,12 @@ var parser = {};
   // Tries to match objects to the given string
   // It will return a list of matching objects
   // It will return a list of exact matches if there any any.
-  parser.findInList = function(s, list) {
+  parser.findInList = function(s, list, cmd) {
     var res = [];
     var score = 0;
     var n;
     for (var i = 0; i < list.length; i++) {
-      n = this.scoreObjectMatch(s, list[i]);
+      n = this.scoreObjectMatch(s, list[i], cmd);
       if (n > score) {
         res = [];
         score = n;
@@ -286,20 +294,23 @@ var parser = {};
   }
 
 
-  parser.scoreObjectMatch = function(s, item) {
+  parser.scoreObjectMatch = function(s, item, cmd) {
+    if (cmd.items && cmd.items.includes(item.name)) {
+      return 5;
+    }
     var itemName = item.alias.toLowerCase();
     if (s == itemName) {
-      return 3;
+      return item[cmd.attName] ? 4 : 3;
     }
     if (item.alt.includes(s)) {
-      return 3;
+      return item[cmd.attName] ? 4 : 3;
     }
     if (new RegExp("\\b" + s).test(itemName)) {
-      return 1;
+      return item[cmd.attName] ? 2 : 1;
     }
     for (var i = 0; i < item.alt.length; i++) {
       if (new RegExp("\\b" + s).test(item.alt[i])) {
-        return 1;
+      return item[cmd.attName] ? 2 : 1;
       }
     }
     return -1;

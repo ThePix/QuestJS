@@ -11,118 +11,19 @@
 
 "use strict";
 
-function Cmd(name, hash) {
-  this.name = name;
-  this.objects = [];
-  // This is the default script for commands
-  this.script = function(cmd, objects) {
-    var attName = cmd.att ? cmd.att : cmd.name.toLowerCase();
-    var success = false;
-    for (var i = 0; i < objects[0].length; i++) {
-      if (!objects[0][i][attName]) {
-        errormsg(ERR_GAME_BUG, CMD_NO_ATT_ERROR + " (" + objects[0][i].name + ").");
-      }
-      else {
-        var result = printOrRun(objects[0][i], attName, (objects[0].length > 1 || parser.currentCommand.all));
-        success = result || success;
-      }
-    }
-    if (success) {
-      game.update();
-      return (cmd.noTurnscripts ? SUCCESS_NO_TURNSCRIPTS : SUCCESS);
-    }
-    else {
-      return FAILED; 
-    }
-  };
-  for (var key in hash) {
-    this[key] = hash[key];
-  }
-}
-
-function ExitCmd(name, hash) {
-  Cmd.call(this, name, hash);
-  this.exitCmd = true;
-  this.objects = [{ignore:true}, {ignore:true}, ],
-  this.script = function(cmd, objects) {
-    if (!hasExit(game.room, cmd.name)) {
-      errormsg(ERR_PLAYER, CMD_NOT_THAT_WAY);
-      return FAILED;
-    }
-    else {
-      var ex = game.room[cmd.name];
-      if (typeof ex == "string") {
-        setRoom(ex);
-        return SUCCESS;
-      }
-      else if (typeof ex === "function"){
-        ex(game.room);
-        return SUCCESS;
-      }
-      else if (typeof ex === "object"){
-        var fn = ex.use;
-        return fn(ex, cmd.name);
-      }
-      else {
-        errormsg(ERR_GAME_BUG, CMD_UNSUPPORTED_DIR);
-        return FAILED;
-      }
-    }
-    
-  };
-}
-
-var useWithDoor = function(ex) {
-  var obj = w[ex.door];
-  var doorName = ex.doorName ? ex.doorName : "door"
-  if (!obj.closed) {
-    setRoom(ex.name);
-    return SUCCESS;
-  }
-  if (!obj.locked) {
-    obj.closed = false;
-    msg("You open the " + doorName + " and walk through.");
-    setRoom(ex.name);
-    return SUCCESS;
-  }
-  if (obj.testKeys()) {
-    obj.closed = false;
-    obj.locked = false;
-    msg("You unlock the " + doorName + ", open it and walk through.");
-    setRoom(ex.name);
-    return SUCCESS;
-  }        
-  msg("You try the " + doorName + ", but it is locked.");
-  return FAILED;
-}
 
 
-function VerbCmd(name, hash) {
-  Cmd.call(this, name, hash);
-  this.verb = true;
-}
 
-function AltCmd(name, altcmd, regex) {
-  Cmd.call(this, name, {});
-  this.altcmd = name;
-  this.regex = regex;
-}
-
-function AltVerbCmd(name, altcmd, pattern) {
-  Cmd.call(this, name, {});
-  this.altcmd = name;
-  this.pattern = pattern;
-  this.verb = true;
-}
 
 
 
 var commands = [
+  // ----------------------------------
+  // Single word commands
   new Cmd('Help', {
     regex:/^help|\?$/,
     script:helpScript,
   }),    
-  
   new Cmd('Look', {
     regex:/^l|look$/,
     script:function() {
@@ -164,10 +65,28 @@ var commands = [
     regex:/^inventory|inv|i$/,
     script:function() {
       var listOfOjects = scope(isHeld);
-      msg("You are carrying " + formatList(listOfOjects, {def:"a", joiner:" and", modified:true, nothing:"nothing"}) + ".");
+      msg("You are carrying " + formatList(listOfOjects, {def:"a", lastJoiner:" and", modified:true, nothing:"nothing"}) + ".");
       return SUCCESS_NO_TURNSCRIPTS;
     },
   }),
+  new Cmd('Map', {
+    regex:/^map$/,
+    script:function() {
+      io.map();
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
+  new Cmd('test', {
+    pattern:'test',
+    script:function() {
+      metamsg(JSON.stringify(w.background));
+      return SUCCESS_NO_TURNSCRIPTS;
+    },
+  }),
+
+  
+  // ----------------------------------
+  // File system commands
   new Cmd('Save', {
     regex:/^save$/,
     script:saveLoadScript,
@@ -216,21 +135,10 @@ var commands = [
       {text:true},
     ]
   }),
-  new Cmd('Map', {
-    regex:/^map$/,
-    script:function() {
-      io.map();
-      return SUCCESS_NO_TURNSCRIPTS;
-    },
-  }),
-  new Cmd('test', {
-    pattern:'test',
-    script:function() {
-      metamsg(JSON.stringify(w.background));
-      return SUCCESS_NO_TURNSCRIPTS;
-    },
-  }),
-
+  
+  
+  // ----------------------------------
+  // Verb-object commands
   new Cmd('Examine', {
     regex:/^(examine|exam|ex|x) (.+)$/,
     att:'examine',
@@ -262,48 +170,66 @@ var commands = [
       {ignore:true},
       {scope:isHere, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_TAKE(item));
+      return false;
+    },
   }),
-  
   new Cmd('Drop', {
     regex:/^(drop) (.+)$/,
     objects:[
       {ignore:true},
       {scope:isHeld, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_NOT_CARRYING(item));
+      return false;
+    },
   }),
-  
   new Cmd('Wear', {
     regex:/^(wear|don|put on) (.+)$/,
     objects:[
       {ignore:true},
       {scope:isHeld, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_WEAR(item));
+      return false;
+    },
   }),
-  
   new Cmd('Remove', {
     regex:/^(remove|doff|take off) (.+)$/,
     objects:[
       {ignore:true},
-      {scope:isHeld, multiple:true},
+      {scope:isWorn, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_NOT_WEARING(item));
+      return false;
+    },
   }),
-  
   new Cmd('Read', {
     regex:/^(read) (.+)$/,
     objects:[
       {ignore:true},
       {scope:isHeld, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_READ(item));
+      return false;
+    },
   }),
-  
   new Cmd('Eat', {
     regex:/^(eat) (.+)$/,
     objects:[
       {ignore:true},
       {scope:isHeld, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_EAT(item));
+      return false;
+    },
   }),
-  
   new Cmd('Turn on', {
     regex:/^(turn on|switch on) (.+)$/,
     att:"switchon",
@@ -311,6 +237,10 @@ var commands = [
       {ignore:true},
       {scope:isHeld, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_SWITCH_ON(item));
+      return false;
+    },
   }),
   
   new Cmd('Turn off', {
@@ -320,6 +250,10 @@ var commands = [
       {ignore:true},
       {scope:isHeld, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_SWITCH_OFF(item));
+      return false;
+    },
   }),
   
   new Cmd('Open', {
@@ -328,6 +262,10 @@ var commands = [
       {ignore:true},
       {scope:isPresent, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_OPEN(item));
+      return false;
+    },
   }),
   
   new Cmd('Close', {
@@ -336,6 +274,10 @@ var commands = [
       {ignore:true},
       {scope:isPresent, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_CLOSE(item));
+      return false;
+    },
   }),
   
   new Cmd('Lock', {
@@ -344,6 +286,10 @@ var commands = [
       {ignore:true},
       {scope:isPresent, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_LOCK(item));
+      return false;
+    },
   }),
   
   new Cmd('Unlock', {
@@ -352,6 +298,10 @@ var commands = [
       {ignore:true},
       {scope:isPresent, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_UNLOCK(item));
+      return false;
+    },
   }),
   
   new Cmd('Use', {
@@ -360,6 +310,10 @@ var commands = [
       {ignore:true},
       {scope:isPresent, multiple:true},
     ],
+    default:function(item, isMultiple) {
+      msg(prefix(item, isMultiple) + CMD_CANNOT_USE(item));
+      return false;
+    },
   }),
   
   new Cmd('Talk to', {
@@ -368,18 +322,27 @@ var commands = [
     objects:[
       {ignore:true},
       {scope:isHere},
-    ]
+    ],
+    default:function(item) {
+      msg("You chat to " + item.byname("the") + " for a few moments, before releasing that " + pronounVerb(item, "'be") + " not about to reply");
+      return false;
+    },
   }),
 
+  
+  // ----------------------------------
+  // Complex commands
+  
+  
   new Cmd('Put/in', {
-    regex:/^(put|place|drop) (.+) (in to|into|in) (.+)$/,
+    regex:/^(put|place|drop) (.+) (in to|into|in|on to|onto|on) (.+)$/,
     objects:[
       {ignore:true},
       {scope:isHeld, multiple:true},
       {ignore:true},
       {scope:isPresent},
     ],
-    script:function(cmd, objects) {
+    script:function(objects) {
       var success = false;
       var container = objects[1][0];
       if (!container.container) {
@@ -402,7 +365,7 @@ var commands = [
           }
         }
       }
-      if (success) { updateUIItems(); }
+      if (success) { game.update(); }
       return success ? SUCCESS : FAILED; 
     },
   }),
@@ -411,9 +374,12 @@ var commands = [
 
   new Cmd('Ask/about', {
     regex:/^(ask) (.+) (about) (.+)$/,
-    script:function(cmd, arr) {
+    script:function(arr) {
+      if (!arr[0][0].askabout) {
+        msg("You can ask " + this.pronouns.objective + " about " + arr[1] + " all you like, but " + pronounVerb(this, "'be") + " not about to reply.");
+        return false;
+      }
       success = arr[0][0].askabout(arr[1]);
-//      msg("You ask " + arr[0][0].name + " about " + arr[1] + ".*");
       return success ? SUCCESS : FAILED; 
     },
     objects:[
@@ -428,7 +394,7 @@ var commands = [
   
   new Cmd('Inspect', {
     regex:/^(inspect) (.+)$/,
-    script:function(cmd, arr) {
+    script:function(arr) {
       if (DEBUG) {
         var item = arr[0][0];
         debugmsg(0, "Name: " + item.name);
@@ -446,7 +412,7 @@ var commands = [
     objects:[
       {ignore:true},
       {scope:isInWorld},
-    ]
+    ],
   }),
 ];
 

@@ -153,7 +153,7 @@ tp.text_processors = {
   
   objects:function(arr, params) {
     var listOfOjects = scope(isHereListed);
-    return formatList(listOfOjects, {def:"a", joiner:" and", modified:true, nothing:"nothing"});
+    return formatList(listOfOjects, {def:"a", lastJoiner:" and", modified:true, nothing:"nothing"});
   },
   
   exits:function(arr, params) {
@@ -163,7 +163,7 @@ tp.text_processors = {
         list.push(EXITS[i].name);
       }
     }
-    return formatList(list, {joiner:" or", nothing:"nowhere"});
+    return formatList(list, {lastJoiner:" or", nothing:"nowhere"});
   },
   
   

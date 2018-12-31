@@ -25,8 +25,9 @@ var CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should
 var CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should as it was listed. Please alert this as a bug in Quest."
 var CMD_DONE = "Done";
 
-
-
+function CMD_NO_DEFAULT(name) {
+  return "No default set for command '" + name + "'.";
+}
 
 function CMD_NOT_CONTAINER(item) {
   return sentenceCase(item.byname("the")) + " is not a container";
@@ -51,6 +52,12 @@ function CMD_CANNOT_TAKE(item) {
 };
 function CMD_CANNOT_WEAR(item) {
   return "You can't wear " + item.pronouns.objective + ".";
+};
+function CMD_CANNOT_SWITCH_ON(item) {
+  return "You can't turn " + item.pronouns.objective + " on.";
+};
+function CMD_CANNOT_SWITCH_OFF(item) {
+  return "You can't turn " + item.pronouns.objective + " off.";
 };
 function CMD_CANNOT_OPEN(item) {
   return "You can't open " + item.pronouns.objective + ".";

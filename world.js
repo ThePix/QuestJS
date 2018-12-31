@@ -1,5 +1,99 @@
 "use strict";
 
+
+
+function Cmd(name, hash) {
+  this.name = name;
+  this.objects = [];
+  this.default = function() { errormsg(ERR_GAME_BUG, CMD_NO_DEFAULT(this.name)); }
+  // This is the default script for commands
+  this.script = function(objects) {
+    var success = false;
+    for (var i = 0; i < objects[0].length; i++) {
+      if (!objects[0][i][this.attName]) {
+        this.default(objects[0][i], objects[0].length > 1 || parser.currentCommand.all);
+      }
+      else {
+        var result = printOrRun(objects[0][i], this.attName, (objects[0].length > 1 || parser.currentCommand.all));
+        success = result || success;
+      }
+    }
+    if (success) {
+      game.update();
+      return (this.noTurnscripts ? SUCCESS_NO_TURNSCRIPTS : SUCCESS);
+    }
+    else {
+      return FAILED; 
+    }
+  };
+  for (var key in hash) {
+    this[key] = hash[key];
+  }
+  this.attName = this.att ? this.att : this.name.toLowerCase() 
+}
+
+function ExitCmd(name, hash) {
+  Cmd.call(this, name, hash);
+  this.exitCmd = true;
+  this.objects = [{ignore:true}, {ignore:true}, ],
+  this.script = function(objects) {
+    if (!hasExit(game.room, this.name)) {
+      errormsg(ERR_PLAYER, CMD_NOT_THAT_WAY);
+      return FAILED;
+    }
+    else {
+      var ex = game.room[this.name];
+      if (typeof ex == "string") {
+        setRoom(ex);
+        return SUCCESS;
+      }
+      else if (typeof ex === "function"){
+        ex(game.room);
+        return SUCCESS;
+      }
+      else if (typeof ex === "object"){
+        var fn = ex.use;
+        return fn(ex, this.name);
+      }
+      else {
+        errormsg(ERR_GAME_BUG, CMD_UNSUPPORTED_DIR);
+        return FAILED;
+      }
+    }
+    
+  };
+}
+
+var useWithDoor = function(ex) {
+  var obj = w[ex.door];
+  var doorName = ex.doorName ? ex.doorName : "door"
+  if (!obj.closed) {
+    setRoom(ex.name);
+    return SUCCESS;
+  }
+  if (!obj.locked) {
+    obj.closed = false;
+    msg("You open the " + doorName + " and walk through.");
+    setRoom(ex.name);
+    return SUCCESS;
+  }
+  if (obj.testKeys()) {
+    obj.closed = false;
+    obj.locked = false;
+    msg("You unlock the " + doorName + ", open it and walk through.");
+    setRoom(ex.name);
+    return SUCCESS;
+  }        
+  msg("You try the " + doorName + ", but it is locked.");
+  return FAILED;
+}
+
+
+
+
+
+
+
 // Use this to create a new item (as opposed to a room).
 // It adds various defaults that apply only to items
 function createItem() {
@@ -142,7 +236,7 @@ function createObject(name, listOfHashes) {
   
   // Give every object an alias and list alias (used in the inventories)
   if (!item.alias) {
-    item.alias = item.name;
+    item.alias = replaceAll(item.name, /_/g, " ");
   }
   if (!item.listalias) {
     item.listalias = sentenceCase(item.alias);

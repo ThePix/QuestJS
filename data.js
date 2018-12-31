@@ -21,14 +21,12 @@ commands.push(new Cmd('Charge', {
   objects:[
     {ignore:true},
     {scope:isHeld}
-  ]
+  ],
+  default:function(item, isMultiple) {
+    msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
+    return false;
+  },
 }));
-
-DEFAULT_ITEM.charge = function(isMultiple) {
-  msg(prefix(this, isMultiple) + pronounVerb(this, "'be", true) + " not something you can charge.");
-  return false;
-}
-
 
 
 
@@ -300,7 +298,15 @@ createItem("TS_Test",
 
 createItem("coin",
   TAKABLE(),
-  { loc:"lounge", examine: "A gold coin."  }
+  { loc:"lounge", examine: "A gold coin.", take:function(isMultiple) {
+    msg(prefix(this, isMultiple) + "You try to pick up the coin, but it just will not budge.");
+    return false;
+  },}
+);
+
+createItem("big_kitchen_table",
+  SURFACE(),
+  { loc:"kitchen", examine: "A Formica table."  }
 );
 
 createItem("garage_key",
