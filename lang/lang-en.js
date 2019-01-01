@@ -99,17 +99,11 @@ function CMD_NO_KEY(item) {
 var CMD_LOCKED_EXIT = "That way is locked.";
 
 
-function CMD_TAKE_SUCCESSFUL(item) {
-  return "You take " + item.byname("the") + ".";
-};
-function CMD_NPC_TAKE_SUCCESSFUL(item, npc) {
-  return nounVerb(npc, "take", true) + " " + item.byname("the") + ".";
+function CMD_TAKE_SUCCESSFUL(item, char) {
+  return nounVerb(char, "take", true) + " " + item.byname("the") + ".";
 };
 
-function CMD_DROP_SUCCESSFUL(item) {
-  return "You drop " + item.byname("the") + ".";
-};
-function CMD_NPC_DROP_SUCCESSFUL(item, npc) {
+function CMD_DROP_SUCCESSFUL(item, npc) {
   return nounVerb(npc, "drop", true) + " " + item.byname("the") + ".";
 };
 
@@ -314,6 +308,9 @@ function pronounVerb(item, verb, capitalise) {
 };
 
 function nounVerb(item, verb, capitalise) {
+  if (item === game.player) {
+    return pronounVerb(item, verb, capitalise);
+  }
   var s = item.alias + " " + conjugate(item, verb);
   return capitalise ? sentenceCase(s) : s;
 };

@@ -313,8 +313,8 @@ createItem("TS_Test",
 
 createItem("coin",
   TAKABLE(),
-  { loc:"lounge", examine: "A gold coin.", take:function(isMultiple) {
-    msg(prefix(this, isMultiple) + "You try to pick up the coin, but it just will not budge.");
+  { loc:"lounge", examine: "A gold coin.", take:function(isMultiple, participant) {
+    msg(prefix(this, isMultiple) + pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
     return false;
   },}
 );

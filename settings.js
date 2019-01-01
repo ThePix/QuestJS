@@ -63,7 +63,13 @@ function setup() {
   //parser.parse("ask mary about house");
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
-  parser.parse("mary, get coin");
+  //parser.parse("mary, get coin");
+  //parser.parse("mary, get torch");
+  //parser.parse("get coin");
+  //parser.parse("get boots");
+  
+  msg("Here is some {param:my_text}.", {my_text:"interesting text"});
+  msg("Here is a {param:my_item:name}.", {my_item:"coin"});
   
   //showStartDiag();
 }
