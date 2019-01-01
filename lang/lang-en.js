@@ -35,17 +35,25 @@ function CMD_NOT_CONTAINER(item) {
 
 
 
-function CMD_NOT_CARRYING(item) {
-  return "You're not carrying " + item.pronouns.objective + ".";
+function CMD_NOT_CARRYING(char, item) {
+  return nounVerb(char, "'be", true) + " not carrying " + item.pronouns.objective + ".";
 };
-function CMD_WEARING(item) {
-  return "You're wearing " + item.pronouns.objective + ".";
+function CMD_WEARING(char, item) {
+  return nounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
 };
+function CMD_NOT_WEARING(char, item) {
+  return nounVerb(char, "'be", true) + " not wearing " + item.pronouns.objective + ".";
+};
+function CMD_ALREADY_HAVE(char, item) {
+  return nounVerb(char, "'have", true) + " got " + item.pronouns.objective + " already.";
+};
+function CMD_ALREADY_WEARING(char, item) {
+  return nounVerb(char, "'have", true) + " already wearing " + item.pronouns.objective + ".";
+};
+
+
 function CMD_NOT_HERE(item) {
   return sentenceCase(item.pronouns.subjective) + "'s not here.";
-};
-function CMD_NOT_WEARING(item) {
-  return "You not wearing " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_TAKE(item) {
   return "You can't take " + item.pronouns.objective + ".";
@@ -81,12 +89,6 @@ function CMD_CANNOT_EAT(item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
 };
 
-function CMD_ALREADY_HAVE(item) {
-  return "You already have " + item.pronouns.objective + ".";
-};
-function CMD_ALREADY_WEARING(item) {
-  return "You're already wearing " + item.pronouns.objective + ".";
-};
 function CMD_ALREADY(item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 };
@@ -99,37 +101,37 @@ function CMD_NO_KEY(item) {
 var CMD_LOCKED_EXIT = "That way is locked.";
 
 
-function CMD_TAKE_SUCCESSFUL(item, char) {
+function CMD_TAKE_SUCCESSFUL(char, item) {
   return nounVerb(char, "take", true) + " " + item.byname("the") + ".";
 };
 
-function CMD_DROP_SUCCESSFUL(item, npc) {
+function CMD_DROP_SUCCESSFUL(char, item) {
   return nounVerb(npc, "drop", true) + " " + item.byname("the") + ".";
 };
 
-function CMD_WEAR_SUCCESSFUL(item) {
-  return "You put on " + item.byname("the") + ".";
+function CMD_WEAR_SUCCESSFUL(char, item) {
+  return nounVerb(char, "put", true) + " on " + item.byname("the") + ".";
 };
-function CMD_REMOVE_SUCCESSFUL(item) {
-  return "You take " + item.byname("the") + " off.";
+function CMD_REMOVE_SUCCESSFUL(char, item) {
+  return nounVerb(char, "take", true) + " " + item.byname("the") + " off.";
 };
-function CMD_OPEN_SUCCESSFUL(item) {
-  return "You open " + item.byname("the") + ".";
+function CMD_OPEN_SUCCESSFUL(char, item) {
+  return nounVerb(char, "open", true) + " " + item.byname("the") + ".";
 };
-function CMD_CLOSE_SUCCESSFUL(item) {
-  return "You close " + item.byname("the") + ".";
+function CMD_CLOSE_SUCCESSFUL(char, item) {
+  return nounVerb(char, "close", true) + " " + item.byname("the") + ".";
 };
-function CMD_LOCK_SUCCESSFUL(item) {
-  return "You lock " + item.byname("the") + ".";
+function CMD_LOCK_SUCCESSFUL(char, item) {
+  return nounVerb(char, "lock", true) + "k " + item.byname("the") + ".";
 };
-function CMD_UNLOCK_SUCCESSFUL(item) {
-  return "You unlock " + item.byname("the") + ".";
+function CMD_UNLOCK_SUCCESSFUL(char, item) {
+  return nounVerb(char, "unlock", true) + " " + item.byname("the") + ".";
 };
-function CMD_TURN_ON_SUCCESSFUL(item) {
-  return "You switch " + item.byname("the") + " on.";
+function CMD_TURN_ON_SUCCESSFUL(char, item) {
+  return nounVerb(char, "switch", true) + " " + item.byname("the") + " on.";
 };
-function CMD_TURN_OFF_SUCCESSFUL(item) {
-  return "You switch " + item.byname("the") + " off.";
+function CMD_TURN_OFF_SUCCESSFUL(char, item) {
+  return nounVerb(char, "switch", true) + " " + item.byname("the") + " off.";
 };
 
 
