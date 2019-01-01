@@ -63,11 +63,9 @@ function setup() {
   //parser.parse("ask mary about house");
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
-  //parser.parse("talk to mary");
+  parser.parse("mary, get coin");
   
   //showStartDiag();
-  msg("Wearing: " + formatList(w.Mary.getWearing()));
-  msg("Holding: " + formatList(w.Mary.getHolding()));
 }
 
 
