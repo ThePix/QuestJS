@@ -105,6 +105,7 @@ body {
 .debug {
   font-size: 10pt;
   color: grey;
+  font-family: monospace;
   /*display: none;*/
 }
 .debug2::before {

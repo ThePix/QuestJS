@@ -68,31 +68,9 @@ function setup() {
   //parser.parse("get coin");
   //parser.parse("get boots");
 
-  test.title("Simple object commands");
-  test.assertCmd("get coin", "You try to pick up the coin, but it just will not budge.");
-  test.assertCmd("get boots", "You take the boots.");
-  test.assertCmd("get boots", "You've got them already.");
-  test.assertCmd("wear boots", "You put on the boots.");
-  test.assertCmd("wear boots", "You're wearing them.");
-  test.assertCmd("remove boots", "You take the boots off.");
-  test.assertCmd("drop boots", "You drop the boots.");
-  
-  test.title("NPC commands");
-  test.assertCmd("kyle, get coin", "He tries to pick up the coin, but it just will not budge.");
-  test.assertEqual("lounge", w.flashlight.loc);
-  test.assertCmd("kyle, get torch", "Kyle takes the flashlight.");
-  test.assertEqual("Kyle", w.flashlight.loc);
-  test.assertCmd("kyle, drop torch", "Kyle drops the flashlight.");
-  test.assertCmd("kyle, get boots", "Kyle takes the boots.");
-  test.assertCmd("kyle, get boots", "He's got them already.");
-  test.assertCmd("kyle, wear boots", "Kyle puts on the boots.");
-  test.assertCmd("kyle, wear boots", "He's wearing them.");
-  test.assertCmd("tell kyle to get the book", "Kyle takes the book.");
-  test.assertCmd("tell kyle to read the book", "It is not in a language he understands.");
-  test.results ();
   //showStartDiag();
-
-  parser.parse("get boots");
+  //test.runTests();
+  parser.parse("kyle,get all");
 }
 
 

@@ -13,7 +13,6 @@ var CMD_ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
 var CMD_GO = "go to |goto |go |head |"
 
 var CMD_NOT_KNOWN_MSG = "I don't even know where to begin with that.";
-var CMD_OBJECT_UNKNOWN_MSG = "Not finding any object '%'.";
 var CMD_DISAMBIG_MSG = "Which do you mean?";
 var CMD_NO_MULTIPLES = "You cannot use multiple objects with that command.";
 var CMD_NOTHING = "Nothing there to do that with.";
@@ -24,6 +23,10 @@ var CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what 
 var CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should as you just clicked it. Please alert the game author about this bug."
 var CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should as it was listed. Please alert this as a bug in Quest."
 var CMD_DONE = "Done";
+
+function CMD_OBJECT_UNKNOWN_MSG(name) {
+  return "Nothing called '" + name + "' here.";
+}
 
 function CMD_NO_DEFAULT(name) {
   return "No default set for command '" + name + "'.";
@@ -36,7 +39,7 @@ function CMD_NOT_CONTAINER(item) {
 
 
 function CMD_NOT_CARRYING(char, item) {
-  return nounVerb(char, "'be", true) + " not carrying " + item.pronouns.objective + ".";
+  return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
 };
 function CMD_WEARING(char, item) {
   return pronounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
@@ -56,28 +59,28 @@ function CMD_NOT_HERE(char, item) {
   return pronounVerb(item, "'be", true) + " not here.";
 };
 function CMD_CANNOT_TAKE(char, item) {
-  return nounVerb(char, "'can", true) + " take " + item.pronouns.objective + ".";
+  return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_WEAR(char, item) {
-  return nounVerb(char, "'can", true) + " wear " + item.pronouns.objective + ".";
+  return nounVerb(char, "can't", true) + " wear " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_SWITCH_ON(char, item) {
-  return nounVerb(char, "'can", true) + " turn " + item.pronouns.objective + " on.";
+  return nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " on.";
 };
 function CMD_CANNOT_SWITCH_OFF(char, item) {
-  return nounVerb(char, "'can", true) + " turn " + item.pronouns.objective + " off.";
+  return nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " off.";
 };
 function CMD_CANNOT_OPEN(char, item) {
-  return nounVerb(char, "'can", true) + " open " + item.pronouns.objective + ".";
+  return nounVerb(char, "can't", true) + " open " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_CLOSE(char, item) {
-  return nounVerb(char, "'can", true) + "t close " + item.pronouns.objective + ".";
+  return nounVerb(char, "can't", true) + "t close " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_LOCK(char, item) {
-  return nounVerb(char, "'can", true) + "t lock " + item.pronouns.objective + ".";
+  return nounVerb(char, "can't", true) + "t lock " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_UNLOCK(char, item) {
-  return nounVerb(char, "'can", true) + " unlock " + item.pronouns.objective + ".";
+  return nounVerb(char, "can't", true) + " unlock " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_READ(char, item) {
   return "Nothing worth reading there.";
@@ -88,6 +91,10 @@ function CMD_CANNOT_USE(char, item) {
 function CMD_CANNOT_EAT(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
 };
+function CMD_CHAR_HAS_IT(char, item) {
+  return nounVerb(char, "have", true) + " " + item.pronouns.objective + ".";
+};
+
 
 function CMD_ALREADY(char, item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
@@ -99,6 +106,19 @@ function CMD_NO_KEY(char, item) {
   return nounVerb(char, "do", true) + " have the right key.";
 };
 var CMD_LOCKED_EXIT = "That way is locked.";
+
+
+
+
+function CMD_OPEN_AND_ENTER(char, doorName) {
+  return nounVerb(char, "open", true) + " the " + doorName + " and walk through.";
+};
+function CMD_UNLOCK_AND_ENTER(char, doorName) {
+  return nounVerb(char, "unlock", true) + " the " + doorName + ", open it and walk through.";
+};
+function CMD_TRY_BUT_LOCKED(char, doorName) {
+  return nounVerb(char, "try", true) + " the " + doorName + ", but it is locked.";
+};
 
 
 function CMD_TAKE_SUCCESSFUL(char, item) {
@@ -133,6 +153,13 @@ function CMD_TURN_ON_SUCCESSFUL(char, item) {
 function CMD_TURN_OFF_SUCCESSFUL(char, item) {
   return nounVerb(char, "switch", true) + " " + item.byname("the") + " off.";
 };
+
+
+
+function NPC_HEADING(char, dir) {
+  return nounVerb(char, "head", true) + " " + dir + ".";
+}
+
 
 
 
@@ -241,7 +268,7 @@ var CONJUGATIONS = {
   ],
   they:[
     { name:"be", value:"are"},
-    { name:"_be", value:"'re"},
+    { name:"'be", value:"'re"},
   ],
   it:[
     { name:"be", value:"is"},
@@ -250,6 +277,7 @@ var CONJUGATIONS = {
     { name:"mould", value:"moulds"},
     { name:"*ould", value:"ould"},
     { name:"must", value:"must"},
+    { name:"don't", value:"doesn't"},
     { name:"can't", value:"can't"},
     { name:"won't", value:"won't"},
     { name:"cannot", value:"cannot"},

@@ -153,7 +153,7 @@ createItem("boots",
 createItem("knife",
   TAKABLE(),
   WEAPON,
-  { loc:"lounge", sharp:false, examine:function() {
+  { loc:"me", sharp:false, examine:function() {
     if (this.sharp) {
       msg("A really sharp knife.");
     }
