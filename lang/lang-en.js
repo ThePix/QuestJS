@@ -39,64 +39,64 @@ function CMD_NOT_CARRYING(char, item) {
   return nounVerb(char, "'be", true) + " not carrying " + item.pronouns.objective + ".";
 };
 function CMD_WEARING(char, item) {
-  return nounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
+  return pronounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
 };
 function CMD_NOT_WEARING(char, item) {
-  return nounVerb(char, "'be", true) + " not wearing " + item.pronouns.objective + ".";
+  return pronounVerb(char, "'be", true) + " not wearing " + item.pronouns.objective + ".";
 };
 function CMD_ALREADY_HAVE(char, item) {
-  return nounVerb(char, "'have", true) + " got " + item.pronouns.objective + " already.";
+  return pronounVerb(char, "'ve", true) + " got " + item.pronouns.objective + " already.";
 };
 function CMD_ALREADY_WEARING(char, item) {
-  return nounVerb(char, "'have", true) + " already wearing " + item.pronouns.objective + ".";
+  return pronounVerb(char, "'ve", true) + " already wearing " + item.pronouns.objective + ".";
 };
 
 
-function CMD_NOT_HERE(item) {
-  return sentenceCase(item.pronouns.subjective) + "'s not here.";
+function CMD_NOT_HERE(char, item) {
+  return pronounVerb(item, "'be", true) + " not here.";
 };
-function CMD_CANNOT_TAKE(item) {
-  return "You can't take " + item.pronouns.objective + ".";
+function CMD_CANNOT_TAKE(char, item) {
+  return nounVerb(char, "'can", true) + " take " + item.pronouns.objective + ".";
 };
-function CMD_CANNOT_WEAR(item) {
-  return "You can't wear " + item.pronouns.objective + ".";
+function CMD_CANNOT_WEAR(char, item) {
+  return nounVerb(char, "'can", true) + " wear " + item.pronouns.objective + ".";
 };
-function CMD_CANNOT_SWITCH_ON(item) {
-  return "You can't turn " + item.pronouns.objective + " on.";
+function CMD_CANNOT_SWITCH_ON(char, item) {
+  return nounVerb(char, "'can", true) + " turn " + item.pronouns.objective + " on.";
 };
-function CMD_CANNOT_SWITCH_OFF(item) {
-  return "You can't turn " + item.pronouns.objective + " off.";
+function CMD_CANNOT_SWITCH_OFF(char, item) {
+  return nounVerb(char, "'can", true) + " turn " + item.pronouns.objective + " off.";
 };
-function CMD_CANNOT_OPEN(item) {
-  return "You can't open " + item.pronouns.objective + ".";
+function CMD_CANNOT_OPEN(char, item) {
+  return nounVerb(char, "'can", true) + " open " + item.pronouns.objective + ".";
 };
-function CMD_CANNOT_CLOSE(item) {
-  return "You can't close " + item.pronouns.objective + ".";
+function CMD_CANNOT_CLOSE(char, item) {
+  return nounVerb(char, "'can", true) + "t close " + item.pronouns.objective + ".";
 };
-function CMD_CANNOT_LOCK(item) {
-  return "You can't lock " + item.pronouns.objective + ".";
+function CMD_CANNOT_LOCK(char, item) {
+  return nounVerb(char, "'can", true) + "t lock " + item.pronouns.objective + ".";
 };
-function CMD_CANNOT_UNLOCK(item) {
-  return "You can't unlock " + item.pronouns.objective + ".";
+function CMD_CANNOT_UNLOCK(char, item) {
+  return nounVerb(char, "'can", true) + " unlock " + item.pronouns.objective + ".";
 };
-function CMD_CANNOT_READ(item) {
+function CMD_CANNOT_READ(char, item) {
   return "Nothing worth reading there.";
 };
-function CMD_CANNOT_USE(item) {
+function CMD_CANNOT_USE(char, item) {
   return "No obvious way to use " + item.pronouns.objective + ".";
 };
-function CMD_CANNOT_EAT(item) {
+function CMD_CANNOT_EAT(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
 };
 
-function CMD_ALREADY(item) {
+function CMD_ALREADY(char, item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 };
-function CMD_LOCKED(item) {
+function CMD_LOCKED(char, item) {
   return pronounVerb(item, "'be", true) + " locked.";
 };
-function CMD_NO_KEY(item) {
-  return "You don't have the right key.";
+function CMD_NO_KEY(char, item) {
+  return nounVerb(char, "do", true) + " have the right key.";
 };
 var CMD_LOCKED_EXIT = "That way is locked.";
 
@@ -106,7 +106,7 @@ function CMD_TAKE_SUCCESSFUL(char, item) {
 };
 
 function CMD_DROP_SUCCESSFUL(char, item) {
-  return nounVerb(npc, "drop", true) + " " + item.byname("the") + ".";
+  return nounVerb(char, "drop", true) + " " + item.byname("the") + ".";
 };
 
 function CMD_WEAR_SUCCESSFUL(char, item) {
@@ -229,15 +229,15 @@ function saveLoadScript() {
 var CONJUGATIONS = {
   i:[
     { name:"be", value:"am"},
-    { name:"_be", value:"'m"},
+    { name:"'be", value:"'m"},
   ],
   you:[
     { name:"be", value:"are"},
-    { name:"_be", value:"'re"},
+    { name:"'be", value:"'re"},
   ],
   we:[
     { name:"be", value:"are"},
-    { name:"_be", value:"'re"},
+    { name:"'be", value:"'re"},
   ],
   they:[
     { name:"be", value:"are"},
@@ -314,6 +314,7 @@ function nounVerb(item, verb, capitalise) {
     return pronounVerb(item, verb, capitalise);
   }
   var s = item.alias + " " + conjugate(item, verb);
+  s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 };
 

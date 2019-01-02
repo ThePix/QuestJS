@@ -130,17 +130,15 @@ createItem("charm",
 
 createItem("book", 
   TAKABLE(),
-  { loc:"lounge", examine:"A leather-bound book.", heldVerbsX:["Read"], read:function() {
-      if (isHeld(this)) {
-        msg ("It is not in a language you understand.");
-        return true;
-      }          
-      else {
-        msg ("You're not holding it.");
-        return false;
-      }          
+  { loc:"lounge", examine:"A leather-bound book.", heldVerbsX:["Read"], read:function(isMultiple, char) {
+    if (cmdRules.isHeldRule(char, this, isMultiple)) {
+      msg (prefix(this, isMultiple) + "It is not in a language " + pronounVerb(char, "understand") + ".");
+      return true;
+    }          
+    else {
+      return false;
     }
-  }
+  }}
 );
 
 
@@ -254,19 +252,19 @@ createItem("light_switch",
 
 
 
-createItem("Mary",
-  NPC(true),
-  { loc:"lounge", examine:"An attractive young lady.", properName:true,
+createItem("Kyle",
+  NPC(false),
+  { loc:"lounge", examine:"A grizzly bear. But cute.", properName:true,
     askoptions:[
-      {regex:/house/, response:"'I like it,' says Mary.", },
-      {regex:/garden/, response:"'Needs some work,' Mary says with a sign.", },
+      {regex:/house/, response:"'I like it,' says Kyle.", },
+      {regex:/garden/, response:"'Needs some work,' Kyle says with a sign.", },
     ],
     speakto:function() {
       switch (this.speaktoCount) {
-        case 0 : msg("You say 'Hello,' to Mary, and she replies in kind."); break;
-        case 1 : msg("You ask Mary how to get upstairs. 'You know,' she replies, 'I have no idea.'"); break;
-        case 2 : msg("'Where do you sleep?' you ask Mary."); msg("'What's \"sleep\"?'"); break;
-        default: msg("You wonder what you can talk to Mary about."); break;
+        case 0 : msg("You say 'Hello,' to Kyle, and she replies in kind."); break;
+        case 1 : msg("You ask Kyle how to get upstairs. 'You know,' she replies, 'I have no idea.'"); break;
+        case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break;
+        default: msg("You wonder what you can talk to Kyle about."); break;
       }
     },
   }
@@ -274,12 +272,12 @@ createItem("Mary",
 
 createItem("straw_boater",
   WEARABLE(false),
-  { loc:"Mary", examine: "A straw boater.", worn:true }
+  { loc:"Kyle", examine: "A straw boater.", worn:true }
 );
 
 createItem("Mary_The_Garden",
   TOPIC(true),
-  { loc:"Mary", alias:"What's the deal with the garden?", nowShow:["Mary_The_Garden_Again"],
+  { loc:"Kyle", alias:"What's the deal with the garden?", nowShow:["Mary_The_Garden_Again"],
     script:function() {
       msg("You ask May about the garden, but she's not talking.");
     },
@@ -288,7 +286,7 @@ createItem("Mary_The_Garden",
 
 createItem("Mary_The_Garden_Again",
   TOPIC(false),
-  { loc:"Mary", alias:"Seriously, what's the deal with the garden?",
+  { loc:"Kyle", alias:"Seriously, what's the deal with the garden?",
     script:function() {
       msg("You ask May about the garden, but she's STILL not talking.");
     },
@@ -297,9 +295,9 @@ createItem("Mary_The_Garden_Again",
 
 createItem("Mary_The_Weather",
   TOPIC(true),
-  { loc:"Mary", alias:"The weather",
+  { loc:"Kyle", alias:"The weather",
     script:function() {
-      msg("You talk to Mary about the weather.");
+      msg("You talk to Kyle about the weather.");
     },
   }
 );
