@@ -69,8 +69,8 @@ function setup() {
   //parser.parse("get boots");
 
   //showStartDiag();
-  //test.runTests();
-  parser.parse("kyle,get all");
+  test.runTests();
+  //parser.parse("kyle,get all");
 }
 
 

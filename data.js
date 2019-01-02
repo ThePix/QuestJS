@@ -88,7 +88,13 @@ createItem("me",
 createRoom("kitchen", {
   desc:'A clean room.',
   west:"lounge",
-  down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; } }),
+  down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; }, msg:function(isMultiple, char) {
+    if (char === game.player) {
+      msg("You go through the trapdoor, and down the ladder.");
+    } else {
+      msg("You watch " + char.byname("the") + " disappear through the trapdoor.");
+    }
+  }}),
   north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
   afterEnterFirst:function() {
     msg("A fresh smell here!");
@@ -191,7 +197,7 @@ createItem("trapdoor",
 
 createItem("camera",
   TAKABLE(),
-  { loc:"lounge", examine:"A cheap digital camera.", alias:"hat", listalias:"microscope" }
+  { loc:"kitchen", examine:"A cheap digital camera.", alt:["picture box"] }
 );
 
 createItem("flashlight",
