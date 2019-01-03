@@ -82,7 +82,7 @@ const MONSTER_ATTACK = function() {
   
 createItem("me",
   PLAYER,
-  { loc:"lounge", alt:["me", "myself", "player"], examine:function() {
+  { loc:"tavern", alt:["me", "myself", "player"], examine:function() {
     msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
   }
@@ -176,8 +176,8 @@ createItem("book",
 
 
 createItem("book_cover",
-  COMPONENT,
-  { loc:"book", examine:"The book cover is very fancy.", }
+  COMPONENT("book"),
+  { examine:"The book cover is very fancy.", }
 );
 
 

@@ -70,8 +70,15 @@ function setup() {
   //parser.parse("get boots");
 
   //showStartDiag();
-  test.runTests();
-  
+  //test.runTests();
+          var item = w.tavern
+        debugmsg(0, "Name: " + item.name);
+        for (var key in item) {
+          if (item.hasOwnProperty(key)) {
+             debugmsg(0, "--" + key + ": " + item[key]);
+          }
+        }        
+
 }
 
 
