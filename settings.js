@@ -28,7 +28,7 @@ var STATUS = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },
   function() { return "<td>Health points:</td><td>" + game.player.hitpoints + "</td>"; },
-  function() { return '<td rowspan="2">' + game.player.status + "</td>"; },
+  function() { return '<td colspan="2">' + game.player.status + "</td>"; },
 ];
 
 

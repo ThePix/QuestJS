@@ -2,27 +2,30 @@
 
 
 commands.push(new Cmd('Kick', {
+  npcCmd:true,
+  rules:[cmdRules.isNotWithOtherCharRule, cmdRules.isHere],
   regex:/^(kick) (.+)$/,
   objects:[
     {ignore:true},
     {scope:isPresent}
-  ]
+  ],
+  default:function(item, isMultiple, char) {
+    msg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
+    return false;
+  },
 }));
-
-DEFAULT_ITEM.kick = function(isMultiple) {
-  msg(prefix(this, isMultiple) + "You kick " + this.pronouns.objective + ", but nothing happens.");
-  return false;
-}
 
 
 
 commands.push(new Cmd('Charge', {
+  npcCmd:true,
+  rules:[cmdRules.isNotWithOtherCharRule, cmdRules.isHeld],
   regex:/^(charge) (.+)$/,
   objects:[
     {ignore:true},
     {scope:isHeld}
   ],
-  default:function(item, isMultiple) {
+  default:function(item, isMultiple, char) {
     msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
     return false;
   },
@@ -32,7 +35,7 @@ commands.push(new Cmd('Charge', {
 
 
 const SPELL = {
-  spellVerbs:['Examine', 'Cast'],
+  spellVerbs:['About', 'Cast'],
   cast:function(self) {
     msg('You cast <i>' + self.name + '</i>.');
   },
