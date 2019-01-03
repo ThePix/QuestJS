@@ -53,7 +53,9 @@ function CMD_ALREADY_HAVE(char, item) {
 function CMD_ALREADY_WEARING(char, item) {
   return pronounVerb(char, "'ve", true) + " already wearing " + item.pronouns.objective + ".";
 };
-
+function CMD_CANNOT_TAKE_COMPONENT(char, item) {
+  return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + pronounVerb(item, "'be") + " part of " + w[item.loc].byname("the") + ".";
+};
 
 function CMD_NOT_HERE(char, item) {
   return pronounVerb(item, "'be", true) + " not here.";

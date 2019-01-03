@@ -105,9 +105,17 @@ createRoom("kitchen", {
 });
 
 
+createRoom("dining_room", {
+  desc:'An old-fashioned room.',
+  east:'lounge',
+  up:"dining_room_on_stool",
+  alias:"dining room",
+});
+
 createRoom("lounge", {
   desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
-  east:'kitchen'
+  east:'kitchen',
+  west:"dining_room",
 });
 
 createRoom("garage", {
@@ -124,7 +132,22 @@ createRoom("basement", {
   }
 });
 
-createObject("spellbook", {
+
+createRoom("dining_room_on_stool", {
+  desc:'Stod on a stool, in an old-fashioned room.',
+  east:'lounge',
+  down:"dining_room",
+  alias:"dining room (on a stool)",
+  loc:"dining_room",
+});
+
+
+createRoom("hole", {
+  desc:'An old-fashioned room.',
+});
+
+
+createRoom("spellbook", {
   examine:'A ancient tomb.',
 });
 
@@ -152,6 +175,12 @@ createItem("book",
 
 
 
+createItem("book_cover",
+  COMPONENT,
+  { loc:"book", examine:"The book cover is very fancy.", }
+);
+
+
 createItem("boots", 
   WEARABLE(),
   { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
@@ -176,9 +205,17 @@ createItem("knife",
 createItem("glass_cabinet",
   CONTAINER(false),
   LOCKED_WITH("cabinet_key"),
-  { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front", transparent:true, }
+  { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, altLocs:["dining_room"]}
 );
 
+createItem("jewellery_box",
+  CONTAINER(true),
+  { loc:"glass_cabinet", alias:"jewellery box", examine:"A nice box.", }
+);
+
+createItem("ring",
+  { loc:"jewellery_box", examine:"A ring.", }
+);
 
 createItem("cardboard_box",
   CONTAINER(false),

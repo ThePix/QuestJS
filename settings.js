@@ -63,6 +63,7 @@ function setup() {
   //parser.parse("ask kyle about house");
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
+  
   //parser.parse("kyle, get coin");
   //parser.parse("kyle, get torch");
   //parser.parse("get coin");
@@ -70,7 +71,7 @@ function setup() {
 
   //showStartDiag();
   test.runTests();
-  //parser.parse("kyle,get all");
+  
 }
 
 
