@@ -82,7 +82,7 @@ const MONSTER_ATTACK = function() {
   
 createItem("me",
   PLAYER,
-  { loc:"tavern", alt:["me", "myself", "player"], examine:function() {
+  { loc:"lounge", alt:["me", "myself", "player"], examine:function() {
     msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
   }
@@ -385,10 +385,52 @@ createItem("garage_door",
 );
 
 createItem("charger",
-  { loc:"garage", examine: "A device bigger than a washing machine to charge a torch?", mended:false,
+  { loc:"garage", examine: "A device bigger than a washing machine to charge a torch? It has a compartment and a button. {charger_state}.", mended:false,
     use:function() {
-      metamsg("To use the charge, type CHARGE followed by the name of the item you want to charge.");
+      metamsg("To use the charge, you need to put the torch in the compartment and press the button.");
     }
   }
 );
 
+createItem("charger_compartment",
+  COMPONENT("charger"),
+  CONTAINER(false),
+  { alias:"compartment", examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.", 
+    testRestrictions:function(item) {
+      var contents = w.charger_compartment.getContents();
+      if (contents.length > 0) {
+        msg("The compartment is full.");
+        return false;
+      }
+      return true;
+    },
+  }
+);
+
+createItem("charger_button",
+  COMPONENT("charger"),
+  { examine:"A big red button.", alias:"button",
+    push:function(isMultiple, participant) {
+      if (!w.charger_compartment.closed || w.flashlight.loc !== "charger_compartment") {
+        msg(pronounVerb(participant, "push", true) + " the button, but nothing happens.");
+        return false;
+      }
+      else {
+        msg(pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
+        w.flashlight.power = 20;;
+        return true;
+      }
+    }
+  }
+);
+
+tp.addDirective("charger_state", function(){
+  if (w.charger_compartment.closed) {
+    return "The compartment is closed";
+  }
+  var contents = w.charger_compartment.getContents();
+  if (contents.length === 0) {
+    return "The compartment is empty";
+  }
+  return "The compartment contains " + formatList(contents);
+});

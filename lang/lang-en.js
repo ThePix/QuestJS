@@ -22,7 +22,7 @@ var CMD_UNSUPPORTED_DIR = "Unsupported type for direction";
 var CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
 var CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should as you just clicked it. Please alert the game author about this bug."
 var CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should as it was listed. Please alert this as a bug in Quest."
-var CMD_DONE = "Done";
+var CMD_DONE = "Done.";
 
 function CMD_OBJECT_UNKNOWN_MSG(name) {
   return "Nothing called '" + name + "' here.";
@@ -32,11 +32,10 @@ function CMD_NO_DEFAULT(name) {
   return "No default set for command '" + name + "'.";
 }
 
-function CMD_NOT_CONTAINER(item) {
+
+function CMD_NOT_CONTAINER(char, item) {
   return sentenceCase(item.byname("the")) + " is not a container";
 };
-
-
 
 function CMD_NOT_CARRYING(char, item) {
   return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
@@ -55,6 +54,9 @@ function CMD_ALREADY_WEARING(char, item) {
 };
 function CMD_CANNOT_TAKE_COMPONENT(char, item) {
   return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + pronounVerb(item, "'be") + " part of " + w[item.loc].byname("the") + ".";
+};
+function CMD_CONTAINER_CLOSED(char, item) {
+  return nounVerb(item, "be", true) + " closed.";
 };
 
 function CMD_NOT_HERE(char, item) {
@@ -98,6 +100,9 @@ function CMD_CHAR_HAS_IT(char, item) {
 };
 
 
+function CMD_NOTHING_USEFUL(char, item) {
+  return "That's not going to do anything useful.";
+};
 function CMD_ALREADY(char, item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 };
@@ -343,7 +348,7 @@ function nounVerb(item, verb, capitalise) {
   if (item === game.player) {
     return pronounVerb(item, verb, capitalise);
   }
-  var s = item.alias + " " + conjugate(item, verb);
+  var s = item.byname("the") + " " + conjugate(item, verb);
   s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 };
