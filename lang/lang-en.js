@@ -33,6 +33,12 @@ function CMD_NO_DEFAULT(name) {
 }
 
 
+function CMD_NOT_NPC(item) {
+  return nounVerb(game.player, "can", true) + " tell " + item.byname("the") + " to do what you like, but there is no way " + pronounVerb(item, "'ll") + " do it.";
+};
+function CMD_NOT_NPC_FOR_GIVE(char, item) {
+  return "Realistically, " + nounVerb(item, "be") + " not interesting in anything " + char.pronouns.subjective + " might give " + item.pronouns.objective + ".";
+};
 function CMD_NOT_CONTAINER(char, item) {
   return sentenceCase(item.byname("the")) + " is not a container";
 };

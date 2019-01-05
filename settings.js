@@ -72,6 +72,7 @@ function setup() {
   //showStartDiag();
   test.runTests();
 
+  
 }
 
 

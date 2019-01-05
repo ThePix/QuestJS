@@ -58,7 +58,7 @@ const INSTANT_SPELL = function() {
 }  
 
 const WEAPON = function() {
-  var res = TAKABLE;
+  var res = TAKEABLE;
   res.icon = function() {
     return ('<img src="images/weapon12.png" />');
   };
@@ -88,29 +88,30 @@ createItem("me",
   }
 );
 
-createRoom("kitchen", {
-  desc:'A clean room.',
-  west:"lounge",
-  down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; }, msg:function(isMultiple, char) {
-    if (char === game.player) {
-      msg("You go through the trapdoor, and down the ladder.");
-    } else {
-      msg("You watch " + char.byname("the") + " disappear through the trapdoor.");
-    }
-  }}),
-  north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
-  afterEnterFirst:function() {
-    msg("A fresh smell here!");
+createItem("knife",
+  TAKEABLE(),
+  WEAPON,
+  { loc:"me", sharp:false,
+    examine:function() {
+      if (this.sharp) {
+        msg("A really sharp knife.");
+      }
+      else {
+        msg("A blunt knife.");
+      }
+    },
+    chargeResponse:function(participant) {
+      msg("There is a loud bang, and the knife is destroyed.");
+      this.display = DSPY_DELETED;
+      return false;
+    },
   }
-});
+);
 
 
-createRoom("dining_room", {
-  desc:'An old-fashioned room.',
-  east:'lounge',
-  up:"dining_room_on_stool",
-  alias:"dining room",
-});
+
+
+
 
 createRoom("lounge", {
   desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
@@ -118,19 +119,8 @@ createRoom("lounge", {
   west:"dining_room",
 });
 
-createRoom("garage", {
-  desc:'An empty garage.',
-  south:new Exit("kitchen", {use:useWithDoor, door:"garage_door", doorName:"kitchen door"},),
-});
 
-createRoom("basement", {
-  desc:"A dank room",
-  darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
-  up:new Exit('kitchen', {isHidden:function() { return false; } }),
-  lightSource:function() {
-    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_NONE;
-  }
-});
+
 
 
 createRoom("dining_room_on_stool", {
@@ -161,7 +151,7 @@ createItem("charm",
 
 
 createItem("book", 
-  TAKABLE(),
+  TAKEABLE(),
   { loc:"lounge", examine:"A leather-bound book.", heldVerbsX:["Read"], read:function(isMultiple, char) {
     if (cmdRules.isHeldRule(char, this, isMultiple)) {
       msg (prefix(this, isMultiple) + "It is not in a language " + pronounVerb(char, "understand") + ".");
@@ -188,31 +178,13 @@ createItem("boots",
 
 
 
-createItem("knife",
-  TAKABLE(),
-  WEAPON,
-  { loc:"me", sharp:false,
-    examine:function() {
-      if (this.sharp) {
-        msg("A really sharp knife.");
-      }
-      else {
-        msg("A blunt knife.");
-      }
-    },
-    chargeResponse:function(participant) {
-      msg("There is a loud bang, and the knife is destroyed.");
-      this.display = DSPY_DELETED;
-      return false;
-    },
-  }
-);
+
 
 
 createItem("glass_cabinet",
   CONTAINER(false),
   LOCKED_WITH("cabinet_key"),
-  { loc:"basement", alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, altLocs:["dining_room"]}
+  { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, altLocs:["dining_room"]}
 );
 
 createItem("jewellery_box",
@@ -231,24 +203,34 @@ createItem("cardboard_box",
 
 
 createItem("ornate_doll",
-  TAKABLE(),
+  TAKEABLE(),
   { loc:"glass_cabinet", alias:"ornate doll", examine:"A fancy doll, eighteenth century." }
 );
 
-createItem("trapdoor",
-  OPENABLE(false),
-  { loc:"kitchen", examine:"A small trapdoor in the floor.", }
+
+
+
+createItem("coin",
+  TAKEABLE(),
+  { loc:"lounge", examine: "A gold coin.", take:function(isMultiple, participant) {
+    msg(prefix(this, isMultiple) + pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
+    return false;
+  },}
 );
 
-
-
-createItem("camera",
-  TAKABLE(),
-  { loc:"kitchen", examine:"A cheap digital camera.", alt:["picture box"] }
+createItem("garage_key",
+  TAKEABLE(),
+  { loc:"lounge", examine: "A big key.", alias: "garage key"  }
 );
+
+createItem("cabinet_key",
+  TAKEABLE(),
+  { loc:"lounge", examine: "A small key.", alias: "small key"  }
+);
+
 
 createItem("flashlight",
-  TAKABLE(),
+  TAKEABLE(),
   SWITCHABLE(false),
   { loc:"lounge", examine:"A small black torch.", alt:["torch"], 
     byname:function(def, modified){
@@ -292,77 +274,45 @@ createItem("flashlight",
 
 
 
-createItem("light_switch",
-  SWITCHABLE(false),
-  { loc:"basement", examine:"A switch, presumably for the light.", alias:"light switch", },
-);
+
+
+
+createRoom("dining_room", {
+  desc:'An old-fashioned room.',
+  east:'lounge',
+  up:"dining_room_on_stool",
+  alias:"dining room",
+});
 
 
 
 
-createItem("Kyle",
-  NPC(false),
-  { loc:"lounge", examine:"A grizzly bear. But cute.", properName:true,
-    askoptions:[
-      {regex:/house/, response:"'I like it,' says Kyle.", },
-      {regex:/garden/, response:"'Needs some work,' Kyle says with a sign.", },
-    ],
-    speakto:function() {
-      switch (this.speaktoCount) {
-        case 0 : msg("You say 'Hello,' to Kyle, and she replies in kind."); break;
-        case 1 : msg("You ask Kyle how to get upstairs. 'You know,' she replies, 'I have no idea.'"); break;
-        case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break;
-        default: msg("You wonder what you can talk to Kyle about."); break;
-      }
-    },
+
+
+createRoom("kitchen", {
+  desc:'A clean room.',
+  west:"lounge",
+  down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; }, msg:function(isMultiple, char) {
+    if (char === game.player) {
+      msg("You go through the trapdoor, and down the ladder.");
+    } else {
+      msg("You watch " + char.byname("the") + " disappear through the trapdoor.");
+    }
+  }}),
+  north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
+  afterEnterFirst:function() {
+    msg("A fresh smell here!");
   }
+});
+
+createItem("trapdoor",
+  OPENABLE(false),
+  { loc:"kitchen", examine:"A small trapdoor in the floor.", }
 );
 
-createItem("straw_boater",
-  WEARABLE(false),
-  { loc:"Kyle", examine: "A straw boater.", worn:true }
-);
-
-createItem("Mary_The_Garden",
-  TOPIC(true),
-  { loc:"Kyle", alias:"What's the deal with the garden?", nowShow:["Mary_The_Garden_Again"],
-    script:function() {
-      msg("You ask May about the garden, but she's not talking.");
-    },
-  }
-);
-
-createItem("Mary_The_Garden_Again",
-  TOPIC(false),
-  { loc:"Kyle", alias:"Seriously, what's the deal with the garden?",
-    script:function() {
-      msg("You ask May about the garden, but she's STILL not talking.");
-    },
-  }
-);
-
-createItem("Mary_The_Weather",
-  TOPIC(true),
-  { loc:"Kyle", alias:"The weather",
-    script:function() {
-      msg("You talk to Kyle about the weather.");
-    },
-  }
-);
-
-createItem("TS_Test",
-  TURNSCRIPT(true, function(self) {
-    msg('Turn script!');
-  }),
-);
-
-
-createItem("coin",
-  TAKABLE(),
-  { loc:"lounge", examine: "A gold coin.", take:function(isMultiple, participant) {
-    msg(prefix(this, isMultiple) + pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
-    return false;
-  },}
+createItem("camera",
+  TAKEABLE(),
+  { loc:"kitchen", examine:"A cheap digital camera.", alt:["picture box"] }
 );
 
 createItem("big_kitchen_table",
@@ -370,21 +320,46 @@ createItem("big_kitchen_table",
   { loc:"kitchen", examine: "A Formica table."  }
 );
 
-createItem("garage_key",
-  TAKABLE(),
-  { loc:"lounge", examine: "A big key.", alias: "garage key"  }
-);
-
-createItem("cabinet_key",
-  TAKABLE(),
-  { loc:"lounge", examine: "A small key.", alias: "small key"  }
-);
-
 createItem("garage_door",
   OPENABLE(false),
   LOCKED_WITH("garage_key"),
   { loc:"kitchen", examine: "The door to the garage.", alias: "garage door", altLocs:["garage"] }
 );
+
+
+
+
+
+
+
+createRoom("basement", {
+  desc:"A dank room",
+  darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
+  up:new Exit('kitchen', {isHidden:function() { return false; } }),
+  lightSource:function() {
+    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_NONE;
+  }
+});
+
+createItem("light_switch",
+  SWITCHABLE(false),
+  { loc:"basement", examine:"A switch, presumably for the light.", alias:"light switch", },
+);
+
+
+createItem("crates", 
+  { loc:"basement", examine:"A bunch of old crates.", }
+  
+);
+
+
+
+
+
+createRoom("garage", {
+  desc:'An empty garage.',
+  south:new Exit("kitchen", {use:useWithDoor, door:"garage_door", doorName:"kitchen door"},),
+});
 
 createItem("charger",
   { loc:"garage", examine: "A device bigger than a washing machine to charge a torch? It has a compartment and a button. {charger_state}.", mended:false,
@@ -428,6 +403,79 @@ createItem("charger_button",
     }
   }
 );
+
+
+
+
+
+
+createItem("Kyle",
+  NPC(false),
+  { loc:"lounge", examine:"A grizzly bear. But cute.", properName:true,
+    askoptions:[
+      {regex:/house/, response:"'I like it,' says Kyle.", },
+      {regex:/garden/, response:"'Needs some work,' Kyle says with a sign.", },
+    ],
+    speakto:function() {
+      switch (this.speaktoCount) {
+        case 0 : msg("You say 'Hello,' to Kyle, and she replies in kind."); break;
+        case 1 : msg("You ask Kyle how to get upstairs. 'You know,' she replies, 'I have no idea.'"); break;
+        case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break;
+        default: msg("You wonder what you can talk to Kyle about."); break;
+      }
+    },
+  }
+);
+
+createItem("straw_boater",
+  WEARABLE(false),
+  { loc:"Kyle", examine: "A straw boater.", worn:true }
+);
+
+createItem("Mary_The_Garden",
+  TOPIC(true),
+  { loc:"Kyle", alias:"What's the deal with the garden?", nowShow:["Mary_The_Garden_Again"],
+    script:function() {
+      msg("You ask May about the garden, but she's not talking.");
+    },
+  }
+);
+
+createItem("Kyle_The_Garden_Again",
+  TOPIC(false),
+  { loc:"Kyle", alias:"Seriously, what's the deal with the garden?",
+    script:function() {
+      msg("You ask May about the garden, but she's STILL not talking.");
+    },
+  }
+);
+
+createItem("Kyle_The_Weather",
+  TOPIC(true),
+  { loc:"Kyle", alias:"The weather",
+    script:function() {
+      msg("You talk to Kyle about the weather.");
+    },
+  }
+);
+
+
+
+
+
+
+
+
+
+
+
+
+createItem("TS_Test",
+  TURNSCRIPT(true, function(self) {
+    msg('Turn script!');
+  }),
+);
+
 
 tp.addDirective("charger_state", function(){
   if (w.charger_compartment.closed) {
