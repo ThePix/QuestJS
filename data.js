@@ -191,13 +191,20 @@ createItem("boots",
 createItem("knife",
   TAKABLE(),
   WEAPON,
-  { loc:"me", sharp:false, examine:function() {
-    if (this.sharp) {
-      msg("A really sharp knife.");
-    }
-    else {
-      msg("A blunt knife.");
-    } },
+  { loc:"me", sharp:false,
+    examine:function() {
+      if (this.sharp) {
+        msg("A really sharp knife.");
+      }
+      else {
+        msg("A blunt knife.");
+      }
+    },
+    chargeResponse:function(participant) {
+      msg("There is a loud bang, and the knife is destroyed.");
+      this.display = DSPY_DELETED;
+      return false;
+    },
   }
 );
 
@@ -274,17 +281,12 @@ createItem("flashlight",
       return true;
     },
     power:1,
-    charge:function(isMultiple) {
-      if (game.player.loc !== "garage") {
-        msg(prefix(this, isMultiple) + "There is nothing to charge the torch with here.");
-        return false;
-      }
-      else {
-        msg(prefix(this, isMultiple) + "You charge the torch - it should last for hours now.");
-        this.power = 20;;
-        return true;
-      }
+    chargeResponse:function(participant) {
+      msg(pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
+      w.flashlight.power = 20;;
+      return true;
     },
+    
   },
 );
 
@@ -411,14 +413,17 @@ createItem("charger_button",
   COMPONENT("charger"),
   { examine:"A big red button.", alias:"button",
     push:function(isMultiple, participant) {
-      if (!w.charger_compartment.closed || w.flashlight.loc !== "charger_compartment") {
+      var contents = w.charger_compartment.getContents()[0];
+      if (!w.charger_compartment.closed || !contents) {
         msg(pronounVerb(participant, "push", true) + " the button, but nothing happens.");
         return false;
       }
+      else if (!contents.chargeResponse) {
+        msg(pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, but nothing happens.");
+        return false;
+      }
       else {
-        msg(pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
-        w.flashlight.power = 20;;
-        return true;
+        return contents.chargeResponse(participant);
       }
     }
   }
@@ -432,5 +437,5 @@ tp.addDirective("charger_state", function(){
   if (contents.length === 0) {
     return "The compartment is empty";
   }
-  return "The compartment contains " + formatList(contents);
+  return "The compartment contains " + formatList(contents, {def:"a"});
 });

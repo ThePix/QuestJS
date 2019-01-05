@@ -58,10 +58,16 @@ function CMD_CANNOT_TAKE_COMPONENT(char, item) {
 function CMD_CONTAINER_CLOSED(char, item) {
   return nounVerb(item, "be", true) + " closed.";
 };
+function CMD_INSIDE_CONTAINER(char, item, cont) {
+  return pronounVerb(item, "be", true) + " inside " + cont.byname("the") + ".";
+};
+
+
 
 function CMD_NOT_HERE(char, item) {
   return pronounVerb(item, "'be", true) + " not here.";
 };
+
 function CMD_CANNOT_TAKE(char, item) {
   return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + ".";
 };
