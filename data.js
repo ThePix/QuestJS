@@ -3,7 +3,7 @@
 
 commands.push(new Cmd('Kick', {
   npcCmd:true,
-  rules:[cmdRules.isNotWithOtherCharRule, cmdRules.isHere],
+  rules:[cmdRules.isNotWithOtherCharRule, cmdRules.isHereRule],
   regex:/^(kick) (.+)$/,
   objects:[
     {ignore:true},
@@ -32,51 +32,21 @@ commands.push(new Cmd('Charge', {
 }));
 
 
-
-
-const SPELL = {
-  spellVerbs:['About', 'Cast'],
-  cast:function(self) {
-    msg('You cast <i>' + self.name + '</i>.');
+commands.push(new Cmd('Move', {
+  npcCmd:true,
+  rules:[cmdRules.isNotWithOtherCharRule, cmdRules.isHereRule],
+  regex:/^(move) (.+)$/,
+  objects:[
+    {ignore:true},
+    {scope:isHere}
+  ],
+  default:function(item, isMultiple, char) {
+    msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
+    return false;
   },
-  icon:function() {
-    return ('<img src="images/spell12.png" />');
-  },
-  getVerbs:function() {
-    return (this.loc === "spellbook" ? ["About", "Cast"] : ["About", "Learn"]);
-  },
-}
+}));
 
-const LASTING_SPELL = function() {
-  var res = SPELL;
-  return res;
-}  
 
-const INSTANT_SPELL = function() {
-  var res = SPELL;
-  return res;
-}  
-
-const WEAPON = function() {
-  var res = TAKEABLE;
-  res.icon = function() {
-    return ('<img src="images/weapon12.png" />');
-  };
-  return res;
-}  
-
-const MONSTER = function() {
-  var res = {};
-  return res;
-}  
-const MULTI_MONSTER = function() {
-  var res = {};
-  return res;
-}  
-const MONSTER_ATTACK = function() {
-  var res = {};
-  return res;
-}  
 
 
   
@@ -90,7 +60,6 @@ createItem("me",
 
 createItem("knife",
   TAKEABLE(),
-  WEAPON,
   { loc:"me", sharp:false,
     examine:function() {
       if (this.sharp) {
@@ -137,16 +106,6 @@ createRoom("hole", {
 });
 
 
-createRoom("spellbook", {
-  examine:'A ancient tomb.',
-});
-
-createItem("charm", 
-  SPELL,
-  {loc:'spellbook', examine:"Charm will make the target think you are his or her friend.",}
-);
-
-
 
 
 
@@ -188,11 +147,13 @@ createItem("glass_cabinet",
 );
 
 createItem("jewellery_box",
+  TAKEABLE(),
   CONTAINER(true),
   { loc:"glass_cabinet", alias:"jewellery box", examine:"A nice box.", }
 );
 
 createItem("ring",
+  TAKEABLE(),
   { loc:"jewellery_box", examine:"A ring.", }
 );
 
@@ -218,10 +179,6 @@ createItem("coin",
   },}
 );
 
-createItem("garage_key",
-  TAKEABLE(),
-  { loc:"lounge", examine: "A big key.", alias: "garage key"  }
-);
 
 createItem("cabinet_key",
   TAKEABLE(),
@@ -262,7 +219,7 @@ createItem("flashlight",
       }
       return true;
     },
-    power:1,
+    power:2,
     chargeResponse:function(participant) {
       msg(pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
       w.flashlight.power = 20;;
@@ -333,7 +290,7 @@ createItem("garage_door",
 
 
 createRoom("basement", {
-  desc:"A dank room",
+  desc:"A dank room, with piles of crates everywhere.",
   darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
   up:new Exit('kitchen', {isHidden:function() { return false; } }),
   lightSource:function() {
@@ -343,12 +300,28 @@ createRoom("basement", {
 
 createItem("light_switch",
   SWITCHABLE(false),
-  { loc:"basement", examine:"A switch, presumably for the light.", alias:"light switch", },
+  { loc:"basement", examine:"A switch, presumably for the light.", alias:"light switch",
+    checkCanSwitchOn:function() {
+      if (!w.crates.moved) {
+        msg("You cannot reach the light switch, without first moving the crates.");
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+  },
 );
 
 
 createItem("crates", 
-  { loc:"basement", examine:"A bunch of old crates.", }
+  { loc:"basement", examine:"A bunch of old crates.",
+    move:function() {
+      msg("You move the crates, so the light switch is accessible.");
+      this.moved = true;
+      return true;
+    }
+  }
   
 );
 
@@ -432,11 +405,11 @@ createItem("straw_boater",
   { loc:"Kyle", examine: "A straw boater.", worn:true }
 );
 
-createItem("Mary_The_Garden",
+createItem("Kyle_The_Garden",
   TOPIC(true),
   { loc:"Kyle", alias:"What's the deal with the garden?", nowShow:["Mary_The_Garden_Again"],
     script:function() {
-      msg("You ask May about the garden, but she's not talking.");
+      msg("You ask Kyle about the garden, but he's not talking.");
     },
   }
 );
@@ -445,7 +418,7 @@ createItem("Kyle_The_Garden_Again",
   TOPIC(false),
   { loc:"Kyle", alias:"Seriously, what's the deal with the garden?",
     script:function() {
-      msg("You ask May about the garden, but she's STILL not talking.");
+      msg("You ask Kyle about the garden, but he's STILL not talking.");
     },
   }
 );
@@ -463,17 +436,51 @@ createItem("Kyle_The_Weather",
 
 
 
+createItem("Lara",
+  NPC(true),
+  { loc:"dining_room", examine:"A normal-sized bunny.", properName:true,
+    giveReaction:function(item, multiple, char) {
+      if (item === w.ring) {
+        msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.");
+        w.ring.loc = "Lara";
+        w.ring.worn = true;
+        w.garage_key.loc = char.name;
+      }
+      else {
+        msg("'Why would I want {i:that}?'");
+      }
+    },
+  }
+);
+
+createItem("garage_key",
+  TAKEABLE(),
+  { loc:"lounge", examine: "A big key.", alias: "garage key"  }
+);
+
+createItem("Lara_garage_key",
+  TOPIC(true),
+  { loc:"Lara", alias:"Can I have the garden key?",
+    script:function() {
+      msg("You ask May about the garage key; she agrees to give it to you if you give her a ring. Perhaps there is one in the glass cabinet?");
+    },
+  }
+);
 
 
 
-
-
+createItem("walls",
+  { examine:"They're walls, what are you expecting?", alt:["wall"], display:DSPY_SCENERY,
+    isAtLoc:function(loc) { return true; }
+  }
+);
 
 
 createItem("TS_Test",
   TURNSCRIPT(true, function(self) {
     msg('Turn script!');
-  }),
+    this.count++;
+  }), {count:0},
 );
 
 

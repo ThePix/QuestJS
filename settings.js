@@ -1,20 +1,24 @@
 "use strict";
 
 const TITLE = "A First Step...";
+const AUTHOR = "The Pixie"
 const VERSION = "1.0";
+const THANKS = ["Kyle", "Lara"];
 
 // UI options
 const PANES = 'Left';  //Can be set to Left, Right or None.
 const COMPASS = true;
+
 const STATUS_PANE = "Status";  // Set to false to turn off
 const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
 const STATUS_WIDTH_RIGHT = 40;
+
 const TEXT_INPUT = true;
 const CURSOR = ">";
+const CMD_ECHO = true;               // echo commands to the screen
+
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;
-const CMD_ECHO = true;               // echo commands to the screen
-const PLAYER_NAME = "me";
 
 const ROOM_TEMPLATE = [
   "%",
@@ -37,11 +41,6 @@ var STATUS = [
 const INVENTORIES = [
   {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn },
   {name:'Items Worn', alt:'itemsWorn', test:isWorn },
-  {name:'Spells known', alt:'spells', 
-    test:function(item) {
-      return item.loc === "spellbook";
-    }
-  },
   {name:'Items Here', alt:'itemsHere', test:isHere },
 ];
 
@@ -59,20 +58,62 @@ const INVENTORIES = [
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 function setup() {
-  msg('This is a test of what we can do.');
-  //parser.parse("ask kyle about house");
+  msg("This is a quick example of what can be done in Quest 6.");
+  msg("Your objective is to turn on the light in the basement, but there are, of course, numerous hoops to jump through.");
+  msg("If you are successful, see if you can do it again, but getting Kyle to do everything. You should find that you can tell an PC to do pretty much anything (except look at things for you and talk to people for you).");
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
   
-  //parser.parse("kyle, get coin");
-  //parser.parse("kyle, get torch");
-  //parser.parse("get coin");
-  //parser.parse("get boots");
-
   //showStartDiag();
   test.runTests();
-
+/*
+  parser.parse("get small key");
+  parser.parse("open cabinet");
+  parser.parse("get ring");
+  parser.parse("w");
+  parser.parse("give ring to lara");
+  parser.parse("e");
+  parser.parse("get torch");
+  parser.parse("e");
+  parser.parse("open garage");
+  parser.parse("n");
+  parser.parse("open compartment");
+  parser.parse("put torch in compartment");
+  parser.parse("press button");
+  parser.parse("get torch");
+  parser.parse("s");
+  parser.parse("open trapdoor");
+  parser.parse("d");
+  parser.parse("turn on torch");
+  parser.parse("move crates");
+  parser.parse("turn on light");*/
   
+/*  parser.parse("kyle,get small key");
+  parser.parse("kyle,open cabinet");
+  parser.parse("kyle,get ring");
+  parser.parse("kyle,w");
+  parser.parse("w");
+  parser.parse("kyle,give ring to lara");
+  parser.parse("kyle,e");
+  parser.parse("e");
+  parser.parse("kyle,get torch");
+  parser.parse("kyle,e");
+  parser.parse("e");
+  parser.parse("kyle,open garage");
+  parser.parse("kyle,n");
+  parser.parse("n");
+  parser.parse("kyle,open compartment");
+  parser.parse("kyle,put torch in compartment");
+  parser.parse("kyle,press button");
+  parser.parse("kyle,get torch");
+  parser.parse("kyle,s");
+  parser.parse("s");
+  parser.parse("kyle,open trapdoor");/*
+  parser.parse("kyle,d");
+  parser.parse("d");
+  parser.parse("kyle,turn on torch");
+  parser.parse("kyle,move crates");
+  parser.parse("kyle,turn on light");*/
 }
 
 

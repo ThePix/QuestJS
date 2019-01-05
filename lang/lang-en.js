@@ -186,8 +186,8 @@ var ERROR_NO_PLAYER = "No player object found. This will not go well...";
 var ERROR_MSG_OR_RUN = "Unsupported type for printOrRun";
 var ERROR_NO_ROOM = "Failed to find room";
 var ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
-function ERROR_NO_PLAYER_FOUND(name) {
-  return "No player object found with name `" + name + "`. This will not go well...";
+function ERROR_NO_PLAYER_FOUND() {
+  return "No player object found. This may be due to a syntax error in data.js, but also check one object is actually flagged as the player.";
 }
 function ERROR_INIT_REPEATED_NAME(name) {
   return "Attempting to use the name `" + name + "`, there there is already an item with that name in the world.";
@@ -258,10 +258,20 @@ function helpScript() {
   if (TEXT_INPUT) {
     metamsg("Type commands in the command bar to interact with the world. To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
     metamsg("You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object). ");
-    metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong. You can use [SHIFT] with the arrow keys to move north, south, east or west, or use the number pad for all eight copmpass directions (when number lock is on).");
+    metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong. You can use [SHIFT] with the arrow keys to move north, south, east or west, or use the number pad for all eight compass directions (when number lock is on).");
+    metamsg("If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Other characters will not respond to the TALK TO/SPEAK TO command or EXAMINE/LOOK AT command.");
   }
   return SUCCESS_NO_TURNSCRIPTS;
 };
+
+
+function aboutScript() {
+  metamsg("{i:" + TITLE + " version " + VERSION + "} was written by " + AUTHOR + " using Quest 6.");
+  if (THANKS.length > 0) {
+    metamsg("Thanks to " + formatList(THANKS, {lastJoiner:" and "}) + ".");
+  }
+};
+
 
 
 function saveLoadScript() {
