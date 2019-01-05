@@ -212,7 +212,7 @@ createItem("knife",
 createItem("glass_cabinet",
   CONTAINER(false),
   LOCKED_WITH("cabinet_key"),
-  { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, altLocs:["dining_room"]}
+  { loc:"basement", alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, altLocs:["dining_room"]}
 );
 
 createItem("jewellery_box",
