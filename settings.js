@@ -19,6 +19,7 @@ const CMD_ECHO = true;               // echo commands to the screen
 
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;
+const RUN_TESTS = true;
 
 const ROOM_TEMPLATE = [
   "%",
@@ -65,7 +66,12 @@ function setup() {
   game.player.status = "You are feeling fine";
   
   //showStartDiag();
-  test.runTests();
+  //if (RUN_TESTS) { test.runTests(); }
+  
+  msg("HERE: " + w.brick.getListAlias("lounge"));
+  
+  
+  
 /*
   parser.parse("get small key");
   parser.parse("open cabinet");

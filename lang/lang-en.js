@@ -34,13 +34,13 @@ function CMD_NO_DEFAULT(name) {
 
 
 function CMD_NOT_NPC(item) {
-  return nounVerb(game.player, "can", true) + " tell " + item.byname("the") + " to do what you like, but there is no way " + pronounVerb(item, "'ll") + " do it.";
+  return nounVerb(game.player, "can", true) + " tell " + item.byname({article:"the"}) + " to do what you like, but there is no way " + pronounVerb(item, "'ll") + " do it.";
 };
 function CMD_NOT_NPC_FOR_GIVE(char, item) {
   return "Realistically, " + nounVerb(item, "be") + " not interesting in anything " + char.pronouns.subjective + " might give " + item.pronouns.objective + ".";
 };
 function CMD_NOT_CONTAINER(char, item) {
-  return sentenceCase(item.byname("the")) + " is not a container";
+  return sentenceCase(item.byname({article:"the"})) + " is not a container";
 };
 
 function CMD_NOT_CARRYING(char, item) {
@@ -59,13 +59,13 @@ function CMD_ALREADY_WEARING(char, item) {
   return pronounVerb(char, "'ve", true) + " already wearing " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_TAKE_COMPONENT(char, item) {
-  return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + pronounVerb(item, "'be") + " part of " + w[item.loc].byname("the") + ".";
+  return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + pronounVerb(item, "'be") + " part of " + w[item.loc].byname({article:"the"}) + ".";
 };
 function CMD_CONTAINER_CLOSED(char, item) {
   return nounVerb(item, "be", true) + " closed.";
 };
 function CMD_INSIDE_CONTAINER(char, item, cont) {
-  return pronounVerb(item, "be", true) + " inside " + cont.byname("the") + ".";
+  return pronounVerb(item, "be", true) + " inside " + cont.byname({article:"the"}) + ".";
 };
 
 
@@ -141,36 +141,36 @@ function CMD_TRY_BUT_LOCKED(char, doorName) {
 
 
 function CMD_TAKE_SUCCESSFUL(char, item) {
-  return nounVerb(char, "take", true) + " " + item.byname("the") + ".";
+  return nounVerb(char, "take", true) + " " + item.byname({article:"the"}) + ".";
 };
 
 function CMD_DROP_SUCCESSFUL(char, item) {
-  return nounVerb(char, "drop", true) + " " + item.byname("the") + ".";
+  return nounVerb(char, "drop", true) + " " + item.byname({article:"the"}) + ".";
 };
 
 function CMD_WEAR_SUCCESSFUL(char, item) {
-  return nounVerb(char, "put", true) + " on " + item.byname("the") + ".";
+  return nounVerb(char, "put", true) + " on " + item.byname({article:"the"}) + ".";
 };
 function CMD_REMOVE_SUCCESSFUL(char, item) {
-  return nounVerb(char, "take", true) + " " + item.byname("the") + " off.";
+  return nounVerb(char, "take", true) + " " + item.byname({article:"the"}) + " off.";
 };
 function CMD_OPEN_SUCCESSFUL(char, item) {
-  return nounVerb(char, "open", true) + " " + item.byname("the") + ".";
+  return nounVerb(char, "open", true) + " " + item.byname({article:"the"}) + ".";
 };
 function CMD_CLOSE_SUCCESSFUL(char, item) {
-  return nounVerb(char, "close", true) + " " + item.byname("the") + ".";
+  return nounVerb(char, "close", true) + " " + item.byname({article:"the"}) + ".";
 };
 function CMD_LOCK_SUCCESSFUL(char, item) {
-  return nounVerb(char, "lock", true) + "k " + item.byname("the") + ".";
+  return nounVerb(char, "lock", true) + "k " + item.byname({article:"the"}) + ".";
 };
 function CMD_UNLOCK_SUCCESSFUL(char, item) {
-  return nounVerb(char, "unlock", true) + " " + item.byname("the") + ".";
+  return nounVerb(char, "unlock", true) + " " + item.byname({article:"the"}) + ".";
 };
 function CMD_TURN_ON_SUCCESSFUL(char, item) {
-  return nounVerb(char, "switch", true) + " " + item.byname("the") + " on.";
+  return nounVerb(char, "switch", true) + " " + item.byname({article:"the"}) + " on.";
 };
 function CMD_TURN_OFF_SUCCESSFUL(char, item) {
-  return nounVerb(char, "switch", true) + " " + item.byname("the") + " off.";
+  return nounVerb(char, "switch", true) + " " + item.byname({article:"the"}) + " off.";
 };
 
 
@@ -370,7 +370,7 @@ function nounVerb(item, verb, capitalise) {
   if (item === game.player) {
     return pronounVerb(item, verb, capitalise);
   }
-  var s = item.byname("the") + " " + conjugate(item, verb);
+  var s = item.byname({article:"the"}) + " " + conjugate(item, verb);
   s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 };

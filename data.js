@@ -190,10 +190,10 @@ createItem("flashlight",
   TAKEABLE(),
   SWITCHABLE(false),
   { loc:"lounge", examine:"A small black torch.", alt:["torch"], 
-    byname:function(def, modified){
+    byname:function(options){
       var res = this.alias;
-      if (def) { res = def + " " + this.alias; }
-      if (this.switchedon && modified) { res += " (providing light)"; }
+      if (options.article) { res = options.article + " " + this.alias; }
+      if (this.switchedon && options.modified) { res += " (providing light)"; }
       return res;
     },
     lightSource:function() {
@@ -253,7 +253,7 @@ createRoom("kitchen", {
     if (char === game.player) {
       msg("You go through the trapdoor, and down the ladder.");
     } else {
-      msg("You watch " + char.byname("the") + " disappear through the trapdoor.");
+      msg("You watch " + char.byname({article:"the"}) + " disappear through the trapdoor.");
     }
   }}),
   north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
@@ -476,6 +476,11 @@ createItem("walls",
 );
 
 
+createItem("brick",
+  COUNTABLE({lounge:7, kitchen:1}),
+    { examine:"A brick is a brick.", }
+);
+
 createItem("TS_Test",
   TURNSCRIPT(true, function(self) {
     msg('Turn script!');
@@ -492,5 +497,5 @@ tp.addDirective("charger_state", function(){
   if (contents.length === 0) {
     return "The compartment is empty";
   }
-  return "The compartment contains " + formatList(contents, {def:"a"});
+  return "The compartment contains " + formatList(contents, {article:"a"});
 });
