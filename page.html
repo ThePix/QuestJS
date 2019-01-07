@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-<meta charset="utf-8"/>
-<title>A Test Page</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="style.css"/>
-<script src="lib/util.js"></script>
-<script src="lib/saveload.js"></script>
-<script src="lib/text.js"></script>
-<script src="lib/test.js"></script>
-<script src="settings.js"></script>
-<script>
-  document.writeln('<script src="lang/' + LANG_FILENAME + '"></scr' + "ipt>");
-</script>
-<script src="lib/io.js"></script>
-<script src="lib/command.js"></script>
-<script src="lib/world.js"></script>
-<script src="lib/templates.js"></script>
-<script src="lib/parser.js"></script>
+  <meta charset="utf-8"/>
+  <title>A Test Page</title>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://ajax.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    script-src 'unsafe-inline' 'self' https://ajax.googleapis.com;"
+  >
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+  
+  <script src="lib/util.js"></script>
+  <script src="lib/saveload.js"></script>
+  <script src="lib/text.js"></script>
+  <script src="lib/test.js"></script>
+  <script src="settings.js"></script>
+  <script>
+    document.writeln('<script src="lang/' + LANG_FILENAME + '"></scr' + "ipt>");
+  </script>
+  <script src="lib/io.js"></script>
+  <script src="lib/command.js"></script>
+  <script src="lib/world.js"></script>
+  <script src="lib/templates.js"></script>
+  <script src="lib/parser.js"></script>
 </head>
 
 
