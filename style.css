@@ -49,7 +49,7 @@ body {
   background-color: #fdf;
   background-image:url("images/back.png");
   overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 20px;
+  padding-top: 5px;
   font-size: 9pt;
   font-family: 'Montserrat', sans-serif;;
 }
@@ -144,6 +144,8 @@ span.compassbutton {
 /* Items in inventories */
 #panes h4 {
   padding-left: 6px;
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 .item {
     cursor: pointer;
