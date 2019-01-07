@@ -190,7 +190,7 @@ createItem("flashlight",
   TAKEABLE(),
   SWITCHABLE(false),
   { loc:"lounge", examine:"A small black torch.", regex:/^torch$/, 
-    byname:function(def, modified){
+    byname:function(options){
       var res = this.alias;
       if (options.article) { res = options.article + " " + this.alias; }
       if (this.switchedon && options.modified) { res += " (providing light)"; }
@@ -478,7 +478,7 @@ createItem("walls",
 
 createItem("brick",
   COUNTABLE({lounge:7, kitchen:1}),
-    { examine:"A brick is a brick.", }
+    { examine:"A brick is a brick.", regex:/^(\d+ )?bricks?$/}
 );
 
 createItem("TS_Test",

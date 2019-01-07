@@ -69,7 +69,8 @@ function setup() {
   //showStartDiag();
   //if (RUN_TESTS) { test.runTests(); }
   
-  msg("Colour: " + io.textColour);
+  parser.parse("get 4 bricks");
+  parser.parse("drop 2 bricks");
 
   /*
   parser.parse("get small key");

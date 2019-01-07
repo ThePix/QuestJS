@@ -24,12 +24,10 @@ var CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should
 var CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should as it was listed. Please alert this as a bug in Quest."
 var CMD_DONE = "Done.";
 
+
+
 function CMD_OBJECT_UNKNOWN_MSG(name) {
   return "Nothing called '" + name + "' here.";
-}
-
-function CMD_NO_DEFAULT(name) {
-  return "No default set for command '" + name + "'.";
 }
 
 
@@ -44,7 +42,7 @@ function CMD_NOT_CONTAINER(char, item) {
 };
 
 function CMD_NOT_CARRYING(char, item) {
-  return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
+  return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + " (" + item.name + ").";  //!!!
 };
 function CMD_WEARING(char, item) {
   return pronounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
@@ -73,6 +71,50 @@ function CMD_INSIDE_CONTAINER(char, item, cont) {
 function CMD_NOT_HERE(char, item) {
   return pronounVerb(item, "'be", true) + " not here.";
 };
+function CMD_CHAR_HAS_IT(char, item) {
+  return nounVerb(char, "have", true) + " " + item.pronouns.objective + ".";
+};
+function CMD_NONE_THERE(char, item) {
+  return "There's no " + item.pluralAlias + " here.";
+};
+function CMD_NONE_HELD(char, item) {
+  return pronoun(char, "have", true) + " no " + item.pluralAlias + ".";
+};
+
+function CMD_NOTHING_USEFUL(char, item) {
+  return "That's not going to do anything useful.";
+};
+function CMD_ALREADY(char, item) {
+  return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
+};
+
+
+
+
+// Door and lock fails
+
+function CMD_LOCKED(char, item) {
+  return pronounVerb(item, "'be", true) + " locked.";
+};
+function CMD_NO_KEY(char, item) {
+  return nounVerb(char, "do", true) + " have the right key.";
+};
+function CMD_LOCKED_EXIT(char, exit) {
+  return "That way is locked.";
+};
+function CMD_OPEN_AND_ENTER(char, doorName) {
+  return nounVerb(char, "open", true) + " the " + doorName + " and walk through.";
+};
+function CMD_UNLOCK_AND_ENTER(char, doorName) {
+  return nounVerb(char, "unlock", true) + " the " + doorName + ", open it and walk through.";
+};
+function CMD_TRY_BUT_LOCKED(char, doorName) {
+  return nounVerb(char, "try", true) + " the " + doorName + ", but it is locked.";
+};
+
+
+
+// CANNOT Messages
 
 function CMD_CANNOT_TAKE(char, item) {
   return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + ".";
@@ -107,45 +149,19 @@ function CMD_CANNOT_USE(char, item) {
 function CMD_CANNOT_EAT(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
 };
-function CMD_CHAR_HAS_IT(char, item) {
-  return nounVerb(char, "have", true) + " " + item.pronouns.objective + ".";
-};
-
-
-function CMD_NOTHING_USEFUL(char, item) {
-  return "That's not going to do anything useful.";
-};
-function CMD_ALREADY(char, item) {
-  return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
-};
-function CMD_LOCKED(char, item) {
-  return pronounVerb(item, "'be", true) + " locked.";
-};
-function CMD_NO_KEY(char, item) {
-  return nounVerb(char, "do", true) + " have the right key.";
-};
-var CMD_LOCKED_EXIT = "That way is locked.";
 
 
 
 
-function CMD_OPEN_AND_ENTER(char, doorName) {
-  return nounVerb(char, "open", true) + " the " + doorName + " and walk through.";
-};
-function CMD_UNLOCK_AND_ENTER(char, doorName) {
-  return nounVerb(char, "unlock", true) + " the " + doorName + ", open it and walk through.";
-};
-function CMD_TRY_BUT_LOCKED(char, doorName) {
-  return nounVerb(char, "try", true) + " the " + doorName + ", but it is locked.";
+
+// SUCCESSFUL Messages
+
+function CMD_TAKE_SUCCESSFUL(char, item, count) {
+  return nounVerb(char, "take", true) + " " + item.byname({article:"the", count:count}) + ".";
 };
 
-
-function CMD_TAKE_SUCCESSFUL(char, item) {
-  return nounVerb(char, "take", true) + " " + item.byname({article:"the"}) + ".";
-};
-
-function CMD_DROP_SUCCESSFUL(char, item) {
-  return nounVerb(char, "drop", true) + " " + item.byname({article:"the"}) + ".";
+function CMD_DROP_SUCCESSFUL(char, item, count) {
+  return nounVerb(char, "drop", true) + " " + item.byname({article:"the", count:count}) + ".";
 };
 
 function CMD_WEAR_SUCCESSFUL(char, item) {
@@ -173,13 +189,19 @@ function CMD_TURN_OFF_SUCCESSFUL(char, item) {
   return nounVerb(char, "switch", true) + " " + item.byname({article:"the"}) + " off.";
 };
 
-
-
 function NPC_HEADING(char, dir) {
   return nounVerb(char, "head", true) + " " + dir + ".";
 }
 
 
+
+
+
+//  ERROR Messages
+
+function ERR_NO_DEFAULT(name) {
+  return "No default set for command '" + name + "'.";
+}
 
 
 var ERROR_NO_PLAYER = "No player object found. This will not go well...";
@@ -397,4 +419,52 @@ function _itemA(item) {
     return "an ";
   }
   return "a ";
+}
+
+
+
+
+
+const numberUnits = "zero;one;two;three;four;five;six;seven;eight;nine;ten;eleven;twelve;thirteen;fourteen;fifteen;sixteen;seventeen;eighteen;nineteen;twenty".split(";");
+const numberTens = "twenty;thirty;forty;fifty;sixty;seventy;eighty;ninety".split(";");
+
+
+function toWords(number) {
+  if (!typeof number == "number") {
+    errormsg ("toWords can only handle numbers");
+    return number;
+  }
+  
+  var s = "";
+  if (number < 0) {
+    s = "minus ";
+    number = -number;
+  }
+  if (number < 2000) {
+    var hundreds = Math.floor(number / 100);
+    number = number % 100;
+    if (hundreds > 0) {
+      s = s + numberUnits[hundreds] + " hundred ";
+      if (number > 0) {
+        s = s + "and ";
+      }
+    }
+    if (number < 20) {
+      if (number !== 0 || s === "") {
+        s = s + numberUnits[number];
+      }
+    }
+    else {
+      var units = number % 10;
+      var tens = Math.floor(number / 10) % 10;
+      s = s + numberTens[tens - 2];
+      if (units !== 0) {
+        s = s + numberUnits[units];
+      }
+    }
+  }
+  else {
+    s = "" + number;
+  }
+  return (s);
 }

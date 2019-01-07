@@ -82,7 +82,7 @@ body {
 }
 
 
-/* Varous msg options */
+/* Various msg options */
 .meta {
   color: grey;
 }
@@ -130,26 +130,29 @@ td.compassbutton {
     border: black solid 1px;
     padding: 2px;
     background-color: #c0c0ff;
-    width: 23px;
+    width: 20px;
     height: 15px;
 }  
 span.compassbutton {
     cursor: pointer;
     text-align: center;
-    width: 23px;
+    width: 18px;
     display: block;
 }  
 
 
 /* Items in inventories */
+#panes h4 {
+  padding-left: 6px;
+}
 .item {
     cursor: pointer;
     border: black solid 1px;
     padding: 2px;
     padding-bottom: 0px;
     background-color: #c0c0ff;
-    width: 140px;
-    margin-left: 5px;
+    width: 135px;
+    margin-left: 10px;
     margin-bottom: 0px;
 }
 .subitem {
@@ -164,12 +167,17 @@ span.compassbutton {
     padding: 2px;
     background-color: #e0e0ff;
     width: 100px;
-    margin-left: 15px;
+    margin-left: 20px;
     margin-top: 0px;
     margin-bottom: 0px;
     font-style:italic;
 }
-
+#status-pane {
+  padding-left: 5pt;
+}
+#compass-table {
+  padding-left: 5pt;
+}
 
 
 
