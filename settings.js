@@ -8,6 +8,7 @@ const THANKS = ["Kyle", "Lara"];
 // UI options
 const PANES = 'Left';  //Can be set to Left, Right or None.
 const COMPASS = true;
+const DIVIDER = "div.png";
 
 const STATUS_PANE = "Status";  // Set to false to turn off
 const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
@@ -40,9 +41,9 @@ var STATUS = [
 // Change the name values to alter how items are displayed
 // You can add (or remove) inventories too
 const INVENTORIES = [
-  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn },
-  {name:'Items Worn', alt:'itemsWorn', test:isWorn },
-  {name:'Items Here', alt:'itemsHere', test:isHere },
+  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn, getLoc:function() { return game.player.name; } },
+  {name:'Items Worn', alt:'itemsWorn', test:isWorn, getLoc:function() { return game.player.name; } },
+  {name:'Items Here', alt:'itemsHere', test:isHere, getLoc:function() { return game.player.loc; } },
 ];
 
 
@@ -68,9 +69,8 @@ function setup() {
   //showStartDiag();
   //if (RUN_TESTS) { test.runTests(); }
   
-  msg("HERE: " + w.brick.getListAlias("lounge"));
-  
-  
+  msg("Colour: " + io.textColour);
+
   
 /*
   parser.parse("get small key");

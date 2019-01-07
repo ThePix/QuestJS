@@ -47,6 +47,7 @@ body {
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
   background-color: #fdf;
+  background-image:url("images/back.png");
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
   font-size: 9pt;
