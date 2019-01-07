@@ -65,7 +65,7 @@ function setup() {
   game.player.status = "You are feeling fine";
   
   //showStartDiag();
-  test.runTests();
+  //test.runTests();
 /*
   parser.parse("get small key");
   parser.parse("open cabinet");
