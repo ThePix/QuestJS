@@ -71,8 +71,7 @@ function setup() {
   
   msg("Colour: " + io.textColour);
 
-  
-/*
+  /*
   parser.parse("get small key");
   parser.parse("open cabinet");
   parser.parse("get ring");

@@ -52,7 +52,7 @@ commands.push(new Cmd('Move', {
   
 createItem("me",
   PLAYER,
-  { loc:"lounge", alt:["me", "myself", "player"], examine:function() {
+  { loc:"lounge", regex:/^me|myself|player$/, examine:function() {
     msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
   }
@@ -189,8 +189,8 @@ createItem("cabinet_key",
 createItem("flashlight",
   TAKEABLE(),
   SWITCHABLE(false),
-  { loc:"lounge", examine:"A small black torch.", alt:["torch"], 
-    byname:function(options){
+  { loc:"lounge", examine:"A small black torch.", regex:/^torch$/, 
+    byname:function(def, modified){
       var res = this.alias;
       if (options.article) { res = options.article + " " + this.alias; }
       if (this.switchedon && options.modified) { res += " (providing light)"; }
@@ -269,7 +269,7 @@ createItem("trapdoor",
 
 createItem("camera",
   TAKEABLE(),
-  { loc:"kitchen", examine:"A cheap digital camera.", alt:["picture box"] }
+  { loc:"kitchen", examine:"A cheap digital camera.", regex:/^picture box$/ }
 );
 
 createItem("big_kitchen_table",
@@ -470,7 +470,7 @@ createItem("Lara_garage_key",
 
 
 createItem("walls",
-  { examine:"They're walls, what are you expecting?", alt:["wall"], display:DSPY_SCENERY,
+  { examine:"They're walls, what are you expecting?", regex:/^wall$/, display:DSPY_SCENERY,
     isAtLoc:function(loc) { return true; }
   }
 );
