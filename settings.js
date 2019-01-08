@@ -6,7 +6,7 @@ const VERSION = "1.0";
 const THANKS = ["Kyle", "Lara"];
 
 // UI options
-const PANES = 'Left';  //Can be set to Left, Right or None.
+const PANES = 'None';  //Can be set to Left, Right or None.
 const COMPASS = true;
 const DIVIDER = "div.png";
 
@@ -21,6 +21,8 @@ const CMD_ECHO = true;               // echo commands to the screen
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;
 const RUN_TESTS = true;
+
+const PARSER_DEBUG = false;
 
 const ROOM_TEMPLATE = [
   "%",
@@ -65,12 +67,13 @@ function setup() {
   msg("If you are successful, see if you can do it again, but getting Kyle to do everything. You should find that you can tell an PC to do pretty much anything (except look at things for you and talk to people for you).");
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
+  scopeSnapshot();
   
   //showStartDiag();
   //if (RUN_TESTS) { test.runTests(); }
   
-  parser.parse("get 4 bricks");
-  parser.parse("drop 2 bricks");
+  //parser.parse("get 4 bricks");
+  //parser.parse("drop 2 bricks");
 
   /*
   parser.parse("get small key");
@@ -82,7 +85,7 @@ function setup() {
   parser.parse("get torch");
   parser.parse("e");
   parser.parse("open garage");
-  parser.parse("n");
+  parser.parse("n");/*
   parser.parse("open compartment");
   parser.parse("put torch in compartment");
   parser.parse("press button");

@@ -42,7 +42,7 @@ function CMD_NOT_CONTAINER(char, item) {
 };
 
 function CMD_NOT_CARRYING(char, item) {
-  return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + " (" + item.name + ").";  //!!!
+  return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
 };
 function CMD_WEARING(char, item) {
   return pronounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";

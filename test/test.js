@@ -1,7 +1,5 @@
 "use strict";
 
-
-
 var test = {};
 
 test.runTests = function() {
@@ -18,7 +16,7 @@ test.runTests = function() {
 
   test.title("Simple object commands (boots)");
   test.assertCmd("wear boots", "You don't have them.");
-  test.assertCmd("remove boots", "You're not wearing them.");
+  test.assertCmd("remove boots", "You don't have them.");
   test.assertCmd("get boots", "You take the boots.");
   test.assertCmd("get boots", "You have them.");
   test.assertCmd("wear boots", "You put on the boots.");
@@ -40,7 +38,7 @@ test.runTests = function() {
 
   test.title("NPC commands (boots)");
   test.assertCmd("kyle, wear boots", "He doesn't have them.");
-  test.assertCmd("kyle, remove boots", "He's not wearing them.");
+  test.assertCmd("kyle, remove boots", "He doesn't have them.");
   test.assertCmd("kyle, get boots", "Kyle takes the boots.");
   test.assertCmd("kyle, get boots", "Kyle has them.");
   test.assertCmd("kyle,give boots to box", "Realistically, the cardboard box is not interesting in anything he might give it.");
@@ -98,7 +96,6 @@ test.runTests = function() {
   test.assertCmd("get torch", "It is inside the compartment.");
   test.assertCmd("open compartment", "You open the compartment.");
   test.assertCmd("get torch", "You take the flashlight.");
-
   test.assertCmd("open compartment", "It already is.");
   test.assertCmd("put knife in compartment", "Done.");
   test.assertCmd("close compartment", "You close the compartment.");

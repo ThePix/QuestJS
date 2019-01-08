@@ -3,7 +3,7 @@
 
 commands.push(new Cmd('Kick', {
   npcCmd:true,
-  rules:[cmdRules.isNotWithOtherCharRule, cmdRules.isHereRule],
+  rules:[cmdRules.isHereRule],
   regex:/^(kick) (.+)$/,
   objects:[
     {ignore:true},
@@ -19,7 +19,7 @@ commands.push(new Cmd('Kick', {
 
 commands.push(new Cmd('Charge', {
   npcCmd:true,
-  rules:[cmdRules.isNotWithOtherCharRule, cmdRules.isHeld],
+  rules:[cmdRules.isHeld],
   regex:/^(charge) (.+)$/,
   objects:[
     {ignore:true},
@@ -34,7 +34,7 @@ commands.push(new Cmd('Charge', {
 
 commands.push(new Cmd('Move', {
   npcCmd:true,
-  rules:[cmdRules.isNotWithOtherCharRule, cmdRules.isHereRule],
+  rules:[cmdRules.isHereRule],
   regex:/^(move) (.+)$/,
   objects:[
     {ignore:true},
@@ -143,7 +143,9 @@ createItem("boots",
 createItem("glass_cabinet",
   CONTAINER(false),
   LOCKED_WITH("cabinet_key"),
-  { loc:"lounge", alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, altLocs:["dining_room"]}
+  { alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, isAtLoc:function(loc) {
+    return (loc == "lounge" || loc == "dining_room");
+  }}
 );
 
 createItem("jewellery_box",
@@ -280,7 +282,9 @@ createItem("big_kitchen_table",
 createItem("garage_door",
   OPENABLE(false),
   LOCKED_WITH("garage_key"),
-  { loc:"kitchen", examine: "The door to the garage.", alias: "garage door", altLocs:["garage"] }
+  { examine: "The door to the garage.", alias: "garage door", isAtLoc:function(loc) {
+    return (loc == "kitchen" || loc == "garage");
+  }}
 );
 
 
@@ -471,13 +475,13 @@ createItem("Lara_garage_key",
 
 createItem("walls",
   { examine:"They're walls, what are you expecting?", regex:/^wall$/, display:DSPY_SCENERY,
-    isAtLoc:function(loc) { return true; }
+    isAtLoc:function(loc) { return w[loc].room; },
   }
 );
 
 
 createItem("brick",
-  COUNTABLE({lounge:7, kitchen:1}),
+  COUNTABLE({lounge:7, dining_room:1}),
     { examine:"A brick is a brick.", regex:/^(\d+ )?bricks?$/}
 );
 
