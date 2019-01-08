@@ -6,7 +6,8 @@ const VERSION = "1.0";
 const THANKS = ["Kyle", "Lara"];
 
 // UI options
-const PANES = 'None';  //Can be set to Left, Right or None.
+const PANES = 'Left';  //Can be set to Left, Right or None.
+// Setting PANES to None will more than double the speed of your game!
 const COMPASS = true;
 const DIVIDER = "div.png";
 
@@ -67,7 +68,7 @@ function setup() {
   msg("If you are successful, see if you can do it again, but getting Kyle to do everything. You should find that you can tell an PC to do pretty much anything (except look at things for you and talk to people for you).");
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
-  scopeSnapshot();
+  world.scopeSnapshot();
   
   //showStartDiag();
   //if (RUN_TESTS) { test.runTests(); }
