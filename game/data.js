@@ -194,7 +194,7 @@ createItem("flashlight",
   { loc:"lounge", examine:"A small black torch.", regex:/^torch$/, 
     byname:function(options){
       var res = this.alias;
-      if (options.article) { res = options.article + " " + this.alias; }
+      if (options.article) { res = (options.article === DEFINITE ? "the" : "a") + " " + this.alias; }
       if (this.switchedon && options.modified) { res += " (providing light)"; }
       return res;
     },
@@ -255,7 +255,7 @@ createRoom("kitchen", {
     if (char === game.player) {
       msg("You go through the trapdoor, and down the ladder.");
     } else {
-      msg("You watch " + char.byname({article:"the"}) + " disappear through the trapdoor.");
+      msg("You watch " + char.byname({article:DEFINITE}) + " disappear through the trapdoor.");
     }
   }}),
   north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
@@ -501,5 +501,5 @@ tp.addDirective("charger_state", function(){
   if (contents.length === 0) {
     return "The compartment is empty";
   }
-  return "The compartment contains " + formatList(contents, {article:"a"});
+  return "The compartment contains " + formatList(contents, {article:INDEFINITE});
 });

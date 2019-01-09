@@ -6,6 +6,12 @@
 
 "use strict";
 
+var LIST_AND = " and ";
+var LIST_NOTHING = "nothing"
+
+
+
+
 var CMD_IGNORED_WORDS = ["", "the", "a", "an"];
 var CMD_JOINER_REGEX = /\,|\band\b/;
 var CMD_ALL_REGEX = /^(all|everything)$/;
@@ -32,13 +38,13 @@ function CMD_OBJECT_UNKNOWN_MSG(name) {
 
 
 function CMD_NOT_NPC(item) {
-  return nounVerb(game.player, "can", true) + " tell " + item.byname({article:"the"}) + " to do what you like, but there is no way " + pronounVerb(item, "'ll") + " do it.";
+  return nounVerb(game.player, "can", true) + " tell " + item.byname({article:DEFINITE}) + " to do what you like, but there is no way " + pronounVerb(item, "'ll") + " do it.";
 };
 function CMD_NOT_NPC_FOR_GIVE(char, item) {
   return "Realistically, " + nounVerb(item, "be") + " not interesting in anything " + char.pronouns.subjective + " might give " + item.pronouns.objective + ".";
 };
 function CMD_NOT_CONTAINER(char, item) {
-  return sentenceCase(item.byname({article:"the"})) + " is not a container";
+  return sentenceCase(item.byname({article:DEFINITE})) + " is not a container";
 };
 
 function CMD_NOT_CARRYING(char, item) {
@@ -57,13 +63,13 @@ function CMD_ALREADY_WEARING(char, item) {
   return pronounVerb(char, "'ve", true) + " already wearing " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_TAKE_COMPONENT(char, item) {
-  return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + pronounVerb(item, "'be") + " part of " + w[item.loc].byname({article:"the"}) + ".";
+  return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + pronounVerb(item, "'be") + " part of " + w[item.loc].byname({article:DEFINITE}) + ".";
 };
 function CMD_CONTAINER_CLOSED(char, item) {
   return nounVerb(item, "be", true) + " closed.";
 };
 function CMD_INSIDE_CONTAINER(char, item, cont) {
-  return pronounVerb(item, "be", true) + " inside " + cont.byname({article:"the"}) + ".";
+  return pronounVerb(item, "be", true) + " inside " + cont.byname({article:DEFINITE}) + ".";
 };
 
 
@@ -88,6 +94,14 @@ function CMD_ALREADY(char, item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 };
 
+
+// NPC fails
+function CMD_NPC_NOTHING_TO_SAY_ABOUT(char) {
+  return nounVerb(char, "have", true) + " nothing to say on the subject.";
+}
+function CMD_NPC_NO_INTEREST_IN(char) {
+  return nounVerb(char, "have", true) + " no interest in that subject.";
+}
 
 
 
@@ -157,36 +171,36 @@ function CMD_CANNOT_EAT(char, item) {
 // SUCCESSFUL Messages
 
 function CMD_TAKE_SUCCESSFUL(char, item, count) {
-  return nounVerb(char, "take", true) + " " + item.byname({article:"the", count:count}) + ".";
+  return nounVerb(char, "take", true) + " " + item.byname({article:DEFINITE, count:count}) + ".";
 };
 
 function CMD_DROP_SUCCESSFUL(char, item, count) {
-  return nounVerb(char, "drop", true) + " " + item.byname({article:"the", count:count}) + ".";
+  return nounVerb(char, "drop", true) + " " + item.byname({article:DEFINITE, count:count}) + ".";
 };
 
 function CMD_WEAR_SUCCESSFUL(char, item) {
-  return nounVerb(char, "put", true) + " on " + item.byname({article:"the"}) + ".";
+  return nounVerb(char, "put", true) + " on " + item.byname({article:DEFINITE}) + ".";
 };
 function CMD_REMOVE_SUCCESSFUL(char, item) {
-  return nounVerb(char, "take", true) + " " + item.byname({article:"the"}) + " off.";
+  return nounVerb(char, "take", true) + " " + item.byname({article:DEFINITE}) + " off.";
 };
 function CMD_OPEN_SUCCESSFUL(char, item) {
-  return nounVerb(char, "open", true) + " " + item.byname({article:"the"}) + ".";
+  return nounVerb(char, "open", true) + " " + item.byname({article:DEFINITE}) + ".";
 };
 function CMD_CLOSE_SUCCESSFUL(char, item) {
-  return nounVerb(char, "close", true) + " " + item.byname({article:"the"}) + ".";
+  return nounVerb(char, "close", true) + " " + item.byname({article:DEFINITE}) + ".";
 };
 function CMD_LOCK_SUCCESSFUL(char, item) {
-  return nounVerb(char, "lock", true) + "k " + item.byname({article:"the"}) + ".";
+  return nounVerb(char, "lock", true) + "k " + item.byname({article:DEFINITE}) + ".";
 };
 function CMD_UNLOCK_SUCCESSFUL(char, item) {
-  return nounVerb(char, "unlock", true) + " " + item.byname({article:"the"}) + ".";
+  return nounVerb(char, "unlock", true) + " " + item.byname({article:DEFINITE}) + ".";
 };
 function CMD_TURN_ON_SUCCESSFUL(char, item) {
-  return nounVerb(char, "switch", true) + " " + item.byname({article:"the"}) + " on.";
+  return nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " on.";
 };
 function CMD_TURN_OFF_SUCCESSFUL(char, item) {
-  return nounVerb(char, "switch", true) + " " + item.byname({article:"the"}) + " off.";
+  return nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " off.";
 };
 
 function NPC_HEADING(char, dir) {
@@ -208,27 +222,68 @@ var ERROR_NO_PLAYER = "No player object found. This will not go well...";
 var ERROR_MSG_OR_RUN = "Unsupported type for printOrRun";
 var ERROR_NO_ROOM = "Failed to find room";
 var ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
+var ERR_ROMAN_NUMBERS_ONLY = "toRoman can only handle numbers";
+
+
 function ERROR_NO_PLAYER_FOUND() {
   return "No player object found. This may be due to a syntax error in data.js, but also check one object is actually flagged as the player.";
 }
 function ERROR_INIT_REPEATED_NAME(name) {
   return "Attempting to use the name `" + name + "`, there there is already an item with that name in the world.";
-};
+}
 function ERROR_INIT_DISALLOWED_NAME(name) {
   return "Attempting to use the disallowed name `" + name + "`; a name can only include letters and digits - no spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.";
-};
+}
 function ERROR_USING_CREATE_OBJECT(name) {
   return "Attempting to use createObject with `" + name + "` after set up. To ensure games save properly you should use cloneObject to create ites during play.";
-};
+}
 function ERROR_INIT_UNKNOWN_LOC(item) {
   return "The item `" + item.name + "` is in an unknown location (" + item.loc + ")";
-};
+}
 function ERROR_INIT_UNKNOWN_EXIT(dir, room, loc) {
   return "The exit `" + dir + "` in room '" + room.name + "' is to an unknown location (" + loc + ")"
-};
+}
 function ERROR_UNKNOWN_KEY(name) {
   return "The key name for this container, `" + name + "`, does not match any key in the game.";
-};
+}
+
+// Text processor errors
+function ERR_TP_NO_OBJECT(name, params) {
+  return "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)";
+}
+function ERR_TP_NO_START_BRACE(params) {
+  return "Failed to find starting curly brace in text processor (<i>" + params.tpOriginalString + "</i>)";
+}
+function ERR_TP_UNKNOWN_DIRECTIVE(name, params) {
+  return "Attempting to use unknown text processor directive '" + name + "' (<i>" + params.tpOriginalString + "</i>)";
+}
+function ERR_TP_EXCEPTION(err) {
+  return "Text processor string caused an error, returning unmodified (reported error: " + err + ")";
+}
+
+
+// Command errors
+function ERR_CMD_RULE_NOT_FUNCTION(cmd, n) {
+  return "Failed to process command '" + cmd.name + "' as one of its rules (" + n + ") is not a function.";
+}
+function ERR_CMD_NO_DOOR(cmd) {
+  return "Not found an object called '" + cmd.door + "'. Any exit that uses the 'useWithDoor' function must also set a 'door' attribute.";
+}
+
+
+
+
+
+// Save/load messages
+var SL_DIR_HEADINGS = "<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>";
+var SL_DIR_MSG = "Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.";
+var SL_NO_FILENAME = "Trying to save with no filename";
+function SL_CANNOT_FIND_OBJ(name) {
+  return "Cannot find object '" + name + "'";
+}
+
+
+
 
 
 var NEVER_MIND = "Never mind.";
@@ -244,6 +299,20 @@ var PRONOUNS = {
   secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your", reflexive:"yourself"},
 };
 
+
+var VERBS = {
+  examine:"Examine",
+  take:"Take",
+  drop:"Drop",
+  open:"Open",
+  close:"Close",
+  switchon:"Switch on",
+  switchoff:"Switch off",
+  wear:"Wear",
+  remove:"Remove",
+  lookat:"Look at",
+  speakto:"Speak to",
+};
 
 
 // Change the abbrev values to suit your game (or language)
@@ -266,7 +335,8 @@ var EXITS = [
   {name:'Wait', abbrev:'Z', nocmd:true}, 
   {name:'Help', abbrev:'?', nocmd:true}, 
 ];
-
+// These are ther ones above that are not actually exits
+var NOT_EXITS = ['Look', 'Help', 'Wait'];
 
 
 function helpScript() {
@@ -290,7 +360,7 @@ function helpScript() {
 function aboutScript() {
   metamsg("{i:" + TITLE + " version " + VERSION + "} was written by " + AUTHOR + " using Quest 6.");
   if (THANKS.length > 0) {
-    metamsg("Thanks to " + formatList(THANKS, {lastJoiner:" and "}) + ".");
+    metamsg("Thanks to " + formatList(THANKS, {lastJoiner:LIST_AND}) + ".");
   }
 };
 
@@ -392,7 +462,7 @@ function nounVerb(item, verb, capitalise) {
   if (item === game.player) {
     return pronounVerb(item, verb, capitalise);
   }
-  var s = item.byname({article:"the"}) + " " + conjugate(item, verb);
+  var s = item.byname({article:DEFINITE}) + " " + conjugate(item, verb);
   s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 };
@@ -467,4 +537,43 @@ function toWords(number) {
     s = "" + number;
   }
   return (s);
+}
+
+
+tp.text_processors.objects =function(arr, params) {
+  var listOfOjects = scope(isHereListed);
+  return formatList(listOfOjects, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:game.player.loc});
+};
+
+  
+tp.text_processors.exits = function(arr, params) {
+  var list = [];
+  for (var i = 0; i < EXITS.length; i++) {
+    if (hasExit(game.room, EXITS[i].name)) {
+      list.push(EXITS[i].name);
+    }
+  }
+  return formatList(list, {lastJoiner:" or ", nothing:"nowhere"});
+};
+
+
+function contentsForSurface(contents) {
+  return "with " + formatList(contents, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:this.name}) + " on it";
+}
+
+function contentsForContainer(contents) {
+  return "containing " + formatList(contents, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:this.name});
+}
+
+// If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
+function talkToMenuTitle(char) {
+  return "Talk to " + char.byname({article:DEFINITE}) + " about:";
+}
+// If the player does TELL MARY ABOUT HOUSE this will appear before the response.
+function tellAboutIntro(char, text) {
+  return "You tell " + char.byname({article:DEFINITE}) + " about " + text + ".";
+}
+// If the player does ASK MARY ABOUT HOUSE this will appear before the response.
+function askAboutIntro(char, text) {
+  return "You ask " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }

@@ -1,5 +1,7 @@
 "use strict";
 
+// This is not language neutral, but should not be shipping with the game
+
 // var test = {};  Done in util.js
 
 test.runTests = function() {
