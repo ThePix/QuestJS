@@ -1,10 +1,7 @@
 "use strict";
 
-var test = {};
+test.tests = function() {
 
-test.runTests = function() {
-  var time = parseInt(Date.now());
-  
   test.title("Simple object commands");
   test.assertCmd("get coin", "You try to pick up the coin, but it just will not budge.");
   test.assertCmd("get straw boater", "Kyle has it.");
@@ -102,79 +99,5 @@ test.runTests = function() {
   test.assertCmd("push button", "There is a loud bang, and the knife is destroyed.");
   test.assertCmd("open compartment", "You open the compartment.");
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");
-
-  
-  test.results (time);
 }  
 
-
-
-test.testing = false;
-test.testOutput = [];
-test.totalCount = 0;
-test.failCount = 0;
-test.subCount = 0;
-test.currentTitle = "Not specified";
-
-test.title = function(title) {
-test.subCount = 0;
-  test.currentTitle = title;
-}
-
-test.printTitle = function() {
-  debugmsg(DBG_TEST, test.currentTitle + ": Error (test " + test.subCount + ")");
-  test.failCount++;
-}
-
-test.assertCmd = function(cmdStr, expected) {
-  test.totalCount++;
-  test.subCount++;
-  if (typeof expected === "string") {
-    expected = [expected];
-  }
-  test.testing = true;
-  test.testOutput = [];
-  parser.parse(cmdStr);
-  test.testing = false;
-  
-  if (test.testOutput.length === expected.length && test.testOutput.every(function(value, index) {
-    if (typeof expected[index] === "string") {
-      return value === expected[index];
-    }
-    else {
-      return new RegExp(expected[index]).test(value);
-    }
-  })) {
-    //debugmsg(DBG_TEST, ".");
-  }
-  else {
-    test.printTitle();
-    for (var i = 0; i < test.testOutput.length; i++) {
-      if (expected[i] !== test.testOutput[i]) {
-        debugmsg(DBG_TEST, "Expected: " + expected[i]);
-        debugmsg(DBG_TEST, "...Found: " + test.testOutput[i]);
-      }
-    }
-  }
-};
-
-
-test.assertEqual = function(expected, found) {
-  test.totalCount++;
-  test.subCount++;
-  if (expected === found) {
-    //debugmsg(DBG_TEST, ".");
-  }
-  else {
-    test.printTitle();
-    debugmsg(DBG_TEST, "Expected: " + expected);
-    debugmsg(DBG_TEST, "...Found: " + found);
-  }
-};
-
-test.results = function(time) {
-  var elapsed = parseInt(Date.now()) - time;
-  debugmsg(DBG_TEST, "Number of tests: " + test.totalCount);
-  debugmsg(DBG_TEST, "Number of fails: " + test.failCount);
-  debugmsg(DBG_TEST, "Elapsed time: " + elapsed + " ms (" + (Math.round(elapsed / test.totalCount * 10) / 10) + " ms/test)");
-};

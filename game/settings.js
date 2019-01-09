@@ -6,7 +6,7 @@ const VERSION = "1.0";
 const THANKS = ["Kyle", "Lara"];
 
 // UI options
-const PANES = 'None';  //Can be set to Left, Right or None.
+const PANES = 'Left';  //Can be set to Left, Right or None.
 // Setting PANES to None will more than double the speed of your game!
 const COMPASS = true;
 const DIVIDER = "div.png";
@@ -20,10 +20,9 @@ const CURSOR = ">";
 const CMD_ECHO = true;               // echo commands to the screen
 
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
-const DEBUG = true;
-const RUN_TESTS = true;
+const DEBUG = true;                  // set to false when releasing
 
-const PARSER_DEBUG = false;
+const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 
 const ROOM_TEMPLATE = [
   "%",

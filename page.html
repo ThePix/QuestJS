@@ -17,9 +17,12 @@
   <script src="lib/util.js"></script>
   <script src="lib/saveload.js"></script>
   <script src="lib/text.js"></script>
-  <script src="settings.js"></script>
+  <script src="game/settings.js"></script>
   <script>
-    if (RUN_TESTS) { document.writeln('<script src="test/test.js"></scr' + "ipt>"); }
+    if (DEBUG) {
+      document.writeln('<script src="test/test-lib.js"></scr' + "ipt>"); 
+      document.writeln('<script src="test/tests.js"></scr' + "ipt>"); 
+    }
     document.writeln('<script src="lang/' + LANG_FILENAME + '"></scr' + "ipt>");
   </script>
   <script src="lib/io.js"></script>
@@ -52,7 +55,7 @@
 </div>
 
 <script src="lib/commands.js"></script>
-<script src="data.js"></script>
+<script src="game/data.js"></script>
 
 </body>
 </html> 
