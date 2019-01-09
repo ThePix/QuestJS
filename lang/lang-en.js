@@ -56,6 +56,12 @@ function CMD_WEARING(char, item) {
 function CMD_NOT_WEARING(char, item) {
   return pronounVerb(char, "'be", true) + " not wearing " + item.pronouns.objective + ".";
 };
+function CMD_CANNOT_WEAR_OVER(char, item, outer) {
+  return pronounVerb(char, "can't", true) + " put " item.byname({article:INDEFINITE}) + " on over " + item.pronouns.possessive + " " + outer.byname() + ".";
+};
+function CMD_CANNOT_REMOVE_UNDER(char, item, outer) {
+  return pronounVerb(char, "can't", true) + " take off " + item.pronouns.possessive + "  " + item.byname() + " whilst wearing " + item.pronouns.possessive + " " + outer.byname() + ".";
+};
 function CMD_ALREADY_HAVE(char, item) {
   return pronounVerb(char, "'ve", true) + " got " + item.pronouns.objective + " already.";
 };
