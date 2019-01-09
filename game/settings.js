@@ -6,7 +6,7 @@ const VERSION = "1.0";
 const THANKS = ["Kyle", "Lara"];
 
 // UI options
-const PANES = 'Left';  //Can be set to Left, Right or None.
+const PANES = 'None';  //Can be set to Left, Right or None.
 // Setting PANES to None will more than double the speed of your game!
 const COMPASS = true;
 const DIVIDER = "div.png";
@@ -68,12 +68,14 @@ function setup() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
   world.scopeSnapshot();
-  
+
+  //parser.parse("get bricks");
+  //parser.parse("e");
+  //parser.parse("put 3 bricks on table");
+  //parser.parse("get bricks");
+   
   //showStartDiag();
-  //if (RUN_TESTS) { test.runTests(); }
   
-  //parser.parse("get 4 bricks");
-  //parser.parse("drop 2 bricks");
 
   /*
   parser.parse("get small key");
