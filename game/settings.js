@@ -6,7 +6,7 @@ const VERSION = "1.0";
 const THANKS = ["Kyle", "Lara"];
 
 // UI options
-const PANES = 'Left';  //Can be set to Left, Right or None.
+const PANES = 'None';  //Can be set to Left, Right or None.
 // Setting PANES to None will more than double the speed of your game!
 const COMPASS = true;
 const DIVIDER = "div.png";

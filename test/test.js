@@ -64,7 +64,7 @@ test.runTests = function() {
 
   test.title("NPC commands (go)");
   test.assertCmd("kyle, go e", "Kyle heads east.");
-  test.assertCmd("kyle, get torch", "Nothing called 'kyle' here.");
+  test.assertCmd("kyle, get torch", "You can't see any such thing.");
   
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("get garage", "You take the garage key.");
@@ -93,15 +93,15 @@ test.runTests = function() {
   test.assertCmd("push button", "You push the button, but nothing happens.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "You push the button. There is a brief hum of power, and a flash.");
-  test.assertCmd("get torch", "It is inside the compartment.");  // !!! Nothing called 'torch' here.
-  /*test.assertCmd("open compartment", "You open the compartment.");
+  test.assertCmd("get torch", "You can't see any such thing.");
+  test.assertCmd("open compartment", "You open the compartment.");
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("open compartment", "It already is.");
   test.assertCmd("put knife in compartment", "Done.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "There is a loud bang, and the knife is destroyed.");
   test.assertCmd("open compartment", "You open the compartment.");
-  test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");*/
+  test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");
 
   
   test.results (time);

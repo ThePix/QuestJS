@@ -27,7 +27,7 @@ var CMD_DONE = "Done.";
 
 
 function CMD_OBJECT_UNKNOWN_MSG(name) {
-  return "Nothing called '" + name + "' here.";
+  return "You can't see any such thing.";
 }
 
 
