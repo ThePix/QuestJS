@@ -28,6 +28,9 @@ test.tests = function() {
   test.assertCmd("get the book", "You take the book.");
   test.assertCmd("read the book", "It is not in a language you understand.");
   test.assertCmd("drop book", "You drop the book.");
+  
+  test.assertCmd("s", "You can't go south.");
+  test.assertCmd("d", "You can't go down.");
 
   test.title("Simple object commands (bricks)");
   test.assertCmd("get the bricks", "You take seven bricks.");
@@ -41,8 +44,36 @@ test.tests = function() {
   test.assertCmd("inv", "You are carrying a knife and five bricks.");
   test.assertCmd("look", ["A clean room.", "You can see a trapdoor, a camera, a big kitchen table (with two bricks on it) and a garage door here.", "You can go north or west."]);
   test.assertCmd("get the bricks", "You take two bricks.");
-  test.assertCmd("w", ["A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater) and a garage key here.", "You can go west or east."]); 
+  test.assertCmd("w", ["A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater) and a garage key here.", "You can go up, west or east."]); 
+  test.assertCmd("drop bricks", "You drop seven bricks.");  
 
+  
+  test.title("Wear/remove");
+  
+  test.assertCmd("u", ["A large room, with a big bed and a wardrobe.", "You can see underwear, some jeans, a shirt, a coat and a jumpsuit here.", "You can go down.",]);
+
+  test.assertCmd("get all", ["Underwear: You take the underwear.", "Jeans: You take the jeans.", "Shirt: You take the shirt.", "Coat: You take the coat.", "Jumpsuit: You take the jumpsuit.", ]);
+  test.assertCmd("wear underwear", "You put on the underwear.");
+  test.assertCmd("wear jeans", "You put on the jeans.");
+  test.assertCmd("wear shirt", "You put on the shirt.");
+  test.assertCmd("remove underwear", "You can't take off your underwear whilst wearing your jeans.");
+  test.assertCmd("remove jeans", "You take the jeans off.");
+  test.assertCmd("remove underwear", "You take the underwear off.");
+  test.assertCmd("wear jumpsuit", "You can't put a jumpsuit on over your shirt.");
+  test.assertCmd("remove shirt", "You take the shirt off.");  
+  test.assertCmd("wear jumpsuit", "You put on the jumpsuit.");
+  test.assertCmd("wear coat", "You put on the coat.");
+  test.assertCmd("wear underwear", "You can't put underwear on over your jumpsuit.");
+  test.assertCmd("remove coat", "You take the coat off.");  
+  test.assertCmd("drop all", ["Knife: You drop the knife.", "Underwear: You drop the underwear.", "Jeans: You drop the jeans.", "Shirt: You drop the shirt.", "Coat: You drop the coat.", "Jumpsuit: You're wearing it.", ]);
+  test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
+  test.assertCmd("drop jumpsuit", "You drop the jumpsuit.");  
+  test.assertCmd("get knife", "You take the knife.");  
+
+  
+  
+  test.assertCmd("d", ["A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater), a garage key and seven bricks here.", "You can go up, west or east.",]);  
+  
   
   test.title("NPC commands");
   test.assertCmd("boots,get coin", "You can tell the boots to do what you like, but there is no way they'll do it.");
@@ -78,8 +109,9 @@ test.tests = function() {
   test.assertCmd("kyle, drop torch", "Kyle drops the flashlight.");
 
   test.title("NPC commands (go)");
+  test.assertCmd("kyle, go ne", "Kyle can't go northeast.");
   test.assertCmd("kyle, go e", "Kyle heads east.");
-  test.assertCmd("kyle, get torch", "You can't see any such thing.");
+  test.assertCmd("kyle, get torch", "You can't see anything you might call 'kyle'.");
   
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("get garage", "You take the garage key.");
@@ -108,7 +140,7 @@ test.tests = function() {
   test.assertCmd("push button", "You push the button, but nothing happens.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "You push the button. There is a brief hum of power, and a flash.");
-  test.assertCmd("get torch", "You can't see any such thing.");
+  test.assertCmd("get torch", "You can't see anything you might call 'torch'.");
   test.assertCmd("open compartment", "You open the compartment.");
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("open compartment", "It already is.");
@@ -117,5 +149,53 @@ test.tests = function() {
   test.assertCmd("push button", "There is a loud bang, and the knife is destroyed.");
   test.assertCmd("open compartment", "You open the compartment.");
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");
+  
+
+  test.title("Clone");
+  var count = Object.keys(w).length;
+
+  var clone = cloneObject(w.book);
+  test.assertEqual(count + 1, Object.keys(w).length);
+  test.assertEqual(w.book, clone.clonePrototype);
+  test.assertEqual(w.book.examine, clone.examine);
+
+  var clone2 = cloneObject(clone);
+  test.assertEqual(count + 2, Object.keys(w).length);
+  test.assertEqual(w.book, clone2.clonePrototype);
+  test.assertEqual(w.book.examine, clone2.examine);
+
+  
+  test.title("Save/Load");
+  // Set up some changes to be saved
+  w.boots.counter = 17;
+  w.boots.unusualString = "Some interesting text";
+  w.boots.notableFlag = true;
+  w.boots.examine = "This will not get saved";
+  
+  w.book.mutableExamine = true
+  w.book.examine = "This WILL get saved";
+  
+  clone.cloneCounter = 29
+  
+  var s = saveLoad.saveTheWorld("Comment!!!");
+
+  // Now change them again, these changes should get over-written
+  w.boots.counter = 42;
+  w.boots.unusualString = "Some boring text";
+  w.boots.notableFlag = false;
+  w.boots.examine = "This will remain";
+  w.book.examine = "This will not remain";
+  var clone3 = cloneObject(clone);  // should not be there later
+
+  saveLoad.loadTheWorld(s);
+  test.assertEqual(count + 2, Object.keys(w).length);
+  test.assertEqual(17, w.boots.counter)
+  test.assertEqual("Some interesting text", w.boots.unusualString)
+  test.assertEqual(true, w.boots.notableFlag)
+  test.assertEqual("This will remain", w.boots.examine)
+  test.assertEqual("This WILL get saved", w.book.examine)
+  
+  test.assertEqual(29, w[clone.name].cloneCounter)
+  
 }  
 

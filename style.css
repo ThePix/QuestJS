@@ -91,35 +91,39 @@ body {
   font-size: 10pt;
   color: red;
 }
-.error1::before {
-  content: "CODE ERROR: ";
+.error21::before {
+  content: "QUEST CODE ERROR: ";
   font-style: italic;
 }
-.error3::before {
-  content: "CODE ERROR: ";
+.error22::before {
+  content: "GAME_CODE ERROR: ";
   font-style: italic;
 }
-.error10::before {
-  content: "FATAL ERROR: ";
+.error23::before {
+  content: "PARSER ERROR: ";
   font-style: italic;
 }
+.error25::before {
+  content: "TEXT PROCESSOR ERROR: ";
+  font-style: italic;
+}
+.error26::before {
+  content: "SAVE/LOAD ERROR: ";
+  font-style: italic;
+}
+.error27::before {
+  content: "DEBUG COMMAND: ";
+  font-style: italic;
+}
+
+
+
+
 .debug {
   font-size: 10pt;
   color: grey;
   font-family: monospace;
   /*display: none;*/
-}
-.debug2::before {
-  content: "NOTE: ";
-  font-style: italic;
-}
-.debug3::before {
-  content: "CODE-DEBUG: ";
-  font-style: italic;
-}
-.debug5::before {
-  content: "LOG: ";
-  font-style: italic;
 }
 
 

@@ -86,6 +86,7 @@ createRoom("lounge", {
   desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
   east:'kitchen',
   west:"dining_room",
+  up:"bedroom",
 });
 
 
@@ -380,6 +381,43 @@ createItem("charger_button",
     }
   }
 );
+
+
+
+
+
+
+createRoom("bedroom", {
+  desc:"A large room, with a big [bed] and a wardrobe.",
+  down:"lounge",
+});
+
+
+createItem("underwear", 
+  WEARABLE(1, ["lower"]),
+  { loc:"bedroom", pronouns:PRONOUNS.massnoun, examine:"Clean!", }
+);
+
+createItem("jeans", 
+  WEARABLE(2, ["lower"]),
+  { loc:"bedroom", pronouns:PRONOUNS.plural, examine:"Clean!", }
+);
+
+createItem("shirt", 
+  WEARABLE(2, ["upper"]),
+  { loc:"bedroom", examine:"Clean!", }
+);
+
+createItem("coat", 
+  WEARABLE(3, ["upper"]),
+  { loc:"bedroom", examine:"Clean!", }
+);
+
+createItem("jumpsuit", 
+  WEARABLE(2, ["upper", "lower"]),
+  { loc:"bedroom", examine:"Clean!", }
+);
+
 
 
 

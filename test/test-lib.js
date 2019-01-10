@@ -24,7 +24,7 @@ test.subCount = 0;
 }
 
 test.printTitle = function() {
-  debugmsg(DBG_TEST, test.currentTitle + ": Error (test " + test.subCount + ")");
+  debugmsg(test.currentTitle + ": Error (test " + test.subCount + ")");
   test.failCount++;
 }
 
@@ -47,14 +47,14 @@ test.assertCmd = function(cmdStr, expected) {
       return new RegExp(expected[index]).test(value);
     }
   })) {
-    //debugmsg(DBG_TEST, ".");
+    //debugmsg(".");
   }
   else {
     test.printTitle();
     for (var i = 0; i < test.testOutput.length; i++) {
       if (expected[i] !== test.testOutput[i]) {
-        debugmsg(DBG_TEST, "Expected: " + expected[i]);
-        debugmsg(DBG_TEST, "...Found: " + test.testOutput[i]);
+        debugmsg("Expected: " + expected[i]);
+        debugmsg("...Found: " + test.testOutput[i]);
       }
     }
   }
@@ -65,18 +65,18 @@ test.assertEqual = function(expected, found) {
   test.totalCount++;
   test.subCount++;
   if (expected === found) {
-    //debugmsg(DBG_TEST, ".");
+    //debugmsg(".");
   }
   else {
     test.printTitle();
-    debugmsg(DBG_TEST, "Expected: " + expected);
-    debugmsg(DBG_TEST, "...Found: " + found);
+    debugmsg("Expected: " + expected);
+    debugmsg("...Found: " + found);
   }
 };
 
 test.results = function(time) {
   var elapsed = parseInt(Date.now()) - time;
-  debugmsg(DBG_TEST, "Number of tests: " + test.totalCount);
-  debugmsg(DBG_TEST, "Number of fails: " + test.failCount);
-  debugmsg(DBG_TEST, "Elapsed time: " + elapsed + " ms (" + (Math.round(elapsed / test.totalCount * 10) / 10) + " ms/test)");
+  debugmsg("Number of tests: " + test.totalCount);
+  debugmsg("Number of fails: " + test.failCount);
+  debugmsg("Elapsed time: " + elapsed + " ms (" + (Math.round(elapsed / test.totalCount * 10) / 10) + " ms/test)");
 };

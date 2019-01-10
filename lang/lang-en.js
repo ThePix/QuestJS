@@ -23,7 +23,6 @@ var CMD_DISAMBIG_MSG = "Which do you mean?";
 var CMD_NO_MULTIPLES = "You cannot use multiple objects with that command.";
 var CMD_NOTHING = "Nothing there to do that with.";
 var CMD_NO_ATT_ERROR = "It does not work like that.";
-var CMD_NOT_THAT_WAY = "You can't go that way.";
 var CMD_UNSUPPORTED_DIR = "Unsupported type for direction";
 var CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
 var CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should as you just clicked it. Please alert the game author about this bug."
@@ -31,9 +30,11 @@ var CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should
 var CMD_DONE = "Done.";
 
 
-
+function CMD_NOT_THAT_WAY(char, dir) {
+  return nounVerb(char, "can't", true) + " go " + dir + ".";
+}
 function CMD_OBJECT_UNKNOWN_MSG(name) {
-  return "You can't see any such thing.";
+  return nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "'.";
 }
 
 
@@ -57,10 +58,10 @@ function CMD_NOT_WEARING(char, item) {
   return pronounVerb(char, "'be", true) + " not wearing " + item.pronouns.objective + ".";
 };
 function CMD_CANNOT_WEAR_OVER(char, item, outer) {
-  return pronounVerb(char, "can't", true) + " put " item.byname({article:INDEFINITE}) + " on over " + item.pronouns.possessive + " " + outer.byname() + ".";
+  return pronounVerb(char, "can't", true) + " put " + item.byname({article:INDEFINITE}) + " on over " + char.pronouns.poss_adj + " " + outer.byname() + ".";
 };
 function CMD_CANNOT_REMOVE_UNDER(char, item, outer) {
-  return pronounVerb(char, "can't", true) + " take off " + item.pronouns.possessive + "  " + item.byname() + " whilst wearing " + item.pronouns.possessive + " " + outer.byname() + ".";
+  return pronounVerb(char, "can't", true) + " take off " + char.pronouns.poss_adj + " " + item.byname() + " whilst wearing " + char.pronouns.poss_adj + " " + outer.byname() + ".";
 };
 function CMD_ALREADY_HAVE(char, item) {
   return pronounVerb(char, "'ve", true) + " got " + item.pronouns.objective + " already.";
@@ -287,8 +288,18 @@ var SL_NO_FILENAME = "Trying to save with no filename";
 function SL_CANNOT_FIND_OBJ(name) {
   return "Cannot find object '" + name + "'";
 }
-
-
+function SL_CANNOT_FIND_PROTOTYPE(name) {
+  return "Cannot find prototype '" + name + "'";
+}
+function SL_UNKNOWN_SAVE_TYPE(name, saveType) {
+  return "Unknown save type for object '" + name + "' (" + saveType + ")";
+}
+function SL_CANNOT_FIND_TYPE(name) {
+  return "Cannot find save type for object '" + name + "'";
+}
+function SL_BAD_FORMAT(name) {
+  return "Bad format in saved data (" + name + ")";
+}
 
 
 
@@ -298,6 +309,7 @@ var DEFAULT_DESCRIPTION = "It's just scenery.";
 
 var PRONOUNS = {
   thirdperson:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
+  massnoun:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
   male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his", reflexive:"himself"},
   female:{subjective:"she", objective:"her", possessive: "hers", poss_adj: "her", reflexive:"herself"},
   plural:{subjective:"they", objective:"them", possessive: "theirs", poss_adj: "their", reflexive:"themselves"},
@@ -490,6 +502,9 @@ function _itemA(item) {
   }
   if (item.pronouns === PRONOUNS.plural) {
     return "some ";
+  }
+  if (item.pronouns === PRONOUNS.massnoun) {
+    return "";
   }
   if (/^[aeiou]/i.test(item.alias)) {
     return "an ";
