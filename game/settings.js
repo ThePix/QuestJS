@@ -69,12 +69,10 @@ function setup() {
   game.player.status = "You are feeling fine";
   world.scopeSnapshot();
 
-  //parser.parse("get bricks");
-  //parser.parse("e");
-  //parser.parse("put 3 bricks on table");
-  //parser.parse("get bricks");
+  //parser.parse("u");
+  //parser.parse("get all");
    
-  showStartDiag();
+  //showStartDiag();
   
   
   
