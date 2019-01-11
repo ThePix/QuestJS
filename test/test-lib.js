@@ -1,8 +1,8 @@
 "use strict";
 
-// This is not language neutral, but should not be shipping with the game
+// This is not language neutral, but should not be shipping with the game, so tough
 
-// var test = {};  Done in util.js
+// Note that the test object was defined in util.js
 
 test.runTests = function() {
   var time = parseInt(Date.now());
