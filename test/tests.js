@@ -172,10 +172,10 @@ test.tests = function() {
   w.boots.notableFlag = true;
   w.boots.examine = "This will not get saved";
   
-  w.book.mutableExamine = true
+  w.book.mutableExamine = true;
   w.book.examine = "This WILL get saved";
   
-  clone.cloneCounter = 29
+  clone.cloneCounter = 29;
   
   var s = saveLoad.saveTheWorld("Comment!!!");
 
@@ -189,13 +189,12 @@ test.tests = function() {
 
   saveLoad.loadTheWorld(s);
   test.assertEqual(count + 2, Object.keys(w).length);
-  test.assertEqual(17, w.boots.counter)
-  test.assertEqual("Some interesting text", w.boots.unusualString)
-  test.assertEqual(true, w.boots.notableFlag)
-  test.assertEqual("This will remain", w.boots.examine)
-  test.assertEqual("This WILL get saved", w.book.examine)
+  test.assertEqual(17, w.boots.counter);
+  test.assertEqual("Some interesting text", w.boots.unusualString);
+  test.assertEqual(true, w.boots.notableFlag);
+  test.assertEqual("This will remain", w.boots.examine);
+  test.assertEqual("This WILL get saved", w.book.examine);
   
-  test.assertEqual(29, w[clone.name].cloneCounter)
+  test.assertEqual(29, w[clone.name].cloneCounter);
   
-}  
-
+};

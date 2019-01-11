@@ -8,7 +8,7 @@ test.runTests = function() {
   var time = parseInt(Date.now());
   test.tests();
   test.results (time);
-}  
+};
 
 
 
@@ -21,12 +21,12 @@ test.currentTitle = "Not specified";
 test.title = function(title) {
 test.subCount = 0;
   test.currentTitle = title;
-}
+};
 
 test.printTitle = function() {
   debugmsg(test.currentTitle + ": Error (test " + test.subCount + ")");
   test.failCount++;
-}
+};
 
 test.assertCmd = function(cmdStr, expected) {
   test.totalCount++;

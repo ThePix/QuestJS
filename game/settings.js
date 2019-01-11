@@ -6,7 +6,7 @@ const VERSION = "1.0";
 const THANKS = ["Kyle", "Lara"];
 
 // UI options
-const PANES = 'None';  //Can be set to Left, Right or None.
+const PANES = 'Left';  //Can be set to Left, Right or None.
 // Setting PANES to None will more than double the speed of your game!
 const COMPASS = true;
 const DIVIDER = "div.png";
@@ -28,7 +28,7 @@ const ROOM_TEMPLATE = [
   "%",
   "You can see {objects} here.",
   "You can go {exits}.",
-]
+];
 
 
 
@@ -74,7 +74,7 @@ function setup() {
   //parser.parse("put 3 bricks on table");
   //parser.parse("get bricks");
    
-  //showStartDiag();
+  showStartDiag();
   
   
   
@@ -204,73 +204,74 @@ $(function() {
 
 
 
-const para0Opts = [
-  "a tiny village",
-  "a provincial town",
-  "the slums",
-  "the merchant's quarter"
-];
+const dialogeOptions = {
+  para0Opts:[
+    "a tiny village",
+    "a provincial town",
+    "the slums",
+    "the merchant's quarter"
+  ],
 
-const para1Opts = [
-  "loving the outdoors",
-  "appreciating the finer things in life",
-  "always hungry",
-  "isolated from children of your own age"
-];
+  para1Opts:[
+    "loving the outdoors",
+    "appreciating the finer things in life",
+    "always hungry",
+    "isolated from children of your own age"
+  ],
 
-const para2Opts = [
-  "introspective",
-  "precocious",
-  "attractive",
-  "curious",
-];
+  para2Opts:[
+    "introspective",
+    "precocious",
+    "attractive",
+    "curious",
+  ],
 
-const para3Opts = [
-  "boy",
-  "girl"
-];
+  para3Opts:[
+    "boy",
+    "girl"
+  ],
 
-const para4Opts = [
-  "getting into trouble",
-  "with your nose in a book",
-  "stealing things",
-  "getting into fights",
-  "arguing with the local priest"
-];
+  para4Opts:[
+    "getting into trouble",
+    "with your nose in a book",
+    "stealing things",
+    "getting into fights",
+    "arguing with the local priest"
+  ],
 
-const para5Opts = [
-  "potion brewing",
-  "crystal magic",
-  "shadow magic",
-  "nature magic"
-];
+  para5Opts:[
+    "potion brewing",
+    "crystal magic",
+    "shadow magic",
+    "nature magic"
+  ],
 
-const para6Opts = [
-  "raven black",
-  "dark brown",
-  "brunette",
-  "dark blond",
-  "blond",
-  "platinum blond",
-  "ginger",
-  "electric blue",
-  "shocking pink",
-];
+  para6Opts:[
+    "raven black",
+    "dark brown",
+    "brunette",
+    "dark blond",
+    "blond",
+    "platinum blond",
+    "ginger",
+    "electric blue",
+    "shocking pink",
+  ],
 
-const para7Opts = [
+para7Opts:[
   "brown",
   "green",
   "hazel",
   "blue",
   "aquamarine"
-];
+],
 
-const para8Opts = [
+para8Opts:[
   "blue",
   "green",
   "orange",
-  
-];
+],
+};
 
 
 
@@ -296,7 +297,7 @@ function scrollPara(element) {
   if (isNaN(paraNumber)) { return; }
   var para = $('#para' + paraNumber);
   if (typeof paraPositions[paraNumber] !== 'number') {
-    var list = eval('para' + paraNumber + 'Opts');
+    var list = dialogeOptions['para' + paraNumber + 'Opts'];
     paraOpts[paraNumber] = list;
     paraPositions[paraNumber] = getRandomInt(0, list.length - 1);
   }
@@ -308,7 +309,6 @@ function scrollPara(element) {
 }    
 
 function setValues() {
-  var p = getPlayer();
   game.player.alias = $('#name_input').val();
   game.player.isFemale = !wizardMale;
   game.player.background = $('#para4').html();
@@ -348,17 +348,17 @@ function showStartDiag() {
   var diag = $("#dialog");
   diag.prop("title", "Who are you?");
   var s;
-  s = 'Name: <input type="text" id="name_input" value="Skybird"/><br/><br/>'
-  s += '<div id="diag-inner">Born in <span id="para0" class="scrolling" onclick="scrollPara(this)"></span>, you grew up <span id="para1" class="scrolling" onclick="scrollPara(this)"></span>. '
-  s += 'You were a <span id="para2" class="scrolling" onclick="scrollPara(this)"></span> <span id="para3" class="scrolling" onclick="scrollPara(this)"></span>, '
-  s += 'always <span id="para4" class="scrolling" onclick="scrollPara(this)"></span>.'
-  s += 'At the age of seven, you caught the eye of <span id="wizardname" class="scrolling" onclick="scrollWizard();">Master Shalazin</span>, '
-  s += 'a <span id="wizardwitch">wizard</span> '
-  s += 'who specialises in <span id="para5" class="scrolling" onclick="scrollPara(this)"></span>. '
-  s += 'Perhaps <span id="wizardhe">he</span> recognised potential in you, or just a pair of hands willing to work for next to nothing; may be just liked your '
-  s += '<span id="para6" class="scrolling" onclick="scrollPara(this)"></span> hair and <span id="para7" class="scrolling" onclick="scrollPara(this)"></span> eyes. '
-  s += 'Either way, you slowly learnt the basics of magic, and have recently learnt how to turn yourself <span id="para8" class="scrolling" onclick="scrollPara(this)"></span>. '
-  s += 'Perhaps more importantly, you have also learnt how to turn yourself back.</div>'
+  s = 'Name: <input type="text" id="name_input" value="Skybird"/><br/><br/>';
+  s += '<div id="diag-inner">Born in <span id="para0" class="scrolling" onclick="scrollPara(this)"></span>, you grew up <span id="para1" class="scrolling" onclick="scrollPara(this)"></span>. ';
+  s += 'You were a <span id="para2" class="scrolling" onclick="scrollPara(this)"></span> <span id="para3" class="scrolling" onclick="scrollPara(this)"></span>, ';
+  s += 'always <span id="para4" class="scrolling" onclick="scrollPara(this)"></span>.';
+  s += 'At the age of seven, you caught the eye of <span id="wizardname" class="scrolling" onclick="scrollWizard();">Master Shalazin</span>, ';
+  s += 'a <span id="wizardwitch">wizard</span> ';
+  s += 'who specialises in <span id="para5" class="scrolling" onclick="scrollPara(this)"></span>. ';
+  s += 'Perhaps <span id="wizardhe">he</span> recognised potential in you, or just a pair of hands willing to work for next to nothing; may be just liked your ';
+  s += '<span id="para6" class="scrolling" onclick="scrollPara(this)"></span> hair and <span id="para7" class="scrolling" onclick="scrollPara(this)"></span> eyes. ';
+  s += 'Either way, you slowly learnt the basics of magic, and have recently learnt how to turn yourself <span id="para8" class="scrolling" onclick="scrollPara(this)"></span>. ';
+  s += 'Perhaps more importantly, you have also learnt how to turn yourself back.</div>';
 
   diag.html(s);
   $('.scrolling').each(function() {

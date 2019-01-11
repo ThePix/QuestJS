@@ -142,7 +142,7 @@ createItem("boots",
 
 
 createItem("glass_cabinet",
-  CONTAINER(false),
+  CONTAINER(true),
   LOCKED_WITH("cabinet_key"),
   { alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, isAtLoc:function(loc) {
     return (loc == "lounge" || loc == "dining_room");
@@ -152,7 +152,7 @@ createItem("glass_cabinet",
 createItem("jewellery_box",
   TAKEABLE(),
   CONTAINER(true),
-  { loc:"glass_cabinet", alias:"jewellery box", examine:"A nice box.", }
+  { loc:"glass_cabinet", alias:"jewellery box", examine:"A nice box.", closed:false }
 );
 
 createItem("ring",
@@ -161,8 +161,8 @@ createItem("ring",
 );
 
 createItem("cardboard_box",
-  CONTAINER(false),
-  { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false, }
+  CONTAINER(true),
+  { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false }
 );
 
 
@@ -193,7 +193,7 @@ createItem("flashlight",
   TAKEABLE(),
   SWITCHABLE(false),
   { loc:"lounge", examine:"A small black torch.", regex:/^torch$/, 
-    byname:function(options){
+    byname:function(options) {
       var res = this.alias;
       if (options.article) { res = (options.article === DEFINITE ? "the" : "a") + " " + this.alias; }
       if (this.switchedon && options.modified) { res += " (providing light)"; }
@@ -225,7 +225,7 @@ createItem("flashlight",
     power:2,
     chargeResponse:function(participant) {
       msg(pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
-      w.flashlight.power = 20;;
+      w.flashlight.power = 20;
       return true;
     },
     
@@ -349,7 +349,7 @@ createItem("charger",
 
 createItem("charger_compartment",
   COMPONENT("charger"),
-  CONTAINER(false),
+  CONTAINER(true),
   { alias:"compartment", examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.", 
     testRestrictions:function(item) {
       var contents = w.charger_compartment.getContents();
