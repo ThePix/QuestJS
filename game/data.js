@@ -498,7 +498,11 @@ createItem("Lara",
         return false;
       }
       return true;
-    }
+    },
+    getAgreementGo(dest, dir) {
+      msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like the " + dest + ".'");
+      return false;
+    },
   }
 );
 
