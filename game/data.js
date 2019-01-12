@@ -531,6 +531,7 @@ createItem("Lara",
       msg("'I'm not doing that!' says Lara indignantly.");
       return false;
     },
+    canTalkToPlayer:function() { return true; },
   }
 );
 
