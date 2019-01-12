@@ -47,6 +47,18 @@ commands.push(new Cmd('Move', {
 }));
 
 
+commands.push(  new Cmd('Hint', {
+    regex:/^hint$|^hints$/,
+    script:function() {
+      if (w[game.player.loc].hint) {
+        metamsg(w[game.player.loc].hint);
+      }
+      else {
+        metamsg("Sorry, no hints here.");
+      }
+    },
+  }));
+
 
 
   
@@ -87,6 +99,7 @@ createRoom("lounge", {
   east:new Exit('kitchen'),
   west:new Exit("dining_room"),
   up:new Exit("bedroom"),
+  hint:"There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).",
 });
 
 
@@ -242,6 +255,7 @@ createRoom("dining_room", {
   east:new Exit('lounge'),
   up:new Exit("dining_room_on_stool"),
   alias:"dining room",
+  hint:"This room features an NPC who will sometimes do as you ask. Compliment her, and she will go to another room, and with then pick things up and drop them (but not bricks). Also not that the glass cabinet is in this room as well as the lounge.",
 });
 
 
@@ -262,7 +276,8 @@ createRoom("kitchen", {
   north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
   afterEnterFirst:function() {
     msg("A fresh smell here!");
-  }
+  },
+  hint:"This room features two doors that open and close. The garage door needs a key.",
 });
 
 createItem("trapdoor",
@@ -300,7 +315,8 @@ createRoom("basement", {
   up:new Exit('kitchen', {isHidden:function() { return false; } }),
   lightSource:function() {
     return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_NONE;
-  }
+  },
+  hint:"The basement illustrates light and dark. There is a torch in the lounge that may be useful.",
 });
 
 createItem("light_switch",
@@ -337,6 +353,7 @@ createItem("crates",
 createRoom("garage", {
   desc:'An empty garage.',
   south:new Exit("kitchen", {use:useWithDoor, door:"garage_door", doorName:"kitchen door"},),
+  hint:"The garage features a complex mechanism, with two components.",
 });
 
 createItem("charger",
@@ -390,6 +407,7 @@ createItem("charger_button",
 createRoom("bedroom", {
   desc:"A large room, with a big [bed] and a wardrobe.",
   down:new Exit("lounge"),
+  hint:"The bedroom has a variety of garments that can be put on - in the right order.",
 });
 
 
@@ -492,21 +510,21 @@ createItem("Lara",
         msg("'Why would I want {i:that}?'");
       }
     },
-    getAgreementTake(item) {
+    getAgreementTake:function(item) {
       if (item === w.brick) {
         msg("'I'm not picking up any bricks,' says Lara indignantly.");
         return false;
       }
       return true;
     },
-    getAgreementGo(dir) {
+    getAgreementGo:function(dir) {
       if (!this.happy) {
         msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like that room.'");
         return false;
       }
       return true;
     },
-    getAgreementDrop() {
+    getAgreementDrop:function() {
       return true;
     },
     getAgreement() {
