@@ -492,6 +492,13 @@ createItem("Lara",
         msg("'Why would I want {i:that}?'");
       }
     },
+    getAgreementTake(item) {
+      if (item === w.brick) {
+        msg("'I'm not picking up any bricks,' says Lara indignantly.");
+        return false;
+      }
+      return true;
+    }
   }
 );
 

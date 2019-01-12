@@ -28,9 +28,8 @@ var ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, 
 var ERR_ROMAN_NUMBERS_ONLY = "toRoman can only handle numbers";
 
 
-function ERROR_NO_PLAYER_FOUND() {
-  return "No player object found. This may be due to a syntax error in data.js, but also check one object is actually flagged as the player.";
-}
+const ERROR_NO_PLAYER_FOUND = "No player object found. This is probably due to an error in data.js. Do [Ctrl][Shft]-I to open the developer tools, and go to the console tab, and look at the first error in the list (if it mentions jQuery, skip it and look at the second one). It should tell you exactly which line in which file. But also check one object is actually flagged as the player.";
+
 function ERROR_INIT_REPEATED_NAME(name) {
   return "Attempting to use the name `" + name + "`, there there is already an item with that name in the world.";
 }
