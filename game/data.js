@@ -84,9 +84,9 @@ createItem("knife",
 
 createRoom("lounge", {
   desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
-  east:'kitchen',
-  west:"dining_room",
-  up:"bedroom",
+  east:new Exit('kitchen'),
+  west:new Exit("dining_room"),
+  up:new Exit("bedroom"),
 });
 
 
@@ -95,8 +95,8 @@ createRoom("lounge", {
 
 createRoom("dining_room_on_stool", {
   desc:'Stod on a stool, in an old-fashioned room.',
-  east:'lounge',
-  down:"dining_room",
+  east:new Exit('lounge'),
+  down:new Exit("dining_room"),
   alias:"dining room (on a stool)",
   loc:"dining_room",
 });
@@ -239,8 +239,8 @@ createItem("flashlight",
 
 createRoom("dining_room", {
   desc:'An old-fashioned room.',
-  east:'lounge',
-  up:"dining_room_on_stool",
+  east:new Exit('lounge'),
+  up:new Exit("dining_room_on_stool"),
   alias:"dining room",
 });
 
@@ -251,7 +251,7 @@ createRoom("dining_room", {
 
 createRoom("kitchen", {
   desc:'A clean room.',
-  west:"lounge",
+  west:new Exit("lounge"),
   down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; }, msg:function(isMultiple, char) {
     if (char === game.player) {
       msg("You go through the trapdoor, and down the ladder.");
@@ -389,7 +389,7 @@ createItem("charger_button",
 
 createRoom("bedroom", {
   desc:"A large room, with a big [bed] and a wardrobe.",
-  down:"lounge",
+  down:new Exit("lounge"),
 });
 
 
