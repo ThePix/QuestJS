@@ -480,7 +480,7 @@ createItem("Kyle_The_Weather",
 
 createItem("Lara",
   NPC(true),
-  { loc:"dining_room", examine:"A normal-sized bunny.", properName:true,
+  { loc:"dining_room", examine:"A normal-sized bunny.", properName:true, happy:false,
     giveReaction:function(item, multiple, char) {
       if (item === w.ring) {
         msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.");
@@ -499,8 +499,18 @@ createItem("Lara",
       }
       return true;
     },
-    getAgreementGo(dest, dir) {
-      msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like the " + dest + ".'");
+    getAgreementGo(dir) {
+      if (!this.happy) {
+        msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like that room.'");
+        return false;
+      }
+      return true;
+    },
+    getAgreementDrop() {
+      return true;
+    },
+    getAgreement() {
+      msg("'I'm not doing that!' says Lara indignantly.");
       return false;
     },
   }
@@ -515,7 +525,18 @@ createItem("Lara_garage_key",
   TOPIC(true),
   { loc:"Lara", alias:"Can I have the garden key?",
     script:function() {
-      msg("You ask May about the garage key; she agrees to give it to you if you give her a ring. Perhaps there is one in the glass cabinet?");
+      msg("You ask Lara about the garage key; she agrees to give it to you if you give her a ring. Perhaps there is one in the glass cabinet?");
+    },
+  }
+);
+
+
+createItem("Lara_very_attractive",
+  TOPIC(true),
+  { loc:"Lara", alias:"You're very attractive",
+    script:function() {
+      msg("You tell Lara she looks very attractive. 'Why thank you!' she replies, smiling at last.");
+      w.Lara.happy = true;
     },
   }
 );

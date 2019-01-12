@@ -169,9 +169,15 @@ var CMD_NOTHING = "Nothing there to do that with.";
 var CMD_NO_ATT_ERROR = "It does not work like that.";
 var CMD_UNSUPPORTED_DIR = "Unsupported type for direction";
 var CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
-var CMD_PANE_CMD_NOT_FOUND = "I don't know that command - and obviously I should as you just clicked it. Please alert the game author about this bug.";
-var CMD_PANE_ITEM_NOT_FOUND = "I don't know that object - and obviously I should as it was listed. Please alert this as a bug in Quest.";
 var CMD_DONE = "Done.";
+
+
+function CMD_PANE_CMD_NOT_FOUND(s) {
+  return "I don't know that command (" + s + ") - and obviously I should as you just clicked it. Please alert the game author about this bug.";
+}
+function CMD_PANE_ITEM_NOT_FOUND(s) {
+  return "I don't know that object (" + s + ")- and obviously I should as it was listed. Please alert this as a bug in Quest.";
+}
 
 
 function CMD_NOT_THAT_WAY(char, dir) {
@@ -263,7 +269,7 @@ function CMD_NPC_NO_INTEREST_IN(char) {
 
 
 // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
-function CMD_TALK_TO_MENU_TITLE(char) {
+function CMD_SPEAK_TO_MENU_TITLE(char) {
   return "Talk to " + char.byname({article:DEFINITE}) + " about:";
 }
 // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
