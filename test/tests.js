@@ -76,7 +76,7 @@ test.tests = function() {
   
   test.title("NPC commands 1");
   
-  test.assertCmd("w", ["You head west.", "An old-fashioned room.", "You can see a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Lara and a brick here.", "You can go up or east.",]);  
+  test.assertCmd("w", ["You head west.", "An old-fashioned room.", "You can see a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a chair, Lara and a brick here.", "You can go up or east.",]);  
   
   test.assertCmd("lara,get brick", "'I'm not picking up any bricks,' says Lara indignantly.");
   test.assertCmd("lara,e", "'I'm not going east,' says Lara indignantly. 'I don't like that room.'");
@@ -84,7 +84,10 @@ test.tests = function() {
   test.assertEqual(2, w.Lara.getTopics().length);
   test.assertCmd("speak to lara", "You tell Lara she looks very attractive. 'Why thank you!' she replies, smiling at last.");
   test.assertEqual(1, w.Lara.getTopics().length);
-  test.assertCmd("lara,e", "Lara heads east.");
+  
+  test.assertCmd("lara,sit on chair", "Lara sits on the chair.");
+  
+  test.assertCmd("lara,e", ["Lara got off the chair.", "Lara heads east."]);
   
   test.assertCmd("e", ["You head east.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater), Lara, a garage key and seven bricks here.", "You can go up, west or east.",]);
   test.assertCmd("lara,get boots", "Lara takes the boots.");

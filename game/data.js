@@ -200,6 +200,30 @@ createRoom("dining_room", {
 });
 
 
+createItem("chair",
+  {
+    loc:"dining_room", examine:"A wooden chair.", 
+    siton:function(isMultiple, char) {
+      if (char.posture === "sitting" && char.postureFurniture === this) {
+        msg(CMD_ALREADY(char, this));
+        return false;
+      }
+      if (!this.testForPosture(char, "sitting")) {
+        return false;
+      }
+      if (char.posture) {
+        msg(CMD_STOP_POSTURE(char))
+      }
+      char.posture = "sitting";
+      char.postureFurniture = this;
+      msg(CMD_SIT_ON_SUCCESSFUL(char, this));
+      return true;
+    },
+    testForPosture:function(char, posture) {
+      return true;
+    }
+  }
+);
 
 
 
@@ -482,6 +506,13 @@ createItem("Lara",
       return true;
     },
     getAgreementDrop:function() {
+      return true;
+    },
+    getAgreementSitOn:function() {
+      if (!this.happy) {
+        msg("'I don't think so!' says Lara indignantly.");
+        return false;
+      }
       return true;
     },
     getAgreement() {

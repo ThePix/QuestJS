@@ -109,6 +109,15 @@ function CMD_TURN_ON_SUCCESSFUL(char, item) {
 function CMD_TURN_OFF_SUCCESSFUL(char, item) {
   return nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " off.";
 }
+function CMD_SIT_ON_SUCCESSFUL(char, item) {
+  return nounVerb(char, "sit", true) + " on " + item.byname({article:DEFINITE}) + ".";
+}
+function CMD_STAND_ON_SUCCESSFUL(char, item) {
+  return nounVerb(char, "stand", true) + " on " + item.byname({article:DEFINITE}) + ".";
+}
+function CMD_RECLINE_ON_SUCCESSFUL(char, item) {
+  return nounVerb(char, "lie", true) + " down on " + item.byname({article:DEFINITE}) + ".";
+}
 
 function NPC_HEADING(char, dir) {
   return nounVerb(char, "head", true) + " " + dir + ".";
@@ -154,7 +163,15 @@ function CMD_CANNOT_USE(char, item) {
 function CMD_CANNOT_EAT(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
 }
-
+function CMD_CANNOT_STAND_ON(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can stand on.";
+}
+function CMD_CANNOT_SIT_ON(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can sit on.";
+}
+function CMD_CANNOT_RECLINE_ON(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can lie on.";
+}
 
 
 
@@ -251,7 +268,11 @@ function CMD_CONTAINER_CLOSED(char, item) {
 function CMD_INSIDE_CONTAINER(char, item, cont) {
   return pronounVerb(item, "be", true) + " inside " + cont.byname({article:DEFINITE}) + ".";
 }
-
+function CMD_STOP_POSTURE(char) {
+  if (!char.posture) return "";
+  // You could split up sitting, standing and lying
+  return nounVerb(char, "get", true) + " off " + char.postureFurniture.byname({article:DEFINITE}) + ".";
+}
 
 
 

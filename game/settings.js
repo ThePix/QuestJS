@@ -69,8 +69,10 @@ function setup() {
   game.player.status = "You are feeling fine";
   world.scopeSnapshot();
 
-  //parser.parse("u");
-  //parser.parse("get all");
+  w.Lara.happy = true
+  parser.parse("w");
+  parser.parse("lara,sit on chair");
+  parser.parse("lara,e");
    
   //showStartDiag();
   
