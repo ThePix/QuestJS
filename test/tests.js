@@ -50,9 +50,9 @@ test.tests = function() {
   
   test.title("Wear/remove");
   
-  test.assertCmd("u", ["You head up.", "A large room, with a big bed and a wardrobe.", "You can see underwear, some jeans, a shirt, a coat and a jumpsuit here.", "You can go down.",]);
+  test.assertCmd("u", ["You head up.", "A large room, with a big bed and a wardrobe.", "You can see a wardrobe, underwear, some jeans, a shirt, a coat and a jumpsuit here.", "You can go in or down.",]);
 
-  test.assertCmd("get all", ["Underwear: You take the underwear.", "Jeans: You take the jeans.", "Shirt: You take the shirt.", "Coat: You take the coat.", "Jumpsuit: You take the jumpsuit.", ]);
+  test.assertCmd("get all", ["Wardrobe: You can't take it.", "Underwear: You take the underwear.", "Jeans: You take the jeans.", "Shirt: You take the shirt.", "Coat: You take the coat.", "Jumpsuit: You take the jumpsuit.", ]);
   test.assertCmd("wear underwear", "You put on the underwear.");
   test.assertCmd("wear jeans", "You put on the jeans.");
   test.assertCmd("wear shirt", "You put on the shirt.");

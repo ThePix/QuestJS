@@ -390,13 +390,13 @@ var EXITS = [
   {name:'northwest', abbrev:'NW'}, 
   {name:'north', abbrev:'N'}, 
   {name:'northeast', abbrev:'NE'}, 
-  {name:'in', abbrev:'In'}, 
+  {name:'in', abbrev:'In', alt:'enter'}, 
   {name:'up', abbrev:'U'},
   
   {name:'west', abbrev:'W'}, 
   {name:'Look', abbrev:'Lk', nocmd:true}, 
   {name:'east', abbrev:'E'}, 
-  {name:'out', abbrev:'Out'}, 
+  {name:'out', abbrev:'Out', alt:'exit'}, 
   {name:'down', abbrev:'Dn', alt:'d'}, 
 
   {name:'southwest', abbrev:'SW'}, 
