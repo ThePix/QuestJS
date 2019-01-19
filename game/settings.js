@@ -54,8 +54,11 @@ const INVENTORIES = [
 
 
 
-
-
+function intro() {
+  msg("This is a quick example of what can be done in Quest 6.");
+  msg("Your objective is to turn on the light in the basement, but there are, of course, numerous hoops to jump through.");
+  msg("If you are successful, see if you can do it again, but getting Kyle to do everything. You should find that you can tell an PC to do pretty much anything (except look at things for you and talk to people for you).");
+}
 
 
 
@@ -63,15 +66,13 @@ const INVENTORIES = [
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 function setup() {
-  msg("This is a quick example of what can be done in Quest 6.");
-  msg("Your objective is to turn on the light in the basement, but there are, of course, numerous hoops to jump through.");
-  msg("If you are successful, see if you can do it again, but getting Kyle to do everything. You should find that you can tell an PC to do pretty much anything (except look at things for you and talk to people for you).");
+  intro();
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
   world.scopeSnapshot();
 
   //parser.parse("spoken");
-  //parser.parse("l");
+//  parser.parse("l");
    
   //showStartDiag();
   
