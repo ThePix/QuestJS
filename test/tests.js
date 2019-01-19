@@ -87,7 +87,7 @@ test.tests = function() {
   
   test.assertCmd("lara,sit on chair", "Lara sits on the chair.");
   
-  test.assertCmd("lara,e", ["Lara got off the chair.", "Lara heads east."]);
+  test.assertCmd("lara,e", ["Lara gets off the chair.", "Lara heads east."]);
   
   test.assertCmd("e", ["You head east.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater), Lara, a garage key and seven bricks here.", "You can go up, west or east.",]);
   test.assertCmd("lara,get boots", "Lara takes the boots.");

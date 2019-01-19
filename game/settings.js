@@ -23,6 +23,7 @@ const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;                  // set to false when releasing
 
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
+const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
 
 const ROOM_TEMPLATE = [
   "%",
@@ -69,10 +70,8 @@ function setup() {
   game.player.status = "You are feeling fine";
   world.scopeSnapshot();
 
-  w.Lara.happy = true
-  parser.parse("w");
-  parser.parse("lara,sit on chair");
-  parser.parse("lara,e");
+  //parser.parse("spoken");
+  //parser.parse("l");
    
   //showStartDiag();
   

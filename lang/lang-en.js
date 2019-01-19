@@ -271,7 +271,10 @@ function CMD_INSIDE_CONTAINER(char, item, cont) {
 function CMD_STOP_POSTURE(char) {
   if (!char.posture) return "";
   // You could split up sitting, standing and lying
-  return nounVerb(char, "get", true) + " off " + char.postureFurniture.byname({article:DEFINITE}) + ".";
+  var s = nounVerb(char, "get", true) + " off " + char.postureFurniture.byname({article:DEFINITE}) + ".";
+  char.posture = null;
+  char.postureFurniture = null;
+  return s;
 }
 
 
@@ -402,7 +405,7 @@ var VERBS = {
   wear:"Wear",
   remove:"Remove",
   lookat:"Look at",
-  speakto:"Speak to",
+  talkto:"Talk to",
 };
 
 

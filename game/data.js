@@ -430,8 +430,8 @@ createItem("Kyle",
       {regex:/house/, response:"'I like it,' says Kyle.", },
       {regex:/garden/, response:"'Needs some work,' Kyle says with a sign.", },
     ],
-    speakto:function() {
-      switch (this.speaktoCount) {
+    talkto:function() {
+      switch (this.talktoCount) {
         case 0 : msg("You say 'Hello,' to Kyle, and she replies in kind."); break;
         case 1 : msg("You ask Kyle how to get upstairs. 'You know,' she replies, 'I have no idea.'"); break;
         case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break;
