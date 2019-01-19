@@ -1,11 +1,9 @@
-
-tmp.html
-ideas.txt
+tmp.*
 *.xml
 *.aslx
 *.yml
 *.rb
-*.rb
+*.txt
 *.zip
-*.zip
-FirstSteps2.zip
+game2/
+page2.html

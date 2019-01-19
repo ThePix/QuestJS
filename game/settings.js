@@ -2,7 +2,7 @@
 
 const TITLE = "A First Step...";
 const AUTHOR = "The Pixie"
-const VERSION = "1.0";
+const VERSION = "1.1";
 const THANKS = ["Kyle", "Lara"];
 
 // UI options
@@ -57,7 +57,7 @@ const INVENTORIES = [
 function intro() {
   msg("This is a quick example of what can be done in Quest 6.");
   msg("Your objective is to turn on the light in the basement, but there are, of course, numerous hoops to jump through.");
-  msg("If you are successful, see if you can do it again, but getting Kyle to do everything. You should find that you can tell an PC to do pretty much anything (except look at things for you and talk to people for you).");
+  msg("If you are successful, see if you can do it again, but getting Kyle to do everything. You should find that you can tell an NPC to do pretty much anything (except look at things for you and talk to people for you).");
 }
 
 
