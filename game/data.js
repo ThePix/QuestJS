@@ -224,7 +224,7 @@ createRoom("kitchen", {
     }
   }}),
   north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
-  afterEnterFirst:function() {
+  afterFirstEnter:function() {
     msg("A fresh smell here!");
   },
   hint:"This room features two doors that open and close. The garage door needs a key.",
@@ -491,6 +491,9 @@ createItem("Lara",
       return true;
     },
     getAgreementDrop:function() {
+      return true;
+    },
+    getAgreementStand:function() {
       return true;
     },
     getAgreementSitOn:function() {

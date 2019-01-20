@@ -86,6 +86,11 @@ test.tests = function() {
   test.assertEqual(1, w.Lara.getTopics().length);
   
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
+  test.assertCmd("lara,stand up", "Lara gets off the chair.");
+  test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
+  test.assertCmd("lara, get off chair", "Lara gets off the chair.");
+  test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
+
   
   test.assertCmd("lara,e", ["Lara gets off the chair.", "Lara heads east."]);
   

@@ -553,7 +553,7 @@
           msg ("The shop keeper sniffs the air and gives you a strange w.look.");
         }
       },
-      afterEnterFirst:function() {
+      afterFirstEnter:function() {
         msg (" ");
         msg ("To make a purchase, either type <i>BUY</i>\" to see a menu of goods available, or type <i>BUY &gt;item></i> if you know exactly what you w.want.");
       },
@@ -611,7 +611,7 @@
         }
         w.sage_have_gem.display = (w.gem.loc = player);
       },
-      afterEnterFirst:function() {
+      afterFirstEnter:function() {
         msg ("'Ah, you here at last,' says the w.sage.");
         msg ("'You knew I was coming?'");
         var s = "'I knew someone was w.coming. You are here to fulfil the ancient w.prophecy. I'm a sage, you know; it is my job to know about these w.things.";
@@ -864,7 +864,7 @@
     {
       loc:"town",
       desc:"You are stood on a road; a properly laid road, though not in a good state of repair. To the north is a town, or perhaps village would be a better word. A few dozen houses, a tavern and a tower. To the south, the road continues for some miles before disappearing in the hills.",
-      beforeEnterFirst:function() {
+      beforeFirstEnter:function() {
         msg ("The market in Tandren is always a lively place, and today is no w.different. You wander amongst the brightly coloured stalls where traders are plying their wares, looking at trinkets and curios, with no particular w.plan. Of course, Grand {if w.player.shalazin_female:Mistress}{if not w.player.shalazin_female:Master} Shalazin wants fairy dust and salamder ears, but there will be time for that w.later.");
         msg ("'You want something special?' says a voice at your w.shoulder. You turn, a man in dark robes is w.there. 'I have some special items I think you will w.like. Not for all w.eyes...' Intrigued, you follow him to a secluded w.alley...");
         msg ("A sudden pain at the back of your head, darkness, w.confusion...");
@@ -879,7 +879,7 @@
       },
       afterEnter:function() {
       },
-      afterEnterFirst:function() {
+      afterFirstEnter:function() {
         msg ("A magpie is stood by the side of the road, looking at w.you.");
         w.magpie.following = true
       },
@@ -901,7 +901,7 @@
     {
       loc:"town",
       desc:"A narrow street between the houses, this connects the road to the south with the market square to the northeast. To the east is a tavern, <i>The Drunken Pig</i>. Besides that, the buildings are modest, single-story affairs.",
-      beforeEnterFirst:function() {
+      beforeFirstEnter:function() {
       },
       east:"tavern",
       northeast:"market_square",
@@ -1722,7 +1722,7 @@
     {
       loc:"forest_and_marsh_north",
       desc:"The forest opens out somewhat by a pond. A track heads north west, another follows a stream from the pond southwards.",
-      afterEnterFirst:function() {
+      afterFirstEnter:function() {
         msg ("Three ducks fly up from the pond, startled by your w.movement.");
         if (w.player.status === "Tongues" && w.magpie.following) {
           msg ("'Stupid ducks,' mutters the w.magpie.");
@@ -2279,7 +2279,7 @@
     {
       loc:"outer_citadel",
       desc:"The far side of this long, narrow room is lined with bunk beds, fourteen in total. There are narrow slit windows between them. On the near side of the room, the larger windows look on to the courtyard. Doors to the northeast and southeast.",
-      beforeEnterFirst:function() {
+      beforeFirstEnter:function() {
         Generate (kobold, this, crude_spear, "Sneering kobold");
         Generate (kobold, this, crude_spear, "Stupid kobold");
         Generate (kobold, this, crude_spear, "Lazy kobold");
@@ -2702,7 +2702,7 @@
     {
       loc:"necropolis",
       desc:"You feel dwarfed by the size of the Great Vault, now you are stood in it.",
-      afterEnterFirst:function() {
+      afterFirstEnter:function() {
         msg ("'You come to steal my gem?' hisses the w.lich. 'Many have tried, all have w.failed. Some serve me still,' it waves a skeltal claw to the overlooking chamber to the w.east. 'Soon you will w.too.'");
       },
       north:"necropolis_hall_ancient_stone",
@@ -2769,7 +2769,7 @@
     {
       loc:"necropolis",
       desc:"A large, rectangular room, with a vaulted roof, and a stone floor. Stone benches are fitted along the longer sides, north and south. Stairs to the east lead up to the chapel, while the main complex of the necropolis is west.",
-      beforeEnterFirst:function() {
+      beforeFirstEnter:function() {
         msg ("As everyone knows, a necropolis is just somewhere to entomb the w.dead. Spooky, to be sure, but no reason to suppose there will be anything to worry about down here apart from the occasion w.rat.");
         w.game.necropolis_visited = true
       },
@@ -2777,7 +2777,7 @@
       },
       afterEnter:function() {
       },
-      afterEnterFirst:function() {
+      afterFirstEnter:function() {
         msg ("Traditionally the dead are dedicated to the air and the earth; a year exposed to the air in a death-tower, then the bones are collected in an ossuary jar, and placed in the w.necropolis. This room is where relatives of the deceased might sit and w.remember.");
       },
       up:"citadel_chapel_rear",
@@ -3384,7 +3384,7 @@
           }
         }
       },
-      afterEnterFirst:function() {
+      afterFirstEnter:function() {
         msg ("'Please don't hurt me,' begs Prince w.Mandrin. 'Wait you're w.not... Please, say you've come to rescue me!'");
       },
     },

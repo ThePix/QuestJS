@@ -12,7 +12,7 @@
     {
       loc:"_oldcastle",
       desc:"This room is your public face to the world; this is where you greet visitors who want to bend your ear or outright bribe you. Even the King himself has visited you here once or twice, and so you have taken the time to esure the room is richly furnished over the years. The walls are hung with tapestries, the chairs are well-upholstered, and the desk is an exquisite example of marquetry. In each corner a vase stands on it own pedastal.<br/>To the north is your bedroom; a private room for you alone. To the northwest, hidden by a tapestry, and enchantments too, is a secret passage to your laboratory. Naturally the laboratory is for you alone too. You exit your chambers via the door to the east, whilst to the south is a window over looking the higher courtyard.",
-      beforeEnterFirst:function() {
+      beforeFirstEnter:function() {
       },
       afterEnter:function() {
         if (w.game.invaded) {
@@ -26,7 +26,7 @@
           }
         }
       },
-      afterEnterFirst:function() {
+      afterFirstEnter:function() {
         msg (" ");
         msg ("'Jenina! Jenina!' A shrill shout from the painting hanging on the w.wall.");
         msg ("'Yes, mother,' you say w.wearily.");
@@ -240,7 +240,7 @@
     {
       loc:"_newcastle",
       desc:"Like the other end, the west end of the dining room has a hearth, and it is pleasantly warm here.<br/>A door to the north leads to the decidedly colder Inner Ward, and to the west to the kitchens.",
-      beforeEnterFirst:function() {
+      beforeFirstEnter:function() {
         if (!w.diningroomwest.done) {
           l = Split(w.this.description, "<br/>");
           w.this.description = w.diningroomwest.longdesc + "<br/>" + StringListItem(l, 1);
@@ -257,7 +257,7 @@
     {
       loc:"_newcastle",
       desc:"Like the other end, the east end of the dining room has a hearth, and it is pleasantly warm here.<br/>A door to the north leads to a flight of steps up to the lesser gallery.",
-      beforeEnterFirst:function() {
+      beforeFirstEnter:function() {
         if (!w.diningroomwest.done) {
           l = Split(w.this.description, "<br/>");
           w.this.description = w.diningroomwest.longdesc + "<br/>" + StringListItem(l, 1);

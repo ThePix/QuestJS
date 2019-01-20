@@ -96,7 +96,7 @@ body {
   font-style: italic;
 }
 .error22::before {
-  content: "GAME_CODE ERROR: ";
+  content: "GAME CODE ERROR: ";
   font-style: italic;
 }
 .error23::before {
