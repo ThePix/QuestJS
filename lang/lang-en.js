@@ -220,7 +220,7 @@ function CMD_NONE_HELD(char, item) {
 function CMD_NOTHING_USEFUL(char, item) {
   return "That's not going to do anything useful.";
 }
-function CMD_ALREADY(char, item) {
+function CMD_ALREADY(item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 }
 

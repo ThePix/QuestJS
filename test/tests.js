@@ -85,7 +85,7 @@ test.tests = function() {
   test.assertCmd("speak to lara", "You tell Lara she looks very attractive. 'Why thank you!' she replies, smiling at last.");
   test.assertEqual(1, w.Lara.getTopics().length);
   
-  test.assertCmd("lara,sit on chair", "Lara sits on the chair.");
+  test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
   
   test.assertCmd("lara,e", ["Lara gets off the chair.", "Lara heads east."]);
   

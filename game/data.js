@@ -201,27 +201,12 @@ createRoom("dining_room", {
 
 
 createItem("chair",
+  FURNITURE({sit:true}),
   {
-    loc:"dining_room", examine:"A wooden chair.", 
-    siton:function(isMultiple, char) {
-      if (char.posture === "sitting" && char.postureFurniture === this) {
-        msg(CMD_ALREADY(char, this));
-        return false;
-      }
-      if (!this.testForPosture(char, "sitting")) {
-        return false;
-      }
-      if (char.posture) {
-        msg(CMD_STOP_POSTURE(char))
-      }
-      char.posture = "sitting";
-      char.postureFurniture = this;
-      msg(CMD_SIT_ON_SUCCESSFUL(char, this));
-      return true;
+    loc:"dining_room", examine:"A wooden chair.",
+    onsitting:function(char) {
+      msg("The chair makes a strange noise when " + nounVerb(char, "sit") + " on it.");
     },
-    testForPosture:function(char, posture) {
-      return true;
-    }
   }
 );
 
