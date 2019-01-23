@@ -15,6 +15,8 @@ const STATUS_PANE = "Status";  // Set to false to turn off
 const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
 const STATUS_WIDTH_RIGHT = 40;
 
+const USE_DROPDOWN_FOR_CONV = true;
+
 const TEXT_INPUT = true;
 const CURSOR = ">";
 const CMD_ECHO = true;               // echo commands to the screen

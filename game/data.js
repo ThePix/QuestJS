@@ -48,7 +48,7 @@ createRoom("lounge", {
 
 
 createRoom("dining_room_on_stool", {
-  desc:'Stod on a stool, in an old-fashioned room.',
+  desc:'Stood on a stool, in an old-fashioned room.',
   east:new Exit('lounge'),
   down:new Exit("dining_room"),
   alias:"dining room (on a stool)",
