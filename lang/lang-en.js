@@ -174,11 +174,17 @@ function CMD_CANNOT_USE(char, item) {
 function CMD_CANNOT_EAT(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
 }
+function CMD_CANNOT_SMASH(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can break.";
+}
 function CMD_CANNOT_FILL(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can fill.";
 }
 function CMD_CANNOT_EMPTY(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can empty.";
+}
+function CMD_CANNOT_LOOK_OUT(char, item) {
+  pronounVerb(char, "can't", true) + " look out of " + item.pronouns.objective + ".";
 }
 function CMD_CANNOT_STAND_ON(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can stand on.";
@@ -214,6 +220,9 @@ function CMD_PANE_ITEM_NOT_FOUND(s) {
 }
 
 
+function CMD_NOTHING_THERE(char) {
+  return nounVerb(char, "be", true) + " sure there's nothing there.";
+}
 function CMD_NOT_THAT_WAY(char, dir) {
   return nounVerb(char, "can't", true) + " go " + dir + ".";
 }

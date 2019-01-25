@@ -31,7 +31,7 @@ test.printTitle = function() {
 test.assertCmd = function(cmdStr, expected) {
   test.totalCount++;
   test.subCount++;
-  if (typeof expected === "string") {
+  if (expected.constructor !== Array) {
     expected = [expected];
   }
   test.testing = true;
@@ -44,7 +44,7 @@ test.assertCmd = function(cmdStr, expected) {
       return value === expected[index];
     }
     else {
-      return new RegExp(expected[index]).test(value);
+      return expected[index].test(value);
     }
   })) {
     //debugmsg(".");
@@ -52,9 +52,17 @@ test.assertCmd = function(cmdStr, expected) {
   else {
     test.printTitle();
     for (var i = 0; i < test.testOutput.length; i++) {
-      if (expected[i] !== test.testOutput[i]) {
-        debugmsg("Expected: " + expected[i]);
-        debugmsg("...Found: " + test.testOutput[i]);
+      if (typeof expected[i] === "string") {
+        if (expected[i] !== test.testOutput[i]) {
+          debugmsg("Expected: " + expected[i]);
+          debugmsg("...Found: " + test.testOutput[i]);
+        }
+      }
+      else {
+        if (!expected[i] || !expected[i].test(test.testOutput[i])) {
+          debugmsg("Expected: " + expected[i]);
+          debugmsg("...Found: " + test.testOutput[i]);
+        }
       }
     }
   }
