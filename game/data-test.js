@@ -1,18 +1,11 @@
 "use strict";
 
- 
 createItem("me",
   PLAYER(),
-  { 
-    loc:"lounge",
-    regex:/^me|myself|player$/,
-    examine:function() {
-      msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
-    },
-  }
+  { loc:"lounge", regex:/^me|myself|player$/, examine:"Just some guy." }
 );
 
-
+// This is for the player
 createItem("knife",
   TAKEABLE(),
   { 
@@ -21,15 +14,13 @@ createItem("knife",
     examine:function() {
       if (this.sharp) {
         msg("A really sharp knife.");
+        msg("A really sharp knife.");
+        msg("A really sharp knife.");
+        msg("A really sharp knife.");
       }
       else {
         msg("A blunt knife.");
       }
-    },
-    chargeResponse:function(participant) {
-      msg("There is a loud bang, and the knife is destroyed.");
-      this.display = DSPY_DELETED;
-      return false;
     },
   }
 );
@@ -37,13 +28,22 @@ createItem("knife",
 
 
 
-
-
-
 createRoom("lounge", {
-  desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
-  east:new Exit('kitchen'),
-  west:new Exit("dining_room"),
-  up:new Exit("bedroom"),
-  hint:"There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).",
-});
+    desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].', east:new Exit('kitchen'),
+    west:new Exit("dining_room"), up:new Exit("bedroom"), }
+);
+
+
+
+createRoom("kitchen", {
+    desc:'A nice room.',
+    east:new Exit('lounge', {
+      locked:true,
+      use:function() {
+        msg("No cannot.");
+      },
+    }
+    ),
+    west:new Exit('lounge'),
+  }
+);

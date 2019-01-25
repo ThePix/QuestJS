@@ -48,7 +48,7 @@ createRoom("lounge", {
 
 
 createRoom("dining_room_on_stool", {
-  desc:'Stod on a stool, in an old-fashioned room.',
+  desc:'Stood on a stool, in an old-fashioned room.',
   east:new Exit('lounge'),
   down:new Exit("dining_room"),
   alias:"dining room (on a stool)",
@@ -550,10 +550,4 @@ createItem("brick",
     { examine:"A brick is a brick.", regex:/^(\d+ )?bricks?$/}
 );
 
-createItem("TS_Test",
-  TURNSCRIPT(true, function(self) {
-    msg('Turn script!');
-    this.count++;
-  }), {count:0},
-);
 

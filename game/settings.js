@@ -15,6 +15,11 @@ const STATUS_PANE = "Status";  // Set to false to turn off
 const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
 const STATUS_WIDTH_RIGHT = 40;
 
+const USE_DROPDOWN_FOR_CONV = true;
+
+const FAILS_COUNT_AS_TURNS = true;
+const TURNSCRIPT_AFTER_LOOK = false;
+
 const TEXT_INPUT = true;
 const CURSOR = ">";
 const CMD_ECHO = true;               // echo commands to the screen
@@ -71,8 +76,8 @@ function setup() {
   game.player.status = "You are feeling fine";
   world.scopeSnapshot();
 
-  //parser.parse("spoken");
-//  parser.parse("l");
+  // parser.parse("kyle,e");
+  // parser.parse("kyle,get torch");
    
   //showStartDiag();
   

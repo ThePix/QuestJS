@@ -49,6 +49,11 @@ function ERROR_UNKNOWN_KEY(name) {
   return "The key name for this container, `" + name + "`, does not match any key in the game.";
 }
 
+function ERROR_UNKNOWN_LOC(name) {
+  return "The location name `" + name + "`, does not match anything in the game.";
+}
+
+
 // Text processor errors
 function ERR_TP_NO_OBJECT(name, params) {
   return "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)";
@@ -477,7 +482,6 @@ function addIndefiniteAritcle(item) {
 
 const numberUnits = "zero;one;two;three;four;five;six;seven;eight;nine;ten;eleven;twelve;thirteen;fourteen;fifteen;sixteen;seventeen;eighteen;nineteen;twenty".split(";");
 const numberTens = "twenty;thirty;forty;fifty;sixty;seventy;eighty;ninety".split(";");
-
 
 function toWords(number) {
   if (typeof number !== "number") {
