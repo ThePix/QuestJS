@@ -550,10 +550,4 @@ createItem("brick",
     { examine:"A brick is a brick.", regex:/^(\d+ )?bricks?$/}
 );
 
-createItem("TS_Test",
-  TURNSCRIPT(true, function(self) {
-    msg('Turn script!');
-    this.count++;
-  }), {count:0},
-);
 
