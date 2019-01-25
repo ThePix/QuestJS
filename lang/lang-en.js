@@ -103,6 +103,12 @@ function CMD_LOCK_SUCCESSFUL(char, item) {
 function CMD_UNLOCK_SUCCESSFUL(char, item) {
   return nounVerb(char, "unlock", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
+function CMD_FILL_SUCCESSFUL(char, item) {
+  return nounVerb(char, "fill", true) + " " + item.byname({article:DEFINITE}) + ".";
+}
+function CMD_EMPTY_SUCCESSFUL(char, item) {
+  return nounVerb(char, "empty", true) + " " + item.byname({article:DEFINITE}) + ".";
+}
 function CMD_TURN_ON_SUCCESSFUL(char, item) {
   return nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " on.";
 }
@@ -162,6 +168,12 @@ function CMD_CANNOT_USE(char, item) {
 }
 function CMD_CANNOT_EAT(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
+}
+function CMD_CANNOT_FILL(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can fill.";
+}
+function CMD_CANNOT_EMPTY(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can empty.";
 }
 function CMD_CANNOT_STAND_ON(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can stand on.";
