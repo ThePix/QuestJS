@@ -22,6 +22,7 @@ function ERR_NO_DEFAULT(name) {
 }
 
 var ERROR_NO_PLAYER = "No player object found. This will not go well...";
+var ERROR_BAD_PLAYER_LOC = "No player location set or set to location that does no exist. This will not go well...";
 var ERROR_MSG_OR_RUN = "Unsupported type for printOrRun";
 var ERROR_NO_ROOM = "Failed to find room";
 var ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
@@ -220,6 +221,12 @@ function CMD_PANE_ITEM_NOT_FOUND(s) {
 }
 
 
+function CMD_NO_SMELL(char) {
+  return nounVerb(char, "can't", true) + " smell anything here.";
+}
+function CMD_NO_LISTEN(char) {
+  return nounVerb(char, "can't", true) + " hear anything of note here.";
+}
 function CMD_NOTHING_THERE(char) {
   return nounVerb(char, "be", true) + " sure there's nothing there.";
 }
@@ -436,26 +443,28 @@ var VERBS = {
 
 
 // Change the abbrev values to suit your game (or language)
-var EXITS = [
-  {name:'northwest', abbrev:'NW'}, 
-  {name:'north', abbrev:'N'}, 
-  {name:'northeast', abbrev:'NE'}, 
-  {name:'in', abbrev:'In', alt:'enter'}, 
-  {name:'up', abbrev:'U'},
-  
-  {name:'west', abbrev:'W'}, 
-  {name:'Look', abbrev:'Lk', nocmd:true}, 
-  {name:'east', abbrev:'E'}, 
-  {name:'out', abbrev:'Out', alt:'exit'}, 
-  {name:'down', abbrev:'Dn', alt:'d'}, 
+// You may want to do that in settings, which is loaded first
+if (EXITS === undefined) {
+  var EXITS = [
+    {name:'northwest', abbrev:'NW'}, 
+    {name:'north', abbrev:'N'}, 
+    {name:'northeast', abbrev:'NE'}, 
+    {name:'in', abbrev:'In', alt:'enter'}, 
+    {name:'up', abbrev:'U'},
+    
+    {name:'west', abbrev:'W'}, 
+    {name:'Look', abbrev:'Lk', nocmd:true}, 
+    {name:'east', abbrev:'E'}, 
+    {name:'out', abbrev:'Out', alt:'exit'}, 
+    {name:'down', abbrev:'Dn', alt:'d'}, 
 
-  {name:'southwest', abbrev:'SW'}, 
-  {name:'south', abbrev:'S'}, 
-  {name:'southeast', abbrev:'SE'}, 
-  {name:'Wait', abbrev:'Z', nocmd:true}, 
-  {name:'Help', abbrev:'?', nocmd:true}, 
-];
-
+    {name:'southwest', abbrev:'SW'}, 
+    {name:'south', abbrev:'S'}, 
+    {name:'southeast', abbrev:'SE'}, 
+    {name:'Wait', abbrev:'Z', nocmd:true}, 
+    {name:'Help', abbrev:'?', nocmd:true}, 
+  ];
+}
 
 
 
