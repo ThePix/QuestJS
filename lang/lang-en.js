@@ -256,6 +256,9 @@ function CMD_NOTHING_USEFUL(char, item) {
 function CMD_ALREADY(item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 }
+function CMD_DEFAULT_EXAMINE(char, item) {
+  return pronounVerb(item, "be", true) + " just your typical, every day " + item.byname({article:INDEFINITE}) + ".";
+}
 
 
 //----------------------------------------------------------------------------------------------

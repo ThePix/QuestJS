@@ -86,6 +86,11 @@ body {
 .meta {
   color: grey;
 }
+.parser {
+  font-weight: bold;
+  font-size: 10pt;
+  color: grey;
+}
 .error {
   font-weight: bold;
   font-size: 10pt;
