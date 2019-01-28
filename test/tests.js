@@ -29,7 +29,7 @@ test.tests = function() {
   test.assertCmd("read the book", "It is not in a language you understand.");
   test.assertCmd("drop book", "You drop the book.");
   
-  test.assertCmd("s", "You can't go south.");
+  test.assertCmd("n", "You can't go north.");
   test.assertCmd("d", "You can't go down.");
 
   test.title("Simple object commands (bricks)");
@@ -44,7 +44,7 @@ test.tests = function() {
   test.assertCmd("inv", "You are carrying a knife and five bricks.");
   test.assertCmd("look", ["A clean room.", "You can see a trapdoor, a camera, a big kitchen table (with two bricks on it) and a garage door here.", "You can go north or west."]);
   test.assertCmd("get the bricks", "You take two bricks.");
-  test.assertCmd("w", ["You head west.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater) and a garage key here.", "You can go up, west or east."]); 
+  test.assertCmd("w", ["You head west.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater) and a garage key here.", "You can go up, west, east or south."]); 
   test.assertCmd("drop bricks", "You drop seven bricks.");  
 
   
@@ -72,7 +72,7 @@ test.tests = function() {
 
   
   
-  test.assertCmd("d", ["You head down.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater), a garage key and seven bricks here.", "You can go up, west or east.",]);  
+  test.assertCmd("d", ["You head down.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater), a garage key and seven bricks here.", "You can go up, west, east or south.",]);  
   
   test.title("NPC commands 1");
   
@@ -94,7 +94,7 @@ test.tests = function() {
   
   test.assertCmd("lara,e", ["Lara gets off the chair.", "Lara heads east."]);
   
-  test.assertCmd("e", ["You head east.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater), Lara, a garage key and seven bricks here.", "You can go up, west or east.",]);
+  test.assertCmd("e", ["You head east.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater), Lara, a garage key and seven bricks here.", "You can go up, west, east or south.",]);
   test.assertCmd("lara,get boots", "Lara takes the boots.");
   test.assertCmd("lara,wear boots", "'I'm not doing that!' says Lara indignantly.");
   test.assertCmd("lara,drop boots", "Lara drops the boots.");

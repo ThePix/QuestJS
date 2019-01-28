@@ -81,7 +81,8 @@ function setup() {
    
   //showStartDiag();
   
-  
+        debugmsg(agenda.PathLib_GetPathExt(w.dining_room, w.conservatory, 5));
+
   
   
 

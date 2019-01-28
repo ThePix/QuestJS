@@ -39,6 +39,7 @@ createRoom("lounge", {
   desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
   east:new Exit('kitchen'),
   west:new Exit("dining_room"),
+  south:new Exit("conservatory"),
   up:new Exit("bedroom"),
   hint:"There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).",
 });
@@ -401,6 +402,126 @@ createItem("jumpsuit",
   WEARABLE(2, ["upper", "lower"]),
   { loc:"bedroom", examine:"Clean!", }
 );
+
+
+
+
+createRoom("conservatory", {
+  desc:"A light airy room.",
+  north:new Exit("lounge"),
+  hint:"The conservatory features a pro-active NPC.",
+});
+
+
+
+
+
+createItem("Arthur",
+  NPC(false),
+  AGENDA_FOLLOWER(["waitForPlayer", "giveText:introduction"]),
+  { 
+    loc:"conservatory",
+    examine:"Another bear, with very pale fur.",
+    properName:true,
+  }
+);
+
+
+const agenda = {
+  waitForPlayer:function(npc) {
+    if (npc.here()) {
+      debugmsg("Here at last: " + npc.name + "/" + npc.loc);
+    }
+    else {
+      debugmsg("Waiting...");
+    }
+    return npc.here();
+  },
+  giveText:function(npc, arr) {
+    for (var i = 0; i < arr.length; i++) {
+      msg(arr[i]);
+    }
+    return true;
+  },
+}
+
+
+
+
+
+
+
+
+
+
+
+agenda.PathLib_GetPathExt = function(start, end, maxlength) {
+    if (!game.pathID) game.pathID = 0;
+    game.pathID++;
+    debugmsg("game.pathID=" + game.pathID);
+
+    var path = null;
+    var current = [];
+    var entry = this.PathLib_AddEntry(current, start);
+    entry.path = [];
+    var length = 0;
+    var iterations = 0;
+    debugmsg("current.length = " + current.length)
+    debugmsg("path = " + path)
+    debugmsg("maxlength = " + maxlength)
+    debugmsg("length = " + length)
+  	while (current.length !== 0 && path === null && (maxlength === -1 || length <= maxlength)) {
+      iterations++
+      debugmsg("iterations = " + iterations)
+  		entry = current.shift();
+      room = entry.room;
+      debugmsg("room = " + room.name)
+      room.pathlib_visited = game.pathID;
+      debugmsg("entry=" + entry)
+      if (room === end) {
+        path = entry.path;
+        debugmsg("path=" + path)
+      } else {
+        for (var i = 0; i < world.exits.length; i++) {
+          toRoom = world.exits[i].name;
+          debugmsg("toRoom = " + toRoom)
+          if (toRoom !== null) {
+            if (PathLib_GetPathExt.parent === room) {
+              // This is a room to be investigated.
+              if (toRoom.pathlib_current !== game.pathID && toRoom.pathlib_visited !== game.pathID) {
+                // We have not touched this room yet. Add its exit to the list.
+                newEntry = this.PathLib_AddEntry(current, toRoom);
+                // Assign to an object attribute to force a copy.
+                game.PathLib_pathtemp = entry.path;
+                game.PathLib_pathtemp.push(PathLib_GetPathExt);
+                newEntry.path = game.PathLib_pathtemp;
+                game.PathLib_pathtemp = null
+                debugmsg("Added")
+              }
+            }
+          }
+        }
+      }
+      length = entry.path.length
+  	}
+    debugmsg("iterations = " + iterations)
+    //debugmsg("iterations = " + iterations + ", path count = " + path.length)
+  	return path;
+}
+
+agenda.PathLib_AddEntry = function(list, room) {
+  var entry = {};
+  entry.room = room;
+  list.pop(entry);
+  room.pathlib_current = game.pathID;
+  return entry;
+}  
+  
+
+
+
+
+
 
 
 
