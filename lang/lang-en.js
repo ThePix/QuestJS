@@ -669,6 +669,12 @@ function pronounVerb(item, verb, capitalise) {
   return capitalise ? sentenceCase(s) : s;
 }
 
+function pronounVerbForGroup(item, verb, capitalise) {
+  var s = item.groupPronouns().subjective + " " + conjugate(item.group(), verb);
+  s = s.replace(/ +\'/, "'");  // yes this is a hack!
+  return capitalise ? sentenceCase(s) : s;
+}
+
 function nounVerb(item, verb, capitalise) {
   if (item === game.player) {
     return pronounVerb(item, verb, capitalise);

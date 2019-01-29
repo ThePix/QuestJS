@@ -232,10 +232,19 @@ test.tests = function() {
   test.assertEqual(null, agenda.findPath(w.dining_room, w.far_away));
   test.assertEqual("conservatory, lounge, dining room", formatList(agenda.findPath(w.garden, w.dining_room)));
   
+  
+  test.title("Groups");
+  w.Kyle.setLeader(w.Arthur);
+  w.Lara.setLeader(w.Arthur);
+  test.assertEqual(2, w.Arthur.followers.length);
+  test.assertEqual("Arthur, Kyle and Lara", w.Arthur.byname({group:true}));
+  
+  
   test.assertCmd("s", ["A clean room.", /You can see/, "You can go north, west or down."]);
   test.assertCmd("w", ["You head west.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go up, west, east or south."]);
   test.assertCmd("s", ["You head south.", "A light airy room.", /You can see/, "You can go north or south."]);
   test.assertCmd("s", ["You head south.", "Very overgrown.", "You can see Arthur here.", "You can go north."]);
+  
   
   test.title("Agendas");
   test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);

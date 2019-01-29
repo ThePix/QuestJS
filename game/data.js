@@ -427,8 +427,6 @@ createRoom("far_away", {
 
 createItem("Arthur",
   NPC(false),
-  AGENDA_FOLLOWER(["giveText:Arthur stands up and stretches.", "giveText:'I'm going to the lounge,' says Arthur.:'Whatever!'", "walkTo:lounge:Arthur arrives", "giveText:introduction"]),
-  //AGENDA_FOLLOWER(["waitForPlayer", "giveText:introduction"]),
   { 
     loc:"garden",
     examine:function() {
@@ -441,6 +439,11 @@ createItem("Arthur",
     },
     suspended:true,
     properName:true,
+    agenda:[
+      "giveText:Arthur stands up and stretches.", 
+      "giveText:'I'm going to the lounge,' says Arthur.:'Whatever!'", 
+      "walkTo:lounge:Arthur arrives", "giveText:introduction"
+    ],
     talkto:function() {
       msg("'Hey, wake up,' you say to Arthur.");
       this.suspended = false;
@@ -448,183 +451,6 @@ createItem("Arthur",
     }
   }
 );
-
-
-const agenda = {
-  // print the array as text if the player is here
-  // otherwise this will be skipped
-  // Used by several other functions, so this applies to them too
-  giveText:function(npc, arr) {
-    if (npc.here()) {
-      for (var i = 0; i < arr.length; i++) {
-        msg(arr[i]);
-      }
-    }
-    return true;
-  },
-  
-  // sets one attribute on the given item
-  // it will guess if Boolean, integer or string
-  setItemAtt:function(npc, arr) {
-    debugmsg("Setting item att...");
-    var item = arr.shift();
-    var att = arr.shift();
-    var value = arr.shift();
-    if (!w[item]) errormsg(ERR_GAME_BUG, "Location '" + item + "' not recognised in the agenda of " + npc.name);
-    if (value === "true") value = true;
-    if (value === "false") value = false;
-    if (/^\d+$/.test(value)) parseInt(value);
-    w[item][att] = value;
-    this.giveText(npc, arr);
-    return true;
-  },
-
-  // Wait one turn
-  wait:function() {
-    return true;
-  },
-
-  // Wait until the player is here, then print the rest of the array as text
-  // This may be repeated any number of times
-  waitForPlayer:function(npc, arr) {
-    if (npc.here()) {
-      this.giveText(npc, arr);
-      return true;
-    }
-    else {
-      return false;;
-    }
-  },
-  
-  // Move the given item directly to the given location, then print the rest of the array as text
-  // Do not use for items with a funny location, such as COUNTABLES
-  moveItem:function(npc, arr) {
-    debugmsg("Moving item...");
-    var item = arr.shift();
-    var dest = arr.shift();
-    if (!w[item]) errormsg(ERR_GAME_BUG, "Location '" + item + "' not recognised in the agenda of " + npc.name);
-    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
-    item.moveFromTo(item.loc, dest);
-    this.giveText(npc, arr);
-    return true;
-  },
-
-  // Move directly to the given location, then print the rest of the array as text
-  // Use "player" to go directly to the room the player is in.
-  // Use an item (i.e., an object not flagged as a room) to have the NPC move
-  // to the room containing the item.
-  moveTo:function(npc, arr) {
-    debugmsg("Moving...");
-    var dest = arr.shift();
-    if (dest === "player") dest = game.player.loc;
-    if (!w[dest].room) dest = dest.loc;
-    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
-    npc.moveWithDescription(dest);
-    this.giveText(npc, arr);
-    return true;
-  },
-
-  // Move to another room via a random, unlocked exit, then print the rest of the array as text
-  walkRandom:function(npc, arr) {
-    debugmsg("Moving random...");
-    var exits = w[npc.loc].getRandomExit(true);
-    var dest = arr.shift();
-    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
-    npc.moveWithDescription(dest);
-    this.giveText(npc, arr);
-    return true;
-  },
-
-  // Move to the given location, using available, unlocked exits, one room per turn
-  // then print the rest of the array as text
-  // Use "player" to go to the room the player is in (if the player moves, the NPC will head
-  // to the new position, but will be omniscient!).
-  // Use an item (i.e., an object not flagged as a room) to have the NPC move
-  // to the room containing the item.
-  // This may be repeated any number of turns
-  walkTo:function(npc, arr) {
-    debugmsg("Walking...");
-    var dest = arr.shift();
-    if (dest === "player") dest = game.player.loc;
-    if (!w[dest].room) dest = dest.loc;
-    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
-    if (npc.isAtLoc(dest)) {
-      this.giveText(npc, arr);
-      return true;
-    }
-    else {
-      var route = agenda.findPath(w[npc.loc], w[dest]);
-      if (!route) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not reachable in the agenda of " + npc.name);
-      debugmsg(formatList(route));
-      npc.moveWithDescription(route[0]);
-      if (npc.isAtLoc(dest)) {
-        this.giveText(npc, arr);
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-  },
-
-  
-}
-
-
-
-
-// start and end are the objects, not their names!
-agenda.findPath = function(start, end, maxlength) {
-  if (start === end) return [];
-  
-  if (!game.pathID) game.pathID = 0;
-  if (maxlength === undefined) maxlength = 999;
-  game.pathID++;
-  var currentList = [start];
-  var length = 0;
-  var nextList, dest, exits;
-  start.pathfinderNote = { id:game.pathID };
-  
-  // At each iteration we look at the rooms linked from the previous one
-  // Any new rooms go into nextList
-  // Each room gets flagged with "pathfinderNote"
-  while (currentList.length > 0 && length < maxlength) {
-    nextList = [];
-    length++;
-    for (var i = 0; i < currentList.length; i++) {
-      exits = currentList[i].getExits(true);
-      //debugmsg(formatList(exits));
-      for (var j = 0; j < exits.length; j++) {
-        //debugmsg(j + "/" + exits.length);
-        dest = w[exits[j].name];
-        if (dest === undefined) errormsg(ERR_QUEST_BUG, "Dest is undefined: " + exits[j].name);
-        if (dest.pathfinderNote && dest.pathfinderNote.id === game.pathID) continue;
-        dest.pathfinderNote = { jumpFrom:currentList[i], id:game.pathID };
-        if (dest === end) return agenda.extractPath(start, end);
-        nextList.push(dest);
-      }
-    }
-    currentList = nextList;
-  }
-  return null;
-}
-    
-agenda.extractPath = function(start, end) {
-  var res = [end];
-  var current = end;
-  var count = 0;
-
-  do {
-    current = current.pathfinderNote.jumpFrom;
-    res.push(current);
-    count++;
-  } while (current !== start && count < 99);
-  res.pop();  // The last is the start location, which we do not ned
-  return res.reverse();
-}
-
-
-
 
 
 
