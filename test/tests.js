@@ -224,4 +224,13 @@ test.tests = function() {
   
   test.assertEqual(29, w[clone.name].cloneCounter);
   
+  
+  test.title("Path finding");
+  
+  test.assertEqual("lounge", formatList(agenda.findPath(w.dining_room, w.lounge)));
+  test.assertEqual("", formatList(agenda.findPath(w.dining_room, w.dining_room)));
+  test.assertEqual(null, agenda.findPath(w.dining_room, w.far_away));
+  test.assertEqual("conservatory, lounge, dining room", formatList(agenda.findPath(w.garden, w.dining_room)));
+  
+  
 };

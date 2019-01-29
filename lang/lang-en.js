@@ -567,7 +567,7 @@ tp.text_processors.objects =function(arr, params) {
 tp.text_processors.exits = function(arr, params) {
   var list = [];
   for (var i = 0; i < EXITS.length; i++) {
-    if (hasExit(game.room, EXITS[i].name)) {
+    if (game.room.hasExit(EXITS[i].name)) {
       list.push(EXITS[i].name);
     }
   }

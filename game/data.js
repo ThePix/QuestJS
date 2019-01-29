@@ -409,18 +409,28 @@ createItem("jumpsuit",
 createRoom("conservatory", {
   desc:"A light airy room.",
   north:new Exit("lounge"),
+  south:new Exit("garden"),
   hint:"The conservatory features a pro-active NPC.",
 });
 
 
+createRoom("garden", {
+  desc:"Very overgrown.",
+  north:new Exit("conservatory"),
+});
+
+
+createRoom("far_away", {
+});
 
 
 
 createItem("Arthur",
   NPC(false),
-  AGENDA_FOLLOWER(["waitForPlayer", "giveText:introduction"]),
+  AGENDA_FOLLOWER(["walkTo:lounge:Arthur arrives", "giveText:introduction"]),
+  //AGENDA_FOLLOWER(["waitForPlayer", "giveText:introduction"]),
   { 
-    loc:"conservatory",
+    loc:"garden",
     examine:"Another bear, with very pale fur.",
     properName:true,
   }
@@ -437,87 +447,137 @@ const agenda = {
     }
     return npc.here();
   },
+  
   giveText:function(npc, arr) {
     for (var i = 0; i < arr.length; i++) {
       msg(arr[i]);
     }
     return true;
   },
-}
-
-
-
-
-
-
-
-
-
-
-
-agenda.PathLib_GetPathExt = function(start, end, maxlength) {
-    if (!game.pathID) game.pathID = 0;
-    game.pathID++;
-    debugmsg("game.pathID=" + game.pathID);
-
-    var path = null;
-    var current = [];
-    var entry = this.PathLib_AddEntry(current, start);
-    entry.path = [];
-    var length = 0;
-    var iterations = 0;
-    debugmsg("current.length = " + current.length)
-    debugmsg("path = " + path)
-    debugmsg("maxlength = " + maxlength)
-    debugmsg("length = " + length)
-  	while (current.length !== 0 && path === null && (maxlength === -1 || length <= maxlength)) {
-      iterations++
-      debugmsg("iterations = " + iterations)
-  		entry = current.shift();
-      room = entry.room;
-      debugmsg("room = " + room.name)
-      room.pathlib_visited = game.pathID;
-      debugmsg("entry=" + entry)
-      if (room === end) {
-        path = entry.path;
-        debugmsg("path=" + path)
-      } else {
-        for (var i = 0; i < world.exits.length; i++) {
-          toRoom = world.exits[i].name;
-          debugmsg("toRoom = " + toRoom)
-          if (toRoom !== null) {
-            if (PathLib_GetPathExt.parent === room) {
-              // This is a room to be investigated.
-              if (toRoom.pathlib_current !== game.pathID && toRoom.pathlib_visited !== game.pathID) {
-                // We have not touched this room yet. Add its exit to the list.
-                newEntry = this.PathLib_AddEntry(current, toRoom);
-                // Assign to an object attribute to force a copy.
-                game.PathLib_pathtemp = entry.path;
-                game.PathLib_pathtemp.push(PathLib_GetPathExt);
-                newEntry.path = game.PathLib_pathtemp;
-                game.PathLib_pathtemp = null
-                debugmsg("Added")
-              }
-            }
-          }
-        }
-      }
-      length = entry.path.length
-  	}
-    debugmsg("iterations = " + iterations)
-    //debugmsg("iterations = " + iterations + ", path count = " + path.length)
-  	return path;
-}
-
-agenda.PathLib_AddEntry = function(list, room) {
-  var entry = {};
-  entry.room = room;
-  list.pop(entry);
-  room.pathlib_current = game.pathID;
-  return entry;
-}  
   
+  // Do not use for items with a funny location, such as COUNTABLES
+  moveItem:function(npc, arr) {
+    debugmsg("Moving item...");
+    var item = arr.shift();
+    var dest = arr.shift();
+    if (!w[item]) errormsg(ERR_GAME_BUG, "Location '" + item + "' not recognised in the agenda of " + npc.name);
+    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
+    item.moveFromTo(item.loc, dest);
+    this.giveText(npc, arr);
+    return true;
+  },
 
+  setItemAtt:function(npc, arr) {
+    debugmsg("Setting item att...");
+    var item = arr.shift();
+    var att = arr.shift();
+    var value = arr.shift();
+    if (!w[item]) errormsg(ERR_GAME_BUG, "Location '" + item + "' not recognised in the agenda of " + npc.name);
+    if (value === "true") value = true;
+    if (value === "false") value = false;
+    if (/^\d+$/.test(value)) parseInt(value);
+    w[item][att] = value;
+    this.giveText(npc, arr);
+    return true;
+  },
+
+  moveTo:function(npc, arr) {
+    debugmsg("Moving...");
+    var dest = arr.shift();
+    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
+    npc.moveWithDescription(dest);
+    this.giveText(npc, arr);
+    return true;
+  },
+
+  moveRandom:function(npc, arr) {
+    debugmsg("Moving random...");
+    var exits = w[npc.loc].getRandomExit();
+    var dest = arr.shift();
+    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
+    npc.moveWithDescription(dest);
+    this.giveText(npc, arr);
+    return true;
+  },
+
+  walkTo:function(npc, arr) {
+    debugmsg("Walking...");
+    var dest = arr.shift();
+    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
+    if (npc.isAtLoc(dest)) {
+      this.giveText(npc, arr);
+      return true;
+    }
+    else {
+      var route = agenda.findPath(w[npc.loc], w[dest]);
+      if (!route) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not reachable in the agenda of " + npc.name);
+      debugmsg(formatList(route));
+      npc.moveWithDescription(route[0]);
+      if (npc.isAtLoc(dest)) {
+        this.giveText(npc, arr);
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  },
+
+  
+}
+
+
+
+
+// start and end are the objects, not their names!
+agenda.findPath = function(start, end, maxlength) {
+  if (start === end) return [];
+  
+  if (!game.pathID) game.pathID = 0;
+  if (maxlength === undefined) maxlength = 999;
+  game.pathID++;
+  var currentList = [start];
+  var length = 0;
+  var nextList, dest, exits;
+  start.pathfinderNote = { id:game.pathID };
+  
+  // At each iteration we look at the rooms linked from the previous one
+  // Any new rooms go into nextList
+  // Each room gets flagged with "pathfinderNote"
+  while (currentList.length > 0 && length < maxlength) {
+    nextList = [];
+    length++;
+    for (var i = 0; i < currentList.length; i++) {
+      exits = currentList[i].getExits();
+      //debugmsg(formatList(exits));
+      for (var j = 0; j < exits.length; j++) {
+        //debugmsg(j + "/" + exits.length);
+        dest = w[exits[j].name];
+        if (dest === undefined) errormsg(ERR_QUEST_BUG, "Dest is undefined: " + exits[j].name);
+        if (dest.pathfinderNote && dest.pathfinderNote.id === game.pathID) continue;
+        dest.pathfinderNote = { jumpFrom:currentList[i], id:game.pathID };
+        if (dest === end) return agenda.extractPath(start, end);
+        nextList.push(dest);
+      }
+    }
+    currentList = nextList;
+  }
+  return null;
+}
+    
+agenda.extractPath = function(start, end) {
+  var res = [end];
+  var current = end;
+  var count = 0;
+
+  do {
+    current = current.pathfinderNote.jumpFrom;
+    res.push(current);
+    count++;
+  } while (current !== start && count < 99);
+  res.pop();  // The last is the start location, which we do not ned
+  return res.reverse();
+}
 
 
 

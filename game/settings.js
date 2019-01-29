@@ -81,7 +81,7 @@ function setup() {
    
   //showStartDiag();
   
-        debugmsg(agenda.PathLib_GetPathExt(w.dining_room, w.conservatory, 5));
+//        debugmsg(agenda.findPath(w.dining_room, w.garden));
 
   
   
