@@ -427,46 +427,44 @@ createRoom("far_away", {
 
 createItem("Arthur",
   NPC(false),
-  AGENDA_FOLLOWER(["walkTo:lounge:Arthur arrives", "giveText:introduction"]),
+  AGENDA_FOLLOWER(["giveText:Arthur stands up and stretches.", "giveText:'I'm going to the lounge,' says Arthur.:'Whatever!'", "walkTo:lounge:Arthur arrives", "giveText:introduction"]),
   //AGENDA_FOLLOWER(["waitForPlayer", "giveText:introduction"]),
   { 
     loc:"garden",
-    examine:"Another bear, with very pale fur.",
+    examine:function() {
+      if (this.suspended) {
+        msg("Arthur is asleep.");
+      }
+      else {
+        msg("Arthur is awake.");
+      }
+    },
+    suspended:true,
     properName:true,
+    talkto:function() {
+      msg("'Hey, wake up,' you say to Arthur.");
+      this.suspended = false;
+      return true;
+    }
   }
 );
 
 
 const agenda = {
-  waitForPlayer:function(npc) {
-    if (npc.here()) {
-      debugmsg("Here at last: " + npc.name + "/" + npc.loc);
-    }
-    else {
-      debugmsg("Waiting...");
-    }
-    return npc.here();
-  },
-  
+  // print the array as text if the player is here
+  // otherwise this will be skipped
+  // Used by several other functions, so this applies to them too
   giveText:function(npc, arr) {
-    for (var i = 0; i < arr.length; i++) {
-      msg(arr[i]);
+    if (npc.here()) {
+      for (var i = 0; i < arr.length; i++) {
+        msg(arr[i]);
+      }
     }
     return true;
   },
   
-  // Do not use for items with a funny location, such as COUNTABLES
-  moveItem:function(npc, arr) {
-    debugmsg("Moving item...");
-    var item = arr.shift();
-    var dest = arr.shift();
-    if (!w[item]) errormsg(ERR_GAME_BUG, "Location '" + item + "' not recognised in the agenda of " + npc.name);
-    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
-    item.moveFromTo(item.loc, dest);
-    this.giveText(npc, arr);
-    return true;
-  },
-
+  // sets one attribute on the given item
+  // it will guess if Boolean, integer or string
   setItemAtt:function(npc, arr) {
     debugmsg("Setting item att...");
     var item = arr.shift();
@@ -481,18 +479,55 @@ const agenda = {
     return true;
   },
 
+  // Wait one turn
+  wait:function() {
+    return true;
+  },
+
+  // Wait until the player is here, then print the rest of the array as text
+  // This may be repeated any number of times
+  waitForPlayer:function(npc, arr) {
+    if (npc.here()) {
+      this.giveText(npc, arr);
+      return true;
+    }
+    else {
+      return false;;
+    }
+  },
+  
+  // Move the given item directly to the given location, then print the rest of the array as text
+  // Do not use for items with a funny location, such as COUNTABLES
+  moveItem:function(npc, arr) {
+    debugmsg("Moving item...");
+    var item = arr.shift();
+    var dest = arr.shift();
+    if (!w[item]) errormsg(ERR_GAME_BUG, "Location '" + item + "' not recognised in the agenda of " + npc.name);
+    if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
+    item.moveFromTo(item.loc, dest);
+    this.giveText(npc, arr);
+    return true;
+  },
+
+  // Move directly to the given location, then print the rest of the array as text
+  // Use "player" to go directly to the room the player is in.
+  // Use an item (i.e., an object not flagged as a room) to have the NPC move
+  // to the room containing the item.
   moveTo:function(npc, arr) {
     debugmsg("Moving...");
     var dest = arr.shift();
+    if (dest === "player") dest = game.player.loc;
+    if (!w[dest].room) dest = dest.loc;
     if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
     npc.moveWithDescription(dest);
     this.giveText(npc, arr);
     return true;
   },
 
-  moveRandom:function(npc, arr) {
+  // Move to another room via a random, unlocked exit, then print the rest of the array as text
+  walkRandom:function(npc, arr) {
     debugmsg("Moving random...");
-    var exits = w[npc.loc].getRandomExit();
+    var exits = w[npc.loc].getRandomExit(true);
     var dest = arr.shift();
     if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
     npc.moveWithDescription(dest);
@@ -500,9 +535,18 @@ const agenda = {
     return true;
   },
 
+  // Move to the given location, using available, unlocked exits, one room per turn
+  // then print the rest of the array as text
+  // Use "player" to go to the room the player is in (if the player moves, the NPC will head
+  // to the new position, but will be omniscient!).
+  // Use an item (i.e., an object not flagged as a room) to have the NPC move
+  // to the room containing the item.
+  // This may be repeated any number of turns
   walkTo:function(npc, arr) {
     debugmsg("Walking...");
     var dest = arr.shift();
+    if (dest === "player") dest = game.player.loc;
+    if (!w[dest].room) dest = dest.loc;
     if (!w[dest]) errormsg(ERR_GAME_BUG, "Location '" + dest + "' not recognised in the agenda of " + npc.name);
     if (npc.isAtLoc(dest)) {
       this.giveText(npc, arr);
@@ -548,7 +592,7 @@ agenda.findPath = function(start, end, maxlength) {
     nextList = [];
     length++;
     for (var i = 0; i < currentList.length; i++) {
-      exits = currentList[i].getExits();
+      exits = currentList[i].getExits(true);
       //debugmsg(formatList(exits));
       for (var j = 0; j < exits.length; j++) {
         //debugmsg(j + "/" + exits.length);
