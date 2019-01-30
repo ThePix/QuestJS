@@ -3,6 +3,7 @@
 test.tests = function() {
 
   test.title("Simple object commands");
+  
   test.assertCmd("i", "You are carrying a knife.");
   test.assertCmd("get coin", "You try to pick up the coin, but it just will not budge.");
   test.assertCmd("get straw boater", "Kyle has it.");
@@ -204,6 +205,7 @@ test.tests = function() {
   
   clone.cloneCounter = 29;
   var agendaCount = w.Arthur.agenda.length;
+  test.assertEqual(0, w.Arthur.followers.length);
   
   var s = saveLoad.saveTheWorld("Comment!!!");
 
@@ -223,6 +225,7 @@ test.tests = function() {
   test.assertEqual("This will remain", w.boots.examine);
   test.assertEqual("This WILL get saved", w.book.examine);
   test.assertEqual(agendaCount, w.Arthur.agenda.length);
+  test.assertEqual(0, w.Arthur.followers.length);
   
   test.assertEqual(29, w[clone.name].cloneCounter);
   
@@ -234,6 +237,8 @@ test.tests = function() {
   test.assertEqual(null, agenda.findPath(w.dining_room, w.far_away));
   test.assertEqual("conservatory, lounge, dining room", formatList(agenda.findPath(w.garden, w.dining_room)));
   
+  test.assertEqual(null, w.dining_room.findExit(w.far_away));
+  test.assertEqual("east", w.dining_room.findExit(w.lounge).dir);
   
   //test.title("Groups");
   //w.Kyle.setLeader(w.Arthur);
@@ -249,11 +254,19 @@ test.tests = function() {
   
   
   test.title("Agendas");
-  //test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
-  //test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
-  //test.assertCmd("z", ["You wait one turn.", "Arthur stands up and stretches."]);
-  //test.assertCmd("x arthur", ["Arthur is awake.", "Arthur stands up and stretches."]);
-  //test.assertCmd("n", ["You head north.", "A light airy room.", /You can see/, "You can go north or south."]);
+  test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
+  test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
+  test.assertEqual(0, w.Arthur.followers.length);
+  test.assertCmd("z", ["You wait one turn.", "Arthur stands up and stretches."]);
+  test.assertCmd("n", ["You head north.", "A light airy room.", /You can see/, "You can go north or south."]);
+  //test.assertEqual(0, w.Arthur.followers.length);
+  test.assertCmd("z", ["You wait one turn.", "Arthur enters the conservatory."]);
+  test.assertCmd("n", ["You head north.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go up, west, east or south.", "Arthur enters the lounge."]);
+  test.assertCmd("w", ["You head west.", "An old-fashioned room.", /^You can see/, "You can go up or east.", "Arthur enters the dining room.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
+  test.assertEqual(0, w.Arthur.followers.length);
+  test.assertCmd("z", ["You wait one turn.", "'Sure,' says Lara."]);
+  test.assertEqual(1, w.Arthur.followers.length);
+  test.assertCmd("z", ["You wait one turn.", "Arthur and Lara leave the dining room, heading east."]);
   
   
   

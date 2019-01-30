@@ -22,7 +22,7 @@ const TURNSCRIPT_AFTER_LOOK = false;
 
 const TEXT_INPUT = true;
 const CURSOR = ">";
-const CMD_ECHO = true;               // echo commands to the screen
+const ECHO = true;               // echo commands to the screen
 
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;                  // set to false when releasing

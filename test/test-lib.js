@@ -37,7 +37,7 @@ test.assertCmd = function(cmdStr, expected) {
   test.testing = true;
   test.testOutput = [];
   parser.parse(cmdStr);
-  world.endTurn();
+  //world.endTurn();
   test.testing = false;
   
   if (test.testOutput.length === expected.length && test.testOutput.every(function(value, index) {

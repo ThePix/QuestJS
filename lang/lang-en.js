@@ -19,49 +19,49 @@
 //----------------------------------------------------------------------------------------------
 // SUCCESSFUL Messages
 
-function CMD_TAKE_SUCCESSFUL(char, item, count) {
+function TAKE_SUCCESSFUL(char, item, count) {
   return nounVerb(char, "take", true) + " " + item.byname({article:DEFINITE, count:count}) + ".";
 }
-function CMD_DROP_SUCCESSFUL(char, item, count) {
+function DROP_SUCCESSFUL(char, item, count) {
   return nounVerb(char, "drop", true) + " " + item.byname({article:DEFINITE, count:count}) + ".";
 }
-function CMD_WEAR_SUCCESSFUL(char, item) {
+function WEAR_SUCCESSFUL(char, item) {
   return nounVerb(char, "put", true) + " on " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_REMOVE_SUCCESSFUL(char, item) {
+function REMOVE_SUCCESSFUL(char, item) {
   return nounVerb(char, "take", true) + " " + item.byname({article:DEFINITE}) + " off.";
 }
-function CMD_OPEN_SUCCESSFUL(char, item) {
+function OPEN_SUCCESSFUL(char, item) {
   return nounVerb(char, "open", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_CLOSE_SUCCESSFUL(char, item) {
+function CLOSE_SUCCESSFUL(char, item) {
   return nounVerb(char, "close", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_LOCK_SUCCESSFUL(char, item) {
+function LOCK_SUCCESSFUL(char, item) {
   return nounVerb(char, "lock", true) + "k " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_UNLOCK_SUCCESSFUL(char, item) {
+function UNLOCK_SUCCESSFUL(char, item) {
   return nounVerb(char, "unlock", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_FILL_SUCCESSFUL(char, item) {
+function FILL_SUCCESSFUL(char, item) {
   return nounVerb(char, "fill", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_EMPTY_SUCCESSFUL(char, item) {
+function EMPTY_SUCCESSFUL(char, item) {
   return nounVerb(char, "empty", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_TURN_ON_SUCCESSFUL(char, item) {
+function TURN_ON_SUCCESSFUL(char, item) {
   return nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " on.";
 }
-function CMD_TURN_OFF_SUCCESSFUL(char, item) {
+function TURN_OFF_SUCCESSFUL(char, item) {
   return nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " off.";
 }
-function CMD_SIT_ON_SUCCESSFUL(char, item) {
+function SIT_ON_SUCCESSFUL(char, item) {
   return nounVerb(char, "sit", true) + " on " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_STAND_ON_SUCCESSFUL(char, item) {
+function STAND_ON_SUCCESSFUL(char, item) {
   return nounVerb(char, "stand", true) + " on " + item.byname({article:DEFINITE}) + ".";
 }
-function CMD_RECLINE_ON_SUCCESSFUL(char, item) {
+function RECLINE_ON_SUCCESSFUL(char, item) {
   return nounVerb(char, "lie", true) + " down on " + item.byname({article:DEFINITE}) + ".";
 }
 
@@ -76,58 +76,58 @@ function NPC_HEADING(char, dir) {
 //----------------------------------------------------------------------------------------------
 // CANNOT Messages
 
-function CMD_CANNOT_TAKE(char, item) {
+function CANNOT_TAKE(char, item) {
   return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_WEAR(char, item) {
+function CANNOT_WEAR(char, item) {
   return nounVerb(char, "can't", true) + " wear " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_SWITCH_ON(char, item) {
+function CANNOT_SWITCH_ON(char, item) {
   return nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " on.";
 }
-function CMD_CANNOT_SWITCH_OFF(char, item) {
+function CANNOT_SWITCH_OFF(char, item) {
   return nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " off.";
 }
-function CMD_CANNOT_OPEN(char, item) {
+function CANNOT_OPEN(char, item) {
   return nounVerb(char, "can't", true) + " open " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_CLOSE(char, item) {
+function CANNOT_CLOSE(char, item) {
   return nounVerb(char, "can't", true) + "t close " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_LOCK(char, item) {
+function CANNOT_LOCK(char, item) {
   return nounVerb(char, "can't", true) + "t lock " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_UNLOCK(char, item) {
+function CANNOT_UNLOCK(char, item) {
   return nounVerb(char, "can't", true) + " unlock " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_READ(char, item) {
+function CANNOT_READ(char, item) {
   return "Nothing worth reading there.";
 }
-function CMD_CANNOT_USE(char, item) {
+function CANNOT_USE(char, item) {
   return "No obvious way to use " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_EAT(char, item) {
+function CANNOT_EAT(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
 }
-function CMD_CANNOT_SMASH(char, item) {
+function CANNOT_SMASH(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can break.";
 }
-function CMD_CANNOT_FILL(char, item) {
+function CANNOT_FILL(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can fill.";
 }
-function CMD_CANNOT_EMPTY(char, item) {
+function CANNOT_EMPTY(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can empty.";
 }
-function CMD_CANNOT_LOOK_OUT(char, item) {
+function CANNOT_LOOK_OUT(char, item) {
   pronounVerb(char, "can't", true) + " look out of " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_STAND_ON(char, item) {
+function CANNOT_STAND_ON(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can stand on.";
 }
-function CMD_CANNOT_SIT_ON(char, item) {
+function CANNOT_SIT_ON(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can sit on.";
 }
-function CMD_CANNOT_RECLINE_ON(char, item) {
+function CANNOT_RECLINE_ON(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can lie on.";
 }
 
@@ -137,54 +137,54 @@ function CMD_CANNOT_RECLINE_ON(char, item) {
 //----------------------------------------------------------------------------------------------
 // General command messages
 
-var CMD_NOT_KNOWN_MSG = "I don't even know where to begin with that.";
-var CMD_DISAMBIG_MSG = "Which do you mean?";
-var CMD_NO_MULTIPLES = "You cannot use multiple objects with that command.";
-var CMD_NOTHING = "Nothing there to do that with.";
-var CMD_NO_ATT_ERROR = "It does not work like that.";
-var CMD_UNSUPPORTED_DIR = "Unsupported type for direction";
-var CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
-var CMD_DONE = "Done.";
+var NOT_KNOWN_MSG = "I don't even know where to begin with that.";
+var DISAMBIG_MSG = "Which do you mean?";
+var NO_MULTIPLES = "You cannot use multiple objects with that command.";
+var NOTHING = "Nothing there to do that with.";
+var NO_ATT_ERROR = "It does not work like that.";
+var UNSUPPORTED_DIR = "Unsupported type for direction";
+var GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
+var DONE = "Done.";
 
 
 
 
-function CMD_NO_SMELL(char) {
+function NO_SMELL(char) {
   return nounVerb(char, "can't", true) + " smell anything here.";
 }
-function CMD_NO_LISTEN(char) {
+function NO_LISTEN(char) {
   return nounVerb(char, "can't", true) + " hear anything of note here.";
 }
-function CMD_NOTHING_THERE(char) {
+function NOTHING_THERE(char) {
   return nounVerb(char, "be", true) + " sure there's nothing there.";
 }
-function CMD_NOT_THAT_WAY(char, dir) {
+function NOT_THAT_WAY(char, dir) {
   return nounVerb(char, "can't", true) + " go " + dir + ".";
 }
-function CMD_OBJECT_UNKNOWN_MSG(name) {
+function OBJECT_UNKNOWN_MSG(name) {
   return nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "'.";
 }
 
-function CMD_NOT_HERE(char, item) {
+function NOT_HERE(char, item) {
   return pronounVerb(item, "'be", true) + " not here.";
 }
-function CMD_CHAR_HAS_IT(char, item) {
+function CHAR_HAS_IT(char, item) {
   return nounVerb(char, "have", true) + " " + item.pronouns.objective + ".";
 }
-function CMD_NONE_THERE(char, item) {
+function NONE_THERE(char, item) {
   return "There's no " + item.pluralAlias + " here.";
 }
-function CMD_NONE_HELD(char, item) {
+function NONE_HELD(char, item) {
   return pronoun(char, "have", true) + " no " + item.pluralAlias + ".";
 }
 
-function CMD_NOTHING_USEFUL(char, item) {
+function NOTHING_USEFUL(char, item) {
   return "That's not going to do anything useful.";
 }
-function CMD_ALREADY(item) {
+function ALREADY(item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 }
-function CMD_DEFAULT_EXAMINE(char, item) {
+function DEFAULT_EXAMINE(char, item) {
   return pronounVerb(item, "be", true) + " just your typical, every day " + item.byname({article:INDEFINITE}) + ".";
 }
 
@@ -192,47 +192,47 @@ function CMD_DEFAULT_EXAMINE(char, item) {
 //----------------------------------------------------------------------------------------------
 // Specific command messages
 
-function CMD_NOT_NPC(item) {
+function NOT_NPC(item) {
   return nounVerb(game.player, "can", true) + " tell " + item.byname({article:DEFINITE}) + " to do what you like, but there is no way " + pronounVerb(item, "'ll") + " do it.";
 }
-function CMD_NOT_NPC_FOR_GIVE(char, item) {
+function NOT_NPC_FOR_GIVE(char, item) {
   return "Realistically, " + nounVerb(item, "be") + " not interesting in anything " + char.pronouns.subjective + " might give " + item.pronouns.objective + ".";
 }
-function CMD_NOT_CONTAINER(char, item) {
+function NOT_CONTAINER(char, item) {
   return sentenceCase(item.byname({article:DEFINITE})) + " is not a container";
 }
 
-function CMD_NOT_CARRYING(char, item) {
+function NOT_CARRYING(char, item) {
   return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
 }
-function CMD_WEARING(char, item) {
+function WEARING(char, item) {
   return pronounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
 }
-function CMD_NOT_WEARING(char, item) {
+function NOT_WEARING(char, item) {
   return pronounVerb(char, "'be", true) + " not wearing " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_WEAR_OVER(char, item, outer) {
+function CANNOT_WEAR_OVER(char, item, outer) {
   return pronounVerb(char, "can't", true) + " put " + item.byname({article:INDEFINITE}) + " on over " + char.pronouns.poss_adj + " " + outer.byname() + ".";
 }
-function CMD_CANNOT_REMOVE_UNDER(char, item, outer) {
+function CANNOT_REMOVE_UNDER(char, item, outer) {
   return pronounVerb(char, "can't", true) + " take off " + char.pronouns.poss_adj + " " + item.byname() + " whilst wearing " + char.pronouns.poss_adj + " " + outer.byname() + ".";
 }
-function CMD_ALREADY_HAVE(char, item) {
+function ALREADY_HAVE(char, item) {
   return pronounVerb(char, "'ve", true) + " got " + item.pronouns.objective + " already.";
 }
-function CMD_ALREADY_WEARING(char, item) {
+function ALREADY_WEARING(char, item) {
   return pronounVerb(char, "'ve", true) + " already wearing " + item.pronouns.objective + ".";
 }
-function CMD_CANNOT_TAKE_COMPONENT(char, item) {
+function CANNOT_TAKE_COMPONENT(char, item) {
   return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + pronounVerb(item, "'be") + " part of " + w[item.loc].byname({article:DEFINITE}) + ".";
 }
-function CMD_CONTAINER_CLOSED(char, item) {
+function CONTAINER_CLOSED(char, item) {
   return nounVerb(item, "be", true) + " closed.";
 }
-function CMD_INSIDE_CONTAINER(char, item, cont) {
+function INSIDE_CONTAINER(char, item, cont) {
   return pronounVerb(item, "be", true) + " inside " + cont.byname({article:DEFINITE}) + ".";
 }
-function CMD_STOP_POSTURE(char) {
+function STOP_POSTURE(char) {
   if (!char.posture) return "";
   // You could split up sitting, standing and lying
   var s = nounVerb(char, "get", true) + " off " + char.postureFurniture.byname({article:DEFINITE}) + ".";
@@ -247,25 +247,25 @@ function CMD_STOP_POSTURE(char) {
 //----------------------------------------------------------------------------------------------
 // NPC messages
 
-function CMD_NPC_NOTHING_TO_SAY_ABOUT(char) {
+function NPC_NOTHING_TO_SAY_ABOUT(char) {
   return nounVerb(char, "have", true) + " nothing to say on the subject.";
 }
-function CMD_NPC_NO_INTEREST_IN(char) {
+function NPC_NO_INTEREST_IN(char) {
   return nounVerb(char, "have", true) + " no interest in that subject.";
 }
 
 
 
 // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
-function CMD_SPEAK_TO_MENU_TITLE(char) {
+function SPEAK_TO_MENU_TITLE(char) {
   return "Talk to " + char.byname({article:DEFINITE}) + " about:";
 }
 // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
-function CMD_TELL_ABOUT_INTRO(char, text) {
+function TELL_ABOUT_INTRO(char, text) {
   return "You tell " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }
 // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
-function CMD_ASK_ABOUT_INTRO(char, text) {
+function ASK_ABOUT_INTRO(char, text) {
   return "You ask " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }
 
@@ -274,22 +274,22 @@ function CMD_ASK_ABOUT_INTRO(char, text) {
 //----------------------------------------------------------------------------------------------
 // Door and lock fails
 
-function CMD_LOCKED(char, item) {
+function LOCKED(char, item) {
   return pronounVerb(item, "'be", true) + " locked.";
 }
-function CMD_NO_KEY(char, item) {
+function NO_KEY(char, item) {
   return nounVerb(char, "do", true) + " have the right key.";
 }
-function CMD_LOCKED_EXIT(char, exit) {
+function LOCKED_EXIT(char, exit) {
   return "That way is locked.";
 }
-function CMD_OPEN_AND_ENTER(char, doorName) {
+function OPEN_AND_ENTER(char, doorName) {
   return nounVerb(char, "open", true) + " the " + doorName + " and walk through.";
 }
-function CMD_UNLOCK_AND_ENTER(char, doorName) {
+function UNLOCK_AND_ENTER(char, doorName) {
   return nounVerb(char, "unlock", true) + " the " + doorName + ", open it and walk through.";
 }
-function CMD_TRY_BUT_LOCKED(char, doorName) {
+function TRY_BUT_LOCKED(char, doorName) {
   return nounVerb(char, "try", true) + " the " + doorName + ", but it is locked.";
 }
 
@@ -313,11 +313,11 @@ var SL_NO_FILENAME = "Trying to save with no filename";
 //----------------------------------------------------------------------------------------------
 
 
-var CMD_IGNORED_WORDS = ["", "the", "a", "an"];
-var CMD_JOINER_REGEX = /\,|\band\b/;
-var CMD_ALL_REGEX = /^(all|everything)$/;
-var CMD_ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
-var CMD_GO = "go to |goto |go |head |";
+var IGNORED_WORDS = ["", "the", "a", "an"];
+var JOINER_REGEX = /\,|\band\b/;
+var ALL_REGEX = /^(all|everything)$/;
+var ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
+var GO = "go to |goto |go |head |";
 
 
 var LIST_AND = " and ";
