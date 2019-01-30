@@ -195,6 +195,8 @@ createItem("flashlight",
 createRoom("dining_room", {
   desc:'An old-fashioned room.',
   east:new Exit('lounge'),
+  canViewLocs:["garden"],
+  canViewMsg:"Through the window you can see: ",
   up:new Exit("dining_room_on_stool"),
   alias:"dining room",
   hint:"This room features an NPC who will sometimes do as you ask. Compliment her, and she will go to another room, and with then pick things up and drop them (but not bricks). Also not that the glass cabinet is in this room as well as the lounge.",
@@ -409,14 +411,14 @@ createItem("jumpsuit",
 createRoom("conservatory", {
   desc:"A light airy room.",
   north:new Exit("lounge"),
-  south:new Exit("garden"),
+  west:new Exit("garden"),
   hint:"The conservatory features a pro-active NPC.",
 });
 
 
 createRoom("garden", {
   desc:"Very overgrown.",
-  north:new Exit("conservatory"),
+  east:new Exit("conservatory"),
 });
 
 
@@ -445,6 +447,7 @@ createItem("Arthur",
       "walkTo:Lara:'Hi, Lara,' says Arthur. 'Come look at the garden.'",
       "joinedBy:Lara:'Sure,' says Lara.",
       "walkTo:garden:'Look at all the beautiful flowers,' says Arthur.",
+      "giveText:Lara smells the flowers.",
     ],
     talkto:function() {
       msg("'Hey, wake up,' you say to Arthur.");

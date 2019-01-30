@@ -249,8 +249,8 @@ test.tests = function() {
   
   test.assertCmd("s", ["A clean room.", /You can see/, "You can go north, west or down."]);
   test.assertCmd("w", ["You head west.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go up, west, east or south."]);
-  test.assertCmd("s", ["You head south.", "A light airy room.", /You can see/, "You can go north or south."]);
-  test.assertCmd("s", ["You head south.", "Very overgrown.", "You can see Arthur here.", "You can go north."]);
+  test.assertCmd("s", ["You head south.", "A light airy room.", /You can see/, "You can go north or west."]);
+  test.assertCmd("w", ["You head west.", "Very overgrown.", "You can see Arthur here.", "You can go east."]);
   
   
   test.title("Agendas");
@@ -258,8 +258,8 @@ test.tests = function() {
   test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
   test.assertEqual(0, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "Arthur stands up and stretches."]);
-  test.assertCmd("n", ["You head north.", "A light airy room.", /You can see/, "You can go north or south."]);
-  //test.assertEqual(0, w.Arthur.followers.length);
+  test.assertCmd("e", ["You head east.", "A light airy room.", /You can see/, "You can go north or west."]);
+  test.assertEqual(0, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "Arthur enters the conservatory."]);
   test.assertCmd("n", ["You head north.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go up, west, east or south.", "Arthur enters the lounge."]);
   test.assertCmd("w", ["You head west.", "An old-fashioned room.", /^You can see/, "You can go up or east.", "Arthur enters the dining room.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
