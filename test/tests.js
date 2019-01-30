@@ -203,6 +203,7 @@ test.tests = function() {
   w.book.examine = "This WILL get saved";
   
   clone.cloneCounter = 29;
+  var agendaCount = w.Arthur.agenda.length;
   
   var s = saveLoad.saveTheWorld("Comment!!!");
 
@@ -221,6 +222,7 @@ test.tests = function() {
   test.assertEqual(true, w.boots.notableFlag);
   test.assertEqual("This will remain", w.boots.examine);
   test.assertEqual("This WILL get saved", w.book.examine);
+  test.assertEqual(agendaCount, w.Arthur.agenda.length);
   
   test.assertEqual(29, w[clone.name].cloneCounter);
   
@@ -233,11 +235,11 @@ test.tests = function() {
   test.assertEqual("conservatory, lounge, dining room", formatList(agenda.findPath(w.garden, w.dining_room)));
   
   
-  test.title("Groups");
-  w.Kyle.setLeader(w.Arthur);
-  w.Lara.setLeader(w.Arthur);
-  test.assertEqual(2, w.Arthur.followers.length);
-  test.assertEqual("Arthur, Kyle and Lara", w.Arthur.byname({group:true}));
+  //test.title("Groups");
+  //w.Kyle.setLeader(w.Arthur);
+  //w.Lara.setLeader(w.Arthur);
+  //test.assertEqual(2, w.Arthur.followers.length);
+  //test.assertEqual("Arthur, Kyle and Lara", w.Arthur.byname({group:true}));
   
   
   test.assertCmd("s", ["A clean room.", /You can see/, "You can go north, west or down."]);
@@ -247,7 +249,11 @@ test.tests = function() {
   
   
   test.title("Agendas");
-  test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
+  //test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
+  //test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
+  //test.assertCmd("z", ["You wait one turn.", "Arthur stands up and stretches."]);
+  //test.assertCmd("x arthur", ["Arthur is awake.", "Arthur stands up and stretches."]);
+  //test.assertCmd("n", ["You head north.", "A light airy room.", /You can see/, "You can go north or south."]);
   
   
   

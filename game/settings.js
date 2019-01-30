@@ -82,7 +82,6 @@ function setup() {
   //showStartDiag();
   
 //        debugmsg(agenda.findPath(w.dining_room, w.garden));
-
   
   
 

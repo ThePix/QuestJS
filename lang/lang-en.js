@@ -14,72 +14,6 @@
 
 
 
-//----------------------------------------------------------------------------------------------
-//  ERROR Messages
-
-function ERR_NO_DEFAULT(name) {
-  return "No default set for command '" + name + "'.";
-}
-
-var ERROR_NO_PLAYER = "No player object found. This will not go well...";
-var ERROR_BAD_PLAYER_LOC = "No player location set or set to location that does no exist. This will not go well...";
-var ERROR_MSG_OR_RUN = "Unsupported type for printOrRun";
-var ERROR_NO_ROOM = "Failed to find room";
-var ERROR_INIT_BACKGROUND = "It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.";
-var ERR_ROMAN_NUMBERS_ONLY = "toRoman can only handle numbers";
-
-
-const ERROR_NO_PLAYER_FOUND = "No player object found. This is probably due to an error in data.js. Do [Ctrl][Shft]-I to open the developer tools, and go to the console tab, and look at the first error in the list (if it mentions jQuery, skip it and look at the second one). It should tell you exactly which line in which file. But also check one object is actually flagged as the player.";
-
-function ERROR_INIT_REPEATED_NAME(name) {
-  return "Attempting to use the name `" + name + "`, there there is already an item with that name in the world.";
-}
-function ERROR_INIT_DISALLOWED_NAME(name) {
-  return "Attempting to use the disallowed name `" + name + "`; a name can only include letters and digits - no spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.";
-}
-function ERROR_USING_CREATE_OBJECT(name) {
-  return "Attempting to use createObject with `" + name + "` after set up. To ensure games save properly you should use cloneObject to create ites during play.";
-}
-function ERROR_INIT_UNKNOWN_LOC(item) {
-  return "The item `" + item.name + "` is in an unknown location (" + item.loc + ")";
-}
-function ERROR_INIT_UNKNOWN_EXIT(dir, room, loc) {
-  return "The exit `" + dir + "` in room '" + room.name + "' is to an unknown location (" + loc + ")";
-}
-function ERROR_UNKNOWN_KEY(name) {
-  return "The key name for this container, `" + name + "`, does not match any key in the game.";
-}
-
-function ERROR_UNKNOWN_LOC(name) {
-  return "The location name `" + name + "`, does not match anything in the game.";
-}
-
-
-// Text processor errors
-function ERR_TP_NO_OBJECT(name, params) {
-  return "Failed to find object '" + name + "' in text processor (<i>" + params.tpOriginalString + "</i>)";
-}
-function ERR_TP_NO_START_BRACE(params) {
-  return "Failed to find starting curly brace in text processor (<i>" + params.tpOriginalString + "</i>)";
-}
-function ERR_TP_UNKNOWN_DIRECTIVE(name, params) {
-  return "Attempting to use unknown text processor directive '" + name + "' (<i>" + params.tpOriginalString + "</i>)";
-}
-function ERR_TP_EXCEPTION(err) {
-  return "Text processor string caused an error, returning unmodified (reported error: " + err + ")";
-}
-
-
-// Command errors
-function ERR_CMD_RULE_NOT_FUNCTION(cmd, n) {
-  return "Failed to process command '" + cmd.name + "' as one of its rules (" + n + ") is not a function.";
-}
-function ERR_CMD_NO_DOOR(cmd) {
-  return "Not found an object called '" + cmd.door + "'. Any exit that uses the 'useWithDoor' function must also set a 'door' attribute.";
-}
-
-
-
 
 
 //----------------------------------------------------------------------------------------------
@@ -213,12 +147,6 @@ var CMD_GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what 
 var CMD_DONE = "Done.";
 
 
-function CMD_PANE_CMD_NOT_FOUND(s) {
-  return "I don't know that command (" + s + ") - and obviously I should as you just clicked it. Please alert the game author about this bug.";
-}
-function CMD_PANE_ITEM_NOT_FOUND(s) {
-  return "I don't know that object (" + s + ")- and obviously I should as it was listed. Please alert this as a bug in Quest.";
-}
 
 
 function CMD_NO_SMELL(char) {
@@ -379,21 +307,6 @@ function CMD_TRY_BUT_LOCKED(char, doorName) {
 var SL_DIR_HEADINGS = "<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>";
 var SL_DIR_MSG = "Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.";
 var SL_NO_FILENAME = "Trying to save with no filename";
-function SL_CANNOT_FIND_OBJ(name) {
-  return "Cannot find object '" + name + "'";
-}
-function SL_CANNOT_FIND_PROTOTYPE(name) {
-  return "Cannot find prototype '" + name + "'";
-}
-function SL_UNKNOWN_SAVE_TYPE(name, saveType) {
-  return "Unknown save type for object '" + name + "' (" + saveType + ")";
-}
-function SL_CANNOT_FIND_TYPE(name) {
-  return "Cannot find save type for object '" + name + "'";
-}
-function SL_BAD_FORMAT(name) {
-  return "Bad format in saved data (" + name + ")";
-}
 
 
 
@@ -640,7 +553,7 @@ function conjugate(item, verb) {
   var arr = CONJUGATIONS[gender.toLowerCase()];
 
   if (!arr) {
-    errormsg(ERR_QUEST_BUG, "No conjugations found: CONJUGATIONS_" + gender.toLowerCase());
+    errormsg("No conjugations found: CONJUGATIONS_" + gender.toLowerCase());
     return verb;
   }
   for (var i = 0; i < arr.length; i++) {

@@ -441,12 +441,15 @@ createItem("Arthur",
     properName:true,
     agenda:[
       "giveText:Arthur stands up and stretches.", 
-      "giveText:'I'm going to the lounge,' says Arthur.:'Whatever!'", 
-      "walkTo:lounge:Arthur arrives", "giveText:introduction"
+      "giveText:'I'm going to find Lara, and show her the garden,' says Arthur.:'Whatever!'", 
+      "walkTo:Lara:'Hi, Lara,' says Arthur. 'Come look at the garden.'",
+      "joinedBy:Lara:'Sure,' says Lara.",
+      "walkTo:garden:'Look at all the beautiful flowers,' says Arthur.",
     ],
     talkto:function() {
       msg("'Hey, wake up,' you say to Arthur.");
       this.suspended = false;
+      this.pause();
       return true;
     }
   }
@@ -468,11 +471,13 @@ createItem("Kyle",
     ],
     talkto:function() {
       switch (this.talktoCount) {
-        case 0 : msg("You say 'Hello,' to Kyle, and she replies in kind."); break;
-        case 1 : msg("You ask Kyle how to get upstairs. 'You know,' she replies, 'I have no idea.'"); break;
+        case 0 : msg("You say 'Hello,' to Kyle, and he replies in kind."); break;
+        case 1 : msg("You ask Kyle how to get upstairs. 'You know,' he replies, 'I have no idea.'"); break;
         case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break;
         default: msg("You wonder what you can talk to Kyle about."); break;
       }
+      this.pause();
+      return true;
     },
   }
 );

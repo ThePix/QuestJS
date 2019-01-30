@@ -37,6 +37,7 @@ test.assertCmd = function(cmdStr, expected) {
   test.testing = true;
   test.testOutput = [];
   parser.parse(cmdStr);
+  world.endTurn();
   test.testing = false;
   
   if (test.testOutput.length === expected.length && test.testOutput.every(function(value, index) {
@@ -51,7 +52,7 @@ test.assertCmd = function(cmdStr, expected) {
   }
   else {
     test.printTitle();
-    for (var i = 0; i < test.testOutput.length; i++) {
+    for (var i = 0; i < Math.max(test.testOutput.length, expected.length); i++) {
       if (typeof expected[i] === "string") {
         if (expected[i] !== test.testOutput[i]) {
           debugmsg("Expected: " + expected[i]);
