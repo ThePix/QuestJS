@@ -5,7 +5,7 @@
 // Note that the test object was defined in util.js
 
 test.runTests = function() {
-  var time = parseInt(Date.now());
+  const time = parseInt(Date.now());
   test.tests();
   test.results (time);
 };
@@ -52,7 +52,7 @@ test.assertCmd = function(cmdStr, expected) {
   }
   else {
     test.printTitle();
-    for (var i = 0; i < Math.max(test.testOutput.length, expected.length); i++) {
+    for (let i = 0; i < Math.max(test.testOutput.length, expected.length); i++) {
       if (typeof expected[i] === "string") {
         if (expected[i] !== test.testOutput[i]) {
           debugmsg("Expected: " + expected[i]);
@@ -84,7 +84,7 @@ test.assertEqual = function(expected, found) {
 };
 
 test.results = function(time) {
-  var elapsed = parseInt(Date.now()) - time;
+  const elapsed = parseInt(Date.now()) - time;
   debugmsg("Number of tests: " + test.totalCount);
   debugmsg("Number of fails: " + test.failCount);
   debugmsg("Elapsed time: " + elapsed + " ms (" + (Math.round(elapsed / test.totalCount * 10) / 10) + " ms/test)");

@@ -180,14 +180,14 @@ test.tests = function() {
   
 
   test.title("Clone");
-  var count = Object.keys(w).length;
+  const count = Object.keys(w).length;
 
-  var clone = cloneObject(w.book);
+  const clone = cloneObject(w.book);
   test.assertEqual(count + 1, Object.keys(w).length);
   test.assertEqual(w.book, clone.clonePrototype);
   test.assertEqual(w.book.examine, clone.examine);
 
-  var clone2 = cloneObject(clone);
+  const clone2 = cloneObject(clone);
   test.assertEqual(count + 2, Object.keys(w).length);
   test.assertEqual(w.book, clone2.clonePrototype);
   test.assertEqual(w.book.examine, clone2.examine);
@@ -204,10 +204,10 @@ test.tests = function() {
   w.book.examine = "This WILL get saved";
   
   clone.cloneCounter = 29;
-  var agendaCount = w.Arthur.agenda.length;
+  const agendaCount = w.Arthur.agenda.length;
   test.assertEqual(0, w.Arthur.followers.length);
   
-  var s = saveLoad.saveTheWorld("Comment!!!");
+  const s = saveLoad.saveTheWorld("Comment!!!");
 
   // Now change them again, these changes should get over-written
   w.boots.counter = 42;
@@ -215,7 +215,7 @@ test.tests = function() {
   w.boots.notableFlag = false;
   w.boots.examine = "This will remain";
   w.book.examine = "This will not remain";
-  var clone3 = cloneObject(clone);  // should not be there later
+  const clone3 = cloneObject(clone);  // should not be there later
 
   saveLoad.loadTheWorld(s);
   test.assertEqual(count + 2, Object.keys(w).length);
@@ -240,12 +240,6 @@ test.tests = function() {
   test.assertEqual(null, w.dining_room.findExit(w.far_away));
   test.assertEqual("east", w.dining_room.findExit(w.lounge).dir);
   
-  //test.title("Groups");
-  //w.Kyle.setLeader(w.Arthur);
-  //w.Lara.setLeader(w.Arthur);
-  //test.assertEqual(2, w.Arthur.followers.length);
-  //test.assertEqual("Arthur, Kyle and Lara", w.Arthur.byname({group:true}));
-  
   
   test.assertCmd("s", ["A clean room.", /You can see/, "You can go north, west or down."]);
   test.assertCmd("w", ["You head west.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go up, west, east or south."]);
@@ -260,13 +254,15 @@ test.tests = function() {
   test.assertCmd("z", ["You wait one turn.", "Arthur stands up and stretches."]);
   test.assertCmd("e", ["You head east.", "A light airy room.", /You can see/, "You can go north or west."]);
   test.assertEqual(0, w.Arthur.followers.length);
-  test.assertCmd("z", ["You wait one turn.", "Arthur enters the conservatory."]);
-  test.assertCmd("n", ["You head north.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go up, west, east or south.", "Arthur enters the lounge."]);
-  test.assertCmd("w", ["You head west.", "An old-fashioned room.", /^You can see/, "You can go up or east.", "Arthur enters the dining room.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
+  test.assertCmd("z", ["You wait one turn.", "Arthur enters the conservatory from the east."]);
+  test.assertCmd("n", ["You head north.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go up, west, east or south.", "Arthur enters the lounge from the north."]);
+  test.assertCmd("w", ["You head west.", "An old-fashioned room.", /^You can see/, "You can go up or east.", "Arthur enters the dining room from the west.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
   test.assertEqual(0, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "'Sure,' says Lara."]);
   test.assertEqual(1, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "Arthur and Lara leave the dining room, heading east."]);
+  test.assertCmd("z", ["You wait one turn."]);
+  test.assertCmd("z", ["You wait one turn.", "Arthur and Lara enter the garden from the west.", "Through the window you see Arthur say something to Lara."]);
   
   
   

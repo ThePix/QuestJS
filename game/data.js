@@ -149,7 +149,7 @@ createItem("flashlight",
   SWITCHABLE(false),
   { loc:"lounge", examine:"A small black torch.", regex:/^torch$/, 
     byname:function(options) {
-      var res = this.alias;
+      let res = this.alias;
       if (options.article) { res = (options.article === DEFINITE ? "the" : "a") + " " + this.alias; }
       if (this.switchedon && options.modified) { res += " (providing light)"; }
       return res;
@@ -196,7 +196,7 @@ createRoom("dining_room", {
   desc:'An old-fashioned room.',
   east:new Exit('lounge'),
   canViewLocs:["garden"],
-  canViewMsg:"Through the window you can see: ",
+  canViewPrefix:"Through the window you can see ",
   up:new Exit("dining_room_on_stool"),
   alias:"dining room",
   hint:"This room features an NPC who will sometimes do as you ask. Compliment her, and she will go to another room, and with then pick things up and drop them (but not bricks). Also not that the glass cabinet is in this room as well as the lounge.",
@@ -322,7 +322,7 @@ createItem("charger_compartment",
   CONTAINER(true),
   { alias:"compartment", examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.", 
     testRestrictions:function(item) {
-      var contents = w.charger_compartment.getContents();
+      const contents = w.charger_compartment.getContents();
       if (contents.length > 0) {
         msg("The compartment is full.");
         return false;
@@ -336,7 +336,7 @@ createItem("charger_button",
   COMPONENT("charger"),
   { examine:"A big red button.", alias:"button",
     push:function(isMultiple, participant) {
-      var contents = w.charger_compartment.getContents()[0];
+      const contents = w.charger_compartment.getContents()[0];
       if (!w.charger_compartment.closed || !contents) {
         msg(pronounVerb(participant, "push", true) + " the button, but nothing happens.");
         return false;
@@ -442,13 +442,21 @@ createItem("Arthur",
     suspended:true,
     properName:true,
     agenda:[
-      "giveText:Arthur stands up and stretches.", 
-      "giveText:'I'm going to find Lara, and show her the garden,' says Arthur.:'Whatever!'", 
+      "text:Arthur stands up and stretches.", 
+      "text:'I'm going to find Lara, and show her the garden,' says Arthur.:'Whatever!'", 
       "walkTo:Lara:'Hi, Lara,' says Arthur. 'Come look at the garden.'",
       "joinedBy:Lara:'Sure,' says Lara.",
-      "walkTo:garden:'Look at all the beautiful flowers,' says Arthur.",
-      "giveText:Lara smells the flowers.",
+      "walkTo:garden:inTheGardenWithLara:'Look at all the beautiful flowers,' says Arthur.:Through the window you see Arthur say something to Lara.",
+      "text:Lara smells the flowers.",
     ],
+    inTheGardenWithLara:function(arr) {
+      if (this.here()) {
+        msg(arr[0]);
+      }
+      if (game.player.loc === "dining_room") {
+        msg(arr[1]);
+      }
+    },
     talkto:function() {
       msg("'Hey, wake up,' you say to Arthur.");
       this.suspended = false;
@@ -467,7 +475,11 @@ createItem("Arthur",
 
 createItem("Kyle",
   NPC(false),
-  { loc:"lounge", examine:"A grizzly bear. But cute.", properName:true,
+  { 
+    loc:"lounge",
+    examine:"A grizzly bear. But cute.", 
+    properName:true,
+    //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
     askoptions:[
       {regex:/house/, response:"'I like it,' says Kyle.", },
       {regex:/garden/, response:"'Needs some work,' Kyle says with a sign.", },

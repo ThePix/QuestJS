@@ -137,14 +137,14 @@ function CANNOT_RECLINE_ON(char, item) {
 //----------------------------------------------------------------------------------------------
 // General command messages
 
-var NOT_KNOWN_MSG = "I don't even know where to begin with that.";
-var DISAMBIG_MSG = "Which do you mean?";
-var NO_MULTIPLES = "You cannot use multiple objects with that command.";
-var NOTHING = "Nothing there to do that with.";
-var NO_ATT_ERROR = "It does not work like that.";
-var UNSUPPORTED_DIR = "Unsupported type for direction";
-var GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
-var DONE = "Done.";
+const NOT_KNOWN_MSG = "I don't even know where to begin with that.";
+const DISAMBIG_MSG = "Which do you mean?";
+const NO_MULTIPLES = "You cannot use multiple objects with that command.";
+const NOTHING = "Nothing there to do that with.";
+const NO_ATT_ERROR = "It does not work like that.";
+const UNSUPPORTED_DIR = "Unsupported type for direction";
+const GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
+const DONE = "Done.";
 
 
 
@@ -235,7 +235,7 @@ function INSIDE_CONTAINER(char, item, cont) {
 function STOP_POSTURE(char) {
   if (!char.posture) return "";
   // You could split up sitting, standing and lying
-  var s = nounVerb(char, "get", true) + " off " + char.postureFurniture.byname({article:DEFINITE}) + ".";
+  const s = nounVerb(char, "get", true) + " off " + char.postureFurniture.byname({article:DEFINITE}) + ".";
   char.posture = null;
   char.postureFurniture = null;
   return s;
@@ -304,35 +304,35 @@ function TRY_BUT_LOCKED(char, doorName) {
 //----------------------------------------------------------------------------------------------
 // Save/load messages
 
-var SL_DIR_HEADINGS = "<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>";
-var SL_DIR_MSG = "Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.";
-var SL_NO_FILENAME = "Trying to save with no filename";
+const SL_DIR_HEADINGS = "<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>";
+const SL_DIR_MSG = "Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.";
+const SL_NO_FILENAME = "Trying to save with no filename";
 
 
 
 //----------------------------------------------------------------------------------------------
 
 
-var IGNORED_WORDS = ["", "the", "a", "an"];
-var JOINER_REGEX = /\,|\band\b/;
-var ALL_REGEX = /^(all|everything)$/;
-var ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
-var GO = "go to |goto |go |head |";
+const IGNORED_WORDS = ["", "the", "a", "an"];
+const JOINER_REGEX = /\,|\band\b/;
+const ALL_REGEX = /^(all|everything)$/;
+const ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
+const GO = "go to |goto |go |head |";
 
 
-var LIST_AND = " and ";
-var LIST_NOTHING = "nothing";
+const LIST_AND = " and ";
+const LIST_NOTHING = "nothing";
 
 
-var NEVER_MIND = "Never mind.";
+const NEVER_MIND = "Never mind.";
 
-var DEFAULT_DESCRIPTION = "It's just scenery.";
+const DEFAULT_DESCRIPTION = "It's just scenery.";
 
 
 //----------------------------------------------------------------------------------------------
 // Language constructs
 
-var PRONOUNS = {
+const PRONOUNS = {
   thirdperson:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
   massnoun:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
   male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his", reflexive:"himself"},
@@ -343,7 +343,7 @@ var PRONOUNS = {
 };
 
 
-var VERBS = {
+const VERBS = {
   examine:"Examine",
   take:"Take",
   drop:"Drop",
@@ -360,23 +360,24 @@ var VERBS = {
 
 // Change the abbrev values to suit your game (or language)
 // You may want to do that in settings, which is loaded first
+// One time we need var rather than const/let!
 if (EXITS === undefined) {
   var EXITS = [
-    {name:'northwest', abbrev:'NW'}, 
-    {name:'north', abbrev:'N'}, 
-    {name:'northeast', abbrev:'NE'}, 
-    {name:'in', abbrev:'In', alt:'enter'}, 
-    {name:'up', abbrev:'U'},
+    {name:'northwest', abbrev:'NW', niceDir:"the northwest"}, 
+    {name:'north', abbrev:'N', niceDir:"the north"}, 
+    {name:'northeast', abbrev:'NE', niceDir:"the northeast"}, 
+    {name:'in', abbrev:'In', alt:'enter', niceDir:"inside"}, 
+    {name:'up', abbrev:'U', niceDir:"above"},
     
-    {name:'west', abbrev:'W'}, 
+    {name:'west', abbrev:'W', niceDir:"the west"}, 
     {name:'Look', abbrev:'Lk', nocmd:true}, 
-    {name:'east', abbrev:'E'}, 
-    {name:'out', abbrev:'Out', alt:'exit'}, 
-    {name:'down', abbrev:'Dn', alt:'d'}, 
+    {name:'east', abbrev:'E', niceDir:"the east"}, 
+    {name:'out', abbrev:'Out', alt:'exit', niceDir:"outside"}, 
+    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below"}, 
 
-    {name:'southwest', abbrev:'SW'}, 
-    {name:'south', abbrev:'S'}, 
-    {name:'southeast', abbrev:'SE'}, 
+    {name:'southwest', abbrev:'SW', niceDir:"the southwest"}, 
+    {name:'south', abbrev:'S', niceDir:"the south"}, 
+    {name:'southeast', abbrev:'SE', niceDir:"the southeast"}, 
     {name:'Wait', abbrev:'Z', nocmd:true}, 
     {name:'Help', abbrev:'?', nocmd:true}, 
   ];
@@ -423,13 +424,13 @@ function toWords(number) {
     return number;
   }
   
-  var s = "";
+  let s = "";
   if (number < 0) {
     s = "minus ";
     number = -number;
   }
   if (number < 2000) {
-    var hundreds = Math.floor(number / 100);
+    let hundreds = Math.floor(number / 100);
     number = number % 100;
     if (hundreds > 0) {
       s = s + numberUnits[hundreds] + " hundred ";
@@ -443,8 +444,8 @@ function toWords(number) {
       }
     }
     else {
-      var units = number % 10;
-      var tens = Math.floor(number / 10) % 10;
+      let units = number % 10;
+      let tens = Math.floor(number / 10) % 10;
       s = s + numberTens[tens - 2];
       if (units !== 0) {
         s = s + numberUnits[units];
@@ -469,17 +470,60 @@ function contentsForContainer(contents) {
 
 
 
+// Use when the NPC leaves a room; will give a message if the player can observe it
+function npcLeavingMsg(npc, dest) {
+  let s = "";
+  let flag = false;
+  if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
+    s = w[game.player.loc].canViewPrefix;
+    flag = true;
+  }
+  if (flag || npc.here()) {
+    s += nounVerb(npc, "leave", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
+    const exit = w[npc.loc].findExit(dest);
+    if (exit) s += ", heading " + exit.dir;
+    s += ".";
+    msg(s);
+  }
+};
+
+
+function niceDirections (dir) {
+  const dirObj = EXITS.find(function(el) { return el.name === dir; });
+  return dirObj.niceDir;
+}
+  
+
+
+function npcEnteringMsg(npc, origin) {
+  let s = "";
+  let flag = false;
+  if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
+    s = w[game.player.loc].canViewPrefix;
+    flag = true;
+  }
+  if (flag || npc.here()) {
+    s = nounVerb(npc, "enter", true) + " " + w[npc.loc].byname({article:DEFINITE});
+    const exit = w[origin].findExit(npc.loc);
+    if (exit) s += " from " + niceDirections(exit.dir);
+    s += ".";
+    msg(s);
+  }
+}
+
+
+
 
 
 tp.text_processors.objects =function(arr, params) {
-  var listOfOjects = scope(isHereListed);
+  const listOfOjects = scope(isHereListed);
   return formatList(listOfOjects, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:game.player.loc});
 };
 
   
 tp.text_processors.exits = function(arr, params) {
-  var list = [];
-  for (var i = 0; i < EXITS.length; i++) {
+  const list = [];
+  for (let i = 0; i < EXITS.length; i++) {
     if (game.room.hasExit(EXITS[i].name)) {
       list.push(EXITS[i].name);
     }
@@ -493,12 +537,17 @@ tp.text_processors.exits = function(arr, params) {
 
 
 
+
+
+
+
+
 //----------------------------------------------------------------------------------------------
 // Conjugating
 
 
 
-var CONJUGATIONS = {
+const CONJUGATIONS = {
   i:[
     { name:"be", value:"am"},
     { name:"'be", value:"'m"},
@@ -548,23 +597,23 @@ var CONJUGATIONS = {
 
 
 function conjugate(item, verb) {
-  var gender = item.pronouns.subjective;
+  let gender = item.pronouns.subjective;
   if (gender === "he" || gender === "she") { gender = "it"; }
-  var arr = CONJUGATIONS[gender.toLowerCase()];
+  const arr = CONJUGATIONS[gender.toLowerCase()];
 
   if (!arr) {
     errormsg("No conjugations found: CONJUGATIONS_" + gender.toLowerCase());
     return verb;
   }
-  for (var i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     if (arr[i].name === verb) {
       return arr[i].value;
     }
   }
   
-  for (i = 0; i < arr.length; i++) {
-    var name = arr[i].name;
-    var value = arr[i].value;
+  for (let i = 0; i < arr.length; i++) {
+    const name = arr[i].name;
+    const value = arr[i].value;
     if (name.startsWith("@") && verb.endsWith(name.substring(1))) {
       return conjugate(item, verb.substring(0, verb.length - name.length + 1)) + value;
     }
@@ -577,13 +626,13 @@ function conjugate(item, verb) {
 
 
 function pronounVerb(item, verb, capitalise) {
-  var s = item.pronouns.subjective + " " + conjugate(item, verb);
+  let s = item.pronouns.subjective + " " + conjugate(item, verb);
   s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 }
 
 function pronounVerbForGroup(item, verb, capitalise) {
-  var s = item.groupPronouns().subjective + " " + conjugate(item.group(), verb);
+  let s = item.groupPronouns().subjective + " " + conjugate(item.group(), verb);
   s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 }
@@ -592,7 +641,7 @@ function nounVerb(item, verb, capitalise) {
   if (item === game.player) {
     return pronounVerb(item, verb, capitalise);
   }
-  var s = item.byname({article:DEFINITE}) + " " + conjugate(item, verb);
+  let s = item.byname({article:DEFINITE}) + " " + conjugate(item, verb);
   s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 }

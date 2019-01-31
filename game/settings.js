@@ -38,7 +38,7 @@ const ROOM_TEMPLATE = [
 
 
 
-var STATUS = [
+const STATUS = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },
   function() { return "<td>Health points:</td><td>" + game.player.hitpoints + "</td>"; },
