@@ -503,7 +503,7 @@ function npcEnteringMsg(npc, origin) {
     flag = true;
   }
   if (flag || npc.here()) {
-    s = nounVerb(npc, "enter", true) + " " + w[npc.loc].byname({article:DEFINITE});
+    s += nounVerb(npc, "enter", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
     const exit = w[origin].findExit(npc.loc);
     if (exit) s += " from " + niceDirections(exit.dir);
     s += ".";
