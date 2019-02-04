@@ -262,7 +262,7 @@ test.tests = function() {
   test.assertEqual(1, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "Arthur and Lara leave the dining room, heading east."]);
   test.assertCmd("z", ["You wait one turn."]);
-  test.assertCmd("z", ["You wait one turn.", "Arthur and Lara enter the garden from the west.", "Through the window you see Arthur say something to Lara."]);
+  test.assertCmd("z", ["You wait one turn.", "Through the window you can see Arthur and Lara enter the garden from the west.", "Through the window you see Arthur say something to Lara."]);
   
   
   

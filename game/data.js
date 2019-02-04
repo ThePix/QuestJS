@@ -479,7 +479,7 @@ createItem("Kyle",
     loc:"lounge",
     examine:"A grizzly bear. But cute.", 
     properName:true,
-    agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
+    //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
     //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
     askoptions:[
       {regex:/house/, response:"'I like it,' says Kyle.", },
