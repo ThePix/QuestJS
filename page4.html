@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <title>A Test Page</title>
+  <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://ajax.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    script-src 'unsafe-inline' 'self' https://ajax.googleapis.com https://html5shiv.googlecode.com;
+    img-src 'self' https://ajax.googleapis.com;"
+  >
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="game4/style.css"/>
+  
+  <script src="lib/util.js"></script>
+  <script src="lib/saveload.js"></script>
+  <script src="lib/text.js"></script>
+  <script src="game4/settings.js"></script>
+  <script>
+    if (DEBUG) {
+      document.writeln('<script src="test/test-lib.js"></scr' + "ipt>"); 
+      document.writeln('<script src="test/tests.js"></scr' + "ipt>"); 
+    }
+    document.writeln('<script src="lang/' + LANG_FILENAME + '"></scr' + "ipt>");
+  </script>
+  <script src="lib/io.js"></script>
+  <script src="lib/command.js"></script>
+  <script src="lib/world.js"></script>
+  <script src="lib/templates.js"></script>
+  <script src="lib/npc.js"></script>
+  <script src="lib/parser.js"></script>
+</head>
+
+
+
+<body>
+
+<div id="bottom-panel">
+<div id="scanner">
+</div>
+</div>
+
+<div id="main">
+<div id="output">
+</div>
+<div id="input">
+<script>
+  document.writeln(CURSOR);
+</script>
+  <input type="text" name="textbox" id="textbox"  autofocus/>
+</div>
+</div>
+
+
+
+
+<script>
+  io.createPanes();
+</script>
+
+<div id="dialog" style="display:none;">
+</div>
+
+<script src="lib/commands.js"></script>
+<script src="game4/code.js"></script>
+<script src="game4/data.js"></script>
+<script src="game4/npcs.js"></script>
+
+</body>
+</html> 
+
+
+
