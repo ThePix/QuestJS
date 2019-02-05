@@ -18,7 +18,7 @@ const STATUS_WIDTH_RIGHT = 40;
 const USE_DROPDOWN_FOR_CONV = true;
 
 const FAILS_COUNT_AS_TURNS = true;
-const TURNSCRIPT_AFTER_LOOK = false;
+const LOOK_COUNTS_AS_TURN = false;
 
 const TEXT_INPUT = true;
 const CURSOR = ">";
@@ -90,11 +90,9 @@ const ooc_intro = "<p>You are on a mission to survey planets around five stars, 
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 function setup() {
-  intro();
   game.player.bonus = 0;
   game.player.status = "You are feeling fine";
   game.player.shipStatus = "The ship is fine";
-  world.scopeSnapshot();
 
   //parser.parse("spoken");
 //  parser.parse("l");

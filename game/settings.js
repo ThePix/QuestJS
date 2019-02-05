@@ -17,8 +17,8 @@ const STATUS_WIDTH_RIGHT = 40;
 
 const USE_DROPDOWN_FOR_CONV = true;
 
-const FAILS_COUNT_AS_TURNS = true;
-const TURNSCRIPT_AFTER_LOOK = false;
+const FAILS_COUNT_AS_TURNS = false;
+const LOOK_COUNTS_AS_TURN = false;
 
 const TEXT_INPUT = true;
 const CURSOR = ">";
@@ -71,13 +71,8 @@ function intro() {
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 function setup() {
-  intro();
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
-  world.scopeSnapshot();
-
-
-
 }
 
 
