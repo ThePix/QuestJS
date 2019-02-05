@@ -76,63 +76,8 @@ function setup() {
   game.player.status = "You are feeling fine";
   world.scopeSnapshot();
 
-  // parser.parse("kyle,e");
-  // parser.parse("kyle,get torch");
-   
-  //showStartDiag();
-  
-//        debugmsg(agenda.findPath(w.dining_room, w.garden));
-  
-  
 
-  /*
-  parser.parse("get small key");
-  parser.parse("open cabinet");
-  parser.parse("get ring");
-  parser.parse("w");
-  parser.parse("give ring to lara");
-  parser.parse("e");
-  parser.parse("get torch");
-  parser.parse("e");
-  parser.parse("open garage");
-  parser.parse("n");/*
-  parser.parse("open compartment");
-  parser.parse("put torch in compartment");
-  parser.parse("press button");
-  parser.parse("get torch");
-  parser.parse("s");
-  parser.parse("open trapdoor");
-  parser.parse("d");
-  parser.parse("turn on torch");
-  parser.parse("move crates");
-  parser.parse("turn on light");*/
-  
-/*  parser.parse("kyle,get small key");
-  parser.parse("kyle,open cabinet");
-  parser.parse("kyle,get ring");
-  parser.parse("kyle,w");
-  parser.parse("w");
-  parser.parse("kyle,give ring to lara");
-  parser.parse("kyle,e");
-  parser.parse("e");
-  parser.parse("kyle,get torch");
-  parser.parse("kyle,e");
-  parser.parse("e");
-  parser.parse("kyle,open garage");
-  parser.parse("kyle,n");
-  parser.parse("n");
-  parser.parse("kyle,open compartment");
-  parser.parse("kyle,put torch in compartment");
-  parser.parse("kyle,press button");
-  parser.parse("kyle,get torch");
-  parser.parse("kyle,s");
-  parser.parse("s");
-  parser.parse("kyle,open trapdoor");/*
-  parser.parse("kyle,d");
-  parser.parse("d");
-  parser.parse("kyle,turn on torch");
-  parser.parse("kyle,move crates");
-  parser.parse("kyle,turn on light");*/
+
 }
 
 
@@ -284,9 +229,6 @@ var paraOpts = [];
 
 var paraPositions = [];
 
-function getRandomInt(min, max) {
-   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 var wizardMale = true;
 
@@ -304,7 +246,7 @@ function scrollPara(element) {
   if (typeof paraPositions[paraNumber] !== 'number') {
     var list = dialogeOptions['para' + paraNumber + 'Opts'];
     paraOpts[paraNumber] = list;
-    paraPositions[paraNumber] = getRandomInt(0, list.length - 1);
+    paraPositions[paraNumber] = randomInt(list.length - 1);
   }
   paraPositions[paraNumber]++;
   if (paraPositions[paraNumber] >= paraOpts[paraNumber].length) {

@@ -157,10 +157,11 @@ createItem("flashlight",
     lightSource:function() {
       return this.switchedon ? LIGHT_FULL : LIGHT_NONE;
     },
-    runTurnscript:function() {
+    eventPeriod:1,
+    eventIsActive:function() {
       return this.switchedon;
     },
-    turnscript:function() {
+    eventScript:function() {
       this.power--;
       if (this.power === 2) {
         msg("The torch flickers.");

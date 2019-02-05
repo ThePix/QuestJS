@@ -260,8 +260,8 @@ createItem("probe_prototype",
     launched:false,
     launchCounter:0,
     status:"Unused",
-    runTurnscript:function() { return this.launched; },
-    turnscript:function() {
+    eventIsActive:function() { return this.launched; },
+    eventScript:function() {
       this.launchCounter++;
       if (this.launchCounter < TURNS_TO_LANDING) {
         this.status = "In flight";
