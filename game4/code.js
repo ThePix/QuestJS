@@ -276,7 +276,7 @@ function createAnalysisTopics(npc, area) {
   for (let i = 0; i < PLANETS.length; i++) {
     const data = PLANET_DATA[area + i];
     for (let j = 0; j < data.length; j++) {
-      createItem(npc.name + "_planet" + i + "_" + j,
+      createItem(npc + "_planet" + i + "_" + j,
         TOPIC(true),
         { 
           loc:npc, 
@@ -317,12 +317,13 @@ function createPlanets() {
 
 createPlanets();
 createAnalysisTopics("Aada", "geology");
-//createAnalysisTopics("Ostap", "biology");
+createAnalysisTopics("Ostap", "biology");
 
   
 
 
 
+  
 
 /* Before sending a probe:
 Are there radio signals?
@@ -331,34 +332,6 @@ Are there bodies of water and/or clouds?
 
 
 
-The first probe can raise the knowledge in the area by 3 points, each subsequent ones can add a further 1, up to 5
-
-// Each probe needs a series of events, these can be a random interval apart, say 2d4 turns, perhaps four each
-// Each event needs a message, and increases knowledge in one or more areas by a certain amount
-// Ad
-// Some probes fail
-/*
-
-const 
-
-
-const PROBES = {
-  geology:{
-    
-  },
-  marine:{
-    
-  },
-  biology:{
-    
-  },
-}
-
-
-const KNOWLEDGE = [
-{
-  geology:[
-  
   
 */
 
