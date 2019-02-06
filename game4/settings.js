@@ -95,11 +95,11 @@ function setup() {
   game.player.shipStatus = "The ship is fine";
 
   //parser.parse("spoken");
-//  parser.parse("l");
+  //  parser.parse("l");
    
   //showStartDiag();
-  
-  
+ 
+  timeAsString();
   
 }
 
