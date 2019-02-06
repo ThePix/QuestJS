@@ -424,6 +424,7 @@ createRoom("garden", {
 
 
 createRoom("far_away", {
+  north:new Exit("lounge"),
 });
 
 

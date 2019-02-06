@@ -30,6 +30,8 @@ const DEBUG = true;                  // set to false when releasing
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
 
+let EXITS;
+
 const ROOM_TEMPLATE = [
   "%",
   "You can see {objects} here.",

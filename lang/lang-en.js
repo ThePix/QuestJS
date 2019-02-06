@@ -362,7 +362,7 @@ const VERBS = {
 // You may want to do that in settings, which is loaded first
 // One time we need var rather than const/let!
 if (EXITS === undefined) {
-  var EXITS = [
+  EXITS = [
     {name:'northwest', abbrev:'NW', niceDir:"the northwest"}, 
     {name:'north', abbrev:'N', niceDir:"the north"}, 
     {name:'northeast', abbrev:'NE', niceDir:"the northeast"}, 

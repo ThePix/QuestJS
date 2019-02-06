@@ -83,6 +83,19 @@ test.assertEqual = function(expected, found) {
   }
 };
 
+test.assertMatch = function(expected, found) {
+  test.totalCount++;
+  test.subCount++;
+  if (expected.test(found)) {
+    //debugmsg(".");
+  }
+  else {
+    test.printTitle();
+    debugmsg("Expected: " + expected);
+    debugmsg("...Found: " + found);
+  }
+};
+
 test.results = function(time) {
   const elapsed = parseInt(Date.now()) - time;
   debugmsg("Number of tests: " + test.totalCount);

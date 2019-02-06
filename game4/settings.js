@@ -32,31 +32,7 @@ const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into sepa
 
 const SAVE_DISABLED = false;
 
-const ROOM_TEMPLATE = [
-  "%",
-  "{objectshere:You can see {objects} here.}",
-]
-
-
-
-const STATUS = [
-  function() { return "<td>Bonus:</td><td>$" + game.player.bonus + "k</td>"; },
-  function() { return '<td colspan="2">' + game.player.status + "</td>"; },
-  function() { return '<td colspan="2">' + game.player.shipStatus + "</td>"; },
-];
-
-
-// Change the name values to alter how items are displayed
-// You can add (or remove) inventories too
-const INVENTORIES = [
-  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn, getLoc:function() { return game.player.name; } },
-  {name:'Items Here', alt:'itemsHere', test:isHere, getLoc:function() { return game.player.loc; } },
-];
-
-
-
-// Change the abbrev values to suit your game (or language)
-var EXITS = [
+let EXITS = [
   {name:'northwest', abbrev:'NW'}, 
   {name:'forward', abbrev:'F'}, 
   {name:'northeast', abbrev:'NE'}, 
@@ -75,6 +51,30 @@ var EXITS = [
   {name:'Wait', abbrev:'Z', nocmd:true}, 
   {name:'Help', abbrev:'?', nocmd:true}, 
 ];
+
+const ROOM_TEMPLATE = [
+  "%",
+  "{objectshere:You can see {objects} here.}",
+]
+
+
+
+
+const STATUS = [
+  function() { return "<td>Bonus:</td><td>$" + game.player.bonus + "k</td>"; },
+  function() { return '<td colspan="2">' + game.player.status + "</td>"; },
+  function() { return '<td colspan="2">' + game.player.shipStatus + "</td>"; },
+];
+
+
+// Change the name values to alter how items are displayed
+// You can add (or remove) inventories too
+const INVENTORIES = [
+  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn, getLoc:function() { return game.player.name; } },
+  {name:'Items Here', alt:'itemsHere', test:isHere, getLoc:function() { return game.player.loc; } },
+];
+
+
 
 
 function intro() {
