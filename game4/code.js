@@ -55,7 +55,13 @@ const PLANETS = [
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet is predominantly grey rock. There are no bodies of water on the surface and no cloud cover. It is 6.8 times the mass of Earth.",
     starDesc:"HD 154088 is a seventh magnitude metal-rich K-type main sequence star that lies approximately 58 light-years from Earth in the constellation of Ophiuchus.",
-    comment:"A lifeless planet, with no water."
+    comment:"A lifeless planet, with no water.",
+    arrivalTime:new Date('December 22, 2325 09:43:43'),
+    onArrival:function() {},
+    Kyle_how_are_you:"'I'm good, mate.'",
+    Ostap_how_are_you:"'I am feeling good.'",
+    Aada_how_are_you:"'I'm okay.'",
+    Ha_yoon_how_are_you:"'I... feel a little queasy. It's just the stasis, nothing I can't handle.'",
   },
     
   { 
@@ -66,7 +72,15 @@ const PLANETS = [
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 75% water. The land surfaces are predominantly purple. Cloud cover is about 40%.",
     starDesc:"HD 168746 is an 8th magnitude star in the constellation of Serpens, 139 light years from Earth. It is very similar to our Sun, a yellow dwarf star (spectral class G5V).",
-    comment:"Lots of life, at about the Devonian Period, with purple planets."
+    comment:"Lots of life, at about the Devonian Period, with purple planets.",
+    arrivalTime:new Date('March 3, 2340 11:05:30'),
+    onArrival:function() {
+      msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod again. 'We have arrived at " + this.starName + ",' the voice continues, 'our second destination, after a length journey without incident. You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.' You sit up, and for a moment you do feel dizzy, but it soon passes.");
+    },
+    Kyle_how_are_you:"'I'm okay,' he says, a little uncertainly.",
+    Ostap_how_are_you:"'When I woke, that was not good! But now, I am feeling good.'",
+    Aada_how_are_you:"'I'm okay.'",
+    Ha_yoon_how_are_you:"'Not so good; I didn't think the stasis would be this bad. But I can still do my job.'",
   },
   
   { 
@@ -78,6 +92,14 @@ const PLANETS = [
     planetDesc:"The planet surface is about 17% water. The land surfaces are predominantly black. Cloud cover is about 20%.",
     starDesc:"HD 168443 is a yellow dwarf star of (spectral type G5) about the mass of the Sun. It is in the constellation of Serpens Cauda, 129 light years from the Solar System. It is actually part of a binary, the other star is a brown dwarf, with a very long orbital period.",
     comment:"A dead planet, following some unknown event; previously had intelligent life. An artefact orbits the planet.",
+    arrivalTime:new Date('October 21, 2362 06:21:39'),
+    onArrival:function() {
+      msg("'Good morning,' says a female voice. {i:Xsansi,} you think to yourself. 'We have arrived at " + this.starName + ",' the voice continues, 'our third destination, after a long and oh-so-tedious journey. You may be suffering from disorientation, nausea, headache and muscle fatigue, but ~I expect that is nothing to decades of loniness, right? If symptoms persist, tough.' You sit up, and immediately feel sick. You grip the sides of the pod as the room spins, waiting for it stop. It is a few minutes before you feel well enough to actually think.");
+    },
+    Kyle_how_are_you:"'I'm okay. Well, not so bad, anyway.'",
+    Ostap_how_are_you:"'I feel sick,' he says with a grin, 'but I keep going.'",
+    Aada_how_are_you:"'I'm great.'",
+    Ha_yoon_how_are_you:"'Feeling sick and dizzy, but I think I can keep going.'",
   },
   
   { 
@@ -89,6 +111,15 @@ const PLANETS = [
     planetDesc:"The planet surface is about 63% water. The land surfaces are predominantly grey and red. Cloud cover is about 25%. Several active volcanoes have been noted.",
     starDesc:"HD 148427 is a 7th-magnitude K-type subgiant star approximately 193 light years away in the constellation Ophiuchus. Its mass is 45% greater than the Sun, and it is three times the size and six times more luminous, although its age is 2½ billion years.",
     comment:"A lifeless planet, but it has water, so suitable for seeding. By this time the AI is doolally.",
+    arrivalTime:new Date('April 15, 2386 13:06:51'),
+    onArrival:function() {
+      msg("'Awake at last are we?' says a female voice. {i:Why does she sound so odd,} you wonder. 'Here we are at " + this.starName + ",' the strangely inflected voice continues, 'our fourth destination, after a long, long journey, giving me plenty of time to consider the nature of reality.' You sit up, and immediately throw up over the side of the pod. You grip the sides of the pod as the entire contents of your stomach is ejected on to the floor. Eventually, the heaving stops.");
+      w.pile_of_vomit.display = DSPY_SCENERY;
+    },
+    Kyle_how_are_you:"'Feeling a bit crock, to be honest.'",
+    Ostap_how_are_you:"'I feel sick,' he says mournfully, 'but I keep going.'",
+    Aada_how_are_you:"'I'm okay.' She does seem annoyingly well.",
+    Ha_yoon_how_are_you:"'Struggling.'",
   },  
   
   { 
@@ -100,6 +131,9 @@ const PLANETS = [
     planetDesc:"The planet surface is about 56% water. The land surfaces are predominantly green. Cloud cover is about 30%.",
     starDesc:"Gliese 1214 is a dim M4.5 red dwarf in the constellation Ophiuchus with an apparent magnitude of 14.7. It is located at a distance of approximately 47 light years from the Sun. The star is about one-fifth the radius of the Sun with a surface temperature estimated to be 3000 K (2730 °C; 4940 °F).[12] Its luminosity is only 0.003% that of the Sun.",
     comment:"This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off.",
+    arrivalTime:new Date('August 19, 2409 12:11:31'),
+    onArrival:function() {
+    },
   },
 
   { 
@@ -111,6 +145,8 @@ const PLANETS = [
     planetDesc:"It is Earth!",
     starDesc:"The Sun is a G2V yellow dwarf. It is located at a distance of 0.0 light years from the Sun. It's luminosity is 100% that of the Sun. The third planet is home to the human race.",
     comment:"Home!",
+    onArrival:function() {
+    },
   },
 ];
 
@@ -276,10 +312,11 @@ function createAnalysisTopics(npc, area) {
   for (let i = 0; i < PLANETS.length; i++) {
     const data = PLANET_DATA[area + i];
     for (let j = 0; j < data.length; j++) {
-      createItem(npc + "_planet" + i + "_" + j,
-        TOPIC(true),
+      createItem(npc.name + "_planet" + i + "_" + j,
+        TOPIC(false),
         { 
-          loc:npc, 
+          loc:npc.name, 
+          npc:npc.alias,
           alias:"Report on planet " + PLANETS[i].starName + " " + PLANETS[i].planet,
           area:area,
           planet:i,
@@ -288,7 +325,7 @@ function createAnalysisTopics(npc, area) {
           script:function() {
             const planet = w["planet" + this.planet];
             const data = PLANET_DATA[this.area + this.planet];
-            msg("'What's your report on " + planet.alias + "?' you ask " + this.loc + ".");
+            msg("'What's your report on " + planet.alias + "?' you ask " + this.npc + ".");
             this.response();
           },
         }
@@ -296,7 +333,27 @@ function createAnalysisTopics(npc, area) {
     }
   }
 }
+
+
+function createHowAreYouTopics(npc) {
+  for (let i = 0; i < PLANETS.length; i++) {
+    createItem(npc.name + "_how_are_you_" + i,
+      TOPIC(false),
+      { 
+        loc:npc.name,
+        npc:npc.alias,
+        alias:"How are you feeling?",
+        response:PLANETS[i][npc.name + "_how_are_you"],
+        script:function() {
+          msg("'How are you feeling?' you ask " + this.npc + ".");
+          msg(this.response());
+        },
+      }
+    );
+  }
+}
   
+ 
 
   
 function createPlanets() {
@@ -309,6 +366,7 @@ function createPlanets() {
         marine:0,
         biology:0,
         radio:0,
+        satellite:false,
       }
     )
   }
@@ -316,12 +374,19 @@ function createPlanets() {
 
 
 createPlanets();
-createAnalysisTopics("Aada", "geology");
-createAnalysisTopics("Ostap", "biology");
 
+
+function arrival(n) {
+  PLANETS[n].onArrival();
+  w.Xsansi.currentPlanet = n;
+  game.elapsedTime = 0;
+  game.startTime = PLANETS[n].arrivalTime;
   
-
-
+  for (let i = 0; i < NPCS.length; i++) {
+    if (n > 0) w[NPCS[i].name + "_how_are_you_" + (n - 1)].hideTopic;
+    w[NPCS[i].name + "_how_are_you_" + n].showTopic;
+  }
+}
 
   
 

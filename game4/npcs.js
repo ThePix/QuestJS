@@ -19,9 +19,8 @@ createItem("Xsansi",
     geoProbes:16,
     seederPods:6,
     satellites:6,
-    currentPlanet:0,
     shipStatus:"All systems nominal.",
-    examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Thoughher hardware is in the server room on deck 2, she is present throughout the ship.",
+    examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
   }
 );
 
@@ -136,6 +135,21 @@ createItem("Ostap",
   }
 );
 
+createItem("Ostap_probe_analysis",
+  TOPIC(true),
+  {
+    loc:"Ostap",
+    alias:"How does a bio-probe work?",
+    hideAfter:false,
+    script:function() {
+      msg("'How does a bio-probe work?,' you ask Ostap.");
+      msg("'I control from the lab, find a good sample. First we look at the morphology, with a simple camera. Then pick up a sample, take a slice to look at the microscopic structure - we look for cells, what is inside the cell. If we get enough cells, we can tell it to extract chemical from one type of sub-structure, then we analysis the chemicals by mass spectroscopy and the infra-red spectroscopy. We hope we find something in the library, if not, the results can be taken to Earth.'");
+      msg("'Okay, cool.'");
+    },
+  }
+);
+
+
 
 createItem("Aada",
   NPC(true),
@@ -151,6 +165,22 @@ createItem("Aada",
     notes:"Aada (F) is from Finland (Oulu), 35, father genetically engineered her, planning to create a dynasty. Her older sister (effectively a lone) rebelled, so the father kept a very tight rein on this one (ef Miranda's sister). Drinks vodka a lot. Signed on as geologist, but not really her speciality - the corp was desperate and so was she. Aada handles the geo-probes.",
   }
 );
+
+createItem("Aada_probe_analysis",
+  TOPIC(true),
+  {
+    loc:"Aada",
+    alias:"How does a geo-probe work?",
+    hideAfter:false,
+    script:function() {
+      msg("'How does a geo-probe work?,' you ask Aada.");
+      msg("'Simple. Once deplyed on the planet, I send it to an interesting rock, and it extends an arm that takes a sample.'");
+      msg("'Okay, but I was wondering what sort of analysis it does. Is it infra-red, or X-ray diffraction or what?'");
+      msg("'Er, yeah, I expect so.'");
+    },
+  }
+);
+
 
 createItem("Ha_yoon",
   NPC(true),
@@ -170,5 +200,11 @@ createItem("Ha_yoon",
 
 
 
+const NPCS = [w.Ostap, w.Aada, w.Kyle, w.Ha_yoon];
 
-
+createAnalysisTopics(w.Aada, "geology");
+createAnalysisTopics(w.Ostap, "biology");
+for (let i = 0; i < NPCS.length; i++) {
+  createHowAreYouTopics(NPCS[i]);
+}
+  

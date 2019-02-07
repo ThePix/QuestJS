@@ -20,10 +20,16 @@ createItem("me",
 
 createRoom("stasis_bay", {
   alias:"stasis bay",
-  desc:'There are eight stasis pods here, in two neat rows of six. That is actually more than there are crew members; you are not sure if some are redundent or if the ship is under-manned. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. The exit in to port.',
+  desc:'There are eight stasis pods here, in two neat rows of six. That is actually more than there are crew members; you are not sure if some are redundent or if the ship is under-manned. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. {if:pile_of_vomit:displayThe exits are to port and aft.',
   out:new Exit('stasis_bay'),
   port:new Exit('hallway'),
   aft:new Exit('cargo_bay'),
+});
+
+createItem("pile_of_vomit", {
+  display:DSPY_HIDDEN,
+  regex:/vomit|sick/,
+  examine:"A large splat of vomit, it stinks. You decide not to look too closely. You do know what you ate last, so what is the point?",
 });
 
 createRoom("stasis_pod", {
@@ -177,14 +183,20 @@ createRoom("probes_forward", {
   desc:"The forward probe hanger is where the satellites are stored ready for deployment. The six satellites are kept in a dust-free environment on the starboard side of the hanger, each on a cradle. A robot arm is available to pick them up and eject them through a hatch in the floor.|On the port side, the seeder pods are stored. Each pod contains a variety of simple lifeforms, such as algae, which, it is hoped, will kickstart life on a suitable planet. It is a long term plan. There are six pods, three to be deployed at distant locations on a planet.| There is a control console to handle it all, though it can also be done remotely.",
   up:new Exit("hallway"),
   aft:new Exit("probes_aft"),
+  forward:new Exit("server_room"),
 });
 
 createRoom("probes_aft", {
   alias:"Probe hanger 2",
-  desc:"The aft probe hanger has the scientific probes. Each probe is contained in a crate, and needs unpacking before deployment. On the port side there is a deluvery system into which a probe can be placed, to be sent to the planet. Various types of probes are available.",
+  desc:"The aft probe hanger has the scientific probes. Each probe is contained in a crate, and needs unpacking before deployment. On the port side there is a delivery system into which a probe can be placed, to be sent to the planet. Various types of probes are available.",
   up:new Exit("lab4"),
   port:new Exit("lab4"),
   forward:new Exit("probes_forward"),
+});
+
+createRoom("server_room", {
+  desc:"The heart of the IT systems, including Xsansi, This room holds three racks of processors, each rack having four shelves and each shelf having eight units. The roomis kept cool and smells slighty of ozone.",
+  aft:new Exit("probes_forward"),
 });
 
 
@@ -274,8 +286,5 @@ createItem("probe_prototype",
     },
   }
 );
-
-
-
 
 

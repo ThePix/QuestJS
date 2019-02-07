@@ -32,6 +32,19 @@ const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into sepa
 
 const SAVE_DISABLED = false;
 
+const SECONDS_PER_TURN = 60;
+const DATE_TIME_LOCALE = 'en-GB';
+const DATE_TIME_START = new Date('April 14, 2387 09:43:00');
+const DATE_TIME_OPTIONS = {
+  year:"numeric",
+  month:"short",
+  day:"2-digit",
+  hour:"2-digit",
+  minute:"2-digit",
+};
+
+
+
 let EXITS = [
   {name:'northwest', abbrev:'NW'}, 
   {name:'forward', abbrev:'F'}, 
@@ -61,6 +74,7 @@ const ROOM_TEMPLATE = [
 
 
 const STATUS = [
+  function() { return "<td colspan=\"2\">" + getDateTime() + "</td>"; },
   function() { return "<td>Bonus:</td><td>$" + game.player.bonus + "k</td>"; },
   function() { return '<td colspan="2">' + game.player.status + "</td>"; },
   function() { return '<td colspan="2">' + game.player.shipStatus + "</td>"; },
@@ -80,7 +94,7 @@ const INVENTORIES = [
 function intro() {
   msg("{i:The \"Joseph Banks\" left Earth orbit in 2319, on a centuries-long mission to survey five relatively close star systems. The crew were put in stasis for the long journey between the stars.}");
   msg("&nbsp;");
-  msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at beta-Pegasi,'the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.'");
+  msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at " + PLANETS[0].starName + ",' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.'");
 };
 
 const ooc_intro = "<p>You are on a mission to survey planets around five stars, the captain of a crew of five (including yourself). There is also a computer system, Xsansi (or AI or computer), that you can talk to anywhere on the ship. </p><p>Your objective is to maximise your bonus. Collecting data will give a bonus, but geo-data about planets suitable for mining and bio-data about planets suitable for colonisation will give higher bonuses. Evidence of alien intelligence will be especially rewarding!</p><p>You have just arrived at your first destination after years in a \"stasis\" pod in suspended animation. TALK TO AI might be a good place to start, once you have created your character.";
@@ -99,7 +113,12 @@ function setup() {
    
   //showStartDiag();
  
-  timeAsString();
+  console.log(getDateTime());
+  
+  for(let key in w) {
+    debugmsg(key);
+  }
+  arrival(0);  
   
 }
 
