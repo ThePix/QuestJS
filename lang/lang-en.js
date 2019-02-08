@@ -261,11 +261,11 @@ function SPEAK_TO_MENU_TITLE(char) {
   return "Talk to " + char.byname({article:DEFINITE}) + " about:";
 }
 // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
-function TELL_ABOUT_INTRO(char, text) {
+let TELL_ABOUT_INTRO = function(char, text) {
   return "You tell " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }
 // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
-function ASK_ABOUT_INTRO(char, text) {
+let ASK_ABOUT_INTRO = function(char, text) {
   return "You ask " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }
 

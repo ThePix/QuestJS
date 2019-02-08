@@ -268,7 +268,20 @@ createRoom("girls_cabin", {
 createItem("probe_prototype",
   { 
     alias:"Probe X",
-    loc:"canteen",
+    regex:/^(bio-|geo-|bio|geo)?probe$/,
+    function(isMultiple, char) {
+      if (char === w.Aada) {
+        msg("'Launch a bio-probe,' you say to Aada.");
+        w.Aada.agenda["walkTo:probes_aft:Aada goes to the probe deployment console.", "text:deployProbe"];
+      }
+      else if (char === w.Ostap) {
+        msg("'Launch a bio-probe,' you say to Ostap.");
+        w.Ostap.agenda["walkTo:probes_aft:Ostap goes to the probe deployment console.", "text:deployProbe"];
+      }
+      else {
+        msg("To launch a probe, see either Aada or Ostap.");
+      }
+    },
     launched:false,
     launchCounter:0,
     status:"Unused",

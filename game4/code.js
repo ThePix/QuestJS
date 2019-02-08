@@ -388,7 +388,11 @@ function arrival(n) {
   }
 }
 
-  
+
+
+ASK_ABOUT_INTRO = function() { return ""; };
+TELL_ABOUT_INTRO = function() { return ""; };
+
 
 /* Before sending a probe:
 Are there radio signals?
@@ -447,17 +451,28 @@ commands.push(new Cmd('Move', {
 }));
 
 
-commands.push(  new Cmd('Hint', {
-    regex:/^hint$|^hints$/,
-    script:function() {
-      if (w[game.player.loc].hint) {
-        metamsg(w[game.player.loc].hint);
-      }
-      else {
-        metamsg("Sorry, no hints here.");
-      }
-    },
-  }));
+commands.push(new Cmd('Hint', {
+  regex:/^hint$|^hints$/,
+  script:function() {
+    metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Tell Adda to launch geo-probe (AADA, LAUNCH PROBE), and tell Ostap to launch bioprobes. Later, ask then about the planet (ASK OSTAP ABOUT PLANET). You have five planets; you can ASK AI ABOUT SHIP to find how many of each probe is left.");
+    metamsg("Return to the stasis pod to go back into stasis. Xsansi will then nagivate the ship to the next planet.");
+    metamsg("As the captain, the welfare of the crew is important, so ASK KYLE ABOUT HIS HEALTH, etc.");
+  },
+}));
+
+
+
+commands.push(new Cmd('Launch', {
+  regex:/^(launch) (.+)$/,
+  npcCmd:true,
+  objects:[
+    {ignore:true},
+    {scope:isInWorld},
+  ],
+  defmsg:function() { msg("You can't launch that!"),
+}));
+
+
 
 
 

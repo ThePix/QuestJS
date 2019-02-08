@@ -21,6 +21,28 @@ createItem("Xsansi",
     satellites:6,
     shipStatus:"All systems nominal.",
     examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
+
+    askoptions:[
+      {regex:/mission/, response:function() {
+        msg("'Remind me of the mission, Xsansi,' you say.");
+        msg("'The ship's mission is to survey five planets orbiting stars in the Ophiuchus and Serpens constellations. At each planet, a satellite is to be launched to collect data from the surface. At your discretion, bio-probes and geo-probes can be dropped to the surface to collect data. Note that there is no capability for probes to return to the ship or for the ship to land on a planet.'");
+        msg("'Your bonus,' she continues, 'depends on the value of the data you collect. Bio-data from planets with advanced life is highly valued, as is geo-data from metal rich planets. Evidence of intelligent life offers further bonuses.'");
+        msg("'Note that $25k will be deducted from you bonus should a crew member die,' she adds. 'Note that no bonus will be awarded in he event of your own death.'");
+      }},
+      
+      {regex:/crew|team/, response:function() {
+        msg("'Tell me about the crew, Xsansi,' you say.");
+        msg("'" + w.Ostap.crewStatus());
+        msg("'" + w.Aada.crewStatus());
+        msg("'" + w.Ha_yoon.crewStatus());
+        msg("'" + w.Kyle.crewStatus() + "'");
+      }},
+      
+      {regex:/status|ship/, response:function() {
+        msg("'What is the ship's status, Xsansi?' you ask.");
+        msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites.'");
+      }},
+    ],
   }
 );
 
