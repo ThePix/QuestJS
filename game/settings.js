@@ -30,6 +30,17 @@ const DEBUG = true;                  // set to false when releasing
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
 
+const SECONDS_PER_TURN = 60;
+const DATE_TIME_LOCALE = 'en-GB';
+const DATE_TIME_START = new Date('February 14, 2019 09:43:00');
+const DATE_TIME_OPTIONS = {
+  year:"numeric",
+  month:"short",
+  day:"2-digit",
+  hour:"2-digit",
+  minute:"2-digit",
+};
+
 let EXITS;
 
 const ROOM_TEMPLATE = [

@@ -48,13 +48,13 @@ let EXITS = [
   {name:'northwest', abbrev:'NW'}, 
   {name:'forward', abbrev:'F'}, 
   {name:'northeast', abbrev:'NE'}, 
-  {name:'in', abbrev:'In', alt:'enter'}, 
+  {name:'in', abbrev:'In', alt:'enter|i'}, 
   {name:'up', abbrev:'U'},
   
   {name:'port', abbrev:'P'}, 
   {name:'Look', abbrev:'Lk', nocmd:true}, 
   {name:'starboard', abbrev:'S'}, 
-  {name:'out', abbrev:'Out', alt:'exit'}, 
+  {name:'out', abbrev:'Out', alt:'exit|o'}, 
   {name:'down', abbrev:'Dn', alt:'d'}, 
 
   {name:'southwest', abbrev:'SW'}, 
@@ -66,7 +66,7 @@ let EXITS = [
 
 const ROOM_TEMPLATE = [
   "%",
-  "{objectshere:You can see {objects} here.}",
+  "{objectsHere:You can see {objects} here.}",
 ]
 
 
@@ -114,9 +114,9 @@ function setup() {
  
   console.log(getDateTime());
   
-  for(let key in w) {
-    debugmsg(key);
-  }
+  //for(let key in w) {
+  //  debugmsg(key);
+  //}
   arrival(0);  
   
 }

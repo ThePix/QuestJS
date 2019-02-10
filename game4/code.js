@@ -469,7 +469,7 @@ commands.push(new Cmd('Launch', {
     {ignore:true},
     {scope:isInWorld},
   ],
-  defmsg:function() { msg("You can't launch that!"),
+  defmsg:function() { msg("You can't launch that!")},
 }));
 
 

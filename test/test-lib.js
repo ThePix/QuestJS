@@ -59,11 +59,14 @@ test.assertCmd = function(cmdStr, expected) {
           debugmsg("...Found: " + test.testOutput[i]);
         }
       }
-      else {
+      else if (expected[i] instanceof RegExp) {
         if (!expected[i] || !expected[i].test(test.testOutput[i])) {
           debugmsg("Expected: " + expected[i]);
           debugmsg("...Found: " + test.testOutput[i]);
         }
+      }
+      else {
+        debugmsg("Found an unrecognised type for expected (should be string or regex): " + (typeof expected[i]));
       }
     }
   }
@@ -102,3 +105,8 @@ test.results = function(time) {
   debugmsg("Number of fails: " + test.failCount);
   debugmsg("Elapsed time: " + elapsed + " ms (" + (Math.round(elapsed / test.totalCount * 10) / 10) + " ms/test)");
 };
+
+test.padArray = function(arr, n) {
+  for (let i = 0; i < n; i++) arr.push(/./);
+  return arr;
+}

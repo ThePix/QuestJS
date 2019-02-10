@@ -129,15 +129,15 @@ createItem("Xsansi_current_planet",
 createItem("Kyle",
   NPC(false),
   { 
-    //loc:"canteen",
+    loc:"flightdeck",
     status:"okay",
     examine:"Kyle is the computer expert, but also a good cook, and has volunteered for the role of chef. An Australian, he is slim, and below average height, with very short blonde hair, and green eyes.",
     crewStatus:function() {
-      let s = "Crew member Kyle's designation is: computer specialist. His current status is: ";
+      let s = "Crew member Kyle's designation is: coms. His current status is: ";
       s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
-    notes:"Kyle (M) is from Australia (born Newcastle but raised in Sydney), 32, a gay nerd. Expert in computing and cooking. Kyle handles the satellite and understanding radio transmissions. Joined up so he can see the future - it is a kind of time travel; hopes to upload himself to become immortal.",
+    notes:"Kyle (M) is from Australia (born Newcastle but raised in Sydney), 32, a gay nerd. Expert in computing and cooking. Kyle handles the satellite and understanding radio transmissions. Joined up so he can see the future - it is a kind of time travel; hopes to upload himself to become immortal. Terminally ill.",
   }
 );
 
@@ -145,7 +145,7 @@ createItem("Kyle",
 createItem("Ostap",
   NPC(false),
   { 
-    //loc:"canteen",
+    loc:"canteen",
     status:"okay",
     examine:"Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a ponytail. He is a biologist from the Ukraine.",
     crewStatus:function() {
@@ -153,7 +153,7 @@ createItem("Ostap",
       s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
-    notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes.",
+    notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she isnot interested. Later cuples up with Ha-yoon",
   }
 );
 
@@ -176,7 +176,7 @@ createItem("Ostap_probe_analysis",
 createItem("Aada",
   NPC(true),
   { 
-    loc:"stasis_bay",
+    loc:"girls_cabin",
     status:"okay",
     examine:"Aada is a Finnish woman with features so ideal you suspect genetic engineering. Tall, with a perfect figure, she keeps her blonde hair short. She is a bit vague about her background, but has some military experience.",
     crewStatus:function() {
@@ -208,7 +208,7 @@ createItem("Ha_yoon",
   NPC(true),
   { 
     alias:"Ha-yoon",
-    //loc:"canteen",
+    loc:"engineering3",
     status:"okay",
     examine:"Ha-yoon is a well-respected Korean engineer, making her possibly the most important member of the crew for ensuring the ship gets back to Earth. She is the shortest of the crew, but perhaps the loudest. She has long, raven=black hair, that falls to her waist, and dark eyes.",
     crewStatus:function() {

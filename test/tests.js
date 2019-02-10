@@ -1,6 +1,41 @@
 "use strict";
 
 test.tests = function() {
+  
+  
+  test.title("Text processor");
+  
+  test.assertEqual("Simple text", processText("Simple text"));
+  test.assertEqual("Simple <i>text</i>", processText("Simple {i:text}"));
+  test.assertEqual("Simple <span style=\"color:red\">text</span>.", processText("Simple {colour:red:text}."));
+
+  test.assertEqual("Simple <span style=\"color:red\">text with <i>nesting</i></span>.", processText("Simple {colour:red:text with {i:nesting}}."));
+
+  test.assertEqual("Simple text", processText("Simple {random:text}"));
+  test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:yes:no}"));
+  game.player.someOddAtt = 67;
+  test.assertEqual("Simple text: 67", processText("Simple text: {show:player:someOddAtt}"));
+  test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:50:yes:no}"));
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:67:yes:no}"));
+  test.assertEqual("Simple text: ", processText("Simple text: {if:player:someOddAtt:50:yes}"));
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:67:yes}"));
+
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifMoreThan:player:someOddAtt:50:yes:no}"));
+  test.assertEqual("Simple text: no", processText("Simple text: {ifLessThan:player:someOddAtt:50:yes:no}"));
+  test.assertEqual("Simple text: ", processText("Simple text: {ifLessThan:player:someOddAtt:50:yes}"));
+
+  game.player.someOddAtt = true;
+  test.assertEqual("Simple text: true", processText("Simple text: {show:player:someOddAtt}"));
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:yes:no}"));
+  test.assertEqual("Simple text: no", processText("Simple text: {ifNot:player:someOddAtt:yes:no}"));
+  
+
+  test.assertEqual("Simple text: seen first time only", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
+  test.assertEqual("Simple text: other times", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
+  test.assertEqual("Simple text: other times", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
+
+  test.assertEqual("Simple text: p2=red", processText("Simple text: p2={param:p2}", {p1:"yellow", p2:"red"}));
+  
 
   test.title("Simple object commands");
   
@@ -8,6 +43,8 @@ test.tests = function() {
   test.assertCmd("get coin", "You try to pick up the coin, but it just will not budge.");
   test.assertCmd("get straw boater", "Kyle has it.");
   test.assertCmd("get box", "You can't take it.");
+  test.assertCmd("get the box", "You can't take it.");
+  test.assertCmd("get a box", "You can't take it.");
   test.assertCmd("get knife", "You have it.");
   test.assertCmd("x tv", "It's just scenery.");
   test.assertCmd("get tv", "You can't take it.");

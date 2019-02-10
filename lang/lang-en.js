@@ -293,7 +293,13 @@ function TRY_BUT_LOCKED(char, doorName) {
   return nounVerb(char, "try", true) + " the " + doorName + ", but it is locked.";
 }
 
+//----------------------------------------------------------------------------------------------
+// Misc
 
+const LIST_AND = " and ";
+const LIST_NOTHING = "nothing";
+const NEVER_MIND = "Never mind.";
+const DEFAULT_DESCRIPTION = "It's just scenery.";
 
 
 
@@ -313,20 +319,12 @@ const SL_NO_FILENAME = "Trying to save with no filename";
 //----------------------------------------------------------------------------------------------
 
 
-const IGNORED_WORDS = ["", "the", "a", "an"];
+//const IGNORED_WORDS = ["", "the", "a", "an"];
+const ARTICLE_FILTER_REGEX = /^(?:the |an |a )?(.+)$/;
 const JOINER_REGEX = /\,|\band\b/;
 const ALL_REGEX = /^(all|everything)$/;
-const ALL_EXCLUDE_REGEX = /^((all|everything) (but|except)\b)/;
+const ALL_EXCLUDE_REGEX = /^((all|everything) (but|bar|except)\b)/;
 const GO = "go to |goto |go |head |";
-
-
-const LIST_AND = " and ";
-const LIST_NOTHING = "nothing";
-
-
-const NEVER_MIND = "Never mind.";
-
-const DEFAULT_DESCRIPTION = "It's just scenery.";
 
 
 //----------------------------------------------------------------------------------------------
@@ -366,13 +364,13 @@ if (EXITS === undefined) {
     {name:'northwest', abbrev:'NW', niceDir:"the northwest"}, 
     {name:'north', abbrev:'N', niceDir:"the north"}, 
     {name:'northeast', abbrev:'NE', niceDir:"the northeast"}, 
-    {name:'in', abbrev:'In', alt:'enter', niceDir:"inside"}, 
+    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside"}, 
     {name:'up', abbrev:'U', niceDir:"above"},
     
     {name:'west', abbrev:'W', niceDir:"the west"}, 
     {name:'Look', abbrev:'Lk', nocmd:true}, 
     {name:'east', abbrev:'E', niceDir:"the east"}, 
-    {name:'out', abbrev:'Out', alt:'exit', niceDir:"outside"}, 
+    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside"}, 
     {name:'down', abbrev:'Dn', alt:'d', niceDir:"below"}, 
 
     {name:'southwest', abbrev:'SW', niceDir:"the southwest"}, 

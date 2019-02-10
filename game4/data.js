@@ -20,10 +20,10 @@ createItem("me",
 
 createRoom("stasis_bay", {
   alias:"stasis bay",
-  desc:'There are eight stasis pods here, in two neat rows of six. That is actually more than there are crew members; you are not sure if some are redundent or if the ship is under-manned. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. {if:pile_of_vomit:displayThe exits are to port and aft.',
-  out:new Exit('stasis_bay'),
+  desc:'There are six stasis pods here, four on one side and two on the other. That is actually more than there are crew members. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
   port:new Exit('hallway'),
   aft:new Exit('cargo_bay'),
+  in:new Exit('stasis_pod', { msg:"You climb into the stasis pod.", } ),
 });
 
 createItem("pile_of_vomit", {
@@ -32,17 +32,19 @@ createItem("pile_of_vomit", {
   examine:"A large splat of vomit, it stinks. You decide not to look too closely. You do know what you ate last, so what is the point?",
 });
 
+
+
 createRoom("stasis_pod", {
   alias:"stasis pod",
   desc:'The stasis pod is shaped uncomfortably like a coffin, and is a pale grey colour. The lid is in the raised position.',
-  out:new Exit('stasis_bay'),
+  out:new Exit('stasis_bay', { msg:"You climb out of the stasis pod.", } ),
 });
 
 
 
 
 createRoom("cargo_bay", {
-  desc:"The cargo bay is a large,open area, with numerous crate, several with their own stasis fields. Yellow lines on the floor indicate accessways to be kept clear. The ship's airlock is to port, whilt enginnering is aft. The stasis bay if forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
+  desc:"The cargo bay is a large,open area, with numerous crate, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay if forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
   forward:new Exit("stasis_bay"),
   port:new Exit("top_deck_aft"),
   up:new Exit("top_deck_aft"),
@@ -150,6 +152,8 @@ createRoom("lab4", {
 
 createRoom("engineering1", {
   desc:"",
+  alias:"Engineering (port)",
+  properName:true,
   starboard:new Exit("engineering2"),
   forward:new Exit("lab4"),
 });
@@ -157,6 +161,8 @@ createRoom("engineering1", {
 
 createRoom("engineering2", {
   desc:"",
+  alias:"Engineering",
+  properName:true,
   starboard:new Exit("engineering3"),
   port:new Exit("engineering1"),
   forward:new Exit("service_passage", {
@@ -167,6 +173,8 @@ createRoom("engineering2", {
 
 createRoom("engineering3", {
   desc:"",
+  properName:true,
+  alias:"Engineering (starboard)",
   port:new Exit("engineering2"),
   forward:new Exit("cargo_bay"),
 });
