@@ -57,7 +57,10 @@ const PLANETS = [
     starDesc:"HD 154088 is a seventh magnitude metal-rich K-type main sequence star that lies approximately 58 light-years from Earth in the constellation of Ophiuchus.",
     comment:"A lifeless planet, with no water.",
     arrivalTime:new Date('December 22, 2325 09:43:43'),
-    onArrival:function() {},
+    onArrival:function() {
+      w.Ha_yoon.status = Math.min(w.Kyle.status, 96);
+      w.Kyle.status = Math.min(w.Kyle.status, 98);
+    },
     Kyle_how_are_you:"'I'm good, mate.'",
     Ostap_how_are_you:"'I am feeling good.'",
     Aada_how_are_you:"'I'm okay.'",
@@ -76,6 +79,10 @@ const PLANETS = [
     arrivalTime:new Date('March 3, 2340 11:05:30'),
     onArrival:function() {
       msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod again. 'We have arrived at " + this.starName + ",' the voice continues, 'our second destination, after a length journey without incident. You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.' You sit up, and for a moment you do feel dizzy, but it soon passes.");
+      game.player.status = Math.min(game.player.status, 95);
+      w.Kyle.status = Math.min(w.Kyle.status, 93);
+      w.Ostap.status = Math.min(w.Kyle.status, 96);
+      w.Ha_yoon.status = Math.min(w.Kyle.status, 84);
     },
     Kyle_how_are_you:"'I'm okay,' he says, a little uncertainly.",
     Ostap_how_are_you:"'When I woke, that was not good! But now, I am feeling good.'",

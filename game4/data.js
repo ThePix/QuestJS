@@ -5,7 +5,7 @@
   
 createItem("me",
   PLAYER(),
-  { loc:"stasis_pod", regex:/^me|myself|player$/, examine:function() {
+  { loc:"stasis_pod", regex:/^me|myself|player$/, status:100, bonus:0, examine:function() {
     msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
   }
@@ -46,8 +46,10 @@ createRoom("stasis_pod", {
 createRoom("cargo_bay", {
   desc:"The cargo bay is a large,open area, with numerous crate, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay if forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
   forward:new Exit("stasis_bay"),
-  port:new Exit("top_deck_aft"),
-  up:new Exit("top_deck_aft"),
+  port:new Exit("top_deck_aft", {
+    msg:"You walk up the narrow stair way to the top deck.",
+    alsoDir:["up"],
+  }),
   starboard:new Exit("airlock"),
   aft:new Exit("engineering3"),
 });
@@ -136,8 +138,10 @@ createRoom("lab4", {
   desc:"",
   forward:new Exit("lab2"),
   port:new Exit("lab3"),
-  starboard:new Exit("probes_aft"),
-  down:new Exit("probes_aft"),
+  starboard:new Exit("probes_aft", {
+    msg:"You walk down the narrow stair way to the bottom deck.",
+    alsoDir:["down"],
+  }),
   aft:new Exit("engineering1"),
 });
 
@@ -197,8 +201,10 @@ createRoom("probes_forward", {
 createRoom("probes_aft", {
   alias:"Probe hanger 2",
   desc:"The aft probe hanger has the scientific probes. Each probe is contained in a crate, and needs unpacking before deployment. On the port side there is a delivery system into which a probe can be placed, to be sent to the planet. Various types of probes are available.",
-  up:new Exit("lab4"),
-  port:new Exit("lab4"),
+  port:new Exit("lab4", {
+    msg:"You walk up the narrow stair way to the middle deck.",
+    alsoDir:["up"],
+  }),
   forward:new Exit("probes_forward"),
 });
 
@@ -235,10 +241,12 @@ createRoom("top_deck_forward", {
 
 createRoom("top_deck_aft", {
   desc:"",
-  down:new Exit("cargo_bay"),
   port:new Exit("guys_cabin"),
   aft:new Exit("girls_cabin"),
-  starboard:new Exit("cargo_bay"),
+  starboard:new Exit("cargo_bay", {
+    msg:"You walk down the narrow stair way to the middle deck.",
+    alsoDir:["down"],
+  }),
   forward:new Exit("top_deck_forward"),
 });
 

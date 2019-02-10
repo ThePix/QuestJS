@@ -74,17 +74,21 @@ const ROOM_TEMPLATE = [
 
 const STATUS = [
   function() { return "<td colspan=\"2\">" + getDateTime() + "</td>"; },
-  function() { return "<td>Bonus:</td><td>$" + game.player.bonus + "k</td>"; },
-  function() { return '<td colspan="2">' + game.player.status + "</td>"; },
-  function() { return '<td colspan="2">' + game.player.shipStatus + "</td>"; },
+  function() { return "<td><i>Bonus:</i></td><td align=\"right\">$" + game.player.bonus + "k</td>"; },
+  function() { return "<td><i>You:</i></td><td align=\"right\">" + game.player.status + "%</td>"; },
+  function() { return "<td><i>Ship:</i></td><td align=\"right\">" + w.Xsansi.status + "%</td>"; },
+  function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + w.Ha_yoon.status + "%</td>"; },
+  function() { return "<td><i>Kyle:</i></td><td align=\"right\">" + w.Kyle.status + "%</td>"; },
+  function() { return "<td><i>Ostap:</i></td><td align=\"right\">" + w.Ostap.status + "%</td>"; },
+  function() { return "<td><i>Aada:</i></td><td align=\"right\">" + w.Aada.status + "%</td>"; },
 ];
 
 
 // Change the name values to alter how items are displayed
 // You can add (or remove) inventories too
 const INVENTORIES = [
-  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn, getLoc:function() { return game.player.name; } },
-  {name:'Items Here', alt:'itemsHere', test:isHere, getLoc:function() { return game.player.loc; } },
+//  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn, getLoc:function() { return game.player.name; } },
+//  {name:'Items Here', alt:'itemsHere', test:isHere, getLoc:function() { return game.player.loc; } },
 ];
 
 
@@ -103,9 +107,6 @@ const ooc_intro = "<p>You are on a mission to survey planets around five stars, 
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 function setup() {
-  game.player.bonus = 0;
-  game.player.status = "You are feeling fine";
-  game.player.shipStatus = "The ship is fine";
 
   //parser.parse("spoken");
   //  parser.parse("l");

@@ -15,6 +15,7 @@ createItem("Xsansi",
     },
     regex:/^(ai|xsan|computer)$/,
     display:DSPY_SCENERY,
+    status:100,
     bioProbes:16,
     geoProbes:16,
     seederPods:6,
@@ -228,5 +229,6 @@ createAnalysisTopics(w.Aada, "geology");
 createAnalysisTopics(w.Ostap, "biology");
 for (let i = 0; i < NPCS.length; i++) {
   createHowAreYouTopics(NPCS[i]);
+  NPCS[i].status = 100;
 }
   

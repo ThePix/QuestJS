@@ -233,10 +233,10 @@ test.tests = function() {
   test.title("Lock and hide");
   const room = w.far_away;
   test.assertEqual(true, room.hasExit("north"));
-  test.assertEqual(true, room.hasExit("north", true));
+  test.assertEqual(true, room.hasExit("north", {excludeLocked:true}));
   test.assertEqual(false, room.setExitLock("northeast", true));
   test.assertEqual(true, room.setExitLock("north", true));
-  test.assertEqual(false, room.hasExit("north", true));
+  test.assertEqual(false, room.hasExit("north", {excludeLocked:true}));
   test.assertEqual(true, room.hasExit("north"));
   room.templatePreSave();
   const landh = room.getSaveString();
@@ -247,7 +247,7 @@ test.tests = function() {
   test.assertMatch(/customSaveExitnorth\:\"\/hidden\"/, room.getSaveString());
   saveLoad.setLoadString("far_away=" + landh);
 
-  test.assertEqual(false, room.hasExit("north", true));
+  test.assertEqual(false, room.hasExit("north", {excludeLocked:true}));
   test.assertEqual(true, room.hasExit("north"));
   
   
