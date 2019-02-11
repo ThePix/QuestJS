@@ -113,7 +113,7 @@ function setup() {
    
   //showStartDiag();
  
-  console.log(getDateTime());
+  //console.log(getDateTime());
   
   //for(let key in w) {
   //  debugmsg(key);

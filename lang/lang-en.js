@@ -139,12 +139,10 @@ function CANNOT_RECLINE_ON(char, item) {
 
 const NOT_KNOWN_MSG = "I don't even know where to begin with that.";
 const DISAMBIG_MSG = "Which do you mean?";
-const NO_MULTIPLES = "You cannot use multiple objects with that command.";
-const NOTHING = "Nothing there to do that with.";
-const NO_ATT_ERROR = "It does not work like that.";
-const UNSUPPORTED_DIR = "Unsupported type for direction";
+const NO_MULTIPLES_MSG = "You cannot use multiple objects with that command.";
+const NOTHING_MSG = "Nothing there to do that with.";
 const GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
-const DONE = "Done.";
+const DONE_MSG = "Done.";
 
 
 
@@ -185,7 +183,7 @@ function ALREADY(item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 }
 function DEFAULT_EXAMINE(char, item) {
-  return pronounVerb(item, "be", true) + " just your typical, every day " + item.byname({article:INDEFINITE}) + ".";
+  return pronounVerb(item, "be", true) + " just your typical, every day " + item.byname() + ".";
 }
 
 
@@ -261,11 +259,11 @@ function SPEAK_TO_MENU_TITLE(char) {
   return "Talk to " + char.byname({article:DEFINITE}) + " about:";
 }
 // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
-let TELL_ABOUT_INTRO = function(char, text) {
+function TELL_ABOUT_INTRO(char, text) {
   return "You tell " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }
 // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
-let ASK_ABOUT_INTRO = function(char, text) {
+function ASK_ABOUT_INTRO(char, text) {
   return "You ask " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }
 
@@ -324,7 +322,7 @@ const ARTICLE_FILTER_REGEX = /^(?:the |an |a )?(.+)$/;
 const JOINER_REGEX = /\,|\band\b/;
 const ALL_REGEX = /^(all|everything)$/;
 const ALL_EXCLUDE_REGEX = /^((all|everything) (but|bar|except)\b)/;
-const GO = "go to |goto |go |head |";
+const GO_PRE_REGEX = "go to |goto |go |head |";
 
 
 //----------------------------------------------------------------------------------------------

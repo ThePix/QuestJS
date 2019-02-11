@@ -60,10 +60,14 @@ test.assertCmd = function(cmdStr, expected) {
         }
       }
       else if (expected[i] instanceof RegExp) {
-        if (!expected[i] || !expected[i].test(test.testOutput[i])) {
+        if (test.testOutput[i] === undefined || !expected[i].test(test.testOutput[i])) {
           debugmsg("Expected: " + expected[i]);
           debugmsg("...Found: " + test.testOutput[i]);
         }
+      }
+      else if (expected[i] === undefined) {
+        debugmsg("Expected nothing");
+        debugmsg("...Found: " + test.testOutput[i]);
       }
       else {
         debugmsg("Found an unrecognised type for expected (should be string or regex): " + (typeof expected[i]));

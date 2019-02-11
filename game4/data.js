@@ -230,7 +230,16 @@ createRoom("lounge", {
 
 
 createRoom("top_deck_forward", {
-  desc:"",
+  desc:function() {
+    if (!w.top_deck_aft.meFirst) {
+      this.meFirst = true;
+      msg(w.top_deck_aft.descStart + this.descThis + w.top_deck_aft.descFinish);
+    }
+    else {
+      msg(this.descThis);
+    }
+  },
+  descThis: "You are stood at the forward end of a narrow corridor, with your cabin to port, and the canteen to starboard. Ahead, is the lounge.",
   down:new Exit("hallway"),
   starboard:new Exit("canteen"),
   port:new Exit("your_cabin"),
@@ -240,7 +249,18 @@ createRoom("top_deck_forward", {
 
 
 createRoom("top_deck_aft", {
-  desc:"",
+  descStart:"The top deck is where the living quarters - such as they are - are accessed. ",
+  descFinish:" The corridor is very utilitarian, with a metal floor and ceiling. The sides are mostly covered in white plastic panels, as a small concession to aesthetics.",
+  desc:function() {
+    if (!w.top_deck_forward.meFirst) {
+      this.meFirst = true;
+      msg(w.top_deck_aft.descStart + this.descThis + w.top_deck_aft.descFinish);
+    }
+    else {
+      msg(this.descThis);
+    }
+  },
+  descThis: "You are stood at the aft end of a narrow corridor, with the women's cabin behind you, the men's to port. To starboard, steps lead down to the cargo bay on the lower deck.",
   port:new Exit("guys_cabin"),
   aft:new Exit("girls_cabin"),
   starboard:new Exit("cargo_bay", {
@@ -253,10 +273,21 @@ createRoom("top_deck_aft", {
 
 
 createRoom("canteen", {
-  desc:"",
+  desc:"The canteen, like everything else of the ship, is pretty small. There is a table, with one short side against the wall, and five plastic [chairs:chair] around it.{tableDesc} At the back is the food preparation area; a work surface across the width of the room, with a sink on the right and a hob on the left.",
   port:new Exit('top_deck_forward'),
 });
 
+
+createItem("canteen_table",
+  SURFACE(),
+  {
+    alias:"table",
+    loc:"canteen",
+    display:DSPY_SCENERY,
+    tpDesc:" The table is bare.",
+    examine:"The table is plastic, attached to the wall at one end, and held up by a single leg at the other end.{tableDesc}",
+  }
+);
 
 
 
@@ -281,26 +312,49 @@ createRoom("girls_cabin", {
 
 
 
-createItem("probe_prototype",
+createItem("probe_prototype", COUNTABLE([]),
   { 
     alias:"Probe X",
-    regex:/^(bio-|geo-|bio|geo)?probe$/,
-    function(isMultiple, char) {
+    regex:/^(\d+ )?(bio-|geo-|bio|geo)?probes?$/,
+    launch:function(isMultiple, char) {
+      let type;
       if (char === w.Aada) {
-        msg("'Launch a bio-probe,' you say to Aada.");
-        w.Aada.agenda["walkTo:probes_aft:Aada goes to the probe deployment console.", "text:deployProbe"];
+        type = "geo";
       }
       else if (char === w.Ostap) {
-        msg("'Launch a bio-probe,' you say to Ostap.");
-        w.Ostap.agenda["walkTo:probes_aft:Ostap goes to the probe deployment console.", "text:deployProbe"];
+        type = "bio";
       }
       else {
         msg("To launch a probe, see either Aada or Ostap.");
+        return false;
       }
+      
+      let number = this.extractNumber();
+      if (!number) number = 1;
+      const available = w.Xsansi[type + "Probes"];
+
+      if (number === 1) {
+        msg("'Launch a " + type + "-probe,' you say to " + char.byname({article:DEFINITE}) + ".");
+      }
+      else {
+        msg("'Launch " + number + " " + type + "-probes,' you say to " + char.byname({article:DEFINITE}) + ".");
+      }
+      if (number > available) {
+        msg("'We only have " + available + " and we should save some for the other planets on our itinery.'");
+        return false;
+      }
+      if (number > 4) {
+        msg("'Are you sure? Protocol says we should deploy no more than five on a single planets.'");
+        msg("'Hey, I'm the captain. It's my bonus on the line here. Get those probes deployed.'");
+      }
+      msg("'Okay captain.'");
+      char.agenda = ["walkTo:probes_aft:" + char.byname({article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number];
+      return true;
     },
     launched:false,
     launchCounter:0,
     status:"Unused",
+    countAtLoc:function(loc) { return 0; },
     eventIsActive:function() { return this.launched; },
     eventScript:function() {
       this.launchCounter++;

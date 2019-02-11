@@ -343,24 +343,16 @@ function createAnalysisTopics(npc, area) {
 
 
 function createHowAreYouTopics(npc) {
-  for (let i = 0; i < PLANETS.length; i++) {
-    createItem(npc.name + "_how_are_you_" + i,
-      TOPIC(false),
-      { 
-        loc:npc.name,
-        npc:npc.alias,
-        alias:"How are you feeling?",
-        response:PLANETS[i][npc.name + "_how_are_you"],
-        script:function() {
-          msg("'How are you feeling?' you ask " + this.npc + ".");
-          msg(this.response());
-        },
-      }
-    );
-  }
+  npc.askoptions.push({
+    regex:/(his |her )?(health|well\-?being)/,
+    response:howAreYouFeeling,
+  });
 }
-  
  
+function howAreYouFeeling(npc) {
+  msg("'How are you feeling?' you ask " + npc.byname({article:DEFINITE}) + ".");
+  msg(PLANETS[w.Xsansi.currentPlanet][npc.name + "_how_are_you"]);
+}
 
   
 function createPlanets() {
@@ -388,11 +380,6 @@ function arrival(n) {
   w.Xsansi.currentPlanet = n;
   game.elapsedTime = 0;
   game.startTime = PLANETS[n].arrivalTime;
-  
-  for (let i = 0; i < NPCS.length; i++) {
-    if (n > 0) w[NPCS[i].name + "_how_are_you_" + (n - 1)].hideTopic;
-    w[NPCS[i].name + "_how_are_you_" + n].showTopic;
-  }
 }
 
 
@@ -410,6 +397,14 @@ Are there bodies of water and/or clouds?
 
   
 */
+
+
+
+tp.text_processors.tableDesc = function(arr, params) {
+  return w.canteen_table.tpDesc;
+};
+
+
 
 
 commands.push(new Cmd('Kick', {
