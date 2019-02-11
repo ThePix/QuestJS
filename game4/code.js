@@ -158,200 +158,252 @@ const PLANETS = [
 ];
 
 const PLANET_DATA = {
-  geology0:[
-    { level:0, fn:function() {
+  Aada0:{
+    level0:function() {
       msg("'Our first planet!' she says excitedly. 'I can't wait to get a probe deployed down there.'");
-    },},
-    { level:1, fn:function() {
+    },
+    level1:function() {
       msg("'Well... Bit dull really. Lots of igneous rock - granite basically. Hopefully we'll turn up more.'"); 
-    },},
-    { level:3, fn:function() {
+    },
+    level3:function() {
       msg("'So not much there. Not seeing any sedimentary rock, so no water. The metamorphic is ancient, so volcanism stopped a long time ago. Basically, a dead planet.'");
-    },},
-    { level:5, fn:function() {
+    },
+    level5:function() {
       msg("'The second probe turned up some interesting sedimentary rocks, so there was water on the planet at one time. Wonder where it all went? It is not like Mars; it has an atmosphere so the water did not just boil away into space.'");
-    },},
-    { level:7, fn:function() {
+    },
+    level7:function() {
       msg("'Got some elemental analysis. Obviously this is from a very limited number of samples, but not seeing much at all in the way of heavy metals. I'm seeing iron, copper, nickel, but hardly anythng heavier than that. Computer suggests it could be a second generation star.'");
       msg("'A what?'");
       msg("'Apparently our sun is a third generation star; it formed from the debris of a previous star, which in turn formed from the debris of an earlier star. The more generations, the more heavy metals. So anyway, basically it means it is probably not even worth mining.'");
-    },},
-  ],
+    },
+  },
 
-  biology0:[
-    { level:0, fn:function() {
+  Ostap0:{
+    level0:function() {
       msg("'So, this one does not look so interesting,' he replies. 'I think we see nothing more than bacteria here - maybe not even that.'");
-    },},
-    { level:1, fn:function() {
+    },
+    level1:function() {
       msg("'So far, we see nothing. No life, no green. Perhaps bacteria living below the surface?'"); 
-    },},
-    { level:3, fn:function() {
+    },
+    level3:function() {
       msg("'Nothing alive here, I think commander.'");
-    },},
-    { level:5, fn:function() {
+    },
+    level5:function() {
       msg("'None of the probes are seeing anything. A big disappointment I think.'");
-    },},
-  ],
+    },
+  },
 
-  geology1:[
-    { level:0, fn:function() {
+  Aada1:{
+    level0:function() {
       msg("'It looks much more interesting than " + planet1.alias + "!' she says excitedly.");
-    },},
-    { level:1, fn:function() {
+    },
+    level1:function() {
       msg("'The pictures are great, it looks so nice down there. Still trying to make sense of the geology.'");
-    },},
-    { level:3, fn:function() {
+    },
+    level3:function() {
       msg("'The soil samples are 20 to 70 percent organic material. The rocks are a mix of igneous and sedimentary. The sedimentary rocks has high carbon content - like limestone - so probably formed from shells and, you know, stuff like that millions of years ago.'");
-    },},
-    { level:4, fn:function() {
+    },
+    level4:function() {
       msg("'The soil samples are 20 to 70 percent organic material. The rocks are a mix of igneous and sedimentary. The sedimentary rocks has high carbon content - like limestone - so probably formed from shells and, you know, stuff like that millions of years ago.  The second probe found some metamorphic rock, so it is an active planet - or was until quite recently.'");
-    },},
-    { level:5, fn:function() {
+    },
+    level5:function() {
       msg("'The soil samples are 20 to 70 percent organic material. The rocks are a mix of igneous and sedimentary. The sedimentary rocks has high carbon content - like limestone - so probably formed from shells and stuff millions of years ago. The second probe found some metamorphic rock, so it is an active planet - or was until quite recently. All the probes indicate high levels of manganese, copper and cobalt; much higher than you would see on earth.'");
-    },},
-  ],
+    },
+  },
 
-  biology1:[
-    { level:0, fn:function() {
+  Ostap1:{
+    level0:function() {
       msg("'This, I think, will be a good planet!'");
-    },},
-    { level:1, fn:function() {
+    },
+    level1:function() {
       msg("'Life on an alien planet! It is so wonderful, I think. And the plants, they are all purple! Maybe an effect of the light, but perhaps they use a completely different biochemistry. And I see some small animals too - but I should say animal-like. Who know what they are?' He grins.");
-    },},
-    { level:2, fn:function() {
+    },
+    level2:function() {
       msg("'I am so happy to see all this alien life! Such diversity! See, these are like ferns, and I think perhaps 8 or 9 meters tall. And they are  purple, so not chlorophyll like Earth plants. Like very primitive trees of Earth Devonian period. IO have seen several small creatures, and some not so small.Jointed, like arthropods, with lots of legs.'");
-    },},
-    { level:3, fn:function() {
+    },
+    level3:function() {
       msg("'So many purple plants! The probe has taken a sample, and it is definitely the plants are purple, not the light. I think maybe it is based on retinal, rather than chlorophyll, but the analysis is not certain - but we can check the analysis when we get to Earth.'");
       msg("'And the creatures!,' he continues. 'I think I saw a primitive reptile or amphibian, walking on four legs. Many of the creatures, they resemble Earth creatures from the Devonian Period; a remarkable example of parallel evolution.");
-    },},
-    { level:4, fn:function() {
+    },
+    level4:function() {
       msg("'The second probe, it is exploring the ocean. Even the plants there are purple - but of course, this is what we should expect, yes? The oceans are so full of life. All sorts of colourful fish-like creatures. Shellfish too! I have seen something a huge lobster-like creature. And eels - but perhaps they are more like worms? So much to see here. Such a pity we cannot land.'");
-    },},
-    { level:5, fn:function() {
+    },
+    level5:function() {
       msg("'So... What a wonderful planet for a biologist! The life here, it is much like Earth perhaps 400 million years ago. How I would like to know when life began here. Did it take longer to reach this stage? Or was it faster than our planet? But it is so different too! The plants use retinal to harvest energy from the sun, so have this amazing plum colour, so the biochemistry here is very different to Earth.'");
-    },},
-    { level:7, fn:function() {
+    },
+    level7:function() {
       msg("'Something attacked one of the probes! It's a shame it's no longer transmitting, but fascinating that there is something down there strong enough to damage a probe built to survive re-entry and landing.'");
-    },},
-  ],
+    },
+  },
   
-  geology2:[
-    { level:0, fn:function() {
+  Aada2:{
+    level0:function() {
       msg("'Looks like another " + planet1.alias + ",' says Adaa. 'Nothing of interest here.'");
-    },},
-    { level:1, fn:function() {
+    },
+    level1:function() {
       msg("'I thought it was going to be as dull as " + planet1.alias + ",' says Adaa, 'but I think it is quite different. It's dead now, but I think there was life on it once.'");
       msg("'Based on what?'");
       msg("'It's just a hunch really, but some of the rocks... they look like ruined buildings.'");
-    },},
-    { level:3, fn:function() {
+    },
+    level3:function() {
       msg("'I had a probe drill into one of the strange rock formations, and it's consistent with concrete, well, more-or-less. And hollow. It broke through into an interior after about 0.3 meters.'");
       msg("'What's inside?'");
       msg("'I don't know! The probes don't have cameras that can extend though holes.'");
-    },},
-    { level:5, fn:function() {
+    },
+    level5:function() {
       msg("'I've got a probe trying to dig a big hole into the building - or whatever it is. I've got some analysis of the black dust. It is basically ash, as we thought, some organic content. Not radioactive though, which was a surprise. I was almost convinced this was the result of a nuclear war.'");
       msg("'Could it be really old and the radioisotopes have all decayed.'");
       msg("'It would have to be really old - the half-life of uranium-238 is over 4 billion years. If it was nuclear weapons as we know them there would some uranium-238.'")
-    },},
-    { level:7, fn:function() {
+    },
+    level7:function() {
       msg("'The probe managed to get though the wall, and it's definitely a building. Inside the walls and straight and square to each other. No furniture or anything, but a doorway that's about human height.'");
-    },},
-  ],
+    },
+  },
 
-  biology2:[
-    { level:0, fn:function() {
+  Ostap2:{
+    level0:function() {
       msg("'Not as interesting as " + planet2.alias + ", I think.'");
-    },},
-    { level:2, fn:function() {
+    },
+    level2:function() {
       msg("'Not so interesting for a biologist, but maybe an archaeologist...'");
       msg("'Archaeologist?'");
       msg("'I think we are too late; there was life here once, but now it is gone.'");
-    },},
-    { level:3, fn:function() {
+    },
+    level3:function() {
       msg("'There are things a live here, but buried. There's bacteria in the soil. But it is not primitive bacteria. I cannot say for sure - I know only Earth bacteria - but I think this is highly evolved. I think some disaster, an extinction event, has wiped out virtually all life. This is all that survives.'");
-    },},
-    { level:5, fn:function() {
+    },
+    level5:function() {
       msg("'It is sad; a whole planet dead - or virtually dead. Sad that we missed them, sad they all died. This is why this mission is so important, so mankind can spread to the stars before something like this happens on Earth.'")
-    },},
-  ],
+    },
+  },
   
-  geology3:[
-    { level:0, fn:function() {
-      msg("'Looks like another " + planet1.alias + ",' says Adaa. 'Not much here.'");
-    },},
-    { level:1, fn:function() {
+  Aada3:{
+    level0:function() {
+      msg("'Looks like another " + planet1.alias + ",' says Aada. 'Not much here.'");
+    },
+    level1:function() {
       msg("'It is quite a new planet - relatively anyway. Lots of volcanoes still as the interior churns up.'");
-    },},
-    { level:3, fn:function() {
+    },
+    level3:function() {
       msg("'A lot of granite-like rocks thrown up by the volcanoes, and they look to be high in heavy metals.'");
-    },},
-    { level:5, fn:function() {
-      msg("'As I thoughtm this is ayoung planet, no chance for sedimentary rocks to form yet, and not much metamorphic either. But a lot of metals, so good for mining. If you don't mind the toxic air!'");
-    },},
-  ],
+    },
+    level5:function() {
+      msg("'As I thought, this is a young planet, no chance for sedimentary rocks to form yet, and not much metamorphic either. But a lot of metals, so good for mining. If you don't mind the toxic air!'");
+    },
+  },
 
-  biology3:[
-    { level:0, fn:function() {
+  Ostap3:{
+    level0:function() {
       msg("'Another dead planet, I think.'");
-    },},
-    { level:1, fn:function() {
+    },
+    level1:function() {
       msg("'I think perhaps simple micro-organisms, but nothing more. It is interesting, perhaps, to see how life has started.'");
-    },},
-    { level:3, fn:function() {
+    },
+    level3:function() {
       msg("'I think somewhere there will be early life, but it has yet to get a foothold, has yet to spread across the planet, so I find nothing yet.'");
-    },},
-    { level:5, fn:function() {
-      msg("'I still find no life - but I am sure it is here somewhere. The conditions are just right.'")
-    },},
-  ],
+    },
+    level5:function() {
+      msg("'I still find no life - but I am sure it is here somewhere. The conditions are just right.'");
+    },
+  },
   
-  geology4:[],
-  biology4:[],
-  geology5:[],
-  biology5:[],
+  Aada4:{},
+  Ostap4:{},
+  Aada5:{},
+  Ostap5:{},
+  
+  Kyle0:{
+    level0:function() {
+      msg("'I've launched the satellite, but not picking anything up.'");
+    },
+    level2:function() {
+      msg("'There's nothing here. No radio signals, and the images are pretty dull too.'");
+    },
+  },
+  Kyle1:{
+    level0:function() {
+      msg("'The satellite's away, but not picking anything up again.'");
+    },
+    level2:function() {
+      msg("'There's nothing here for me to study; no radio signals. The images are cool, all those huge purple ferns, lots different biomes. Ostap must love it.'");
+    },
+  },
+  Kyle2:{
+    level0:function() {
+      msg("'The satellite's away, and it might just be noise, but there could be a signal.'");
+    },
+    level2:function() {
+      // TODO!!!
+      // Kyle should come and see you about this; then this message should change
+      msg("'There's nothing on the planet producing radio signals, but there is something in orbit. I can't tell what it is, but all the analysers say it is artificial. And I've never heard of a natural radio signal from something that small. I... I think we should take a look.'");
+    },
+  },
+  Kyle3:{
+    level0:function() {
+      msg("'The satellite's away, but looks like another dead one.'");
+    },
+    level2:function() {
+      msg("'No radio signals, nothing interesting in the images.'");
+    },
+  },
+  Kyle4:{
+    level0:function() {
+      msg("'This is really exciting,' enthuses Kyle. 'I'm picking up all sorts of radio signals. The satellite's away, so hopefully it can focus in just one for analysis.'");
+    },
+    level1:function() {
+      msg("'I've identified a transmitter, and we're starting to analyse the data. It's very complex, and the computer's working hard to unscramble the data.'");
+    },
+    level2:function() {
+      msg("'I'm starting to get results from the signals being broadcast from that transmitter. Its strange - in some ways the signal is very complex - beyond anything I've seen before - , but, well, it seems to be in English!'");
+      msg("'How can that be?'");
+      msg("'I don't know.'");
+    },
+  },
+  Kyle5:{},
+  
+  Ha_yoon0:{},
+  Ha_yoon1:{},
+  Ha_yoon2:{},
+  Ha_yoon3:{},
+  Ha_yoon4:{},
+  Ha_yoon5:{},
 }
 
 
 
-function createAnalysisTopics(npc, area) {
-  for (let i = 0; i < PLANETS.length; i++) {
-    const data = PLANET_DATA[area + i];
-    for (let j = 0; j < data.length; j++) {
-      createItem(npc.name + "_planet" + i + "_" + j,
-        TOPIC(false),
-        { 
-          loc:npc.name, 
-          npc:npc.alias,
-          alias:"Report on planet " + PLANETS[i].starName + " " + PLANETS[i].planet,
-          area:area,
-          planet:i,
-          level:j,
-          response:data[j].fn,
-          script:function() {
-            const planet = w["planet" + this.planet];
-            const data = PLANET_DATA[this.area + this.planet];
-            msg("'What's your report on " + planet.alias + "?' you ask " + this.npc + ".");
-            this.response();
-          },
-        }
-      );
-    }
-  }
-}
 
-
-function createHowAreYouTopics(npc) {
+function createTopics(npc) {
   npc.askoptions.push({
     regex:/(his |her )?(health|well\-?being)/,
     response:howAreYouFeeling,
+  });
+  npc.askoptions.push({
+    regex:/(this |the |)?planet/,
+    response:planetAnalysis,
   });
 }
  
 function howAreYouFeeling(npc) {
   msg("'How are you feeling?' you ask " + npc.byname({article:DEFINITE}) + ".");
   msg(PLANETS[w.Xsansi.currentPlanet][npc.name + "_how_are_you"]);
+}
+
+function planetAnalysis(npc) {
+  msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].alias + "?' you ask " + npc.byname({article:DEFINITE}) + ".");
+  const arr = PLANET_DATA[npc.name + w.Xsansi.currentPlanet];
+  if (arr.length === 0) {
+    msg("You should talk to Aada or Ostap about that stuff.");
+    return false;
+  }
+  let level = PLANETS[w.Xsansi.currentPlanet][npc.specialisation];
+  if (level === undefined) {
+    msg("You should talk to Aada or Ostap about that stuff.");
+    return false;
+  }
+  while (arr["level" + level] === undefined) {
+    level--;
+  }
+  msg(arr["level" + level]);
 }
 
   
@@ -423,17 +475,18 @@ commands.push(new Cmd('Kick', {
 
 
 
-commands.push(new Cmd('Charge', {
+commands.push(new Cmd('Topics', {
   npcCmd:true,
   rules:[cmdRules.isHeld],
-  regex:/^(charge) (.+)$/,
+  regex:/^topics?$/,
   objects:[
-    {ignore:true},
-    {scope:isHeld}
   ],
-  default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
-    return false;
+  script:function() {
+    metamsg("Some suggestions for Xsansi: mission, itinerary, crew, status and this planet.");
+    metamsg("Some suggestions for the crew: probes, his/her health, specialisation and this planet.");
+    metamsg("Not every character will have a response to all these. As the situation changes, their responses may change too.");
+    metamsg("If there are topics you feel should be implemented but are missing, get in contact and let me know.");
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -476,16 +529,3 @@ commands.push(new Cmd('Launch', {
 
 
 
-
-
-
-tp.addDirective("charger_state", function(){
-  if (w.charger_compartment.closed) {
-    return "The compartment is closed";
-  }
-  var contents = w.charger_compartment.getContents();
-  if (contents.length === 0) {
-    return "The compartment is empty";
-  }
-  return "The compartment contains " + formatList(contents, {article:INDEFINITE});
-});

@@ -191,7 +191,7 @@ createRoom("engineering3", {
 // LOWER DECK
 
 createRoom("probes_forward", {
-  alias:"Probe hanger 1",
+  alias:"Forward probe hanger",
   desc:"The forward probe hanger is where the satellites are stored ready for deployment. The six satellites are kept in a dust-free environment on the starboard side of the hanger, each on a cradle. A robot arm is available to pick them up and eject them through a hatch in the floor.|On the port side, the seeder pods are stored. Each pod contains a variety of simple lifeforms, such as algae, which, it is hoped, will kickstart life on a suitable planet. It is a long term plan. There are six pods, three to be deployed at distant locations on a planet.| There is a control console to handle it all, though it can also be done remotely.",
   up:new Exit("hallway"),
   aft:new Exit("probes_aft"),
@@ -199,7 +199,7 @@ createRoom("probes_forward", {
 });
 
 createRoom("probes_aft", {
-  alias:"Probe hanger 2",
+  alias:"Aft probe hanger",
   desc:"The aft probe hanger has the scientific probes. Each probe is contained in a crate, and needs unpacking before deployment. On the port side there is a delivery system into which a probe can be placed, to be sent to the planet. Various types of probes are available.",
   port:new Exit("lab4", {
     msg:"You walk up the narrow stair way to the middle deck.",

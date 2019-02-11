@@ -44,8 +44,8 @@ createItem("Xsansi",
         msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites.'");
       }},
       
-      {regex:/itinery|stars|planets|route|destinations/, response:function() {
-        msg("'Remind me of the itinery, Xsansi,' you say.");
+      {regex:/itinerary|stars|planets|route|destinations/, response:function() {
+        msg("'Remind me of the itinerary, Xsansi,' you say.");
         for (let i = w.Xsansi.currentPlanet; i < PLANETS.length; i++) {
           let s = "'Item " + (i + 1) + ": " + PLANETS[i].starDesc;
           if (i + 2 === PLANETS.length) s += "'";
@@ -74,12 +74,25 @@ createItem("Kyle",
     loc:"flightdeck",
     status:"okay",
     properName:true,
+    specialisation:"coms",
     examine:"Kyle is the computer expert, but also a good cook, and has volunteered for the role of chef. An Australian, he is slim, and below average height, with very short blonde hair, and green eyes.",
     crewStatus:function() {
       let s = "Crew member Kyle's designation is: coms. His current status is: ";
       s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
+    askoptions:[
+      {regex:/probe/, response:function() {
+        msg("'What probes do you handle?' you ask Kyle.");
+        msg("'I launch the satellites, one per planet. No need to tell me, I know the routine. Once in orbit they photograph the planet surface, elay signals from the other probes and listen for radio emissions.");
+      }},
+      
+      {regex:/(your |his |her )?special.*|expert.*/, response:function() {
+        msg("'What is your area of expertise?' you ask Kyle.");
+        msg("'Communication systems. So I launch the satellite, but unless we find intelligent life, there's not a lot for me to do.' He thinks for a moment. 'Actually my background is computing, so if Xsansi is playing up, I'll have a tinker.'");
+        msg("'You will not,' says Xsansi, indignantly. 'I can assure you that I am self-maintaining, and designed to last for centuries.'");
+      }},
+    ],
     notes:"Kyle (M) is from Australia (born Newcastle but raised in Sydney), 32, a gay nerd. Expert in computing and cooking. Kyle handles the satellite and understanding radio transmissions. Joined up so he can see the future - it is a kind of time travel; hopes to upload himself to become immortal. Terminally ill.",
   }
 );
@@ -91,6 +104,7 @@ createItem("Ostap",
     loc:"canteen",
     status:"okay",
     properName:true,
+    specialisation:"biology",
     examine:"Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a ponytail. He is a biologist from the Ukraine.",
     crewStatus:function() {
       let s = "Crew member Ostap's designation is: biologist. His current status is: ";
@@ -100,11 +114,19 @@ createItem("Ostap",
     notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she isnot interested. Later couples up with Ha-yoon",
     askoptions:[
       {regex:/probe/, response:function() {
-        msg("'How does a bio-probe work?,' you ask Ostap.");
+        msg("'How does a bio-probe work?' you ask Ostap.");
         msg("'I control from the lab, find a good sample. First we look at the morphology, with a simple camera. Then pick up a sample, take a slice to look at the microscopic structure - we look for cells, what is inside the cell. If we get enough cells, we can tell it to extract chemical from one type of sub-structure, then we analysis the chemicals by mass spectroscopy and the infra-red spectroscopy. We hope we find something in the library, if not, the results can be taken to Earth.'");
         msg("'Okay, cool.'");
       }},
+      
+      {regex:/(your |his |her )?special.*|expert.*/, response:function() {
+        msg("'What is your area of expertise?' you ask Ostap.");
+        msg("'I am the biologist. I studied at University of Kiev, then later at Notre Dame, in Paris, I did my Ph.D. thesis on extremophiles, and then I did a lot of work on Xenobiology for Tokyo Life Sciences.'");
+      }},
     ],
+    deployProbe:function(arr) {
+      msg("About to deploy " + arr[0] + " probe(s).");
+    },
   }
 );
 
@@ -118,6 +140,9 @@ createItem("Aada",
     loc:"girls_cabin",
     status:"okay",
     properName:true,
+    specialisation:"geology",
+    geologyFlag1:false,
+    geologyFlag2:false,
     examine:"Aada is a Finnish woman with features so ideal you suspect genetic engineering. Tall, with a perfect figure, she keeps her blonde hair short. She is a bit vague about her background, but has some military experience.",
     crewStatus:function() {
       let s = "Crew member Adaa's designation is: geologist. Her current status is: ";
@@ -127,10 +152,29 @@ createItem("Aada",
     notes:"Aada (F) is from Finland (Oulu), 35, father genetically engineered her, planning to create a dynasty. Her older sister (effectively a lone) rebelled, so the father kept a very tight rein on this one (ef Miranda's sister). Drinks vodka a lot. Signed on as geologist, but not really her speciality - the corp was desperate and so was she. Aada handles the geo-probes.",
     askoptions:[
       {regex:/probe/, response:function() {
-        msg("'How does a geo-probe work?,' you ask Aada.");
+        msg("'How does a geo-probe work?' you ask Aada.");
         msg("'Simple. Once deployed on the planet, I send it to an interesting rock, and it extends an arm that takes a sample.'");
         msg("'Okay, but I was wondering what sort of analysis it does. Is it infra-red, or X-ray diffraction or what?'");
         msg("'Er, yeah, I expect so.'");
+        w.Aada.geologyFlag1 = true;
+      }},
+      
+      {regex:/(your |his |her )?special.*|expert.*/, response:function() {
+        msg("'What is your area of expertise?' you ask Aada.");
+        msg("'I am the geologist.'");
+        msg("'Okay. So how long have you been in geology?'");
+        msg("'Well, I've taken an interest for years....'");
+        w.Aada.geologyFlag2 = true;
+      }},
+
+      {regex:/lack of*|inability/, response:function() {
+        msg("'You don't seem that... well up on geology,' you suggest to Aada.");
+        msg("'What's that supposed to mean?'");
+        if (w.Aada.geologyFlag1 && w.Aada.geologyFlag2) {
+          msg("'You don't seem to know much about how the prpobes work, or have much background in geology.'");
+          msg("She sighs. 'It's true. I signed up to get away from something, and, well, I know a rock when I see it. And these systems are all automated, it's not like you need a higher degree to launch a probe. We're really just technicians. I'll be able to cope. I learn fast, you'll see.'");
+        }
+        w.Aada.geologyFlag2 = true;
       }},
     ],
   }
@@ -145,6 +189,7 @@ createItem("Ha_yoon",
     loc:"engineering3",
     status:"okay",
     properName:true,
+    specialisation:"engineering",
     examine:"Ha-yoon is a well-respected Korean engineer, making her possibly the most important member of the crew for ensuring the ship gets back to Earth. She is the shortest of the crew, but perhaps the loudest. She has long, raven=black hair, that falls to her waist, and dark eyes.",
     crewStatus:function() {
       let s = "Crew member Ha-yoon's designation is: engineer. Her current status is: ";
@@ -152,6 +197,19 @@ createItem("Ha_yoon",
       return s;
     },
     notes:"Ha-yoon (F) is from Korean (Seoul), 28, and is on the run, after killing a couple of guys. She hopes that after all the time in space her crimes will be forgotten. Engineer.",
+    askoptions:[
+      {regex:/probe/, response:function() {
+        msg("'How do the probe works?' you ask Ha-yoon.");
+        msg("'i don't know about the analyse, but each probe is contained in an ablative shell, which is sheds as it descends, with the impact slowed by a combination of parachutes and retro-rockets. Once on the surface, the autonomous probe will start collecting samples, following its programming, moving on crawler tracks. They also have a limited amount of propellent to jump them out of holes.'");
+      }},
+      
+      {regex:/(your |his |her )?special.*|expert.*/, response:function() {
+        msg("'What is your area of expertise?' you ask Ha-yoon.");
+        msg("'I am the engineer. I worked for PanTech in the asteroids, so I know spaceship systems. This is a bit different as it runs unmanned for decades...'");
+        msg("'Apart from me,' Xsansi adds.");
+        msg("'... Which doesn't change the fact there there are stasis systems for the crew and food, which I had never seen before.'");
+      }},
+    ],
   }
 );
 
@@ -159,10 +217,8 @@ createItem("Ha_yoon",
 
 const NPCS = [w.Ostap, w.Aada, w.Kyle, w.Ha_yoon];
 
-createAnalysisTopics(w.Aada, "geology");
-createAnalysisTopics(w.Ostap, "biology");
 for (let i = 0; i < NPCS.length; i++) {
-  createHowAreYouTopics(NPCS[i]);
+  createTopics(NPCS[i]);
   NPCS[i].status = 100;
 }
   
