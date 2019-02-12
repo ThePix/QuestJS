@@ -50,12 +50,13 @@ const PLANETS = [
   {
     starName:"HD 154088",
     planet:"D",
+    comment:"A lifeless planet, with no water.",
     atmosphere:"The atmosphere is 63% nitrogen, 17% carbon dioxide, 17% methane, 2% water and about 1% of various other gases including ethane, ammonia and hydrogen sulphide.",
     radio:"No radio signal detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet is predominantly grey rock. There are no bodies of water on the surface and no cloud cover. It is 6.8 times the mass of Earth.",
     starDesc:"HD 154088 is a seventh magnitude metal-rich K-type main sequence star that lies approximately 58 light-years from Earth in the constellation of Ophiuchus.",
-    comment:"A lifeless planet, with no water.",
+    probeLandingSuccess:"ynyyyynyyyynyyynnyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
     arrivalTime:new Date('December 22, 2325 09:43:43'),
     onArrival:function() {
       w.Ha_yoon.status = Math.min(w.Kyle.status, 96);
@@ -70,12 +71,13 @@ const PLANETS = [
   { 
     starName:"HD 168746", 
     planet:"B", 
+    comment:"Lots of life, at about the Devonian Period, with purple planets.",
     atmosphere:"The atmosphere is 71% nitrogen, 15% oxygen, 3% carbon dioxide  and about 1% of various other gases including water and methane.",
     radio:"No radio signal detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 75% water. The land surfaces are predominantly purple. Cloud cover is about 40%.",
     starDesc:"HD 168746 is an 8th magnitude star in the constellation of Serpens, 139 light years from Earth. It is very similar to our Sun, a yellow dwarf star (spectral class G5V).",
-    comment:"Lots of life, at about the Devonian Period, with purple planets.",
+    probeLandingSuccess:"yyyynyyyyyynyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
     arrivalTime:new Date('March 3, 2340 11:05:30'),
     onArrival:function() {
       msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod again. 'We have arrived at " + this.starName + ",' the voice continues, 'our second destination, after a length journey without incident. You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.' You sit up, and for a moment you do feel dizzy, but it soon passes.");
@@ -93,13 +95,14 @@ const PLANETS = [
   { 
     starName:"HD 168443", 
     planet:"C", 
+    comment:"A dead planet, following some unknown event; previously had intelligent life. An artefact orbits the planet.",
     atmosphere:"The atmosphere is 76% nitrogen, 22% oxygen, 1% carbon dioxide and about 1% of various other gases including water and carbon monoxide.",
     radio:"Radio signals have been detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 17% water. The land surfaces are predominantly black. Cloud cover is about 20%.",
     starDesc:"HD 168443 is a yellow dwarf star of (spectral type G5) about the mass of the Sun. It is in the constellation of Serpens Cauda, 129 light years from the Solar System. It is actually part of a binary, the other star is a brown dwarf, with a very long orbital period.",
-    comment:"A dead planet, following some unknown event; previously had intelligent life. An artefact orbits the planet.",
     arrivalTime:new Date('October 21, 2362 06:21:39'),
+    probeLandingSuccess:"yynyynyyyynyynyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
     onArrival:function() {
       msg("'Good morning,' says a female voice. {i:Xsansi,} you think to yourself. 'We have arrived at " + this.starName + ",' the voice continues, 'our third destination, after a long and oh-so-tedious journey. You may be suffering from disorientation, nausea, headache and muscle fatigue, but ~I expect that is nothing to decades of loniness, right? If symptoms persist, tough.' You sit up, and immediately feel sick. You grip the sides of the pod as the room spins, waiting for it stop. It is a few minutes before you feel well enough to actually think.");
     },
@@ -112,12 +115,13 @@ const PLANETS = [
   { 
     starName:"HD 148427", 
     planet:"D", 
+    comment:"A lifeless planet, but it has water, so suitable for seeding. By this time the AI is doolally.",
     atmosphere:"The atmosphere is 53% nitrogen, 18% carbon dioxide, 12% nitrogen dioxide, 10% carbon monoxide, 7% nitrogen oxide, 4% sulphur dioxide, 3% hydrogen sulphide, 2% water and about 1% of various other gases including ammonia.",
     radio:"No radio signals have been detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 63% water. The land surfaces are predominantly grey and red. Cloud cover is about 25%. Several active volcanoes have been noted.",
     starDesc:"HD 148427 is a 7th-magnitude K-type subgiant star approximately 193 light years away in the constellation Ophiuchus. Its mass is 45% greater than the Sun, and it is three times the size and six times more luminous, although its age is 2½ billion years.",
-    comment:"A lifeless planet, but it has water, so suitable for seeding. By this time the AI is doolally.",
+    probeLandingSuccess:"yyyyyynyyyyyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
     arrivalTime:new Date('April 15, 2386 13:06:51'),
     onArrival:function() {
       msg("'Awake at last are we?' says a female voice. {i:Why does she sound so odd,} you wonder. 'Here we are at " + this.starName + ",' the strangely inflected voice continues, 'our fourth destination, after a long, long journey, giving me plenty of time to consider the nature of reality.' You sit up, and immediately throw up over the side of the pod. You grip the sides of the pod as the entire contents of your stomach is ejected on to the floor. Eventually, the heaving stops.");
@@ -132,12 +136,13 @@ const PLANETS = [
   { 
     starName:"Gliese 1214", 
     planet:"A", 
+    comment:"This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off.",
     atmosphere:"Pretty good.",
     radio:"Radio signals have been detected.",
     lights:"There are numerous light sources on the night side of the planet.",
+    probeLandingSuccess:"yyyynyyyyyynyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
     planetDesc:"The planet surface is about 56% water. The land surfaces are predominantly green. Cloud cover is about 30%.",
     starDesc:"Gliese 1214 is a dim M4.5 red dwarf in the constellation Ophiuchus with an apparent magnitude of 14.7. It is located at a distance of approximately 47 light years from the Sun. The star is about one-fifth the radius of the Sun with a surface temperature estimated to be 3000 K (2730 °C; 4940 °F).[12] Its luminosity is only 0.003% that of the Sun.",
-    comment:"This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off.",
     arrivalTime:new Date('August 19, 2409 12:11:31'),
     onArrival:function() {
     },
@@ -146,12 +151,12 @@ const PLANETS = [
   { 
     starName:"Sol", 
     planet:"Earth", 
+    comment:"Home!",
     atmosphere:"Normal!",
     radio:"There is a lot of radio signals, indicating a technological advanced race active.",
     lights:"The night side of the planet is awash with light!",
     planetDesc:"It is Earth!",
     starDesc:"The Sun is a G2V yellow dwarf. It is located at a distance of 0.0 light years from the Sun. It's luminosity is 100% that of the Sun. The third planet is home to the human race.",
-    comment:"Home!",
     onArrival:function() {
     },
   },
@@ -418,6 +423,7 @@ function createPlanets() {
         biology:0,
         radio:0,
         satellite:false,
+        probeLandingSuccess:PLANETS[i].probeLandingSuccess,
       }
     )
   }
@@ -432,6 +438,8 @@ function arrival(n) {
   w.Xsansi.currentPlanet = n;
   game.elapsedTime = 0;
   game.startTime = PLANETS[n].arrivalTime;
+  w.Aada.deployProbeTotal = 0;
+  w.Ostap.deployProbeTotal = 0;
 }
 
 
@@ -440,15 +448,64 @@ ASK_ABOUT_INTRO = function() { return ""; };
 TELL_ABOUT_INTRO = function() { return ""; };
 
 
-/* Before sending a probe:
-Are there radio signals?
-Are there lights on the dark side?
-Are there bodies of water and/or clouds?
 
 
-
+function deployProbe(npc, probeType) {
+  w.Xsansi[probeType + "Probes"]--;
+  const probe = cloneObject(w.probe_prototype);
   
-*/
+  probe.alias = sentenceCase(probeType) + "-probe " + toRoman(16 - w.Xsansi[probeType + "Probes"]);
+  probe.launched = true;
+  probe.owner = npc.name;
+  //debugmsg("Launched: " + probe.alias);
+}
+
+
+
+function shipAlert(s) {
+  if (isOnShip()) {
+    msg("'" + s + "' announces Xsansi.");
+  }
+}
+
+
+function isOnShip() {
+  return w[game.player.loc].notOnShip === undefined;
+}
+
+
+function currentPlanet() {
+  return w["planet" + w.Xsansi.currentPlanet];
+}
+
+
+function probeLandsOkay() {
+  const planet = currentPlanet();
+  const flag = (planet.probeLandingSuccess[0] === "y");
+  planet.probeLandingSuccess = planet.probeLandingSuccess.substring(1);
+  if (!flag) {
+    w.Aada.lostProbe = true;
+    w.Ostap.lostProbe = true;
+  }
+  return flag;
+}
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -518,7 +575,7 @@ commands.push(new Cmd('Hint', {
 
 
 commands.push(new Cmd('Launch', {
-  regex:/^(launch) (.+)$/,
+  regex:/^(launch|deploy) (.+)$/,
   npcCmd:true,
   objects:[
     {ignore:true},

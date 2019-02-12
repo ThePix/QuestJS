@@ -57,6 +57,7 @@ createRoom("cargo_bay", {
 createRoom("airlock", {
   desc:"",
   port:new Exit("cargo_bay"),
+  starboard:new Exit("space"),
 });
 
 
@@ -308,9 +309,25 @@ createRoom("girls_cabin", {
 
 
 
+//-----------------------------------------------------
+// EXTERIOR
 
 
 
+createRoom("space", {
+  desc:"",
+  port:new Exit("airlock"),
+  notOnShip:true,
+});
+
+
+
+
+
+
+
+//-----------------------------------------------------
+// SPECIAL ITEMS
 
 createItem("probe_prototype", COUNTABLE([]),
   { 
@@ -340,15 +357,29 @@ createItem("probe_prototype", COUNTABLE([]),
         msg("'Launch " + number + " " + type + "-probes,' you say to " + char.byname({article:DEFINITE}) + ".");
       }
       if (number > available) {
-        msg("'We only have " + available + " and we should save some for the other planets on our itinery.'");
+        msg("'We only have " + available + " and we should save some for the other planets on our itinerary.'");
         return false;
       }
-      if (number > 4) {
+      
+      if (number > (5 - char.deployProbeTotal)) {
         msg("'Are you sure? Protocol says we should deploy no more than five on a single planets.'");
         msg("'Hey, I'm the captain. It's my bonus on the line here. Get those probes deployed.'");
       }
-      msg("'Okay captain.'");
-      char.agenda = ["walkTo:probes_aft:" + char.byname({article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number];
+      
+      if (char.deployProbeAction === 0 || char.deployProbeAction ===4) {
+        msg("'Okay captain.'");
+        char.agenda = ["walkTo:probes_aft:" + char.byname({article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number];
+        char.deployProbeAction = 0;
+        char.deployProbeCount = 0;
+      }
+      else {
+        // already part way through launching
+        // skip walking there, skip first deploy action
+        // the old number should be replaced
+        msg("'Okay captain.'");
+        char.agenda = ["text:deployProbe:" + number];
+        char.deployProbeAction = 1;
+      }
       return true;
     },
     launched:false,
@@ -362,8 +393,16 @@ createItem("probe_prototype", COUNTABLE([]),
         this.status = "In flight";
       }
       if (this.launchCounter === TURNS_TO_LANDING) {
-        this.status = "Landing";
-        shipAlert(this.name + " is landing.");
+        if (probeLandsOkay()) {
+          this.status = "Landing";
+          shipAlert(this.alias + " has successfully landed on the planet.");
+        }
+        else {
+          shipAlert("Contact with " + this.alias + " has been lost as it attempted to land on the planet.");
+          this.launched = false;
+          this.status = "Destroyed";
+        }
+        
       }
       
     },

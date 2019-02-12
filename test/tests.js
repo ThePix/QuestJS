@@ -36,7 +36,17 @@ test.tests = function() {
 
   test.assertEqual("Simple text: p2=red", processText("Simple text: p2={param:p2}", {p1:"yellow", p2:"red"}));
   
+  test.title("Numbers");
+  
+  test.assertEqual("fourteen", toWords(14));
+  test.assertEqual("minus four hundred and three", toWords(-403));
+  test.assertEqual("ninetyseven", toWords(97));
 
+  test.assertEqual("fourteenth", toOrdinal(14));
+  test.assertEqual("four hundred and third", toOrdinal(403));
+  test.assertEqual("ninetyfirst", toOrdinal(91));
+  test.assertEqual("ninetieth", toOrdinal(90));
+  
   test.title("Simple object commands");
   
   test.assertCmd("i", "You are carrying a knife.");
@@ -176,7 +186,7 @@ test.tests = function() {
   test.title("NPC commands (go)");
   test.assertCmd("kyle, go ne", "Kyle can't go northeast.");
   test.assertCmd("kyle, go e", "Kyle heads east.");
-  test.assertCmd("kyle, get torch", "You can't see anything you might call 'kyle'.");
+  test.assertCmd("kyle, get torch", "You can't see anything you might call 'kyle' here.");
   
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("get garage", "You take the garage key.");
@@ -205,7 +215,7 @@ test.tests = function() {
   test.assertCmd("push button", "You push the button, but nothing happens.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "You push the button. There is a brief hum of power, and a flash.");
-  test.assertCmd("get torch", "You can't see anything you might call 'torch'.");
+  test.assertCmd("get torch", "You can't see anything you might call 'torch' here.");
   test.assertCmd("open compartment", "You open the compartment.");
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("open compartment", "It already is.");

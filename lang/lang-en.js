@@ -160,7 +160,7 @@ function NOT_THAT_WAY(char, dir) {
   return nounVerb(char, "can't", true) + " go " + dir + ".";
 }
 function OBJECT_UNKNOWN_MSG(name) {
-  return nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "'.";
+  return nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "' here.";
 }
 
 function NOT_HERE(char, item) {
@@ -414,6 +414,17 @@ function addIndefiniteAritcle(item) {
 const numberUnits = "zero;one;two;three;four;five;six;seven;eight;nine;ten;eleven;twelve;thirteen;fourteen;fifteen;sixteen;seventeen;eighteen;nineteen;twenty".split(";");
 const numberTens = "twenty;thirty;forty;fifty;sixty;seventy;eighty;ninety".split(";");
 
+const ordinalReplacements = [
+  {regex:/one$/, replace:"first"},
+  {regex:/two$/, replace:"second"},
+  {regex:/three$/, replace:"third"},
+  {regex:/five$/, replace:"fifth"},
+  {regex:/eight$/, replace:"eighth"},
+  {regex:/nine$/, replace:"ninth"},
+  {regex:/twelve$/, replace:"twelfth"},
+  {regex:/y$/, replace:"ieth"},
+]
+
 function toWords(number) {
   if (typeof number !== "number") {
     errormsg ("toWords can only handle numbers");
@@ -453,6 +464,22 @@ function toWords(number) {
   }
   return (s);
 }
+
+function toOrdinal(number) {
+  if (typeof number !== "number") {
+    errormsg ("toWords can only handle numbers");
+    return number;
+  }
+  
+  let s = toWords(number);
+  for (let i = 0; i < ordinalReplacements.length; i++) {
+    if (ordinalReplacements[i].regex.test(s)) {
+      return s.replace(ordinalReplacements[i].regex, ordinalReplacements[i].replace);
+    }
+  }
+  return (s + "th");
+}
+
 
 
 

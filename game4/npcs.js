@@ -11,7 +11,7 @@ createItem("Xsansi",
   NPC(true),
   { 
     isAtLoc:function(loc) {
-      return true;
+      return isOnShip();
     },
     regex:/^(ai|xsan|computer)$/,
     display:DSPY_SCENERY,
@@ -113,6 +113,16 @@ createItem("Ostap",
     },
     notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she isnot interested. Later couples up with Ha-yoon",
     askoptions:[
+      {regex:/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/, response:function() {
+        if (w.Ostap.lostProbe) {
+          msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Ostap.");
+        }
+        else {
+          msg("'Do we ever lose probes?' you ask Ostap.");
+        }
+        msg("'We are exploring the unknown, we have to expect some probes will not make it to he planet surface successfully. Perhaps a retro-rocket fails or a parachute, or it lands at the bottom of a deep hole, or is struck bylightning as it lands. We should only expect 70 to 80 percent to land successfully, I think.'");
+      }},
+
       {regex:/probe/, response:function() {
         msg("'How does a bio-probe work?' you ask Ostap.");
         msg("'I control from the lab, find a good sample. First we look at the morphology, with a simple camera. Then pick up a sample, take a slice to look at the microscopic structure - we look for cells, what is inside the cell. If we get enough cells, we can tell it to extract chemical from one type of sub-structure, then we analysis the chemicals by mass spectroscopy and the infra-red spectroscopy. We hope we find something in the library, if not, the results can be taken to Earth.'");
@@ -123,9 +133,40 @@ createItem("Ostap",
         msg("'What is your area of expertise?' you ask Ostap.");
         msg("'I am the biologist. I studied at University of Kiev, then later at Notre Dame, in Paris, I did my Ph.D. thesis on extremophiles, and then I did a lot of work on Xenobiology for Tokyo Life Sciences.'");
       }},
+      
     ],
+    deployProbeAction:0,
+    deployProbeCount:0,
+    deployProbeTotal:0,
     deployProbe:function(arr) {
-      msg("About to deploy " + arr[0] + " probe(s).");
+      const count = parseInt(arr[0]);
+      switch (this.deployProbeAction) {
+        case 0:
+        msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " to deploy...' mutters Ostap as he types at the console.");
+        this.deployProbeAction++;
+        break;
+        case 1:
+        msg("Ostap prepares the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.deployProbeAction++;
+        break;
+        case 2:
+        msg("Ostap launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.deployProbeCount++;
+        this.deployProbeTotal++;
+        deployProbe(this, "bio");
+        if (this.deployProbeCount === count) {
+          this.deployProbeAction++;
+        }
+        else {
+          this.deployProbeAction--;
+        }
+        break;
+        case 3:
+        msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " launched,' says Ostap as he stands up.");
+        this.deployProbeAction++;
+        break;
+      }
+      return this.deployProbeAction === 4;
     },
   }
 );
@@ -151,6 +192,19 @@ createItem("Aada",
     },
     notes:"Aada (F) is from Finland (Oulu), 35, father genetically engineered her, planning to create a dynasty. Her older sister (effectively a lone) rebelled, so the father kept a very tight rein on this one (ef Miranda's sister). Drinks vodka a lot. Signed on as geologist, but not really her speciality - the corp was desperate and so was she. Aada handles the geo-probes.",
     askoptions:[
+      {regex:/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/, response:function() {
+        if (w.Ostap.lostProbe) {
+          msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Aada.");
+          msg("'The probe was destroyed, I guess. Or too damaged to transmit anyway.'");
+          msg("'Any idea how that would happen?'");
+          msg("'What am I, an expert on...? Oh, right, I am. Hmm, well I guess it could land in a volcano or something. Are they water-proof? I guess they must be. Struck by lightning... Mechanical failure... That sort of thing, I guess.'");
+        }
+        else {
+          msg("'Do we ever lose probes?' you ask Aada.");
+          msg("'Er, that's a good question. I guess we must do, we are exploring the unknown, right?'");
+        }
+      }},
+
       {regex:/probe/, response:function() {
         msg("'How does a geo-probe work?' you ask Aada.");
         msg("'Simple. Once deployed on the planet, I send it to an interesting rock, and it extends an arm that takes a sample.'");
@@ -176,7 +230,51 @@ createItem("Aada",
         }
         w.Aada.geologyFlag2 = true;
       }},
+      
     ],
+    deployProbeAction:0,
+    deployProbeCount:0,
+    deployProbeTotal:0,
+    deployProbe:function(arr) {
+      const count = parseInt(arr[0]);
+      switch (this.deployProbeAction) {
+        case 0:
+        if (w.Xsansi.currentPlanet === 0 && this.deployProbeTotal === 0) {
+          msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada, looking blankly at the console for a moment. 'How hard can it be?' She starts tapping at the key board.");
+        }
+        else {
+          msg("'Another " + toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada. 'Easy enough.'");
+        }
+        this.deployProbeAction++;
+        break;
+        case 1:
+        msg("Aada prepares the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.deployProbeAction++;
+        break;
+        case 2:
+        msg("Aada launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.deployProbeCount++;
+        this.deployProbeTotal++;
+        deployProbe(this, "geo");
+        if (this.deployProbeCount === count) {
+          this.deployProbeAction++;
+        }
+        else {
+          this.deployProbeAction--;
+        }
+        break;
+        case 3:
+        if (w.Xsansi.currentPlanet === 0 && this.deployProbeTotal === count) {
+          msg("'There!' says Aada, triumphantly. '" + toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed. I knew it couldn't be {i:that} tricky.'");
+        }
+        else {
+          msg("'That's another " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed,' says Aada.");
+        }
+        this.deployProbeAction++;
+        break;
+      }
+      return this.deployProbeAction === 4;
+    },
   }
 );
 
