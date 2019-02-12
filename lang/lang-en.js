@@ -677,7 +677,7 @@ function nounVerb(item, verb, capitalise) {
 //----------------------------------------------------------------------------------------------
 // Meta-messages
 
-function helpScript() {
+let helpScript = function() {
   metamsg("This is an experiment in using JavaScript (and a little jQuery) to create a text game.");
   if (PANES !== "None") {
     if (COMPASS) {
@@ -692,15 +692,16 @@ function helpScript() {
     metamsg("If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Other characters will not respond to the TALK TO/SPEAK TO command or EXAMINE/LOOK AT command.");
   }
   return SUCCESS_NO_TURNSCRIPTS;
-}
+};
 
 
-function aboutScript() {
+let aboutScript = function() {
   metamsg("{i:" + TITLE + " version " + VERSION + "} was written by " + AUTHOR + " using Quest 6.");
   if (THANKS.length > 0) {
     metamsg("Thanks to " + formatList(THANKS, {lastJoiner:LIST_AND}) + ".");
   }
-}
+  return SUCCESS_NO_TURNSCRIPTS;
+};
 
 
 

@@ -569,9 +569,50 @@ commands.push(new Cmd('Hint', {
     metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Tell Adda to launch geo-probe (AADA, LAUNCH PROBE), and tell Ostap to launch bioprobes. Later, ask then about the planet (ASK OSTAP ABOUT PLANET). You have five planets; you can ASK AI ABOUT SHIP to find how many of each probe is left.");
     metamsg("Return to the stasis pod to go back into stasis. Xsansi will then nagivate the ship to the next planet.");
     metamsg("As the captain, the welfare of the crew is important, so ASK KYLE ABOUT HIS HEALTH, etc.");
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
+helpScript = function() {
+  metamsg("Help commands:");
+  metamsg("HELP NPC: Interacting with NPCs");
+  metamsg("HELP GAME WORLD: Notes about the universe the game is set in");
+  metamsg("HELP SYSTEM: About the game system");
+  return SUCCESS_NO_TURNSCRIPTS;
+}
+
+
+commands.push(new Cmd('HelpGameWorld', {
+  regex:/^(?:\?|help) game world$/,
+  script:function() {
+    metamsg("The game world:");
+    metamsg("I have, to some degree, tried to go hard science fiction. I wold like to think this is not {i:too} much a flight of fantasy. I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
+    metamsg(" I am also assuming people can be held in stasis, and presumably this is like freezing time (cf Niven's stasis field, in his \"Known Space\"). I need that to preserve the food so the crew have something to eat 80 years after leaving Earth.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpNPCs', {
+  regex:/^(?:\?|help) npcs?$/,
+  script:function() {
+    metamsg("Interacting with NPC:");
+    metamsg("You can ask an NPC to do something by using the same command you would use to have yourself do something, but prefixed with {color:red:[name],} (note the comma) or {color:red:TELL [name] TO}.");
+    metamsg("You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}.");
+    metamsg("Use the TOPICS command for some suggested topics. There are rather more for ASK than TELL, as you might expect.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpSystem', {
+  regex:/^(?:\?|help) npcs?$/,
+  script:function() {
+    metamsg("The Game System:")
+    metamsg("This game is written entirely in JavaScript, so it is running in your browser. Compared to Quest 5, which I am familiar with, this means that you do not need to download any software to run it, and there is no annoying lag while you wait for a server to respond. Compared to Inform... well, it allows authors to directly access a modern programming language (though the point of Inform 7, of course, is to keep the programming language at bay).");
+    metamsg("It is a complete system, implementing all the standards of a parser game, including the usual compass directions by default! Containers, surfaces, countables, wearables, openables, furniture, components and switchable are all built in, as well as NPCs, which hopefully are acting with some semblance of realism.")
+    metamsg("For more information, including a tutorial on how to create your own game, see <a href=\"https://github.com/ThePix/QuestJS/wiki\">here</a>. As yet there is no editor, but I hope there will be one day.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
 
 
 commands.push(new Cmd('Launch', {
