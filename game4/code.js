@@ -29,15 +29,6 @@ Each awakening gets steadily worse, by the fourthyou are throwing up.
 
 
 
-Ship
-
-The mission assumes only a day at each planet, so there are supplies for two weeks, held in stasis. There is water and oxygen for a month. In fact, there is more, as the ship is under-manned.
-
-Has no weapons, besides light arms for the crew (e-locked)
-
-
-
-
 */
 
 
@@ -50,19 +41,33 @@ const PLANETS = [
   {
     starName:"HD 154088",
     planet:"D",
-    comment:"A lifeless planet, with no water.",
+    comment:"A lifeless planet, with no water, not much minerals either",
     atmosphere:"The atmosphere is 63% nitrogen, 17% carbon dioxide, 17% methane, 2% water and about 1% of various other gases including ethane, ammonia and hydrogen sulphide.",
     radio:"No radio signal detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet is predominantly grey rock. There are no bodies of water on the surface and no cloud cover. It is 6.8 times the mass of Earth.",
     starDesc:"HD 154088 is a seventh magnitude metal-rich K-type main sequence star that lies approximately 58 light-years from Earth in the constellation of Ophiuchus.",
     probeLandingSuccess:"ynyyyynyyyynyyynnyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
+    geoProbeRanks:[
+      [3, 7, 12],
+      [5],
+      [4],
+      [6],
+    ],
+    geoProbeBonusPerRank:2,
+    bioProbeRanks:[
+      [3, 7, 10],
+      [2, 6],
+      [2, 7],
+      [6],
+    ],
+    bioProbeBonusPerRank:1,
     arrivalTime:new Date('December 22, 2325 09:43:43'),
     onArrival:function() {
       w.Ha_yoon.status = Math.min(w.Kyle.status, 96);
       w.Kyle.status = Math.min(w.Kyle.status, 98);
     },
-    Kyle_how_are_you:"'I'm good, mate.'",
+    Kyle_how_are_you:"'I'm good, mate. Why? Why shouldn't I be?'",
     Ostap_how_are_you:"'I am feeling good.'",
     Aada_how_are_you:"'I'm okay.'",
     Ha_yoon_how_are_you:"'I... feel a little queasy. It's just the stasis, nothing I can't handle.'",
@@ -71,16 +76,32 @@ const PLANETS = [
   { 
     starName:"HD 168746", 
     planet:"B", 
-    comment:"Lots of life, at about the Devonian Period, with purple planets.",
+    comment:"Lots of life, at about the Devonian Period, with purple planets. Good metals too",
     atmosphere:"The atmosphere is 71% nitrogen, 15% oxygen, 3% carbon dioxide  and about 1% of various other gases including water and methane.",
     radio:"No radio signal detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 75% water. The land surfaces are predominantly purple. Cloud cover is about 40%.",
     starDesc:"HD 168746 is an 8th magnitude star in the constellation of Serpens, 139 light years from Earth. It is very similar to our Sun, a yellow dwarf star (spectral class G5V).",
     probeLandingSuccess:"yyyynyyyyyynyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
+    geoProbeRanks:[
+      [3, 8, 12],
+      [6],
+      [7],
+      [5]
+    ],
+    geoProbeBonusPerRank:5,
+    bioProbeRanks:[
+      [2, 5, 8],
+      [2, 4],
+      [4, 3],
+      [3, 3],
+      [2, 3],
+    ],
+    bioProbeBonusPerRank:5,
     arrivalTime:new Date('March 3, 2340 11:05:30'),
     onArrival:function() {
-      msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod again. 'We have arrived at " + this.starName + ",' the voice continues, 'our second destination, after a length journey without incident. You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.' You sit up, and for a moment you do feel dizzy, but it soon passes.");
+      msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod again. 'We have arrived at " + this.starName + ",' the voice continues, 'our second destination, after a lengthy journey, with a single incident. On the nineteenth of September, 2338 at 2104, ship time, the ship passed through a meteor shower, resulting in a loss of integrity in: the lounge, the captain's cabin, the top deck corridor.");
+      msg("'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.' You sit up, and for a moment you do feel dizzy, but it soon passes.");
       game.player.status = Math.min(game.player.status, 95);
       w.Kyle.status = Math.min(w.Kyle.status, 93);
       w.Ostap.status = Math.min(w.Kyle.status, 96);
@@ -103,6 +124,20 @@ const PLANETS = [
     starDesc:"HD 168443 is a yellow dwarf star of (spectral type G5) about the mass of the Sun. It is in the constellation of Serpens Cauda, 129 light years from the Solar System. It is actually part of a binary, the other star is a brown dwarf, with a very long orbital period.",
     arrivalTime:new Date('October 21, 2362 06:21:39'),
     probeLandingSuccess:"yynyynyyyynyynyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
+    geoProbeRanks:[
+      [3, 8, 15],
+      [4],
+      [3],
+      [4],
+    ],
+    geoProbeBonusPerRank:4,
+    bioProbeRanks:[
+      [4, 7, 11],
+      [4, 7],
+      [3, 7],
+      [3],
+    ],
+    bioProbeBonusPerRank:2,
     onArrival:function() {
       msg("'Good morning,' says a female voice. {i:Xsansi,} you think to yourself. 'We have arrived at " + this.starName + ",' the voice continues, 'our third destination, after a long and oh-so-tedious journey. You may be suffering from disorientation, nausea, headache and muscle fatigue, but ~I expect that is nothing to decades of loniness, right? If symptoms persist, tough.' You sit up, and immediately feel sick. You grip the sides of the pod as the room spins, waiting for it stop. It is a few minutes before you feel well enough to actually think.");
     },
@@ -115,13 +150,25 @@ const PLANETS = [
   { 
     starName:"HD 148427", 
     planet:"D", 
-    comment:"A lifeless planet, but it has water, so suitable for seeding. By this time the AI is doolally.",
+    comment:"A lifeless planet, but it has water, so suitable for seeding. By this time the AI is doolally. A young, fourth generation planet, good for mining.",
     atmosphere:"The atmosphere is 53% nitrogen, 18% carbon dioxide, 12% nitrogen dioxide, 10% carbon monoxide, 7% nitrogen oxide, 4% sulphur dioxide, 3% hydrogen sulphide, 2% water and about 1% of various other gases including ammonia.",
     radio:"No radio signals have been detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 63% water. The land surfaces are predominantly grey and red. Cloud cover is about 25%. Several active volcanoes have been noted.",
     starDesc:"HD 148427 is a 7th-magnitude K-type subgiant star approximately 193 light years away in the constellation Ophiuchus. Its mass is 45% greater than the Sun, and it is three times the size and six times more luminous, although its age is 2½ billion years.",
     probeLandingSuccess:"yyyyyynyyyyyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
+    geoProbeRanks:[
+      [4, 9, 16],
+      [],
+      [4],
+    ],
+    geoProbeBonusPerRank:5,
+    bioProbeRanks:[
+      [3, 8, 15],
+      [3],
+      [4],
+    ],
+    bioProbeBonusPerRank:2,
     arrivalTime:new Date('April 15, 2386 13:06:51'),
     onArrival:function() {
       msg("'Awake at last are we?' says a female voice. {i:Why does she sound so odd,} you wonder. 'Here we are at " + this.starName + ",' the strangely inflected voice continues, 'our fourth destination, after a long, long journey, giving me plenty of time to consider the nature of reality.' You sit up, and immediately throw up over the side of the pod. You grip the sides of the pod as the entire contents of your stomach is ejected on to the floor. Eventually, the heaving stops.");
@@ -136,11 +183,11 @@ const PLANETS = [
   { 
     starName:"Gliese 1214", 
     planet:"A", 
-    comment:"This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off.",
+    comment:"This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off. Any probes will be shot down!",
     atmosphere:"Pretty good.",
     radio:"Radio signals have been detected.",
     lights:"There are numerous light sources on the night side of the planet.",
-    probeLandingSuccess:"yyyynyyyyyynyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
+    probeLandingSuccess:"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
     planetDesc:"The planet surface is about 56% water. The land surfaces are predominantly green. Cloud cover is about 30%.",
     starDesc:"Gliese 1214 is a dim M4.5 red dwarf in the constellation Ophiuchus with an apparent magnitude of 14.7. It is located at a distance of approximately 47 light years from the Sun. The star is about one-fifth the radius of the Sun with a surface temperature estimated to be 3000 K (2730 °C; 4940 °F).[12] Its luminosity is only 0.003% that of the Sun.",
     arrivalTime:new Date('August 19, 2409 12:11:31'),
@@ -177,7 +224,7 @@ const PLANET_DATA = {
       msg("'The second probe turned up some interesting sedimentary rocks, so there was water on the planet at one time. Wonder where it all went? It is not like Mars; it has an atmosphere so the water did not just boil away into space.'");
     },
     level7:function() {
-      msg("'Got some elemental analysis. Obviously this is from a very limited number of samples, but not seeing much at all in the way of heavy metals. I'm seeing iron, copper, nickel, but hardly anythng heavier than that. Computer suggests it could be a second generation star.'");
+      msg("'Got some elemental analysis. Obviously this is from a very limited number of samples, but not seeing much at all in the way of heavy metals. I'm seeing iron, copper, nickel, but hardly anything heavier than that. Computer suggests it could be a second generation star.'");
       msg("'A what?'");
       msg("'Apparently our sun is a third generation star; it formed from the debris of a previous star, which in turn formed from the debris of an earlier star. The more generations, the more heavy metals. So anyway, basically it means it is probably not even worth mining.'");
     },
@@ -450,16 +497,27 @@ TELL_ABOUT_INTRO = function() { return ""; };
 
 
 
-function deployProbe(npc, probeType) {
+function deployProbe(npc, probeType, probeNumber) {
   w.Xsansi[probeType + "Probes"]--;
   const probe = cloneObject(w.probe_prototype);
   
   probe.alias = sentenceCase(probeType) + "-probe " + toRoman(16 - w.Xsansi[probeType + "Probes"]);
+  probe.probeType = probeType;
+  probe.planetNumber = w.Xsansi.currentPlanet;
+  probe.probeNumber = probeNumber;
   probe.launched = true;
   probe.owner = npc.name;
   //debugmsg("Launched: " + probe.alias);
 }
 
+
+function getProbes() {
+  const arr = [];
+  for (let key in w) {
+    if (w[key].clonePrototype === w.probe_prototype) arr.push(w[key]);
+  }
+  return arr;
+}
 
 
 function shipAlert(s) {
@@ -513,6 +571,11 @@ tp.text_processors.tableDesc = function(arr, params) {
   return w.canteen_table.tpDesc;
 };
 
+
+
+tp.text_processors.stasis_pod_status = function(arr, params) {
+  return w.stasis_bay.tpStatus;
+};
 
 
 
@@ -587,7 +650,8 @@ commands.push(new Cmd('HelpGameWorld', {
   script:function() {
     metamsg("The game world:");
     metamsg("I have, to some degree, tried to go hard science fiction. I wold like to think this is not {i:too} much a flight of fantasy. I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
-    metamsg(" I am also assuming people can be held in stasis, and presumably this is like freezing time (cf Niven's stasis field, in his \"Known Space\"). I need that to preserve the food so the crew have something to eat 80 years after leaving Earth.");
+    metamsg("I am also assuming people can be held in stasis, and presumably this is like freezing time (cf Niven's stasis field, in his \"Known Space\"). I need that to preserve the food so the crew have something to eat 80 years after leaving Earth.");
+    metamsg("Also, probes are {i:fast}! It just takes a few turns to travel from orbit to the planet surface, which has to be at least 100 miles, and likely considerably more. They work fast on the planet too. It is a game, we need stuff to happened quickly to get interest.");
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -626,4 +690,22 @@ commands.push(new Cmd('Launch', {
 }));
 
 
-
+commands.push(new Cmd('ProbeStatus', {
+  regex:/^probes?$/,
+  script:function() {
+    const arr = getProbes();
+    metamsg("Found " + arr.length + " probes");
+    for (let i = 0; i < arr.length; i++) {
+      metamsg("------------------");
+      metamsg("Probe:" + arr[i].alias);
+      metamsg("Status:" + arr[i].status);
+      metamsg("launchCounter:" + arr[i].launchCounter);
+      metamsg("probeType:" + arr[i].probeType);
+      metamsg("planetNumber:" + arr[i].planetNumber);
+    }
+    metamsg("------------------");
+    metamsg("Geology:" + currentPlanet().geology);
+    metamsg("Biology:" + currentPlanet().biology);
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));

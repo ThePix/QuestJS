@@ -5,12 +5,29 @@
   
 createItem("me",
   PLAYER(),
-  { loc:"stasis_pod", regex:/^me|myself|player$/, status:100, bonus:0, examine:function() {
+  { loc:"stasis_pod_room", regex:/^me|myself|player$/, status:100, bonus:0, examine:function() {
     msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
   }
 );
 
+createItem("your_underwear", WEARABLE(1, ["body"]), {
+  alias:"underwear",
+  loc:"me",
+  worn:true,
+  defArticle:"your",
+  indefArticle:"your",
+  examine:"Your underwear is standard issue; white and functional.",
+});
+
+createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
+  alias:"jumpsuit",
+  loc:"me",
+  worn:true,
+  defArticle:"your",
+  indefArticle:"your",
+  examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
+});
 
 
 
@@ -20,10 +37,18 @@ createItem("me",
 
 createRoom("stasis_bay", {
   alias:"stasis bay",
-  desc:'There are six stasis pods here, four on one side and two on the other. That is actually more than there are crew members. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
+  desc:'There are six stasis pods here, four on one side and two on the other. That is actually more than there are crew members. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
+  podStatus:1,
+  tpStatus:function() {
+    switch (w.stasis_bay.podStatus) {
+      case 0: return "All pods are currently closed";
+      case 1: return "All pods are currently open";
+      case 2: return "Currently only your pod and the spare pod are open";
+    }
+  },
   port:new Exit('hallway'),
   aft:new Exit('cargo_bay'),
-  in:new Exit('stasis_pod', { msg:"You climb into the stasis pod.", } ),
+  in:new Exit('stasis_pod_room', { msg:"You climb into the stasis pod.", } ),
 });
 
 createItem("pile_of_vomit", {
@@ -32,9 +57,51 @@ createItem("pile_of_vomit", {
   examine:"A large splat of vomit, it stinks. You decide not to look too closely. You do know what you ate last, so what is the point?",
 });
 
+createItem("stasis_pod", {
+  alias:"pod",
+  regex:/^(stasis )?pods?$/,
+  display:DSPY_SCENERY,
+  loc:"stasis_bay",
+  examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
+});
+
+createItem("stasis_locker", CONTAINER(true), {
+  alias:"locker",
+  display:DSPY_SCENERY,
+  loc:"stasis_bay",
+  examine:function() {
+    if (this.closed) {
+      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
+    }
+    else {
+      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(), {lastJoiner:" and ", article:INDEFINITE}) + ".");
+    }
+  },
+});
 
 
-createRoom("stasis_pod", {
+createItem("your_spacesuit", WEARABLE(2, ["body"]), {
+  alias:"spacesuit",
+  loc:"stasis_locker",
+  defArticle:"your",
+  indefArticle:"your",
+  examine:"Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility.",
+});
+
+createItem("other_spacesuit", {
+  alias:"spare spacesuit",
+  loc:"stasis_locker",
+  examine:"The other spacesuit is identical to your own.",
+});
+
+
+
+
+
+
+
+
+createRoom("stasis_pod_room", {
   alias:"stasis pod",
   desc:'The stasis pod is shaped uncomfortably like a coffin, and is a pale grey colour. The lid is in the raised position.',
   out:new Exit('stasis_bay', { msg:"You climb out of the stasis pod.", } ),
@@ -402,9 +469,16 @@ createItem("probe_prototype", COUNTABLE([]),
           this.launched = false;
           this.status = "Destroyed";
         }
-        
       }
+      if (this.launchCounter === TURNS_TO_LANDING + 1) {
+        this.status = "Exploring";
+      }
+      const arr = PLANETS[this.planetNumber][this.probeType + "ProbeRanks"][this.probeNumber];
       
+      if (arr !== undefined && arr.includes(this.launchCounter - TURNS_TO_LANDING)) {
+        w["planet" + this.planetNumber][this.probeType + "logy"]++;
+        game.player.bonus += PLANETS[this.planetNumber][this.probeType + "ProbeBonusPerRank"];
+      }
     },
   }
 );

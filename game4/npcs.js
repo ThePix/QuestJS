@@ -13,6 +13,7 @@ createItem("Xsansi",
     isAtLoc:function(loc) {
       return isOnShip();
     },
+    properName:true,
     regex:/^(ai|xsan|computer)$/,
     display:DSPY_SCENERY,
     status:100,
@@ -24,14 +25,14 @@ createItem("Xsansi",
     examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
 
     askoptions:[
-      {regex:/mission/, response:function() {
+      {name:"mission", regex:/mission/, response:function() {
         msg("'Remind me of the mission, Xsansi,' you say.");
         msg("'The ship's mission is to survey five planets orbiting stars in the Ophiuchus and Serpens constellations. At each planet, a satellite is to be launched to collect data from the surface. At your discretion, bio-probes and geo-probes can be dropped to the surface to collect data. Note that there is no capability for probes to return to the ship or for the ship to land on a planet.'");
         msg("'Your bonus,' she continues, 'depends on the value of the data you collect. Bio-data from planets with advanced life is highly valued, as is geo-data from metal rich planets. Evidence of intelligent life offers further bonuses.'");
         msg("'Note that $25k will be deducted from you bonus should a crew member die,' she adds. 'Note that no bonus will be awarded in he event of your own death.'");
       }},
       
-      {regex:/crew|team/, response:function() {
+      {name:"crew", regex:/crew|team/, response:function() {
         msg("'Tell me about the crew, Xsansi,' you say.");
         msg("'" + w.Ostap.crewStatus());
         msg("'" + w.Aada.crewStatus());
@@ -39,12 +40,12 @@ createItem("Xsansi",
         msg("'" + w.Kyle.crewStatus() + "'");
       }},
       
-      {regex:/status|ship/, response:function() {
+      {name:"ship", regex:/status|ship/, response:function() {
         msg("'What is the ship's status, Xsansi?' you ask.");
         msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites.'");
       }},
       
-      {regex:/itinerary|stars|planets|route|destinations/, response:function() {
+      {name:"itinerary", regex:/itinerary|stars|planets|route|destinations/, response:function() {
         msg("'Remind me of the itinerary, Xsansi,' you say.");
         for (let i = w.Xsansi.currentPlanet; i < PLANETS.length; i++) {
           let s = "'Item " + (i + 1) + ": " + PLANETS[i].starDesc;
@@ -53,7 +54,7 @@ createItem("Xsansi",
         }
       }},
       
-      {regex:/this planet|this star|planet|star|the planet|the star/, response:function() {
+      {name:"planet", regex:/this planet|this star|planet|star|the planet|the star/, response:function() {
         msg("'Tell me about this planet, Xsansi,' you say.");
         const planet = PLANETS[w.Xsansi.currentPlanet];
         let s = "'We are currently in orbit around the planet " + planet.starName + planet.planet +"' she says. '";
@@ -61,6 +62,30 @@ createItem("Xsansi",
         s += planet.lights + " " + planet.radio + "'";
         msg(s);
       }},
+      
+      {name:"meteors", regex:/meteor/, response:function() {
+        if (w.Xsansi.currentPlanet === 0) {
+          msg("'Is there any risk of being hit by something, like a meteor shower, Xsansi?' you ask.")
+          msg("'There is a probability of 0.23 of significant damage from a meteor shower during the mission. The probability of that occuring while the crew is not in stasis is less than 0.0002.'");
+        }
+        else {
+          msg("'Tell me about that meteor shower, Xsansi,' you say.")
+          msg("'We passed through the periphery of a class D meteor shower on the approach to " + PLANETS[1].starName + PLANETS[1].planet + ". I was able to modify the course of the ship to avoid the worst of the damage, but was constrained by the amount of fuel needed to complete the mission. The ship experienced damage to the upper forward and port areas.'")
+        }
+      }},
+      
+      {name:"damage", regex:/damage/, response:function() {
+        if (w.Xsansi.currentPlanet === 0) {
+          msg("'Is the ship damaged at all, Xsansi?' you ask.")
+          msg("'There is currently no damage to the ship.");
+        }
+        else {
+          msg("'Tell me about the damage to the ship, Xsansi,' you say.")
+          // TODO  !!!
+          msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.'")
+        }
+      }},
+      
     ],
   }
 );
@@ -151,9 +176,9 @@ createItem("Ostap",
         break;
         case 2:
         msg("Ostap launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        deployProbe(this, "bio", this.deployProbeTotal);
         this.deployProbeCount++;
         this.deployProbeTotal++;
-        deployProbe(this, "bio");
         if (this.deployProbeCount === count) {
           this.deployProbeAction++;
         }
@@ -253,9 +278,9 @@ createItem("Aada",
         break;
         case 2:
         msg("Aada launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        deployProbe(this, "geo", deployProbeTotal);
         this.deployProbeCount++;
         this.deployProbeTotal++;
-        deployProbe(this, "geo");
         if (this.deployProbeCount === count) {
           this.deployProbeAction++;
         }

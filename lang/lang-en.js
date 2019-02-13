@@ -384,11 +384,14 @@ if (EXITS === undefined) {
 
 
 
-function addDefiniteAritcle(item) {
+function addDefiniteArticle(item) {
+  if (item.defArticle) {
+    return item.defArticle + " ";
+  }
   return item.properName ? "" : "the ";
 }
 
-function addIndefiniteAritcle(item) {
+function addIndefiniteArticle(item) {
   if (item.indefArticle) {
     return item.indefArticle + " ";
   }
