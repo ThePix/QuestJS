@@ -23,7 +23,7 @@ createItem("Xsansi",
     satellites:6,
     shipStatus:"All systems nominal.",
     examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
-
+    
     askoptions:[
       {name:"mission", regex:/mission/, response:function() {
         msg("'Remind me of the mission, Xsansi,' you say.");
@@ -77,7 +77,19 @@ createItem("Xsansi",
       {name:"damage", regex:/damage/, response:function() {
         if (w.Xsansi.currentPlanet === 0) {
           msg("'Is the ship damaged at all, Xsansi?' you ask.")
-          msg("'There is currently no damage to the ship.");
+          msg("'There is currently no damage to the ship.'");
+        }
+        else {
+          msg("'Tell me about the damage to the ship, Xsansi,' you say.")
+          // TODO  !!!
+          msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.'")
+        }
+      }},
+      
+      {name:"repairs", regex:/repairs/, response:function() {
+        if (w.Xsansi.currentPlanet === 0) {
+          msg("'How do we do repairs, Xsansi?' you ask.")
+          msg("'In the event of a loss of hull integrity, kits for repairing the hull from inside the ship can be found in the cargo bay. The captain and one nominated crew member should don spacesuits, whilst other crew members go in their respective stasis pods. The ship's air will then be evacuated while repairs are made.'");
         }
         else {
           msg("'Tell me about the damage to the ship, Xsansi,' you say.")
@@ -96,6 +108,7 @@ createItem("Xsansi",
 createItem("Kyle",
   NPC(false),
   { 
+    notes:"Kyle (M) is from Australia (born Newcastle but raised in Sydney), 32, a gay nerd. Expert in computing and cooking. Kyle handles the satellite and understanding radio transmissions. Joined up so he can see the future - it is a kind of time travel; hopes to upload himself to become immortal. Terminally ill.",
     loc:"flightdeck",
     status:"okay",
     properName:true,
@@ -105,6 +118,38 @@ createItem("Kyle",
       let s = "Crew member Kyle's designation is: coms. His current status is: ";
       s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
+    },
+    reactionToUndress:0,
+    reactions:function() {
+      const g = game.player.getOuterWearable("body");
+      if (g === false && this.reactionToUndress < 2) {
+        if (game.player.isFemale) {
+          msg("Kyle glances at you briefly. Kind of insulting that he is so uninterested in your naked body.");
+        }
+        else {
+          msg("Kyle looks you up and down, and swallows nervously. 'Er... you're naked,' he says, trying, not to successfully, to stare.");
+          this.pause();
+        }
+        this.reactionToUndress = 2;
+      }
+    },
+    revive:function(isMultiple, char) {
+      if (char === game.player) {
+        msg("You wonder how to revive " + this.byname() + " - probably best to leave that to Xsansi.");
+        return false;
+      }
+      if (char !== w.Xsansi) {
+        msg("'" + char.byname() + ", can you revive " + this.byname() + "?' you ask.");
+        msg("'Probably best to leave that to Xsansi.'");
+        return false;
+      }
+      if (!this.inPod) {
+        msg("'Xsansi, please revive " + this.byname() + ",' you say.");
+        msg("'Crew member " + this.byname() + " is not currently in stasis.'");
+        return false;
+      }
+      // check number revived TODO!!!
+      
     },
     askoptions:[
       {regex:/probe/, response:function() {
@@ -118,7 +163,6 @@ createItem("Kyle",
         msg("'You will not,' says Xsansi, indignantly. 'I can assure you that I am self-maintaining, and designed to last for centuries.'");
       }},
     ],
-    notes:"Kyle (M) is from Australia (born Newcastle but raised in Sydney), 32, a gay nerd. Expert in computing and cooking. Kyle handles the satellite and understanding radio transmissions. Joined up so he can see the future - it is a kind of time travel; hopes to upload himself to become immortal. Terminally ill.",
   }
 );
 
@@ -126,6 +170,7 @@ createItem("Kyle",
 createItem("Ostap",
   NPC(false),
   { 
+    notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she isnot interested. Later couples up with Ha-yoon",
     loc:"canteen",
     status:"okay",
     properName:true,
@@ -136,7 +181,6 @@ createItem("Ostap",
       s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
-    notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she isnot interested. Later couples up with Ha-yoon",
     askoptions:[
       {regex:/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/, response:function() {
         if (w.Ostap.lostProbe) {
@@ -145,7 +189,7 @@ createItem("Ostap",
         else {
           msg("'Do we ever lose probes?' you ask Ostap.");
         }
-        msg("'We are exploring the unknown, we have to expect some probes will not make it to he planet surface successfully. Perhaps a retro-rocket fails or a parachute, or it lands at the bottom of a deep hole, or is struck bylightning as it lands. We should only expect 70 to 80 percent to land successfully, I think.'");
+        msg("'We are exploring the unknown, we have to expect some probes will not make it to he planet surface successfully. Perhaps a retro-rocket fails or a parachute, or it lands at the bottom of a deep hole, or is struck by lightning as it lands. We should only expect 70 to 80 percent to land successfully, I think.'");
       }},
 
       {regex:/probe/, response:function() {
@@ -160,6 +204,19 @@ createItem("Ostap",
       }},
       
     ],
+    reactionToUndress:0,
+    reactions:function() {
+      const g = game.player.getOuterWearable("body");
+      if (g === false && this.reactionToUndress < 2) {
+        msg("Ostap looks you up and down, and smiles. 'Maybe I will get naked too! So liberating. The others are okay with it?'");
+        this.reactionToUndress = 2;
+        this.pause();
+      }
+      else if (g.layer === 1 && this.reactionToUndress < 1) {
+        msg("Ostap looks you up and down, and shrugs.");
+        this.reactionToUndress = 1;
+      }
+    },
     deployProbeAction:0,
     deployProbeCount:0,
     deployProbeTotal:0,
@@ -203,6 +260,7 @@ createItem("Ostap",
 createItem("Aada",
   NPC(true),
   { 
+    notes:"Aada (F) is from Finland (Oulu), 35, father genetically engineered her, planning to create a dynasty. Her older sister (effectively a lone) rebelled, so the father kept a very tight rein on this one (ef Miranda's sister). Drinks vodka a lot. Signed on as geologist, but not really her speciality - the corp was desperate and so was she. Aada handles the geo-probes.",
     loc:"girls_cabin",
     status:"okay",
     properName:true,
@@ -215,7 +273,23 @@ createItem("Aada",
       s += this.status + ". Her current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
-    notes:"Aada (F) is from Finland (Oulu), 35, father genetically engineered her, planning to create a dynasty. Her older sister (effectively a lone) rebelled, so the father kept a very tight rein on this one (ef Miranda's sister). Drinks vodka a lot. Signed on as geologist, but not really her speciality - the corp was desperate and so was she. Aada handles the geo-probes.",
+    reactionToUndress:0,
+    reactions:function() {
+      const g = game.player.getOuterWearable("body");
+      if (g === false && this.reactionToUndress < 2) {
+        if (game.plauer.isFemale) {
+          msg("Aada looks you up and down. 'Very trim!' she notes. 'I bet the guys like the view.'");
+          if (w.Kyle.reactionToUndress === 2) {
+            msg("'Well, Kyle was none too impressed.'");
+          }
+        }
+        else {
+          msg("Aada looks you up and down. 'Is that really appropriate for a captain,' she muses.");
+        }
+        this.pause();
+        this.reactionToUndress = 2;
+      }
+    },
     askoptions:[
       {regex:/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/, response:function() {
         if (w.Ostap.lostProbe) {
@@ -309,6 +383,7 @@ createItem("Ha_yoon",
   NPC(true),
   { 
     alias:"Ha-yoon",
+    notes:"Ha-yoon (F) is from Korean (Seoul), 28, and is on the run, after killing a couple of guys. She hopes that after all the time in space her crimes will be forgotten. Engineer.",
     loc:"engineering3",
     status:"okay",
     properName:true,
@@ -319,7 +394,20 @@ createItem("Ha_yoon",
       s += this.status + ". Her current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
-    notes:"Ha-yoon (F) is from Korean (Seoul), 28, and is on the run, after killing a couple of guys. She hopes that after all the time in space her crimes will be forgotten. Engineer.",
+    reactionToUndress:0,
+    reactions:function() {
+      const g = game.player.getOuterWearable("body");
+      if (g === false && this.reactionToUndress < 2) {
+        if (game.player.isFemale) {
+          msg("'Captain!' exclaims Ha-yoon when she sees you naked.");
+        }
+        else {
+          msg("'Captain!' exclaims Ha-yoon when she sees you naked. 'I'm sure we don't need to see {i:that}!'");
+        }
+        this.pause();
+        this.reactionToUndress = 2;
+      }
+    },
     askoptions:[
       {regex:/probe/, response:function() {
         msg("'How do the probe works?' you ask Ha-yoon.");

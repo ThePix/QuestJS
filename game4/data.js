@@ -11,14 +11,7 @@ createItem("me",
   }
 );
 
-createItem("your_underwear", WEARABLE(1, ["body"]), {
-  alias:"underwear",
-  loc:"me",
-  worn:true,
-  defArticle:"your",
-  indefArticle:"your",
-  examine:"Your underwear is standard issue; white and functional.",
-});
+
 
 createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   alias:"jumpsuit",
@@ -29,7 +22,14 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
 });
 
-
+createItem("your_underwear", WEARABLE(1, ["body"]), {
+  alias:"underwear",
+  loc:"me",
+  worn:true,
+  defArticle:"your",
+  indefArticle:"your",
+  examine:"Your underwear is standard issue; white and functional.",
+});
 
 
 //-----------------------------------------------------

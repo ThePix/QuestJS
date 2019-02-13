@@ -496,6 +496,11 @@ TELL_ABOUT_INTRO = function() { return ""; };
 
 
 
+function reviveNpc(npc, object) {
+  
+}
+
+
 
 function deployProbe(npc, probeType, probeNumber) {
   w.Xsansi[probeType + "Probes"]--;
@@ -687,6 +692,16 @@ commands.push(new Cmd('Launch', {
     {scope:isInWorld},
   ],
   defmsg:function() { msg("You can't launch that!")},
+}));
+
+commands.push(new Cmd('Revive', {
+  regex:/^(revive|wake|awaken) (.+)$/,
+  npcCmd:true,
+  objects:[
+    {ignore:true},
+    {scope:isInWorld},
+  ],
+  defmsg:function() { msg("You can't revive that!")},
 }));
 
 
