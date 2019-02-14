@@ -63,7 +63,7 @@ createItem("Xsansi",
         msg(s);
       }},
       
-      {name:"meteors", regex:/meteor/, response:function() {
+      {name1:"meteors", regex:/meteor/, response:function() {
         if (w.Xsansi.currentPlanet === 0) {
           msg("'Is there any risk of being hit by something, like a meteor shower, Xsansi?' you ask.")
           msg("'There is a probability of 0.23 of significant damage from a meteor shower during the mission. The probability of that occuring while the crew is not in stasis is less than 0.0002.'");
@@ -74,7 +74,7 @@ createItem("Xsansi",
         }
       }},
       
-      {name:"damage", regex:/damage/, response:function() {
+      {name1:"damage", regex:/damage/, response:function() {
         if (w.Xsansi.currentPlanet === 0) {
           msg("'Is the ship damaged at all, Xsansi?' you ask.")
           msg("'There is currently no damage to the ship.'");
@@ -86,7 +86,7 @@ createItem("Xsansi",
         }
       }},
       
-      {name:"repairs", regex:/repairs/, response:function() {
+      {name1:"repairs", regex:/repairs/, response:function() {
         if (w.Xsansi.currentPlanet === 0) {
           msg("'How do we do repairs, Xsansi?' you ask.")
           msg("'In the event of a loss of hull integrity, kits for repairing the hull from inside the ship can be found in the cargo bay. The captain and one nominated crew member should don spacesuits, whilst other crew members go in their respective stasis pods. The ship's air will then be evacuated while repairs are made.'");
@@ -112,26 +112,13 @@ createItem("Kyle",
     loc:"flightdeck",
     status:"okay",
     properName:true,
+    relationship:0,
     specialisation:"coms",
     examine:"Kyle is the computer expert, but also a good cook, and has volunteered for the role of chef. An Australian, he is slim, and below average height, with very short blonde hair, and green eyes.",
     crewStatus:function() {
       let s = "Crew member Kyle's designation is: coms. His current status is: ";
       s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
-    },
-    reactionToUndress:0,
-    reactions:function() {
-      const g = game.player.getOuterWearable("body");
-      if (g === false && this.reactionToUndress < 2) {
-        if (game.player.isFemale) {
-          msg("Kyle glances at you briefly. Kind of insulting that he is so uninterested in your naked body.");
-        }
-        else {
-          msg("Kyle looks you up and down, and swallows nervously. 'Er... you're naked,' he says, trying, not to successfully, to stare.");
-          this.pause();
-        }
-        this.reactionToUndress = 2;
-      }
     },
     revive:function(isMultiple, char) {
       if (char === game.player) {
@@ -151,18 +138,78 @@ createItem("Kyle",
       // check number revived TODO!!!
       
     },
+
+    // Reactions
+    reactionToUndress:0,
+    reactions:function() {
+      const g = game.player.getOuterWearable("body");
+      if (g === false && this.reactionToUndress < 2) {
+        if (game.player.isFemale) {
+          msg("Kyle glances at you briefly. Kind of insulting that he is so uninterested in your naked body.");
+        }
+        else {
+          msg("Kyle looks you up and down, and swallows nervously. 'Er... you're naked,' he says, trying, not to successfully, to stare.");
+          this.pause();
+        }
+        this.reactionToUndress = 2;
+      }
+    },
+
+    // Conversations
+    probesAskResponse:function() {
+      msg("'What probes do you handle?' you ask Kyle.");
+      msg("'I launch the satellites, one per planet. No need to tell me, I know the routine. Once in orbit they photograph the planet surface, elay signals from the other probes and listen for radio emissions.");
+    },
+    areaAskResponse:function() {
+      msg("'Communication systems. So I launch the satellite, but unless we find intelligent life, there's not a lot for me to do.' He thinks for a moment. 'Actually my background is computing, so if Xsansi is playing up, I'll have a tinker.'");
+      msg("'You will not,' says Xsansi, indignantly. 'I can assure you that I am self-maintaining, and designed to last for centuries.'");
+    },
+    backgroundAskResponse:function() {
+      msg("'Er, there' not much to tell really... Just a regular guy.'");
+      msg("'You're from Australia, right?'");
+      msg("'That's right, cobber! Did the accent give it away?' Actually his accent is pretty faint, apart from the occasional \"cobber\", which you suspect is just an affectation. 'I'm from Sydney... well, originally Newcastle, but lived in Sygney most of my life.'")
+    },
     askoptions:[
-      {regex:/probe/, response:function() {
-        msg("'What probes do you handle?' you ask Kyle.");
-        msg("'I launch the satellites, one per planet. No need to tell me, I know the routine. Once in orbit they photograph the planet surface, elay signals from the other probes and listen for radio emissions.");
+      {regex:/newcastle/, response:function() {
+        msg("'What's Newcastle like?' you ask Kyle.");
+        msg("'It's... okay. But no better than that. I guess it's too close to Sydney, and anything interesting goes there, so its kinda dull.'");
+        trackRelationship(w.Kyle, 1, "background2");
       }},
       
-      {regex:/(your |his |her )?special.*|expert.*/, response:function() {
-        msg("'What is your area of expertise?' you ask Kyle.");
-        msg("'Communication systems. So I launch the satellite, but unless we find intelligent life, there's not a lot for me to do.' He thinks for a moment. 'Actually my background is computing, so if Xsansi is playing up, I'll have a tinker.'");
-        msg("'You will not,' says Xsansi, indignantly. 'I can assure you that I am self-maintaining, and designed to last for centuries.'");
+      {regex:/sydney/, response:function() {
+        msg("'What's Sydney like?' you ask Kyle.");
+        msg("'It's great! Really great nightlife, just so lively. Everyone said when they banned vehicles from the CBD, back in '68, it would die a death, but I think it made it even better.'");
+        trackRelationship(w.Kyle, 1, "background2");
       }},
+      
     ],
+    
+    // Satellite deployment
+    deploySatelliteAction:0,
+    deploySatellite:function(arr) {
+      const count = parseInt(arr[0]);
+      switch (this.deploySatelliteAction) {
+        case 0:
+        this.msg("Kyle sits at the console, and logs in.");
+        break;
+        case 1:
+        this.msg("Kyle prepares the satellite.");
+        break;
+        case 2:
+        this.msg("Kyle launches the satellite.");
+        break;
+        case 3:
+        this.msg("Kyle watches the satellite as it goes into its prescribed orbit.");
+        break;
+        case 4:
+        this.msg("'Ripper!' said Kyle.");
+        shipAlert("The satellite is in orbit,");
+        currentPlanet().satellite = true;
+        break;
+      }
+      this.deploySatelliteAction++;
+      return this.deploySatelliteAction === 5;
+    },
   }
 );
 
@@ -170,9 +217,10 @@ createItem("Kyle",
 createItem("Ostap",
   NPC(false),
   { 
-    notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she isnot interested. Later couples up with Ha-yoon",
+    notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she is not interested. Later couples up with Ha-yoon",
     loc:"canteen",
     status:"okay",
+    relationship:0,
     properName:true,
     specialisation:"biology",
     examine:"Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a ponytail. He is a biologist from the Ukraine.",
@@ -181,29 +229,34 @@ createItem("Ostap",
       s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
-    askoptions:[
-      {regex:/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/, response:function() {
-        if (w.Ostap.lostProbe) {
-          msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Ostap.");
-        }
-        else {
-          msg("'Do we ever lose probes?' you ask Ostap.");
-        }
-        msg("'We are exploring the unknown, we have to expect some probes will not make it to he planet surface successfully. Perhaps a retro-rocket fails or a parachute, or it lands at the bottom of a deep hole, or is struck by lightning as it lands. We should only expect 70 to 80 percent to land successfully, I think.'");
-      }},
-
-      {regex:/probe/, response:function() {
-        msg("'How does a bio-probe work?' you ask Ostap.");
-        msg("'I control from the lab, find a good sample. First we look at the morphology, with a simple camera. Then pick up a sample, take a slice to look at the microscopic structure - we look for cells, what is inside the cell. If we get enough cells, we can tell it to extract chemical from one type of sub-structure, then we analysis the chemicals by mass spectroscopy and the infra-red spectroscopy. We hope we find something in the library, if not, the results can be taken to Earth.'");
-        msg("'Okay, cool.'");
-      }},
-      
-      {regex:/(your |his |her )?special.*|expert.*/, response:function() {
-        msg("'What is your area of expertise?' you ask Ostap.");
-        msg("'I am the biologist. I studied at University of Kiev, then later at Notre Dame, in Paris, I did my Ph.D. thesis on extremophiles, and then I did a lot of work on Xenobiology for Tokyo Life Sciences.'");
-      }},
-      
-    ],
+    stasis:function() {
+      msg("'Ostap, you're work here is done; you can go get in your stasis pod.'");
+      if (this.deployProbeTotal === 0) {
+        msg("'You don't think I should deploy a probe first?'");
+        msg("'I'm the captain,' you remind him.");
+      }
+      msg("'Right, okay then.'");
+      this.agenda.push("walkTo:stasis_bay");
+      this.agenda.push("text:stasisPod");
+      this.stasisPodCount = 0;
+    },
+    stasisPod:function() {
+      switch(this.stasisPodCount) {
+        case 0:
+        this.msg("Ostap pulls off his jumpsuit, and puts it in the drawer under his stasis pod.");
+        break;
+        case 1:
+        this.msg("Just in his underwear, Ostap climbs into his stasis pod.");
+        break;
+        case 2:
+        this.msg("'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field.");
+        break;
+      }
+      this.stasisPodCount++;
+      return this.stasisPodCount === 3;
+    },
+    
+    // Reactions
     reactionToUndress:0,
     reactions:function() {
       const g = game.player.getOuterWearable("body");
@@ -217,6 +270,39 @@ createItem("Ostap",
         this.reactionToUndress = 1;
       }
     },
+
+    // Conversations
+    probesAskResponse:function() {
+      msg("'How does a bio-probe work?' you ask Ostap.");
+      msg("'I control from the lab, find a good sample. First we look at the morphology, with a simple camera. Then pick up a sample, take a slice to look at the microscopic structure - we look for cells, what is inside the cell. If we get enough cells, we can tell it to extract chemical from one type of sub-structure, then we analysis the chemicals by mass spectroscopy and the infra-red spectroscopy. We hope we find something in the library, if not, the results can be taken to Earth.'");
+      msg("'Okay, cool.'");
+    },
+    areaAskResponse:function() {
+      msg("'I am the biologist. I studied at University of Kiev, then later at Notre Dame, in Paris, I did my Ph.D. thesis on extremophiles, and then I did a lot of work on Xenobiology for Tokyo Life Sciences.'");
+    },
+    backgroundAskResponse:function() {
+      msg("'I'm from Nastasiv, near Ternopil.' He sees you blank face. 'In the Ukraine. I grew up with three brothers and two sisters, so it was always noisy.' He smiles. 'Both my sisters, they are biologists too. Well, one a botanist. We take after our babusya - Professor Oliynyk made one of the first synthetic cells in '82.'");
+    },
+    askoptions:[
+      {nameLost:"lost probe", regex:/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/, response:function() {
+        if (w.Ostap.lostProbe) {
+          msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Ostap.");
+        }
+        else {
+          msg("'Do we ever lose probes?' you ask Ostap.");
+        }
+        msg("'We are exploring the unknown, we have to expect some probes will not make it to he planet surface successfully. Perhaps a retro-rocket fails or a parachute, or it lands at the bottom of a deep hole, or is struck by lightning as it lands. We should only expect 70 to 80 percent to land successfully, I think.'");
+      }},
+      {regex:/babusya/, response:function() {
+        msg("'What does babusya?' you ask Ostap.");
+        msg("'Is Ukrainian for grandmother. Professor Oliynyk was my father's mother. I think she was disappointed when he became a software engineer, and he felt bad, so encouraged us to follow in her footsteps.'");
+        trackRelationship(w.Ostap, 1, "background2");
+      }},
+
+      
+    ],
+    
+    // Probe deployment
     deployProbeAction:0,
     deployProbeCount:0,
     deployProbeTotal:0,
@@ -224,15 +310,15 @@ createItem("Ostap",
       const count = parseInt(arr[0]);
       switch (this.deployProbeAction) {
         case 0:
-        msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " to deploy...' mutters Ostap as he types at the console.");
+        this.msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " to deploy...' mutters Ostap as he types at the console.");
         this.deployProbeAction++;
         break;
         case 1:
-        msg("Ostap prepares the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.msg("Ostap prepares the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
         this.deployProbeAction++;
         break;
         case 2:
-        msg("Ostap launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.msg("Ostap launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
         deployProbe(this, "bio", this.deployProbeTotal);
         this.deployProbeCount++;
         this.deployProbeTotal++;
@@ -244,7 +330,7 @@ createItem("Ostap",
         }
         break;
         case 3:
-        msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " launched,' says Ostap as he stands up.");
+        this.msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " launched,' says Ostap as he stands up.");
         this.deployProbeAction++;
         break;
       }
@@ -264,20 +350,23 @@ createItem("Aada",
     loc:"girls_cabin",
     status:"okay",
     properName:true,
+    relationship:0,
     specialisation:"geology",
     geologyFlag1:false,
     geologyFlag2:false,
-    examine:"Aada is a Finnish woman with features so ideal you suspect genetic engineering. Tall, with a perfect figure, she keeps her blonde hair short. She is a bit vague about her background, but has some military experience.",
+    examine:"Aada is a Finnish woman with features so ideal you suspect genetic engineering. Tall, with a perfect figure, she keeps her blonde hair short.",
     crewStatus:function() {
-      let s = "Crew member Adaa's designation is: geologist. Her current status is: ";
+      let s = "Crew member Aada's designation is: geologist. Her current status is: ";
       s += this.status + ". Her current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
+    
+    // Reactions
     reactionToUndress:0,
     reactions:function() {
       const g = game.player.getOuterWearable("body");
       if (g === false && this.reactionToUndress < 2) {
-        if (game.plauer.isFemale) {
+        if (game.player.isFemale) {
           msg("Aada looks you up and down. 'Very trim!' she notes. 'I bet the guys like the view.'");
           if (w.Kyle.reactionToUndress === 2) {
             msg("'Well, Kyle was none too impressed.'");
@@ -290,8 +379,33 @@ createItem("Aada",
         this.reactionToUndress = 2;
       }
     },
+    
+    // Conversations
+    probesAskResponse:function() {
+      msg("'How does a geo-probe work?' you ask Aada.");
+      msg("'Simple. Once deployed on the planet, I send it to an interesting rock, and it extends an arm that takes a sample.'");
+      msg("'Okay, but I was wondering what sort of analysis it does. Is it infra-red, or X-ray diffraction or what?'");
+      msg("'Er, yeah, I expect so.'");
+      w.Aada.geologyFlag1 = true;
+    },
+    areaAskResponse:function() {
+        msg("'I am the geologist.'");
+        msg("'Okay. So how long have you been in geology?'");
+        msg("'Well, I've taken an interest for years....'");
+        w.Aada.geologyFlag2 = true;
+    },
+    backgroundAskResponse:function() {
+      if (this.relationship < 3) {
+        msg("'I'd... rather not say. There's nothing sinister, it's just... well, I'd rather you judge me on what I do, rather than where I come from. Does that make sense?'");
+        msg("'I guess...' You wonder if she might divulge more when you get to know her better.");
+      }
+      else {
+        msg("'I'd... Well, I suppose it doesn't matter now. I have a sister, Maikki; she's twelve years older than me. My father is a very powerful man, and he had her genetically engineered to be his perfect daughter. She was to be his legacy, the one to continue his empire. She had other ideas. Became a mercenary, living on the fringe.")
+        msg("'So here I am,' she continued, 'a clone of Maikki. For years father kept me, well, prisoner in effect. I escaped, but I knew he would always be after me. This seemed the perfect getaway; no way can he reach me here, and by the time we get back to Earth, centuries will've passed. So I signed up as geologist.'");
+      }
+    },
     askoptions:[
-      {regex:/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/, response:function() {
+      {name:"lost probe", regex:/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/, response:function() {
         if (w.Ostap.lostProbe) {
           msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Aada.");
           msg("'The probe was destroyed, I guess. Or too damaged to transmit anyway.'");
@@ -302,22 +416,6 @@ createItem("Aada",
           msg("'Do we ever lose probes?' you ask Aada.");
           msg("'Er, that's a good question. I guess we must do, we are exploring the unknown, right?'");
         }
-      }},
-
-      {regex:/probe/, response:function() {
-        msg("'How does a geo-probe work?' you ask Aada.");
-        msg("'Simple. Once deployed on the planet, I send it to an interesting rock, and it extends an arm that takes a sample.'");
-        msg("'Okay, but I was wondering what sort of analysis it does. Is it infra-red, or X-ray diffraction or what?'");
-        msg("'Er, yeah, I expect so.'");
-        w.Aada.geologyFlag1 = true;
-      }},
-      
-      {regex:/(your |his |her )?special.*|expert.*/, response:function() {
-        msg("'What is your area of expertise?' you ask Aada.");
-        msg("'I am the geologist.'");
-        msg("'Okay. So how long have you been in geology?'");
-        msg("'Well, I've taken an interest for years....'");
-        w.Aada.geologyFlag2 = true;
       }},
 
       {regex:/lack of*|inability/, response:function() {
@@ -331,6 +429,8 @@ createItem("Aada",
       }},
       
     ],
+    
+    // Probe deployment
     deployProbeAction:0,
     deployProbeCount:0,
     deployProbeTotal:0,
@@ -339,19 +439,19 @@ createItem("Aada",
       switch (this.deployProbeAction) {
         case 0:
         if (w.Xsansi.currentPlanet === 0 && this.deployProbeTotal === 0) {
-          msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada, looking blankly at the console for a moment. 'How hard can it be?' She starts tapping at the key board.");
+          this.msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada, looking blankly at the console for a moment. 'How hard can it be?' She starts tapping at the key board.");
         }
         else {
-          msg("'Another " + toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada. 'Easy enough.'");
+          this.msg("'Another " + toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada. 'Easy enough.'");
         }
         this.deployProbeAction++;
         break;
         case 1:
-        msg("Aada prepares the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.msg("Aada prepares the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
         this.deployProbeAction++;
         break;
         case 2:
-        msg("Aada launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.msg("Aada launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
         deployProbe(this, "geo", deployProbeTotal);
         this.deployProbeCount++;
         this.deployProbeTotal++;
@@ -364,10 +464,10 @@ createItem("Aada",
         break;
         case 3:
         if (w.Xsansi.currentPlanet === 0 && this.deployProbeTotal === count) {
-          msg("'There!' says Aada, triumphantly. '" + toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed. I knew it couldn't be {i:that} tricky.'");
+          this.msg("'There!' says Aada, triumphantly. '" + toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed. I knew it couldn't be {i:that} tricky.'");
         }
         else {
-          msg("'That's another " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed,' says Aada.");
+          this.msg("'That's another " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed,' says Aada.");
         }
         this.deployProbeAction++;
         break;
@@ -386,6 +486,7 @@ createItem("Ha_yoon",
     notes:"Ha-yoon (F) is from Korean (Seoul), 28, and is on the run, after killing a couple of guys. She hopes that after all the time in space her crimes will be forgotten. Engineer.",
     loc:"engineering3",
     status:"okay",
+    relationship:0,
     properName:true,
     specialisation:"engineering",
     examine:"Ha-yoon is a well-respected Korean engineer, making her possibly the most important member of the crew for ensuring the ship gets back to Earth. She is the shortest of the crew, but perhaps the loudest. She has long, raven=black hair, that falls to her waist, and dark eyes.",
@@ -394,6 +495,8 @@ createItem("Ha_yoon",
       s += this.status + ". Her current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
+    
+    // Reactions
     reactionToUndress:0,
     reactions:function() {
       const g = game.player.getOuterWearable("body");
@@ -408,18 +511,23 @@ createItem("Ha_yoon",
         this.reactionToUndress = 2;
       }
     },
-    askoptions:[
-      {regex:/probe/, response:function() {
-        msg("'How do the probe works?' you ask Ha-yoon.");
-        msg("'i don't know about the analyse, but each probe is contained in an ablative shell, which is sheds as it descends, with the impact slowed by a combination of parachutes and retro-rockets. Once on the surface, the autonomous probe will start collecting samples, following its programming, moving on crawler tracks. They also have a limited amount of propellent to jump them out of holes.'");
-      }},
-      
-      {regex:/(your |his |her )?special.*|expert.*/, response:function() {
-        msg("'What is your area of expertise?' you ask Ha-yoon.");
+    
+    // Conversations
+    probesAskResponse:function() {
+      msg("'How do the probe works?' you ask Ha-yoon.");
+      msg("'i don't know about the analyse, but each probe is contained in an ablative shell, which is sheds as it descends, with the impact slowed by a combination of parachutes and retro-rockets. Once on the surface, the autonomous probe will start collecting samples, following its programming, moving on crawler tracks. They also have a limited amount of propellent to jump them out of holes.'");
+    },
+    areaAskResponse:function() {
         msg("'I am the engineer. I worked for PanTech in the asteroids, so I know spaceship systems. This is a bit different as it runs unmanned for decades...'");
         msg("'Apart from me,' Xsansi adds.");
         msg("'... Which doesn't change the fact there there are stasis systems for the crew and food, which I had never seen before.'");
-      }},
+    },
+    backgroundAskResponse:function() {
+      msg("'I am from Seoul.'");
+      msg("'Okay... Any family or anything?'");
+      msg("'No, no family.'");
+    },
+    askoptions:[
     ],
   }
 );

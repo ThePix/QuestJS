@@ -290,10 +290,10 @@ const PLANET_DATA = {
   
   Aada2:{
     level0:function() {
-      msg("'Looks like another " + planet1.alias + ",' says Adaa. 'Nothing of interest here.'");
+      msg("'Looks like another " + planet1.alias + ",' says Aada. 'Nothing of interest here.'");
     },
     level1:function() {
-      msg("'I thought it was going to be as dull as " + planet1.alias + ",' says Adaa, 'but I think it is quite different. It's dead now, but I think there was life on it once.'");
+      msg("'I thought it was going to be as dull as " + planet1.alias + ",' says Aada, 'but I think it is quite different. It's dead now, but I think there was life on it once.'");
       msg("'Based on what?'");
       msg("'It's just a hunch really, but some of the rocks... they look like ruined buildings.'");
     },
@@ -426,12 +426,38 @@ const PLANET_DATA = {
 
 function createTopics(npc) {
   npc.askoptions.push({
+    name:"health",
     regex:/(his |her )?(health|well\-?being)/,
     response:howAreYouFeeling,
   });
   npc.askoptions.push({
+    name:"planet",
     regex:/(this |the |)?planet/,
     response:planetAnalysis,
+  });
+  npc.askoptions.push({
+    name:"probes",
+    regex:/probes?/,
+    response:function(npc) {
+      npc.probesAskResponse();
+    }
+  });
+  npc.askoptions.push({
+    name:"expertise", 
+    regex:/(your |his |her )?(area|special.*|expert.*)/,
+    response:function(npc) {
+      msg("'What is your area of expertise?' you ask " + npc.byname({article:DEFINITE}) + ".");
+      npc.areaAskResponse();
+    }
+  });
+  npc.askoptions.push({
+    name:"background", 
+    regex:/^((his |her )?(background))|((him|her)self)$/,
+    response:function(npc) {
+      msg("'Tell me about yourself,' you say to " + npc.byname({article:DEFINITE}) + ".");
+      npc.backgroundAskResponse();
+      trackRelationship(npc, 1, "background");
+    }
   });
 }
  
@@ -441,13 +467,13 @@ function howAreYouFeeling(npc) {
 }
 
 function planetAnalysis(npc) {
-  msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].alias + "?' you ask " + npc.byname({article:DEFINITE}) + ".");
+  msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].starName + PLANETS[w.Xsansi.currentPlanet].planet + "?' you ask " + npc.byname({article:DEFINITE}) + ".");
   const arr = PLANET_DATA[npc.name + w.Xsansi.currentPlanet];
-  if (arr.length === 0) {
+  if (Object.keys(arr).length === 0) {
     msg("You should talk to Aada or Ostap about that stuff.");
     return false;
   }
-  let level = PLANETS[w.Xsansi.currentPlanet][npc.specialisation];
+  let level = w["planet" + w.Xsansi.currentPlanet][npc.specialisation];
   if (level === undefined) {
     msg("You should talk to Aada or Ostap about that stuff.");
     return false;
@@ -455,7 +481,7 @@ function planetAnalysis(npc) {
   while (arr["level" + level] === undefined) {
     level--;
   }
-  msg(arr["level" + level]);
+  arr["level" + level]();
 }
 
   
@@ -468,9 +494,14 @@ function createPlanets() {
         geology:0,
         marine:0,
         biology:0,
-        radio:0,
+        coms:0,
         satellite:false,
         probeLandingSuccess:PLANETS[i].probeLandingSuccess,
+        eventIsActive:function() { return this.satellite; },
+        eventPeriod:5,
+        eventScript:function() {
+          this.coms++; 
+        },
       }
     )
   }
@@ -487,9 +518,36 @@ function arrival(n) {
   game.startTime = PLANETS[n].arrivalTime;
   w.Aada.deployProbeTotal = 0;
   w.Ostap.deployProbeTotal = 0;
+  updateTopics(w.Xsansi, n);
+  for (let i = 0; i < NPCS.length; i++) {
+    NPCS[i].state = n * 100;
+  }
+  w.Kyle.agenda = ["walkTo:probes_forward", "text:deploySatellite"];
+  w.Kyle.deploySatelliteAction = 0;
 }
 
+// If a topic has an attribute "name2", then using code=2,
+// "name" will be changed to "name2". This means new topics get added to the TOPIC command
+// tested
+function updateTopics(npc, code) {
+  for (let i = 0; i < npc.askoptions.length; i++) {
+    if (npc.askoptions[i]["name" + code] !== undefined) {
+      npc.askoptions[i].name = npc.askoptions[i]["name" + code];
+    }
+  }
+}
 
+// Use this to increase the player's relationship with the NPC to ensure it only happens once
+// tested
+function trackRelationship(npc, inc, code) {
+  if (npc.relationshipTracker === undefined) npc.relationshipTracker = "~";
+  const regex = new RegExp("~" + code + "~");
+  if (!regex.test(npc.relationshipTracker)) {
+    npc.relationship += inc;
+    npc.relationshipTracker += code + "~"
+  }
+}
+    
 
 ASK_ABOUT_INTRO = function() { return ""; };
 TELL_ABOUT_INTRO = function() { return ""; };
@@ -549,6 +607,7 @@ function probeLandsOkay() {
   if (!flag) {
     w.Aada.lostProbe = true;
     w.Ostap.lostProbe = true;
+    updateTopics(w.Ostap, "Lost")
   }
   return flag;
 }
@@ -607,10 +666,22 @@ commands.push(new Cmd('Topics', {
   objects:[
   ],
   script:function() {
-    metamsg("Some suggestions for Xsansi: mission, itinerary, crew, status and this planet.");
-    metamsg("Some suggestions for the crew: probes, his/her health, specialisation and this planet.");
-    metamsg("Not every character will have a response to all these. As the situation changes, their responses may change too.");
-    metamsg("If there are topics you feel should be implemented but are missing, get in contact and let me know.");
+    let arr = [];
+    for (let i = 0; i < w.Xsansi.askoptions.length; i++) {
+      if (w.Xsansi.askoptions[i].name !== undefined) {
+        arr.push(w.Xsansi.askoptions[i].name);
+      }
+    }
+    metamsg("Some suggestions for Xsansi: " + arr.sort().join("; ") + ".");
+    arr = [];
+    for (let i = 0; i < w.Ostap.askoptions.length; i++) {
+      if (w.Ostap.askoptions[i].name !== undefined) {
+        arr.push(w.Ostap.askoptions[i].name);
+      }
+    }
+    metamsg("Some suggestions for the crew: " + arr.sort().join("; ") + ".");
+    metamsg("Not every character will have a response to all these. As the situation changes, their responses may change too, and new topics become available.");
+    metamsg("If there are topics you feel should be implemented but are missing (or alternative names for existing topics), get in contact and let me know.");
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -683,6 +754,27 @@ commands.push(new Cmd('HelpSystem', {
   },
 }));
 
+// kyle, in stasis
+
+commands.push(new Cmd('Get in pod1', {
+  regex:/^(.+), (?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
+  npcCmd:true,
+  attName:"stasis",
+  objects:[
+    {scope:isHere, attName:"npc"},
+  ],
+  defmsg:function() { msg("That's not about to get in a stasis!")},
+}));
+commands.push(new Cmd('Get in pod2', {
+  regex:/^tell (.+) to (?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
+  npcCmd:true,
+  attName:"stasis",
+  objects:[
+    {scope:isHere, attName:"npc"},
+  ],
+  defmsg:function() { msg("That's not about to get in a stasis!")},
+}));
+
 
 commands.push(new Cmd('Launch', {
   regex:/^(launch|deploy) (.+)$/,
@@ -721,6 +813,9 @@ commands.push(new Cmd('ProbeStatus', {
     metamsg("------------------");
     metamsg("Geology:" + currentPlanet().geology);
     metamsg("Biology:" + currentPlanet().biology);
+    metamsg("Radio:" + currentPlanet().coms);
+    metamsg("Satellite:" + currentPlanet().satellite);
+    metamsg("Active:" + currentPlanet().eventIsActive());
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));

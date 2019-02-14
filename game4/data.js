@@ -2,6 +2,10 @@
 
 
 
+createRoom("nowhere", {
+});
+
+
   
 createItem("me",
   PLAYER(),
@@ -15,11 +19,21 @@ createItem("me",
 
 createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   alias:"jumpsuit",
-  loc:"me",
-  worn:true,
+  loc:"stasis_pod_drawer",
   defArticle:"your",
   indefArticle:"your",
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
+  moveFromTo:function(fromLoc, toLoc) {
+    if (!w[fromLoc]) errormsg("The location name `" + fromLoc + "`, does not match anything in the game.");
+    if (!w[toLoc]) errormsg("The location name `" + toLoc + "`, does not match anything in the game.");
+    this.loc = toLoc; 
+    w[fromLoc].itemTaken(this);
+    w[toLoc].itemDropped(this);
+    if (fromLoc === "stasis_pod_drawer") {
+      w.stasis_pod_drawer.display = DSPY_NOT_HERE;
+      msg("The stasis pod drawer slides shut.");
+    }
+  },
 });
 
 createItem("your_underwear", WEARABLE(1, ["body"]), {
@@ -65,6 +79,14 @@ createItem("stasis_pod", {
   examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
 });
 
+createItem("stasis_pod_drawer", CONTAINER(false), {
+  alias:"drawer",
+  //display:DSPY_SCENERY,
+  loc:"nowhere",
+  closed:false,
+  examine:"The drawer extends out from the foot of the pod; it is white and quite shallow, and almost the width of the pod.{ifHere:pile_of_vomit: Fortunately, it is well away from the vomit.}",
+});
+
 createItem("stasis_locker", CONTAINER(true), {
   alias:"locker",
   display:DSPY_SCENERY,
@@ -104,7 +126,16 @@ createItem("other_spacesuit", {
 createRoom("stasis_pod_room", {
   alias:"stasis pod",
   desc:'The stasis pod is shaped uncomfortably like a coffin, and is a pale grey colour. The lid is in the raised position.',
-  out:new Exit('stasis_bay', { msg:"You climb out of the stasis pod.", } ),
+  out:new Exit('stasis_bay', {
+    use:function() {
+      msg("You climb out of the stasis pod.");
+      world.setRoom(game.player, this.name, "out");
+      if (w.your_jumpsuit.loc === "stasis_pod_drawer") {
+        w.stasis_pod_drawer.loc = "stasis_bay";
+        msg("A drawer under the pod slides open to reveal your jumpsuit.");
+      }
+    }      
+  }),
 });
 
 
