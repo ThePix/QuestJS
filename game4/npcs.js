@@ -223,12 +223,12 @@ createItem("Ostap",
     relationship:0,
     properName:true,
     specialisation:"biology",
-    examine:"Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a ponytail. He is a biologist from the Ukraine.",
     crewStatus:function() {
       let s = "Crew member Ostap's designation is: biologist. His current status is: ";
       s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
       return s;
     },
+
     stasis:function() {
       msg("'Ostap, you're work here is done; you can go get in your stasis pod.'");
       if (this.deployProbeTotal === 0) {
@@ -240,20 +240,59 @@ createItem("Ostap",
       this.agenda.push("text:stasisPod");
       this.stasisPodCount = 0;
     },
-    stasisPod:function() {
-      switch(this.stasisPodCount) {
-        case 0:
-        this.msg("Ostap pulls off his jumpsuit, and puts it in the drawer under his stasis pod.");
-        break;
-        case 1:
-        this.msg("Just in his underwear, Ostap climbs into his stasis pod.");
-        break;
-        case 2:
-        this.msg("'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field.");
-        break;
+
+    // Description
+    clothing:2,
+    examine:function() {
+      let s;
+      switch (this.clothing) {
+        case 0: s = "He is naked."; break;
+        case 1: s = "He is in his underwear."; break;
+        case 2: s = "He is wearing a dark grey jumpsuit."; break;
       }
-      this.stasisPodCount++;
-      return this.stasisPodCount === 3;
+      if (this.posture === "reclining" && this.loc === "stasis_bay") {
+        s += " He is lying in his stasis pod.";
+      }
+      else if (this.posture) {
+        s += " He is " + this.posture + ".";
+      }
+      msg("Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail." + s);
+    },
+
+    // Agenda
+    eventIsActive:function() { return this.status = "okay"; },
+    stopAgenda:function() {
+      const agendaLast = this.agenda[this.agenda.length - 1];
+      if (agendaLast && /stasisPod/.test(agendaLast)) {
+        msg("'Ostap, forget what I said; don't get in your stasis pod yet.'");
+        msg("'Oh, okay.'");
+      }
+      else {
+        msg("'Ostap, stop what you're doing.'");
+        if (this.agenda.length === 0) {
+          msg("'Not really doing anything.'");
+        }
+        else {
+          msg("'Oh, right.'");
+        }
+      }
+      this.agenda = [];  // TODO!!!
+    },
+    stasisPod:function() {
+      if (this.clothing === 2) {
+        this.msg("Ostap pulls off his jumpsuit, and puts it in the drawer under his stasis pod.");
+        this.clothing = 1;
+        return false;
+      }
+      if (this.posture !== "reclining") {
+        this.msg("Just in his underwear, Ostap climbs into his stasis pod.");
+        this.posture = "reclining";
+        return false;
+      }
+      this.msg("'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field.");
+      this.status = "stasis";
+      this.loc = "nowhere";
+      return true;
     },
     
     // Reactions

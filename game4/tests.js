@@ -57,8 +57,20 @@ test.tests = function() {
   test.assertCmd("f", test.padArray([], 4));
   test.assertCmd("u", test.padArray([], 4));
   test.assertCmd("s", test.padArray([], 4));
-  test.assertCmd("z", ["You wait one turn.", "Just in his underwear, Ostap climbs into his stasis pod."]);
-  test.assertCmd("z", ["You wait one turn.", "'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field."]);
+  test.assertCmd("ostap, stop", ["'Ostap, forget what I said; don't get in your stasis pod yet.'", "'Oh, okay.'"]);
+  test.assertCmd("ostap, stop", ["'Ostap, stop what you're doing.'", "'Not really doing anything.'"]);
   test.assertCmd("z", "You wait one turn.");
+  test.assertCmd("z", "You wait one turn.");
+  test.assertCmd("l", [/All pods are currently open/, "You can see Ostap here."]);
+  test.assertCmd("ostap, go in stasis pod", ["'Ostap, you're work here is done; you can go get in your stasis pod.'", "'Right, okay then.'"]);
+  test.assertCmd("z", ["You wait one turn.", "Just in his underwear, Ostap climbs into his stasis pod."]);
+  test.assertCmd("x ostap", ["Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail.He is in his underwear. He is lying in his stasis pod.", "'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field."]);
+  test.assertCmd("l", /Ostap's stasis pod is closed/);
+  
+
+
+  //test.assertCmd("z", ["You wait one turn.", "Just in his underwear, Ostap climbs into his stasis pod."]);
+  //test.assertCmd("z", ["You wait one turn.", "'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field."]);
+  //test.assertCmd("z", "You wait one turn.");
   
 };

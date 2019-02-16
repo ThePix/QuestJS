@@ -51,13 +51,19 @@ createItem("your_underwear", WEARABLE(1, ["body"]), {
 
 createRoom("stasis_bay", {
   alias:"stasis bay",
-  desc:'There are six stasis pods here, four on one side and two on the other. That is actually more than there are crew members. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
-  podStatus:1,
+  desc:'There are six stasis pods here, four on one side and two on the other. {podStatus} That is actually more than there are crew members. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
   tpStatus:function() {
-    switch (w.stasis_bay.podStatus) {
-      case 0: return "All pods are currently closed";
-      case 1: return "All pods are currently open";
-      case 2: return "Currently only your pod and the spare pod are open";
+    const arr = [];
+    for (let i = 0; i < NPCS.length; i++) {
+      if (NPCS[i].status === "stasis") {
+        arr.push(NPCS[i]);
+      }
+    }
+    switch (arr.length) {
+      case 0: return "All pods are currently open.";
+      case 4: return "Currently only your pod and the spare pod are open.";
+      case 1: return arr[0].byname() + "'s stasis pod is closed.";
+      default: return "The stasis pods of " + formatList(arr) + " are closed.";
     }
   },
   port:new Exit('hallway'),

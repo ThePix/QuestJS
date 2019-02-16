@@ -637,7 +637,7 @@ tp.text_processors.tableDesc = function(arr, params) {
 
 
 
-tp.text_processors.stasis_pod_status = function(arr, params) {
+tp.text_processors.podStatus = function(arr, params) {
   return w.stasis_bay.tpStatus;
 };
 
@@ -702,57 +702,6 @@ commands.push(new Cmd('Move', {
 }));
 
 
-commands.push(new Cmd('Hint', {
-  regex:/^hint$|^hints$/,
-  script:function() {
-    metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Tell Adda to launch geo-probe (AADA, LAUNCH PROBE), and tell Ostap to launch bioprobes. Later, ask then about the planet (ASK OSTAP ABOUT PLANET). You have five planets; you can ASK AI ABOUT SHIP to find how many of each probe is left.");
-    metamsg("Return to the stasis pod to go back into stasis. Xsansi will then nagivate the ship to the next planet.");
-    metamsg("As the captain, the welfare of the crew is important, so ASK KYLE ABOUT HIS HEALTH, etc.");
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-}));
-
-helpScript = function() {
-  metamsg("Help commands:");
-  metamsg("HELP NPC: Interacting with NPCs");
-  metamsg("HELP GAME WORLD: Notes about the universe the game is set in");
-  metamsg("HELP SYSTEM: About the game system");
-  return SUCCESS_NO_TURNSCRIPTS;
-}
-
-
-commands.push(new Cmd('HelpGameWorld', {
-  regex:/^(?:\?|help) game world$/,
-  script:function() {
-    metamsg("The game world:");
-    metamsg("I have, to some degree, tried to go hard science fiction. I wold like to think this is not {i:too} much a flight of fantasy. I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
-    metamsg("I am also assuming people can be held in stasis, and presumably this is like freezing time (cf Niven's stasis field, in his \"Known Space\"). I need that to preserve the food so the crew have something to eat 80 years after leaving Earth.");
-    metamsg("Also, probes are {i:fast}! It just takes a few turns to travel from orbit to the planet surface, which has to be at least 100 miles, and likely considerably more. They work fast on the planet too. It is a game, we need stuff to happened quickly to get interest.");
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-}));
-
-commands.push(new Cmd('HelpNPCs', {
-  regex:/^(?:\?|help) npcs?$/,
-  script:function() {
-    metamsg("Interacting with NPC:");
-    metamsg("You can ask an NPC to do something by using the same command you would use to have yourself do something, but prefixed with {color:red:[name],} (note the comma) or {color:red:TELL [name] TO}.");
-    metamsg("You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}.");
-    metamsg("Use the TOPICS command for some suggested topics. There are rather more for ASK than TELL, as you might expect.");
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-}));
-
-commands.push(new Cmd('HelpSystem', {
-  regex:/^(?:\?|help) npcs?$/,
-  script:function() {
-    metamsg("The Game System:")
-    metamsg("This game is written entirely in JavaScript, so it is running in your browser. Compared to Quest 5, which I am familiar with, this means that you do not need to download any software to run it, and there is no annoying lag while you wait for a server to respond. Compared to Inform... well, it allows authors to directly access a modern programming language (though the point of Inform 7, of course, is to keep the programming language at bay).");
-    metamsg("It is a complete system, implementing all the standards of a parser game, including the usual compass directions by default! Containers, surfaces, countables, wearables, openables, furniture, components and switchable are all built in, as well as NPCs, which hopefully are acting with some semblance of realism.")
-    metamsg("For more information, including a tutorial on how to create your own game, see <a href=\"https://github.com/ThePix/QuestJS/wiki\">here</a>. As yet there is no editor, but I hope there will be one day.");
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-}));
 
 // kyle, in stasis
 
@@ -773,6 +722,25 @@ commands.push(new Cmd('Get in pod2', {
     {scope:isHere, attName:"npc"},
   ],
   defmsg:function() { msg("That's not about to get in a stasis!")},
+}));
+
+commands.push(new Cmd('Stop1', {
+  regex:/^(.+), (?:stop|halt|forget it)$/,
+  npcCmd:true,
+  attName:"stopAgenda",
+  objects:[
+    {scope:isHere, attName:"npc"},
+  ],
+  defmsg:function() { msg("That's not doing anything!")},
+}));
+commands.push(new Cmd('Stop2', {
+  regex:/^tell (.+) to (?:stop|halt|forget it)$/,
+  npcCmd:true,
+  attName:"stopAgenda",
+  objects:[
+    {scope:isHere, attName:"npc"},
+  ],
+  defmsg:function() { msg("That's not doing anything")},
 }));
 
 
@@ -816,6 +784,96 @@ commands.push(new Cmd('ProbeStatus', {
     metamsg("Radio:" + currentPlanet().coms);
     metamsg("Satellite:" + currentPlanet().satellite);
     metamsg("Active:" + currentPlanet().eventIsActive());
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+
+
+
+
+
+commands.unshift(new Cmd('Help', {
+  regex:/^help$|^\?$/,
+  script:function() { 
+    metamsg("{b:Commands that help you play the game:}");
+    metamsg("HELP GENERAL: How to player parser games");
+    metamsg("HELP PROBE: Interacting with NPCs");
+    metamsg("HELP NPC: Interacting with NPCs");
+    metamsg("HINT: Suggestions on what to actually do");
+    metamsg("{b:Commands that give information about the game:}");
+    metamsg("HELP GAME WORLD: Notes about the universe the game is set in");
+    metamsg("HELP SYSTEM: About the game system");
+    metamsg("HELP CREDITS: Credits, obviously!");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpGen', {
+  regex:/^(?:\?|help) general$/,
+  script:function() { helpScript(); },
+}));
+
+commands.push(new Cmd('Hint', {
+  regex:/^hint$|^hints$/,
+  script:function() {
+    metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Tell Adda to launch geo-probe (AADA, LAUNCH PROBE), and tell Ostap to launch bioprobes. Later, ask then about the planet (ASK OSTAP ABOUT PLANET). You have five planets; you can ASK AI ABOUT SHIP to find how many of each probe is left.");
+    metamsg("Return to the stasis pod to go back into stasis. Xsansi will then nagivate the ship to the next planet.");
+    metamsg("As the captain, the welfare of the crew is important, so ASK KYLE ABOUT HIS HEALTH, etc.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpNPCs', {
+  regex:/^(?:\?|help) npcs?$/,
+  script:function() {
+    metamsg("{b:Interacting with NPC:}");
+    metamsg("You can ask an NPC to do something by using the same command you would use to have yourself do something, but prefixed with {color:red:[name],} (note the comma) or {color:red:TELL [name] TO}.");
+    metamsg("You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}.");
+    metamsg("Use the TOPICS command for some suggested topics. There are rather more for ASK than TELL, as you might expect.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpProbes', {
+  regex:/^(?:\?|help) probes?$/,
+  script:function() {
+  metamsg("{b:Using probes:}");
+    metamsg("Kyle will automatically deploy a satellite, but you need to tell NPCs to deploy probes. For a bio-probe, talk to Ostap, for a geo-probe, talk to Aada. They will then walk to the probe hanger, and launch the probe. You can tell them to launch several at once (eg {color:red:OSTAP< LAUNCH 3 PROBES}; note that the number must be in digits), but remember, you only have sixteen of each for five planets.");
+    metamsg("Once a probe has been launched, it is on its own; you cannot control it.");
+    metamsg("After a probe has landed, it will send data back to the ship. If the data has value, your bonus will automatically increase. The first probe on a planet will generally get you two of three bonuses, the third may not get you any and by the tenth, there are not going to get you anything.")
+    metamsg("After thirty turns a probe will have got everything it can - and usually much sooner. Get to know your crew while you wait.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpGameWorld', {
+  regex:/^(?:\?|help) game world$/,
+  script:function() {
+    metamsg("{b:The game world:}");
+    metamsg("I have, to some degree, tried to go hard science fiction; I would like to think this is not {i:too} much a flight of fantasy. I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
+    metamsg("I am also assuming people can be held in stasis, and presumably this is like freezing time (cf Niven's stasis field, in his \"Known Space\" series). I need that to preserve the food so the crew have something to eat 80 years after leaving Earth.");
+    metamsg("Also, probes are {i:fast}! It just takes a few turns to travel from orbit to the planet surface, which has to be at least 100 miles, and likely considerably more. They work fast on the planet too. It is a game, we need stuff to happened quickly to keep players interested.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpSystem', {
+  regex:/^(?:\?|help) npcs?$/,
+  script:function() {
+    metamsg("The Game System:")
+    metamsg("This game is written entirely in JavaScript, so it is running in your browser. Compared to Quest 5, which I am familiar with, this means that you do not need to download any software to run it, and there is no annoying lag while you wait for a server to respond. Compared to Inform... well, it allows authors to directly access a modern programming language (though the point of Inform 7, of course, is to keep the programming language at bay).");
+    metamsg("It is a complete system, implementing all the standards of a parser game, including the usual compass directions by default! Containers, surfaces, countables, wearables, openables, furniture, components and switchable are all built in, as well as NPCs, which hopefully are acting with some semblance of realism.")
+    metamsg("For more information, including a tutorial on how to create your own game, see <a href=\"https://github.com/ThePix/QuestJS/wiki\">here</a>. As yet there is no editor, but I hope there will be one day.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.unshift(new Cmd('HelpCredits', {
+  regex:/^(?:\? |help )?(?:credits?|about)$/,
+  script:function() {
+    metamsg("{b:Credits:}");
+    metamsg("This was written by The Pixie, on a game system created by The Pixie.");
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
