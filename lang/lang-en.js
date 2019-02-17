@@ -485,6 +485,15 @@ function toOrdinal(number) {
 
 
 
+function convertNumbers(s) {
+  for (let i = 0; i < numberUnits.length; i++) {
+    let regex = new RegExp("\\b" + numberUnits[i] + "\\b");
+    if (regex.test(s)) s = s.replace(regex, "" + i);
+  }
+  return s;
+}
+
+
 
 function contentsForSurface(contents) {
   return "with " + formatList(contents, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:this.name}) + " on it";

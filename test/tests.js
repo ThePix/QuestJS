@@ -45,8 +45,13 @@ test.tests = function() {
   test.assertEqual("fourteenth", toOrdinal(14));
   test.assertEqual("four hundred and third", toOrdinal(403));
   test.assertEqual("ninetyfirst", toOrdinal(91));
-  test.assertEqual("ninetieth", toOrdinal(90));
+  test.assertEqual("get 4 sticks", convertNumbers("get four sticks"));
+  test.assertEqual("get 14 sticks", convertNumbers("get fourteen sticks"));
+  test.assertEqual("get no sticks", convertNumbers("get no sticks"));
   
+
+  test.assertEqual("ninetieth", toOrdinal(90));
+
   test.title("Simple object commands");
   
   test.assertCmd("i", "You are carrying a knife.");

@@ -17,12 +17,13 @@ const STATUS_WIDTH_RIGHT = 40;
 
 const USE_DROPDOWN_FOR_CONV = true;
 
-const FAILS_COUNT_AS_TURNS = true;
+const FAILS_COUNT_AS_TURNS = false;
 const LOOK_COUNTS_AS_TURN = false;
 
 const TEXT_INPUT = true;
 const CURSOR = ">";
 const CMD_ECHO = true;               // echo commands to the screen
+const CONVERT_NUMBERS_IN_PARSER = true;
 
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;                  // set to false when releasing

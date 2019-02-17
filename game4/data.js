@@ -140,6 +140,7 @@ createRoom("stasis_pod_room", {
         w.stasis_pod_drawer.loc = "stasis_bay";
         msg("A drawer under the pod slides open to reveal your jumpsuit.");
       }
+      return true;
     }      
   }),
 });

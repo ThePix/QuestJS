@@ -36,7 +36,7 @@ test.tests = function() {
   test.assertCmd("ask ostap about lost probes", ["'Do we ever lose probes?' you ask Ostap.", /^'We are exploring the unknown, we have to expect /]);
   test.assertCmd("ask ostap about planet", ["'What's your report on HD 154088D?' you ask Ostap.", "'So, this one does not look so interesting,' he replies. 'I think we see nothing more than bacteria here - maybe not even that.'"]);
   test.assertCmd("ask ostap about lost probes", ["'Do we ever lose probes?' you ask Ostap.", /^'We are exploring the unknown/]);
-  test.assertCmd("topics", test.padArray(["Some suggestions for Xsansi: crew; itinerary; mission; planet; ship.", "Some suggestions for the crew: background; expertise; health; planet; probes."], 2));
+  test.assertCmd("topics for ostap", ["Some suggestions for what to ask Ostap about: background; expertise; health; planet; probes."]);
   test.assertCmd("z", ["You wait one turn.", "Ostap launches the first probe."]);
   test.assertCmd("z", ["You wait one turn.", "Ostap prepares the second probe."]);
   test.assertCmd("z", ["You wait one turn.", "Ostap launches the second probe."]);
@@ -47,7 +47,7 @@ test.tests = function() {
   test.assertCmd("z", ["You wait one turn.", "'Contact with Bio-probe II has been lost as it attempted to land on the planet.' announces Xsansi."]);
   test.assertCmd("ask ostap about lost probes", ["'What does Xsansi mean by \"contact lost\" with that probe?' you ask Ostap.", /^'We are exploring the unknown/]);
   test.assertCmd("ask ostap about planet", ["'What's your report on HD 154088D?' you ask Ostap.", "'So far, we see nothing. No life, no green. Perhaps bacteria living below the surface?'"]);
-  test.assertCmd("topics", test.padArray(["Some suggestions for Xsansi: crew; itinerary; mission; planet; ship.", "Some suggestions for the crew: background; expertise; health; lost probe; planet; probes."], 2));
+  test.assertCmd("topics ostap", ["Some suggestions for what to ask Ostap about: background; expertise; health; lost probe; planet; probes."]);
   test.assertEqual(0, w.Ostap.relationship);
   test.assertCmd("ask ostap about himself", ["'Tell me about yourself,' you say to Ostap.", /^'I'm from Nastasiv, near Ternopil.'/]);
   test.assertEqual(1, w.Ostap.relationship);

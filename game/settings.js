@@ -23,6 +23,8 @@ const LOOK_COUNTS_AS_TURN = false;
 const TEXT_INPUT = true;
 const CURSOR = ">";
 const CMD_ECHO = true;               // echo commands to the screen
+const CONVERT_NUMBERS_IN_PARSER = false;
+
 
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;                  // set to false when releasing
@@ -86,6 +88,10 @@ function intro() {
 function setup() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
+  
+
+  
+  
 }
 
 

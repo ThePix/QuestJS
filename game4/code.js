@@ -659,32 +659,7 @@ commands.push(new Cmd('Kick', {
 
 
 
-commands.push(new Cmd('Topics', {
-  npcCmd:true,
-  rules:[cmdRules.isHeld],
-  regex:/^topics?$/,
-  objects:[
-  ],
-  script:function() {
-    let arr = [];
-    for (let i = 0; i < w.Xsansi.askoptions.length; i++) {
-      if (w.Xsansi.askoptions[i].name !== undefined) {
-        arr.push(w.Xsansi.askoptions[i].name);
-      }
-    }
-    metamsg("Some suggestions for Xsansi: " + arr.sort().join("; ") + ".");
-    arr = [];
-    for (let i = 0; i < w.Ostap.askoptions.length; i++) {
-      if (w.Ostap.askoptions[i].name !== undefined) {
-        arr.push(w.Ostap.askoptions[i].name);
-      }
-    }
-    metamsg("Some suggestions for the crew: " + arr.sort().join("; ") + ".");
-    metamsg("Not every character will have a response to all these. As the situation changes, their responses may change too, and new topics become available.");
-    metamsg("If there are topics you feel should be implemented but are missing (or alternative names for existing topics), get in contact and let me know.");
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-}));
+
 
 
 commands.push(new Cmd('Move', {
