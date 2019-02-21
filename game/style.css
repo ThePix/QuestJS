@@ -63,8 +63,15 @@ body {
   display: None;
 }
 
-
-
+/*
+.paneDiv {
+  background-color: #ffff00;
+  width:150px;
+  margin-left:5px;
+  border: black solid 1px;
+  border-radius: 3px;
+}
+*/
 
 
 
