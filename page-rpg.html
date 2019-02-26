@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <title>A Test Page</title>
+  <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://ajax.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    script-src 'unsafe-inline' 'self' https://ajax.googleapis.com https://html5shiv.googlecode.com;
+    img-src 'self' https://ajax.googleapis.com;"
+  >
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="game-rpg/style.css"/>
+  
+  <script src="lib/util.js"></script>
+  <script src="lib/saveload.js"></script>
+  <script src="lib/text.js"></script>
+  <script src="game-rpg/settings.js"></script>
+  <script>
+    if (DEBUG) {
+      document.writeln('<script src="test/test-lib.js"></scr' + "ipt>"); 
+      //document.writeln('<script src="game-rpg/tests.js"></scr' + "ipt>"); 
+    }
+    document.writeln('<script src="lang/' + LANG_FILENAME + '"></scr' + "ipt>");
+  </script>
+  <script src="lib/io.js"></script>
+  <script src="lib/command.js"></script>
+  <script src="lib/defaults.js"></script>
+  <script src="lib/templates.js"></script>
+  <script src="lib/world.js"></script>
+  <script src="lib/npc.js"></script>
+  <script src="lib/parser.js"></script>
+</head>
+
+
+
+<body>
+
+<div id="rightpanel" class="sidepanes sidepanesRight">
+<div id="rightstatus">
+<table align="center">
+<tr><td width="120"><b>Current weapon</b></td></tr>
+<tr><td><img id="weaponImage" src="sword" /></td></tr>
+<tr><td><b>Health</b></td></tr>
+<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:green;padding-right:100px;"></span></td></tr>
+<tr><td><b>Spell points</b></td></tr>
+<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:blue;padding-right:100px;"></span></td></tr>
+<tr><td><b>Armour</b></td></tr>
+<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:red;padding-right:100px;"></span></td></tr>
+</table>
+</div>
+
+<table align="center">
+<tr><td id="cell0" width="40"></td><td id="cell1" width="40"></td><td id="cell2" width="40"></td></tr>
+  <script>
+    for (let i = 3; i < 24; i += 3) {
+      document.write(`<tr><td id="cell${i}"></td><td id="cell${i + 1}"></td><td id="cell${i + 2}"></td></tr>`);
+    }
+  </script>
+</table>
+</div>
+
+<div id="main">
+<div id="output">
+</div>
+<div id="input">
+<script>
+  document.writeln(CURSOR);
+</script>
+  <input type="text" name="textbox" id="textbox"  autofocus/>
+</div>
+</div>
+
+
+
+
+<script>
+  io.createPanes();
+</script>
+
+<div id="dialog" style="display:none;">
+</div>
+
+<script src="lib/commands.js"></script>
+<script src="game-rpg/code.js"></script>
+<script src="game-rpg/data.js"></script>
+
+</body>
+</html> 
+
+
+

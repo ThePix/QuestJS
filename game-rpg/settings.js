@@ -88,19 +88,56 @@ function intro() {
 function setup() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
-  let n = 56
-  debugmsg(`Some text ${n = 5}.`);
-  debugmsg(`Some text ${n}.`);
-  
-
-  
-  
+  game.player.slotsUsed = 0;
+  for (let i = 0; i < skills.list.length; i++) {
+    skills.addButton(skills.list[i]);
+  }
 }
 
 
+const skills = {
+  list:[
+    { name:"Sword", icon:"sword1", tooltip:"A simple attack", },
+    { name:"Double-Sword", icon:"sword2", tooltip:"Attack one foe twice, but at -2 to the attack roll",  },
+    { name:"Multi-Sword", icon:"sword3", tooltip:"Attack three foes at once, but at -4 to the attack roll",  },
+    { name:"Sword of Fire", icon:"sword-fire", tooltip:"Attack with a flaming sword",  },
+    { name:"Ice Sword", icon:"sword-ice", tooltip:"Attack with a freezing blade",  },
+  ],
 
+  addButton:function(skill) {
+    const cell = $('#cell' + game.player.slotsUsed);
+    cell.html('<img src="images/icon-' + skill.icon + '.png" title="' + skill.tooltip + '" />');
+    cell.click(skills.buttonClickHandler);
+    cell.css("background-color", "black");
+    cell.css("padding", "2px");
+    cell.attr("name", skill.name);
+    game.player.slotsUsed++;
+  },
 
+  resetButtons:function() {
+    for (let i = 0; i < game.player.slotsUsed; i++) {
+      $('#cell' + i).css("background-color", "black");
+      $('#cell' + i).attr("name", "");
+    }
+  },
 
+  buttonClickHandler:function(event) {
+    skills.resetButtons();
+    const cell = $("#" + event.currentTarget.id);
+    cell.css("background-color", "yellow");
+    cell.attr("name", "selected");
+  },
+
+  getSkillFromButtons:function() {
+    for (let i = 1; i <= game.player.slotsUsed; i++) {
+      if ($("#cell" + i).attr("name") === "selected") {
+        return skills.list[i];
+      }
+    }
+    return null;
+  },
+
+}
 
 
 
