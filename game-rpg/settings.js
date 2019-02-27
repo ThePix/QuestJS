@@ -9,7 +9,7 @@ const THANKS = ["Kyle", "Lara"];
 const PANES = 'Left';  //Can be set to Left, Right or None.
 // Setting PANES to None will more than double the speed of your game!
 const COMPASS = true;
-//const DIVIDER = "div.png";
+const DIVIDER = "div.png";
 
 const STATUS_PANE = "Status";  // Set to false to turn off
 const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
@@ -93,6 +93,53 @@ function setup() {
     skills.addButton(skills.list[i]);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+const ioCreateCustom = function() {
+  document.writeln('<div id="rightpanel" class="sidepanes sidepanesRight">');
+  document.writeln('<div id="rightstatus">');
+  document.writeln('<table align="center">');
+  document.writeln('<tr><td width="120"><b>Current weapon</b></td></tr>');
+  document.writeln('<tr><td><img id="weaponImage" /></td></tr>');
+  document.writeln('<tr><td><b>Health</b></td></tr>');
+  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:green;padding-right:100px;"></span></td></tr>');
+  document.writeln('<tr><td><b>Spell points</b></td></tr>');
+  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:blue;padding-right:100px;"></span></td></tr>');
+  document.writeln('<tr><td><b>Armour</b></td></tr>');
+  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:red;padding-right:100px;"></span></td></tr>');
+  document.writeln('</table>');
+  document.writeln('</div>');
+
+  document.writeln('<table align="center">');
+  document.writeln('<tr><td id="cell0" width="40"></td><td id="cell1" width="40"></td><td id="cell2" width="40"></td></tr>');
+  for (let i = 3; i < 24; i += 3) {
+    document.write(`  <tr><td id="cell${i}"></td><td id="cell${i + 1}"></td><td id="cell${i + 2}"></td></tr>`);
+  }
+  document.writeln('</table>');
+  document.writeln('</div>');
+};  
+
+
+const ioUpdateCustom = function() {
+  $('#weaponImage').attr('src', 'images/icon-' + w[game.player.equipped].image + '.png');
+  $('#hits-indicator').css('padding-right', 120 * game.player.health / game.player.maxHealth);
+};
+
+
+
+
+
+
 
 
 const skills = {
