@@ -9,7 +9,7 @@ const THANKS = ["Kyle", "Lara"];
 const PANES = 'Left';  //Can be set to Left, Right or None.
 // Setting PANES to None will more than double the speed of your game!
 const COMPASS = true;
-//const DIVIDER = "div.png";
+const DIVIDER = "div.png";
 
 const STATUS_PANE = "Status";  // Set to false to turn off
 const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane

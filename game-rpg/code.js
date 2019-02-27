@@ -1,7 +1,8 @@
 "use strict";
 
 const RPG_NPC = function(female) {
-  const res = $.extend({}, NPC(female));
+  //const res = $.extend({}, NPC(female));
+  const res = NPC(female));
 
   res.attack = function(isMultiple, char) {
     let skill = skills.getSkillFromButtons();
@@ -19,6 +20,13 @@ const RPG_NPC = function(female) {
 }
 
 
+const WEAPON = function() {
+  const res = $.extend({}, TAKEABLE_DICTIONARY);
+  
+  res.equip = function(isMultiple, char) {
+    char.equipped = this.name
+    
+  
 
 
 

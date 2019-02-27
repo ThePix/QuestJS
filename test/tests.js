@@ -98,8 +98,23 @@ test.tests = function() {
   test.assertCmd("look", ["A clean room.", "You can see a trapdoor, a camera, a big kitchen table (with two bricks on it) and a garage door here.", "You can go north or west."]);
   test.assertCmd("get the bricks", "You take two bricks.");
   test.assertCmd("w", ["You head west.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater) and a garage key here.", "You can go up, west, east or south."]); 
-  test.assertCmd("drop bricks", "You drop seven bricks.");  
 
+  test.title("Restricting");
+
+  test.assertCmd("talk to kyle", "You say 'Hello,' to Kyle, and he replies in kind.");
+  w.Kyle.canTalk = function() { msg("He has taken a vow of silence."); return false; }
+  test.assertCmd("talk to kyle", "He has taken a vow of silence.");
+  w.Kyle.canTalk = function() { return true; }
+  game.player.canTalk = function() { msg("You are gagged."); return false; }
+  test.assertCmd("talk to kyle", "You are gagged.");
+  game.player.canTalk = function() { return true; }
+  game.player.canManipulate = function() { msg("You are handcuffed."); return false; }
+  test.assertCmd("drop bricks", "You are handcuffed.");
+  game.player.canManipulate = function() { return true; }
+  test.assertCmd("drop bricks", "You drop seven bricks.");  
+  
+  
+  
   
   test.title("Wear/remove");
   
@@ -141,7 +156,12 @@ test.tests = function() {
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
   test.assertCmd("lara,stand up", "Lara gets off the chair.");
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
+  
+  w.Lara.canPosture = function() { msg("She is turned to stone."); return false; }
+  test.assertCmd("lara, get off chair", "She is turned to stone.");
+  w.Lara.canPosture = function() { return true; }
   test.assertCmd("lara, get off chair", "Lara gets off the chair.");
+
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
 
   
