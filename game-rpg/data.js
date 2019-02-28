@@ -4,7 +4,7 @@
 
   
 createItem("me",
-  PLAYER(), {
+  RPG_PLAYER(), {
     loc:"lounge",
     regex:/^me|myself|player$/,
     equipped:"weapon_unarmed",
@@ -19,6 +19,8 @@ createItem("me",
 createItem("weapon_unarmed",
   WEAPON(), {
     image:"fist",
+    damage:"d4",
+    bonus:-2,
   }
 );
 
@@ -26,6 +28,8 @@ createItem("knife",
   WEAPON(), {
     loc:"me",
     image:"knife",
+    damage:"d4+2",
+    bonus:-2,
     sharp:true,
     examine:function() {
       if (this.sharp) {
@@ -42,6 +46,7 @@ createItem("flail",
   WEAPON(), {
     loc:"me",
     image:"flail",
+    damage:"2d10+4",
     sharp:true,
     examine:function() {
       if (this.sharp) {
@@ -66,6 +71,14 @@ createRoom("lounge", {
 
 
 
+
+createItem("goblin",
+  RPG_NPC(false), {
+    loc:"lounge",
+    damage:"2d10+4",
+    health:40,
+  }
+);
 
 
 

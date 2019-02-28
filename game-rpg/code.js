@@ -24,21 +24,72 @@ Apply damage
 
 */
 
+function performAttack(attacker, target) {
+  let skill = skills.getSkillFromButtons();
+  skills.resetButtons();
+  if (skill === null) skill = skills.list[0];
+  const attackNumber = skill.attackNumber ? skill.attackNumber : 1;
+
+  for (let i = 0; i < attackNumber; i++) {
+    // base attack from weapon
+    const attack = new Attack(attacker.getEquippedWeapon());
+    // modify for attacker
+    attacker.processAttack(attack);
+    // modify for skill
+    skill.processAttack(attack, i);
+    // modify for room
+    if (game.room.processAttack) game.room.processAttack(attack);
+    // modify for target
+    target.processDefence(attack);
+    
+    attack.apply(attacker, target, i);
+  }
+}  
+
+
+
+const RPG_TEMPLATE = {
+  offensiveBonus:0,
+  armour:0,
+  defensiveBonus:0,
+
+  attack:function(isMultiple, char) {
+    performAttack(char, this);
+    return true;
+  },
+
+  processDefence:function(attack) {
+    attack.armour += this.armour;
+    attack.offensiveBonus -= this.defensiveBonus;
+  },
+  
+  processAttack:function(attack) {
+    attack.offensiveBonus += this.defensiveBonus;
+  },
+}
+
+
+
+const RPG_PLAYER = function() {
+  const res = PLAYER();
+  
+  for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key];
+  
+  res.getEquippedWeapon = function() { return w[this.equipped]; }
+  
+  return res;
+}
+
 const RPG_NPC = function(female) {
-  //const res = $.extend({}, NPC(female));
   const res = NPC(female);
 
-  res.attack = function(isMultiple, char) {
-    let skill = skills.getSkillFromButtons();
-    skills.resetButtons();
-    if (skill === null) skill = skills.list[0];
-    msg(prefix(this, isMultiple) + nounVerb(char, "attack", true) + " " + this.byname({article:DEFINITE}) + " using " + skill.name + ".");
-    return true;
-  };
+  for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key];
   
   res.getVerbs = function() {
     return [VERBS.lookat, VERBS.talkto, "Attack"];
   };
+  
+  res.getEquippedWeapon = function() { return this; }
     
   return res;
 }
