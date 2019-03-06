@@ -298,6 +298,8 @@ const LIST_AND = " and ";
 const LIST_NOTHING = "nothing";
 const NEVER_MIND = "Never mind.";
 const DEFAULT_DESCRIPTION = "It's just scenery.";
+const CLICK_TO_CONTINUE = "Click to continue...";
+
 
 
 

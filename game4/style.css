@@ -252,3 +252,12 @@ span.compassbutton {
   font-family: 'Ubuntu Condensed', sans-serif;
   border-image:none;
 }
+
+
+
+.continue {
+  text-decoration: underline;
+  color:blue;
+  cursor: pointer;
+}
+  

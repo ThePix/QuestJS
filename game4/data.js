@@ -69,6 +69,12 @@ createRoom("stasis_bay", {
   port:new Exit('hallway'),
   aft:new Exit('cargo_bay'),
   in:new Exit('stasis_pod_room', { msg:"You climb into the stasis pod.", } ),
+  beforeFirstEnter:function() {
+    msg("There is an odd smell.");
+    wait (function() {
+      world.enterRoomAfterScripts();
+    } );
+  }
 });
 
 createItem("pile_of_vomit", {

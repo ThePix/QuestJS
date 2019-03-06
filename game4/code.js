@@ -624,7 +624,10 @@ function probeLandsOkay() {
 
 
 
-
+io.clickToContinueLink = function() {
+  msg('<a class="continue" onclick="io.waitContinue()">Click...</a>');
+  io.continuePrintId = io.nextid - 1;
+}
 
 
 

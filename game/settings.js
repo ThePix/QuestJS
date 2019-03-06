@@ -51,8 +51,6 @@ const ROOM_TEMPLATE = [
   "You can go {exits}.",
 ];
 
-
-
 const STATUS = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },
