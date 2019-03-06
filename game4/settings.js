@@ -100,8 +100,6 @@ function intro() {
   wait(function() {
     msg("&nbsp;");
     msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at " + PLANETS[0].starName + ",' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.'");
-  });
-  wait(function() {
     msg("&nbsp;");
     msg("'Okay...'");
     world.enterRoom();
