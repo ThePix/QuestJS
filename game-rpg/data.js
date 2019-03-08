@@ -75,10 +75,40 @@ createRoom("lounge", {
 createItem("goblin",
   RPG_NPC(false), {
     loc:"lounge",
-    damage:"2d10+4",
+    damage:"3d6",
     health:40,
   }
 );
 
+createItem("orc",
+  RPG_NPC(false), {
+    loc:"lounge",
+    damage:"2d10+4",
+    health:60,
+  }
+);
 
+createItem("snotling",
+  RPG_NPC(false), {
+    loc:"lounge",
+    damage:"2d4",
+    health:20,
+  }
+);
+
+createItem("friend",
+  RPG_NPC(false), {
+    loc:"lounge",
+    damage:"2d4",
+    health:20,
+    isHostile:function() { return false; }
+  }
+);
+
+
+createItem("chest",
+  CONTAINER(true), {
+    loc:"lounge",
+  }
+);
 

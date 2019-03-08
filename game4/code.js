@@ -774,10 +774,11 @@ commands.push(new Cmd('ProbeStatus', {
 commands.unshift(new Cmd('Help', {
   regex:/^help$|^\?$/,
   script:function() { 
+    metamsg("Help is available on a number of topics...");
     metamsg("{b:Commands that help you play the game:}");
     metamsg("HELP GENERAL: How to player parser games");
-    metamsg("HELP PROBE: Interacting with NPCs");
-    metamsg("HELP NPC: Interacting with NPCs");
+    metamsg("HELP NPC: Interacting with other characters");
+    metamsg("HELP PROBE: How to deploy and use probes");
     metamsg("HINT: Suggestions on what to actually do");
     metamsg("{b:Commands that give information about the game:}");
     metamsg("HELP GAME WORLD: Notes about the universe the game is set in");
@@ -795,9 +796,9 @@ commands.push(new Cmd('HelpGen', {
 commands.push(new Cmd('Hint', {
   regex:/^hint$|^hints$/,
   script:function() {
-    metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Tell Adda to launch geo-probe (AADA, LAUNCH PROBE), and tell Ostap to launch bioprobes. Later, ask then about the planet (ASK OSTAP ABOUT PLANET). You have five planets; you can ASK AI ABOUT SHIP to find how many of each probe is left.");
+    metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Tell Adda to launch geo-probe ({color:red:AADA, LAUNCH PROBE}), and tell Ostap to launch bioprobes. Later, ask then about the planet ({color:red:ASK OSTAP ABOUT PLANET}). You have five planets; you can {color:red:ASK AI ABOUT SHIP} to find how many of each probe is left.");
     metamsg("Return to the stasis pod to go back into stasis. Xsansi will then nagivate the ship to the next planet.");
-    metamsg("As the captain, the welfare of the crew is important, so ASK KYLE ABOUT HIS HEALTH, etc.");
+    metamsg("As the captain, the welfare of the crew is important, so {color:red:ASK KYLE ABOUT HIS HEALTH}, etc.");
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -817,7 +818,7 @@ commands.push(new Cmd('HelpProbes', {
   regex:/^(?:\?|help) probes?$/,
   script:function() {
   metamsg("{b:Using probes:}");
-    metamsg("Kyle will automatically deploy a satellite, but you need to tell NPCs to deploy probes. For a bio-probe, talk to Ostap, for a geo-probe, talk to Aada. They will then walk to the probe hanger, and launch the probe. You can tell them to launch several at once (eg {color:red:OSTAP< LAUNCH 3 PROBES}; note that the number must be in digits), but remember, you only have sixteen of each for five planets.");
+    metamsg("Kyle will automatically deploy a satellite, but you need to tell NPCs to deploy probes. For a bio-probe, talk to Ostap, for a geo-probe, talk to Aada. They will then walk to the probe hanger, and launch the probe. You can tell them to launch several at once (eg {color:red:OSTAP, LAUNCH 3 PROBES}; note that the number must be in digits), but remember, you only have sixteen of each for five planets.");
     metamsg("Once a probe has been launched, it is on its own; you cannot control it.");
     metamsg("After a probe has landed, it will send data back to the ship. If the data has value, your bonus will automatically increase. The first probe on a planet will generally get you two of three bonuses, the third may not get you any and by the tenth, there are not going to get you anything.")
     metamsg("After thirty turns a probe will have got everything it can - and usually much sooner. Get to know your crew while you wait.");

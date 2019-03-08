@@ -97,7 +97,8 @@ function setup() {
       w[key].maxHealth = w[key].health;
     }
   }
-  parser.parse("attack goblin");
+  
+//  parser.parse("attack goblin");
 }
 
 
@@ -150,17 +151,37 @@ const ioUpdateCustom = function() {
 
 const skills = {
   list:[
-    { name:"Sword", icon:"sword1", tooltip:"A simple attack", processAttack:function(attack, i) {}},
-    { name:"Double-Sword", icon:"sword2", tooltip:"Attack one foe twice, but at -2 to the attack roll", attackNumber:2, processAttack:function(attack, i) {
-      attack.offensiveBonus -= 2;
-    },},
-    { name:"Multi-Sword", icon:"sword3", tooltip:"Attack three foes at once, but at -4 to the attack roll", processAttack:function(attack, i) {
-      attack.offensiveBonus -= (2 + 2 * i);
-    },},
-    { name:"Sword of Fire", icon:"sword-fire", tooltip:"Attack with a flaming sword", processAttack:function(attack, i) {
+    { name:"Basic attack", icon:"sword1", tooltip:"A simple attack", processAttack:function(attack, options) {}},
+    
+    { 
+      name:"Double attack",
+      icon:"sword2",
+      tooltip:"Attack one foe twice, but at -2 to the attack roll", 
+      attackNumber:2, 
+      processAttack:function(attack, options) {
+        attack.offensiveBonus -= 2;
+      },
+    },
+    
+    { 
+      name:"Sweeping attack", 
+      icon:"sword3", 
+      tooltip:"Attack one foe for normal damage, and any other for 4 damage; at -3 to the attack roll for reach", 
+      attackTarget:"foes", 
+      processAttack:function(attack, options) {
+        if (options.secondary) {
+          attack.damageNumber = 0;
+          attack.damageBonus = 4;
+        }
+        attack.offensiveBonus -= 3;
+      },
+    },
+    
+    { name:"Sword of Fire", icon:"sword-fire", tooltip:"Attack with a flaming sword", processAttack:function(attack, options) {
       attack.element = "fire";
     },},
-    { name:"Ice Sword", icon:"sword-ice", tooltip:"Attack with a freezing blade", processAttack:function(attack, i) {
+    
+    { name:"Ice Sword", icon:"sword-ice", tooltip:"Attack with a freezing blade", processAttack:function(attack, options) {
       attack.element = "ice";
     },},
   ],
@@ -200,40 +221,6 @@ const skills = {
   
 }
 
-
-
-function Attack(weapon) {
-  this.element = null;
-  this.offensiveBonus = 0;
-  this.armour = 0;
-  for (let key in weapon) this[key] = weapon[key];
-  if (this.damage === undefined) {
-    errormsg(`Weapon ${weapon.name} has no damage attribute.`);
-    return;
-  }
-  const regexMatch = /^(\d*)d(\d+)([\+|\-]\d+)?$/i.exec(this.damage);
-  if (regexMatch === null) {
-    errormsg(`Weapon ${weapon.name} has a bad damage attribute.`);
-    return;
-  }
-  this.damageNumber = regexMatch[1] === ""  ? 1 : parseInt(regexMatch[1]);
-  this.damageSides = parseInt(regexMatch[2]);
-  this.damageBonus = (regexMatch[3] === undefined  ? 0 : parseInt(regexMatch[3]));
-  this.apply = function(attacker, target) {
-    let damage = this.damageBonus;
-    for (let i = 0; i < this.damageNumber; i++) {
-      damage += randomInt(1, this.damageSides);
-    }
-    damage -= this.damageSides - this.armour;
-    if (damage < 1) damage = 1;
-    msg(nounVerb(attacker, "attack", true) + " " + target.byname({article:DEFINITE}) + ".");
-    msg("Element: " + this.element);
-    msg("Offensive bonus: " + this.offensiveBonus);
-    msg("Damage: " + damage);
-    
-    
-  };
-}
 
 
 

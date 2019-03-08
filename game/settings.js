@@ -86,13 +86,6 @@ function intro() {
 function setup() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
-  let n = 56
-  debugmsg(`Some text ${n = 5}.`);
-  debugmsg(`Some text ${n}.`);
-  
-
-  
-  
 }
 
 
