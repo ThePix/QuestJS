@@ -257,7 +257,7 @@ commands.push(new Cmd('Attack', {
     {scope:isPresent}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(this, isMultiple) + "No point attacking " + this.byname({article:DEFINITE}) + ".");
+    msg(prefix(item, isMultiple) + "No point attacking " + item.byname({article:DEFINITE}) + ".");
     return false;
   },
 }));
@@ -272,7 +272,7 @@ commands.push(new Cmd('Equip', {
     {scope:isHeld}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(this, isMultiple) + pronounVerb(item, "be", true) + " not something you can equip.");
+    msg(prefix(item, isMultiple) + pronounVerb(item, "be", true) + " not something you can equip.");
     return false;
   },
 }));
@@ -287,7 +287,7 @@ commands.push(new Cmd('Unequip', {
     {scope:isHeld}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(this, isMultiple) + pronounVerb(item, "be", true) + " not something you can equip.");
+    msg(prefix(item, isMultiple) + pronounVerb(item, "be", true) + " not something you can equip.");
     return false;
   },
 }));

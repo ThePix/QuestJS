@@ -655,7 +655,7 @@ commands.push(new Cmd('Kick', {
     {scope:isPresent}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
+    msg(prefix(item, isMultiple) + pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
     return false;
   },
 }));
