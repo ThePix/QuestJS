@@ -86,6 +86,7 @@ function intro() {
 function setup() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
+  //io.inputIsDisabled = true;
 }
 
 
