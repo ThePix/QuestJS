@@ -232,10 +232,16 @@ function INSIDE_CONTAINER(char, item, cont) {
 }
 function STOP_POSTURE(char) {
   if (!char.posture) return "";
+  let s;
   // You could split up sitting, standing and lying
-  const s = nounVerb(char, "get", true) + " off " + char.postureFurniture.byname({article:DEFINITE}) + ".";
-  char.posture = null;
-  char.postureFurniture = null;
+  if (char.postureFurniture) {
+    s = nounVerb(char, "get", true) + " off " + w[char.postureFurniture].byname({article:DEFINITE}) + ".";
+  }
+  else {
+    s = nounVerb(char, "stand", true) + " up.";
+  }
+  char.posture = undefined;
+  char.postureFurniture = undefined;
   return s;
 }
 
