@@ -2,6 +2,9 @@
 
 test.tests = function() {
   
+  test.title("Util");
+  
+  test.assertEqual("Simple text", sentenceCase("simple text"));
   
   test.title("Text processor");
   

@@ -1,5 +1,12 @@
 "use strict";
 
+
+
+createRoom("lounge", {
+    desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].', east:new Exit('kitchen'),
+    west:new Exit("dining_room"), up:new Exit("bedroom"), }
+);
+
 createItem("me",
   PLAYER(),
   { loc:"lounge", regex:/^me|myself|player$/, examine:"Just some guy." }
@@ -28,10 +35,6 @@ createItem("knife",
 
 
 
-createRoom("lounge", {
-    desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].', east:new Exit('kitchen'),
-    west:new Exit("dining_room"), up:new Exit("bedroom"), }
-);
 
 
 
