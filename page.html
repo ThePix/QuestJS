@@ -14,17 +14,24 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="game/style.css"/>
   
   <script src="lib/util.js"></script>
   <script src="lib/saveload.js"></script>
-  <script src="game/settings.js"></script>
   <script>
+    const FOLDER = "game";
+    document.writeln('<script src="' + FOLDER + '/settings.js"></scr' + "ipt>"); 
+  </script>
+  <script>
+    document.writeln('<link rel="stylesheet" href="' + FOLDER + '/style.css"/>');
+
     if (DEBUG) {
-      document.writeln('<script src="test/test-lib.js"></scr' + "ipt>"); 
-      document.writeln('<script src="test/tests.js"></scr' + "ipt>"); 
+      document.writeln('<script src="lib/test-lib.js"></scr' + "ipt>"); 
+      document.writeln('<script src="' + FOLDER + '/tests.js"></scr' + "ipt>"); 
     }
     document.writeln('<script src="lang/' + LANG_FILENAME + '"></scr' + "ipt>");
+    if (CUSTOM_EXITS) {
+      document.writeln('<script src="' + FOLDER + '/exits.js"></scr' + "ipt>"); 
+    }
   </script>
   <script src="lib/text.js"></script>
   <script src="lib/io.js"></script>
@@ -35,14 +42,22 @@
   <script src="lib/npc.js"></script>
   <script src="lib/parser.js"></script>
   <script src="lib/commands.js"></script>
-  <script src="game/code.js"></script>
-  <script src="game/data.js"></script>
-
+  <script>
+    for (let i = 0; i < FILES.length; i++) {
+      document.writeln('<script src="' + FOLDER + '/' + FILES[i] + '.js"></scr' + "ipt>"); 
+    }
+  </script>
 </head>
 
 
 
 <body>
+
+<div id="bottom-panel">
+<div id="scanner">
+</div>
+</div>
+
 <div id="main">
 <div id="output">
 </div>
@@ -55,12 +70,16 @@
 </div>
 
 
+
+
 <script>
   io.createPanes();
 </script>
 
 <div id="dialog" style="display:none;">
 </div>
+
+
 
 </body>
 </html> 

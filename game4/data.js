@@ -10,7 +10,7 @@ createRoom("nowhere", {
 createItem("me",
   PLAYER(),
   { loc:"stasis_pod_room", regex:/^me|myself|player$/, status:100, bonus:0, examine:function() {
-    msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
+    msg("You feel fine...");
     },
   }
 );
