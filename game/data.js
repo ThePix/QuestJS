@@ -11,6 +11,7 @@ createItem("me",
   }
 );
 
+
 createItem("knife",
   TAKEABLE(),
   { loc:"me", sharp:false,
@@ -131,10 +132,13 @@ createItem("ornate_doll",
 
 createItem("coin",
   TAKEABLE(),
-  { loc:"lounge", examine: "A gold coin.", take:function(isMultiple, participant) {
-    msg(prefix(this, isMultiple) + pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
-    return false;
-  },}
+  {
+    loc:"lounge", examine: "A gold coin.",
+    take:function(isMultiple, participant) {
+      msg(prefix(this, isMultiple) + pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
+      return false;
+    },
+  }
 );
 
 
@@ -147,7 +151,7 @@ createItem("cabinet_key",
 createItem("flashlight",
   TAKEABLE(),
   SWITCHABLE(false),
-  { loc:"lounge", examine:"A small black torch.", regex:/^torch$/, 
+  { loc:"lounge", examine:"A small red torch.", regex:/^torch$/, 
     byname:function(options) {
       let res = this.alias;
       if (options.article) { res = (options.article === DEFINITE ? "the" : "a") + " " + this.alias; }
@@ -184,8 +188,7 @@ createItem("flashlight",
       w.flashlight.power = 20;
       return true;
     },
-    
-  },
+  }
 );
 
 
@@ -285,7 +288,7 @@ createItem("light_switch",
         return true;
       }
     }
-  },
+  }
 );
 
 
@@ -296,8 +299,7 @@ createItem("crates",
       this.moved = true;
       return true;
     }
-  }
-  
+  }  
 );
 
 
@@ -310,6 +312,7 @@ createRoom("garage", {
   hint:"The garage features a complex mechanism, with two components.",
 });
 
+
 createItem("charger",
   { loc:"garage", examine: "A device bigger than a washing machine to charge a torch? It has a compartment and a button. {charger_state}.", mended:false,
     use:function() {
@@ -317,6 +320,7 @@ createItem("charger",
     }
   }
 );
+
 
 createItem("charger_compartment",
   COMPONENT("charger"),

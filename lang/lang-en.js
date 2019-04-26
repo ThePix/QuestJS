@@ -6,14 +6,9 @@
 
 "use strict";
 
-
-
-
-
-
-
-
-
+const tp = {
+  text_processors:{},
+};
 
 
 //----------------------------------------------------------------------------------------------
@@ -366,27 +361,25 @@ const VERBS = {
 // Change the abbrev values to suit your game (or language)
 // You may want to do that in settings, which is loaded first
 // One time we need var rather than const/let!
-if (EXITS === undefined) {
-  EXITS = [
-    {name:'northwest', abbrev:'NW', niceDir:"the northwest"}, 
-    {name:'north', abbrev:'N', niceDir:"the north"}, 
-    {name:'northeast', abbrev:'NE', niceDir:"the northeast"}, 
-    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside"}, 
-    {name:'up', abbrev:'U', niceDir:"above"},
-    
-    {name:'west', abbrev:'W', niceDir:"the west"}, 
-    {name:'Look', abbrev:'Lk', nocmd:true}, 
-    {name:'east', abbrev:'E', niceDir:"the east"}, 
-    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside"}, 
-    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below"}, 
+let EXITS = [
+  {name:'northwest', abbrev:'NW', niceDir:"the northwest"}, 
+  {name:'north', abbrev:'N', niceDir:"the north"}, 
+  {name:'northeast', abbrev:'NE', niceDir:"the northeast"}, 
+  {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside"}, 
+  {name:'up', abbrev:'U', niceDir:"above"},
+  
+  {name:'west', abbrev:'W', niceDir:"the west"}, 
+  {name:'Look', abbrev:'Lk', nocmd:true}, 
+  {name:'east', abbrev:'E', niceDir:"the east"}, 
+  {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside"}, 
+  {name:'down', abbrev:'Dn', alt:'d', niceDir:"below"}, 
 
-    {name:'southwest', abbrev:'SW', niceDir:"the southwest"}, 
-    {name:'south', abbrev:'S', niceDir:"the south"}, 
-    {name:'southeast', abbrev:'SE', niceDir:"the southeast"}, 
-    {name:'Wait', abbrev:'Z', nocmd:true}, 
-    {name:'Help', abbrev:'?', nocmd:true}, 
-  ];
-}
+  {name:'southwest', abbrev:'SW', niceDir:"the southwest"}, 
+  {name:'south', abbrev:'S', niceDir:"the south"}, 
+  {name:'southeast', abbrev:'SE', niceDir:"the southeast"}, 
+  {name:'Wait', abbrev:'Z', nocmd:true}, 
+  {name:'Help', abbrev:'?', nocmd:true}, 
+];
 
 
 
@@ -733,3 +726,14 @@ function saveLoadScript() {
   return SUCCESS_NO_TURNSCRIPTS;
 }
 
+
+
+
+
+
+
+
+try { SUCCESS; }
+catch (e) {
+  module.exports = { EXITS: EXITS, PRONOUNS: PRONOUNS }
+}

@@ -43,8 +43,6 @@ const DATE_TIME_OPTIONS = {
   minute:"2-digit",
 };
 
-let EXITS;
-
 const ROOM_TEMPLATE = [
   "%",
   "You can see {objects} here.",
