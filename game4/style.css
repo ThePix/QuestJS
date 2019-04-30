@@ -71,8 +71,8 @@ h2, h4 {
   background-image:url("../images/back4.png");
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 5px;
-  font-size: 9pt;
-  font-family: 'Orbitron';
+  font-size: 10pt;
+  /*font-family: 'Orbitron';*/
 }
 .sidepanesLeft {
   left: 0;

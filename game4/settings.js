@@ -57,7 +57,7 @@ const ROOM_TEMPLATE = [
 
 const STATUS = [
   function() { return "<td colspan=\"2\">" + getDateTime() + "</td>"; },
-  function() { return "<td width=\"100px\"><i>Bonus:</i></td><td width=\"30px\" align=\"right\">$" + game.player.bonus + "k</td>"; },
+  function() { return "<td width=\"100px\"><b><i>Bonus:</i></b></td><td width=\"30px\" align=\"right\"><b>$" + game.player.bonus + "k</b></td>"; },
   function() { return "<td><i>You:</i></td><td align=\"right\">" + game.player.status + "%</td>"; },
   function() { return "<td><i>Ship:</i></td><td align=\"right\">" + w.Xsansi.status + "%</td>"; },
   function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + w.Ha_yoon.status + "%</td>"; },

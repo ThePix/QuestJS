@@ -1,3 +1,5 @@
+"use strict";
+
 
 EXITS = [
   {name:'northwest', abbrev:'NW'}, 

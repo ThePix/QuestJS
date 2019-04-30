@@ -549,25 +549,30 @@ function npcEnteringMsg(npc, origin) {
 }
 
 
-
-
-
-tp.text_processors.objects =function(arr, params) {
-  const listOfOjects = scope(isHereListed);
-  return formatList(listOfOjects, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:game.player.loc});
-};
-
-  
-tp.text_processors.exits = function(arr, params) {
+function exitList() {
   const list = [];
   for (let i = 0; i < EXITS.length; i++) {
     if (game.room.hasExit(EXITS[i].name)) {
       list.push(EXITS[i].name);
     }
   }
+  return list;
+}
+
+tp.text_processors.objects = function(arr, params) {
+  const listOfOjects = scope(isHereListed);
+  return formatList(listOfOjects, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:game.player.loc});
+};
+  
+tp.text_processors.exits = function(arr, params) {
+  const list = exitList();
   return formatList(list, {lastJoiner:" or ", nothing:"nowhere"});
 };
 
+tp.text_processors.exitsHere = function(arr, params) {
+  const list = exitList();
+  return list.length === 0 ? "" : arr.join(":");
+};
 
 
 
