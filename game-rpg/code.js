@@ -195,6 +195,8 @@ const RPG_NPC = function(female) {
 const WEAPON = function() {
   const res = $.extend({}, TAKEABLE_DICTIONARY);
   
+  res.weapon = true;
+  
   res.getVerbs = function() {
     if (!this.isAtLoc(game.player.name)) {
       return [VERBS.lookat, VERBS.take];

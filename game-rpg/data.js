@@ -10,6 +10,10 @@ createItem("me",
     equipped:"weapon_unarmed",
     health:20,
     maxHealth:100,
+    pp:40,
+    maxPP:40,
+    maxArmour:20,
+    armour:10,
     examine:function() {
       msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
@@ -21,6 +25,7 @@ createItem("weapon_unarmed",
     image:"fist",
     damage:"d4",
     bonus:-2,
+    alias:"unarmed",
   }
 );
 

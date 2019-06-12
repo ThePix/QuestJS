@@ -117,13 +117,13 @@ const ioCreateCustom = function() {
   document.writeln('<div id="rightstatus">');
   document.writeln('<table align="center">');
   document.writeln('<tr><td width="120"><b>Current weapon</b></td></tr>');
-  document.writeln('<tr><td><img id="weaponImage" /></td></tr>');
+  document.writeln('<tr><td id="weapon-td"><img id="weaponImage" onclick="chooseWeapon();"/></td></tr>');
   document.writeln('<tr><td><b>Health</b></td></tr>');
-  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:green;padding-right:100px;"></span></td></tr>');
+  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\" title="Your current hits" id="hits-td"><span id="hits-indicator" style="background-color:green;padding-right:100px;"></span></td></tr>');
   document.writeln('<tr><td><b>Spell points</b></td></tr>');
-  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:blue;padding-right:100px;"></span></td></tr>');
+  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\" title="Your current PP" id="pp-td"><span id="pp-indicator" style="background-color:blue;padding-right:100px;"></span></td></tr>');
   document.writeln('<tr><td><b>Armour</b></td></tr>');
-  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\"><span id="hits-indicator" style="background-color:red;padding-right:100px;"></span></td></tr>');
+  document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\" title="Your current armour" id="armour-td"><span id="armour-indicator" style="background-color:red;padding-right:100px;"></span></td></tr>');
   document.writeln('</table>');
   document.writeln('</div>');
 
@@ -134,15 +134,64 @@ const ioCreateCustom = function() {
   }
   document.writeln('</table>');
   document.writeln('</div>');
+  
+  document.writeln('<div id="choose-weapon-div" title="Select a weapon">');
+  document.writeln('<select id="weapon-select"></select>');
+  document.writeln('</div>');
+  $(function() {
+    $( "#choose-weapon-div" ).dialog({
+      autoOpen: false,  
+      buttons: {
+        OK: function() {chosenWeapon();}
+      },
+    });
+  });
 };  
 
 
 const ioUpdateCustom = function() {
+  console.log("in ioUpdateCustom");
   $('#weaponImage').attr('src', 'images/icon-' + w[game.player.equipped].image + '.png');
+  $('#weapon-td').prop('title', "Weapon: " + w[game.player.equipped].alias);
+  
   $('#hits-indicator').css('padding-right', 120 * game.player.health / game.player.maxHealth);
+  $('#hits-td').prop('title', "Hits: " + game.player.health + "/" + game.player.maxHealth);
+
+  $('#pp-indicator').css('padding-right', 120 * game.player.pp / game.player.maxPP);
+  $('#pp-td').prop('title', "Power points: " + game.player.pp + "/" + game.player.maxPP);
+
+  $('#armour-indicator').css('padding-right', 120 * game.player.armour / game.player.maxArmour);
+  $('#armour-td').prop('title', "Armour: " + game.player.armour + "/" + game.player.maxArmour);
+
+  console.log($('#hits-td').prop('title'));
 };
 
 
+const chooseWeapon = function() {
+  console.log("in chooseWeapon");
+  const weapons = [];
+  for (let o in w) {
+    if (w[o].loc === game.player.name && w[o].weapon) {
+      console.log(o);
+      weapons.push('<option value="'+ o +'">' + w[o].listalias + '</option>');
+    }
+  }
+  const s = weapons.join('');
+  console.log(s);
+
+  $('#weapon-select').html(s);  
+  
+  $("#choose-weapon-div").dialog("open");
+};
+
+
+const chosenWeapon = function() {
+  $("#choose-weapon-div").dialog("close");
+  const selected = $("#weapon-select").val();
+  console.log("in chosenWeapon: " + selected);
+  w[selected].equip(false, game.player);
+  world.endTurn(SUCCESS);
+};
 
 
 
