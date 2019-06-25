@@ -199,6 +199,7 @@ createItem("flashlight",
 createRoom("dining_room", {
   desc:'An old-fashioned room.',
   east:new Exit('lounge'),
+  west:new Exit('lift'),
   canViewLocs:["garden"],
   canViewPrefix:"Through the window you can see ",
   up:new Exit("dining_room_on_stool"),
@@ -216,6 +217,15 @@ createItem("chair",
     },
   }
 );
+
+
+
+createRoom("lift", {
+  desc:'A curious lift.',
+  saveExitDests:true,
+  east:new Exit('dining_room'),
+});
+
 
 
 
@@ -366,6 +376,7 @@ createRoom("bedroom", {
   desc:"A large room, with a big [bed] and a wardrobe.",
   down:new Exit("lounge"),
   in:new Exit("wardrobe"),
+  west:new Exit('lift'),
   hint:"The bedroom has a variety of garments that can be put on - in the right order.",
 });
 

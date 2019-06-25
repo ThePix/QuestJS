@@ -121,7 +121,7 @@ test.tests = function() {
   
   test.title("Wear/remove");
   
-  test.assertCmd("u", ["You head up.", "A large room, with a big bed and a wardrobe.", "You can see a wardrobe, underwear, some jeans, a shirt, a coat and a jumpsuit here.", "You can go in or down.",]);
+  test.assertCmd("u", ["You head up.", "A large room, with a big bed and a wardrobe.", "You can see a wardrobe, underwear, some jeans, a shirt, a coat and a jumpsuit here.", "You can go in, west or down.",]);
 
   test.assertCmd("get all", ["Wardrobe: You can't take it.", "Underwear: You take the underwear.", "Jeans: You take the jeans.", "Shirt: You take the shirt.", "Coat: You take the coat.", "Jumpsuit: You take the jumpsuit.", ]);
   test.assertCmd("wear underwear", "You put on the underwear.");
@@ -147,7 +147,7 @@ test.tests = function() {
   
   test.title("NPC commands 1");
   
-  test.assertCmd("w", ["You head west.", "An old-fashioned room.", "You can see a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a chair, Lara and a brick here.", "You can go up or east.",]);  
+  test.assertCmd("w", ["You head west.", "An old-fashioned room.", "You can see a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a chair, Lara and a brick here.", "You can go up, west or east.",]);  
   
   test.assertCmd("lara,get brick", "'I'm not picking up any bricks,' says Lara indignantly.");
   test.assertCmd("lara,e", "'I'm not going east,' says Lara indignantly. 'I don't like that room.'");
@@ -353,7 +353,7 @@ test.tests = function() {
   test.assertEqual(0, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "Arthur enters the conservatory from the east."]);
   test.assertCmd("n", ["You head north.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go up, west, east or south.", "Arthur enters the lounge from the north."]);
-  test.assertCmd("w", ["You head west.", "An old-fashioned room.", /^You can see/, "You can go up or east.", "Arthur enters the dining room from the west.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
+  test.assertCmd("w", ["You head west.", "An old-fashioned room.", /^You can see/, "You can go up, west or east.", "Arthur enters the dining room from the west.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
   test.assertEqual(0, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "'Sure,' says Lara."]);
   test.assertEqual(1, w.Arthur.followers.length);
