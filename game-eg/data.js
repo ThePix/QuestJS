@@ -225,6 +225,14 @@ createRoom("lift",
   {
     desc:'A curious lift.',
     east:new Exit('dining_room'),
+    transitMenuPrompt:'Where do you want to go?',
+    afterEnter:transitOfferMenu,
+    transitAutoMove:true,
+    transitOnMove:function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); },
+    transitCheck:function() {
+      msg("The lift is out of order");
+      return false;
+    },
   }
 );
 
@@ -235,9 +243,10 @@ createItem("button_g",
   {
     alias:"Button: G",
     examine:"A button with the letter G on it.",
-    dest:"dining_room",
-    alreadyHereMsg:"You press the button; nothing happens.",
-    goToDestMsg:"You press the button; the door closes and the lift heads to the ground floor. The door opens again.",
+    transitDest:"dining_room",
+    transitDestAlias:"Ground Floor",
+    transitAlreadyHere:"You're already there mate!",
+    transitGoToDest:"The old man presses the button....",
     
   }
 );
@@ -247,9 +256,10 @@ createItem("button_1",
   {
     alias:"Button: 1",
     examine:"A button with the letter 1 on it.",
-    dest:"bedroom",
-    alreadyHereMsg:"You press the button; nothing happens.",
-    goToDestMsg:"You press the button; the door closes and the lift heads to the first floor. The door opens again.",
+    transitDest:"bedroom",
+    transitDestAlias:"The Bedroom",
+    transitAlreadyHere:"You press the button; nothing happens.",
+    transitGoToDest:"You press the button; the door closes and the lift heads to the first floor. The door opens again.",
     
   }
 );
@@ -259,11 +269,12 @@ createItem("button_2",
   {
     alias:"Button: 2",
     examine:"A button with the letter 2 on it.",
-    dest:"attic",
+    transitDest:"attic",
+    transitDestAlias:"The Attic",
     locked:true,
-    alreadyHereMsg:"You press the button; nothing happens.",
-    goToDestMsg:"You press the button; the door closes and the lift heads to the second floor. The door opens again.",
-    lockedMsg:"That does nothing, the button does not work.",
+    transitAlreadyHere:"You press the button; nothing happens.",
+    transitGoToDest:"You press the button; the door closes and the lift heads to the second floor. The door opens again.",
+    transitLocked:"That does nothing, the button does not work.",
   }
 );
 
