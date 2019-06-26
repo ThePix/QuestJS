@@ -23,7 +23,7 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
-  moveFromTo:function(fromLoc, toLoc) {
+  moveToFrom:function(toLoc, fromLoc) {
     if (!w[fromLoc]) errormsg("The location name `" + fromLoc + "`, does not match anything in the game.");
     if (!w[toLoc]) errormsg("The location name `" + toLoc + "`, does not match anything in the game.");
     this.loc = toLoc; 

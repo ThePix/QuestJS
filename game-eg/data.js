@@ -224,6 +224,39 @@ createRoom("lift", {
   desc:'A curious lift.',
   saveExitDests:true,
   east:new Exit('dining_room'),
+  dests:['dining_room', 'bedroom', 'attic'],
+});
+
+
+
+createItem("button_g",
+  {
+    loc:"lift",
+    alias:"Button: G",
+    examine:"A button with the letter G on it.",
+    getVerbs:function() { return [VERBS.examine, "Push"]; },
+    dest:"dining_room",
+    push:function() { 
+      if (w.lift.east.name === 'dining_room') {
+        msg("You press the button; nothing happens.");
+        return false;
+      }
+      else {
+        msg("You press the button; the door closes and the lift heads to the ground floor. The door opens again.");
+        w.lift.east.name = 'dining_room';
+        return true;
+      }
+    },
+  }
+);
+
+
+
+
+
+createRoom("attic", {
+  desc:'An spooky attic.',
+  west:new Exit('lift'),
 });
 
 

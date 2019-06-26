@@ -214,7 +214,7 @@ const WEAPON = function() {
       char.equipped = "weapon_unarmed";
     }
     msg(prefix(this, isMultiple) + DROP_SUCCESSFUL(char, this));
-    this.moveFromTo(this.loc, char.loc);
+    this.moveToFrom(char.loc, this.loc);
     return true;
   },
   
