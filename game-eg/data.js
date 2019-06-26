@@ -220,33 +220,50 @@ createItem("chair",
 
 
 
-createRoom("lift", {
-  desc:'A curious lift.',
-  saveExitDests:true,
-  east:new Exit('dining_room'),
-  dests:['dining_room', 'bedroom', 'attic'],
-});
+createRoom("lift",
+  TRANSIT("east"),
+  {
+    desc:'A curious lift.',
+    east:new Exit('dining_room'),
+  }
+);
 
 
 
 createItem("button_g",
+  TRANSIT_BUTTON("lift"),
   {
-    loc:"lift",
     alias:"Button: G",
     examine:"A button with the letter G on it.",
-    getVerbs:function() { return [VERBS.examine, "Push"]; },
     dest:"dining_room",
-    push:function() { 
-      if (w.lift.east.name === 'dining_room') {
-        msg("You press the button; nothing happens.");
-        return false;
-      }
-      else {
-        msg("You press the button; the door closes and the lift heads to the ground floor. The door opens again.");
-        w.lift.east.name = 'dining_room';
-        return true;
-      }
-    },
+    alreadyHereMsg:"You press the button; nothing happens.",
+    goToDestMsg:"You press the button; the door closes and the lift heads to the ground floor. The door opens again.",
+    
+  }
+);
+
+createItem("button_1",
+  TRANSIT_BUTTON("lift"),
+  {
+    alias:"Button: 1",
+    examine:"A button with the letter 1 on it.",
+    dest:"bedroom",
+    alreadyHereMsg:"You press the button; nothing happens.",
+    goToDestMsg:"You press the button; the door closes and the lift heads to the first floor. The door opens again.",
+    
+  }
+);
+
+createItem("button_2",
+  TRANSIT_BUTTON("lift"),
+  {
+    alias:"Button: 2",
+    examine:"A button with the letter 2 on it.",
+    dest:"attic",
+    locked:true,
+    alreadyHereMsg:"You press the button; nothing happens.",
+    goToDestMsg:"You press the button; the door closes and the lift heads to the second floor. The door opens again.",
+    lockedMsg:"That does nothing, the button does not work.",
   }
 );
 
