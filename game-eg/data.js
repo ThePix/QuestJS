@@ -94,6 +94,28 @@ createItem("boots",
 
 
 
+createItem("waterskin",
+  TAKEABLE(),
+  { 
+    examine:function() { msg("The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full."); },
+    capacity:10,
+    full:3,
+    loc:"lounge",
+    fill:function(isMultiple) {
+      if (game.player.loc != "garage") {
+        msg(prefix(this, isMultiple) + "There is nothing to charge the torch with here.");
+        return false;
+      }
+      else {
+        msg(prefix(this, isMultiple) + "You charge the torch - it should last for hours now.");
+        this.power = 20;;
+        return true;
+      }
+    },
+  }
+);
+
+
 
 
 
@@ -306,6 +328,7 @@ createRoom("kitchen", {
     msg("A fresh smell here!");
   },
   hint:"This room features two doors that open and close. The garage door needs a key.",
+  source:"water",
 });
 
 createItem("trapdoor",

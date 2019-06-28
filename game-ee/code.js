@@ -6,3 +6,7 @@ function intro() {
 
 function setup() {
 }
+
+function getFluidSource(char) {
+  const room = w[char.loc];
+}
