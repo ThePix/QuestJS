@@ -1,6 +1,6 @@
 "use strict";
 
-const TITLE = "Enery Effect 2";
+const TITLE = "Enery Effect";
 const AUTHOR = "The Pixie"
 const VERSION = "1.0";
 const THANKS = [];
