@@ -248,13 +248,13 @@ createRoom("lift",
     desc:'A curious lift.',
     east:new Exit('dining_room'),
     transitMenuPrompt:'Where do you want to go?',
-    afterEnter:transitOfferMenu,
-    transitAutoMove:true,
-    transitOnMove:function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); },
-    transitCheck:function() {
-      msg("The lift is out of order");
-      return false;
-    },
+    //afterEnter:transitOfferMenu,
+    //transitAutoMove:true,
+    //transitOnMove:function(toLoc, fromLoc) { debugmsg("MOVING to " + toLoc + " from " + fromLoc); },
+    //transitCheck:function() {
+    //  msg("The lift is out of order");
+    //  return false;
+    //},
   }
 );
 

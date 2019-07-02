@@ -362,8 +362,27 @@ test.tests = function() {
   test.assertCmd("z", ["You wait one turn.", "Through the window you can see Arthur and Lara enter the garden from the west.", "Through the window you see Arthur say something to Lara."]);
   
   
+  test.title("Transit");
+  test.assertCmd("w", ["You head west.", "A curious lift.", "You can see a Button: G, a Button: 1 and a Button: 2 here.", "You can go east."]);
+  test.assertCmd("push button: g", ["You're already there mate!"]);
+  test.assertCmd("push 1", ["You press the button; the door closes and the lift heads to the first floor. The door opens again."]);
+  test.assertCmd("e", ["You head east.", "A large room, with a big bed and a wardrobe.", "You can see a wardrobe, underwear, some jeans, a shirt, a coat and a jumpsuit here.", "You can go in, west or down."]);
+  test.assertCmd("w", ["You head west.", "A curious lift.", "You can see a Button: G, a Button: 1 and a Button: 2 here.", "You can go east."]);
+  
+  w.lift.transitOnMove = function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); };
+  
+  test.assertCmd("push 1", ["You press the button; nothing happens."]);
+  test.assertCmd("push 2", ["That does nothing, the button does not work."]);
+  test.assertCmd("push g", ["The old man presses the button....", "MOVING to dining_room from bedroom"]);
+  test.assertCmd("e", ["You head east.", "An old-fashioned room.", /^You can see/, "You can go up, west or east."]);  
   
   
-  
+  w.lift.transitCheck = function() {
+    msg("The lift is out of order");
+    return false;
+  };
+  w.lift.transitAutoMove = true;
+  w.lift.afterEnter = transitOfferMenu;
+  test.assertCmd("w", ["You head west.", "A curious lift.", "You can see a Button: G, a Button: 1 and a Button: 2 here.", "You can go east.", "The lift is out of order", "An old-fashioned room.", "You can see a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a chair and a brick here.", "You can go up, west or east."]);
   
 };
