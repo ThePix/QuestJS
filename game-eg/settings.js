@@ -30,7 +30,7 @@ const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
 const DEBUG = true;                  // set to false when releasing
 const CUSTOM_EXITS = false;          // set to true to use custom exits, in exits.js
 const FILES = ["code", "data"];
-const MAX_UNDO = 10;
+const MAX_UNDO = 0;
 const ROOM_HEADINGS = true;
 
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs

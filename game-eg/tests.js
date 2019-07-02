@@ -314,7 +314,7 @@ test.tests = function() {
   w.book.examine = "This will not remain";
   const clone3 = cloneObject(clone);  // should not be there later
 
-  saveLoad.loadTheWorld(s);
+  saveLoad.loadTheWorld(s, 4);
   test.assertEqual(count + 2, Object.keys(w).length);
   test.assertEqual(17, w.boots.counter);
   test.assertEqual("Some interesting text", w.boots.unusualString);
