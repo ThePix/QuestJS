@@ -31,6 +31,8 @@ const CUSTOM_EXITS = true;
 const FILES = ["code", "data", "npcs"];
 const MAX_UNDO = 10;
 const ROOM_HEADINGS = true;
+const NO_TALK_TO = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}.";
+const NO_ASK_TELL = false;
 
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
@@ -58,16 +60,23 @@ const ROOM_TEMPLATE = [
 
 
 const STATUS = [
-  function() { return "<td colspan=\"2\">" + getDateTime() + "</td>"; },
+  function() { return "<td colspan=\"2\" align=\"center\">" + getDateTime() + "</td>"; },
   function() { return "<td width=\"100px\"><b><i>Bonus:</i></b></td><td width=\"30px\" align=\"right\"><b>$" + game.player.bonus + "k</b></td>"; },
+  function() { return "<td colspan=\"2\" align=\"center\"> </td>"; },
   function() { return "<td><i>You:</i></td><td align=\"right\">" + game.player.status + "%</td>"; },
   function() { return "<td><i>Ship:</i></td><td align=\"right\">" + w.Xsansi.status + "%</td>"; },
-  function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + w.Ha_yoon.status + "%</td>"; },
-  function() { return "<td><i>Kyle:</i></td><td align=\"right\">" + w.Kyle.status + "%</td>"; },
-  function() { return "<td><i>Ostap:</i></td><td align=\"right\">" + w.Ostap.status + "%</td>"; },
-  function() { return "<td><i>Aada:</i></td><td align=\"right\">" + w.Aada.status + "%</td>"; },
+  function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + displayStatus(w.Ha_yoon) + "</td>"; },
+  function() { return "<td><i>Kyle:</i></td><td align=\"right\">" + displayStatus(w.Kyle) + "</td>"; },
+  function() { return "<td><i>Ostap:</i></td><td align=\"right\">" + displayStatus(w.Ostap) + "</td>"; },
+  function() { return "<td><i>Aada:</i></td><td align=\"right\">" + displayStatus(w.Aada) + "</td>"; },
 ];
 
+
+
+function displayStatus(obj) {
+  if (typeof obj.status === "string") return obj.status;
+  return obj.status + "%";
+}
 
 // Change the name values to alter how items are displayed
 // You can add (or remove) inventories too

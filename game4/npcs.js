@@ -42,7 +42,12 @@ createItem("Xsansi",
       
       {name:"ship", regex:/status|ship/, response:function() {
         msg("'What is the ship's status, Xsansi?' you ask.");
-        msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites.'");
+        msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites ready to be deployed.'");
+      }},
+      
+      {name:"satellite", regex:/satellite/, response:function() {
+        msg("'Tell me about the satellite, Xsansi.'");
+        msg("TODO!!!");
       }},
       
       {name:"itinerary", regex:/itinerary|stars|planets|route|destinations/, response:function() {
@@ -197,6 +202,7 @@ createItem("Kyle",
         break;
         case 2:
         this.msg("Kyle launches the satellite.");
+        w.Xsansi.satellites--;
         break;
         case 3:
         this.msg("Kyle watches the satellite as it goes into its prescribed orbit.");
@@ -466,7 +472,13 @@ createItem("Aada",
         }
         w.Aada.geologyFlag2 = true;
       }},
-      
+    ],
+    
+    telloptions:[
+      {regex:/.* hot/, response:function() {
+        msg("'You look hot!' you say Aada.");
+        msg("'If you're trying to get in my knickers, forget it.'");
+      }},
     ],
     
     // Probe deployment
@@ -491,7 +503,7 @@ createItem("Aada",
         break;
         case 2:
         this.msg("Aada launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
-        deployProbe(this, "geo", deployProbeTotal);
+        deployProbe(this, "geo", this.deployProbeTotal);
         this.deployProbeCount++;
         this.deployProbeTotal++;
         if (this.deployProbeCount === count) {

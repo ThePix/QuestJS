@@ -527,7 +527,7 @@ function npcLeavingMsg(npc, dest) {
 
 function niceDirections (dir) {
   const dirObj = EXITS.find(function(el) { return el.name === dir; });
-  return dirObj.niceDir;
+  return dirObj.niceDir ? dirObj.niceDir : dirObj.name;
 }
   
 

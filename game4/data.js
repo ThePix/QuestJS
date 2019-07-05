@@ -23,12 +23,7 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
-  moveToFrom:function(toLoc, fromLoc) {
-    if (!w[fromLoc]) errormsg("The location name `" + fromLoc + "`, does not match anything in the game.");
-    if (!w[toLoc]) errormsg("The location name `" + toLoc + "`, does not match anything in the game.");
-    this.loc = toLoc; 
-    w[fromLoc].itemTaken(this);
-    w[toLoc].itemDropped(this);
+  onMove:function(toLoc, fromLoc) {
     if (fromLoc === "stasis_pod_drawer") {
       w.stasis_pod_drawer.display = DSPY_NOT_HERE;
       msg("The stasis pod drawer slides shut.");
@@ -51,7 +46,7 @@ createItem("your_underwear", WEARABLE(1, ["body"]), {
 
 createRoom("stasis_bay", {
   alias:"stasis bay",
-  desc:'There are six stasis pods here, four on one side and two on the other. {podStatus} That is actually more than there are crew members. Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant aline. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
+  desc:'There are six stasis pods here (despite only five crew members), four on one side and two on the other. {podStatus} Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant alive. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
   tpStatus:function() {
     const arr = [];
     for (let i = 0; i < NPCS.length; i++) {
@@ -149,7 +144,7 @@ createRoom("stasis_pod_room", {
 
 
 createRoom("cargo_bay", {
-  desc:"The cargo bay is a large,open area, with numerous crate, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay if forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
+  desc:"The cargo bay is a large,open area, with numerous [crates:crate], several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
   forward:new Exit("stasis_bay"),
   port:new Exit("top_deck_aft", {
     msg:"You walk up the narrow stair way to the top deck.",
@@ -160,9 +155,9 @@ createRoom("cargo_bay", {
 });
 
 createRoom("airlock", {
-  desc:"",
+  desc:"The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the [controls].",
   port:new Exit("cargo_bay"),
-  starboard:new Exit("space"),
+  starboard:new Exit("space", { locked:true, }),
 });
 
 

@@ -32,6 +32,8 @@ const CUSTOM_EXITS = false;          // set to true to use custom exits, in exit
 const FILES = ["code", "data"];
 const MAX_UNDO = 0;
 const ROOM_HEADINGS = true;
+const NO_TALK_TO = "TALK TO is not a feature in this game.";
+const NO_ASK_TELL = "ASK/TELL ABOUT is not a feature in this game.";
 
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
