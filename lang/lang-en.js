@@ -151,6 +151,9 @@ function NO_LISTEN(char) {
 function NOTHING_THERE(char) {
   return nounVerb(char, "be", true) + " sure there's nothing there.";
 }
+function NOTHING_INSIDE(char) {
+  return "There's nothing to see inside.";
+}
 function NOT_THAT_WAY(char, dir) {
   return nounVerb(char, "can't", true) + " go " + dir + ".";
 }
@@ -227,6 +230,10 @@ function CONTAINER_CLOSED(char, item) {
 }
 function INSIDE_CONTAINER(char, item, cont) {
   return pronounVerb(item, "be", true) + " inside " + cont.byname({article:DEFINITE}) + ".";
+}
+function LOOK_INSIDE(char, item) {
+  const l = formatList(item.getContents(), {article:INDEFINITE, lastJoiner:" and ", nothing:"nothing"});
+  return "Inside " + item.byname({article:DEFINITE}) + " " + pronounVerb(char, "can") + " see " + l + ".";
 }
 function STOP_POSTURE(char) {
   if (!char.posture) return "";

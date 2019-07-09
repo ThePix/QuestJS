@@ -68,15 +68,30 @@ createRoom("hole", {
 
 createItem("book", 
   TAKEABLE(),
-  { loc:"lounge", examine:"A leather-bound book.", heldVerbsX:["Read"], read:function(isMultiple, char) {
-    if (cmdRules.isHeldRule(char, this, isMultiple)) {
-      msg (prefix(this, isMultiple) + "It is not in a language " + pronounVerb(char, "understand") + ".");
-      return true;
-    }          
-    else {
-      return false;
-    }
-  }}
+  { 
+    loc:"lounge",
+    examine:"A leather-bound book.",
+    heldVerbsX:["Read"], 
+    read:function(isMultiple, char) {
+      if (cmdRules.isHeldRule(char, this, isMultiple)) {
+        if (char === w.Lara) {
+          msg ("'Okay.' Lara spends a few minutes reading the book.");
+          msg ("'I meant, read it to me.'");
+          msg ("'All of it?'");
+          msg ("'Quick summary.'");
+          msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
+        }
+        else {
+          msg (prefix(this, isMultiple) + "It is not in a language " + pronounVerb(char, "understand") + ".");
+        }
+        return true;
+      }          
+      else {
+        return false;
+      }
+    },
+    lookinside:"The book has pages and pages of text, but you do not even recongise the text.",
+  }
 );
 
 
@@ -646,6 +661,10 @@ createItem("Lara",
         w.ring.worn = true;
         w.garage_key.loc = char.name;
       }
+      if (item === w.book) {
+        msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'");
+        w.book.loc = "Lara";
+      }
       else {
         msg("'Why would I want {i:that}?'");
       }
@@ -668,6 +687,9 @@ createItem("Lara",
       return true;
     },
     getAgreementStand:function() {
+      return true;
+    },
+    getAgreementRead:function() {
       return true;
     },
     getAgreementSitOn:function() {

@@ -55,6 +55,13 @@ test.tests = function() {
 
   test.assertEqual("ninetieth", toOrdinal(90));
 
+  test.title("Look inside");
+  
+  test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box and an ornate doll.");
+  test.assertCmd("look inside box", "Inside the cardboard box you can see nothing.");
+  test.assertCmd("look inside boots", "There's nothing to see inside.");
+  test.assertCmd("look inside book", "The book has pages and pages of text, but you do not even recongise the text.");
+  
   test.title("Simple object commands");
   
   test.assertCmd("i", "You are carrying a knife.");
@@ -83,7 +90,9 @@ test.tests = function() {
   test.title("Simple object commands (book)");
   test.assertCmd("get the book", "You take the book.");
   test.assertCmd("read the book", "It is not in a language you understand.");
-  test.assertCmd("drop book", "You drop the book.");
+  test.assertCmd("give it to kyle", "Done.");
+  test.assertCmd("kyle, read the book", "It is not in a language he understands.");
+  test.assertCmd("kyle, drop book", "Kyle drops the book.");
   
   test.assertCmd("n", "You can't go north.");
   test.assertCmd("d", "You can't go down.");
