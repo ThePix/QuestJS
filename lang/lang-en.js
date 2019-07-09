@@ -198,6 +198,9 @@ function NOT_CONTAINER(char, item) {
 function NOT_CARRYING(char, item) {
   return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
 }
+function NOT_INSIDE(char, item) {
+  return pronounVerb(item, "'be", true) + " not inside that.";
+}
 function WEARING(char, item) {
   return pronounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
 }

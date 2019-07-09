@@ -21,6 +21,20 @@ function setup() {
 
 
 
+commands.push(new Cmd('Tes2', {
+  regex:/^(tst)$/,
+  objects:[
+    {ignore:true},
+  ],
+  script:function(arr) {
+    console.log(scope(isReachable));
+    console.log("Reachable: " + isReachable(w.brick));
+    console.log("Here: " + isHere(w.brick));
+    console.log("Contained: " + isContained(w.brick));
+    console.log("Either: " + isHereOrContained(w.brick));
+    return SUCCESS_NO_TURNSCRIPTS; 
+  },
+}));
 
 
 commands.push(new Cmd('Kick', {

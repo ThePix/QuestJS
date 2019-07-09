@@ -139,6 +139,7 @@ createItem("ring",
 );
 
 createItem("cardboard_box",
+  TAKEABLE(),
   CONTAINER(true),
   { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false }
 );

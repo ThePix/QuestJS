@@ -60,9 +60,9 @@ test.tests = function() {
   test.assertCmd("i", "You are carrying a knife.");
   test.assertCmd("get coin", "You try to pick up the coin, but it just will not budge.");
   test.assertCmd("get straw boater", "Kyle has it.");
-  test.assertCmd("get box", "You can't take it.");
-  test.assertCmd("get the box", "You can't take it.");
-  test.assertCmd("get a box", "You can't take it.");
+  test.assertCmd("get cabinet", "You can't take it.");
+  test.assertCmd("get the cabinet", "You can't take it.");
+  test.assertCmd("get a cabinet", "You can't take it.");
   test.assertCmd("get knife", "You have it.");
   test.assertCmd("x tv", "It's just scenery.");
   test.assertCmd("get tv", "You can't take it.");
@@ -101,6 +101,39 @@ test.tests = function() {
   test.assertCmd("look", ["A clean room.", "You can see a trapdoor, a camera, a big kitchen table (with two bricks on it) and a garage door here.", "You can go north or west."]);
   test.assertCmd("get the bricks", "You take two bricks.");
   test.assertCmd("w", ["You head west.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a waterskin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box, a coin, a small key, a flashlight, Kyle (wearing a straw boater) and a garage key here.", "You can go up, west, east or south."]); 
+
+  test.title("Simple object commands (bricks and a box)");
+  test.assertEqual(false, isContained(w.brick));
+  test.assertCmd("drop bricks in box", "Done.");
+  test.assertEqual(true, isContained(w.brick));
+  test.assertCmd("get bricks", "You take seven bricks.");
+  test.assertEqual(false, isContained(w.brick));
+  
+  test.assertCmd("drop three bricks in box", "Done.");
+  test.assertEqual(true, isContained(w.brick));
+  test.assertCmd("drop bricks", "You drop four bricks.");
+  test.assertEqual(true, isContained(w.brick));
+  test.assertCmd("get bricks", "You take four bricks.");
+  test.assertEqual(true, isContained(w.brick));
+  test.assertCmd("get bricks", "You take three bricks.");
+  test.assertEqual(false, isContained(w.brick));
+  
+  test.title("Simple object commands (bricks and a held box)");
+  test.assertCmd("get box", "You take the cardboard box.");
+  test.assertCmd("drop bricks in box", "Done.");
+  test.assertCmd("get bricks from box", "Done.");
+  
+  test.assertCmd("drop three bricks in box", "Done.");
+  test.assertCmd("drop bricks", "You drop four bricks.");
+  test.assertCmd("get bricks", "You take four bricks.");
+  test.assertCmd("get bricks", "You take three bricks.");
+  test.assertCmd("drop box", "You drop the cardboard box.");
+  
+
+
+
+
+  
 
   test.title("Restricting");
 
@@ -182,7 +215,7 @@ test.tests = function() {
   test.assertCmd("boots,get coin", "You can tell the boots to do what you like, but there is no way they'll do it.");
   test.assertCmd("kyle,get coin", "He tries to pick up the coin, but it just will not budge.");
   test.assertCmd("kyle,get knife", "You have it.");
-  test.assertCmd("kyle,get box", "Kyle can't take it.");
+  test.assertCmd("kyle,get cabinet", "Kyle can't take it.");
   test.assertCmd("kyle,get cover", "Kyle can't take it; it's part of the book.");
 
   test.title("NPC commands (boots)");
