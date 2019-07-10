@@ -330,7 +330,7 @@ createRoom("attic", {
 
 
 createRoom("kitchen", {
-  desc:'A clean room.',
+  desc:`A clean room{if:clock:display:${DSPY_SCENERY}:, a clock hanging on the wall}.`,
   west:new Exit("lounge"),
   down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; }, msg:function(isMultiple, char) {
     if (char === game.player) {
@@ -346,6 +346,11 @@ createRoom("kitchen", {
   hint:"This room features two doors that open and close. The garage door needs a key.",
   source:"water",
 });
+
+createItem("clock",
+  TAKEABLE(),
+  { loc:"kitchen", display:DSPY_SCENERY, examine:"A white clock.", }
+);
 
 createItem("trapdoor",
   OPENABLE(false),
