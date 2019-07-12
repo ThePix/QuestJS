@@ -83,7 +83,7 @@ createItem("stasis_pod", {
 createItem("stasis_pod_drawer", CONTAINER(false), {
   alias:"drawer",
   //display:DSPY_SCENERY,
-  loc:"nowhere",
+  loc:"stasis_bay",
   closed:false,
   examine:"The drawer extends out from the foot of the pod; it is white and quite shallow, and almost the width of the pod.{ifHere:pile_of_vomit: Fortunately, it is well away from the vomit.}",
 });
@@ -139,6 +139,36 @@ createRoom("stasis_pod_room", {
     }      
   }),
 });
+
+createItem("stasis_pod_interior",
+  OPENABLE(true),
+  {
+    alias:"stasis pod",
+    regex:/^(stasis pod|pod|lid)$/,
+    display:DSPY_SCENERY,
+    loc:"stasis_pod_room",
+    closed:false,
+    examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
+    close:function(isMultiple, char) {
+      if (w.Kyle.deploySatelliteAction < 5) {
+        msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'closing the lid of a stasis pod will put you back in stasis. That is not permitted until the satellite is deployed, and not advised until probes have been deployed and data collected.' The lid rises to its fully open position.");
+        return false;
+      }
+      if (w.your_jumpsuit.loc === game.player.name) {
+        msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'your jumpsuit should be left outside the pod when going into stasis.' The lid rises to its fully open position.");
+        return false;
+      }
+      
+      w.your_jumpsuit.loc = "stasis_pod_drawer";
+      w.stasis_pod_drawer.display = DSPY_SCENERY;
+      msg("You give pod lid a pull, and it starts to descend, sealing you in. You feel a sharp pain in your shoulder, and almost immediately you start to feel sleepy... so sleepy you cannot keep your eyes open.");
+      arrival();
+      // MORE STUFF HERE ???
+      return true;
+    },
+  }
+);
+
 
 
 

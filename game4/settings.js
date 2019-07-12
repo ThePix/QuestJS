@@ -1,6 +1,6 @@
 "use strict";
 
-const TITLE = "Planet Survey";
+const TITLE = "The Joseph Banks";
 const AUTHOR = "The Pixie"
 const VERSION = "1.1";
 const THANKS = ["Kyle", "Lara"];
@@ -115,7 +115,7 @@ function setup() {
   //for(let key in w) {
   //  debugmsg(key);
   //}
-  arrival(0);  
+  arrival();  
   
 }
 

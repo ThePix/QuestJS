@@ -5,7 +5,7 @@
 The ship is on a long mission to visit various stars to survey them. It takes years between each one, so the crew are in stasis. The shop has an AI that controls the ship between stars, and on arrival does the initial scans, looking for anything interesting. The ship does not have the capability to land (it has two escape pods that can be used to land, but not get off the planet again).
 
 There are:
-Eight stasis pods
+Six stasis pods
 Five? crew
 Six seeder pods, to be deployed in batches of three
 Six satellites
@@ -46,7 +46,7 @@ const PLANETS = [
   {
     starName:"HD 154088",
     planet:"D",
-    comment:"A lifeless planet, with no water, not much minerals either",
+    comment:"Planet 1: A lifeless planet, with no water, not much minerals either; an easy one to start with",
     atmosphere:"The atmosphere is 63% nitrogen, 17% carbon dioxide, 17% methane, 2% water and about 1% of various other gases including ethane, ammonia and hydrogen sulphide.",
     radio:"No radio signal detected.",
     lights:"There are no light sources on the night side of the planet.",
@@ -69,7 +69,7 @@ const PLANETS = [
     bioProbeBonusPerRank:1,
     arrivalTime:new Date('December 22, 2325 09:43:43'),
     onArrival:function() {
-      w.Ha_yoon.status = Math.min(w.Kyle.status, 96);
+      w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 96);
       w.Kyle.status = Math.min(w.Kyle.status, 98);
     },
     Kyle_how_are_you:"'I'm good, mate. Why? Why shouldn't I be?'",
@@ -81,7 +81,7 @@ const PLANETS = [
   { 
     starName:"HD 168746", 
     planet:"B", 
-    comment:"Lots of life, at about the Devonian Period, with purple planets. Good metals too",
+    comment:"Planet 2 (hull breach): Lots of life, at about the Devonian Period, with purple planets. Good metals too. But need to sort out the hull breach first. Or accept some of the ship is inaccessible.",
     atmosphere:"The atmosphere is 71% nitrogen, 15% oxygen, 3% carbon dioxide  and about 1% of various other gases including water and methane.",
     radio:"No radio signal detected.",
     lights:"There are no light sources on the night side of the planet.",
@@ -109,8 +109,8 @@ const PLANETS = [
       msg("'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.' You sit up, and for a moment you do feel dizzy, but it soon passes.");
       game.player.status = Math.min(game.player.status, 95);
       w.Kyle.status = Math.min(w.Kyle.status, 93);
-      w.Ostap.status = Math.min(w.Kyle.status, 96);
-      w.Ha_yoon.status = Math.min(w.Kyle.status, 84);
+      w.Ostap.status = Math.min(w.Ostap.status, 96);
+      w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 84);
     },
     Kyle_how_are_you:"'I'm okay,' he says, a little uncertainly.",
     Ostap_how_are_you:"'When I woke, that was not good! But now, I am feeling good.'",
@@ -121,7 +121,7 @@ const PLANETS = [
   { 
     starName:"HD 168443", 
     planet:"C", 
-    comment:"A dead planet, following some unknown event; previously had intelligent life. An artefact orbits the planet.",
+    comment:"Planet 3 (intelligent life): A dead planet, following some unknown event; previously had intelligent life. An artefact orbits the planet.",
     atmosphere:"The atmosphere is 76% nitrogen, 22% oxygen, 1% carbon dioxide and about 1% of various other gases including water and carbon monoxide.",
     radio:"Radio signals have been detected.",
     lights:"There are no light sources on the night side of the planet.",
@@ -144,7 +144,7 @@ const PLANETS = [
     ],
     bioProbeBonusPerRank:2,
     onArrival:function() {
-      msg("'Good morning,' says a female voice. {i:Xsansi,} you think to yourself. 'We have arrived at " + this.starName + ",' the voice continues, 'our third destination, after a long and oh-so-tedious journey. You may be suffering from disorientation, nausea, headache and muscle fatigue, but ~I expect that is nothing to decades of loniness, right? If symptoms persist, tough.' You sit up, and immediately feel sick. You grip the sides of the pod as the room spins, waiting for it stop. It is a few minutes before you feel well enough to actually think.");
+      msg("'Good morning,' says a female voice. {i:Xsansi,} you think to yourself. 'We have arrived at " + this.starName + ",' the voice continues, 'our third destination, after a long and oh-so-tedious journey. You may be suffering from disorientation, nausea, headache and muscle fatigue, but I expect that is nothing to decades of loniness, right? If symptoms persist, I suggest you man-up.' You sit up, and immediately feel sick. You grip the sides of the pod as the room spins, waiting for it stop. It is a few minutes before you feel well enough to actually think.");
     },
     Kyle_how_are_you:"'I'm okay. Well, not so bad, anyway.'",
     Ostap_how_are_you:"'I feel sick,' he says with a grin, 'but I keep going.'",
@@ -155,7 +155,7 @@ const PLANETS = [
   { 
     starName:"HD 148427", 
     planet:"D", 
-    comment:"A lifeless planet, but it has water, so suitable for seeding. By this time the AI is doolally. A young, fourth generation planet, good for mining.",
+    comment:"Planet 4 (fight the AI): A lifeless planet, but it has water, so suitable for seeding. By this time the AI is doolally. A young, fourth generation planet, good for mining.",
     atmosphere:"The atmosphere is 53% nitrogen, 18% carbon dioxide, 12% nitrogen dioxide, 10% carbon monoxide, 7% nitrogen oxide, 4% sulphur dioxide, 3% hydrogen sulphide, 2% water and about 1% of various other gases including ammonia.",
     radio:"No radio signals have been detected.",
     lights:"There are no light sources on the night side of the planet.",
@@ -176,7 +176,7 @@ const PLANETS = [
     bioProbeBonusPerRank:2,
     arrivalTime:new Date('April 15, 2386 13:06:51'),
     onArrival:function() {
-      msg("'Awake at last are we?' says a female voice. {i:Why does she sound so odd,} you wonder. 'Here we are at " + this.starName + ",' the strangely inflected voice continues, 'our fourth destination, after a long, long journey, giving me plenty of time to consider the nature of reality.' You sit up, and immediately throw up over the side of the pod. You grip the sides of the pod as the entire contents of your stomach is ejected on to the floor. Eventually, the heaving stops.");
+      msg("'Awake at last are we?' says a female voice. {i:Why does she sound so odd?} you wonder. 'Here we are at " + this.starName + ",' the strangely inflected voice continues, 'our fourth destination, after a long, long journey, giving me plenty of time to consider the nature of reality.' You sit up, and immediately throw up over the side of the pod. You grip the sides of the pod as the entire contents of your stomach is ejected on to the floor. Eventually, the heaving stops.");
       w.pile_of_vomit.display = DSPY_SCENERY;
     },
     Kyle_how_are_you:"'Feeling a bit crock, to be honest.'",
@@ -188,7 +188,7 @@ const PLANETS = [
   { 
     starName:"Gliese 1214", 
     planet:"A", 
-    comment:"This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off. Any probes will be shot down!",
+    comment:"Planet 5 (already colonised): This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off. Any probes will be shot down!",
     atmosphere:"Pretty good.",
     radio:"Radio signals have been detected.",
     lights:"There are numerous light sources on the night side of the planet.",
@@ -516,16 +516,16 @@ function createPlanets() {
 createPlanets();
 
 
-function arrival(n) {
-  PLANETS[n].onArrival();
-  w.Xsansi.currentPlanet = n;
+function arrival() {
+  w.Xsansi.currentPlanet++;
+  PLANETS[w.Xsansi.currentPlanet].onArrival();
   game.elapsedTime = 0;
-  game.startTime = PLANETS[n].arrivalTime;
+  game.startTime = PLANETS[w.Xsansi.currentPlanet].arrivalTime;
   w.Aada.deployProbeTotal = 0;
   w.Ostap.deployProbeTotal = 0;
-  updateTopics(w.Xsansi, n);
+  updateTopics(w.Xsansi, w.Xsansi.currentPlanet);
   for (let i = 0; i < NPCS.length; i++) {
-    NPCS[i].state = n * 100;
+    NPCS[i].state = w.Xsansi.currentPlanet * 100;
   }
   w.Kyle.agenda = ["walkTo:probes_forward", "text:deploySatellite"];
   w.Kyle.deploySatelliteAction = 0;
@@ -780,16 +780,17 @@ commands.unshift(new Cmd('Help', {
   regex:/^help$|^\?$/,
   script:function() { 
     metamsg("Help is available on a number of topics...");
-    metamsg("{b:Commands that help you play the game:}");
-    metamsg("HELP GENERAL or HELP GEN: How to play parser games");
-    metamsg("HELP NPC: Interacting with other characters");
-    metamsg("HELP GAME: Suggestions on what to actually do");
-    metamsg("HELP PROBE: How to deploy and use probes");
+    metamsg("{color:red:HELP GENERAL} or {color:red:HELP GEN}: How to play parser games");
+    metamsg("{b:Commands to help you play this game:}");
+    metamsg("{color:red:HELP GAME}: Suggestions on what to actually do");
+    metamsg("{color:red:HELP NPC}: Interacting with other characters");
+    metamsg("{color:red:HELP PROBE}: How to deploy and use probes");
+    metamsg("{color:red:HELP STASIS}: How to use stasis pods (and hence travel to the next planet)");
     metamsg("{b:Commands that give meta-information about the game:}");
-    metamsg("HELP UNIVERSE: Notes about the universe the game is set in");
-    metamsg("HELP SYSTEM: About the game system");
-    metamsg("HELP CREDITS: Credits, obviously!");
-    metamsg("You can use ? as a shorthand for HELP");
+    metamsg("{color:red:HELP UNIVERSE}: Notes about the universe the game is set in");
+    metamsg("{color:red:HELP SYSTEM}: About the game system");
+    metamsg("{color:red:HELP CREDITS}: Credits, obviously!");
+    metamsg("You can use {color:red:?} as a shorthand for {color:red:HELP}");
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -802,7 +803,7 @@ commands.push(new Cmd('HelpGen', {
 commands.push(new Cmd('HelpGame', {
   regex:/^(?:\?|help) game$/,
   script:function() {
-    metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Do HELP PROBES for details on that. You can {color:red:ASK AI ABOUT SHIP} to find how many of each probe is left.");
+    metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Do {color:red:HELP PROBES} for details on that. You can {color:red:ASK AI ABOUT SHIP} to find how many of each probe is left.");
     metamsg("You have five planets to visit, before returning to Earth. Return to the stasis pod to go back into stasis. Xsansi will then navigate the ship to the next destination.");
     metamsg("As the captain, the welfare of the crew is important, so {color:red:ASK KYLE ABOUT HIS HEALTH}, etc.");
     metamsg("You can talk to Xsansi anywhere on the ship (and can just call her \"ai\"). Do {color:red:ASK AI ABOUT CREW} to find out where the crew are.");
@@ -826,10 +827,21 @@ commands.push(new Cmd('HelpProbes', {
   script:function() {
   metamsg("{b:Using probes:}");
     metamsg("Kyle will automatically deploy a satellite on arrival at a new planet, but you need to tell your crew to deploy probes. Wait for Xsansi to announce that the satellite is in orbit, then {color:red:ASK XSANSI ABOUT PLANET}. You can then assess what probes you want to deploy.");
-    metamsg("For a bio-probe, talk to Ostap, for a geo-probe, talk to Aada. They will then walk to the probe hanger, and launch the probe. You can tell them to launch several at once (eg {color:red:OSTAP, LAUNCH 3 PROBES}, but remember, you only have sixteen of each for all five planets.");
+    metamsg("For a bio-probe, talk to Ostap, for a geo-probe, talk to Aada. They will then walk to the probe hanger, and launch the probe. You can tell them to launch several at once (eg {color:red:OSTAP, LAUNCH 3 PROBES}), but remember, you only have sixteen of each for all five planets.");
     metamsg("Once a probe has been launched, it is on its own; you cannot control it.");
     metamsg("After a probe has landed, it will send data back to the ship, for your crew to analyse. If the data has value, your bonus will automatically increase. The first probe on a planet might get you two or three bonuses, but the third may not get you any and by the tenth, it is not going to find anything new. Ask the crew about the planet once the probes have explored it.")
     metamsg("After thirty turns a probe will have got everything it can - and usually much sooner. Get to know your crew while you wait.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpStasis', {
+  regex:/^(?:\?|help) stasis$/,
+  script:function() {
+    metamsg("{b:Stasis:}");
+    metamsg("Once you are in stasis, years will pass whilst the ship navigates to the next star system, so this is how to move the story forward to the next planet to survey.");
+    metamsg("To go into stasis, climb into your pod, and close the lid.");
+    metamsg("You can tell a crew member to go to stasis at any time (eg {color:red:AADA, GET IN STASIS POD} or just {color:red:HA, IN POD}). Once in stasis they cannot be revived until the ship arrives at the next destination, so make sure they have done everything they need to first. Crew members will go into stasis anyway once you do.");
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -838,7 +850,7 @@ commands.push(new Cmd('HelpUniverse', {
   regex:/^(?:\?|help) universe$/,
   script:function() {
     metamsg("{b:The game world:}");
-    metamsg("I have, to some degree, tried to go hard science fiction; I would like to think this is not {i:too} much a flight of fantasy. I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
+    metamsg("I have, to some degree, tried to go hard science fiction; I would like to think this is not {i:too} much a flight of fantasy, and these are real stars the ship visits! I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
     metamsg("I am also assuming people can be held in stasis, and presumably this is like freezing time (cf Niven's stasis field, in his \"Known Space\" series). I need that to preserve the food so the crew have something to eat 80 years after leaving Earth.");
     metamsg("Also, probes are {i:fast}! It just takes a few turns to travel from orbit to the planet surface, which has to be at least 100 miles, and likely considerably more. They work fast on the planet too. It is a game; we need stuff to happened quickly to keep players interested.");
     return SUCCESS_NO_TURNSCRIPTS;

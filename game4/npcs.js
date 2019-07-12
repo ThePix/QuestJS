@@ -21,6 +21,7 @@ createItem("Xsansi",
     geoProbes:16,
     seederPods:6,
     satellites:6,
+    currentPlanet:-1,
     shipStatus:"All systems nominal.",
     examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
     
@@ -40,6 +41,26 @@ createItem("Xsansi",
         msg("'" + w.Kyle.crewStatus() + "'");
       }},
       
+      {name:"kyle", regex:/kyle/, response:function() {
+        msg("'Tell me Kyle, Xsansi,' you say.");
+        msg("'" + w.Kyle.crewStatus() + "'");
+      }},
+      
+      {name:"aada", regex:/aada/, response:function() {
+        msg("'Tell me Kyle, Xsansi,' you say.");
+        msg("'" + w.Kyle.crewStatus() + "'");
+      }},
+      
+      {name:"ha_yoon", regex:/ha-yoon|ha yoon|ha|yoon/, response:function() {
+        msg("'Tell me Ha-yoon, Xsansi,' you say.");
+        msg("'" + w.Ha_yoon.crewStatus() + "'");
+      }},
+      
+      {name:"ostap", regex:/ostap/, response:function() {
+        msg("'Tell me Ostap, Xsansi,' you say.");
+        msg("'" + w.Ostap.crewStatus() + "'");
+      }},
+      
       {name:"ship", regex:/status|ship/, response:function() {
         msg("'What is the ship's status, Xsansi?' you ask.");
         msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites ready to be deployed.'");
@@ -48,6 +69,12 @@ createItem("Xsansi",
       {name:"satellite", regex:/satellite/, response:function() {
         msg("'Tell me about the satellite, Xsansi.'");
         msg("TODO!!!");
+      }},
+      
+      {name:"Joseph Banks", regex:/joseph|banks/, response:function() {
+        msg("'Who was this Joseph Banks guy the ship is named after, Xsansi?'");
+        msg("'Sir Joseph Banks, 1st Baronet, GCB, PRS was born on 24 February 1743 in London, UK, and died 19 June 1820 in London, UK. He was a naturalist, botanist, and patron of the natural sciences, who played a major role in the colonisation of Australia by Europeans, and is credited with discovering approximately 1,400 species of plants, some 80 of which bear his name.'");
+        msg("'Some old scientist guy. Got it.'");
       }},
       
       {name:"itinerary", regex:/itinerary|stars|planets|route|destinations/, response:function() {
@@ -172,7 +199,7 @@ createItem("Kyle",
     backgroundAskResponse:function() {
       msg("'Er, there' not much to tell really... Just a regular guy.'");
       msg("'You're from Australia, right?'");
-      msg("'That's right, cobber! Did the accent give it away?' Actually his accent is pretty faint, apart from the occasional \"cobber\", which you suspect is just an affectation. 'I'm from Sydney... well, originally Newcastle, but lived in Sygney most of my life.'")
+      msg("'That's right, cobber! Did the accent give it away?' Actually his accent is pretty faint, apart from the occasional \"cobber\", which you suspect is just an affectation. 'I'm from Sydney... well, originally Newcastle, but lived in Sydney most of my life.'")
     },
     askoptions:[
       {regex:/newcastle/, response:function() {
