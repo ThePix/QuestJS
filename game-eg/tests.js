@@ -75,6 +75,12 @@ test.tests = function() {
   test.assertCmd("get tv", "You can't take it.");
   test.assertCmd("give knife to boots", "Realistically, the boots are not interesting in anything you might give them.");
 
+  test.title("Simple object commands (eat)");
+  test.assertCmd("eat knife", "It's not something you can eat.");
+  test.assertCmd("get sandwich", "You take the sandwich.");
+  test.assertCmd("drink sandwich", "It's not something you can drink.");
+  test.assertCmd("ingest sandwich", ["You eat the sandwich.", "That was Great!"]);
+  
   test.title("Simple object commands (boots)");
   test.assertCmd("wear boots", "You don't have them.");
   test.assertCmd("remove boots", "You don't have them.");

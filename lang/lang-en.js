@@ -59,6 +59,12 @@ function STAND_ON_SUCCESSFUL(char, item) {
 function RECLINE_ON_SUCCESSFUL(char, item) {
   return nounVerb(char, "lie", true) + " down on " + item.byname({article:DEFINITE}) + ".";
 }
+function EAT_SUCCESSFUL(char, item) {
+  return nounVerb(char, "eat", true) + " " + item.byname({article:DEFINITE}) + ".";
+}
+function DRINK_SUCCESSFUL(char, item) {
+  return nounVerb(char, "drink", true) + " " + item.byname({article:DEFINITE}) + ".";
+}
 
 function NPC_HEADING(char, dir) {
   return nounVerb(char, "head", true) + " " + dir + ".";
@@ -126,6 +132,15 @@ function CANNOT_RECLINE_ON(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can lie on.";
 }
 
+function CANNOT_EAT(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can eat.";
+}
+function CANNOT_DRINK(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can drink.";
+}
+function CANNOT_INGEST(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can ingest.";
+}
 
 
 
@@ -365,6 +380,8 @@ const VERBS = {
   remove:"Remove",
   lookat:"Look at",
   talkto:"Talk to",
+  eat:"Eat",
+  drink:"Drink",
 };
 
 

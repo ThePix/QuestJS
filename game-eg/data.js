@@ -159,6 +159,11 @@ createItem("cardboard_box",
   { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false }
 );
 
+createItem("sandwich",
+  EDIBLE(false),
+  { loc:"lounge", examine:"A tasty looking thing.", onIngesting:function() { msg("That was Great!"); }, }
+);
+
 
 createItem("ornate_doll",
   TAKEABLE(),
