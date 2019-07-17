@@ -20,7 +20,31 @@ function setup() {
 }
 
 
+/*
+game.registerEvent("sayNow", function() {
+  msg("Now! " + game.elapsedRealTime);
+  setTimeout(io.scrollToEnd,1);
+});
 
+game.registerEvent("sayOften", function() {
+  msg("Often! " + this.count);
+  if (!this.count) this.count = 0;
+  this.count++;
+  if (this.count > 3) return true;
+});
+
+
+game.registerEvent("sayThen", function() {
+  msg("Then!");
+  setTimeout(io.scrollToEnd,1);
+});
+
+game.registerTimedEvent("sayOften", 2, 2);
+game.registerTimedEvent("sayOften", 18, 3);
+game.registerTimedEvent("sayThen", 10);
+game.registerTimedEvent("sayNow", 6, 4);
+game.registerTimedEvent("sayNow", 7, 7);
+*/
 
 
 
