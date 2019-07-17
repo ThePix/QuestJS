@@ -21,6 +21,9 @@ function setup() {
 
 
 
+
+
+
 commands.push(new Cmd('Tes2', {
   regex:/^(tst)$/,
   objects:[
