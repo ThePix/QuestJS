@@ -337,7 +337,7 @@ createItem("Ostap",
         this.reactionToUndress = 2;
         this.pause();
       }
-      else if (g.layer === 1 && this.reactionToUndress < 1) {
+      else if (g.wear_layer === 1 && this.reactionToUndress < 1) {
         msg("Ostap looks you up and down, and shrugs.");
         this.reactionToUndress = 1;
       }
