@@ -588,6 +588,12 @@ createItem("Arthur",
       msg("'Hey, wake up,' you say to Arthur.");
       this.suspended = false;
       this.pause();
+      this.multiMsg([
+        "'What?' he says, opening his eyes. 'Oh, it's you.'",
+        "'I am awake!'",
+        false,
+        "'Stop it!'",
+      ])
       return true;
     }
   }

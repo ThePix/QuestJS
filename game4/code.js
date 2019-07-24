@@ -71,6 +71,12 @@ const PLANETS = [
     onArrival:function() {
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 96);
       w.Kyle.status = Math.min(w.Kyle.status, 98);
+      msg("{i:The \"Joseph Banks\" left Earth orbit in 2319, on a centuries-long mission to survey five relatively close star systems. The crew were put in stasis for the long journey between the stars.}");
+      wait(function() {
+        msg("&nbsp;");
+        msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at " + PLANETS[0].starName + ",' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.'");
+        world.enterRoom();
+      });
     },
     Kyle_how_are_you:"'I'm good, mate. Why? Why shouldn't I be?'",
     Ostap_how_are_you:"'I am feeling good.'",
@@ -111,6 +117,12 @@ const PLANETS = [
       w.Kyle.status = Math.min(w.Kyle.status, 93);
       w.Ostap.status = Math.min(w.Ostap.status, 96);
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 84);
+      w.Xsansi.status = 74;
+      for (let key in w) {
+        if (w[key].room && w[key].name !== "stasis_bay" &&  w[key].name !== "stasis_pod_room") {
+          w[key].vacuum = true;
+        }
+      }
     },
     Kyle_how_are_you:"'I'm okay,' he says, a little uncertainly.",
     Ostap_how_are_you:"'When I woke, that was not good! But now, I am feeling good.'",

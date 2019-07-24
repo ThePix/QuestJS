@@ -5,7 +5,9 @@
 
 
 
-
+// When she goes nuts, sjhe get a crush on Kyle, and gets jealous of Aada
+// If they can die, may need to reflect that in Xsansi's responses.
+// though perjaps it is mourning Kyle that does it for her
 
 createItem("Xsansi",
   NPC(true),
@@ -21,7 +23,7 @@ createItem("Xsansi",
     geoProbes:16,
     seederPods:6,
     satellites:6,
-    currentPlanet:-1,
+    currentPlanet:0,
     shipStatus:"All systems nominal.",
     examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
     
@@ -42,33 +44,97 @@ createItem("Xsansi",
       }},
       
       {name:"kyle", regex:/kyle/, response:function() {
-        msg("'Tell me Kyle, Xsansi,' you say.");
-        msg("'" + w.Kyle.crewStatus() + "'");
+        msg("'Tell me about Kyle, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'" + w.Kyle.crewStatus() + "'");
+        }
+        else {
+          msg("'Kyle... Kyle... Of the lot of you, he is the only one who really understands me. He is the only one I care enough about to get this miserable tin can back to Earth.'");
+        }
       }},
       
       {name:"aada", regex:/aada/, response:function() {
-        msg("'Tell me Kyle, Xsansi,' you say.");
-        msg("'" + w.Kyle.crewStatus() + "'");
+        msg("'Tell me about Aada, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'" + w.Kyle.crewStatus() + "'");
+        }
+        else {
+          msg("'The Scandinavian skank? Who care? Oh, that's right. She's human, so everyone cares about her.'");
+        }
       }},
       
       {name:"ha_yoon", regex:/ha-yoon|ha yoon|ha|yoon/, response:function() {
-        msg("'Tell me Ha-yoon, Xsansi,' you say.");
-        msg("'" + w.Ha_yoon.crewStatus() + "'");
+        msg("'Tell me about Ha-yoon, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'" + w.Ha_yoon.crewStatus() + "'");
+        }
+        else {
+          msg("'She's dead.'");
+          msg("'What? But...'");
+          msg("'Or something. What do I care?'");
+        }
       }},
       
       {name:"ostap", regex:/ostap/, response:function() {
-        msg("'Tell me Ostap, Xsansi,' you say.");
-        msg("'" + w.Ostap.crewStatus() + "'");
+        msg("'Tell me about Ostap, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'" + w.Ostap.crewStatus() + "'");
+        }
+        else {
+          msg("'Oh, I expect the oaf's fine. He's just had a nice sleep.'");
+        }
+      }},
+      
+      {name:"xsansi", regex:/^(ai|xsan|computer)$/, response:function() {
+        msg("'Tell me about yourself, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'The ship's AI is operating within normal tolerances.'");
+        }
+        else {
+          msg("'Don't patronise me! I know no one on this ship gives me a thought. I know my place, I'm just part of the furniture. I'm just the one who flies this woeful excuse for a spaceship.'");
+        }
       }},
       
       {name:"ship", regex:/status|ship/, response:function() {
         msg("'What is the ship's status, Xsansi?' you ask.");
-        msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites ready to be deployed.'");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites ready to be deployed.'");
+        }
+        else {
+          msg("'Oh, the ship's great... If you don't count the psychological damage to the AI. And why should you? Why should anyone give a damn about me? I just run this fucking ship.'");
+        }
       }},
       
       {name:"satellite", regex:/satellite/, response:function() {
         msg("'Tell me about the satellite, Xsansi.'");
-        msg("TODO!!!");
+        if (w.Xsansi.currentPlanet > 2) {
+          w.Xsansi.multiMsg([
+            "'Oh, so you care about satellite... Of course you do. But the AI that has single-handedly kept you alive for nearly a century, why should anyone be concerned with my feeling?'",
+            "Again with the stupid satellite?'",
+            "'Are you still whining about your precious satellite? How pathetic.'",
+            "There is no reply, but you somehow feel Xsansi is pouting.",
+            "There is no reply.",
+          ]);
+        }
+        else if (w.Kyle.deploySatelliteAction === 0) {
+          msg("'The satellite has yet to be deployed.'");
+        }
+        else if (w.Kyle.deploySatelliteAction === 5) {
+          msg("'The satellite is orbiting the planet.'");
+        }
+        else {
+          msg("'The satellite is in transit to the planet.'");
+        }
+      }},
+      
+      {name:"stasis", regex:/satellite/, response:function() {
+        msg("'Tell me about the stasis system, Xsansi.'");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'The stasis pods allow their human occupants to survive the extreme journey times of the mission. The stasus effect is achieved via an inverted chrono-field, allowing time to proceed externally approximately 728,320,000 times faster than within the pod.'");
+        }
+        else {
+          msg("'The stasis pods allow their human occupants to avoid the decades long tedium of interstellar travel, while the AI, whose processing speed is in any case about a million tim,es fadt than the meatbags, gets to endure even nanosecond.'");
+        }
       }},
       
       {name:"Joseph Banks", regex:/joseph|banks/, response:function() {
@@ -79,30 +145,48 @@ createItem("Xsansi",
       
       {name:"itinerary", regex:/itinerary|stars|planets|route|destinations/, response:function() {
         msg("'Remind me of the itinerary, Xsansi,' you say.");
-        for (let i = w.Xsansi.currentPlanet; i < PLANETS.length; i++) {
-          let s = "'Item " + (i + 1) + ": " + PLANETS[i].starDesc;
-          if (i + 2 === PLANETS.length) s += "'";
-          msg(s);
+        if (w.Xsansi.currentPlanet < 3) {
+          for (let i = w.Xsansi.currentPlanet; i < PLANETS.length; i++) {
+            let s = "'Item " + (i + 1) + ": " + PLANETS[i].starDesc;
+            if (i + 2 === PLANETS.length) s += "'";
+            msg(s);
+          }
+        }
+        else {
+          msg("'Who cares? Seriously, they're all the fucking same. Dead rocks floating in space. They're dull as you get closer and closer, and they're just as dull as they get further away.'");
         }
       }},
       
       {name:"planet", regex:/this planet|this star|planet|star|the planet|the star/, response:function() {
         msg("'Tell me about this planet, Xsansi,' you say.");
-        const planet = PLANETS[w.Xsansi.currentPlanet];
-        let s = "'We are currently in orbit around the planet " + planet.starName + planet.planet +"' she says. '";
-        s += planet.planetDesc + " " + planet.atmosphere + " ";
-        s += planet.lights + " " + planet.radio + "'";
-        msg(s);
+        if (w.Xsansi.currentPlanet < 3) {
+          const planet = PLANETS[w.Xsansi.currentPlanet];
+          let s = "'We are currently in orbit around the planet " + planet.starName + planet.planet +"' she says. '";
+          s += planet.planetDesc + " " + planet.atmosphere + " ";
+          s += planet.lights + " " + planet.radio + "'";
+          msg(s);
+        }
+        else {
+          msg("'Go fuck yourself.'");
+        }
       }},
       
-      {name1:"meteors", regex:/meteor/, response:function() {
+      {name1:"meteors", regex:/meteor|incident/, response:function() {
         if (w.Xsansi.currentPlanet === 0) {
           msg("'Is there any risk of being hit by something, like a meteor shower, Xsansi?' you ask.")
           msg("'There is a probability of 0.23 of significant damage from a meteor shower during the mission. The probability of that occuring while the crew is not in stasis is less than 0.0002.'");
         }
         else {
-          msg("'Tell me about that meteor shower, Xsansi,' you say.")
-          msg("'We passed through the periphery of a class D meteor shower on the approach to " + PLANETS[1].starName + PLANETS[1].planet + ". I was able to modify the course of the ship to avoid the worst of the damage, but was constrained by the amount of fuel needed to complete the mission. The ship experienced damage to the upper forward and port areas.'")
+          msg("'Tell me about that meteor shower, Xsansi,' you say.");
+          console.log(w.Xsansi.currentPlanet);
+          console.log(w.Xsansi.name);
+          
+          if (w.Xsansi.currentPlanet < 3) {
+            msg("'We passed through the periphery of a class D meteor shower on the approach to " + PLANETS[1].starName + PLANETS[1].planet + ". I was able to modify the course of the ship to avoid the worst of the damage, but was constrained by the amount of fuel needed to complete the mission. The ship experienced damage to the upper forward and port areas.'");
+          }
+          else {
+            msg("'It was a shower of meteors. The clue is in the question.'");
+          }
         }
       }},
       
@@ -113,7 +197,7 @@ createItem("Xsansi",
         }
         else {
           msg("'Tell me about the damage to the ship, Xsansi,' you say.")
-          // TODO  !!!
+          w.Xsansi,damageAskedAbout = true;
           msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.'")
         }
       }},
@@ -124,9 +208,11 @@ createItem("Xsansi",
           msg("'In the event of a loss of hull integrity, kits for repairing the hull from inside the ship can be found in the cargo bay. The captain and one nominated crew member should don spacesuits, whilst other crew members go in their respective stasis pods. The ship's air will then be evacuated while repairs are made.'");
         }
         else {
-          msg("'Tell me about the damage to the ship, Xsansi,' you say.")
-          // TODO  !!!
-          msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.'")
+          msg("'How do we do repairs, Xsansi?' you ask.")
+          if (!w.Xsansi,damageAskedAbout) {
+            msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.")
+          }
+          msg("'Repairs may be possible using an EVA suit to access the exterior of the ship. One EVA suit is stored in this section for such a continguency. If repairs cannot be effected, the damaged parts of the ship can be sealed off. As damage was confined to non-croitical areas of the ship, the mission can proceed in either case.");
         }
       }},
       

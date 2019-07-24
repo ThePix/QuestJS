@@ -401,8 +401,11 @@ test.tests = function() {
   
   
   test.title("Agendas");
+  test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur.", "'What?' he says, opening his eyes. 'Oh, it's you.'"]);
+  test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur.", "'I am awake!'"]);
   test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
-  test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur."]);
+  test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur.", "'Stop it!'"]);
+  test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur.", "'Stop it!'"]);
   test.assertEqual(0, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "Arthur stands up and stretches."]);
   test.assertCmd("e", ["You head east.", "A light airy room.", /You can see/, "You can go north or west."]);
