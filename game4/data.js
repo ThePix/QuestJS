@@ -140,7 +140,7 @@ createItem("other_spacesuit", {
 createRoom("stasis_pod_room", {
   alias:"stasis pod",
   desc:'The stasis pod is shaped uncomfortably like a coffin, and is a pale grey colour. The lid is in the raised position.',
-  vacuum:false,
+  vacuum:"stasis_bay",
   out:new Exit('stasis_bay', {
     use:function() {
       msg("You climb out of the stasis pod.");
@@ -217,7 +217,7 @@ createRoom("airlock", {
 
 
 createRoom("hallway", {
-  desc:"This is, in a sense, the central nexus of the ship. The flightdeck is forward, the stasis bay to starboard, the labs to port. A ladder goes up to the living quarters and down to the probe hangers.",
+  desc:"This is, in a sense, the central nexus of the ship. The flight-deck is forward, the stasis bay to starboard, the labs to port. A ladder goes up to the living quarters and down to the probe hangers.",
   vacuum:false,
   starboard:new Exit("stasis_bay"),
   port:new Exit("lab2"),
@@ -245,7 +245,8 @@ createRoom("service_passage", {
 
 
 createRoom("flightdeck", {
-  desc:"The flight deck is semi-circular, with windows looking out in all directions. In the centre is the command chair, and there are four other chairs at the various workstations. The flightdeck can be used as an escape capsule, and can be landed on a suitable planet (but cannot be used to get back to space). The only exit is aft.",
+  alias:"flight-deck",
+  desc:"The flight deck is semi-circular, with windows looking out in all directions. In the centre is the command chair, and there are four other chairs at the various workstations. The flight-deck can be used as an escape capsule, and can be landed on a suitable planet (but cannot be used to get back to space). The only exit is aft.",
   vacuum:false,
   aft:new Exit("hallway"),
 });
@@ -312,7 +313,7 @@ createRoom("engineering1", {
   desc:"",
   alias:"Engineering (port)",
   properName:true,
-  vacuum:false,
+  vacuum:"engineering2",
   starboard:new Exit("engineering2"),
   forward:new Exit("lab4"),
 });
@@ -335,7 +336,7 @@ createRoom("engineering3", {
   desc:"",
   properName:true,
   alias:"Engineering (starboard)",
-  vacuum:false,
+  vacuum:"engineering2",
   port:new Exit("engineering2"),
   forward:new Exit("cargo_bay"),
 });
@@ -349,7 +350,7 @@ createRoom("engineering3", {
 
 createRoom("probes_forward", {
   alias:"Forward probe hanger",
-  desc:"The forward probe hanger is where the satellites are stored ready for deployment. The six satellites are kept in a dust-free environment on the starboard side of the hanger, each on a cradle. A robot arm is available to pick them up and eject them through a hatch in the floor.|On the port side, the seeder pods are stored. Each pod contains a variety of simple lifeforms, such as algae, which, it is hoped, will kickstart life on a suitable planet. It is a long term plan. There are six pods, three to be deployed at distant locations on a planet.| There is a control console to handle it all, though it can also be done remotely.",
+  desc:"The forward probe hanger is where the satellites are stored ready for deployment. The six satellites are kept in a dust-free environment on the starboard side of the hanger, each on a cradle. A robot arm is available to pick them up and eject them through a hatch in the floor.|On the port side, the seeder pods are stored. Each pod contains a variety of simple lifeforms, such as algae, which, it is hoped, will kick-start life on a suitable planet. It is a long term plan. There are six pods, three to be deployed at distant locations on a planet.| There is a control console to handle it all, though it can also be done remotely.",
   vacuum:false,
   up:new Exit("hallway"),
   aft:new Exit("probes_aft"),
@@ -368,7 +369,7 @@ createRoom("probes_aft", {
 });
 
 createRoom("server_room", {
-  desc:"The heart of the IT systems, including Xsansi, This room holds three racks of processors, each rack having four shelves and each shelf having eight units. The roomis kept cool and smells slighty of ozone.",
+  desc:"The heart of the IT systems, including Xsansi, This room holds three racks of processors, each rack having four shelves and each shelf having eight units. The room is kept cool and smells slightly of ozone.",
   vacuum:false,
   aft:new Exit("probes_forward"),
 });
@@ -423,7 +424,7 @@ createRoom("top_deck_aft", {
     }
   },
   descThis: "You are stood at the aft end of a narrow corridor, with the women's cabin behind you, the men's to port. To starboard, steps lead down to the cargo bay on the lower deck.",
-  vacuum:false,
+  vacuum:"top_deck_forward",
   port:new Exit("guys_cabin"),
   aft:new Exit("girls_cabin"),
   starboard:new Exit("cargo_bay", {
@@ -483,6 +484,7 @@ createRoom("girls_cabin", {
 createRoom("space", {
   desc:"",
   vacuum:true,
+  isSpace:true,
   port:new Exit("airlock"),
   notOnShip:true,
 });

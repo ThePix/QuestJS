@@ -25,6 +25,7 @@ createItem("Xsansi",
     satellites:6,
     currentPlanet:0,
     shipStatus:"All systems nominal.",
+    pressureOverride:false,
     examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
     
     askoptions:[

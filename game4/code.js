@@ -118,6 +118,7 @@ const PLANETS = [
       w.Ostap.status = Math.min(w.Ostap.status, 96);
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 84);
       w.Xsansi.status = 74;
+      w.Xsansi.pressureOverride = true;
       for (let key in w) {
         if (w[key].room && w[key].name !== "stasis_bay" &&  w[key].name !== "stasis_pod_room") {
           w[key].vacuum = true;
@@ -638,7 +639,10 @@ function probeLandsOkay() {
 
 
 
-
+function isRoomPressured(room) {
+  if (typeof room.vacuum === "string") room = w[room.vacuum];
+  return !room.vaccum;
+}
 
 
 io.clickToContinueLink = function() {
@@ -707,7 +711,7 @@ commands.push(new Cmd('Get in pod1', {
   objects:[
     {scope:isHere, attName:"npc"},
   ],
-  defmsg:function() { msg("That's not about to get in a stasis!")},
+  defmsg:"That's not about to get in a stasis!",
 }));
 commands.push(new Cmd('Get in pod2', {
   regex:/^tell (.+) to (?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
@@ -716,7 +720,7 @@ commands.push(new Cmd('Get in pod2', {
   objects:[
     {scope:isHere, attName:"npc"},
   ],
-  defmsg:function() { msg("That's not about to get in a stasis!")},
+  defmsg:"That's not about to get in a stasis!",
 }));
 
 commands.push(new Cmd('Stop1', {
@@ -726,7 +730,7 @@ commands.push(new Cmd('Stop1', {
   objects:[
     {scope:isHere, attName:"npc"},
   ],
-  defmsg:function() { msg("That's not doing anything!")},
+  defmsg:"That's not doing anything!",
 }));
 commands.push(new Cmd('Stop2', {
   regex:/^tell (.+) to (?:stop|halt|forget it)$/,
@@ -735,7 +739,7 @@ commands.push(new Cmd('Stop2', {
   objects:[
     {scope:isHere, attName:"npc"},
   ],
-  defmsg:function() { msg("That's not doing anything")},
+  defmsg:"That's not doing anything",
 }));
 
 
@@ -746,7 +750,7 @@ commands.push(new Cmd('Launch', {
     {ignore:true},
     {scope:isInWorld},
   ],
-  defmsg:function() { msg("You can't launch that!")},
+  defmsg:"You can't launch that!",
 }));
 
 commands.push(new Cmd('Revive', {
@@ -756,8 +760,140 @@ commands.push(new Cmd('Revive', {
     {ignore:true},
     {scope:isInWorld},
   ],
-  defmsg:function() { msg("You can't revive that!")},
+  defmsg:"You can't revive that!",
 }));
+
+commands.push(new Cmd('Pressurise', {
+  regex:/^pressuri[sz]e (.+)$/,
+  npcCmd:true,
+  objects:[
+    {scope:isRoom},
+  ],
+  script:function(objects) {
+    return handlePressurise(game.player, objects, true);
+  },
+}));
+commands.push(new Cmd('Depressurise', {
+  regex:/^(depressuri[sz]e|evacuate) (.+)$/,
+  npcCmd:true,
+  objects:[
+    {ignore:true},
+    {scope:isRoom},
+  ],
+  script:function(objects) {
+    return handlePressurise(game.player, objects, false);
+  },
+}));
+
+commands.push(new Cmd('NpcPressurise1', {
+  regex:/^(.+), ?pressuri[sz]e (.+)$/,
+  objects:[
+    {scope:isHere, attName:"npc"},
+    {scope:isRoom},
+  ],
+  script:function(objects) {
+    var npc = objects[0][0];
+    npc.actedThisTurn = true;
+    if (!npc.npc) {
+      msg(CMD_NOT_NPC(npc));
+      return FAILED; 
+    }
+    objects.shift();
+    return handlePressurise(npc, objects, true);
+  },
+}));
+commands.push(new Cmd('NpcPressurise2', {
+  regex:/^tell (.+) to pressuri[sz]e (.+)$/,
+  objects:[
+    {scope:isHere, attName:"npc"},
+    {scope:isRoom},
+  ],
+  script:function(objects) {
+    var npc = objects[0][0];
+    npc.actedThisTurn = true;
+    if (!npc.npc) {
+      msg(CMD_NOT_NPC(npc));
+      return FAILED; 
+    }
+    objects.shift();
+    return handlePressurise(npc, objects, true);
+  },
+}));
+commands.push(new Cmd('NpcDepressurise1', {
+  regex:/^(.+), ?(depressuri[sz]e|evacuate) (.+)$/,
+  objects:[
+    {scope:isHere, attName:"npc"},
+    {ignore:true},
+    {scope:isRoom},
+  ],
+  script:function(objects) {
+    var npc = objects[0][0];
+    npc.actedThisTurn = true;
+    if (!npc.npc) {
+      msg(CMD_NOT_NPC(npc));
+      return FAILED; 
+    }
+    objects.shift();
+    return handlePressurise(npc, objects, false);
+  },
+}));
+commands.push(new Cmd('NpcDepressurise2', {
+  regex:/^tell (.+) to (depressuri[sz]e|evacuate) (.+)$/,
+  objects:[
+    {scope:isHere, attName:"npc"},
+    {ignore:true},
+    {scope:isRoom},
+  ],
+  script:function(objects) {
+    var npc = objects[0][0];
+    npc.actedThisTurn = true;
+    if (!npc.npc) {
+      msg(CMD_NOT_NPC(npc));
+      return FAILED; 
+    }
+    objects.shift();
+    return handlePressurise(npc, objects, false);
+  },
+}));
+
+
+function handlePressurise(char, objects, pressurise) {
+  const baseRoom = objects[0][0];
+  if (!baseRoom.room) {
+    msg("You can't " + (pressurise ? pressurise : depressurise) + " that.");
+    return FAILED;
+  }
+  if (char === game.player) {
+    metamsg("You need to ask Xsansi to pressurise or depressurise any part of the ship.");
+    return FAILED;
+  }
+  if (char.name !== "Xsansi") {
+    msg("'You need to ask Xsansi to pressurise or depressurise any part of the ship.'");
+    return FAILED;
+  }
+  if (baseRoom.isSpace) {
+    msg("'Scientists estimates the volume of space to be infinite. The ship does not have sufficient air to pressure space.'");
+    return FAILED;
+  }
+  const mainRoom = (typeof baseRoom.vacuum === "string" ? w[baseRoom.vacuum] : baseRoom);
+  if (mainRoom.vacuum !== pressurise) {
+    msg("'" + sentenceCase(mainRoom.byname({article:DEFINITE})) + " is already " + (pressurise ? 'pressurised' : 'depressurised') + ".");
+    return FAILED;
+  }
+  if (!w.Xsansi.pressureOverride && mainRoom.name !== "airlock" && !pressurise) {
+    msg("'Safety interlocks prevent depressurising parts of the ship while the crew are active.'");
+    return FAILED;
+  }
+  if (pressurise) {
+    msg("'Pressurising " + mainRoom.byname({article:DEFINITE}) + "... Room is now pressurised.'");
+    mainRoom.vacuum = false;
+  }
+  else {
+    msg("'Evacuating " + mainRoom.byname({article:DEFINITE}) + "... Room is now under vacuum.'");
+    mainRoom.vacuum = true;
+  }
+  return SUCCESS;
+}
 
 
 commands.push(new Cmd('ProbeStatus', {
@@ -798,6 +934,7 @@ commands.unshift(new Cmd('Help', {
     metamsg("{color:red:HELP NPC}: Interacting with other characters");
     metamsg("{color:red:HELP PROBE}: How to deploy and use probes");
     metamsg("{color:red:HELP STASIS}: How to use stasis pods (and hence travel to the next planet)");
+    if (w.Xsansi.currentPlanet !== 0) metamsg("{color:red:HELP VACUUM}: How to handle the cold vacuum of space");
     metamsg("{b:Commands that give meta-information about the game:}");
     metamsg("{color:red:HELP UNIVERSE}: Notes about the universe the game is set in");
     metamsg("{color:red:HELP SYSTEM}: About the game system");
@@ -854,6 +991,16 @@ commands.push(new Cmd('HelpStasis', {
     metamsg("Once you are in stasis, years will pass whilst the ship navigates to the next star system, so this is how to move the story forward to the next planet to survey.");
     metamsg("To go into stasis, climb into your pod, and close the lid.");
     metamsg("You can tell a crew member to go to stasis at any time (eg {color:red:AADA, GET IN STASIS POD} or just {color:red:HA, IN POD}). Once in stasis they cannot be revived until the ship arrives at the next destination, so make sure they have done everything they need to first. Crew members will go into stasis anyway once you do.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpVacuum', {
+  regex:/^(?:\?|help) (vacuum|d?e?pressur.+)$/,
+  script:function() {
+    metamsg("{b:Vacuum:}");
+    metamsg("Each section of the ship can be pressurised or depressurised at Xsansi, just ask {color:red:XSANSI, PRESSURIZE THE CARGO BAY} or {color:red:AI, DEPRESSURISE ENGINEERING}.");
+    metamsg("Note that safety overrides may prevent Xsansi from complying.");
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
