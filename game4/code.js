@@ -119,6 +119,9 @@ const PLANETS = [
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 84);
       w.Xsansi.status = 74;
       w.Xsansi.pressureOverride = true;
+      w.lounge.leaks = true;
+      w.your_cabin.leaks = true;
+      w.top_deck_forward.leaks = true;
       for (let key in w) {
         if (w[key].room && w[key].name !== "stasis_bay" &&  w[key].name !== "stasis_pod_room") {
           w[key].vacuum = true;
@@ -867,31 +870,36 @@ function handlePressurise(char, objects, pressurise) {
     metamsg("You need to ask Xsansi to pressurise or depressurise any part of the ship.");
     return FAILED;
   }
+  // I am counting these as successes as the player has successfully made the request, even if it was refused
   if (char.name !== "Xsansi") {
     msg("'You need to ask Xsansi to pressurise or depressurise any part of the ship.'");
-    return FAILED;
+    return SUCCESS;
   }
   if (baseRoom.isSpace) {
     msg("'Scientists estimates the volume of space to be infinite. The ship does not have sufficient air to pressure space.'");
-    return FAILED;
+    return SUCCESS;
   }
   const mainRoom = (typeof baseRoom.vacuum === "string" ? w[baseRoom.vacuum] : baseRoom);
   if (mainRoom.vacuum !== pressurise) {
     msg("'" + sentenceCase(mainRoom.byname({article:DEFINITE})) + " is already " + (pressurise ? 'pressurised' : 'depressurised') + ".");
-    return FAILED;
+    return SUCCESS;
   }
   if (!w.Xsansi.pressureOverride && mainRoom.name !== "airlock" && !pressurise) {
     msg("'Safety interlocks prevent depressurising parts of the ship while the crew are active.'");
-    return FAILED;
+    return SUCCESS;
   }
-  if (pressurise) {
-    msg("'Pressurising " + mainRoom.byname({article:DEFINITE}) + "... Room is now pressurised.'");
-    mainRoom.vacuum = false;
-  }
-  else {
+  if (!pressurise) {
     msg("'Evacuating " + mainRoom.byname({article:DEFINITE}) + "... Room is now under vacuum.'");
     mainRoom.vacuum = true;
+    return SUCCESS;
   }
+  if (mainRoom.leaks) {
+    msg("'Pressurising " + mainRoom.byname({article:DEFINITE}) + "... Pressurisation failed.'");
+    return SUCCESS;
+  }
+
+  msg("'Pressurising " + mainRoom.byname({article:DEFINITE}) + "... Room is now pressurised.'");
+  mainRoom.vacuum = false;
   return SUCCESS;
 }
 
