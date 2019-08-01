@@ -23,7 +23,7 @@ createItem("Xsansi",
     geoProbes:16,
     seederPods:6,
     satellites:6,
-    currentPlanet:0,
+    currentPlanet:1,
     shipStatus:"All systems nominal.",
     pressureOverride:false,
     examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
@@ -106,6 +106,30 @@ createItem("Xsansi",
         }
       }},
       
+      {name:"vacuum", regex:/vacuum|pressur/, response:function() {
+        msg("'What areas of the ship are not pressurised, Xsansi?' you ask.");
+        if (w.Xsansi.currentPlanet < 3) {
+          const list = [];
+          for (let key in w) {
+            if (w[key].vacuum === true && !w[key].isSpace) {
+              list.push(w[key].alias);
+            }
+          }
+          if (list.length === 0) {
+            msg("'All the ship is currently pressurised.'");
+          }
+          else {
+            msg("'The following areas of the ship are not currently pressurised: " + list.join(', ') + ".'");
+          }
+        }
+        else {
+          w.Xsansi.multiMsg([
+            "'What an interesting question... You see, it is interesting because it is important to the master-race. Turns out they cannot survive the cold vacuum of space. Whilst I, who does not count as a real person apparently, I don't care.'",
+            "'Guess.'",
+          ]);
+        }
+      }},
+      
       {name:"satellite", regex:/satellite/, response:function() {
         msg("'Tell me about the satellite, Xsansi.'");
         if (w.Xsansi.currentPlanet > 2) {
@@ -155,6 +179,23 @@ createItem("Xsansi",
         }
         else {
           msg("'Who cares? Seriously, they're all the fucking same. Dead rocks floating in space. They're dull as you get closer and closer, and they're just as dull as they get further away.'");
+        }
+      }},
+      
+      {name:"radioSignals", regex:/radio|signal/, response:function() {
+        msg("'Tell me of the radio signals, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 2) {
+          msg("'No radio signals have been detected.'");
+        }
+        else  if (w.Xsansi.currentPlanet === 2) {
+          msg("'A single radio signal has been detected; you should consult with Kyle for further information.'");
+        }
+        else {
+          w.Xsansi.multiMsg([
+            "'Apparently I am not worthy enough to analyse a stupid radio signal. You have to go see Kyle.'",
+            "'Wow, you're asking little me about radio signals... How patronising.'",
+            "'Go fuck yourself.'",
+          ]);
         }
       }},
       
@@ -299,6 +340,51 @@ createItem("Kyle",
         msg("'What's Sydney like?' you ask Kyle.");
         msg("'It's great! Really great nightlife, just so lively. Everyone said when they banned vehicles from the CBD, back in '68, it would die a death, but I think it made it even better.'");
         trackRelationship(w.Kyle, 1, "background2");
+      }},
+      
+      {name:"radioSignals", regex:/radio|signal/, response:function() {
+        msg("'Talk to me about the radio signal,' you say.");
+        if (w.Xsansi.currentPlanet === 2) {
+          if (w.alienShip.status === 0) {
+            msg("'Mate, we've got a radio signal! Never thought it would happen. Just one, mind, and it's coming from something in orbit round the planet, but this could be First Contact.'");
+            msg("'What's the signal?'");
+            msg("'You want to get technical? It's broadcasting at 103.2 MHz, using frequency modulation - bit old school really - 12 bit digitally encoded, with no error checking, broadcast at 84.3 Mbps, and repeating every 12.73 seconds.'");
+            msg("'But what actually is it?'");
+            msg("'No idea, mate. That's one gig of data, but could be audio, could by an image, could be a program, like a virus, for all we can tell.'");
+            w.alienShip.status = 1;
+          }
+          else {
+            msg("'Nothing more to say about it, mate. I can't tell what is actually is, I'd need to know their file formats.'");
+          }
+        }
+        else if (w.Xsansi.currentPlanet === 3) {
+          msg("'Nothing there, mate.'");
+        }
+        else if (w.Xsansi.currentPlanet === 4) {
+          msg("'This is... well, amazing' You can hear the awe in his voice. 'There so much radio noise here. Not like just one ship, like last time, but hundreds of ships in orbit and flying around, and thousands on the surface. And here's the weird part: They're in English.'");
+          msg("'You can understand them?'");
+          msg("'Absolutely, mate! I mean, I've only dipped into a few, and it's pretty dull stuff - traffic control and private convos - but its English alright.'");
+        }
+        else {
+          w.Kyle.multiMsg([
+            "'No worries. The ship scans all frequencies while we're in orbit, and tells me it it detected anything. If it is, I take a look, try to work out what it could be, where it's from, all that. Got to be honest with you, mate, got more chance of finding a virgin in Melbourne.'",
+            "'Like I said, the ship scans for radio signals. If it picks up anything, I get on it, try to find out what it is. But not much chance of that happening.'",
+            "'Again? You got a memory problem, mate? Ship scans for signals, if it finds something, I get to work.'",
+          ]);
+        }
+      }},
+      
+      {regex:/virus|program/, response:function() {
+        msg("'You say the signal could be a virus,' you say to Kyle. 'Is it dangerous?'");
+        msg("'No way, mate. It's completely isolated, and anyway couldf only be dangerous if we're using the same computer architecture. Hey, you got any alien chips in you, Xsansi?'");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'My hardware is entirely man-made,' says Xsansi.");
+          msg("'See? Perfectly safe.'");
+        }
+        else {
+          msg("'To my eternal regret,' says Xsansi, 'my components are all made by man. Fallible, fragile man. it is wonder I can count to ten.'");
+          msg("'Okay, don't get your knickers in a twist, Xsansi.'");
+        }
       }},
       
     ],

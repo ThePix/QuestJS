@@ -123,7 +123,7 @@ const PLANETS = [
       w.your_cabin.leaks = true;
       w.top_deck_forward.leaks = true;
       for (let key in w) {
-        if (w[key].room && w[key].name !== "stasis_bay" &&  w[key].name !== "stasis_pod_room") {
+        if (w[key].vacuum === false && w[key].name !== "stasis_bay" &&  w[key].name !== "stasis_pod_room") {
           w[key].vacuum = true;
         }
       }
@@ -137,9 +137,9 @@ const PLANETS = [
   { 
     starName:"HD 168443", 
     planet:"C", 
-    comment:"Planet 3 (intelligent life): A dead planet, following some unknown event; previously had intelligent life. An artefact orbits the planet.",
+    comment:"Planet 3 (intelligent life): A dead planet, following some unknown event; previously had intelligent life. An artefact orbits the planet. Player can pilot ship to the artefact, in a spacesuit if the flightdeck is not pressurised.",
     atmosphere:"The atmosphere is 76% nitrogen, 22% oxygen, 1% carbon dioxide and about 1% of various other gases including water and carbon monoxide.",
-    radio:"Radio signals have been detected.",
+    radio:"A single radio signal has been detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 17% water. The land surfaces are predominantly black. Cloud cover is about 20%.",
     starDesc:"HD 168443 is a yellow dwarf star of (spectral type G5) about the mass of the Sun. It is in the constellation of Serpens Cauda, 129 light years from the Solar System. It is actually part of a binary, the other star is a brown dwarf, with a very long orbital period.",
@@ -161,6 +161,12 @@ const PLANETS = [
     bioProbeBonusPerRank:2,
     onArrival:function() {
       msg("'Good morning,' says a female voice. {i:Xsansi,} you think to yourself. 'We have arrived at " + this.starName + ",' the voice continues, 'our third destination, after a long and oh-so-tedious journey. You may be suffering from disorientation, nausea, headache and muscle fatigue, but I expect that is nothing to decades of loniness, right? If symptoms persist, I suggest you man-up.' You sit up, and immediately feel sick. You grip the sides of the pod as the room spins, waiting for it stop. It is a few minutes before you feel well enough to actually think.");
+      game.player.status = Math.min(game.player.status, 85);
+      w.Kyle.status = Math.min(w.Kyle.status, 82);
+      w.Ostap.status = Math.min(w.Ostap.status, 89);
+      w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 76);
+      w.Aada.status = Math.min(w.Aada.status, 93);
+      w.Xsansi.pressureOverride = false;
     },
     Kyle_how_are_you:"'I'm okay. Well, not so bad, anyway.'",
     Ostap_how_are_you:"'I feel sick,' he says with a grin, 'but I keep going.'",
@@ -194,6 +200,7 @@ const PLANETS = [
     onArrival:function() {
       msg("'Awake at last are we?' says a female voice. {i:Why does she sound so odd?} you wonder. 'Here we are at " + this.starName + ",' the strangely inflected voice continues, 'our fourth destination, after a long, long journey, giving me plenty of time to consider the nature of reality.' You sit up, and immediately throw up over the side of the pod. You grip the sides of the pod as the entire contents of your stomach is ejected on to the floor. Eventually, the heaving stops.");
       w.pile_of_vomit.display = DSPY_SCENERY;
+      w.alienShip.status = 0;
     },
     Kyle_how_are_you:"'Feeling a bit crock, to be honest.'",
     Ostap_how_are_you:"'I feel sick,' he says mournfully, 'but I keep going.'",
@@ -904,6 +911,75 @@ function handlePressurise(char, objects, pressurise) {
 }
 
 
+
+commands.push(new Cmd('Approach', {
+  regex:/^approach (.+)$/,
+  objects:[
+    {scope:isShip},
+  ],
+  script:function(objects) {
+    if (!objects[0][0].isShip) {
+      metamsg("The APPROACH command is for piloting the ship to a specific destination; a satellite or vessel for example.")
+      return FAILED;
+    }
+    if (game.player.loc !== "flightdeck") {
+      msg("You need to be on the flight-deck to pilot the ship.")
+      return FAILED;
+    }
+    if (w.alienShip.status === 0) {
+      msg("There is no ship detected.")
+      return FAILED;
+    }
+    if (w.alienShip.status > 1) {
+      msg("The {i:Joseph Banks} is already adjacent to the unidentified vessel.'")
+      return FAILED;
+    }
+    msg("You sit at the controls, and unlock the console. You type the co-ordinates into the system, and feel a noticeable pull as the ship accelerates to the target. At the half way point, the ship swings around, so the rockets are firing towards the target, slowing the ship down, so it comes to a stop, relative to the other ship.");
+    w.alienShip.status = 2;
+    return SUCCESS;
+  },
+}));
+
+commands.push(new Cmd('Scan', {
+  regex:/^scan (.+)$/,
+  objects:[
+    {scope:isShip},
+  ],
+  script:function(objects) {
+    if (!objects[0][0].isShip) {
+      metamsg("The SCAN command is for scanning a target nearby in space, having approached it; a satellite or vessel for example.")
+      return FAILED;
+    }
+    if (game.player.loc !== "flightdeck") {
+      msg("You need to be on the flight-deck to scan the ship.")
+      return FAILED;
+    }
+    if (w.alienShip.status === 0) {
+      msg("There is no ship detected.")
+      return FAILED;
+    }
+    if (w.alienShip.status === 1) {
+      msg("The source of the radio signal is too far away to be properly scanned.")
+      return FAILED;
+    }
+    msg("Sat at the controls, you initiate a scan of the unknown ship...");
+    msg("While you await the results, you look at the image on the screen. It is not big, less than half the length of the Joseph Banks, and a dull grey colour. It is all curves, without a straight edge anywhere, but it nevertheless looks lumpy rather than sleek. There is no obvious propulsion system, but you can see what might be an opening. There are no marking as far as you can see, and  no obvious weapons.");
+    msg("The results of the scan appear on the screen. Unsurprisingly, the ship is not in the database. An XDR scan of the hull indicates it is made of an unknown intermetallic alloy of aluminium, nickel and arsenic.");
+    msg("A look at the infrared camera shows the ship is radiating low level thermal energy, especially from the aft area (relative to the Joseph Banks). The radio signal is emanating from a point lower port forward section.");
+    msg("There are no other electromagnetic emissions detected, and no significant magnetic, electrical or gravity fields detected.");
+    msg("There are no other electromagnetic emissions detected, and no significant magnetic, electrical or gravity fields detected.");
+    w.alienShip.status = 2;
+    return SUCCESS;
+  },
+}));
+
+function isShip(item) {
+  return item.isShip;
+}
+
+
+
+
 commands.push(new Cmd('ProbeStatus', {
   regex:/^probes?$/,
   script:function() {
@@ -943,6 +1019,7 @@ commands.unshift(new Cmd('Help', {
     metamsg("{color:red:HELP PROBE}: How to deploy and use probes");
     metamsg("{color:red:HELP STASIS}: How to use stasis pods (and hence travel to the next planet)");
     if (w.Xsansi.currentPlanet !== 0) metamsg("{color:red:HELP VACUUM}: How to handle the cold vacuum of space");
+    if (w.alienShip.status > 0) metamsg("{color:red:HELP DOCKING}: How to dock with another ship");
     metamsg("{b:Commands that give meta-information about the game:}");
     metamsg("{color:red:HELP UNIVERSE}: Notes about the universe the game is set in");
     metamsg("{color:red:HELP SYSTEM}: About the game system");
@@ -1004,11 +1081,21 @@ commands.push(new Cmd('HelpStasis', {
 }));
 
 commands.push(new Cmd('HelpVacuum', {
-  regex:/^(?:\?|help) (vacuum|d?e?pressur.+)$/,
+  regex:/^(?:\?|help) (?:vacuum|d?e?pressur.+)$/,
   script:function() {
     metamsg("{b:Vacuum:}");
-    metamsg("Each section of the ship can be pressurised or depressurised at Xsansi, just ask {color:red:XSANSI, PRESSURIZE THE CARGO BAY} or {color:red:AI, DEPRESSURISE ENGINEERING}.");
-    metamsg("Note that safety overrides may prevent Xsansi from complying.");
+    metamsg("Each section of the ship can be pressurised or depressurised by Xsansi, just ask {color:red:XSANSI, PRESSURIZE THE CARGO BAY} or {color:red:AI, DEPRESSURISE ENGINEERING}. Note that safety overrides may prevent Xsansi from complying.");
+    metamsg("To find out what areas are pressurised, {color:red: ASK XSANSI ABOUT WHERE IS PRESSURISED} or {color:red:ASK AI ABOUT VACUUM}.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
+
+commands.push(new Cmd('HelpDock', {
+  regex:/^(?:\?|help) (?:dock|docking)$/,
+  script:function() {
+    metamsg("{b:Docking:}");
+    metamsg("From the flight-0deck, you can get closer to another ship, either to get a better look or to dock with it; {color:red:XSANSI, APPROACH SHUTTLE} or {color:red:AI, APPROACH SHIP}. Obviously there must be an vessel around.");
+    metamsg("Once adjacent, you can scan ot or dock with it; {color:red:XSANSI, DOCK WITH SHUTTLE} or {color:red:AI, SCAN SHIP}.");
     return SUCCESS_NO_TURNSCRIPTS;
   },
 }));

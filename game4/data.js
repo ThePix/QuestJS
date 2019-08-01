@@ -18,8 +18,10 @@ createItem("me",
       msg("You feel fine...");
     },
     canMove:function(ex) {
-      const room1 = w[this.loc];
-      const room2 = w[ex.name];
+      let room1 = w[this.loc];
+      if (typeof room1.vacuum === "string") room1 = w[room1.vacuum];
+      let room2 = w[ex.name];
+      if (typeof room2.vacuum === "string") room2 = w[room2.vacuum];
       if (room1.vacuum === room2.vacuum) return true;
       msg("The door to " + room2.byname({article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + room1.byname({article:DEFINITE}) + " is not.");
       return false;
@@ -491,7 +493,18 @@ createRoom("space", {
 
 
 
+// status
+// 0 not detected
+// 1 detected
+// 2 approached
+// 3 docked
 
+createItem("alienShip", {
+  regex:/^alien ship|alien vessel|ship|vessel$/,
+  desc:"",
+  isShip:true,
+  status:0,
+});
 
 
 

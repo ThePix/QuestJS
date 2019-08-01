@@ -1,6 +1,6 @@
 "use strict";
 
-const TITLE = "The Joseph Banks";
+const TITLE = "The Voyages of The Joseph Banks";
 const AUTHOR = "The Pixie"
 const VERSION = "1.1";
 const THANKS = ["Kyle", "Lara"];
@@ -35,21 +35,19 @@ const NO_TALK_TO = "You can talk to an NPC using either {color:red:ASK [name] AB
 const NO_ASK_TELL = false;
 
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
-const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
+const SPLIT_LINES_ON = "|";   // Strings sent to msg will be broken into separate lines
 
 const SAVE_DISABLED = false;
 
 const SECONDS_PER_TURN = 60;
 const DATE_TIME_LOCALE = 'en-GB';
 const DATE_TIME_START = new Date('April 14, 2387 09:43:00');
-const DATE_TIME_OPTIONS = {
-  year:"numeric",
-  month:"short",
-  day:"2-digit",
-  hour:"2-digit",
-  minute:"2-digit",
-};
-
+const DATE_TIME_OPTIONS = {};
+DATE_TIME_OPTIONS.year = "numeric";
+DATE_TIME_OPTIONS.month = "short";
+DATE_TIME_OPTIONS.day = "2-digit";
+DATE_TIME_OPTIONS.hour = "2-digit";
+DATE_TIME_OPTIONS.minute = "2-digit";
 
 const ROOM_TEMPLATE = [
   "%",
