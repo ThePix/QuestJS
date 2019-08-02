@@ -24,6 +24,7 @@ const TEXT_INPUT = true;
 const CURSOR = ">";
 const CMD_ECHO = true;               // echo commands to the screen
 const CONVERT_NUMBERS_IN_PARSER = true;
+let MONEY_FORMAT = "$!";
 
 
 const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice

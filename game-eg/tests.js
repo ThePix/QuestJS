@@ -51,9 +51,24 @@ test.tests = function() {
   test.assertEqual("get 4 sticks", convertNumbers("get four sticks"));
   test.assertEqual("get 14 sticks", convertNumbers("get fourteen sticks"));
   test.assertEqual("get no sticks", convertNumbers("get no sticks"));
-  
-
   test.assertEqual("ninetieth", toOrdinal(90));
+  
+  test.title("Numbers 2");
+
+  test.assertEqual("(012,34)", displayNumber(1234, "(3,2)"));
+  console.log(MONEY_FORMAT);
+  test.assertEqual("$1234", displayMoney(1234));
+  test.assertEqual("$-1234", displayMoney(-1234));
+  MONEY_FORMAT = "!3.2! credits"
+  test.assertEqual("012.34 credits", displayMoney(1234));
+  test.assertEqual("-012.34 credits", displayMoney(-1234));
+  MONEY_FORMAT = "!+3.2! credits"
+  test.assertEqual("+012.34 credits", displayMoney(1234));
+  test.assertEqual("-012.34 credits", displayMoney(-1234));
+  MONEY_FORMAT = game.moneyformat = "!$1,2!($1,2)!"
+  test.assertEqual("$12,34", displayMoney(1234));
+  test.assertEqual("($12,34)", displayMoney(-1234));
+  
 
   test.title("Look inside");
   
