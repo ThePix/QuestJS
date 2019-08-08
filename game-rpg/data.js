@@ -36,12 +36,12 @@ createItem("knife",
     damage:"d4+2",
     bonus:-2,
     sharp:true,
-    examine:function() {
+    examine:function(isMultiple) {
       if (this.sharp) {
-        msg("A really sharp knife.");
+        msg(prefix(item, isMultiple) + "A really sharp knife.");
       }
       else {
-        msg("A blunt knife.");
+        msg(prefix(item, isMultiple) + "A blunt knife.");
       }
     },
   }
@@ -53,12 +53,12 @@ createItem("flail",
     image:"flail",
     damage:"2d10+4",
     sharp:true,
-    examine:function() {
+    examine:function(isMultiple) {
       if (this.sharp) {
-        msg("A really sharp knife.");
+        msg(prefix(item, isMultiple) + "A really sharp knife.");
       }
       else {
-        msg("A blunt knife.");
+        msg(prefix(item, isMultiple) + "A blunt knife.");
       }
     },
   }

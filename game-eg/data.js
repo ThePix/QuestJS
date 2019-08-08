@@ -15,12 +15,12 @@ createItem("me",
 createItem("knife",
   TAKEABLE(),
   { loc:"me", sharp:false,
-    examine:function() {
+    examine:function(isMultiple) {
       if (this.sharp) {
-        msg("A really sharp knife.");
+        msg(prefix(item, isMultiple) + "A really sharp knife.");
       }
       else {
-        msg("A blunt knife.");
+        msg(prefix(item, isMultiple) + "A blunt knife.");
       }
     },
     chargeResponse:function(participant) {
@@ -112,7 +112,7 @@ createItem("boots",
 createItem("waterskin",
   TAKEABLE(),
   { 
-    examine:function() { msg("The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full."); },
+    examine:function(isMultiple) { msg(prefix(item, isMultiple) + "The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full."); },
     capacity:10,
     full:3,
     loc:"lounge",
@@ -558,12 +558,12 @@ createItem("Arthur",
   NPC(false),
   { 
     loc:"garden",
-    examine:function() {
+    examine:function(isMultiple) {
       if (this.suspended) {
-        msg("Arthur is asleep.");
+        msg(prefix(item, isMultiple) + "Arthur is asleep.");
       }
       else {
-        msg("Arthur is awake.");
+        msg(prefix(item, isMultiple) + "Arthur is awake.");
       }
     },
     suspended:true,
