@@ -449,7 +449,7 @@ createItem("Ostap",
 
     // Description
     clothing:2,
-    examine:function() {
+    examine:function(isMultiple) {
       let s;
       switch (this.clothing) {
         case 0: s = "He is naked."; break;
@@ -462,7 +462,7 @@ createItem("Ostap",
       else if (this.posture) {
         s += " He is " + this.posture + ".";
       }
-      msg("Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail." + s);
+      msg(prefix(item, isMultiple) + "Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail." + s);
     },
 
     // Agenda

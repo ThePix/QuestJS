@@ -72,7 +72,7 @@ const INVENTORIES = [
   {name:'Items Here', alt:'itemsHere', test:isHere, getLoc:function() { return game.player.loc; } },
 ];
 
-
+const INTRO = "This is my first Quest 6 game.";
 
 
 
