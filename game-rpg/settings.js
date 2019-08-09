@@ -96,6 +96,8 @@ function setup() {
     }
   }
   
+  //ioCreateCustom();
+  
 //  parser.parse("attack goblin");
 }
 
@@ -277,8 +279,7 @@ const skills = {
 
 
 
-/*
-const DISABLED = true;
+const DISABLED = false;
 var professions = [
   {name:"Farm hand", bonus:"strength"},
   {name:"Scribe", bonus:"intelligence"},
@@ -329,7 +330,7 @@ $(function() {
   });
 });
 
-*/
+
 
 
 
