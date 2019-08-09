@@ -71,7 +71,7 @@ createRoom("stasis_bay", {
     switch (arr.length) {
       case 0: return "All pods are currently open.";
       case 4: return "Currently only your pod and the spare pod are open.";
-      case 1: return arr[0].byname() + "'s stasis pod is closed.";
+      case 1: return arr[0].byname({possessive:true}) + "'s stasis pod is closed.";
       default: return "The stasis pods of " + formatList(arr) + " are closed.";
     }
   },
