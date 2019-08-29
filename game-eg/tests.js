@@ -56,7 +56,6 @@ test.tests = function() {
   test.title("Numbers 2");
 
   test.assertEqual("(012,34)", displayNumber(1234, "(3,2)"));
-  console.log(MONEY_FORMAT);
   test.assertEqual("$1234", displayMoney(1234));
   test.assertEqual("$-1234", displayMoney(-1234));
   MONEY_FORMAT = "!3.2! credits"

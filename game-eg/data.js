@@ -708,7 +708,7 @@ createItem("Lara",
     getAgreementRead:function() {
       return true;
     },
-    getAgreementSitOn:function() {
+    getAgreementPosture:function() {
       if (!this.happy) {
         msg("'I don't think so!' says Lara indignantly.");
         return false;
