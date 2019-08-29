@@ -679,7 +679,7 @@ tp.text_processors.podStatus = function(arr, params) {
 
 commands.push(new Cmd('Kick', {
   npcCmd:true,
-  rules:[cmdRules.isHereRule],
+  rules:[cmdRules.isHere],
   regex:/^(kick) (.+)$/,
   objects:[
     {ignore:true},
@@ -698,7 +698,7 @@ commands.push(new Cmd('Kick', {
 
 commands.push(new Cmd('Move', {
   npcCmd:true,
-  rules:[cmdRules.isHereRule],
+  rules:[cmdRules.isHere],
   regex:/^(move) (.+)$/,
   objects:[
     {ignore:true},

@@ -46,32 +46,18 @@ game.registerTimedEvent("sayNow", 7, 7);
 
 
 
-commands.push(new Cmd('Tes2', {
-  regex:/^(tst)$/,
-  objects:[
-    {ignore:true},
-  ],
-  script:function(arr) {
-    console.log(scope(isReachable));
-    console.log("Reachable: " + isReachable(w.brick));
-    console.log("Here: " + isHere(w.brick));
-    console.log("Contained: " + isContained(w.brick));
-    console.log("Either: " + isHereOrContained(w.brick));
-    return SUCCESS_NO_TURNSCRIPTS; 
-  },
-}));
 
 
 commands.push(new Cmd('Kick', {
   npcCmd:true,
-  rules:[cmdRules.isHereRule],
+  rules:[cmdRules.isHere],
   regex:/^(kick) (.+)$/,
   objects:[
     {ignore:true},
     {scope:isPresent}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
+    failedmsg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
     return false;
   },
 }));
@@ -87,7 +73,7 @@ commands.push(new Cmd('Charge', {
     {scope:isHeld}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
+    failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
     return false;
   },
 }));
@@ -95,14 +81,14 @@ commands.push(new Cmd('Charge', {
 
 commands.push(new Cmd('Move', {
   npcCmd:true,
-  rules:[cmdRules.isHereRule],
+  rules:[cmdRules.isHere],
   regex:/^(move) (.+)$/,
   objects:[
     {ignore:true},
     {scope:isHere}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
+    failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
     return false;
   },
 }));

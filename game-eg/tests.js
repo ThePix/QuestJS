@@ -1,7 +1,6 @@
 "use strict";
 
 test.tests = function() {
-  
   test.title("Util");
   
   test.assertEqual("Simple text", sentenceCase("simple text"));
@@ -87,7 +86,7 @@ test.tests = function() {
   test.assertCmd("get knife", "You have it.");
   test.assertCmd("x tv", "It's just scenery.");
   test.assertCmd("get tv", "You can't take it.");
-  test.assertCmd("give knife to boots", "Realistically, the boots are not interesting in anything you might give them.");
+  test.assertCmd("give knife to boots", "Realistically, the boots are not interested in anything you might give them.");
 
   test.title("Simple object commands (eat)");
   test.assertCmd("eat knife", "It's not something you can eat.");
@@ -174,10 +173,6 @@ test.tests = function() {
 
   test.title("Restricting");
 
-  test.assertCmd("talk to kyle", "You say 'Hello,' to Kyle, and he replies in kind.");
-  w.Kyle.canTalk = function() { msg("He has taken a vow of silence."); return false; }
-  test.assertCmd("talk to kyle", "He has taken a vow of silence.");
-  w.Kyle.canTalk = function() { return true; }
   game.player.canTalk = function() { msg("You are gagged."); return false; }
   test.assertCmd("talk to kyle", "You are gagged.");
   game.player.canTalk = function() { return true; }
@@ -260,7 +255,7 @@ test.tests = function() {
   test.assertCmd("kyle, remove boots", "He doesn't have them.");
   test.assertCmd("kyle, get boots", "Kyle takes the boots.");
   test.assertCmd("kyle, get boots", "Kyle has them.");
-  test.assertCmd("kyle,give boots to box", "Realistically, the cardboard box is not interesting in anything he might give it.");
+  test.assertCmd("kyle,give boots to box", "Realistically, the cardboard box is not interested in anything he might give it.");
   test.assertCmd("kyle, get boots", "Kyle has them.");
   test.assertCmd("kyle, wear boots", "Kyle puts on the boots.");
   test.assertCmd("kyle, wear boots", "He's wearing them.");

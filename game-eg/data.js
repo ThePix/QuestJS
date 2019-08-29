@@ -73,7 +73,7 @@ createItem("book",
     examine:"A leather-bound book.",
     heldVerbsX:["Read"], 
     read:function(isMultiple, char) {
-      if (cmdRules.isHeldRule(char, this, isMultiple)) {
+      if (cmdRules.isHeld(char, this, isMultiple)) {
         if (char === w.Lara) {
           msg ("'Okay.' Lara spends a few minutes reading the book.");
           msg ("'I meant, read it to me.'");
@@ -719,7 +719,7 @@ createItem("Lara",
       msg("'I'm not doing that!' says Lara indignantly.");
       return false;
     },
-    canTalkToPlayer:function() { return true; },
+    canTalkPlayer:function() { return true; },
   }
 );
 

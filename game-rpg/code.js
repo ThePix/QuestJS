@@ -252,7 +252,7 @@ const WEAPON = function() {
 
 commands.push(new Cmd('Attack', {
   npcCmd:true,
-  rules:[cmdRules.isHereRule],
+  rules:[cmdRules.isHere],
   regex:/^(attack) (.+)$/,
   objects:[
     {ignore:true},
@@ -267,7 +267,7 @@ commands.push(new Cmd('Attack', {
 
 commands.push(new Cmd('Equip', {
   npcCmd:true,
-  rules:[cmdRules.isHeldRule, cmdRules.charCanManipulateRule],
+  rules:[cmdRules.isHeld],
   regex:/^(equip|brandish|draw) (.+)$/,
   objects:[
     {ignore:true},
@@ -282,7 +282,7 @@ commands.push(new Cmd('Equip', {
 
 commands.push(new Cmd('Unequip', {
   npcCmd:true,
-  rules:[cmdRules.isHeldRule, cmdRules.charCanManipulateRule],
+  rules:[cmdRules.isHeld],
   regex:/^(unequip|holster|sheath|put away) (.+)$/,
   objects:[
     {ignore:true},

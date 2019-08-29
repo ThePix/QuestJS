@@ -207,7 +207,10 @@ function NOT_NPC(item) {
   return nounVerb(game.player, "can", true) + " tell " + item.byname({article:DEFINITE}) + " to do what you like, but there is no way " + pronounVerb(item, "'ll") + " do it.";
 }
 function NOT_NPC_FOR_GIVE(char, item) {
-  return "Realistically, " + nounVerb(item, "be") + " not interesting in anything " + char.pronouns.subjective + " might give " + item.pronouns.objective + ".";
+  return "Realistically, " + nounVerb(item, "be") + " not interested in anything " + char.pronouns.subjective + " might give " + item.pronouns.objective + ".";
+}
+function NOT_ABLE_TO_HEAR(char, item) {
+  return "Doubtful " + nounVerb(item, "will") + " be interested in anything " + char.pronouns.subjective + " has to say.";
 }
 function NOT_CONTAINER(char, item) {
   return sentenceCase(item.byname({article:DEFINITE})) + " is not a container";
