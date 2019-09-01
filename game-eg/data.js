@@ -17,10 +17,10 @@ createItem("knife",
   { loc:"me", sharp:false,
     examine:function(isMultiple) {
       if (this.sharp) {
-        msg(prefix(item, isMultiple) + "A really sharp knife.");
+        msg(prefix(this, isMultiple) + "A really sharp knife.");
       }
       else {
-        msg(prefix(item, isMultiple) + "A blunt knife.");
+        msg(prefix(this, isMultiple) + "A blunt knife.");
       }
     },
     chargeResponse:function(participant) {
