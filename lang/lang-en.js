@@ -65,6 +65,9 @@ function EAT_SUCCESSFUL(char, item) {
 function DRINK_SUCCESSFUL(char, item) {
   return nounVerb(char, "drink", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
+function PUSH_EXIT_SUCCESSFUL(char, item, dir, destRoom) {
+  return nounVerb(char, "push", true) + " " + item.byname({article:DEFINITE}) + " " + dir + ".";
+}
 
 function NPC_HEADING(char, dir) {
   return nounVerb(char, "head", true) + " " + dir + ".";
@@ -141,6 +144,12 @@ function CANNOT_DRINK(char, item) {
 function CANNOT_INGEST(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can ingest.";
 }
+function CANNOT_PUSH(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can move around like that.";
+}
+function CANNOT_PUSH_UP(char, item) {
+  return pronounVerb(char, "'be", true) + " not getting " + item.byname({article:DEFINITE}) + " up there!";
+}
 
 
 
@@ -187,6 +196,9 @@ function NONE_THERE(char, item) {
 }
 function NONE_HELD(char, item) {
   return pronoun(char, "have", true) + " no " + item.pluralAlias + ".";
+}
+function TAKE_NOT_PUSH(char, item) {
+  return "Just pick the thing up already!";
 }
 
 function NOTHING_USEFUL(char, item) {

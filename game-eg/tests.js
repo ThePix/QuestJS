@@ -68,6 +68,14 @@ test.tests = function() {
   test.assertEqual("($12,34)", displayMoney(-1234));
   
 
+  test.title("getDir");
+  test.assertEqual("out", getDir("o"));
+  test.assertEqual("down", getDir("dn"));
+  test.assertEqual("out", getDir("exit"));
+  test.assertEqual(false, getDir("bo"));
+
+
+
   test.title("Look inside");
   
   test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box and an ornate doll.");
@@ -452,5 +460,18 @@ test.tests = function() {
   w.lift.transitAutoMove = true;
   w.lift.afterEnter = transitOfferMenu;
   test.assertCmd("w", ["You head west.", "A curious lift.", "You can see a Button: G, a Button: 1 and a Button: 2 here.", "You can go east.", "The lift is out of order", "An old-fashioned room.", "You can see a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a chair and a brick here.", "You can go up, west or east."]);
+  
+  
+  
+  test.title("Push");
+  test.assertCmd("e", ["You head east.", "A smelly room with an old settee and a tv.", "You can see a book, a waterskin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a cardboard box (containing some boots), a coin, a small key, seven bricks, a book and a book here.", "You can go up, west, east or south."]);
+  test.assertCmd("s", ["You head south.", "A light airy room.", "You can see a crate and a broken chair here.", "You can go north or west."]);
+  test.assertCmd("push crate", "That's not going to do anything useful.");
+  test.assertCmd("push chair s", "It's not something you can move around like that.");
+  w.broken_chair.shift = function() { msg("You try to push chair, but it just breaks even more."); return false; }
+  w.broken_chair.shiftable = true;
+  test.assertCmd("push chair w", "You try to push chair, but it just breaks even more.");
+  test.assertCmd("push crate s", "You can't go south.");
+  test.assertCmd("push crate w", "You push the crate west.");
   
 };

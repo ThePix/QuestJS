@@ -542,6 +542,17 @@ createRoom("conservatory", {
 });
 
 
+createItem("crate", 
+  FURNITURE({stand:true}), SHIFTABLE(),
+  { loc:"conservatory", examine:"A large wooden crate, probably strong enough to stand on."}
+);
+
+createItem("broken_chair", 
+  { loc:"conservatory", examine:"A broken chair."}
+);
+
+
+
 createRoom("garden", {
   desc:"Very overgrown.",
   east:new Exit("conservatory"),
