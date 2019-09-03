@@ -86,6 +86,9 @@ function CANNOT_TAKE(char, item) {
 function CANNOT_WEAR(char, item) {
   return nounVerb(char, "can't", true) + " wear " + item.pronouns.objective + ".";
 }
+function CANNOT_WEAR_ENSEMBLE(char, item) {
+  return "Individual parts of an ensemble must be worn and removed separately.";
+}
 function CANNOT_SWITCH_ON(char, item) {
   return nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " on.";
 }

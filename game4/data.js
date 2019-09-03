@@ -39,7 +39,7 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
   onMove:function(toLoc, fromLoc) {
     if (fromLoc === "stasis_pod_drawer") {
-      w.stasis_pod_drawer.display = DSPY_NOT_HERE;
+      w.stasis_pod_drawer.setDisplay(DSPY_NOT_HERE);
       msg("The stasis pod drawer slides shut.");
     }
   },
@@ -176,7 +176,7 @@ createItem("stasis_pod_interior",
       }
       
       w.your_jumpsuit.loc = "stasis_pod_drawer";
-      w.stasis_pod_drawer.display = DSPY_SCENERY;
+      w.stasis_pod_drawer.setDisplay(DSPY_SCENERY);
       msg("You give pod lid a pull, and it starts to descend, sealing you in. You feel a sharp pain in your shoulder, and almost immediately you start to feel sleepy... so sleepy you cannot keep your eyes open.");
       arrival();
       // MORE STUFF HERE ???

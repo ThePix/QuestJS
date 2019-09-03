@@ -199,7 +199,7 @@ const PLANETS = [
     arrivalTime:new Date('April 15, 2386 13:06:51'),
     onArrival:function() {
       msg("'Awake at last are we?' says a female voice. {i:Why does she sound so odd?} you wonder. 'Here we are at " + this.starName + ",' the strangely inflected voice continues, 'our fourth destination, after a long, long journey, giving me plenty of time to consider the nature of reality.' You sit up, and immediately throw up over the side of the pod. You grip the sides of the pod as the entire contents of your stomach is ejected on to the floor. Eventually, the heaving stops.");
-      w.pile_of_vomit.display = DSPY_SCENERY;
+      w.pile_of_vomit.setDisplay(DSPY_SCENERY);
       w.alienShip.status = 0;
     },
     Kyle_how_are_you:"'Feeling a bit crock, to be honest.'",

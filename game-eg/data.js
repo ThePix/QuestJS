@@ -25,7 +25,7 @@ createItem("knife",
     },
     chargeResponse:function(participant) {
       msg("There is a loud bang, and the knife is destroyed.");
-      this.display = DSPY_DELETED;
+      this.setDisplay(DSPY_DELETED);
       return false;
     },
   }
@@ -185,7 +185,7 @@ createItem("coin",
 );
 
 
-createItem("cabinet_key",
+createItem("small_key",
   TAKEABLE(),
   { loc:"lounge", examine: "A small key.", alias: "small key"  }
 );
@@ -280,8 +280,8 @@ createRoom("lift",
 );
 
 
-
-createItem("button_g",
+// calling it button_0 make it appear before button_1 in lists
+createItem("button_0",
   TRANSIT_BUTTON("lift"),
   {
     alias:"Button: G",
@@ -531,6 +531,29 @@ createItem("jumpsuit",
   { loc:"bedroom", examine:"Clean!", }
 );
 
+
+
+
+
+
+createItem("suit_trousers", 
+  WEARABLE(2, ["lower"]),
+  { loc:"wardrobe", examine:"The trousers.", pronouns:PRONOUNS.plural}
+);
+
+createItem("jacket", 
+  WEARABLE(3, ["upper"]),
+  { loc:"wardrobe", examine:"The jacket", }
+);
+
+createItem("waistcoat", 
+  WEARABLE(2, ["upper", "lower"]),
+  { loc:"wardrobe", examine:"The waistcoat", }
+);
+
+createEnsemble("suit", [w.suit_trousers, w.jacket, w.waistcoat],
+  { examine:"A complete suit.", regex:/xyz/}
+);
 
 
 

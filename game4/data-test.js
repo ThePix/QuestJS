@@ -28,7 +28,7 @@ createItem("knife",
     },
     chargeResponse:function(participant) {
       msg("There is a loud bang, and the knife is destroyed.");
-      this.display = DSPY_DELETED;
+      this.setDisplay(DSPY_DELETED);
       return false;
     },
   }
