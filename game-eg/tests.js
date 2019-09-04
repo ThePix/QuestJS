@@ -219,6 +219,9 @@ test.tests = function() {
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
   test.assertCmd("lara,stand up", "Lara gets off the chair.");
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
+  
+  test.assertCmd("l", ["An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and Lara (sitting on the chair) here.", "You can go east, up or west.",]);  
+  
   w.Lara.canPosture = function() { msg("She is turned to stone."); return false; }
   test.assertCmd("lara, get off chair", "She is turned to stone.");
   w.Lara.canPosture = function() { return true; }
@@ -450,5 +453,13 @@ test.tests = function() {
   test.assertCmd("drop suit", ["You drop the suit."]);
   test.assertCmd("get suit", ["You take the suit."]);
   test.assertCmd("wear xyz", ["Individual parts of an ensemble must be worn and removed separately."]);
+  test.assertCmd("wear trousers", ["You put on the suit trousers."]);
+  test.assertCmd("i", ["You are carrying a flashlight, a garage key, a jacket, some suit trousers (worn) and a waistcoat."]);
+  test.assertCmd("wear jacket", ["You put on the jacket."]);
+  test.assertCmd("wear waistcoat", ["You can't put a waistcoat on over your jacket."]);
+  test.assertCmd("doff jacket", ["You take the jacket off."]);
+  test.assertCmd("wear waistcoat", ["You put on the waistcoat."]);
+  test.assertCmd("wear jacket", ["You put on the jacket."]);
+  test.assertCmd("i", ["You are carrying a flashlight, a garage key and a suit (worn)."]);
   
 };

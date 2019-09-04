@@ -547,7 +547,7 @@ createItem("jacket",
 );
 
 createItem("waistcoat", 
-  WEARABLE(2, ["upper", "lower"]),
+  WEARABLE(2, ["upper"]),
   { loc:"wardrobe", examine:"The waistcoat", }
 );
 
