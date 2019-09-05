@@ -1,9 +1,21 @@
 "use strict";
 
 test.tests = function() {
-  test.title("Util");
+  test.title("sentenceCase");
   
   test.assertEqual("Simple text", sentenceCase("simple text"));
+  
+  
+  test.title("randomFromArray");
+  const ary = ["one", "two", "three"];
+  const ary2 = [];
+  for (let i = 0; i < 3; i++) {
+    const res = randomFromArray(ary, true);
+    if (ary2.includes(res)) test.fail("ary2 already has that value");
+    ary2.push(res);
+  }
+  test.assertEqual(0, ary.length);
+  
   
   
   test.title("arrayCompare");
