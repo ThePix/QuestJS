@@ -256,7 +256,7 @@ commands.push(new Cmd('Attack', {
   regex:/^(attack) (.+)$/,
   objects:[
     {ignore:true},
-    {scope:isPresent}
+    {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
     msg(prefix(item, isMultiple) + "No point attacking " + item.byname({article:DEFINITE}) + ".");
@@ -271,7 +271,7 @@ commands.push(new Cmd('Equip', {
   regex:/^(equip|brandish|draw) (.+)$/,
   objects:[
     {ignore:true},
-    {scope:isHeld}
+    {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
     msg(prefix(item, isMultiple) + pronounVerb(item, "be", true) + " not something you can equip.");
@@ -286,7 +286,7 @@ commands.push(new Cmd('Unequip', {
   regex:/^(unequip|holster|sheath|put away) (.+)$/,
   objects:[
     {ignore:true},
-    {scope:isHeld}
+    {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
     msg(prefix(item, isMultiple) + pronounVerb(item, "be", true) + " not something you can equip.");

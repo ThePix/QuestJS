@@ -25,7 +25,7 @@ createItem("knife",
     },
     chargeResponse:function(participant) {
       msg("There is a loud bang, and the knife is destroyed.");
-      this.setDisplay(DSPY_DELETED);
+      delete this.loc;
       return false;
     },
   }
@@ -54,7 +54,7 @@ createRoom("dining_room_on_stool", {
   east:new Exit('lounge'),
   down:new Exit("dining_room"),
   alias:"dining room (on a stool)",
-  loc:"dining_room",
+  //loc:"dining_room",
 });
 
 
@@ -335,7 +335,7 @@ createRoom("attic", {
 
 
 createRoom("kitchen", {
-  desc:`A clean room{if:clock:display:${DSPY_SCENERY}:, a clock hanging on the wall}.`,
+  desc:'A clean room{if:clock:scenery:, a clock hanging on the wall}.',
   west:new Exit("lounge"),
   down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; }, msg:function(isMultiple, char) {
     if (char === game.player) {
@@ -354,7 +354,7 @@ createRoom("kitchen", {
 
 createItem("clock",
   TAKEABLE(),
-  { loc:"kitchen", display:DSPY_SCENERY, examine:"A white clock.", }
+  { loc:"kitchen", scenery:true, examine:"A white clock.", }
 );
 
 createItem("trapdoor",
@@ -447,7 +447,7 @@ createItem("charger_compartment",
   CONTAINER(true),
   { alias:"compartment", examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.", 
     testRestrictions:function(item) {
-      const contents = w.charger_compartment.getContents();
+      const contents = w.charger_compartment.getContents(display.LOOK);
       if (contents.length > 0) {
         msg("The compartment is full.");
         return false;
@@ -461,7 +461,7 @@ createItem("charger_button",
   COMPONENT("charger"),
   { examine:"A big red button.", alias:"button",
     push:function(isMultiple, participant) {
-      const contents = w.charger_compartment.getContents()[0];
+      const contents = w.charger_compartment.getContents(display.ALL)[0];
       if (!w.charger_compartment.closed || !contents) {
         msg(pronounVerb(participant, "push", true) + " the button, but nothing happens.");
         return false;
@@ -785,8 +785,11 @@ createItem("Lara_very_attractive",
 
 
 createItem("walls",
-  { examine:"They're walls, what are you expecting?", regex:/^wall$/, display:DSPY_SCENERY,
-    isAtLoc:function(loc) { return w[loc].room; },
+  { examine:"They're walls, what are you expecting?", regex:/^wall$/,
+    scenery:true,
+    isAtLoc:function(loc, situation) {
+      return w[loc].room && situation === display.PARSER; 
+    },
   }
 );
 

@@ -80,8 +80,8 @@ function displayStatus(obj) {
 // Change the name values to alter how items are displayed
 // You can add (or remove) inventories too
 const INVENTORIES = [
-//  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn, getLoc:function() { return game.player.name; } },
-//  {name:'Items Here', alt:'itemsHere', test:isHere, getLoc:function() { return game.player.loc; } },
+//  {name:'Items Held', alt:'itemsHeld', test:util.isHeldNotWorn, getLoc:function() { return game.player.name; } },
+//  {name:'Items Here', alt:'itemsHere', test:util.isHere, getLoc:function() { return game.player.loc; } },
 ];
 
 

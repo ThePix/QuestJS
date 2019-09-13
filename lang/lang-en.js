@@ -265,7 +265,7 @@ function INSIDE_CONTAINER(char, item, cont) {
   return pronounVerb(item, "be", true) + " inside " + cont.byname({article:DEFINITE}) + ".";
 }
 function LOOK_INSIDE(char, item) {
-  const l = formatList(item.getContents(), {article:INDEFINITE, lastJoiner:" and ", nothing:"nothing"});
+  const l = formatList(item.getContents(display.LOOK), {article:INDEFINITE, lastJoiner:" and ", nothing:"nothing"});
   return "Inside " + item.byname({article:DEFINITE}) + " " + pronounVerb(char, "can") + " see " + l + ".";
 }
 function STOP_POSTURE(char) {
@@ -605,7 +605,7 @@ function exitList() {
 }
 
 tp.text_processors.objects = function(arr, params) {
-  const listOfOjects = scope(isHereListed);
+  const listOfOjects = scopeHereListed();
   return formatList(listOfOjects, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:game.player.loc});
 };
   

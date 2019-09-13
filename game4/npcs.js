@@ -12,12 +12,12 @@
 createItem("Xsansi",
   NPC(true),
   { 
-    isAtLoc:function(loc) {
-      return isOnShip();
+    isAtLoc:function(loc, situation) {
+      return isOnShip() && (situation === display.PARSER || situation === display.SIDE_PANE);
     },
     properName:true,
     regex:/^(ai|xsan|computer)$/,
-    display:DSPY_SCENERY,
+    scenery:true,
     status:100,
     bioProbes:16,
     geoProbes:16,

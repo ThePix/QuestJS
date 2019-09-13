@@ -54,7 +54,7 @@ commands.push(new Cmd('Kick', {
   regex:/^(kick) (.+)$/,
   objects:[
     {ignore:true},
-    {scope:isPresent}
+    {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
     failedmsg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
@@ -70,7 +70,7 @@ commands.push(new Cmd('Charge', {
   regex:/^(charge) (.+)$/,
   objects:[
     {ignore:true},
-    {scope:isHeld}
+    {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
     failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
@@ -85,7 +85,7 @@ commands.push(new Cmd('Move', {
   regex:/^(move) (.+)$/,
   objects:[
     {ignore:true},
-    {scope:isHere}
+    {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
     failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
@@ -113,7 +113,7 @@ tp.addDirective("charger_state", function(){
   if (w.charger_compartment.closed) {
     return "The compartment is closed";
   }
-  const contents = w.charger_compartment.getContents();
+  const contents = w.charger_compartment.getContents(display.LOOK);
   if (contents.length === 0) {
     return "The compartment is empty";
   }

@@ -62,13 +62,13 @@ createItem("charm",
 
 
 const INVENTORIES = [
-  {name:'Items Held', alt:'itemsHeld', test:isHeldNotWorn },
-  {name:'Items Worn', alt:'itemsWorn', test:isWorn },
+  {name:'Items Held', alt:'itemsHeld', test:util.isHeldNotWorn },
+  {name:'Items Worn', alt:'itemsWorn', test:util.isWorn },
   {name:'Spells known', alt:'spells', 
     test:function(item) {
       return item.loc === "spellbook";
     }
   },
-  {name:'Items Here', alt:'itemsHere', test:isHere },
+  {name:'Items Here', alt:'itemsHere', test:util.isHere },
 ];
 

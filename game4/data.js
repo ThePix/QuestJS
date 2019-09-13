@@ -39,7 +39,7 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
   onMove:function(toLoc, fromLoc) {
     if (fromLoc === "stasis_pod_drawer") {
-      w.stasis_pod_drawer.setDisplay(DSPY_NOT_HERE);
+      delete w.stasis_pod_drawer.loc;
       msg("The stasis pod drawer slides shut.");
     }
   },
@@ -82,7 +82,7 @@ createRoom("stasis_bay", {
 });
 
 createItem("pile_of_vomit", {
-  display:DSPY_HIDDEN,
+  scenery:true,
   regex:/vomit|sick/,
   examine:"A large splat of vomit, it stinks. You decide not to look too closely. You do know what you ate last, so what is the point?",
 });
@@ -90,14 +90,14 @@ createItem("pile_of_vomit", {
 createItem("stasis_pod", {
   alias:"pod",
   regex:/^(stasis )?pods?$/,
-  display:DSPY_SCENERY,
+  scenery:true,
   loc:"stasis_bay",
   examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
 });
 
 createItem("stasis_pod_drawer", CONTAINER(false), {
   alias:"drawer",
-  //display:DSPY_SCENERY,
+  //scenery:true,
   loc:"stasis_bay",
   closed:false,
   examine:"The drawer extends out from the foot of the pod; it is white and quite shallow, and almost the width of the pod.{ifHere:pile_of_vomit: Fortunately, it is well away from the vomit.}",
@@ -105,14 +105,14 @@ createItem("stasis_pod_drawer", CONTAINER(false), {
 
 createItem("stasis_locker", CONTAINER(true), {
   alias:"locker",
-  display:DSPY_SCENERY,
+  scenery:true,
   loc:"stasis_bay",
   examine:function() {
     if (this.closed) {
       msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
     }
     else {
-      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(), {lastJoiner:" and ", article:INDEFINITE}) + ".");
+      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(display.LOOK), {lastJoiner:" and ", article:INDEFINITE}) + ".");
     }
   },
 });
@@ -161,7 +161,7 @@ createItem("stasis_pod_interior",
   {
     alias:"stasis pod",
     regex:/^(stasis pod|pod|lid)$/,
-    display:DSPY_SCENERY,
+    scenery:true,
     loc:"stasis_pod_room",
     closed:false,
     examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
@@ -176,7 +176,7 @@ createItem("stasis_pod_interior",
       }
       
       w.your_jumpsuit.loc = "stasis_pod_drawer";
-      w.stasis_pod_drawer.setDisplay(DSPY_SCENERY);
+      w.stasis_pod_drawer.scenery = true;
       msg("You give pod lid a pull, and it starts to descend, sealing you in. You feel a sharp pain in your shoulder, and almost immediately you start to feel sleepy... so sleepy you cannot keep your eyes open.");
       arrival();
       // MORE STUFF HERE ???
@@ -450,7 +450,7 @@ createItem("canteen_table",
   {
     alias:"table",
     loc:"canteen",
-    display:DSPY_SCENERY,
+    scenery:true,
     tpDesc:" The table is bare.",
     examine:"The table is plastic, attached to the wall at one end, and held up by a single leg at the other end.{tableDesc}",
   }

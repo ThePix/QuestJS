@@ -162,19 +162,19 @@ test.tests = function() {
   
 
   test.title("Simple object commands (bricks and a box)");
-  test.assertEqual(false, isContained(w.brick));
+  test.assertEqual(false, parser.isContained(w.brick));
   test.assertCmd("drop bricks in box", "Done.");
-  test.assertEqual(true, isContained(w.brick));
+  test.assertEqual(true, parser.isContained(w.brick));
   test.assertCmd("get bricks", "You take seven bricks.");
-  test.assertEqual(false, isContained(w.brick));  
+  test.assertEqual(false, parser.isContained(w.brick));  
   test.assertCmd("drop three bricks in box", "Done.");
-  test.assertEqual(true, isContained(w.brick));
+  test.assertEqual(true, parser.isContained(w.brick));
   test.assertCmd("drop bricks", "You drop four bricks.");
-  test.assertEqual(true, isContained(w.brick));
+  test.assertEqual(true, parser.isContained(w.brick));
   test.assertCmd("get bricks", "You take four bricks.");
-  test.assertEqual(true, isContained(w.brick));
+  test.assertEqual(true, parser.isContained(w.brick));
   test.assertCmd("get bricks", "You take three bricks.");
-  test.assertEqual(false, isContained(w.brick));
+  test.assertEqual(false, parser.isContained(w.brick));
   
   
   test.title("Simple object commands (bricks and a held box)");
@@ -356,7 +356,7 @@ test.tests = function() {
   test.assertEqual(false, room.hasExit("north", {excludeLocked:true}));
   test.assertEqual(true, room.hasExit("north"));
   
-  
+
   test.title("Save/Load");
   // Set up some changes to be saved
   w.boots.counter = 17;

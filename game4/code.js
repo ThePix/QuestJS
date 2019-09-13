@@ -199,7 +199,7 @@ const PLANETS = [
     arrivalTime:new Date('April 15, 2386 13:06:51'),
     onArrival:function() {
       msg("'Awake at last are we?' says a female voice. {i:Why does she sound so odd?} you wonder. 'Here we are at " + this.starName + ",' the strangely inflected voice continues, 'our fourth destination, after a long, long journey, giving me plenty of time to consider the nature of reality.' You sit up, and immediately throw up over the side of the pod. You grip the sides of the pod as the entire contents of your stomach is ejected on to the floor. Eventually, the heaving stops.");
-      w.pile_of_vomit.setDisplay(DSPY_SCENERY);
+      w.pile_of_vomit.loc = "stasis_bay";
       w.alienShip.status = 0;
     },
     Kyle_how_are_you:"'Feeling a bit crock, to be honest.'",
@@ -683,7 +683,7 @@ commands.push(new Cmd('Kick', {
   regex:/^(kick) (.+)$/,
   objects:[
     {ignore:true},
-    {scope:isPresent}
+    {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
     msg(prefix(item, isMultiple) + pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
@@ -702,7 +702,7 @@ commands.push(new Cmd('Move', {
   regex:/^(move) (.+)$/,
   objects:[
     {ignore:true},
-    {scope:isHere}
+    {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
     msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
@@ -719,7 +719,7 @@ commands.push(new Cmd('Get in pod1', {
   npcCmd:true,
   attName:"stasis",
   objects:[
-    {scope:isHere, attName:"npc"},
+    {scope:parser.isHere, attName:"npc"},
   ],
   defmsg:"That's not about to get in a stasis!",
 }));
@@ -728,7 +728,7 @@ commands.push(new Cmd('Get in pod2', {
   npcCmd:true,
   attName:"stasis",
   objects:[
-    {scope:isHere, attName:"npc"},
+    {scope:parser.isHere, attName:"npc"},
   ],
   defmsg:"That's not about to get in a stasis!",
 }));
@@ -738,7 +738,7 @@ commands.push(new Cmd('Stop1', {
   npcCmd:true,
   attName:"stopAgenda",
   objects:[
-    {scope:isHere, attName:"npc"},
+    {scope:parser.isHere, attName:"npc"},
   ],
   defmsg:"That's not doing anything!",
 }));
@@ -747,7 +747,7 @@ commands.push(new Cmd('Stop2', {
   npcCmd:true,
   attName:"stopAgenda",
   objects:[
-    {scope:isHere, attName:"npc"},
+    {scope:parser.isHere, attName:"npc"},
   ],
   defmsg:"That's not doing anything",
 }));
@@ -758,7 +758,7 @@ commands.push(new Cmd('Launch', {
   npcCmd:true,
   objects:[
     {ignore:true},
-    {scope:isInWorld},
+    {scope:parser.isInWorld},
   ],
   defmsg:"You can't launch that!",
 }));
@@ -768,7 +768,7 @@ commands.push(new Cmd('Revive', {
   npcCmd:true,
   objects:[
     {ignore:true},
-    {scope:isInWorld},
+    {scope:parser.isInWorld},
   ],
   defmsg:"You can't revive that!",
 }));
@@ -798,7 +798,7 @@ commands.push(new Cmd('Depressurise', {
 commands.push(new Cmd('NpcPressurise1', {
   regex:/^(.+), ?pressuri[sz]e (.+)$/,
   objects:[
-    {scope:isHere, attName:"npc"},
+    {scope:parser.isHere, attName:"npc"},
     {scope:isRoom},
   ],
   script:function(objects) {
@@ -815,7 +815,7 @@ commands.push(new Cmd('NpcPressurise1', {
 commands.push(new Cmd('NpcPressurise2', {
   regex:/^tell (.+) to pressuri[sz]e (.+)$/,
   objects:[
-    {scope:isHere, attName:"npc"},
+    {scope:parser.isHere, attName:"npc"},
     {scope:isRoom},
   ],
   script:function(objects) {
@@ -832,7 +832,7 @@ commands.push(new Cmd('NpcPressurise2', {
 commands.push(new Cmd('NpcDepressurise1', {
   regex:/^(.+), ?(depressuri[sz]e|evacuate) (.+)$/,
   objects:[
-    {scope:isHere, attName:"npc"},
+    {scope:parser.isHere, attName:"npc"},
     {ignore:true},
     {scope:isRoom},
   ],
@@ -850,7 +850,7 @@ commands.push(new Cmd('NpcDepressurise1', {
 commands.push(new Cmd('NpcDepressurise2', {
   regex:/^tell (.+) to (depressuri[sz]e|evacuate) (.+)$/,
   objects:[
-    {scope:isHere, attName:"npc"},
+    {scope:parser.isHere, attName:"npc"},
     {ignore:true},
     {scope:isRoom},
   ],
