@@ -576,17 +576,18 @@ function niceDirections (dir) {
 }
   
 
-
+// the NPC has already been moved, so npc.loc is the destination
 function npcEnteringMsg(npc, origin) {
   let s = "";
   let flag = false;
   if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
+    // Can the player see the location the NPC enters, from another location?
     s = w[game.player.loc].canViewPrefix;
     flag = true;
   }
   if (flag || npc.here()) {
     s += nounVerb(npc, "enter", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
-    const exit = w[origin].findExit(npc.loc);
+    const exit = w[npc.loc].findExit(origin);
     if (exit) s += " from " + niceDirections(exit.dir);
     s += ".";
     msg(s);

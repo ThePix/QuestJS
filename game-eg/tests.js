@@ -391,7 +391,7 @@ test.tests = function() {
   test.title("Path finding");
   test.assertEqual("lounge", formatList(agenda.findPath(w.dining_room, w.lounge)));
   test.assertEqual("", formatList(agenda.findPath(w.dining_room, w.dining_room)));
-  test.assertEqual(null, agenda.findPath(w.dining_room, w.far_away));
+  test.assertEqual(false, agenda.findPath(w.dining_room, w.far_away));
   test.assertEqual("conservatory, dining room, lounge", formatList(agenda.findPath(w.garden, w.dining_room)));
   test.assertEqual(null, w.dining_room.findExit(w.far_away));
   test.assertEqual("east", w.dining_room.findExit(w.lounge).dir);
@@ -411,15 +411,15 @@ test.tests = function() {
   test.assertCmd("z", ["You wait one turn.", "Arthur stands up and stretches."]);
   test.assertCmd("e", ["You head east.", "A light airy room.", /You can see/, "You can go north or west."]);
   test.assertEqual(0, w.Arthur.followers.length);
-  test.assertCmd("z", ["You wait one turn.", "Arthur enters the conservatory from the east."]);
-  test.assertCmd("n", ["You head north.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go east, south, up or west.", "Arthur enters the lounge from the north."]);
-  test.assertCmd("w", ["You head west.", "An old-fashioned room.", /^You can see/, "You can go east, up or west.", "Arthur enters the dining room from the west.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
+  test.assertCmd("z", ["You wait one turn.", "Arthur enters the conservatory from the west."]);
+  test.assertCmd("n", ["You head north.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go east, south, up or west.", "Arthur enters the lounge from the south."]);
+  test.assertCmd("w", ["You head west.", "An old-fashioned room.", /^You can see/, "You can go east, up or west.", "Arthur enters the dining room from the east.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
   test.assertEqual(0, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "'Sure,' says Lara."]);
   test.assertEqual(1, w.Arthur.followers.length);
   test.assertCmd("z", ["You wait one turn.", "Arthur and Lara leave the dining room, heading east."]);
   test.assertCmd("z", ["You wait one turn."]);
-  test.assertCmd("z", ["You wait one turn.", "Through the window you can see Arthur and Lara enter the garden from the west.", "Through the window you see Arthur say something to Lara."]);
+  test.assertCmd("z", ["You wait one turn.", "Through the window you can see Arthur and Lara enter the garden from the east.", "Through the window you see Arthur say something to Lara."]);
   
   
   test.title("Transit");

@@ -196,7 +196,7 @@ createRoom("mess",
     north:new Exit('guns_battery'),
     east:new Exit('sickbay'),
     west:new Exit('malinda_office'),
-    afterEnterFirst:function() {
+    afterFirstEnter:function() {
       msg("A man steps up to you. 'Commander Herdsman, it's an honour to finally meet you.' He is dressed in a military uniform - the insignia is GARMR. 'I'm James Couturier. I'm the weapons specialist assigned to the Brittany. You can usually find me in the armoury, but when I heard you were awake, I just had to come and talk to the greatesrt man ever.'");
     }
   }
