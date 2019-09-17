@@ -31,7 +31,7 @@ test.tests = function() {
   test.assertEqual([w.coin, w.boots], arraySubtract([w.coin, w.boots, w.ring], [w.ring]));
   
 
-  test.title("Text processor");
+  test.title("Text processor 1");
   test.assertEqual("Simple text", processText("Simple text"));
   test.assertEqual("Simple <i>text</i>", processText("Simple {i:text}"));
   test.assertEqual("Simple <span style=\"color:red\">text</span>.", processText("Simple {colour:red:text}."));
@@ -40,6 +40,8 @@ test.tests = function() {
   test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:yes:no}"));
   game.player.someOddAtt = 67;
   test.assertEqual("Simple text: 67", processText("Simple text: {show:player:someOddAtt}"));
+
+  test.title("Text processor 2");
   test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:50:yes:no}"));
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:67:yes:no}"));
   test.assertEqual("Simple text: ", processText("Simple text: {if:player:someOddAtt:50:yes}"));
@@ -52,9 +54,29 @@ test.tests = function() {
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: no", processText("Simple text: {ifNot:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: seen first time only", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
+
+  test.title("Text processor 3");
   test.assertEqual("Simple text: other times", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
   test.assertEqual("Simple text: other times", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
   test.assertEqual("Simple text: p2=red", processText("Simple text: p2={param:p2}", {p1:"yellow", p2:"red"}));
+  w.book.func1 = function() { return "test1" }
+  w.book.func2 = function(a, b) { return "test2(" + a + ", " + b + ")" }
+  w.book.func3 = function(a) { return "It is " + w[a].alias + " reading the book." }
+  test.assertEqual("Simple text: p2=test1", processText("Simple text: p2={param:item:func1}", {item:"book"}));
+  test.assertEqual("Simple text: p2=test2(one, two)", processText("Simple text: p2={param:item:func2:one:two}", {item:"book"}));
+  test.assertEqual("Simple text: p2=It is Kyle reading the book.", processText("Simple text: p2={param:item:func3:char}", {item:"book", char:"Kyle"}));
+
+
+
+  test.title("Text processor 4");
+  test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:'Kyle'}));
+  test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:w.Kyle}));
+  test.assertEqual("Kyle is your bear.", processText("{nv:Kyle:be} {pa:me} bear."));
+  test.assertEqual("Kyle is her bear.", processText("{nv:Kyle:be} {pa:Lara} bear."));
+  test.assertEqual("There is Kyle.", processText("There is {nm:chr:a}.", {chr:w.Kyle}));
+  test.assertEqual("There is a book.", processText("There is {nm:chr:a}.", {chr:w.book}));
+  test.assertEqual("Kyle is here.", processText("{nm:chr:the:true} is here.", {chr:w.Kyle}));
+  test.assertEqual("The book is here.", processText("{nm:chr:the:true} is here.", {chr:w.book}));
 
   
   test.title("Numbers");
