@@ -73,7 +73,6 @@ createItem("book",
     examine:"A leather-bound book.",
     heldVerbsX:["Read"], 
     read:function(isMultiple, char) {
-    console.log(char)
       if (cmdRules.isHeld(null, char, this, isMultiple)) {
         if (char === w.Lara) {
           msg ("'Okay.' Lara spends a few minutes reading the book.");
