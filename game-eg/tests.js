@@ -420,7 +420,7 @@ test.tests = function() {
   test.assertCmd("s", ["A clean room.", /You can see/, "You can go down, north or west."]);
   test.assertCmd("w", ["You head west.", "A smelly room with an old settee and a tv.", /^You can see/, "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "A light airy room.", /You can see/, "You can go north or west."]);
-  test.assertCmd("w", ["You head west.", "Very overgrown.", "You can see Arthur here.", "You can go east."]);
+  test.assertCmd("w", ["You head west.", "Very overgrown. The garden backs onto a shop to the west, whilst the conservatory is east.", "You can see Arthur here.", "You can go east or west."]);
   
   
   test.title("Agendas");
@@ -495,5 +495,15 @@ test.tests = function() {
   test.assertCmd("wear waistcoat", ["You put on the waistcoat."]);
   test.assertCmd("wear jacket", ["You put on the jacket."]);
   test.assertCmd("i", ["You are carrying a flashlight, a garage key and a suit (worn)."]);
+  
+  
+  test.title("pre-shop");
+  test.assertCmd("o", ["You head out.", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
+  test.assertCmd("d", ["You head down.", "A smelly room with an old settee and a tv.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."]);
+  test.assertCmd("s", ["You head south.", "A light airy room.", "You can see a broken chair here.", "You can go north or west."]);
+  test.assertCmd("w", ["You head west.", "Very overgrown. The garden backs onto a shop to the west, whilst the conservatory is east.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "A funny little shop.", "You can go east."]);
+
+  test.title("shop");
   
 };

@@ -53,7 +53,7 @@ const DATE_TIME_OPTIONS = {
 
 const ROOM_TEMPLATE = [
   "%",
-  "You can see {objects} here.",
+  "{objectsHere:You can see {objects} here.}",
   "You can go {exits}.",
 ];
 

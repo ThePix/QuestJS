@@ -577,8 +577,9 @@ createItem("broken_chair",
 
 
 createRoom("garden", {
-  desc:"Very overgrown.",
+  desc:"Very overgrown. The garden backs onto a shop to the west, whilst the conservatory is east.",
   east:new Exit("conservatory"),
+  west:new Exit("shop"),
 });
 
 
@@ -800,3 +801,20 @@ createItem("brick",
 );
 
 
+createRoom("shop", {
+  desc:"A funny little shop.",
+  east:new Exit("garden"),
+});
+
+createItem("carrot", {
+  examine:"It's a carrot!",
+  price:2,
+  buyAt:["shop"],
+  sellAt:["shop"],
+});
+
+createItem("honey_pasta", {
+  examine:"It's pasta, wth honey on it.",
+  price:5,
+  buyAt:["shop"],
+});

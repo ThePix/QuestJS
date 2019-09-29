@@ -65,6 +65,12 @@ function EAT_SUCCESSFUL(char, item) {
 function DRINK_SUCCESSFUL(char, item) {
   return nounVerb(char, "drink", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
+function PURCHASE_SUCCESSFUL(char, item, amt) {
+  return nounVerb(char, "buy", true) + " " + item.byname({article:DEFINITE}) + " for " + displayMoney(amt) + ".";
+}
+function SELL_SUCCESSFUL(char, item, amt) {
+  return nounVerb(char, "sell", true) + " " + item.byname({article:DEFINITE}) + " for " + displayMoney(amt) + ".";
+}
 function PUSH_EXIT_SUCCESSFUL(char, item, dir, destRoom) {
   return nounVerb(char, "push", true) + " " + item.byname({article:DEFINITE}) + " " + dir + ".";
 }
@@ -110,6 +116,23 @@ function CANNOT_UNLOCK(char, item) {
 function CANNOT_READ(char, item) {
   return "Nothing worth reading there.";
 }
+
+function CANNOT_PURCHASE(char, item, amt) {
+  return nounVerb(char, "can't", true) + " buy " + item.pronouns.objective + ".";
+}
+function CANNOT_PURCHASE_HERE(char, item, amt) {
+  return nounVerb(char, "can't", true) + " buy " + item.byname({article:DEFINITE}) + " here.";
+}
+function CANNOT_AFFORD(char, item, amt) {
+  return nounVerb(char, "can't", true) + " afford " + item.byname({article:DEFINITE}) + " (need " + displayMoney(amt) + ").";
+}
+function CANNOT_SELL(char, item, amt) {
+  return nounVerb(char, "can't", true) + " sell " + item.pronouns.objective + ".";
+}
+function CANNOT_SELL_HERE(char, item, amt) {
+  return nounVerb(char, "can't", true) + " sell " + item.byname({article:DEFINITE}) + " here.";
+}
+
 function CANNOT_USE(char, item) {
   return "No obvious way to use " + item.pronouns.objective + ".";
 }
