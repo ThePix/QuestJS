@@ -804,17 +804,20 @@ createItem("brick",
 createRoom("shop", {
   desc:"A funny little shop.",
   east:new Exit("garden"),
+  willBuy:function(obj) {
+    return (obj === w.trophy);
+  }
 });
 
-createItem("carrot", {
+createItem("carrot", TAKEABLE(), MERCH(2, ["shop"]), {
   examine:"It's a carrot!",
-  price:2,
-  buyAt:["shop"],
-  sellAt:["shop"],
 });
 
-createItem("honey_pasta", {
-  examine:"It's pasta, wth honey on it.",
-  price:5,
-  buyAt:["shop"],
+createItem("honey_pasta",  TAKEABLE(), MERCH(5, ["shop"]),{
+  examine:"It's pasta. With honey on it.",
+});
+
+createItem("trophy",  TAKEABLE(), MERCH(15, "shop"),{
+  examine:"It is a unique trophy!",
+  doNotClone:true,
 });

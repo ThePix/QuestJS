@@ -503,7 +503,40 @@ test.tests = function() {
   test.assertCmd("s", ["You head south.", "A light airy room.", "You can see a broken chair here.", "You can go north or west."]);
   test.assertCmd("w", ["You head west.", "Very overgrown. The garden backs onto a shop to the west, whilst the conservatory is east.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
   test.assertCmd("w", ["You head west.", "A funny little shop.", "You can go east."]);
+  w.me.money = 20
 
-  test.title("shop");
+  test.title("shop - buy");
+  test.assertEqual(true, parser.isForSale(w.carrot))
+  test.assertEqual(true, parser.isForSale(w.trophy))
+  test.assertEqual(undefined, parser.isForSale(w.flashlight))
+  test.assertCmd("buy carrot", ["You buy the carrot for $0,02."]);
+  test.assertCmd("buy carrot", ["You buy the carrot for $0,02."]);
+  test.assertEqual(16, w.me.money)
+  test.assertCmd("buy flashlight", ["You can't buy it."]);
+  test.assertCmd("buy trophy", ["You buy the trophy for $0,15."]);
+  test.assertEqual(1, w.me.money)
+  test.assertEqual(true, parser.isForSale(w.carrot))
+  //console.log("----------------------");
+  test.assertEqual(false, parser.isForSale(w.trophy))
+  test.assertCmd("buy trophy", ["You can't buy the trophy here - probably because you are already holding it."]);
+  test.assertCmd("buy carrot", ["You can't afford the carrot (need $0,02)."]);
+  test.assertEqual(1, w.me.money)
   
+  test.title("shop - sell");
+  test.assertCmd("sell carrot", ["You can't sell the carrot here."]);
+  test.assertEqual(1, w.me.money)
+  test.assertCmd("sell trophy", ["You sell the trophy for $0,08."]);
+  test.assertEqual(9, w.me.money)
+  test.assertCmd("sell trophy", ["You can't see anything you might call 'trophy' here."]);
+  test.assertEqual(9, w.me.money)
+  w.me.money = 20
+  w.shop.sellingDiscount = 20
+  test.assertEqual(12, w.trophy.getBuyingPrice(w.me))
+  test.assertCmd("buy trophy", ["You buy the trophy for $0,12."]);
+  test.assertEqual(8, w.me.money)
+  w.shop.buyingValue = 80
+  test.assertCmd("sell trophy", ["You sell the trophy for $0,12."]);
+  test.assertEqual(20, w.me.money)
+  
+  /* */
 };

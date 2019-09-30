@@ -117,11 +117,16 @@ function CANNOT_READ(char, item) {
   return "Nothing worth reading there.";
 }
 
-function CANNOT_PURCHASE(char, item, amt) {
+function CANNOT_PURCHASE(char, item) {
   return nounVerb(char, "can't", true) + " buy " + item.pronouns.objective + ".";
 }
-function CANNOT_PURCHASE_HERE(char, item, amt) {
-  return nounVerb(char, "can't", true) + " buy " + item.byname({article:DEFINITE}) + " here.";
+function CANNOT_PURCHASE_HERE(char, item) {
+  if (item.doNotClone && item.isAtLoc(char.name)) {
+    return nounVerb(char, "can't", true) + " buy " + item.byname({article:DEFINITE}) + " here - probably because " + nounVerb(char, "be") + " already holding " + item.pronouns.objective + ".";
+  }
+  else {
+    return nounVerb(char, "can't", true) + " buy " + item.byname({article:DEFINITE}) + " here.";
+  }
 }
 function CANNOT_AFFORD(char, item, amt) {
   return nounVerb(char, "can't", true) + " afford " + item.byname({article:DEFINITE}) + " (need " + displayMoney(amt) + ").";
@@ -135,9 +140,6 @@ function CANNOT_SELL_HERE(char, item, amt) {
 
 function CANNOT_USE(char, item) {
   return "No obvious way to use " + item.pronouns.objective + ".";
-}
-function CANNOT_EAT(char, item) {
-  return pronounVerb(item, "'be", true) + " not something you can eat.";
 }
 function CANNOT_SMASH(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can break.";
