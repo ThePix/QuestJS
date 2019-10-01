@@ -694,6 +694,7 @@ const CONJUGATIONS = {
     { name:"'ve", value:"'s"},
     { name:"'be", value:"'s"},
     { name:"*ay", value:"ays"},
+    { name:"*uy", value:"uys"},
     { name:"*oy", value:"oys"},
     { name:"*ey", value:"eys"},
     { name:"*y", value:"ies"},
