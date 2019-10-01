@@ -3,13 +3,14 @@
 
 
   
-createItem("me",
-  PLAYER(),
-  { loc:"lounge", regex:/^me|myself|player$/, examine:function() {
+createItem("me", PLAYER(), { 
+  loc:"lounge",
+  regex:/^me|myself|player$/,
+  money:10,
+  examine:function() {
     msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
-    },
-  }
-);
+  },
+});
 
 
 createItem("knife",

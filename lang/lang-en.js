@@ -368,8 +368,10 @@ const LIST_NOTHING = "nothing";
 const NEVER_MIND = "Never mind.";
 const DEFAULT_DESCRIPTION = "It's just scenery.";
 const CLICK_TO_CONTINUE = "Click to continue...";
-
-
+const BUY = "Buy"; // used in the command link in the purchase table
+const BUY_HEADINGS = ["Item", "Cost", ""];
+const CURRENT_MONEY = "Current money";
+const NOTHING_FOR_SALE = "Nothing for sale here."
 
 
 
