@@ -215,3 +215,17 @@ span.compassbutton {
   color: blue;
   background-color: silver;
 }
+
+
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding:4px;
+  text-align:center;
+}
+
+
+
+.typewriter {
+  font-weight: bold;
+  font-size: larger;
+}

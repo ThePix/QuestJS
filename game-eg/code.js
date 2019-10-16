@@ -105,6 +105,19 @@ commands.push(  new Cmd('Hint', {
       }
     },
   }));
+  
+
+
+
+commands.push(  new Cmd('print', {
+    regex:/^print$/,
+    script:function() {
+      typeWriter.write('The first line.');
+      typeWriter.write('*');
+      typeWriter.write('Third line');
+    },
+  }));
+  
 
 
 
