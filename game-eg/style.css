@@ -228,6 +228,7 @@ th, td {
 
 
 .typewriter {
-  font-weight: bold;
-  font-size: larger;
+/*  font-weight: bold;
+  font-size: larger;*/
+  color:grey;
 }

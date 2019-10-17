@@ -36,7 +36,9 @@ const ROOM_HEADINGS = true;
 const NO_TALK_TO = false;
 const NO_ASK_TELL = false;
 const NPC_REACTIONS_AWAYS = false;
-const TYPEWRITER = false;
+const TYPEWRITER = true;
+const TYPEWRITER_DELAY = 50;
+const TYPEWRITER_DELAY_LINE = 200;
 
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines

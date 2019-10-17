@@ -112,13 +112,19 @@ commands.push(  new Cmd('Hint', {
 commands.push(  new Cmd('print', {
     regex:/^print$/,
     script:function() {
-      typeWriter.write('The first line.');
-      typeWriter.write('*');
-      typeWriter.write('Third line');
+      /*typeWriter.write('p', 'The first line.');
+      typeWriter.write('p', '2');
+      typeWriter.write('p', '');
+      typeWriter.write('f', function() { console.log('here') } );
+      typeWriter.write('p', 'Third line');*/
+      msg('The first line.');
+      msg('2');
+      msg('');
+      msgFunction(function() { console.log('here') } );
+      msg('Third line');
     },
   }));
   
-
 
 
 

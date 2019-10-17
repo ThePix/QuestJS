@@ -35,7 +35,9 @@ const ROOM_HEADINGS = true;
 const NO_TALK_TO = "TALK TO is not a feature in this game.";
 const NO_ASK_TELL = "ASK/TELL ABOUT is not a feature in this game.";
 const NPC_REACTIONS_AWAYS = false;
-const TYPEWRITER = false;
+const TYPEWRITER = true;
+const TYPEWRITER_DELAY = 50;
+const TYPEWRITER_DELAY_LINE = 200;
 
 
 const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
