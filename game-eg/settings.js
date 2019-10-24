@@ -36,7 +36,7 @@ const ROOM_HEADINGS = true;
 const NO_TALK_TO = false;
 const NO_ASK_TELL = false;
 const NPC_REACTIONS_AWAYS = false;
-const TYPEWRITER = true;
+const TYPEWRITER = false;
 const TYPEWRITER_DELAY = 50;
 const TYPEWRITER_DELAY_LINE = 200;
 
