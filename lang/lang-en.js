@@ -417,7 +417,7 @@ const PRONOUNS = {
 
 const VERBS = {
   examine:"Examine",
-  use:"use",
+  use:"Use",
   take:"Take",
   drop:"Drop",
   open:"Open",
