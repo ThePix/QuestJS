@@ -40,7 +40,6 @@ const TYPEWRITER = false;
 const TYPEWRITER_DELAY = 50;
 const TYPEWRITER_DELAY_LINE = 200;
 
-const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
 
 const SECONDS_PER_TURN = 60;

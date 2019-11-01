@@ -37,7 +37,6 @@ const NPC_REACTIONS_AWAYS = false;
 const MONEY_FORMAT = "$!";
 const TYPEWRITER = false;
 
-const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "|";   // Strings sent to msg will be broken into separate lines
 
 const SAVE_DISABLED = false;

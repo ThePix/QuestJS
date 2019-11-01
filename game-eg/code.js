@@ -57,8 +57,7 @@ commands.push(new Cmd('Kick', {
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
-    failedmsg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
-    return false;
+    return failedmsg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
   },
 }));
 
@@ -73,8 +72,7 @@ commands.push(new Cmd('Charge', {
     {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
-    failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
-    return false;
+    return failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
   },
 }));
 
@@ -88,8 +86,7 @@ commands.push(new Cmd('Move', {
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
-    failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
-    return false;
+    return failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
   },
 }));
 

@@ -297,7 +297,7 @@ function LOOK_INSIDE(char, item) {
   return "Inside " + item.byname({article:DEFINITE}) + " " + pronounVerb(char, "can") + " see " + l + ".";
 }
 function STOP_POSTURE(char) {
-  if (!char.posture) return "";
+  if (!char.posture || char.posture === "standing") return "";
   let s;
   // You could split up sitting, standing and lying
   if (char.postureFurniture) {

@@ -2,8 +2,18 @@
 
 test.tests = function() {
   test.title("sentenceCase");
-  
   test.assertEqual("Simple text", sentenceCase("simple text"));
+  
+  test.title("byname");
+  test.assertEqual("book", w.book.byname());
+  test.assertEqual("the book", w.book.byname({article:DEFINITE}));
+  test.assertEqual("A book", w.book.byname({article:INDEFINITE, capital:true}));
+  console.log(w.me.player)
+  console.log("----------------")
+  test.assertEqual("you", w.me.byname());
+  console.log("----------------")
+  test.assertEqual("You", w.me.byname({article:INDEFINITE, capital:true}));
+  console.log("----------------")
   
   
   test.title("randomFromArray");

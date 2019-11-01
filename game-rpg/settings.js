@@ -37,7 +37,6 @@ const NO_ASK_TELL = "ASK/TELL ABOUT is not a feature in this game.";
 const NPC_REACTIONS_AWAYS = false;
 const TYPEWRITER = false;
 
-const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
 
 const SECONDS_PER_TURN = 60;
