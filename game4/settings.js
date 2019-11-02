@@ -35,8 +35,8 @@ const NO_TALK_TO = "You can talk to an NPC using either {color:red:ASK [name] AB
 const NO_ASK_TELL = false;
 const NPC_REACTIONS_AWAYS = false;
 const MONEY_FORMAT = "$!";
+const TYPEWRITER = false;
 
-const PARSER_DEBUG = false;      // If true, will report the data the parser outputs
 const SPLIT_LINES_ON = "|";   // Strings sent to msg will be broken into separate lines
 
 const SAVE_DISABLED = false;

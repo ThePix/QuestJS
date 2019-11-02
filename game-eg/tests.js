@@ -2,8 +2,18 @@
 
 test.tests = function() {
   test.title("sentenceCase");
-  
   test.assertEqual("Simple text", sentenceCase("simple text"));
+  
+  test.title("byname");
+  test.assertEqual("book", w.book.byname());
+  test.assertEqual("the book", w.book.byname({article:DEFINITE}));
+  test.assertEqual("A book", w.book.byname({article:INDEFINITE, capital:true}));
+  console.log(w.me.player)
+  console.log("----------------")
+  test.assertEqual("you", w.me.byname());
+  console.log("----------------")
+  test.assertEqual("You", w.me.byname({article:INDEFINITE, capital:true}));
+  console.log("----------------")
   
   
   test.title("randomFromArray");
@@ -79,6 +89,17 @@ test.tests = function() {
   test.assertEqual("The book is here.", processText("{nm:chr:the:true} is here.", {chr:w.book}));
 
   
+  test.title("Text processor 5");
+  test.assertEqual("Kyle is a bear.", processText("{Kyle.alias} is a bear."));
+  test.assertEqual("Kyle is a bear.", processText("{show:Kyle:alias} is a bear."));
+  test.assertEqual("Kyle is a bear.", processText("{Kyle:alias} is a bear."));
+  test.assertEqual("You have $10.", processText("You have ${show:me:money}."));
+  test.assertEqual("You have $10.", processText("You have ${player.money}."));
+  test.assertEqual("You have $10.", processText("You have ${me.money}."));
+  test.assertEqual("You have $10.", processText("You have ${player.money}."));
+
+
+
   test.title("Numbers");
   test.assertEqual("fourteen", toWords(14));
   test.assertEqual("minus four hundred and three", toWords(-403));

@@ -224,3 +224,11 @@ th, td {
   padding:4px;
   text-align:center;
 }
+
+
+
+.typewriter {
+/*  font-weight: bold;
+  font-size: larger;*/
+  color:grey;
+}

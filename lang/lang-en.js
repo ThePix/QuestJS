@@ -238,6 +238,9 @@ function ALREADY(item) {
 function DEFAULT_EXAMINE(char, item) {
   return pronounVerb(item, "be", true) + " just your typical, every day " + item.byname() + ".";
 }
+function NO_TOPICS(char, target) {
+  return nounVerb(char, "have", true) + " nothing to talk to " + target.byname({article:DEFINITE}) + " about.";
+}
 
 
 //----------------------------------------------------------------------------------------------
@@ -294,7 +297,7 @@ function LOOK_INSIDE(char, item) {
   return "Inside " + item.byname({article:DEFINITE}) + " " + pronounVerb(char, "can") + " see " + l + ".";
 }
 function STOP_POSTURE(char) {
-  if (!char.posture) return "";
+  if (!char.posture || char.posture === "standing") return "";
   let s;
   // You could split up sitting, standing and lying
   if (char.postureFurniture) {

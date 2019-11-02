@@ -57,8 +57,7 @@ commands.push(new Cmd('Kick', {
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
-    failedmsg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
-    return false;
+    return failedmsg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
   },
 }));
 
@@ -73,8 +72,7 @@ commands.push(new Cmd('Charge', {
     {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
-    failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
-    return false;
+    return failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
   },
 }));
 
@@ -88,8 +86,7 @@ commands.push(new Cmd('Move', {
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
-    failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
-    return false;
+    return failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
   },
 }));
 
@@ -105,7 +102,26 @@ commands.push(  new Cmd('Hint', {
       }
     },
   }));
+  
 
+
+
+commands.push(  new Cmd('print', {
+    regex:/^print$/,
+    script:function() {
+      /*typeWriter.write('p', 'The first line.');
+      typeWriter.write('p', '2');
+      typeWriter.write('p', '');
+      typeWriter.write('f', function() { console.log('here') } );
+      typeWriter.write('p', 'Third line');*/
+      msg('The first line.');
+      msg('2');
+      msg('');
+      msgFunction(function() { console.log('here') } );
+      msg('Third line');
+    },
+  }));
+  
 
 
 
