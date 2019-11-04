@@ -1,9 +1,9 @@
 "use strict";
 
-const TITLE = "A First Step...";
-const AUTHOR = "The Pixie"
-const VERSION = "1.1";
-const THANKS = ["Kyle", "Lara"];
+const TITLE = "Your new game";
+const AUTHOR = "Your name here"
+const VERSION = "0.1";
+const THANKS = [];
 
 // UI options
 const PANES = 'Left';  //Can be set to Left, Right or None.
@@ -36,8 +36,8 @@ const NO_TALK_TO = "TALK TO is not a feature in this game.";
 const NO_ASK_TELL = "ASK/TELL ABOUT is not a feature in this game.";
 const NPC_REACTIONS_AWAYS = false;
 const TYPEWRITER = true;
-const TYPEWRITER_DELAY = 50;
-const TYPEWRITER_DELAY_LINE = 200;
+const TYPEWRITER_DELAY = 25
+const TYPEWRITER_DELAY_LINE = 100;
 
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
 
@@ -54,15 +54,12 @@ const DATE_TIME_OPTIONS = {
 
 const ROOM_TEMPLATE = [
   "%",
-  "You can see {objects} here.",
-  "You can go {exits}.",
+  "{objectsHere:You can see {objects} here.}",
+  "{objectsHere:You can go {exits}.}",
 ];
 
 const STATUS = [
-  "hitpoints",
-  function() { return "<td>Spell points:</td><td>3</td>"; },
   function() { return "<td>Health points:</td><td>" + game.player.hitpoints + "</td>"; },
-  function() { return '<td colspan="2">' + game.player.status + "</td>"; },
 ];
 
 

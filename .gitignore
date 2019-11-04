@@ -5,20 +5,8 @@ tmp.*
 *.rb
 *.txt
 *.zip
-game2/
-page2.html
-game3/
-page3.html
-game5/
-page5.html
-game-x/
-page-x.html
-page-xx.html
-game\*-test.*
+game-x*/
+libx/
+page-x*.html
 images/Joseph Banks.svg
-misc/run.bat
-misc/wardrobe.js
-misc/brimstone.js
-page-bs.html
-page-mono.html
-page-hl.html
+misc/
