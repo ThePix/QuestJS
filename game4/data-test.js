@@ -5,7 +5,7 @@ createItem("me",
   PLAYER(),
   { 
     loc:"lounge",
-    regex:/^me|myself|player$/,
+    regex:/^(me|myself|player)$/,
     examine:function() {
       msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },

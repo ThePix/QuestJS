@@ -3,7 +3,7 @@
 
 createItem("me",
   PLAYER(),
-  { loc:"sickbay", regex:/^me|myself|player$/, examine: "Just a regular guy.", }
+  { loc:"sickbay", regex:/^(me|myself|player)$/, examine: "Just a regular guy.", }
 );
 
 createItem("all_tool",

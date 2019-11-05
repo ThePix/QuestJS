@@ -102,10 +102,10 @@ function CANNOT_SWITCH_OFF(char, item) {
   return nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " off.";
 }
 function CANNOT_OPEN(char, item) {
-  return nounVerb(char, "can't", true) + " open " + item.pronouns.objective + ".";
+  return nounVerb(item, "can't", true) + " be opened.";
 }
 function CANNOT_CLOSE(char, item) {
-  return nounVerb(char, "can't", true) + "t close " + item.pronouns.objective + ".";
+  return nounVerb(item, "can't", true) + " be closed.";
 }
 function CANNOT_LOCK(char, item) {
   return nounVerb(char, "can't", true) + "t lock " + item.pronouns.objective + ".";

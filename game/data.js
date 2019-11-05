@@ -3,7 +3,7 @@
 
 createItem("me",
   PLAYER(),
-    { loc:"lounge", regex:/^me|myself|player$/, examine: "Just a regular guy.", hitpoints:100, }
+    { loc:"lounge", regex:/^(me|myself|player)$/, examine: "Just a regular guy.", hitpoints:100, }
 );
 
 createRoom("lounge", {

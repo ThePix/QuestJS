@@ -2,7 +2,7 @@
 
 createItem("me",
   PLAYER(),
-  { loc:"lounge", regex:/^me|myself|player$/, examine:"Just some guy." }
+  { loc:"lounge", regex:/^(me|myself|player)$/, examine:"Just some guy." }
 );
 
 // This is for the player

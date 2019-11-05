@@ -1,6 +1,21 @@
 "use strict";
 
 test.tests = function() {
+  
+  test.title("parser.scoreObjectMatch");
+  test.assertEqual(70, parser.scoreObjectMatch("me", w.me, ""));
+  test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.me, ""));
+  test.assertEqual(-1, parser.scoreObjectMatch("xme", w.me, ""));
+  test.assertEqual(70, parser.scoreObjectMatch("flashlight", w.flashlight, ""));
+  test.assertEqual(16, parser.scoreObjectMatch("f", w.flashlight, ""));
+  test.assertEqual(18, parser.scoreObjectMatch("fla", w.flashlight, ""));
+  test.assertEqual(60, parser.scoreObjectMatch("torch", w.flashlight, ""));
+  test.assertEqual(70, parser.scoreObjectMatch("glass cabinet", w.glass_cabinet, ""));
+  test.assertEqual(50, parser.scoreObjectMatch("glass", w.glass_cabinet, ""));
+  test.assertEqual(50, parser.scoreObjectMatch("cabinet", w.glass_cabinet, ""));
+  test.assertEqual(3, parser.scoreObjectMatch("cab", w.glass_cabinet, ""));
+  
+  
   test.title("sentenceCase");
   test.assertEqual("Simple text", sentenceCase("simple text"));
   
@@ -8,12 +23,8 @@ test.tests = function() {
   test.assertEqual("book", w.book.byname());
   test.assertEqual("the book", w.book.byname({article:DEFINITE}));
   test.assertEqual("A book", w.book.byname({article:INDEFINITE, capital:true}));
-  console.log(w.me.player)
-  console.log("----------------")
   test.assertEqual("you", w.me.byname());
-  console.log("----------------")
   test.assertEqual("You", w.me.byname({article:INDEFINITE, capital:true}));
-  console.log("----------------")
   
   
   test.title("randomFromArray");

@@ -6,7 +6,7 @@
 createItem("me",
   RPG_PLAYER(), {
     loc:"lounge",
-    regex:/^me|myself|player$/,
+    regex:/^(me|myself|player)$/,
     equipped:"weapon_unarmed",
     health:20,
     maxHealth:100,
