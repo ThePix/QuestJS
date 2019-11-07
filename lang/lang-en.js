@@ -756,11 +756,26 @@ function pronounVerbForGroup(item, verb, capitalise) {
   return capitalise ? sentenceCase(s) : s;
 }
 
+function verbPronoun(item, verb, capitalise) {
+  let s = conjugate(item, verb) + " " + item.pronouns.subjective;
+  s = s.replace(/ +\'/, "'");  // yes this is a hack!
+  return capitalise ? sentenceCase(s) : s;
+}
+
 function nounVerb(item, verb, capitalise) {
   if (item === game.player) {
     return pronounVerb(item, verb, capitalise);
   }
   let s = item.byname({article:DEFINITE}) + " " + conjugate(item, verb);
+  s = s.replace(/ +\'/, "'");  // yes this is a hack!
+  return capitalise ? sentenceCase(s) : s;
+}
+
+function verbNoun(item, verb, capitalise) {
+  if (item === game.player) {
+    return pronounVerb(item, verb, capitalise);
+  }
+  let s = conjugate(item, verb) + " " + item.byname({article:DEFINITE});
   s = s.replace(/ +\'/, "'");  // yes this is a hack!
   return capitalise ? sentenceCase(s) : s;
 }

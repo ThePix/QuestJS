@@ -274,8 +274,18 @@ test.tests = function() {
   test.assertCmd("d", ["You head down.", "A smelly room with an old settee and a tv.", "You can see a book, some boots, seven bricks, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), a small key and a waterskin here.", "You can go east, south, up or west.",]);  
 
   
+  test.title("say");
+  test.assertCmd("say hello", ["You say, 'Hello.'", "No one seemed interested in what you say."]);
+  w.Kyle.loc = "dining_room"
+  test.assertCmd("w", ["You head west.", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and Lara here.", "You can go east, up or west.",]);
+
+  test.assertCmd("say hello", ["You say, 'Hello.'", "'Oh, hell there,' replies Lara.", "'Have you two met before?' asks Kyle."]);
+  test.assertCmd("say yes", ["You say, 'Yes.'", "'Oh, cool,' says Kyle."]);
+  test.assertCmd("say hello", ["You say, 'Hello.'", "No one seemed interested in what you say."]);
+  w.Kyle.loc = "lounge"
+
+  
   test.title("NPC commands 1");
-  test.assertCmd("w", ["You head west.", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and Lara here.", "You can go east, up or west.",]);  
   test.assertCmd("lara,get brick", "'I'm not picking up any bricks,' says Lara indignantly.");
   test.assertCmd("lara,e", "'I'm not going east,' says Lara indignantly. 'I don't like that room.'");
   test.menuResponseNumber = 1;
