@@ -664,24 +664,27 @@ createItem("Kyle",
       this.pause();
       return true;
     },
-    sayPriority:0,
-    sayResponse:function(s, verb) {
-      if (this.sayState === 1) {
-        if (/^(yes)$/.test(s)) {
-          msg("'Oh, cool,' says Kyle.");
-          w.Kyle.sayPriority = 0;
-          return true;
-        }
-        if (/^(no)$/.test(s)) {
-          msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.");
-          w.Kyle.sayPriority = 0;
-          return true;
-        }
-      }
-      return false
-    },
   }
 );
+
+
+createItem("kyle_question", QUESTION(), {
+  responses:[
+    {
+      regex:/^(yes)$/,
+      response:function() {
+        msg("'Oh, cool,' says Kyle.");
+      }
+    },
+    {
+      regex:/^(no)$/,
+      response:function() {
+        msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.");
+      }
+    },
+  ],
+});  
+  
 
 createItem("straw_boater",
   WEARABLE(false),
@@ -777,13 +780,10 @@ createItem("Lara",
     sayResponse:function(s, verb) {
       if (/^(hi|hello)$/.test(s) && this.sayState === 0) {
         msg("'Oh, hell there,' replies Lara.");
-        console.log(w.Kyle.loc)
-        console.log(w.Lara.loc)
-        console.log(w.me.loc)
         if (w.Kyle.isHere()) {
           msg("'Have you two met before?' asks Kyle.");
           w.Kyle.sayBonus = 8;
-          w.Kyle.sayState = 1;
+          w.Kyle.sayQuestion = "kyle_question";
         }
         this.sayState = 1;
         return true;
