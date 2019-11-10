@@ -279,7 +279,7 @@ test.tests = function() {
   w.Kyle.loc = "dining_room"
   test.assertCmd("w", ["You head west.", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and Lara here.", "You can go east, up or west.",]);
 
-  test.assertCmd("say hello", ["You say, 'Hello.'", "'Oh, hell there,' replies Lara.", "'Have you two met before?' asks Kyle."]);
+  test.assertCmd("say hello", ["You say, 'Hello.'", "'Oh, hello there,' replies Lara.", "'Have you two met before?' asks Kyle."]);
   test.assertCmd("say yes", ["You say, 'Yes.'", "'Oh, cool,' says Kyle."]);
   test.assertCmd("say hello", ["You say, 'Hello.'", "No one seemed interested in what you say."]);
   w.Kyle.loc = "lounge"

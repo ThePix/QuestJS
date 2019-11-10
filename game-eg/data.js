@@ -777,19 +777,20 @@ createItem("Lara",
     canTalkPlayer:function() { return true; },
     
     sayPriority:3,
-    sayResponse:function(s, verb) {
-      if (/^(hi|hello)$/.test(s) && this.sayState === 0) {
-        msg("'Oh, hell there,' replies Lara.");
-        if (w.Kyle.isHere()) {
-          msg("'Have you two met before?' asks Kyle.");
-          w.Kyle.sayBonus = 8;
-          w.Kyle.sayQuestion = "kyle_question";
-        }
-        this.sayState = 1;
-        return true;
+    sayResponses:[
+      {
+        regex:/^(hi|hello)$/,
+        id:"hello",
+        response:function() {
+          msg("'Oh, hello there,' replies Lara.");
+          if (w.Kyle.isHere()) {
+            msg("'Have you two met before?' asks Kyle.");
+            w.Kyle.sayBonus = 8;
+            w.Kyle.sayQuestion = "kyle_question";
+          }
+        },
       }
-      return false
-    },
+    ],
   }
 );
 
