@@ -98,6 +98,8 @@ test.tests = function() {
   test.assertEqual("There is a book.", processText("There is {nm:chr:a}.", {chr:w.book}));
   test.assertEqual("Kyle is here.", processText("{nm:chr:the:true} is here.", {chr:w.Kyle}));
   test.assertEqual("The book is here.", processText("{nm:chr:the:true} is here.", {chr:w.book}));
+  test.assertEqual("It is your book.", processText("It is {nms:chr:the} book.", {chr:game.player}));
+  test.assertEqual("It is Kyle's book.", processText("It is {nms:chr:the} book.", {chr:w.Kyle}));
 
   
   test.title("Text processor 5");

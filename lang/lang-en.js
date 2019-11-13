@@ -410,8 +410,8 @@ const PRONOUNS = {
   male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his", reflexive:"himself"},
   female:{subjective:"she", objective:"her", possessive: "hers", poss_adj: "her", reflexive:"herself"},
   plural:{subjective:"they", objective:"them", possessive: "theirs", poss_adj: "their", reflexive:"themselves"},
-  firstperson:{subjective:"I", objective:"me", possessive: "mine", poss_adj: "my", reflexive:"myself"},
-  secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your", reflexive:"yourself"},
+  firstperson:{subjective:"I", objective:"me", possessive: "mine", poss_adj: "my", reflexive:"myself", possessive_name:'my'},
+  secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your", reflexive:"yourself", possessive_name:'your'},
 };
 
 
