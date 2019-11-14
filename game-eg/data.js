@@ -7,8 +7,8 @@ createItem("me", PLAYER(), {
   loc:"lounge",
   regex:/^(me|myself|player)$/,
   money:10,
-  examine:function() {
-    msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
+  examine:function(isMultiple) {
+    msg(prefix(this, isMultiple) + "A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
   },
 });
 
@@ -139,6 +139,7 @@ createItem("glass_cabinet",
   CONTAINER(true),
   LOCKED_WITH("cabinet_key"),
   { alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, isAtLoc:function(loc) {
+    if (typeof loc !== "string") loc = loc.name
     return (loc == "lounge" || loc == "dining_room");
   }}
 );
@@ -377,6 +378,7 @@ createItem("garage_door",
   OPENABLE(false),
   LOCKED_WITH("garage_key"),
   { examine: "The door to the garage.", alias: "garage door", isAtLoc:function(loc) {
+    if (typeof loc !== "string") loc = loc.name
     return (loc == "kitchen" || loc == "garage");
   }}
 );
@@ -682,6 +684,12 @@ createItem("kyle_question", QUESTION(), {
         msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.");
       }
     },
+    {
+      response:function() {
+        msg("'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'");
+        w.Kyle.askQuestion("kyle_question");
+      }
+    },
   ],
 });  
   
@@ -785,8 +793,7 @@ createItem("Lara",
           msg("'Oh, hello there,' replies Lara.");
           if (w.Kyle.isHere()) {
             msg("'Have you two met before?' asks Kyle.");
-            w.Kyle.sayBonus = 8;
-            w.Kyle.sayQuestion = "kyle_question";
+            w.Kyle.askQuestion("kyle_question");
           }
         },
       }
@@ -825,6 +832,7 @@ createItem("walls",
   { examine:"They're walls, what are you expecting?", regex:/^wall$/,
     scenery:true,
     isAtLoc:function(loc, situation) {
+      if (typeof loc !== "string") loc = loc.name
       return w[loc].room && situation === display.PARSER; 
     },
   }

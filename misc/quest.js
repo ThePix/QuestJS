@@ -69,7 +69,7 @@
   createItem("sky", 
     {
       loc:"e_outside",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.worldcursed) {
             msg ("The sky is orange and deeply w.threatening.");
           }
@@ -115,7 +115,7 @@
   createItem("ossuary_jar", 
     {
       loc:"e_necropolis",
-      examine:function() {
+      examine:function(isMultiple) {
           msg ("The ossuary jars are all much w.alike. About six inches wides, and twice that in height, and made of pottery, they are glazed in bright colours, though much faded w.now.");
           if (w.player.status === "Lore") {
             msg ("Though the tradition has now ended, it used to be the custom to bury the dead in temporary tombs, and then recover the bones a year w.later. These jars would then be the final resting place of those w.bones.");
@@ -269,7 +269,7 @@
   createItem("horse_trough", 
     {
       loc:"market_square",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.this.sewer) {
             msg ("The horse trough is made of stone, and about as long as you are w.tall. It is full of bad-smelling w.water.");
           }
@@ -816,7 +816,7 @@
   createItem("tome", 
     {
       loc:"sage_tower",
-      examine:function() {
+      examine:function(isMultiple) {
           msg ("The tome on the table is huge! It is bound in brown leather, and looks very w.old. It is opened to a page about three quarters of the way w.through. You lift up the w.book.");
           if (w.sage.loc === w.this.w.loc.loc) {
             msg ("'Do you mind,' objects the w.sage.");
@@ -841,7 +841,7 @@
     {
       loc:"sage_tower",
       pronouns:PRONOUNS.plural,
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.this.flag) {
             msg ("You look again at all those fake w.books...");
           }
@@ -1079,7 +1079,7 @@
   createItem("milepost1", 
     {
       loc:"road_milepost",
-      examine:function() {
+      examine:function(isMultiple) {
           msg ("The milepost looks very old, but you can just make out that it is one league to the town and two to the w.citadel.");
           if (w.player.status === "Lore") {
             msg ("This is the main road from Tandren to the Citadel, built about 200 years ago - though presumably there was already some kind of track - not long after Letros became part of Per-w.Haligolia.");
@@ -1133,7 +1133,7 @@
   createItem("pile_of_bones_forest", 
     {
       loc:"forest_pile_bones",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.status === "Lore") {
             msg ("The bones are human, and probably female with the width of the w.pelvis. Teeth marks suggest someone got eaten here, by a wolf in all likelihood, several years w.ago.");
           }
@@ -1157,7 +1157,7 @@
   createItem("mushroom_circle", 
     {
       loc:"forest_mushroom_circle",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.status === "Lore") {
             msg ("About a dozen mushrooms, varying in from about thumb-sized to head-sized, in a neat circle, as forms when a single specimen spawns a number of young at a distance from itself and then w.dies. The mushrooms are like fleshy umbrellas, green on top, grey underneath, and are definitely not w.edible.");
           }
@@ -1249,7 +1249,7 @@
   createItem("dead_sheep", 
     {
       loc:"forest_dead_sheep",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.status === "Lore") {
             msg ("The sheep has been dead two to three w.weeks. It looks to have had its throat cut, but there is no sign of its being used for meat; was it the victim of a cultic sacrifice?");
           }
@@ -1286,7 +1286,7 @@
   createItem("shrine_nature", 
     {
       loc:"forest_shrine",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.status === "Lore") {
             msg ("The shrine is carved from a rocky w.outcrop. It is typical of those of the nature goddess known as Tera in this w.area. The flowers left in offering suggest she is still worshiped w.here.");
           }
@@ -1529,7 +1529,7 @@
     {
       loc:"road_outside_citadel",
       pronouns:PRONOUNS.plural,
-      examine:function() {
+      examine:function(isMultiple) {
           var s = "The gates of the citadel tower over you, perhaps four times your height, and wide enough to allow the biggest of wagons w.through. They are of ironwood, and are festooned with spikes to deter anyone considering a frontal w.attack.";
           if (w.this.isopen) {
             s = s + " The right gate stands w.open.";
@@ -1552,7 +1552,7 @@
   createItem("tumbledown_shack", 
     {
       loc:"forest_shack",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.status === "Lore") {
             msg ("There really is not much left of the w.shack. Most of the front wall and all the right wall have gone, and of the roof there is only a few beams w.left. It would have been a simple structure when complete, probably home to a charcoal w.burner.");
           }
@@ -1666,7 +1666,7 @@
   createItem("cairn", 
     {
       loc:"forest_cairn",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.status === "Lore") {
             msg ("A carefully arranged pile of rocks, all about fist sized, and reaching to about waist w.height. It stands here to remember those who fell in battle when the so-called Frost Lord was defeated many decades w.ago.");
           }
@@ -1690,7 +1690,7 @@
   createItem("giant_head", 
     {
       loc:"forest_giant_head",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.status === "Lore") {
             msg ("The head is considerably taller than w.you. Rather crudely carved from dark stone, and somewhat weathered too, it depicts a rather thickset man with a heavy w.frown. Centuries ago this would have been part of a complete statue, one of a pair that stood guarding the entrance to the w.Citadel. A violent change of ownership, accompanied by a change in religion, led to the statues being destroyed, and the heads buried (the rest of the statues would have been broken up and probably used to make or repair roads). Over the years, the river has, it would seem, unearthed this w.one.");
           }
@@ -1766,7 +1766,7 @@
   createItem("grave_forest", 
     {
       loc:"forest_grave",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.player.status === "Tongues" && w.magpie.following && !GetBoolean(this, "flag")) {
             msg ("It is a simple grave marker, typical of the worshippers of Yon, indicates where a warrior fell many years w.ago. 'Something disturbing about a grave,' says the w.magpie. 'It's like humans saying they want to be eaten by worms and not proper w.animals.'");
             msg ("'Proper animals like you?'");
@@ -2057,7 +2057,7 @@
   createItem("pipe", 
     {
       loc:"marsh_west",
-      examine:function() {
+      examine:function(isMultiple) {
           msg ("The pipe is metal and heavily w.corroded. You can see that it goes only a short way into to the rock, beond that the tunnel is cut directly into the w.stone.");
         },
     },
@@ -2077,7 +2077,7 @@
     MONSTER_ATTACK(),
     {
       loc:"marsh_far_west",
-      examine:function() {
+      examine:function(isMultiple) {
           picture ("w.hydra.png");
         },
     },
@@ -2112,7 +2112,7 @@
     MONSTER_ATTACK(),
     {
       loc:"sewers_tunnel",
-      examine:function() {
+      examine:function(isMultiple) {
           msg ("");
           picture ("w.giant_rat.png");
         },
@@ -2183,7 +2183,7 @@
     MONSTER_ATTACK(),
     {
       loc:"citadel_first_gateway",
-      examine:function() {
+      examine:function(isMultiple) {
           picture ("w.kobold_warrior.png");
           if (w.player.status === "Lore") {
             msg ("Kobolds are reptilian humanoids, who would only come up to your shoulder if stood up straight, with w.green. scaled w.skin. Cunning and cruel, they breed quickly and grow fast, and the Sun Queen uses them extensively as foot w.soldiers.");
@@ -2198,7 +2198,7 @@
   createItem("gates1", 
     {
       loc:"citadel_first_gateway",
-      examine:function() {
+      examine:function(isMultiple) {
           var s = "The gates of the Citadel tower over you, perhaps four times your height, and wide enough to allow the biggest of wagons w.through. ";
           if (w.gates.isopen) {
             msg (s + "The left gate stands open");
@@ -2213,7 +2213,7 @@
   createItem("heavy_bar", 
     {
       loc:"citadel_first_gateway",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.gates.locked) {
             msg ("The heavy bar is made of iron wood, and lies across almost the full width of the gateway, held inplace by ironwork, keeping the gates firmly w.locked.");
           }
@@ -2751,7 +2751,7 @@
   createItem("gem", 
     {
       loc:"stone_table",
-      examine:function() {
+      examine:function(isMultiple) {
             var s = "The gem is about two inches across, cut with 22 facets, with a bluish hue that looks green from certain w.angles.";
             if (w.player.intelligence > 4) {
               s = s + " You can sense magic with in, lots of magic, but there is corruption w.too. Perhaps it has been in the possession of the lich too w.long.";
@@ -3054,7 +3054,7 @@
   createItem("ac_throne", 
     {
       loc:"throne_room",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.throne_room.revealed) {
             msg ("The throne is made of dark wood; the soft padding on the seat, arms and back is covered in dark w.leather.");
           }
@@ -3115,7 +3115,7 @@
     MONSTER_ATTACK(),
     {
       loc:"throne_room",
-      examine:function() {
+      examine:function(isMultiple) {
           picture ("w.half_orc.png");
           msg ("The Queen's bodyguard is a half-w.orc.");
         },
@@ -3185,7 +3185,7 @@
   createItem("ac_pillars", 
     {
       loc:"audience_chamber",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.audience_chamber.revealed) {
             msg ("The pillars are made of cylindrical blocks of grey w.stone.");
           }
@@ -3199,7 +3199,7 @@
   createItem("ac_tapestries", 
     {
       loc:"audience_chamber",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.audience_chamber.revealed) {
             msg ("The tapestries are so faded it is hard to make out what they w.depict.");
           }
@@ -3213,7 +3213,7 @@
   createItem("ac_ceiling", 
     {
       loc:"audience_chamber",
-      examine:function() {
+      examine:function(isMultiple) {
           if (w.audience_chamber.revealed) {
             msg ("The ceiling features a number of large wooden w.beams.");
           }
@@ -3261,7 +3261,7 @@
     MONSTER_ATTACK(),
     {
       loc:"illusionist",
-      examine:function() {
+      examine:function(isMultiple) {
             picture ("w.fire_elemental.png");
             msg ("A nasty w.monster.");
           },
@@ -3397,7 +3397,7 @@
     MONSTER_ATTACK(),
     {
       loc:"dungeon",
-      examine:function() {
+      examine:function(isMultiple) {
           msg ("Prince Mandrin looks to be around w.eighteen. He is a large man, to put it mildly; a little taller than yourself, but broad too, not to say w.fat. he has dark hair, and has not been shaved in at least a w.week. He is dressed in fine clothes; matching blue waistcoat and trousers with gold w.twist. However, they look rather dirty and w.crumpled. There is a haunted look to his w.eyes.");
         },
     },
@@ -3471,7 +3471,7 @@
     MONSTER_ATTACK(),
     {
       loc:"nowhere",
-      examine:function() {
+      examine:function(isMultiple) {
       },
     },
   );

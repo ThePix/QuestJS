@@ -13,6 +13,7 @@ createItem("Xsansi",
   NPC(true),
   { 
     isAtLoc:function(loc, situation) {
+      if (typeof loc !== "string") loc = loc.name
       return isOnShip() && (situation === display.PARSER || situation === display.SIDE_PANE);
     },
     properName:true,

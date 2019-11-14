@@ -11,15 +11,12 @@ createItem("knife",
   { 
     loc:"me",
     sharp:false,
-    examine:function() {
+    examine:function(isMultiple) {
       if (this.sharp) {
-        msg("A really sharp knife.");
-        msg("A really sharp knife.");
-        msg("A really sharp knife.");
-        msg("A really sharp knife.");
+        msg(prefix(this, isMultiple) + "A really sharp knife.");
       }
       else {
-        msg("A blunt knife.");
+        msg(prefix(this, isMultiple) + "A blunt knife.");
       }
     },
   }

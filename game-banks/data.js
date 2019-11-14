@@ -14,8 +14,8 @@ createItem("me",
     regex:/^(me|myself|player)$/, 
     status:100, 
     bonus:0, 
-    examine:function() {
-      msg("You feel fine...");
+    examine:function(isMultiple) {
+      msg(prefix(this, isMultiple) + "You feel fine...");
     },
     canMove:function(ex) {
       let room1 = w[this.loc];
@@ -107,12 +107,12 @@ createItem("stasis_locker", CONTAINER(true), {
   alias:"locker",
   scenery:true,
   loc:"stasis_bay",
-  examine:function() {
+  examine:function(isMultiple) {
     if (this.closed) {
-      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
+      msg(prefix(this, isMultiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
     }
     else {
-      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(display.LOOK), {lastJoiner:" and ", article:INDEFINITE}) + ".");
+      msg(prefix(this, isMultiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(display.LOOK), {lastJoiner:" and ", article:INDEFINITE}) + ".");
     }
   },
 });

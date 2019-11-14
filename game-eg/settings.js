@@ -15,7 +15,7 @@ const STATUS_PANE = "Status";  // Set to false to turn off
 const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
 const STATUS_WIDTH_RIGHT = 40;
 
-const USE_DROPDOWN_FOR_CONV = true;
+const DROPDOWN_FOR_CONV = true;
 
 const FAILS_COUNT_AS_TURNS = false;
 const LOOK_COUNTS_AS_TURN = false;
@@ -35,6 +35,8 @@ const MAX_UNDO = 0;
 const ROOM_HEADINGS = true;
 const NO_TALK_TO = false;
 const NO_ASK_TELL = false;
+const TURNS_QUESTIONS_LAST_TURN = 5;
+const GIVE_PLAYER_SAY_MSG = true;
 const NPC_REACTIONS_AWAYS = false;
 const TYPEWRITER = false;
 const TYPEWRITER_DELAY = 50;

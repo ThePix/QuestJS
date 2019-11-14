@@ -15,7 +15,7 @@ const STATUS_PANE = false;  // Set to false to turn off
 const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
 const STATUS_WIDTH_RIGHT = 40;
 
-const USE_DROPDOWN_FOR_CONV = true;
+const DROPDOWN_FOR_CONV = true;
 
 const FAILS_COUNT_AS_TURNS = false;
 const LOOK_COUNTS_AS_TURN = false;

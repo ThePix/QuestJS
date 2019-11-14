@@ -14,8 +14,8 @@ createItem("me",
     maxPP:40,
     maxArmour:20,
     armour:10,
-    examine:function() {
-      msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
+    examine:function(isMultiple) {
+      msg(prefix(this, isMultiple) + "A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
   }
 );
