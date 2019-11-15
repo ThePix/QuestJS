@@ -256,7 +256,10 @@ function NOT_ABLE_TO_HEAR(char, item) {
   return "Doubtful " + nounVerb(item, "will") + " be interested in anything " + char.pronouns.subjective + " has to say.";
 }
 function NOT_CONTAINER(char, item) {
-  return sentenceCase(item.byname({article:DEFINITE})) + " is not a container";
+  return sentenceCase(item.byname({article:DEFINITE})) + " is not a container.";
+}
+function NOT_VESSEL(char, item) {
+  return sentenceCase(item.byname({article:DEFINITE})) + " is not a vessel.";
 }
 
 function NOT_CARRYING(char, item) {

@@ -58,6 +58,7 @@ const FAILS_COUNT_AS_TURNS = false;
 const LOOK_COUNTS_AS_TURN = false;
 const NPC_REACTIONS_AWAYS = false;
 const INTRO = "This is my first Quest 6 game.";
+const SAVE_DISABLED = false;  // When save is disabled, objects can be created during game play
 
 
 // Date and time settings

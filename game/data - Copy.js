@@ -8,5 +8,4 @@ createItem("me",
 
 createRoom("lounge", {
   desc:"The lounge is boring, you really need to put stuff in it.",
-  locs:["one", "two", "three"]
 });

@@ -41,6 +41,7 @@ const NPC_REACTIONS_AWAYS = false;
 const TYPEWRITER = false;
 const TYPEWRITER_DELAY = 50;
 const TYPEWRITER_DELAY_LINE = 200;
+const SAVE_DISABLED = false;
 
 const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
 

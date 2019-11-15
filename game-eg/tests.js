@@ -406,7 +406,68 @@ test.tests = function() {
   test.assertEqual(w.book.examine, clone2.examine);
 
   
-  test.title("Lock and hide");
+  test.title("Save/Load 1");
+
+  const sl1 = "Some long string, with ~ all | sorts {} of! = stuff. In it^&*\""
+  test.assertEqual(sl1, saveLoad.decodeString(saveLoad.encodeString(sl1)))
+  const sl2 = ["Some long string, ", "with ~ all | sorts {} of! = stuff.", " In it^&*\""]
+  const sl3 = saveLoad.decodeArray(saveLoad.encodeArray(sl2))
+  test.assertEqual(sl2[0], sl3[0])
+  test.assertEqual(sl2[1], sl3[1])
+  test.assertEqual(sl2[2], sl3[2])
+
+  test.assertEqual("tst:number:14;", saveLoad.encode("tst", 14))
+  test.assertEqual("", saveLoad.encode("tst", false))
+  test.assertEqual("tst:boolean:true;", saveLoad.encode("tst", true))
+  test.assertEqual("tst:string:14;", saveLoad.encode("tst", '14'))
+  test.assertEqual("tst:qobject:book;", saveLoad.encode("tst", w.book))
+  test.assertEqual("tst:array:14~12;", saveLoad.encode("tst", ['14', '12']))
+
+  saveLoad.decode(w.far_away, "one:number:14")
+  test.assertEqual(14, w.far_away.one)
+  saveLoad.decode(w.far_away, "two:string:14")
+  test.assertEqual('14', w.far_away.two)
+  saveLoad.decode(w.far_away, "three:boolean:true")
+  test.assertEqual(true, w.far_away.three)
+  saveLoad.decode(w.far_away, "four:qobject:book")
+  test.assertEqual(w.book, w.far_away.four)
+  saveLoad.decode(w.far_away, "five:array:14~12")
+  test.assertEqual('14', w.far_away.five[0])
+  //console.log(w.far_away.north)
+  saveLoad.decode(w.far_away, "north:exit:lounge:l:h")
+  test.assertEqual(true, w.far_away.north.hidden)
+
+  test.title("Save/Load 2");
+  // Set up some changes to be saved
+  w.boots.counter = 17;
+  w.boots.unusualString = "Some interesting text";
+  w.boots.notableFlag = true;
+  w.boots.examine = "This will get saved";
+  clone.cloneCounter = 29;
+  const agendaCount = w.Arthur.agenda.length;
+  test.assertEqual(0, w.Arthur.followers.length);
+  const s = saveLoad.saveTheWorld("Comment!!!");
+  // Now change them again, these changes should get over-written
+  w.boots.counter = 42;
+  w.boots.unusualString = "Some boring text";
+  w.boots.notableFlag = false;
+  w.boots.examine = "This will not remain";
+  const clone3 = cloneObject(clone);  // should not be there later
+  console.log(w.lounge)
+  saveLoad.loadTheWorld(s, 4);
+  test.assertEqual(count + 2, Object.keys(w).length);
+  test.assertEqual(17, w.boots.counter);
+  test.assertEqual("Some interesting text", w.boots.unusualString);
+  test.assertEqual(true, w.boots.notableFlag);
+  test.assertEqual("This will get saved", w.boots.examine);
+  test.assertEqual(agendaCount, w.Arthur.agenda.length);
+  test.assertEqual(0, w.Arthur.followers.length);
+  test.assertEqual(29, w[clone.name].cloneCounter);
+  
+  
+
+
+  test.title("Lock and hide save/load");
   const room = w.far_away;
   test.assertEqual(true, room.hasExit("north"));
   test.assertEqual(true, room.hasExit("north", {excludeLocked:true}));
@@ -425,38 +486,8 @@ test.tests = function() {
   test.assertEqual(false, room.hasExit("north", {excludeLocked:true}));
   test.assertEqual(true, room.hasExit("north"));
   
+  
 
-  test.title("Save/Load");
-  // Set up some changes to be saved
-  w.boots.counter = 17;
-  w.boots.unusualString = "Some interesting text";
-  w.boots.notableFlag = true;
-  w.boots.examine = "This will not get saved";
-  w.book.mutableExamine = true;
-  w.book.examine = "This WILL get saved";
-  clone.cloneCounter = 29;
-  const agendaCount = w.Arthur.agenda.length;
-  test.assertEqual(0, w.Arthur.followers.length);
-  const s = saveLoad.saveTheWorld("Comment!!!");
-  // Now change them again, these changes should get over-written
-  w.boots.counter = 42;
-  w.boots.unusualString = "Some boring text";
-  w.boots.notableFlag = false;
-  w.boots.examine = "This will remain";
-  w.book.examine = "This will not remain";
-  const clone3 = cloneObject(clone);  // should not be there later
-  saveLoad.loadTheWorld(s, 4);
-  test.assertEqual(count + 2, Object.keys(w).length);
-  test.assertEqual(17, w.boots.counter);
-  test.assertEqual("Some interesting text", w.boots.unusualString);
-  test.assertEqual(true, w.boots.notableFlag);
-  test.assertEqual("This will remain", w.boots.examine);
-  test.assertEqual("This WILL get saved", w.book.examine);
-  test.assertEqual(agendaCount, w.Arthur.agenda.length);
-  test.assertEqual(0, w.Arthur.followers.length);
-  test.assertEqual(29, w[clone.name].cloneCounter);
-  
-  
   test.title("Path finding");
   test.assertEqual("lounge", formatList(agenda.findPath(w.dining_room, w.lounge)));
   test.assertEqual("", formatList(agenda.findPath(w.dining_room, w.dining_room)));
