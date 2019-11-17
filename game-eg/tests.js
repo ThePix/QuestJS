@@ -444,6 +444,8 @@ test.tests = function() {
   w.boots.notableFlag = true;
   w.boots.examine = "This will get saved";
   clone.cloneCounter = 29;
+  w.far_away.north.hidden = false
+  w.far_away.north.locked = false
   const agendaCount = w.Arthur.agenda.length;
   test.assertEqual(0, w.Arthur.followers.length);
   const s = saveLoad.saveTheWorld("Comment!!!");
@@ -453,7 +455,7 @@ test.tests = function() {
   w.boots.notableFlag = false;
   w.boots.examine = "This will not remain";
   const clone3 = cloneObject(clone);  // should not be there later
-  console.log(w.lounge)
+  w.far_away.north.locked = true
   saveLoad.loadTheWorld(s, 4);
   test.assertEqual(count + 2, Object.keys(w).length);
   test.assertEqual(17, w.boots.counter);
@@ -463,31 +465,10 @@ test.tests = function() {
   test.assertEqual(agendaCount, w.Arthur.agenda.length);
   test.assertEqual(0, w.Arthur.followers.length);
   test.assertEqual(29, w[clone.name].cloneCounter);
+  test.assertEqual(false, w.far_away.north.locked);
+  test.assertEqual(false, w.far_away.north.hidden);
   
   
-
-
-  test.title("Lock and hide save/load");
-  const room = w.far_away;
-  test.assertEqual(true, room.hasExit("north"));
-  test.assertEqual(true, room.hasExit("north", {excludeLocked:true}));
-  test.assertEqual(false, room.setExitLock("northeast", true));
-  test.assertEqual(true, room.setExitLock("north", true));
-  test.assertEqual(false, room.hasExit("north", {excludeLocked:true}));
-  test.assertEqual(true, room.hasExit("north"));
-  room.templatePreSave();
-  const landh = room.getSaveString();
-  test.assertMatch(/customSaveExitnorth\:\"locked\/\"/, landh);
-  room.setExitHide("north", true);
-  room.setExitLock("north", false);
-  room.templatePreSave();
-  test.assertMatch(/customSaveExitnorth\:\"\/hidden\"/, room.getSaveString());
-  saveLoad.setLoadString("far_away=" + landh);
-  test.assertEqual(false, room.hasExit("north", {excludeLocked:true}));
-  test.assertEqual(true, room.hasExit("north"));
-  
-  
-
   test.title("Path finding");
   test.assertEqual("lounge", formatList(agenda.findPath(w.dining_room, w.lounge)));
   test.assertEqual("", formatList(agenda.findPath(w.dining_room, w.dining_room)));

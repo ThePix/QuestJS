@@ -433,6 +433,7 @@ const VERBS = {
   talkto:"Talk to",
   eat:"Eat",
   drink:"Drink",
+  read:"read",
 };
 
 
