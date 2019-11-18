@@ -337,7 +337,7 @@ createRoom("attic", {
 
 
 createRoom("kitchen", {
-  desc:'A clean room{if:clock:scenery:, a clock hanging on the wall}.',
+  desc:'A clean room{if:clock:scenery:, a clock hanging on the wall}. There is a sink in the corner.',
   west:new Exit("lounge"),
   down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; }, msg:function(isMultiple, char) {
     if (char === game.player) {
@@ -382,6 +382,24 @@ createItem("garage_door",
     return (loc == "kitchen" || loc == "garage");
   }}
 );
+
+createItem("jug", VESSEL(4), TAKEABLE(), {
+  loc:"big_kitchen_table",
+  examine:"A small jug, stripped blue and white.",
+});
+
+createItem("kitchen_sink", {
+  loc:"kitchen",
+  scenery:true, 
+  examine:"A dirty sink.",
+  isSourceOf:function(subst) { return subst === "water"; }
+});
+
+createItem("water", LIQUID(), {
+});
+
+createItem("honey", LIQUID(), {
+});
 
 
 
