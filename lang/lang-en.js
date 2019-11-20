@@ -147,6 +147,9 @@ function CANNOT_SMASH(char, item) {
 function CANNOT_FILL(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can fill.";
 }
+function CANNOT_MIX(char, item) {
+  return pronounVerb(item, "'be", true) + " not something you can mix liquids in.";
+}
 function CANNOT_EMPTY(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can empty.";
 }
@@ -219,7 +222,7 @@ function NOT_HERE(char, item) {
 function CHAR_HAS_IT(char, item) {
   return nounVerb(char, "have", true) + " " + item.pronouns.objective + ".";
 }
-function NONE_THERE(char, item) {
+function NONE_HERE(char, item) {
   return "There's no " + item.pluralAlias + " here.";
 }
 function NONE_HELD(char, item) {

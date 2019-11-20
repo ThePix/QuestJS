@@ -603,8 +603,10 @@ test.tests = function() {
   game.update();
   test.assertCmd("get jug", ["You take the jug."]);
   test.assertCmd("fill jug with tears", ["You can't see anything you might call 'tears' here."]);
-  test.assertCmd("fill jug with honey", ["None here."]);
+  test.assertCmd("fill jug with honey", ["There's no honey here."]);
   test.assertCmd("fill jug with water", ["You fill the jug."]);
+  test.assertCmd("fill jug with water", ["It already is."]);
+  test.assertCmd("fill jug with lemonade", ["It's not something you can mix liquids in."]);
   
   
   /* */

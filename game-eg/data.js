@@ -392,13 +392,16 @@ createItem("kitchen_sink", {
   loc:"kitchen",
   scenery:true, 
   examine:"A dirty sink.",
-  isSourceOf:function(subst) { return subst === "water"; }
+  isSourceOf:function(subst) { return subst === "water" || subst === "lemonade"; }
 });
 
 createItem("water", LIQUID(), {
 });
 
 createItem("honey", LIQUID(), {
+});
+
+createItem("lemonade", LIQUID(), {
 });
 
 
