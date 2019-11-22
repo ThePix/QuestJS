@@ -36,6 +36,7 @@ const NO_ASK_TELL = false;
 const NPC_REACTIONS_AWAYS = false;
 const MONEY_FORMAT = "$!";
 const TYPEWRITER = false;
+const GIVE_PLAYER_ASK_TELL_MSG = true;
 
 const SPLIT_LINES_ON = "|";   // Strings sent to msg will be broken into separate lines
 

@@ -453,34 +453,38 @@ const PLANET_DATA = {
 
 
 function createTopics(npc) {
-  npc.askoptions.push({
+  npc.askoptions.unshift({
     name:"health",
     regex:/(his |her )?(health|well\-?being)/,
+    test:function(p) { return p.text.match(this.regex); }, 
     response:howAreYouFeeling,
   });
-  npc.askoptions.push({
+  npc.askoptions.unshift({
     name:"planet",
     regex:/(this |the |)?planet/,
     response:planetAnalysis,
   });
-  npc.askoptions.push({
+  npc.askoptions.unshift({
     name:"probes",
     regex:/probes?/,
+    test:function(p) { return p.text.match(this.regex); }, 
     response:function(npc) {
       npc.probesAskResponse();
     }
   });
-  npc.askoptions.push({
+  npc.askoptions.unshift({
     name:"expertise", 
     regex:/(your |his |her )?(area|special.*|expert.*|job|role)/,
+    test:function(p) { return p.text.match(this.regex); }, 
     response:function(npc) {
       msg("'What is your area of expertise?' you ask " + npc.byname({article:DEFINITE}) + ".");
       npc.areaAskResponse();
     }
   });
-  npc.askoptions.push({
+  npc.askoptions.unshift({
     name:"background", 
     regex:/^((his |her )?(background))|((him|her)self)$/,
+    test:function(p) { return p.text.match(this.regex); }, 
     response:function(npc) {
       msg("'Tell me about yourself,' you say to " + npc.byname({article:DEFINITE}) + ".");
       npc.backgroundAskResponse();
@@ -777,7 +781,7 @@ commands.push(new Cmd('Pressurise', {
   regex:/^pressuri[sz]e (.+)$/,
   npcCmd:true,
   objects:[
-    {scope:isRoom},
+    {scope:'isRoom'},
   ],
   script:function(objects) {
     return handlePressurise(game.player, objects, true);
@@ -788,7 +792,7 @@ commands.push(new Cmd('Depressurise', {
   npcCmd:true,
   objects:[
     {ignore:true},
-    {scope:isRoom},
+    {scope:'isRoom'},
   ],
   script:function(objects) {
     return handlePressurise(game.player, objects, false);
@@ -799,7 +803,7 @@ commands.push(new Cmd('NpcPressurise1', {
   regex:/^(.+), ?pressuri[sz]e (.+)$/,
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {scope:isRoom},
+    {scope:'isRoom'},
   ],
   script:function(objects) {
     var npc = objects[0][0];
@@ -816,7 +820,7 @@ commands.push(new Cmd('NpcPressurise2', {
   regex:/^tell (.+) to pressuri[sz]e (.+)$/,
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {scope:isRoom},
+    {scope:'isRoom'},
   ],
   script:function(objects) {
     var npc = objects[0][0];
@@ -834,7 +838,7 @@ commands.push(new Cmd('NpcDepressurise1', {
   objects:[
     {scope:parser.isHere, attName:"npc"},
     {ignore:true},
-    {scope:isRoom},
+    {scope:'isRoom'},
   ],
   script:function(objects) {
     var npc = objects[0][0];
@@ -852,7 +856,7 @@ commands.push(new Cmd('NpcDepressurise2', {
   objects:[
     {scope:parser.isHere, attName:"npc"},
     {ignore:true},
-    {scope:isRoom},
+    {scope:'isRoom'},
   ],
   script:function(objects) {
     var npc = objects[0][0];
@@ -915,7 +919,7 @@ function handlePressurise(char, objects, pressurise) {
 commands.push(new Cmd('Approach', {
   regex:/^approach (.+)$/,
   objects:[
-    {scope:isShip},
+    {scope:'isShip'},
   ],
   script:function(objects) {
     if (!objects[0][0].isShip) {
@@ -943,7 +947,7 @@ commands.push(new Cmd('Approach', {
 commands.push(new Cmd('Scan', {
   regex:/^scan (.+)$/,
   objects:[
-    {scope:isShip},
+    {scope:'isShip'},
   ],
   script:function(objects) {
     if (!objects[0][0].isShip) {

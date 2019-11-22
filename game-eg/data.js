@@ -672,7 +672,7 @@ createItem("Kyle", NPC(false),
   properName:true,
   //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
   //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
-  askoptions:[
+  askoptions2:[
     {
       test:function(p) { return p.text.match(/house/); }, 
       msg:"'I like it,' says Kyle.",
@@ -694,6 +694,33 @@ createItem("Kyle", NPC(false),
       msg:"Kyle has no interest in that subject.",
       failed:true,
     }
+  ],
+  askoptions:[
+    {
+      test:function(p) { return p.text.match(/house/); }, 
+      msg:"'I like it,' says Kyle.",
+    },
+    {
+      test:function(p) { return p.text.match(/garden/) },
+      responses:[
+        {
+          test:function(p) { return w.garden.fixed; },
+          msg:"'Looks much better now,' Kyle says with a grin.",
+        },
+        {
+          test:function(p) { return w.Kyle.needsWorkCount === 0; },
+          msg:"'Needs some work,' Kyle says with a sign.",
+          script:function(p) { w.Kyle.needsWorkCount++; },
+        },
+        {
+          msg:"'I'm giving up hope of it ever getting sorted,' Kyle says.",
+        },
+      ],
+    },
+    {
+      msg:"Kyle has no interest in that subject.",
+      failed:true,
+    },
   ],
   needsWorkCount:0,
   talkto:function() {
