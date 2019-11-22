@@ -665,36 +665,48 @@ createItem("Arthur",
 
 
 
-createItem("Kyle",
-  NPC(false),
-  { 
-    loc:"lounge",
-    examine:"A grizzly bear. But cute.", 
-    properName:true,
-    //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
-    //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
-    askoptions:[
-      {
-        test:function(p) { return p.text.match(/house/); }, 
-        msg:"'I like it,' says Kyle.",
-      },
-      {
-        test:function(p) { return p.text.match(/garden/); },
-        msg:"'Needs some work,' Kyle says with a sign.",
-      },
-    ],
-    talkto:function() {
-      switch (this.talktoCount) {
-        case 0 : msg("You say 'Hello,' to Kyle, and he replies in kind."); break;
-        case 1 : msg("You ask Kyle how to get upstairs. 'You know,' he replies, 'I have no idea.'"); break;
-        case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break;
-        default: msg("You wonder what you can talk to Kyle about."); break;
-      }
-      this.pause();
-      return true;
+createItem("Kyle", NPC(false),
+{ 
+  loc:"lounge",
+  examine:"A grizzly bear. But cute.", 
+  properName:true,
+  //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
+  //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
+  askoptions:[
+    {
+      test:function(p) { return p.text.match(/house/); }, 
+      msg:"'I like it,' says Kyle.",
     },
-  }
-);
+    {
+      test:function(p) { return p.text.match(/garden/) && w.garden.fixed; },
+      msg:"'Looks much better now,' Kyle says with a grin.",
+    },
+    {
+      test:function(p) { return p.text.match(/garden/) && w.Kyle.needsWorkCount === 0; },
+      msg:"'Needs some work,' Kyle says with a sign.",
+      script:function(p) { w.Kyle.needsWorkCount++; },
+    },
+    {
+      test:function(p) { return p.text.match(/garden/); },
+      msg:"'I'm giving up hope of it ever getting sorted,' Kyle says.",
+    },
+    {
+      msg:"Kyle has no interest in that subject.",
+      failed:true,
+    }
+  ],
+  needsWorkCount:0,
+  talkto:function() {
+    switch (this.talktoCount) {
+      case 0 : msg("You say 'Hello,' to Kyle, and he replies in kind."); break;
+      case 1 : msg("You ask Kyle how to get upstairs. 'You know,' he replies, 'I have no idea.'"); break;
+      case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break;
+      default: msg("You wonder what you can talk to Kyle about."); break;
+    }
+    this.pause();
+    return true;
+  },
+});
 
 
 createItem("kyle_question", QUESTION(), {

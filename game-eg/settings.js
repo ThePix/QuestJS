@@ -37,6 +37,7 @@ const NO_TALK_TO = false;
 const NO_ASK_TELL = false;
 const TURNS_QUESTIONS_LAST_TURN = 5;
 const GIVE_PLAYER_SAY_MSG = true;
+const GIVE_PLAYER_ASK_TELL_MSG = true;
 const NPC_REACTIONS_AWAYS = false;
 const TYPEWRITER = false;
 const TYPEWRITER_DELAY = 50;

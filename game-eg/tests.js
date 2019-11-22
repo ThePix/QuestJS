@@ -287,6 +287,18 @@ test.tests = function() {
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
   test.assertCmd("say yes", ["You say, 'Yes.'", "'Oh, cool,' says Kyle."]);
   test.assertCmd("say hello", ["You say, 'Hello.'", "No one seemed interested in what you say."]);
+
+
+
+  test.title("ask");
+  test.assertCmd("ask kyle about hats", ["You ask Kyle about hats.", "Kyle has no interest in that subject."]);
+  test.assertCmd("ask kyle about garden", ["You ask Kyle about garden.", "'Needs some work,' Kyle says with a sign."]);
+  test.assertCmd("ask kyle about garden", ["You ask Kyle about garden.", "'I'm giving up hope of it ever getting sorted,' Kyle says."]);
+  test.assertCmd("ask kyle about garden", ["You ask Kyle about garden.", "'I'm giving up hope of it ever getting sorted,' Kyle says."]);
+  w.garden.fixed = true
+  test.assertCmd("ask kyle about garden", ["You ask Kyle about garden.", "'Looks much better now,' Kyle says with a grin."]);
+
+
   w.Kyle.loc = "lounge"
 
   
