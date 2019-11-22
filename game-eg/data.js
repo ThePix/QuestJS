@@ -674,8 +674,14 @@ createItem("Kyle",
     //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
     //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
     askoptions:[
-      {regex:/house/, response:"'I like it,' says Kyle.", },
-      {regex:/garden/, response:"'Needs some work,' Kyle says with a sign.", },
+      {
+        test:function(p) { return p.text.match(/house/); }, 
+        msg:"'I like it,' says Kyle.",
+      },
+      {
+        test:function(p) { return p.text.match(/garden/); },
+        msg:"'Needs some work,' Kyle says with a sign.",
+      },
     ],
     talkto:function() {
       switch (this.talktoCount) {
