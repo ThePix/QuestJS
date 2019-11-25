@@ -29,7 +29,7 @@ createItem("Xsansi",
     pressureOverride:false,
     examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
     
-    askoptions:[
+    askOptions:[
       {
         name:"mission",
         test:function(p) { return p.text.match(/mission/); }, 
@@ -402,7 +402,7 @@ createItem("Kyle",
       msg("'You're from Australia, right?'");
       msg("'That's right, cobber! Did the accent give it away?' Actually his accent is pretty faint, apart from the occasional \"cobber\", which you suspect is just an affectation. 'I'm from Sydney... well, originally Newcastle, but lived in Sydney most of my life.'")
     },
-    askoptions:[
+    askOptions:[
       {
         test:function(p) { return p.text.match(/newcastle/); }, 
         response:function() {
@@ -614,7 +614,7 @@ createItem("Ostap",
     backgroundAskResponse:function() {
       msg("'I'm from Nastasiv, near Ternopil.' He sees you blank face. 'In the Ukraine. I grew up with three brothers and two sisters, so it was always noisy.' He smiles. 'Both my sisters, they are biologists too. Well, one a botanist. We take after our babusya - Professor Oliynyk made one of the first synthetic cells in '82.'");
     },
-    askoptions:[
+    askOptions:[
       {
         nameLost:"lost probe",
         test:function(p) { return p.text.match(/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/); }, 
@@ -743,7 +743,7 @@ createItem("Aada",
         msg("'So here I am,' she continued, 'a clone of Maikki. For years father kept me, well, prisoner in effect. I escaped, but I knew he would always be after me. This seemed the perfect getaway; no way can he reach me here, and by the time we get back to Earth, centuries will've passed. So I signed up as geologist.'");
       }
     },
-    askoptions:[
+    askOptions:[
       {
         name:"lost probe",
         test:function(p) { return p.text.match(/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/); }, 
@@ -775,7 +775,7 @@ createItem("Aada",
       },
     ],
     
-    telloptions:[
+    tellOptions:[
       {
         test:function(p) { return p.text.match(/.* hot/); }, 
         response:function() {
@@ -882,7 +882,7 @@ createItem("Ha_yoon",
       msg("'Okay... Any family or anything?'");
       msg("'No, no family.'");
     },
-    askoptions:[
+    askOptions:[
     ],
   }
 );

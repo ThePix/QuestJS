@@ -672,7 +672,7 @@ createItem("Kyle", NPC(false),
   properName:true,
   //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
   //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
-  askoptions2:[
+  askOptions2:[
     {
       test:function(p) { return p.text.match(/house/); }, 
       msg:"'I like it,' says Kyle.",
@@ -695,7 +695,7 @@ createItem("Kyle", NPC(false),
       failed:true,
     }
   ],
-  askoptions:[
+  askOptions:[
     {
       test:function(p) { return p.text.match(/house/); }, 
       msg:"'I like it,' says Kyle.",

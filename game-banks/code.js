@@ -453,18 +453,18 @@ const PLANET_DATA = {
 
 
 function createTopics(npc) {
-  npc.askoptions.unshift({
+  npc.askOptions.unshift({
     name:"health",
     regex:/(his |her )?(health|well\-?being)/,
     test:function(p) { return p.text.match(this.regex); }, 
     response:howAreYouFeeling,
   });
-  npc.askoptions.unshift({
+  npc.askOptions.unshift({
     name:"planet",
     regex:/(this |the |)?planet/,
     response:planetAnalysis,
   });
-  npc.askoptions.unshift({
+  npc.askOptions.unshift({
     name:"probes",
     regex:/probes?/,
     test:function(p) { return p.text.match(this.regex); }, 
@@ -472,7 +472,7 @@ function createTopics(npc) {
       npc.probesAskResponse();
     }
   });
-  npc.askoptions.unshift({
+  npc.askOptions.unshift({
     name:"expertise", 
     regex:/(your |his |her )?(area|special.*|expert.*|job|role)/,
     test:function(p) { return p.text.match(this.regex); }, 
@@ -481,7 +481,7 @@ function createTopics(npc) {
       npc.areaAskResponse();
     }
   });
-  npc.askoptions.unshift({
+  npc.askOptions.unshift({
     name:"background", 
     regex:/^((his |her )?(background))|((him|her)self)$/,
     test:function(p) { return p.text.match(this.regex); }, 
@@ -562,9 +562,9 @@ function arrival() {
 // "name" will be changed to "name2". This means new topics get added to the TOPIC command
 // tested
 function updateTopics(npc, code) {
-  for (let i = 0; i < npc.askoptions.length; i++) {
-    if (npc.askoptions[i]["name" + code] !== undefined) {
-      npc.askoptions[i].name = npc.askoptions[i]["name" + code];
+  for (let i = 0; i < npc.askOptions.length; i++) {
+    if (npc.askOptions[i]["name" + code] !== undefined) {
+      npc.askOptions[i].name = npc.askOptions[i]["name" + code];
     }
   }
 }
