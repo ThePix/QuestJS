@@ -562,9 +562,9 @@ function toOrdinal(number) {
   }
   
   let s = toWords(number);
-  for (let i = 0; i < ordinalReplacements.length; i++) {
-    if (ordinalReplacements[i].regex.test(s)) {
-      return s.replace(ordinalReplacements[i].regex, ordinalReplacements[i].replace);
+  for (let or of ordinalReplacements) {
+    if (or.regex.test(s)) {
+      return s.replace(or.regex, or.replace);
     }
   }
   return (s + "th");
@@ -637,9 +637,9 @@ function npcEnteringMsg(npc, origin) {
 
 function exitList() {
   const list = [];
-  for (let i = 0; i < EXITS.length; i++) {
-    if (game.room.hasExit(EXITS[i].name)) {
-      list.push(EXITS[i].name);
+  for (let exit of EXITS) {
+    if (game.room.hasExit(exit.name)) {
+      list.push(exit.name);
     }
   }
   return list;
@@ -734,15 +734,15 @@ function conjugate(item, verb) {
     errormsg("No conjugations found: CONJUGATIONS_" + gender.toLowerCase());
     return verb;
   }
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i].name === verb) {
-      return arr[i].value;
+  for (let conj of arr) {
+    if (conj.name === verb) {
+      return conj.value;
     }
   }
   
-  for (let i = 0; i < arr.length; i++) {
-    const name = arr[i].name;
-    const value = arr[i].value;
+  for (let conj of arr) {
+    const name = conj.name;
+    const value = conj.value;
     if (name.startsWith("@") && verb.endsWith(name.substring(1))) {
       return conjugate(item, verb.substring(0, verb.length - name.length + 1)) + value;
     }
