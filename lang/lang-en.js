@@ -244,6 +244,9 @@ function DEFAULT_EXAMINE(char, item) {
 function NO_TOPICS(char, target) {
   return nounVerb(char, "have", true) + " nothing to talk to " + target.byname({article:DEFINITE}) + " about.";
 }
+function CONTAINER_RECURSION(char, container, item) {
+  return "What? You want to put " + item.byname({article:DEFINITE}) + " in " + container.byname({article:DEFINITE}) + " when " + container.byname({article:DEFINITE}) + " is already in " + item.byname({article:DEFINITE}) + "? That's just too freaky for me.";
+}
 
 
 //----------------------------------------------------------------------------------------------
