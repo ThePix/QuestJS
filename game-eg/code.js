@@ -48,7 +48,7 @@ game.registerTimedEvent("sayNow", 7, 7);
 
 
 
-commands.push(new Cmd('Kick', {
+commands.push(new Cmd('EgKick', {
   npcCmd:true,
   rules:[cmdRules.isHere],
   regex:/^(kick) (.+)$/,
@@ -63,7 +63,7 @@ commands.push(new Cmd('Kick', {
 
 
 
-commands.push(new Cmd('Charge', {
+commands.push(new Cmd('EgCharge', {
   npcCmd:true,
   rules:[cmdRules.isHeld],
   regex:/^(charge) (.+)$/,
@@ -77,7 +77,7 @@ commands.push(new Cmd('Charge', {
 }));
 
 
-commands.push(new Cmd('Move', {
+commands.push(new Cmd('EgMove', {
   npcCmd:true,
   rules:[cmdRules.isHere],
   regex:/^(move) (.+)$/,
@@ -91,7 +91,7 @@ commands.push(new Cmd('Move', {
 }));
 
 
-commands.push(  new Cmd('Hint', {
+commands.push(  new Cmd('EgHint', {
     regex:/^hint$|^hints$/,
     script:function() {
       if (w[game.player.loc].hint) {
@@ -106,7 +106,7 @@ commands.push(  new Cmd('Hint', {
 
 
 
-commands.push(  new Cmd('print', {
+commands.push(  new Cmd('EgPrint', {
     regex:/^print$/,
     script:function() {
       /*typeWriter.write('p', 'The first line.');
