@@ -690,7 +690,7 @@ commands.push(new Cmd('Kick', {
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
+    msg(prefix(item, isMultiple) + lang.pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
     return false;
   },
 }));
@@ -709,7 +709,7 @@ commands.push(new Cmd('Move', {
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
+    msg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
     return false;
   },
 }));
@@ -1003,7 +1003,7 @@ commands.push(new Cmd('ProbeStatus', {
     metamsg("Radio:" + currentPlanet().coms);
     metamsg("Satellite:" + currentPlanet().satellite);
     metamsg("Active:" + currentPlanet().eventIsActive());
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1029,7 +1029,7 @@ commands.unshift(new Cmd('Help', {
     metamsg("{color:red:HELP SYSTEM}: About the game system");
     metamsg("{color:red:HELP CREDITS}: Credits, obviously!");
     metamsg("You can use {color:red:?} as a shorthand for {color:red:HELP}");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1045,7 +1045,7 @@ commands.push(new Cmd('HelpGame', {
     metamsg("You have five planets to visit, before returning to Earth. Return to the stasis pod to go back into stasis. Xsansi will then navigate the ship to the next destination.");
     metamsg("As the captain, the welfare of the crew is important, so {color:red:ASK KYLE ABOUT HIS HEALTH}, etc.");
     metamsg("You can talk to Xsansi anywhere on the ship (and can just call her \"ai\"). Do {color:red:ASK AI ABOUT CREW} to find out where the crew are.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1056,7 +1056,7 @@ commands.push(new Cmd('HelpNPCs', {
     metamsg("You can ask an NPC to do something by using the same command you would use to have yourself do something, but prefixed with {color:red:[name],} (note the comma) or {color:red:TELL [name] TO}.");
     metamsg(no_talk_to);
     metamsg("Use the TOPICS command for some suggested topics. There are rather more for ASK than TELL, as you might expect.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1069,7 +1069,7 @@ commands.push(new Cmd('HelpProbes', {
     metamsg("Once a probe has been launched, it is on its own; you cannot control it.");
     metamsg("After a probe has landed, it will send data back to the ship, for your crew to analyse. If the data has value, your bonus will automatically increase. The first probe on a planet might get you two or three bonuses, but the third may not get you any and by the tenth, it is not going to find anything new. Ask the crew about the planet once the probes have explored it.")
     metamsg("After thirty turns a probe will have got everything it can - and usually much sooner. Get to know your crew while you wait.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1080,7 +1080,7 @@ commands.push(new Cmd('HelpStasis', {
     metamsg("Once you are in stasis, years will pass whilst the ship navigates to the next star system, so this is how to move the story forward to the next planet to survey.");
     metamsg("To go into stasis, climb into your pod, and close the lid.");
     metamsg("You can tell a crew member to go to stasis at any time (eg {color:red:AADA, GET IN STASIS POD} or just {color:red:HA, IN POD}). Once in stasis they cannot be revived until the ship arrives at the next destination, so make sure they have done everything they need to first. Crew members will go into stasis anyway once you do.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1090,7 +1090,7 @@ commands.push(new Cmd('HelpVacuum', {
     metamsg("{b:Vacuum:}");
     metamsg("Each section of the ship can be pressurised or depressurised by Xsansi, just ask {color:red:XSANSI, PRESSURIZE THE CARGO BAY} or {color:red:AI, DEPRESSURISE ENGINEERING}. Note that safety overrides may prevent Xsansi from complying.");
     metamsg("To find out what areas are pressurised, {color:red: ASK XSANSI ABOUT WHERE IS PRESSURISED} or {color:red:ASK AI ABOUT VACUUM}.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1100,7 +1100,7 @@ commands.push(new Cmd('HelpDock', {
     metamsg("{b:Docking:}");
     metamsg("From the flight-0deck, you can get closer to another ship, either to get a better look or to dock with it; {color:red:XSANSI, APPROACH SHUTTLE} or {color:red:AI, APPROACH SHIP}. Obviously there must be an vessel around.");
     metamsg("Once adjacent, you can scan ot or dock with it; {color:red:XSANSI, DOCK WITH SHUTTLE} or {color:red:AI, SCAN SHIP}.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1111,7 +1111,7 @@ commands.push(new Cmd('HelpUniverse', {
     metamsg("I have, to some degree, tried to go hard science fiction; I would like to think this is not {i:too} much a flight of fantasy, and these are real stars the ship visits! I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
     metamsg("I am also assuming people can be held in stasis, and presumably this is like freezing time (cf Niven's stasis field, in his \"Known Space\" series). I need that to preserve the food so the crew have something to eat 80 years after leaving Earth.");
     metamsg("Also, probes are {i:fast}! It just takes a few turns to travel from orbit to the planet surface, which has to be at least 100 miles, and likely considerably more. They work fast on the planet too. It is a game; we need stuff to happened quickly to keep players interested.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1122,7 +1122,7 @@ commands.push(new Cmd('HelpSystem', {
     metamsg("This game is written entirely in JavaScript, so it is running in your browser. Compared to Quest 5, which I am familiar with, this means that you do not need to download any software to run it, and there is no annoying lag while you wait for a server to respond. Compared to Inform... well, it allows authors to directly access a modern programming language (though the point of Inform 7, of course, is to keep the programming language at bay).");
     metamsg("It is a complete system, implementing all the standards of a parser game, including the usual compass directions by default! Containers, surfaces, countables, wearables, openables, furniture, components and switchable are all built in, as well as NPCs, which hopefully are acting with some semblance of realism.")
     metamsg("For more information, including a tutorial on how to create your own game, see <a href=\"https://github.com/ThePix/QuestJS/wiki\">here</a>. As yet there is no editor, but I hope there will be one day.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
@@ -1131,6 +1131,6 @@ commands.unshift(new Cmd('HelpCredits', {
   script:function() {
     metamsg("{b:Credits:}");
     metamsg("This was written by The Pixie, on a game system created by The Pixie.");
-    return SUCCESS_no_turnscripts;
+    return SUCCESS_NO_TURNSCRIPTS;
   },
 }));

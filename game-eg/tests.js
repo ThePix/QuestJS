@@ -114,16 +114,16 @@ test.tests = function() {
 
 
   test.title("Numbers");
-  test.assertEqual("fourteen", toWords(14));
-  test.assertEqual("minus four hundred and three", toWords(-403));
-  test.assertEqual("ninetyseven", toWords(97));
-  test.assertEqual("fourteenth", toOrdinal(14));
-  test.assertEqual("four hundred and third", toOrdinal(403));
-  test.assertEqual("ninetyfirst", toOrdinal(91));
-  test.assertEqual("get 4 sticks", convertNumbers("get four sticks"));
-  test.assertEqual("get 14 sticks", convertNumbers("get fourteen sticks"));
-  test.assertEqual("get no sticks", convertNumbers("get no sticks"));
-  test.assertEqual("ninetieth", toOrdinal(90));
+  test.assertEqual("fourteen", lang.toWords(14));
+  test.assertEqual("minus four hundred and three", lang.toWords(-403));
+  test.assertEqual("ninetyseven", lang.toWords(97));
+  test.assertEqual("fourteenth", lang.toOrdinal(14));
+  test.assertEqual("four hundred and third", lang.toOrdinal(403));
+  test.assertEqual("ninetyfirst", lang.toOrdinal(91));
+  test.assertEqual("get 4 sticks", lang.convertNumbers("get four sticks"));
+  test.assertEqual("get 14 sticks", lang.convertNumbers("get fourteen sticks"));
+  test.assertEqual("get no sticks", lang.convertNumbers("get no sticks"));
+  test.assertEqual("ninetieth", lang.toOrdinal(90));
 
   
   test.title("Numbers 2");

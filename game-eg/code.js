@@ -57,7 +57,7 @@ commands.push(new Cmd('EgKick', {
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
-    return failedmsg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
+    return failedmsg(prefix(this, isMultiple) + lang.pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
   },
 }));
 
@@ -72,7 +72,7 @@ commands.push(new Cmd('EgCharge', {
     {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
-    return failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
+    return failedmsg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can charge.");
   },
 }));
 
@@ -86,7 +86,7 @@ commands.push(new Cmd('EgMove', {
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
-    return failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
+    return failedmsg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
   },
 }));
 
