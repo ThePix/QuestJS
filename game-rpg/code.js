@@ -181,7 +181,7 @@ const RPG_NPC = function(female) {
   for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key];
   
   res.getVerbs = function() {
-    return [VERBS.lookat, VERBS.talkto, "Attack"];
+    return [verbs.lookat, verbs.talkto, "Attack"];
   };
   
   res.getEquippedWeapon = function() { return this; }
@@ -199,13 +199,13 @@ const WEAPON = function() {
   
   res.getVerbs = function() {
     if (!this.isAtLoc(game.player.name)) {
-      return [VERBS.lookat, VERBS.take];
+      return [verbs.lookat, verbs.take];
     }
     else if (game.player.equipped === this.name) {
-      return [VERBS.drop, "Unequip"];
+      return [verbs.drop, "Unequip"];
     }
     else {
-      return [VERBS.drop, "Equip"];
+      return [verbs.drop, "Equip"];
     }
   };
 
@@ -213,7 +213,7 @@ const WEAPON = function() {
     if (char.equipped === this.name) {
       char.equipped = "weapon_unarmed";
     }
-    msg(prefix(this, isMultiple) + DROP_SUCCESSFUL(char, this));
+    msg(prefix(this, isMultiple) + drop_successful(char, this));
     this.moveToFrom(char.loc, this.loc);
     return true;
   },

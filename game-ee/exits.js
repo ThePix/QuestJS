@@ -1,7 +1,7 @@
 "use strict";
 
 
-EXITS = [
+exit_list = [
   {name:'northwest', abbrev:'NW'}, 
   {name:'forward', abbrev:'F'}, 
   {name:'northeast', abbrev:'NE'}, 

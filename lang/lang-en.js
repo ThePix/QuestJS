@@ -14,64 +14,64 @@ const tp = {
 //----------------------------------------------------------------------------------------------
 // SUCCESSFUL Messages
 
-function TAKE_SUCCESSFUL(char, item, count) {
+function take_successful(char, item, count) {
   return nounVerb(char, "take", true) + " " + item.byname({article:DEFINITE, count:count}) + ".";
 }
-function DROP_SUCCESSFUL(char, item, count) {
+function drop_successful(char, item, count) {
   return nounVerb(char, "drop", true) + " " + item.byname({article:DEFINITE, count:count}) + ".";
 }
-function WEAR_SUCCESSFUL(char, item) {
+function wear_successful(char, item) {
   return nounVerb(char, "put", true) + " on " + item.byname({article:DEFINITE}) + ".";
 }
-function REMOVE_SUCCESSFUL(char, item) {
+function remove_successful(char, item) {
   return nounVerb(char, "take", true) + " " + item.byname({article:DEFINITE}) + " off.";
 }
-function OPEN_SUCCESSFUL(char, item) {
+function open_successful(char, item) {
   return nounVerb(char, "open", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function CLOSE_SUCCESSFUL(char, item) {
+function close_successful(char, item) {
   return nounVerb(char, "close", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function LOCK_SUCCESSFUL(char, item) {
+function lock_successful(char, item) {
   return nounVerb(char, "lock", true) + "k " + item.byname({article:DEFINITE}) + ".";
 }
-function UNLOCK_SUCCESSFUL(char, item) {
+function unlock_successful(char, item) {
   return nounVerb(char, "unlock", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function FILL_SUCCESSFUL(char, item) {
+function fill_successful(char, item) {
   return nounVerb(char, "fill", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function EMPTY_SUCCESSFUL(char, item) {
+function empty_successful(char, item) {
   return nounVerb(char, "empty", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function TURN_ON_SUCCESSFUL(char, item) {
+function turn_on_successful(char, item) {
   return nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " on.";
 }
-function TURN_OFF_SUCCESSFUL(char, item) {
+function turn_off_successful(char, item) {
   return nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " off.";
 }
-function SIT_ON_SUCCESSFUL(char, item) {
+function sit_on_successful(char, item) {
   return nounVerb(char, "sit", true) + " on " + item.byname({article:DEFINITE}) + ".";
 }
-function STAND_ON_SUCCESSFUL(char, item) {
+function stand_on_successful(char, item) {
   return nounVerb(char, "stand", true) + " on " + item.byname({article:DEFINITE}) + ".";
 }
-function RECLINE_ON_SUCCESSFUL(char, item) {
+function recline_on_successful(char, item) {
   return nounVerb(char, "lie", true) + " down on " + item.byname({article:DEFINITE}) + ".";
 }
-function EAT_SUCCESSFUL(char, item) {
+function eat_successful(char, item) {
   return nounVerb(char, "eat", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function DRINK_SUCCESSFUL(char, item) {
+function drink_successful(char, item) {
   return nounVerb(char, "drink", true) + " " + item.byname({article:DEFINITE}) + ".";
 }
-function PURCHASE_SUCCESSFUL(char, item, amt) {
+function purchase_successful(char, item, amt) {
   return nounVerb(char, "buy", true) + " " + item.byname({article:DEFINITE}) + " for " + displayMoney(amt) + ".";
 }
-function SELL_SUCCESSFUL(char, item, amt) {
+function sell_successful(char, item, amt) {
   return nounVerb(char, "sell", true) + " " + item.byname({article:DEFINITE}) + " for " + displayMoney(amt) + ".";
 }
-function PUSH_EXIT_SUCCESSFUL(char, item, dir, destRoom) {
+function push_exit_successful(char, item, dir, destRoom) {
   return nounVerb(char, "push", true) + " " + item.byname({article:DEFINITE}) + " " + dir + ".";
 }
 
@@ -84,43 +84,43 @@ function NPC_HEADING(char, dir) {
 
 
 //----------------------------------------------------------------------------------------------
-// CANNOT Messages
+// CANnot Messages
 
-function CANNOT_TAKE(char, item) {
+function cannot_take(char, item) {
   return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + ".";
 }
-function CANNOT_WEAR(char, item) {
+function cannot_wear(char, item) {
   return nounVerb(char, "can't", true) + " wear " + item.pronouns.objective + ".";
 }
-function CANNOT_WEAR_ENSEMBLE(char, item) {
+function cannot_wear_ensemble(char, item) {
   return "Individual parts of an ensemble must be worn and removed separately.";
 }
-function CANNOT_SWITCH_ON(char, item) {
+function cannot_switch_on(char, item) {
   return nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " on.";
 }
-function CANNOT_SWITCH_OFF(char, item) {
+function cannot_switch_off(char, item) {
   return nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " off.";
 }
-function CANNOT_OPEN(char, item) {
+function cannot_open(char, item) {
   return nounVerb(item, "can't", true) + " be opened.";
 }
-function CANNOT_CLOSE(char, item) {
+function cannot_close(char, item) {
   return nounVerb(item, "can't", true) + " be closed.";
 }
-function CANNOT_LOCK(char, item) {
+function cannot_lock(char, item) {
   return nounVerb(char, "can't", true) + "t lock " + item.pronouns.objective + ".";
 }
-function CANNOT_UNLOCK(char, item) {
+function cannot_unlock(char, item) {
   return nounVerb(char, "can't", true) + " unlock " + item.pronouns.objective + ".";
 }
-function CANNOT_READ(char, item) {
+function cannot_read(char, item) {
   return "Nothing worth reading there.";
 }
 
-function CANNOT_PURCHASE(char, item) {
+function cannot_purchase(char, item) {
   return nounVerb(char, "can't", true) + " buy " + item.pronouns.objective + ".";
 }
-function CANNOT_PURCHASE_HERE(char, item) {
+function cannot_purchase_here(char, item) {
   if (item.doNotClone && item.isAtLoc(char.name)) {
     return nounVerb(char, "can't", true) + " buy " + item.byname({article:DEFINITE}) + " here - probably because " + nounVerb(char, "be") + " already holding " + item.pronouns.objective + ".";
   }
@@ -128,57 +128,57 @@ function CANNOT_PURCHASE_HERE(char, item) {
     return nounVerb(char, "can't", true) + " buy " + item.byname({article:DEFINITE}) + " here.";
   }
 }
-function CANNOT_AFFORD(char, item, amt) {
+function cannot_afford(char, item, amt) {
   return nounVerb(char, "can't", true) + " afford " + item.byname({article:DEFINITE}) + " (need " + displayMoney(amt) + ").";
 }
-function CANNOT_SELL(char, item, amt) {
+function cannot_sell(char, item, amt) {
   return nounVerb(char, "can't", true) + " sell " + item.pronouns.objective + ".";
 }
-function CANNOT_SELL_HERE(char, item, amt) {
+function cannot_sell_here(char, item, amt) {
   return nounVerb(char, "can't", true) + " sell " + item.byname({article:DEFINITE}) + " here.";
 }
 
-function CANNOT_USE(char, item) {
+function cannot_use(char, item) {
   return "No obvious way to use " + item.pronouns.objective + ".";
 }
-function CANNOT_SMASH(char, item) {
+function cannot_smash(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can break.";
 }
-function CANNOT_FILL(char, item) {
+function cannot_fill(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can fill.";
 }
-function CANNOT_MIX(char, item) {
+function cannot_mix(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can mix liquids in.";
 }
-function CANNOT_EMPTY(char, item) {
+function cannot_empty(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can empty.";
 }
-function CANNOT_LOOK_OUT(char, item) {
+function cannot_look_out(char, item) {
   pronounVerb(char, "can't", true) + " look out of " + item.pronouns.objective + ".";
 }
-function CANNOT_STAND_ON(char, item) {
+function cannot_stand_on(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can stand on.";
 }
-function CANNOT_SIT_ON(char, item) {
+function cannot_sit_on(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can sit on.";
 }
-function CANNOT_RECLINE_ON(char, item) {
+function cannot_recline_on(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can lie on.";
 }
 
-function CANNOT_EAT(char, item) {
+function cannot_eat(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can eat.";
 }
-function CANNOT_DRINK(char, item) {
+function cannot_drink(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can drink.";
 }
-function CANNOT_INGEST(char, item) {
+function cannot_ingest(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can ingest.";
 }
-function CANNOT_PUSH(char, item) {
+function cannot_push(char, item) {
   return pronounVerb(item, "'be", true) + " not something you can move around like that.";
 }
-function CANNOT_PUSH_UP(char, item) {
+function cannot_push_up(char, item) {
   return pronounVerb(char, "'be", true) + " not getting " + item.byname({article:DEFINITE}) + " up there!";
 }
 
@@ -187,64 +187,64 @@ function CANNOT_PUSH_UP(char, item) {
 //----------------------------------------------------------------------------------------------
 // General command messages
 
-const NOT_KNOWN_MSG = "I don't even know where to begin with that.";
-const DISAMBIG_MSG = "Which do you mean?";
-const NO_MULTIPLES_MSG = "You cannot use multiple objects with that command.";
-const NOTHING_MSG = "Nothing there to do that with.";
-const GENERAL_OBJ_ERROR = "So I kind of get what you want to do, but not what you want to do it with.";
-const DONE_MSG = "Done.";
+const not_known_msg = "I don't even know where to begin with that.";
+const disambig_msg = "Which do you mean?";
+const no_multiples_msg = "You cannot use multiple objects with that command.";
+const nothing_msg = "Nothing there to do that with.";
+const general_obj_error = "So I kind of get what you want to do, but not what you want to do it with.";
+const done_msg = "Done.";
 
 
 
 
-function NO_SMELL(char) {
+function no_smell(char) {
   return nounVerb(char, "can't", true) + " smell anything here.";
 }
-function NO_LISTEN(char) {
+function no_listen(char) {
   return nounVerb(char, "can't", true) + " hear anything of note here.";
 }
-function NOTHING_THERE(char) {
+function nothing_there(char) {
   return nounVerb(char, "be", true) + " sure there's nothing there.";
 }
-function NOTHING_INSIDE(char) {
+function nothing_inside(char) {
   return "There's nothing to see inside.";
 }
-function NOT_THAT_WAY(char, dir) {
+function not_that_way(char, dir) {
   return nounVerb(char, "can't", true) + " go " + dir + ".";
 }
-function OBJECT_UNKNOWN_MSG(name) {
+function object_unknown_msg(name) {
   return nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "' here.";
 }
 
-function NOT_HERE(char, item) {
+function not_here(char, item) {
   return pronounVerb(item, "'be", true) + " not here.";
 }
-function CHAR_HAS_IT(char, item) {
+function char_has_it(char, item) {
   return nounVerb(char, "have", true) + " " + item.pronouns.objective + ".";
 }
-function NONE_HERE(char, item) {
+function none_here(char, item) {
   return "There's no " + item.pluralAlias + " here.";
 }
-function NONE_HELD(char, item) {
+function none_held(char, item) {
   return pronoun(char, "have", true) + " no " + item.pluralAlias + ".";
 }
-function TAKE_NOT_PUSH(char, item) {
+function TAKE_not_push(char, item) {
   return "Just pick the thing up already!";
 }
 
-function NOTHING_USEFUL(char, item) {
+function nothing_useful(char, item) {
   return "That's not going to do anything useful.";
 }
-function ALREADY(item) {
+function already(item) {
   return sentenceCase(item.pronouns.subjective) + " already " + conjugate(item, "be") + ".";
 }
-function DEFAULT_EXAMINE(char, item) {
+function default_examine(char, item) {
   return pronounVerb(item, "be", true) + " just your typical, every day " + item.byname() + ".";
 }
-function NO_TOPICS(char, target) {
+function no_topics(char, target) {
   return nounVerb(char, "have", true) + " nothing to talk to " + target.byname({article:DEFINITE}) + " about.";
 }
-function CONTAINER_RECURSION(char, container, item) {
+function container_recursion(char, container, item) {
   return "What? You want to put " + item.byname({article:DEFINITE}) + " in " + container.byname({article:DEFINITE}) + " when " + container.byname({article:DEFINITE}) + " is already in " + item.byname({article:DEFINITE}) + "? That's just too freaky for me.";
 }
 
@@ -252,60 +252,60 @@ function CONTAINER_RECURSION(char, container, item) {
 //----------------------------------------------------------------------------------------------
 // Specific command messages
 
-function NOT_NPC(item) {
+function not_npc(item) {
   return nounVerb(game.player, "can", true) + " tell " + item.byname({article:DEFINITE}) + " to do what you like, but there is no way " + pronounVerb(item, "'ll") + " do it.";
 }
-function NOT_NPC_FOR_GIVE(char, item) {
+function not_npc_for_give(char, item) {
   return "Realistically, " + nounVerb(item, "be") + " not interested in anything " + char.pronouns.subjective + " might give " + item.pronouns.objective + ".";
 }
-function NOT_ABLE_TO_HEAR(char, item) {
+function not_able_to_hear(char, item) {
   return "Doubtful " + nounVerb(item, "will") + " be interested in anything " + char.pronouns.subjective + " has to say.";
 }
-function NOT_CONTAINER(char, item) {
+function not_container(char, item) {
   return sentenceCase(item.byname({article:DEFINITE})) + " is not a container.";
 }
-function NOT_VESSEL(char, item) {
+function not_vessel(char, item) {
   return sentenceCase(item.byname({article:DEFINITE})) + " is not a vessel.";
 }
 
-function NOT_CARRYING(char, item) {
+function not_carrying(char, item) {
   return pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
 }
-function NOT_INSIDE(char, item) {
+function not_inside(char, item) {
   return pronounVerb(item, "'be", true) + " not inside that.";
 }
-function WEARING(char, item) {
+function wearing(char, item) {
   return pronounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
 }
-function NOT_WEARING(char, item) {
+function not_wearing(char, item) {
   return pronounVerb(char, "'be", true) + " not wearing " + item.pronouns.objective + ".";
 }
-function CANNOT_WEAR_OVER(char, item, outer) {
+function cannot_wear_over(char, item, outer) {
   return pronounVerb(char, "can't", true) + " put " + item.byname({article:INDEFINITE}) + " on over " + char.pronouns.poss_adj + " " + outer.byname() + ".";
 }
-function CANNOT_REMOVE_UNDER(char, item, outer) {
+function cannot_remove_under(char, item, outer) {
   return pronounVerb(char, "can't", true) + " take off " + char.pronouns.poss_adj + " " + item.byname() + " whilst wearing " + char.pronouns.poss_adj + " " + outer.byname() + ".";
 }
-function ALREADY_HAVE(char, item) {
+function already_have(char, item) {
   return pronounVerb(char, "'ve", true) + " got " + item.pronouns.objective + " already.";
 }
-function ALREADY_WEARING(char, item) {
+function already_wearing(char, item) {
   return pronounVerb(char, "'ve", true) + " already wearing " + item.pronouns.objective + ".";
 }
-function CANNOT_TAKE_COMPONENT(char, item) {
+function cannot_take_component(char, item) {
   return nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + pronounVerb(item, "'be") + " part of " + w[item.loc].byname({article:DEFINITE}) + ".";
 }
-function CONTAINER_CLOSED(char, item) {
+function container_closed(char, item) {
   return nounVerb(item, "be", true) + " closed.";
 }
-function INSIDE_CONTAINER(char, item, cont) {
+function inside_container(char, item, cont) {
   return pronounVerb(item, "be", true) + " inside " + cont.byname({article:DEFINITE}) + ".";
 }
-function LOOK_INSIDE(char, item) {
+function look_inside(char, item) {
   const l = formatList(item.getContents(display.LOOK), {article:INDEFINITE, lastJoiner:" and ", nothing:"nothing"});
   return "Inside " + item.byname({article:DEFINITE}) + " " + pronounVerb(char, "can") + " see " + l + ".";
 }
-function STOP_POSTURE(char) {
+function stop_posture(char) {
   if (!char.posture || char.posture === "standing") return "";
   let s;
   // You could split up sitting, standing and lying
@@ -326,25 +326,25 @@ function STOP_POSTURE(char) {
 //----------------------------------------------------------------------------------------------
 // NPC messages
 
-function NPC_NOTHING_TO_SAY_ABOUT(char) {
+function npc_nothing_to_say_about(char) {
   return nounVerb(char, "have", true) + " nothing to say on the subject.";
 }
-function NPC_NO_INTEREST_IN(char) {
+function npc_no_interest_in(char) {
   return nounVerb(char, "have", true) + " no interest in that subject.";
 }
 
 
 
 // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
-function SPEAK_TO_MENU_TITLE(char) {
+function speak_to_menu_title(char) {
   return "Talk to " + char.byname({article:DEFINITE}) + " about:";
 }
 // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
-function TELL_ABOUT_INTRO(char, text) {
+function tell_about_intro(char, text) {
   return "You tell " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }
 // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
-function ASK_ABOUT_INTRO(char, text) {
+function ask_about_intro(char, text) {
   return "You ask " + char.byname({article:DEFINITE}) + " about " + text + ".";
 }
 
@@ -353,37 +353,37 @@ function ASK_ABOUT_INTRO(char, text) {
 //----------------------------------------------------------------------------------------------
 // Door and lock fails
 
-function LOCKED(char, item) {
+function locked(char, item) {
   return pronounVerb(item, "'be", true) + " locked.";
 }
-function NO_KEY(char, item) {
+function no_key(char, item) {
   return nounVerb(char, "do", true) + " have the right key.";
 }
-function LOCKED_EXIT(char, exit) {
+function locked_exit(char, exit) {
   return "That way is locked.";
 }
-function OPEN_AND_ENTER(char, doorName) {
+function open_and_enter(char, doorName) {
   return nounVerb(char, "open", true) + " the " + doorName + " and walk through.";
 }
-function UNLOCK_AND_ENTER(char, doorName) {
+function unlock_and_enter(char, doorName) {
   return nounVerb(char, "unlock", true) + " the " + doorName + ", open it and walk through.";
 }
-function TRY_BUT_LOCKED(char, doorName) {
+function try_but_locked(char, doorName) {
   return nounVerb(char, "try", true) + " the " + doorName + ", but it is locked.";
 }
 
 //----------------------------------------------------------------------------------------------
 // Misc
 
-const LIST_AND = " and ";
-const LIST_NOTHING = "nothing";
-const NEVER_MIND = "Never mind.";
-const DEFAULT_DESCRIPTION = "It's just scenery.";
-const CLICK_TO_CONTINUE = "Click to continue...";
-const BUY = "Buy"; // used in the command link in the purchase table
-const BUY_HEADINGS = ["Item", "Cost", ""];
-const CURRENT_MONEY = "Current money";
-const NOTHING_FOR_SALE = "Nothing for sale here."
+const list_and = " and ";
+const list_nothing = "nothing";
+const never_mind = "Never mind.";
+const default_description = "It's just scenery.";
+const click_to_continue = "Click to continue...";
+const buy = "Buy"; // used in the command link in the purchase table
+const buy_headings = ["Item", "Cost", ""];
+const current_money = "Current money";
+const nothing_for_sale = "Nothing for sale here."
 
 
 
@@ -393,27 +393,27 @@ const NOTHING_FOR_SALE = "Nothing for sale here."
 //----------------------------------------------------------------------------------------------
 // Save/load messages
 
-const SL_DIR_HEADINGS = "<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>";
-const SL_DIR_MSG = "Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.";
-const SL_NO_FILENAME = "Trying to save with no filename";
+const sl_dir_headings = "<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>";
+const sl_dir_msg = "Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.";
+const sl_no_filename = "Trying to save with no filename";
 
 
 
 //----------------------------------------------------------------------------------------------
 
 
-//const IGNORED_WORDS = ["", "the", "a", "an"];
-const ARTICLE_FILTER_REGEX = /^(?:the |an |a )?(.+)$/;
-const JOINER_REGEX = /\,|\band\b/;
-const ALL_REGEX = /^(all|everything)$/;
-const ALL_EXCLUDE_REGEX = /^((all|everything) (but|bar|except)\b)/;
-const GO_PRE_REGEX = "go to |goto |go |head |";
+//const IGnored_words = ["", "the", "a", "an"];
+const article_filter_regex = /^(?:the |an |a )?(.+)$/;
+const joiner_regex = /\,|\band\b/;
+const all_regex = /^(all|everything)$/;
+const all_exclude_regex = /^((all|everything) (but|bar|except)\b)/;
+const go_pre_regex = "go to |goto |go |head |";
 
 
 //----------------------------------------------------------------------------------------------
 // Language constructs
 
-const PRONOUNS = {
+const pronouns = {
   thirdperson:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
   massnoun:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
   male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his", reflexive:"himself"},
@@ -424,7 +424,7 @@ const PRONOUNS = {
 };
 
 
-const VERBS = {
+const verbs = {
   examine:"Examine",
   use:"use",
   take:"Take",
@@ -446,7 +446,7 @@ const VERBS = {
 // Change the abbrev values to suit your game (or language)
 // You may want to do that in settings, which is loaded first
 // One time we need var rather than const/let!
-let EXITS = [
+let exit_list = [
   {name:'northwest', abbrev:'NW', niceDir:"the northwest"}, 
   {name:'north', abbrev:'N', niceDir:"the north"}, 
   {name:'northeast', abbrev:'NE', niceDir:"the northeast"}, 
@@ -485,10 +485,10 @@ function addIndefiniteArticle(item) {
   if (item.properName) {
     return "";
   }
-  if (item.pronouns === PRONOUNS.plural) {
+  if (item.pronouns === pronouns.plural) {
     return "some ";
   }
-  if (item.pronouns === PRONOUNS.massnoun) {
+  if (item.pronouns === pronouns.massnoun) {
     return "";
   }
   if (/^[aeiou]/i.test(item.alias)) {
@@ -583,11 +583,11 @@ function convertNumbers(s) {
 
 
 function contentsForSurface(contents) {
-  return "with " + formatList(contents, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:this.name}) + " on it";
+  return "with " + formatList(contents, {article:INDEFINITE, lastJoiner:list_and, modified:true, nothing:list_nothing, loc:this.name}) + " on it";
 }
 
 function contentsForContainer(contents) {
-  return "containing " + formatList(contents, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:this.name});
+  return "containing " + formatList(contents, {article:INDEFINITE, lastJoiner:list_and, modified:true, nothing:list_nothing, loc:this.name});
 }
 
 
@@ -611,7 +611,7 @@ function npcLeavingMsg(npc, dest) {
 
 
 function niceDirections (dir) {
-  const dirObj = EXITS.find(function(el) { return el.name === dir; });
+  const dirObj = exit_list.find(function(el) { return el.name === dir; });
   return dirObj.niceDir ? dirObj.niceDir : dirObj.name;
 }
   
@@ -637,7 +637,7 @@ function npcEnteringMsg(npc, origin) {
 
 function exitList() {
   const list = [];
-  for (let exit of EXITS) {
+  for (let exit of exit_list) {
     if (game.room.hasExit(exit.name)) {
       list.push(exit.name);
     }
@@ -647,7 +647,7 @@ function exitList() {
 
 tp.text_processors.objects = function(arr, params) {
   const listOfOjects = scopeHereListed();
-  return formatList(listOfOjects, {article:INDEFINITE, lastJoiner:LIST_AND, modified:true, nothing:LIST_NOTHING, loc:game.player.loc});
+  return formatList(listOfOjects, {article:INDEFINITE, lastJoiner:list_and, modified:true, nothing:list_nothing, loc:game.player.loc});
 };
   
 tp.text_processors.exits = function(arr, params) {
@@ -675,7 +675,7 @@ tp.text_processors.exitsHere = function(arr, params) {
 
 
 
-const CONJUGATIONS = {
+const conjugations = {
   i:[
     { name:"be", value:"am"},
     { name:"'be", value:"'m"},
@@ -728,10 +728,10 @@ const CONJUGATIONS = {
 function conjugate(item, verb) {
   let gender = item.pronouns.subjective;
   if (gender === "he" || gender === "she") { gender = "it"; }
-  const arr = CONJUGATIONS[gender.toLowerCase()];
+  const arr = conjugations[gender.toLowerCase()];
 
   if (!arr) {
-    errormsg("No conjugations found: CONJUGATIONS_" + gender.toLowerCase());
+    errormsg("No conjugations found: conjugations_" + gender.toLowerCase());
     return verb;
   }
   for (let conj of arr) {
@@ -812,16 +812,16 @@ let helpScript = function() {
     metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong. You can use [SHIFT] with the arrow keys to move north, south, east or west, or use the number pad for all eight compass directions (when number lock is on).");
     metamsg("If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Other characters will not respond to the TALK TO/SPEAK TO command or EXAMINE/LOOK AT command.");
   }
-  return SUCCESS_NO_TURNSCRIPTS;
+  return SUCCESS_no_turnscripts;
 };
 
 
 let aboutScript = function() {
   metamsg("{i:" + TITLE + " version " + VERSION + "} was written by " + AUTHOR + " using Quest 6.");
   if (THANKS.length > 0) {
-    metamsg("Thanks to " + formatList(THANKS, {lastJoiner:LIST_AND}) + ".");
+    metamsg("Thanks to " + formatList(THANKS, {lastJoiner:list_and}) + ".");
   }
-  return SUCCESS_NO_TURNSCRIPTS;
+  return SUCCESS_no_turnscripts;
 };
 
 
@@ -830,7 +830,7 @@ function saveLoadScript() {
   metamsg("To save your progress, type SAVE followed by the name to save with.");
   metamsg("To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.");
   metamsg("To see a list of save games, type DIR.");
-  return SUCCESS_NO_TURNSCRIPTS;
+  return SUCCESS_no_turnscripts;
 }
 
 
@@ -842,5 +842,5 @@ function saveLoadScript() {
 
 try { SUCCESS; }
 catch (e) {
-  module.exports = { EXITS: EXITS, PRONOUNS: PRONOUNS }
+  module.exports = { exit_list: exit_list, pronouns: pronouns }
 }

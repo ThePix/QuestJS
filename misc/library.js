@@ -278,7 +278,7 @@
   createItem("ash_flinders", 
     {
       loc:"flinders",
-      pronouns:PRONOUNS.plural,
+      pronouns:pronouns.plural,
       examine:"A pile of ashes that used to be ####.",
       takemsg:"Lucy wondered why she would want to pick up a load of ashes.",
     },
@@ -287,7 +287,7 @@
   createItem("rust_flinders", 
     {
       loc:"flinders",
-      pronouns:PRONOUNS.plural,
+      pronouns:pronouns.plural,
       examine:"A pile of rusted metal that used to be ####.",
       takemsg:"Lucy wondered why she would want to pick up a useless load of rusted metal.",
     },
@@ -296,7 +296,7 @@
   createItem("cloth_flinders", 
     {
       loc:"flinders",
-      pronouns:PRONOUNS.plural,
+      pronouns:pronouns.plural,
       examine:"A whole bunch of rags that used to be ####.",
       takemsg:"Lucy wondered why she would want to pick up a load of rags.",
     },
@@ -305,7 +305,7 @@
   createItem("paper_flinders", 
     {
       loc:"flinders",
-      pronouns:PRONOUNS.plural,
+      pronouns:pronouns.plural,
       examine:"A whole bunch of torn up paper that used to be ####.",
       takemsg:"Lucy wondered why she would want to pick up a load of ripped up paper.",
     },
@@ -314,7 +314,7 @@
   createItem("wood_flinders", 
     {
       loc:"flinders",
-      pronouns:PRONOUNS.plural,
+      pronouns:pronouns.plural,
       examine:"A whole bunch of splintered wood that used to be ####.",
       takemsg:"Lucy wondered why she would want to pick up a load of broken wood. {i:Think of the splinters!}",
     },
@@ -323,7 +323,7 @@
   createItem("glass_flinders", 
     {
       loc:"flinders",
-      pronouns:PRONOUNS.plural,
+      pronouns:pronouns.plural,
       examine:"Some broken bits of glass that used to be ####.",
       takemsg:"Lucy wondered why she would want to pick up a load of broken glass.",
     },
@@ -332,7 +332,7 @@
   createItem("ceramic_flinders", 
     {
       loc:"flinders",
-      pronouns:PRONOUNS.plural,
+      pronouns:pronouns.plural,
       examine:"Some broken bits of glass that used to be ####.",
       takemsg:"Lucy wondered why she would want to pick up a load of broken glass.",
     },

@@ -105,7 +105,7 @@ createItem("book_cover",
 
 createItem("boots", 
   WEARABLE(),
-  { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
+  { loc:"lounge", pronouns:pronouns.plural, examine:"Some old boots.", }
 );
 
 
@@ -137,7 +137,7 @@ createItem("waterskin",
 
 createItem("glass_cabinet",
   CONTAINER(true),
-  LOCKED_WITH("cabinet_key"),
+  locked_WITH("cabinet_key"),
   { alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, isAtLoc:function(loc) {
     if (typeof loc !== "string") loc = loc.name
     return (loc == "lounge" || loc == "dining_room");
@@ -204,7 +204,7 @@ createItem("flashlight",
       return res;
     },
     lightSource:function() {
-      return this.switchedon ? LIGHT_FULL : LIGHT_NONE;
+      return this.switchedon ? LIGHT_FULL : LIGHT_none;
     },
     eventPeriod:1,
     eventIsActive:function() {
@@ -376,7 +376,7 @@ createItem("big_kitchen_table",
 
 createItem("garage_door",
   OPENABLE(false),
-  LOCKED_WITH("garage_key"),
+  locked_WITH("garage_key"),
   { examine: "The door to the garage.", alias: "garage door", isAtLoc:function(loc) {
     if (typeof loc !== "string") loc = loc.name
     return (loc == "kitchen" || loc == "garage");
@@ -415,7 +415,7 @@ createRoom("basement", {
   darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
   up:new Exit('kitchen', {isHidden:function() { return false; } }),
   lightSource:function() {
-    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_NONE;
+    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_none;
   },
   hint:"The basement illustrates light and dark. There is a torch in the lounge that may be useful.",
 });
@@ -530,14 +530,14 @@ createItem("underwear",
   WEARABLE(1, ["lower"]),
   { 
     loc:"bedroom",
-    pronouns:PRONOUNS.massnoun,
+    pronouns:pronouns.massnoun,
     examine:"Clean!",
   }
 );
 
 createItem("jeans", 
   WEARABLE(2, ["lower"]),
-  { loc:"bedroom", pronouns:PRONOUNS.plural, examine:"Clean!", }
+  { loc:"bedroom", pronouns:pronouns.plural, examine:"Clean!", }
 );
 
 createItem("shirt", 
@@ -562,7 +562,7 @@ createItem("jumpsuit",
 
 createItem("suit_trousers", 
   WEARABLE(2, ["lower"]),
-  { loc:"wardrobe", examine:"The trousers.", pronouns:PRONOUNS.plural}
+  { loc:"wardrobe", examine:"The trousers.", pronouns:pronouns.plural}
 );
 
 createItem("jacket", 
