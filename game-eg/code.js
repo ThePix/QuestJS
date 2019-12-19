@@ -48,7 +48,7 @@ game.registerTimedEvent("sayNow", 7, 7);
 
 
 
-commands.push(new Cmd('Kick', {
+commands.unshift(new Cmd('EgKick', {
   npcCmd:true,
   rules:[cmdRules.isHere],
   regex:/^(kick) (.+)$/,
@@ -57,13 +57,13 @@ commands.push(new Cmd('Kick', {
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
-    return failedmsg(prefix(this, isMultiple) + pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
+    return failedmsg(prefix(this, isMultiple) + lang.pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
   },
 }));
 
 
 
-commands.push(new Cmd('Charge', {
+commands.unshift(new Cmd('EgCharge', {
   npcCmd:true,
   rules:[cmdRules.isHeld],
   regex:/^(charge) (.+)$/,
@@ -72,12 +72,12 @@ commands.push(new Cmd('Charge', {
     {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
-    return failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can charge.");
+    return failedmsg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can charge.");
   },
 }));
 
 
-commands.push(new Cmd('Move', {
+commands.unshift(new Cmd('EgMove', {
   npcCmd:true,
   rules:[cmdRules.isHere],
   regex:/^(move) (.+)$/,
@@ -86,12 +86,12 @@ commands.push(new Cmd('Move', {
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
-    return failedmsg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
+    return failedmsg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
   },
 }));
 
 
-commands.push(  new Cmd('Hint', {
+commands.unshift(  new Cmd('EgHint', {
     regex:/^hint$|^hints$/,
     script:function() {
       if (w[game.player.loc].hint) {
@@ -106,7 +106,7 @@ commands.push(  new Cmd('Hint', {
 
 
 
-commands.push(  new Cmd('print', {
+commands.unshift(  new Cmd('EgPrint', {
     regex:/^print$/,
     script:function() {
       /*typeWriter.write('p', 'The first line.');

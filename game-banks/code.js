@@ -581,8 +581,8 @@ function trackRelationship(npc, inc, code) {
 }
     
 
-ASK_ABOUT_INTRO = function() { return ""; };
-TELL_ABOUT_INTRO = function() { return ""; };
+ask_about_intro = function() { return ""; };
+tell_about_intro = function() { return ""; };
 
 
 
@@ -690,7 +690,7 @@ commands.push(new Cmd('Kick', {
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
+    msg(prefix(item, isMultiple) + lang.pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
     return false;
   },
 }));
@@ -709,7 +709,7 @@ commands.push(new Cmd('Move', {
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(item, "'be", true) + " not something you can move.");
+    msg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
     return false;
   },
 }));
@@ -809,7 +809,7 @@ commands.push(new Cmd('NpcPressurise1', {
     var npc = objects[0][0];
     npc.actedThisTurn = true;
     if (!npc.npc) {
-      msg(CMD_NOT_NPC(npc));
+      msg(CMD_not_npc(npc));
       return FAILED; 
     }
     objects.shift();
@@ -826,7 +826,7 @@ commands.push(new Cmd('NpcPressurise2', {
     var npc = objects[0][0];
     npc.actedThisTurn = true;
     if (!npc.npc) {
-      msg(CMD_NOT_NPC(npc));
+      msg(CMD_not_npc(npc));
       return FAILED; 
     }
     objects.shift();
@@ -844,7 +844,7 @@ commands.push(new Cmd('NpcDepressurise1', {
     var npc = objects[0][0];
     npc.actedThisTurn = true;
     if (!npc.npc) {
-      msg(CMD_NOT_NPC(npc));
+      msg(CMD_not_npc(npc));
       return FAILED; 
     }
     objects.shift();
@@ -862,7 +862,7 @@ commands.push(new Cmd('NpcDepressurise2', {
     var npc = objects[0][0];
     npc.actedThisTurn = true;
     if (!npc.npc) {
-      msg(CMD_NOT_NPC(npc));
+      msg(CMD_not_npc(npc));
       return FAILED; 
     }
     objects.shift();
@@ -1054,7 +1054,7 @@ commands.push(new Cmd('HelpNPCs', {
   script:function() {
     metamsg("{b:Interacting with NPCs:}");
     metamsg("You can ask an NPC to do something by using the same command you would use to have yourself do something, but prefixed with {color:red:[name],} (note the comma) or {color:red:TELL [name] TO}.");
-    metamsg(NO_TALK_TO);
+    metamsg(no_talk_to);
     metamsg("Use the TOPICS command for some suggested topics. There are rather more for ASK than TELL, as you might expect.");
     return SUCCESS_NO_TURNSCRIPTS;
   },

@@ -555,7 +555,7 @@
       },
       afterFirstEnter:function() {
         msg (" ");
-        msg ("To make a purchase, either type <i>BUY</i>\" to see a menu of goods available, or type <i>BUY &gt;item></i> if you know exactly what you w.want.");
+        msg ("To make a purchase, either type <i>buy</i>\" to see a menu of goods available, or type <i>buy &gt;item></i> if you know exactly what you w.want.");
       },
       west:"market_square",
     },
@@ -840,7 +840,7 @@
   createItem("sage_books", 
     {
       loc:"sage_tower",
-      pronouns:PRONOUNS.plural,
+      pronouns:lang.pronouns.plural,
       examine:function(isMultiple) {
           if (w.this.flag) {
             msg ("You look again at all those fake w.books...");
@@ -1528,7 +1528,7 @@
   createItem("gates", 
     {
       loc:"road_outside_citadel",
-      pronouns:PRONOUNS.plural,
+      pronouns:lang.pronouns.plural,
       examine:function(isMultiple) {
           var s = "The gates of the citadel tower over you, perhaps four times your height, and wide enough to allow the biggest of wagons w.through. They are of ironwood, and are festooned with spikes to deter anyone considering a frontal w.attack.";
           if (w.this.isopen) {

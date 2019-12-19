@@ -83,7 +83,7 @@ createItem("book",
           msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
         }
         else {
-          msg (prefix(this, isMultiple) + "It is not in a language " + pronounVerb(char, "understand") + ".");
+          msg (prefix(this, isMultiple) + "It is not in a language " + lang.pronounVerb(char, "understand") + ".");
         }
         return true;
       }          
@@ -105,7 +105,7 @@ createItem("book_cover",
 
 createItem("boots", 
   WEARABLE(),
-  { loc:"lounge", pronouns:PRONOUNS.plural, examine:"Some old boots.", }
+  { loc:"lounge", pronouns:lang.pronouns.plural, examine:"Some old boots.", }
 );
 
 
@@ -137,7 +137,7 @@ createItem("waterskin",
 
 createItem("glass_cabinet",
   CONTAINER(true),
-  LOCKED_WITH("cabinet_key"),
+  locked_WITH("cabinet_key"),
   { alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, isAtLoc:function(loc) {
     if (typeof loc !== "string") loc = loc.name
     return (loc == "lounge" || loc == "dining_room");
@@ -180,7 +180,7 @@ createItem("coin",
   {
     loc:"lounge", examine: "A gold coin.",
     take:function(isMultiple, participant) {
-      msg(prefix(this, isMultiple) + pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
+      msg(prefix(this, isMultiple) + lang.pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
       return false;
     },
   }
@@ -204,7 +204,7 @@ createItem("flashlight",
       return res;
     },
     lightSource:function() {
-      return this.switchedon ? LIGHT_FULL : LIGHT_NONE;
+      return this.switchedon ? LIGHT_FULL : LIGHT_none;
     },
     eventPeriod:1,
     eventIsActive:function() {
@@ -229,7 +229,7 @@ createItem("flashlight",
     },
     power:2,
     chargeResponse:function(participant) {
-      msg(pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
+      msg(lang.pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
       w.flashlight.power = 20;
       return true;
     },
@@ -258,7 +258,7 @@ createItem("chair",
   {
     loc:"dining_room", examine:"A wooden chair.",
     onsitting:function(char) {
-      msg("The chair makes a strange noise when " + nounVerb(char, "sit") + " on it.");
+      msg("The chair makes a strange noise when " + lang.nounVerb(char, "sit") + " on it.");
     },
   }
 );
@@ -376,7 +376,7 @@ createItem("big_kitchen_table",
 
 createItem("garage_door",
   OPENABLE(false),
-  LOCKED_WITH("garage_key"),
+  locked_WITH("garage_key"),
   { examine: "The door to the garage.", alias: "garage door", isAtLoc:function(loc) {
     if (typeof loc !== "string") loc = loc.name
     return (loc == "kitchen" || loc == "garage");
@@ -415,7 +415,7 @@ createRoom("basement", {
   darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
   up:new Exit('kitchen', {isHidden:function() { return false; } }),
   lightSource:function() {
-    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_NONE;
+    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_none;
   },
   hint:"The basement illustrates light and dark. There is a torch in the lounge that may be useful.",
 });
@@ -487,11 +487,11 @@ createItem("charger_button",
     push:function(isMultiple, participant) {
       const contents = w.charger_compartment.getContents(display.ALL)[0];
       if (!w.charger_compartment.closed || !contents) {
-        msg(pronounVerb(participant, "push", true) + " the button, but nothing happens.");
+        msg(lang.pronounVerb(participant, "push", true) + " the button, but nothing happens.");
         return false;
       }
       else if (!contents.chargeResponse) {
-        msg(pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, but nothing happens.");
+        msg(lang.pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, but nothing happens.");
         return false;
       }
       else {
@@ -530,14 +530,14 @@ createItem("underwear",
   WEARABLE(1, ["lower"]),
   { 
     loc:"bedroom",
-    pronouns:PRONOUNS.massnoun,
+    pronouns:lang.pronouns.massnoun,
     examine:"Clean!",
   }
 );
 
 createItem("jeans", 
   WEARABLE(2, ["lower"]),
-  { loc:"bedroom", pronouns:PRONOUNS.plural, examine:"Clean!", }
+  { loc:"bedroom", pronouns:lang.pronouns.plural, examine:"Clean!", }
 );
 
 createItem("shirt", 
@@ -562,7 +562,7 @@ createItem("jumpsuit",
 
 createItem("suit_trousers", 
   WEARABLE(2, ["lower"]),
-  { loc:"wardrobe", examine:"The trousers.", pronouns:PRONOUNS.plural}
+  { loc:"wardrobe", examine:"The trousers.", pronouns:lang.pronouns.plural}
 );
 
 createItem("jacket", 

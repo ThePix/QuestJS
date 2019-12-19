@@ -128,7 +128,7 @@ function Attack(weapon) {
     }
     damage -= this.damageSides - this.armour;
     if (damage < 1) damage = 1;
-    msg(nounVerb(attacker, "attack", true) + " " + target.byname({article:DEFINITE}) + ".");
+    msg(lang.nounVerb(attacker, "attack", true) + " " + target.byname({article:DEFINITE}) + ".");
     msg("Element: " + this.element);
     msg("Offensive bonus: " + this.offensiveBonus);
     msg(`Damage: ${this.damageNumber}d${this.damageSides}+${this.damageBonus}`);
@@ -181,7 +181,7 @@ const RPG_NPC = function(female) {
   for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key];
   
   res.getVerbs = function() {
-    return [VERBS.lookat, VERBS.talkto, "Attack"];
+    return [verbs.lookat, verbs.talkto, "Attack"];
   };
   
   res.getEquippedWeapon = function() { return this; }
@@ -199,13 +199,13 @@ const WEAPON = function() {
   
   res.getVerbs = function() {
     if (!this.isAtLoc(game.player.name)) {
-      return [VERBS.lookat, VERBS.take];
+      return [verbs.lookat, verbs.take];
     }
     else if (game.player.equipped === this.name) {
-      return [VERBS.drop, "Unequip"];
+      return [verbs.drop, "Unequip"];
     }
     else {
-      return [VERBS.drop, "Equip"];
+      return [verbs.drop, "Equip"];
     }
   };
 
@@ -213,7 +213,7 @@ const WEAPON = function() {
     if (char.equipped === this.name) {
       char.equipped = "weapon_unarmed";
     }
-    msg(prefix(this, isMultiple) + DROP_SUCCESSFUL(char, this));
+    msg(prefix(this, isMultiple) + drop_successful(char, this));
     this.moveToFrom(char.loc, this.loc);
     return true;
   },
@@ -224,10 +224,10 @@ const WEAPON = function() {
       return false;
     }
     if (char.equipped !== "weapon_unarmed") {
-      msg(pronounVerb(char, "put", true) + " away " + w[char.equipped].byname({article:DEFINITE}) + ".");
+      msg(lang.pronounVerb(char, "put", true) + " away " + w[char.equipped].byname({article:DEFINITE}) + ".");
     }
     char.equipped = this.name;
-    msg(pronounVerb(char, "draw", true) + " " + this.byname({article:DEFINITE}) + ".");
+    msg(lang.pronounVerb(char, "draw", true) + " " + this.byname({article:DEFINITE}) + ".");
     return true;
   }
 
@@ -237,7 +237,7 @@ const WEAPON = function() {
       return false;
     }
     char.equipped = "weapon_unarmed";
-    msg(pronounVerb(char, "put", true) + " away " + this.byname({article:DEFINITE}) + ".");
+    msg(lang.pronounVerb(char, "put", true) + " away " + this.byname({article:DEFINITE}) + ".");
     return true;
   }
   
@@ -274,7 +274,7 @@ commands.push(new Cmd('Equip', {
     {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(item, "be", true) + " not something you can equip.");
+    msg(prefix(item, isMultiple) + lang.pronounVerb(item, "be", true) + " not something you can equip.");
     return false;
   },
 }));
@@ -289,7 +289,7 @@ commands.push(new Cmd('Unequip', {
     {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + pronounVerb(item, "be", true) + " not something you can equip.");
+    msg(prefix(item, isMultiple) + lang.pronounVerb(item, "be", true) + " not something you can equip.");
     return false;
   },
 }));
