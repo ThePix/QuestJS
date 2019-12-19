@@ -455,7 +455,7 @@ const lang = {
     talkto:"Talk to",
     eat:"Eat",
     drink:"Drink",
-    read:"read",
+    read:"Read",
   },
 
 
@@ -463,22 +463,22 @@ const lang = {
   // You may want to do that in settings, which is loaded first
   // One time we need var rather than const/let!
   exit_list:[
-    {name:'northwest', abbrev:'NW', niceDir:"the northwest"}, 
-    {name:'north', abbrev:'N', niceDir:"the north"}, 
-    {name:'northeast', abbrev:'NE', niceDir:"the northeast"}, 
+    {name:'northwest', abbrev:'NW', niceDir:"the northwest", key:103}, 
+    {name:'north', abbrev:'N', niceDir:"the north", key:104}, 
+    {name:'northeast', abbrev:'NE', niceDir:"the northeast", key:105}, 
     {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside"}, 
-    {name:'up', abbrev:'U', niceDir:"above"},
+    {name:'up', abbrev:'U', niceDir:"above", key:107},
     
-    {name:'west', abbrev:'W', niceDir:"the west"}, 
-    {name:'Look', abbrev:'Lk', nocmd:true}, 
-    {name:'east', abbrev:'E', niceDir:"the east"}, 
+    {name:'west', abbrev:'W', niceDir:"the west", key:100}, 
+    {name:'Look', abbrev:'Lk', nocmd:true, key:101}, 
+    {name:'east', abbrev:'E', niceDir:"the east", key:102}, 
     {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside"}, 
-    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below"}, 
+    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", key:109}, 
 
-    {name:'southwest', abbrev:'SW', niceDir:"the southwest"}, 
-    {name:'south', abbrev:'S', niceDir:"the south"}, 
-    {name:'southeast', abbrev:'SE', niceDir:"the southeast"}, 
-    {name:'Wait', abbrev:'Z', nocmd:true}, 
+    {name:'southwest', abbrev:'SW', niceDir:"the southwest", key:97}, 
+    {name:'south', abbrev:'S', niceDir:"the south", key:98}, 
+    {name:'southeast', abbrev:'SE', niceDir:"the southeast", key:99}, 
+    {name:'Wait', abbrev:'Z', nocmd:true, key:110}, 
     {name:'Help', abbrev:'?', nocmd:true}, 
   ],
 
@@ -798,18 +798,19 @@ const lang = {
   // Meta-messages
 
   helpScript:function() {
-    metamsg("This is an experiment in using JavaScript (and a little jQuery) to create a text game.");
+    if (TEXT_INPUT) {
+      metamsg("Type commands in the command bar to interact with the world.");      
+      metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean. You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
+      metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.");
+      metamsg("{b:Using items:} You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
+      metamsg("{b:Language: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
+      metamsg("{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..");
+    }
     if (PANES !== "None") {
       if (COMPASS) {
         metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
       }
       metamsg("To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.");
-    }
-    if (TEXT_INPUT) {
-      metamsg("Type commands in the command bar to interact with the world. To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
-      metamsg("You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use lang.pronouns., so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object). ");
-      metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong. You can use [SHIFT] with the arrow keys to move north, south, east or west, or use the number pad for all eight compass directions (when number lock is on).");
-      metamsg("If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Other characters will not respond to the TALK TO/SPEAK TO command or EXAMINE/LOOK AT command.");
     }
     return SUCCESS_NO_TURNSCRIPTS;
   },
