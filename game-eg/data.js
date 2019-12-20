@@ -672,35 +672,14 @@ createItem("Kyle", NPC(false),
   properName:true,
   //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
   //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
-  askOptions2:[
-    {
-      test:function(p) { return p.text.match(/house/); }, 
-      msg:"'I like it,' says Kyle.",
-    },
-    {
-      test:function(p) { return p.text.match(/garden/) && w.garden.fixed; },
-      msg:"'Looks much better now,' Kyle says with a grin.",
-    },
-    {
-      test:function(p) { return p.text.match(/garden/) && w.Kyle.needsWorkCount === 0; },
-      msg:"'Needs some work,' Kyle says with a sign.",
-      script:function(p) { w.Kyle.needsWorkCount++; },
-    },
-    {
-      test:function(p) { return p.text.match(/garden/); },
-      msg:"'I'm giving up hope of it ever getting sorted,' Kyle says.",
-    },
-    {
-      msg:"Kyle has no interest in that subject.",
-      failed:true,
-    }
-  ],
   askOptions:[
     {
+      name:'House',
       test:function(p) { return p.text.match(/house/); }, 
       msg:"'I like it,' says Kyle.",
     },
     {
+      name:'Garden',
       test:function(p) { return p.text.match(/garden/) },
       responses:[
         {
@@ -716,6 +695,20 @@ createItem("Kyle", NPC(false),
           msg:"'I'm giving up hope of it ever getting sorted,' Kyle says.",
         },
       ],
+    },
+    {
+      test:function(p) { return p.text.match(/park/) },
+      responses:[
+        {
+          name:'Park',
+          msg:"'Going to the park sounds like fun,' Kyle says with a grin.",
+        },
+      ],
+    },
+    {
+      name:'Fountain',
+      test:function(p) { return p.text.match(/fountain/) && p.actor.specialFlag },
+      msg:"'The fountain does not work.'",
     },
     {
       msg:"Kyle has no interest in that subject.",

@@ -842,6 +842,16 @@ const lang = {
     metamsg("Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).");
     return SUCCESS_NO_TURNSCRIPTS;
   },
+  topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
+  topics_none_found:function(char) {
+    return "No suggestions for what to ask or tell " + char.byname({article:DEFINITE}) + " available."
+  },
+  topics_ask_list:function(char, arr) {
+    return "Some suggestions for what to ask " + char.byname({article:DEFINITE}) + " about: " + arr.join("; ") + "."
+  },
+  topics_tell_list:function(char, arr) {
+    return "Some suggestions for what to tell " + char.byname({article:DEFINITE}) + " about: " + arr.join("; ") + "."
+  },
 
   spoken_on:"Game mode is now 'spoken'. Type INTRO to hear the introductory text.",
   spoken_off:"Game mode is now 'unspoken'.",

@@ -297,7 +297,10 @@ test.tests = function() {
   test.assertCmd("ask kyle about garden", ["You ask Kyle about garden.", "'I'm giving up hope of it ever getting sorted,' Kyle says."]);
   w.garden.fixed = true
   test.assertCmd("ask kyle about garden", ["You ask Kyle about garden.", "'Looks much better now,' Kyle says with a grin."]);
-
+  test.assertCmd("topics", [/^Use TOPICS FOR/])
+  test.assertCmd("topics kyle", ["Some suggestions for what to ask Kyle about: Garden; House; Park."])
+  w.Kyle.specialFlag = true
+  test.assertCmd("topics kyle", ["Some suggestions for what to ask Kyle about: Fountain; Garden; House; Park."])
 
   w.Kyle.loc = "lounge"
 
