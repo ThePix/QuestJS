@@ -539,22 +539,43 @@ const lang = {
     return lang.nounVerb(char, "try", true) + " the " + doorName + ", but it is locked.";
   },
 
-  //----------------------------------------------------------------------------------------------
-  // Misc
 
-  list_and:" and ",
-  list_nothing:"nothing",
-  never_mind:"Never mind.",
-  default_description:"It's just scenery.",
-  click_to_continue:"Click to continue...",
-  buy:"Buy", // used in the command link in the purchase table
-  buy_headings:["Item", "Cost", ""],
-  current_money:"Current money",
-  nothing_for_sale:"Nothing for sale here.",
-  wait_msg:"You wait one turn.",
+  // Use when the NPC leaves a room; will give a message if the player can observe it
+  npcLeavingMsg:function(npc, dest) {
+    let s = "";
+    let flag = false;
+    if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
+      s = w[game.player.loc].canViewPrefix;
+      flag = true;
+    }
+    if (flag || npc.here()) {
+      s += lang.nounVerb(npc, "leave", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
+      const exit = w[npc.loc].findExit(dest);
+      if (exit) s += ", heading " + exit.dir;
+      s += ".";
+      msg(s);
+    }
+  },
 
 
 
+  // the NPC has already been moved, so npc.loc is the destination
+  npcEnteringMsg:function(npc, origin) {
+    let s = "";
+    let flag = false;
+    if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
+      // Can the player see the location the NPC enters, from another location?
+      s = w[game.player.loc].canViewPrefix;
+      flag = true;
+    }
+    if (flag || npc.here()) {
+      s += lang.nounVerb(npc, "enter", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
+      const exit = w[npc.loc].findExit(origin);
+      if (exit) s += " from " + util.niceDirections(exit.dir);
+      s += ".";
+      msg(s);
+    }
+  },
 
 
 
@@ -568,6 +589,97 @@ const lang = {
 
 
   //----------------------------------------------------------------------------------------------
+  // Meta-messages
+
+  topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
+  topics_none_found:function(char) {
+    return "No suggestions for what to ask or tell " + char.byname({article:DEFINITE}) + " available."
+  },
+  topics_ask_list:function(char, arr) {
+    return "Some suggestions for what to ask " + char.byname({article:DEFINITE}) + " about: " + arr.join("; ") + "."
+  },
+  topics_tell_list:function(char, arr) {
+    return "Some suggestions for what to tell " + char.byname({article:DEFINITE}) + " about: " + arr.join("; ") + "."
+  },
+
+  spoken_on:"Game mode is now 'spoken'. Type INTRO to hear the introductory text.",
+  spoken_off:"Game mode is now 'unspoken'.",
+  mode_brief:"Game mode is now 'brief'; no room descriptions (except with LOOK).",
+  mode_terse:"Game mode is now 'terse'; room descriptions only shown on first entering and with LOOK.",
+  mode_verbose:"Game mode is now 'verbose'; room descriptions shown every time you enter a room.",
+  transcript_already_on:"Transcript is already turned on.",
+  transcript_already_off:"Transcript is already turned off.",
+  undo_disabled:"Sorry, UNDO is not enabled in this game.",
+  undo_not_available:"There are no saved game-states to UNDO back to.",
+  undo_done:"Undoing...",
+
+
+
+  helpScript:function() {
+    if (TEXT_INPUT) {
+      metamsg("Type commands in the command bar to interact with the world.");      
+      metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean. You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
+      metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.");
+      metamsg("{b:Using items:} You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
+      metamsg("{b:Language: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
+      metamsg("{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..");
+    }
+    if (PANES !== "None") {
+      if (COMPASS) {
+        metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
+      }
+      metamsg("To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.");
+    }
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+
+  aboutScript:function() {
+    metamsg("{i:" + TITLE + " version " + VERSION + "} was written by " + AUTHOR + " using Quest 6.");
+    if (THANKS.length > 0) {
+      metamsg("Thanks to " + formatList(THANKS, {lastJoiner:list_and}) + ".");
+    }
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+
+  saveLoadScript:function() {
+    metamsg("To save your progress, type SAVE followed by the name to save with.");
+    metamsg("To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.");
+    metamsg("To see a list of save games, type DIR.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+
+  transcriptScript:function() {
+    metamsg("The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output.");
+    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it. To empty the file, use SCRIPT CLEAR.");
+    metamsg("You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.");
+    metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+
+  topicsScript:function() {
+    metamsg("Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).");
+    return SUCCESS_NO_TURNSCRIPTS;
+  },
+
+  //----------------------------------------------------------------------------------------------
+  //                                   DATA
+
+  // Misc
+
+  list_and:" and ",
+  list_nothing:"nothing",
+  list_or:" or ",
+  list_nowhere:"nowhere",
+  never_mind:"Never mind.",
+  default_description:"It's just scenery.",
+  click_to_continue:"Click to continue...",
+  buy:"Buy", // used in the command link in the purchase table
+  buy_headings:["Item", "Cost", ""],
+  current_money:"Current money",
+  nothing_for_sale:"Nothing for sale here.",
+  wait_msg:"You wait one turn.",
+
+
 
 
   article_filter_regex:/^(?:the |an |a )?(.+)$/,
@@ -576,6 +688,11 @@ const lang = {
   all_exclude_regex:/^((all|everything) (but|bar|except)\b)/,
   go_pre_regex:"go to |goto |go |head |",
 
+
+  contentsForData:{
+    surface:{prefix:'with ', suffix:' on it'},
+    container:{prefix:'containing ', suffix:''},
+  },
 
   //----------------------------------------------------------------------------------------------
   // Language constructs
@@ -591,6 +708,7 @@ const lang = {
   },
 
 
+  // Display verbs used in the side panel
   verbs:{
     examine:"Examine",
     use:"use",
@@ -633,41 +751,6 @@ const lang = {
     {name:'Help', abbrev:'?', nocmd:true}, 
   ],
 
-
-
-
-
-
-  addDefiniteArticle:function(item) {
-    if (item.defArticle) {
-      return item.defArticle + " ";
-    }
-    return item.properName ? "" : "the ";
-  },
-
-  addIndefiniteArticle:function(item) {
-    if (item.indefArticle) {
-      return item.indefArticle + " ";
-    }
-    if (item.properName) {
-      return "";
-    }
-    if (item.pronouns === lang.pronouns.plural) {
-      return "some ";
-    }
-    if (item.pronouns === lang.pronouns.massnoun) {
-      return "";
-    }
-    if (/^[aeiou]/i.test(item.alias)) {
-      return "an ";
-    }
-    return "a ";
-  },
-
-
-
-
-
   numberUnits:"zero;one;two;three;four;five;six;seven;eight;nine;ten;eleven;twelve;thirteen;fourteen;fifteen;sixteen;seventeen;eighteen;nineteen;twenty".split(";"),
   numberTens:"twenty;thirty;forty;fifty;sixty;seventy;eighty;ninety".split(";"),
 
@@ -681,147 +764,6 @@ const lang = {
     {regex:/twelve$/, replace:"twelfth"},
     {regex:/y$/, replace:"ieth"},
   ],
-
-  toWords:function(number) {
-    if (typeof number !== "number") {
-      errormsg ("toWords can only handle numbers");
-      return number;
-    }
-    
-    let s = "";
-    if (number < 0) {
-      s = "minus ";
-      number = -number;
-    }
-    if (number < 2000) {
-      let hundreds = Math.floor(number / 100);
-      number = number % 100;
-      if (hundreds > 0) {
-        s = s + lang.numberUnits[hundreds] + " hundred ";
-        if (number > 0) {
-          s = s + "and ";
-        }
-      }
-      if (number < 20) {
-        if (number !== 0 || s === "") {
-          s = s + lang.numberUnits[number];
-        }
-      }
-      else {
-        let units = number % 10;
-        let tens = Math.floor(number / 10) % 10;
-        s = s + lang.numberTens[tens - 2];
-        if (units !== 0) {
-          s = s + lang.numberUnits[units];
-        }
-      }
-    }
-    else {
-      s = "" + number;
-    }
-    return (s);
-  },
-
-  toOrdinal:function(number) {
-    if (typeof number !== "number") {
-      errormsg ("toWords can only handle numbers");
-      return number;
-    }
-    
-    let s = lang.toWords(number);
-    for (let or of lang.ordinalReplacements) {
-      if (or.regex.test(s)) {
-        return s.replace(or.regex, or.replace);
-      }
-    }
-    return (s + "th");
-  },
-
-  convertNumbers:function(s) {
-    for (let i = 0; i < lang.numberUnits.length; i++) {
-      let regex = new RegExp("\\b" + lang.numberUnits[i] + "\\b");
-      if (regex.test(s)) s = s.replace(regex, "" + i);
-    }
-    return s;
-  },
-
-
-
-  contentsForSurface:function(contents) {
-    return "with " + formatList(contents, {article:INDEFINITE, lastJoiner:lang.list_and, modified:true, nothing:lang.list_nothing, loc:this.name}) + " on it";
-  },
-
-  contentsForContainer:function(contents) {
-    return "containing " + formatList(contents, {article:INDEFINITE, lastJoiner:lang.list_and, modified:true, nothing:lang.list_nothing, loc:this.name});
-  },
-
-
-
-  // Use when the NPC leaves a room; will give a message if the player can observe it
-  npcLeavingMsg:function(npc, dest) {
-    let s = "";
-    let flag = false;
-    if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
-      s = w[game.player.loc].canViewPrefix;
-      flag = true;
-    }
-    if (flag || npc.here()) {
-      s += lang.nounVerb(npc, "leave", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
-      const exit = w[npc.loc].findExit(dest);
-      if (exit) s += ", heading " + exit.dir;
-      s += ".";
-      msg(s);
-    }
-  },
-
-
-  niceDirections:function(dir) {
-    const dirObj = lang.exit_list.find(function(el) { return el.name === dir; });
-    return dirObj.niceDir ? dirObj.niceDir : dirObj.name;
-  },
-    
-
-  // the NPC has already been moved, so npc.loc is the destination
-  npcEnteringMsg:function(npc, origin) {
-    let s = "";
-    let flag = false;
-    if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
-      // Can the player see the location the NPC enters, from another location?
-      s = w[game.player.loc].canViewPrefix;
-      flag = true;
-    }
-    if (flag || npc.here()) {
-      s += lang.nounVerb(npc, "enter", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
-      const exit = w[npc.loc].findExit(origin);
-      if (exit) s += " from " + lang.niceDirections(exit.dir);
-      s += ".";
-      msg(s);
-    }
-  },
-
-
-  exitList:function() {
-    const list = [];
-    for (let exit of lang.exit_list) {
-      if (game.room.hasExit(exit.name)) {
-        list.push(exit.name);
-      }
-    }
-    return list;
-  },
-
-
-
-
-
-
-
-
-
-
-
-  //----------------------------------------------------------------------------------------------
-  // Conjugating
 
 
 
@@ -871,6 +813,124 @@ const lang = {
       { name:"*", value:"s"},
     ],
   },
+
+
+  //----------------------------------------------------------------------------------------------
+  //                                   LANGUAGE FUNCTIONS
+
+
+
+
+  addDefiniteArticle:function(item) {
+    if (item.defArticle) {
+      return item.defArticle + " ";
+    }
+    return item.properName ? "" : "the ";
+  },
+
+  addIndefiniteArticle:function(item) {
+    if (item.indefArticle) {
+      return item.indefArticle + " ";
+    }
+    if (item.properName) {
+      return "";
+    }
+    if (item.pronouns === lang.pronouns.plural) {
+      return "some ";
+    }
+    if (item.pronouns === lang.pronouns.massnoun) {
+      return "";
+    }
+    if (/^[aeiou]/i.test(item.alias)) {
+      return "an ";
+    }
+    return "a ";
+  },
+
+
+
+
+
+  toWords:function(number) {
+    if (typeof number !== "number") {
+      errormsg ("toWords can only handle numbers");
+      return number;
+    }
+    
+    let s = "";
+    if (number < 0) {
+      s = "minus ";
+      number = -number;
+    }
+    if (number < 2000) {
+      let hundreds = Math.floor(number / 100);
+      number = number % 100;
+      if (hundreds > 0) {
+        s = s + lang.numberUnits[hundreds] + " hundred ";
+        if (number > 0) {
+          s = s + "and ";
+        }
+      }
+      if (number < 20) {
+        if (number !== 0 || s === "") {
+          s = s + lang.numberUnits[number];
+        }
+      }
+      else {
+        let units = number % 10;
+        let tens = Math.floor(number / 10) % 10;
+        s = s + lang.numberTens[tens - 2];
+        if (units !== 0) {
+          s = s + lang.numberUnits[units];
+        }
+      }
+    }
+    else {
+      s = number.toString();
+    }
+    return (s);
+  },
+
+  toOrdinal:function(number) {
+    if (typeof number !== "number") {
+      errormsg ("toOrdinal can only handle numbers");
+      return number;
+    }
+    
+    let s = lang.toWords(number);
+    for (let or of lang.ordinalReplacements) {
+      if (or.regex.test(s)) {
+        return s.replace(or.regex, or.replace);
+      }
+    }
+    return (s + "th");
+  },
+
+  convertNumbers:function(s) {
+    for (let i = 0; i < lang.numberUnits.length; i++) {
+      let regex = new RegExp("\\b" + lang.numberUnits[i] + "\\b");
+      if (regex.test(s)) s = s.replace(regex, "" + i);
+    }
+    return s;
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //----------------------------------------------------------------------------------------------
+  // Conjugating
+
 
 
 
@@ -945,103 +1005,7 @@ const lang = {
 
 
 
-  //----------------------------------------------------------------------------------------------
-  // Meta-messages
-
-  helpScript:function() {
-    if (TEXT_INPUT) {
-      metamsg("Type commands in the command bar to interact with the world.");      
-      metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean. You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
-      metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.");
-      metamsg("{b:Using items:} You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
-      metamsg("{b:Language: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
-      metamsg("{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..");
-    }
-    if (PANES !== "None") {
-      if (COMPASS) {
-        metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
-      }
-      metamsg("To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.");
-    }
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-
-  aboutScript:function() {
-    metamsg("{i:" + TITLE + " version " + VERSION + "} was written by " + AUTHOR + " using Quest 6.");
-    if (THANKS.length > 0) {
-      metamsg("Thanks to " + formatList(THANKS, {lastJoiner:list_and}) + ".");
-    }
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-
-  saveLoadScript:function() {
-    metamsg("To save your progress, type SAVE followed by the name to save with.");
-    metamsg("To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.");
-    metamsg("To see a list of save games, type DIR.");
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-
-  transcriptScript:function() {
-    metamsg("The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output.");
-    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it. To empty the file, use SCRIPT CLEAR.");
-    metamsg("You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.");
-    metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.");
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-
-  topicsScript:function() {
-    metamsg("Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).");
-    return SUCCESS_NO_TURNSCRIPTS;
-  },
-  topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
-  topics_none_found:function(char) {
-    return "No suggestions for what to ask or tell " + char.byname({article:DEFINITE}) + " available."
-  },
-  topics_ask_list:function(char, arr) {
-    return "Some suggestions for what to ask " + char.byname({article:DEFINITE}) + " about: " + arr.join("; ") + "."
-  },
-  topics_tell_list:function(char, arr) {
-    return "Some suggestions for what to tell " + char.byname({article:DEFINITE}) + " about: " + arr.join("; ") + "."
-  },
-
-  spoken_on:"Game mode is now 'spoken'. Type INTRO to hear the introductory text.",
-  spoken_off:"Game mode is now 'unspoken'.",
-  mode_brief:"Game mode is now 'brief'; no room descriptions (except with LOOK).",
-  mode_terse:"Game mode is now 'terse'; room descriptions only shown on first entering and with LOOK.",
-  mode_verbose:"Game mode is now 'verbose'; room descriptions shown every time you enter a room.",
-  transcript_already_on:"Transcript is already turned on.",
-  transcript_already_off:"Transcript is already turned off.",
-  undo_disabled:"Sorry, UNDO is not enabled in this game.",
-  undo_not_available:"There are no saved game-states to UNDO back to.",
-  undo_done:"Undoing...",
-
 };
-
-
-// Most of the text processors are set up in text.js; these are te language specific ones.
-const tp = {
-  text_processors:{
-    
-    objects:function(arr, params) {
-      const listOfOjects = scopeHereListed();
-      return formatList(listOfOjects, {article:INDEFINITE, lastJoiner:lang.list_and, modified:true, nothing:lang.list_nothing, loc:game.player.loc});
-    },
-      
-    exits:function(arr, params) {
-      const list = lang.exitList();
-      return formatList(list, {lastJoiner:" or ", nothing:"nowhere"});
-    },
-
-    exitsHere:function(arr, params) {
-      const list = lang.exitList();
-      return list.length === 0 ? "" : arr.join(":");
-    },
-    
-  },
-};
-
-
-
 
 
 
