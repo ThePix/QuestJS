@@ -581,10 +581,6 @@ function trackRelationship(npc, inc, code) {
 }
     
 
-ask_about_intro = function() { return ""; };
-tell_about_intro = function() { return ""; };
-
-
 
 function reviveNpc(npc, object) {
   
@@ -1054,7 +1050,7 @@ commands.push(new Cmd('HelpNPCs', {
   script:function() {
     metamsg("{b:Interacting with NPCs:}");
     metamsg("You can ask an NPC to do something by using the same command you would use to have yourself do something, but prefixed with {color:red:[name],} (note the comma) or {color:red:TELL [name] TO}.");
-    metamsg(no_talk_to);
+    metamsg(NO_TALK_TO);
     metamsg("Use the TOPICS command for some suggested topics. There are rather more for ASK than TELL, as you might expect.");
     return SUCCESS_NO_TURNSCRIPTS;
   },

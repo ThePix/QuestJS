@@ -31,12 +31,12 @@ const CUSTOM_EXITS = true;
 const FILES = ["code", "data", "npcs"];
 const MAX_UNDO = 10;
 const ROOM_HEADINGS = true;
-const no_talk_to = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}.";
-const no_ask_tell = false;
+const NO_TALK_TO = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}.";
+const NO_ASK_TELL = false;
 const NPC_REACTIONS_AWAYS = false;
 const MONEY_FORMAT = "$!";
 const TYPEWRITER = false;
-const GIVE_PLAYER_ASK_TELL_MSG = true;
+const GIVE_PLAYER_ASK_TELL_MSG = false;
 
 const SPLIT_LINES_ON = "|";   // Strings sent to msg will be broken into separate lines
 

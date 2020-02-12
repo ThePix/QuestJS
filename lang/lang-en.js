@@ -107,8 +107,8 @@ const lang = {
   PushExit:/^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
   NpcPushExit1:/^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
   NpcPushExit2:/^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-  AskAbout:/^(ask) (.+) (about) (.+)$/,
-  TellAbout:/^(tell) (.+) (about) (.+)$/,
+  AskAbout:/^(ask) (.+) (about|what|who|how|why|where|when) (.+)$/,
+  TellAbout:/^(tell) (.+) (about|what|who|how|why|where|when) (.+)$/,
   DebugWalkThrough:/^wt (.+)$/,
   DebugInspect:/^inspect (.+)$/,
   DebugInspectByName:/^inspect2 (.+)$/,
@@ -507,12 +507,12 @@ const lang = {
     return "Talk to " + char.byname({article:DEFINITE}) + " about:";
   },
   // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
-  tell_about_intro:function(char, text) {
-    return "You tell " + char.byname({article:DEFINITE}) + " about " + text + ".";
+  tell_about_intro:function(char, text1, text2) {
+    return "You tell " + char.byname({article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
   // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
-  ask_about_intro:function(char, text) {
-    return "You ask " + char.byname({article:DEFINITE}) + " about " + text + ".";
+  ask_about_intro:function(char, text1, text2) {
+    return "You ask " + char.byname({article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
 
 
@@ -591,7 +591,7 @@ const lang = {
   //----------------------------------------------------------------------------------------------
   // Meta-messages
 
-  topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
+  topics_NO_ASK_TELL:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
   topics_none_found:function(char) {
     return "No suggestions for what to ask or tell " + char.byname({article:DEFINITE}) + " available."
   },

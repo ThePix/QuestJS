@@ -32,8 +32,8 @@ const CUSTOM_EXITS = false;          // set to true to use custom exits, in exit
 const FILES = ["code", "data"];
 const MAX_UNDO = 10;
 const ROOM_HEADINGS = true;
-const no_talk_to = "TALK TO is not a feature in this game.";
-const no_ask_tell = "ASK/TELL ABOUT is not a feature in this game.";
+const NO_TALK_TO = "TALK TO is not a feature in this game.";
+const NO_ASK_TELL = "ASK/TELL ABOUT is not a feature in this game.";
 const NPC_REACTIONS_AWAYS = false;
 const TYPEWRITER = false;
 

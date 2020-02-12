@@ -47,8 +47,8 @@ const FILES = ["code", "data"];      // Additional files to load
 
 
 // Conversations settings
-const no_talk_to = "TALK TO is not a feature in this game.";
-const no_ask_tell = "ASK/TELL ABOUT is not a feature in this game.";
+const NO_TALK_TO = "TALK TO is not a feature in this game.";
+const NO_ASK_TELL = "ASK/TELL ABOUT is not a feature in this game.";
 const TURNS_QUESTIONS_LAST_TURN = 5;
 const GIVE_PLAYER_SAY_MSG = true;
 const GIVE_PLAYER_ASK_TELL_MSG = true;
