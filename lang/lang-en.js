@@ -514,7 +514,12 @@ const lang = {
   ask_about_intro:function(char, text1, text2) {
     return "You ask " + char.byname({article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
-
+  // This will be added to the start of the regex of a command to make an NPC command
+  // The saved capture group is the NPC's name
+  tell_to_prefixes:{
+    1:'(?:tell|ask) (.+) to ',   // TELL KYLE TO GET SPOON
+    2:'(.+), ?',                 // KYLE, GET SPOON
+  },
 
 
   //----------------------------------------------------------------------------------------------
@@ -591,7 +596,7 @@ const lang = {
   //----------------------------------------------------------------------------------------------
   // Meta-messages
 
-  topics_NO_ASK_TELL:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
+  topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
   topics_none_found:function(char) {
     return "No suggestions for what to ask or tell " + char.byname({article:DEFINITE}) + " available."
   },
@@ -1013,8 +1018,9 @@ const lang = {
 
 
 
+
 // Used by the editor
 try { SUCCESS; }
 catch (e) {
-  module.exports = { EXITS: lang.exit_list, PRONOUNS: lang.pronouns }
+  module.exports = { lang:lang }
 }
