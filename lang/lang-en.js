@@ -350,6 +350,8 @@ const lang = {
   done_msg:"Done.",
   nothing_for_sale:"Nothing for sale here.",
   wait_msg:"You wait one turn.",
+  no_map:"Sorry, no map available.",
+  inventoryPreamble:"You are carrying",
 
 
 

@@ -701,7 +701,8 @@ createItem("Kyle", NPC(false),
       responses:[
         {
           name:'Park',
-          msg:"'Going to the park sounds like fun,' Kyle says with a grin.",
+          mentions:['Swings'],
+          msg:"'Going to the park sounds like fun,' Kyle says with a grin. 'We can go on the swings!'",
         },
       ],
     },
@@ -709,6 +710,12 @@ createItem("Kyle", NPC(false),
       name:'Fountain',
       test:function(p) { return p.text.match(/fountain/) && p.actor.specialFlag },
       msg:"'The fountain does not work.'",
+    },
+    {
+      name:'Swings',
+      silent:true,
+      test:function(p) { return p.text.match(/swing/) },
+      msg:"'The swings are fun!'",
     },
     {
       msg:"Kyle has no interest in that subject.",
