@@ -48,6 +48,31 @@ game.registerTimedEvent("sayNow", 7, 7);
 
 
 
+function firstTimeTesting() {
+  firsttime(232646, function() {
+    msg("{font:trade winds:Te first time 10{sup:2} CH{sub:4} Er {smallcaps:This is small caps}.}")
+  }, function() {
+    msg("Every {huge:other} {big:time} betweeb {small:is} {tiny:very small} notmasl.")
+  });
+}
+
+
+
+
+
+
+commands.unshift(  new Cmd('FT', {
+  regex:/^ft$/,
+  script:function() {
+    firstTimeTesting()
+  },
+}));
+  
+
+
+
+
+
 commands.unshift(new Cmd('EgKick', {
   npcCmd:true,
   rules:[cmdRules.isHere],
