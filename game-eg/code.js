@@ -75,6 +75,8 @@ commands.unshift(  new Cmd('FT', {
   regex:/^ft$/,
   script:function() {
     unscrambler.write("p", "Some text in a long sentence.")
+    msg("Some text {rainbow:with some quite colorful}.")
+    msg("Some text {rainbow:red:blue:with some quite colorful}.")
   },
 }));
   
