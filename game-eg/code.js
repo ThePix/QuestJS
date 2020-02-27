@@ -71,12 +71,19 @@ function firstTimeTesting() {
 
 
 
-commands.unshift(  new Cmd('FT', {
-  regex:/^ft$/,
+commands.unshift(  new Cmd('Alpha', {
+  regex:/^alpha$/,
   script:function() {
-    unscrambler.write("p", "Some text in a long sentence.")
-    msg("Some text {rainbow:with some quite colorful}.")
-    msg("Some text {rainbow:red:blue:with some quite colorful}.")
+    msg("Some text in Greek: {encode:391:3AC:The quick brown fox jumped over the lazy dog}.")
+    msg("Some text in Cyrillic: {encode:402:431:The quick brown fox jumped over the lazy dog}.")
+    msg("Some text in Armenian {encode:531:561:The quick brown fox jumped over the lazy dog}.")
+
+    msg("Some text in Devanagari: {encode:904:904:The quick brown fox jumped over the lazy dog}.")
+    msg("Some text in Thai {encode:E01:E01:The quick brown fox jumped over the lazy dog}.")
+    msg("Some text in Tibetan {encode:F20:F20:The quick brown fox jumped over the lazy dog}.")
+    msg("Some text in Khmer {encode:1780:1780:The quick brown fox jumped over the lazy dog}.")
+    msg("Some text in Javan {encode:A985:A985:The quick brown fox jumped over the lazy dog}.")
+    msg("Some text in Nko {encode:7C1:7C1:The quick brown fox jumped over the lazy dog}.")
   },
 }));
   
