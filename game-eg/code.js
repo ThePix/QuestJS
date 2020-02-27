@@ -50,10 +50,20 @@ game.registerTimedEvent("sayNow", 7, 7);
 
 function firstTimeTesting() {
   firsttime(232646, function() {
-    msg("{font:trade winds:Te first time 10{sup:2} CH{sub:4} Er {smallcaps:This is small caps}.}")
+    msg(spaces(5)+ "{font:trade winds:Te first time 10{sup:2} CH{sub:4} Er {smallcaps:This is small caps}.}")
   }, function() {
     msg("Every {huge:other} {big:time} betweeb {small:is} {tiny:very small} notmasl.")
   });
+  const a = ["one", "two", "three"]
+  console.log(a)
+  arrayRemove(a, "two")
+  console.log(a)
+  arrayRemove(a, "three")
+  console.log(a)
+  arrayRemove(a, "three")
+  console.log(a)
+  arrayRemove(a, "one")
+  console.log(a)
 }
 
 
@@ -64,7 +74,7 @@ function firstTimeTesting() {
 commands.unshift(  new Cmd('FT', {
   regex:/^ft$/,
   script:function() {
-    firstTimeTesting()
+    unscrambler.write("p", "Some text in a long sentence.")
   },
 }));
   
@@ -134,11 +144,11 @@ commands.unshift(  new Cmd('EgHint', {
 commands.unshift(  new Cmd('EgPrint', {
     regex:/^print$/,
     script:function() {
-      /*typeWriter.write('p', 'The first line.');
+      typeWriter.write('p', 'The first line.');
       typeWriter.write('p', '2');
       typeWriter.write('p', '');
       typeWriter.write('f', function() { console.log('here') } );
-      typeWriter.write('p', 'Third line');*/
+      typeWriter.write('p', 'Third line');
       msg('The first line.');
       msg('2');
       msg('');

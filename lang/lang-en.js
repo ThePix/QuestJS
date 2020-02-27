@@ -825,9 +825,14 @@ const lang = {
   //----------------------------------------------------------------------------------------------
   //                                   LANGUAGE FUNCTIONS
 
+//@DOC
+// ## Language Functions
+//@UNDOC
 
 
-
+  //@DOC
+  // Returns "the " if appropriate for this item.
+  // If the item has 'defArticle' it returns that; if it has a proper name, returns an empty string.
   addDefiniteArticle:function(item) {
     if (item.defArticle) {
       return item.defArticle + " ";
@@ -835,6 +840,10 @@ const lang = {
     return item.properName ? "" : "the ";
   },
 
+  //@DOC
+  // Returns "a " or "an " if appropriate for this item.
+  // If the item has 'indefArticle' it returns that; if it has a proper name, returns an empty string.
+  // If it starts with a vowel, it returns "an ", otherwise "a ".
   addIndefiniteArticle:function(item) {
     if (item.indefArticle) {
       return item.indefArticle + " ";
@@ -857,7 +866,10 @@ const lang = {
 
 
 
-
+  //@DOC
+  // Returns the given number in words, so 19 would be returned as 'nineteen'.
+  // Numbers uner -2000 and over 2000 are returned as a string of digits,
+  // so 2001 is returned as '2001'.
   toWords:function(number) {
     if (typeof number !== "number") {
       errormsg ("toWords can only handle numbers");
@@ -898,6 +910,11 @@ const lang = {
     return (s);
   },
 
+
+  //@DOC
+  // Returns the given number in words as the ordinal, so 19 would be returned as 'nineteenth'.
+  // Numbers uner -2000 and over 2000 are returned as a string of digits with 'th' appended,
+  // so 2001 is returned as '2001th'.
   toOrdinal:function(number) {
     if (typeof number !== "number") {
       errormsg ("toOrdinal can only handle numbers");
@@ -941,7 +958,9 @@ const lang = {
 
 
 
-
+  //@DOC
+  // Returns the verb properly conjugated for the item, so "go" with a ball would return
+  // "goes", but "go" with the player (if using second person pronouns).
   conjugate:function(item, verb) {
     let gender = item.pronouns.subjective;
     if (gender === "he" || gender === "she") { gender = "it"; }
@@ -971,6 +990,12 @@ const lang = {
   },
 
 
+
+  //@DOC
+  // Returns the pronoun for the item, followed by the conjugated verb,
+  // so "go" with a ball would return "it goes", but "go" with the player (if using second person pronouns)
+  // would return "you go".
+  // The first letter is capitalised if 'capitalise' is true.
   pronounVerb:function(item, verb, capitalise) {
     let s = item.pronouns.subjective + " " + lang.conjugate (item, verb);
     s = s.replace(/ +\'/, "'");  // yes this is a hack!
@@ -989,6 +1014,12 @@ const lang = {
     return capitalise ? sentenceCase(s) : s;
   },
 
+  //@DOC
+  // Returns the name for the item, followed by the conjugated verb,
+  // so "go" with a ball would return "the ball goes", but "go" with 
+  // a some bees would return "the bees go". For the player, (if using second person pronouns)
+  // would return the pronoun "you go".
+  // The first letter is capitalised if 'capitalise' is true.
   nounVerb:function(item, verb, capitalise) {
     if (item === game.player) {
       return lang.pronounVerb(item, verb, capitalise);

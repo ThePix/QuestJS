@@ -193,48 +193,47 @@ createItem("small_key",
 );
 
 
-createItem("flashlight",
-  TAKEABLE(),
-  SWITCHABLE(false),
-  { loc:"lounge", examine:"A small red torch.", regex:/^torch$/, 
-    byname:function(options) {
-      let res = this.alias;
-      if (options.article) { res = (options.article === DEFINITE ? "the" : "a") + " " + this.alias; }
-      if (this.switchedon && options.modified) { res += " (providing light)"; }
-      return res;
-    },
-    lightSource:function() {
-      return this.switchedon ? LIGHT_FULL : LIGHT_none;
-    },
-    eventPeriod:1,
-    eventIsActive:function() {
-      return this.switchedon;
-    },
-    eventScript:function() {
-      this.power--;
-      if (this.power === 2) {
-        msg("The torch flickers.");
-      }
-      if (this.power < 0) {
-        msg("The torch flickers and dies.{once: Perhaps there is a charger in the garage?}");
-        this.doSwitchoff();
-      }
-    },
-    checkCanSwitchOn () {
-      if (this.power < 0) {
-        msg("The torch is dead.");
-        return false;
-      }
-      return true;
-    },
-    power:2,
-    chargeResponse:function(participant) {
-      msg(lang.pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
-      w.flashlight.power = 20;
-      return true;
-    },
-  }
-);
+createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
+  loc:"lounge",
+  examine:"A small red torch.",
+  regex:/^torch$/, 
+  byname:function(options) {
+    let res = this.alias;
+    if (options.article) { res = (options.article === DEFINITE ? "the" : "a") + " " + this.alias; }
+    if (this.switchedon && options.modified) { res += " (providing light)"; }
+    return res;
+  },
+  lightSource:function() {
+    return this.switchedon ? LIGHT_FULL : LIGHT_none;
+  },
+  eventPeriod:1,
+  eventIsActive:function() {
+    return this.switchedon;
+  },
+  eventScript:function() {
+    this.power--;
+    if (this.power === 2) {
+      msg("The torch flickers.");
+    }
+    if (this.power < 0) {
+      msg("The torch flickers and dies.{once: Perhaps there is a charger in the garage?}");
+      this.doSwitchoff();
+    }
+  },
+  checkCanSwitchOn () {
+    if (this.power < 0) {
+      msg("The torch is dead.");
+      return false;
+    }
+    return true;
+  },
+  power:2,
+  chargeResponse:function(participant) {
+    msg(lang.pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
+    w.flashlight.power = 20;
+    return true;
+  },
+});
 
 
 
