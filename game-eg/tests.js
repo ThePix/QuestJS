@@ -584,6 +584,10 @@ test.tests = function() {
   w.me.money = 20
 
   test.title("shop - buy");
+  test.assertEqual("The carrot is $0,02", processText("The carrot is {money:carrot}"))
+  test.assertEqual("The carrot is $0,02", processText("The carrot is {$:carrot}"))
+  test.assertEqual("You see $0,12", processText("You see {$:12}"))
+  test.assertEqual("The carrot is $0,02", processText("{nm:item:the:true} is {$:carrot}", {item:w.carrot}))
   test.assertEqual(true, parser.isForSale(w.carrot))
   test.assertEqual(true, parser.isForSale(w.trophy))
   test.assertEqual(undefined, parser.isForSale(w.flashlight))
