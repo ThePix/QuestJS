@@ -216,8 +216,6 @@ const skills = {
 
 
 
-
-
 settings.startingDialogDisabled = false;
 
 settings.professions = [
@@ -264,6 +262,7 @@ $(function() {
           p.isFemale = $("#female").is(':checked');
           p.fullname = $("#namefield").val();
           if (settings.textInput) { $('#textbox').focus(); }
+          console.log(p)
         }
       }
     ]
@@ -403,8 +402,8 @@ $(document).ready(function () {
         }
       });
       $("button[title='Close']")[0].style.display = 'none';
-});
-*/
+});*/
+
 function scrollWizard() {
   wizardMale = !wizardMale;
   $('#wizardname').html(wizardMale ? 'Master Shalazin' :  'Mistress Shalazin');

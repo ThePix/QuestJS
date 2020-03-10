@@ -8,7 +8,7 @@ settings.thanks = ["Kyle", "Lara"]
 // UI options
 settings.divider = "div4.png"
 
-settings.customExits = true
+settings.customExits = 'exits'
 settings.files = ["code", "data", "npcs"]
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false
