@@ -130,13 +130,13 @@ test.tests = function() {
   test.assertEqual("(012,34)", displayNumber(1234, "(3,2)"));
   test.assertEqual("$1234", displayMoney(1234));
   test.assertEqual("$-1234", displayMoney(-1234));
-  MONEY_FORMAT = "!3.2! credits"
+  settings.moneyFormat = "!3.2! credits"
   test.assertEqual("012.34 credits", displayMoney(1234));
   test.assertEqual("-012.34 credits", displayMoney(-1234));
-  MONEY_FORMAT = "!+3.2! credits"
+  settings.moneyFormat = "!+3.2! credits"
   test.assertEqual("+012.34 credits", displayMoney(1234));
   test.assertEqual("-012.34 credits", displayMoney(-1234));
-  MONEY_FORMAT = game.moneyformat = "!$1,2!($1,2)!"
+  settings.moneyFormat = game.moneyformat = "!$1,2!($1,2)!"
   test.assertEqual("$12,34", displayMoney(1234));
   test.assertEqual("($12,34)", displayMoney(-1234));
   

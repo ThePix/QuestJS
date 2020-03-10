@@ -1,77 +1,15 @@
 "use strict";
 
-const TITLE = "A First Step...";
-const AUTHOR = "The Pixie"
-const VERSION = "1.1";
-const THANKS = ["Kyle", "Lara"];
+settings.title = "A First Step...";
+settings.author = "The Pixie"
+settings.version = "1.1";
+settings.thanks = ["Kyle", "Lara"];
 
-// UI options
-const PANES = 'Left';  //Can be set to Left, Right or None.
-// Setting PANES to None will more than double the speed of your game!
-const COMPASS = true;
-const DIVIDER = "div.png";
-
-const STATUS_PANE = "Status";  // Set to false to turn off
-const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
-const STATUS_WIDTH_RIGHT = 40;
-
-const DROPDOWN_FOR_CONV = true;
-
-const FAILS_COUNT_AS_TURNS = false;
-const LOOK_COUNTS_AS_TURN = false;
-
-const TEXT_INPUT = true;
-const CURSOR = ">";
-const CMD_ECHO = true;               // echo commands to the screen
-const CONVERT_NUMBERS_IN_PARSER = false;
-
-
-const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
-const DEBUG = true;                  // set to false when releasing
-const CUSTOM_EXITS = false;          // set to true to use custom exits, in exits.js
-const FILES = ["code", "data"];
-const MAX_UNDO = 10;
-const ROOM_HEADINGS = true;
-const NO_TALK_TO = "TALK TO is not a feature in this game.";
-const NO_ASK_TELL = "ASK/TELL ABOUT is not a feature in this game.";
-const NPC_REACTIONS_AWAYS = false;
-const TYPEWRITER = false;
-
-const SPLIT_LINES_ON = "<br>";   // Strings sent to msg will be broken into separate lines
-
-const SECONDS_PER_TURN = 60;
-const DATE_TIME_LOCALE = 'en-GB';
-const DATE_TIME_START = new Date('February 14, 2019 09:43:00');
-const DATE_TIME_OPTIONS = {
-  year:"numeric",
-  month:"short",
-  day:"2-digit",
-  hour:"2-digit",
-  minute:"2-digit",
-};
-
-const ROOM_TEMPLATE = [
-  "%",
-  "You can see {objects} here.",
-  "You can go {exits}.",
-];
-
-
-
-const STATUS = [
+settings.status = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },
   function() { return "<td>Health points:</td><td>" + game.player.hitpoints + "</td>"; },
   function() { return '<td colspan="2">' + game.player.status + "</td>"; },
-];
-
-
-// Change the name values to alter how items are displayed
-// You can add (or remove) inventories too
-const INVENTORIES = [
-  {name:'Items Held', alt:'itemsHeld', test:util.isHeldNotWorn, getLoc:function() { return game.player.name; } },
-  {name:'Items Worn', alt:'itemsWorn', test:util.isWorn, getLoc:function() { return game.player.name; } },
-  {name:'Items Here', alt:'itemsHere', test:util.isHere, getLoc:function() { return game.player.loc; } },
 ];
 
 
@@ -84,7 +22,7 @@ const INVENTORIES = [
 
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
-function setup() {
+settings.setup = function() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
   game.player.slotsUsed = 0;
@@ -280,8 +218,9 @@ const skills = {
 
 
 
-const DISABLED = false;
-var professions = [
+settings.startingDialogDisabled = false;
+
+settings.professions = [
   {name:"Farm hand", bonus:"strength"},
   {name:"Scribe", bonus:"intelligence"},
   {name:"Exotic dancer", bonus:"agility"},
@@ -289,22 +228,22 @@ var professions = [
 ];
 
 $(function() {
-  if (DISABLED) {
-    var p = getPlayer();
-    p.job = professions[0];
+  if (settings.startingDialogDisabled) {
+    const p = game.player;
+    p.job = settings.professions[0];
     p.isFemale = true;
     p.fullname = "Shaala";
     return; 
   }
-  var diag = $("#dialog");
+  const diag = $("#dialog");
   diag.prop("title", "Who are you?");
-  var s;
+  let s;
   s = '<p>Name: <input id="namefield" type="text" value="Zoxx" /></p>';
   s += '<p>Male: <input type="radio" id="male" name="sex" value="male">&nbsp;&nbsp;&nbsp;&nbsp;';
   s += 'Female<input type="radio" id="female" name="sex" value="female" checked></p>';
   s += '<p>Job:<select id="job">'
-  for (var i = 0; i < professions.length; i++) {
-    s += '<option value="' + professions[i].name + '">' + professions[i].name + '</option>';
+  for (let profession of settings.professions) {
+    s += '<option value="' + profession.name + '">' + profession.name + '</option>';
   }
   s += '</select></p>';
   
@@ -319,12 +258,12 @@ $(function() {
         text: "OK",
         click: function() {
           $(this).dialog("close");
-          var p = getPlayer();
-          job = $("#job").val();
-          p.job = professions.find(function(el) { return el.name === job; });
+          const p = game.player;
+          const job = $("#job").val();
+          p.job = settings.professions.find(function(el) { return el.name === job; });
           p.isFemale = $("#female").is(':checked');
           p.fullname = $("#namefield").val();
-          if (TEXT_INPUT) { $('#textbox').focus(); }
+          if (settings.textInput) { $('#textbox').focus(); }
         }
       }
     ]
@@ -505,7 +444,7 @@ function showStartDiag() {
         click: function() {
           $(this).dialog("close");
           setValues(this);
-          if (TEXT_INPUT) { $('#textbox').focus(); }
+          if (settings.textInput) { $('#textbox').focus(); }
         }
       }
     ]

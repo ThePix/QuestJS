@@ -625,7 +625,7 @@ const lang = {
 
 
   helpScript:function() {
-    if (TEXT_INPUT) {
+    if (settings.textInput) {
       metamsg("Type commands in the command bar to interact with the world.");      
       metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean. You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
       metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.");
@@ -633,8 +633,8 @@ const lang = {
       metamsg("{b:Language: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
       metamsg("{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..");
     }
-    if (PANES !== "None") {
-      if (COMPASS) {
+    if (settings.panes !== "None") {
+      if (settings.compass) {
         metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
       }
       metamsg("To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.");
@@ -643,9 +643,9 @@ const lang = {
   },
 
   aboutScript:function() {
-    metamsg("{i:" + TITLE + " version " + VERSION + "} was written by " + AUTHOR + " using Quest 6.");
-    if (THANKS.length > 0) {
-      metamsg("Thanks to " + formatList(THANKS, {lastJoiner:list_and}) + ".");
+    metamsg("{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6.", {settings:settings});
+    if (settings.thanks && settings.thanks.length > 0) {
+      metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".");
     }
     return SUCCESS_NO_TURNSCRIPTS;
   },

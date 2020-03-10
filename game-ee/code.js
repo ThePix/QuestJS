@@ -1,6 +1,6 @@
 "use strict";
 
-function setup() {
+settings.setup = function() {
   msg("You open your eyes, and wonder where you are. Some sort of medical facility? You think.");
   msg("'Ah, you'reawake.' A woman's voice, off to the side. You look at her.");
   msg("'Dr Quechua?' you say. 'What...?' Last time you saw her, Quechua was a medical officer on a the SS Tempest, an Accord frigate.");

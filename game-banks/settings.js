@@ -1,66 +1,27 @@
 "use strict";
 
-const TITLE = "The Voyages of The Joseph Banks";
-const AUTHOR = "The Pixie"
-const VERSION = "1.1";
-const THANKS = ["Kyle", "Lara"];
+settings.title = "The Voyages of The Joseph Banks"
+settings.author = "The Pixie"
+settings.version = "0.1"
+settings.thanks = ["Kyle", "Lara"]
 
 // UI options
-const PANES = 'Left';  //Can be set to Left, Right or None.
-// Setting PANES to None will more than double the speed of your game!
-const COMPASS = true;
-const DIVIDER = "div4.png";
+settings.divider = "div4.png"
 
-const STATUS_PANE = "Status";  // Set to false to turn off
-const STATUS_WIDTH_LEFT = 120; // How wide the columns are in the status pane
-const STATUS_WIDTH_RIGHT = 40;
+settings.customExits = true
+settings.files = ["code", "data", "npcs"]
+settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
+settings.noAskTell = false
+settings.givePlayerAskTellMsg = false
+settings.splitLinesOn = "|"
 
-const DROPDOWN_FOR_CONV = true;
-
-const FAILS_COUNT_AS_TURNS = false;
-const LOOK_COUNTS_AS_TURN = false;
-
-const TEXT_INPUT = true;
-const CURSOR = ">";
-const CMD_ECHO = true;               // echo commands to the screen
-const CONVERT_NUMBERS_IN_PARSER = true;
-
-const LANG_FILENAME = "lang-en.js";  // set to the language file of your choice
-const DEBUG = true;                  // set to false when releasing
-const CUSTOM_EXITS = true;
-const FILES = ["code", "data", "npcs"];
-const MAX_UNDO = 10;
-const ROOM_HEADINGS = true;
-const NO_TALK_TO = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}.";
-const NO_ASK_TELL = false;
-const NPC_REACTIONS_AWAYS = false;
-const MONEY_FORMAT = "$!";
-const TYPEWRITER = false;
-const GIVE_PLAYER_ASK_TELL_MSG = false;
-
-const SPLIT_LINES_ON = "|";   // Strings sent to msg will be broken into separate lines
-
-const SAVE_DISABLED = false;
-
-const SECONDS_PER_TURN = 60;
-const DATE_TIME_LOCALE = 'en-GB';
-const DATE_TIME_START = new Date('April 14, 2387 09:43:00');
-const DATE_TIME_OPTIONS = {};
-DATE_TIME_OPTIONS.year = "numeric";
-DATE_TIME_OPTIONS.month = "short";
-DATE_TIME_OPTIONS.day = "2-digit";
-DATE_TIME_OPTIONS.hour = "2-digit";
-DATE_TIME_OPTIONS.minute = "2-digit";
-
-const ROOM_TEMPLATE = [
+settings.dateTime.start = new Date('April 14, 2387 09:43:00')
+settings.roomTemplate = [
   "%",
   "{objectsHere:You can see {objects} here.}",
 ]
 
-
-
-
-const STATUS = [
+settings.status = [
   function() { return "<td colspan=\"2\" align=\"center\">" + getDateTime() + "</td>"; },
   function() { return "<td width=\"100px\"><b><i>Bonus:</i></b></td><td width=\"30px\" align=\"right\"><b>$" + game.player.bonus + "k</b></td>"; },
   function() { return "<td colspan=\"2\" align=\"center\"> </td>"; },
@@ -81,7 +42,7 @@ function displayStatus(obj) {
 
 // Change the name values to alter how items are displayed
 // You can add (or remove) inventories too
-const INVENTORIES = [
+settings.inventories = [
 //  {name:'Items Held', alt:'itemsHeld', test:util.isHeldNotWorn, getLoc:function() { return game.player.name; } },
 //  {name:'Items Here', alt:'itemsHere', test:util.isHere, getLoc:function() { return game.player.loc; } },
 ];
@@ -95,7 +56,7 @@ const ooc_intro = "<p>You are on a mission to survey planets around five stars, 
 
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
-function setup() {
+settings.setup = function() {
 
   //parser.parse("spoken");
   //  parser.parse("l");
@@ -128,7 +89,7 @@ function setup() {
 
 
 
-const DISABLED = true;
+settings.startingDialogDisabled = true
 const professions = [
   {name:"Engineer", bonus:"mech"},
   {name:"Scientist", bonus:"science"},
@@ -150,7 +111,7 @@ const backgrounds = [
 
 
 $(function() {
-  if (DISABLED) {
+  if (settings.startingDialogDisabled) {
     w.me.job = professions[0].name;
     w.me.jobBonus = professions[0].bonus;
     w.me.isFemale = true;
@@ -193,7 +154,7 @@ $(function() {
           //w.me.background = backgrounds.find(function(el) { return el.name === background; });
           w.me.isFemale = $("#female").is(':checked');
           w.me.fullname = $("#namefield").val();
-          if (TEXT_INPUT) { $('#textbox').focus(); }
+          if (settings.textInput) { $('#textbox').focus(); }
         }
       }
     ]

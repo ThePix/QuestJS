@@ -197,7 +197,9 @@ span.compassbutton {
 #compass-table {
   padding-left: 5pt;
 }
-
+#dialog {
+  display:none;
+}
 
 
 

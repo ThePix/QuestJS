@@ -1,6 +1,2 @@
 "use strict";
 
-
-
-function setup() {
-}
