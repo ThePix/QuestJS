@@ -583,6 +583,13 @@ test.tests = function() {
   test.assertCmd("w", ["You head west.", "A funny little shop.", "You can go east."]);
   w.me.money = 20
 
+  test.title("shop - text processor");
+  test.assertEqual("The carrot is $0,02", processText("The carrot is {money:carrot}"))
+  test.assertEqual("The carrot is $0,02", processText("The carrot is {$:carrot}"))
+  test.assertEqual("You see $0,12", processText("You see {$:12}"))
+  test.assertEqual("The carrot is $0,02", processText("{nm:item:the:true} is {$:carrot}", {item:w.carrot}))
+  test.assertEqual("The carrot is $0,02", processText("{nm:item:the:true} is {$:carrot}", {item:'carrot'}))
+
   test.title("shop - buy");
   test.assertEqual(true, parser.isForSale(w.carrot))
   test.assertEqual(true, parser.isForSale(w.trophy))

@@ -718,7 +718,7 @@ const lang = {
   // Display verbs used in the side panel
   verbs:{
     examine:"Examine",
-    use:"use",
+    use:"Use",
     take:"Take",
     drop:"Drop",
     open:"Open",
