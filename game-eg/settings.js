@@ -8,6 +8,8 @@ settings.thanks = ["Kyle", "Lara"]
 settings.noTalkTo = false
 settings.noAskTell = false
 
+settings.tests = true
+
 settings.status = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },
