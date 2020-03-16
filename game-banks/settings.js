@@ -13,11 +13,10 @@ settings.files = ["code", "data", "npcs"]
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false
 settings.givePlayerAskTellMsg = false
-settings.splitLinesOn = "|"
 
 settings.dateTime.start = new Date('April 14, 2387 09:43:00')
 settings.roomTemplate = [
-  "%",
+  "{hereDesc}",
   "{objectsHere:You can see {objects} here.}",
 ]
 

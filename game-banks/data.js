@@ -419,10 +419,10 @@ createRoom("top_deck_aft", {
   desc:function() {
     if (!w.top_deck_forward.meFirst) {
       this.meFirst = true;
-      msg(w.top_deck_aft.descStart + this.descThis + w.top_deck_aft.descFinish);
+      return w.top_deck_aft.descStart + this.descThis + w.top_deck_aft.descFinish
     }
     else {
-      msg(this.descThis);
+      return this.descThis
     }
   },
   descThis: "You are stood at the aft end of a narrow corridor, with the women's cabin behind you, the men's to port. To starboard, steps lead down to the cargo bay on the lower deck.",
