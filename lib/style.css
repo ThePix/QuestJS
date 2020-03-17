@@ -73,6 +73,13 @@
   margin-left: 20px;
 }
 
+.continue {
+  color:blue;
+  cursor: pointer;
+  font-style: italic;
+  margin-left: 20px;
+}
+
 
 /* Various msg options */
 .meta {

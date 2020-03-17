@@ -3,49 +3,35 @@
 
 
 
-function intro() {
-  msg();
-}
-
-
-
-
-// This function will be called at the start of the game, so can be used
-// to introduce your game.
-settings.setup = function() {
-  game.player.hitpoints = 20;
-  game.player.status = "You are feeling fine";
-}
 
 
 /*
-game.registerEvent("sayNow", function() {
-  msg("Now! " + game.elapsedRealTime);
-  setTimeout(io.scrollToEnd,1);
-});
+// This function will be called at the start of the game, so can be used
+// to introduce your game.
+settings.setup = function() {
+  msg("Some text")
+  wait(function() {
+    msg("More text")
+    wait(function() {
+      msg("Even more text")
+      world.enterRoom()
+    })
+  })
+  /*displayPages([
+    "Some text",
+    "More text",
+    "Even more text",
+    '',
+  ], {clearScreen:true, startUp:true})*
+  
+  game.player.hitpoints = 20;
+  game.player.status = "You are feeling fine";
+  io.updateStatus()
+  return true;
+}
 
-game.registerEvent("sayOften", function() {
-  msg("Often! " + this.count);
-  if (!this.count) this.count = 0;
-  this.count++;
-  if (this.count > 3) return true;
-});
 
-
-game.registerEvent("sayThen", function() {
-  msg("Then!");
-  setTimeout(io.scrollToEnd,1);
-});
-
-game.registerTimedEvent("sayOften", 2, 2);
-game.registerTimedEvent("sayOften", 18, 3);
-game.registerTimedEvent("sayThen", 10);
-game.registerTimedEvent("sayNow", 6, 4);
-game.registerTimedEvent("sayNow", 7, 7);
 */
-
-
-
 
 
 function firstTimeTesting() {
