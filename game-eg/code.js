@@ -3,27 +3,24 @@
 
 
 
-/*
+
 
 
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
   msg("Some text")
+  io.addToOutputQueue({text:"The real message is revealed!!", action:'effect', tag:'pre', effect:io.unscrambleEffect, randomPlacing:true, incSpaces:true, pick:function(i) {return 'At first this message is shown'.charAt(i) }})
   wait()
-  io.addToOutputQueue({text:"To output scrambled text that is revealed one character at a time, use unscrambler.write.", action:'effect', tag:'p', effect:io.unscambleEffect})
-  wait()
-  io.addToOutputQueue({text:"If there are multiple lines of text they will all be unscrambled at the same time (though longer lines will finish later)", action:'effect', tag:'p', effect:io.typewriterEffect})
+  io.addToOutputQueue({text:"If there are multiple lines of text...", action:'effect', tag:'p', effect:io.typewriterEffect})
   wait()
   msg("Even more text")
-  wait()
+  wait(3)
 
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
   io.updateStatus()
 }
-*/
-
 
 
 
@@ -128,23 +125,6 @@ commands.unshift(  new Cmd('EgHint', {
   
 
 
-/*
-commands.unshift(  new Cmd('EgPrint', {
-    regex:/^print$/,
-    script:function() {
-      typeWriter.write('p', 'The first line.');
-      typeWriter.write('p', '2');
-      typeWriter.write('p', '');
-      typeWriter.write('f', function() { console.log('here') } );
-      typeWriter.write('p', 'Third line');
-      msg('The first line.');
-      msg('2');
-      msg('');
-      msgFunction(function() { console.log('here') } );
-      msg('Third line');
-    },
-  }));
-*/
 
 
 
