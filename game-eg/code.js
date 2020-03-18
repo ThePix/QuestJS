@@ -3,35 +3,28 @@
 
 
 
-
-
 /*
+
+
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
   msg("Some text")
-  wait(function() {
-    msg("More text")
-    wait(function() {
-      msg("Even more text")
-      world.enterRoom()
-    })
-  })
-  /*displayPages([
-    "Some text",
-    "More text",
-    "Even more text",
-    '',
-  ], {clearScreen:true, startUp:true})*
-  
+  wait()
+  io.addToOutputQueue({text:"To output scrambled text that is revealed one character at a time, use unscrambler.write.", action:'effect', tag:'p', effect:io.unscambleEffect})
+  wait()
+  io.addToOutputQueue({text:"If there are multiple lines of text they will all be unscrambled at the same time (though longer lines will finish later)", action:'effect', tag:'p', effect:io.typewriterEffect})
+  wait()
+  msg("Even more text")
+  wait()
+
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
   io.updateStatus()
-  return true;
 }
-
-
 */
+
+
 
 
 function firstTimeTesting() {
@@ -135,7 +128,7 @@ commands.unshift(  new Cmd('EgHint', {
   
 
 
-
+/*
 commands.unshift(  new Cmd('EgPrint', {
     regex:/^print$/,
     script:function() {
@@ -151,7 +144,7 @@ commands.unshift(  new Cmd('EgPrint', {
       msg('Third line');
     },
   }));
-  
+*/
 
 
 

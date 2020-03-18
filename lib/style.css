@@ -80,7 +80,17 @@
   margin-left: 20px;
 }
 
+.unscrambler {
+  font-family: "Lucida Console", Monaco, monospace;
+}
 
+.typewriter {
+  font-family: "Lucida Console", Monaco, monospace;
+}
+.typewriter-active {
+  font-weight: bold;
+  font-size: larger;
+}
 /* Various msg options */
 .meta {
   color: grey;
@@ -217,9 +227,3 @@ th, td {
   text-align:center;
 }
 
-
-
-.typewriter {
-  font-weight: bold;
-  font-size: larger;
-}
