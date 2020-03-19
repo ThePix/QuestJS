@@ -10,12 +10,13 @@
 // to introduce your game.
 settings.setup = function() {
   msg("Some text")
+  /*
   io.addToOutputQueue({text:"The real message is revealed!!", action:'effect', tag:'pre', effect:io.unscrambleEffect, randomPlacing:true, incSpaces:true, pick:function(i) {return 'At first this message is shown'.charAt(i) }})
   wait()
   io.addToOutputQueue({text:"If there are multiple lines of text...", action:'effect', tag:'p', effect:io.typewriterEffect})
   wait()
   msg("Even more text")
-  wait(3)
+  wait(3)*/
 
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
@@ -43,6 +44,29 @@ function firstTimeTesting() {
 }
 
 
+
+commands.unshift(new Cmd('Test input', {
+  npcCmd:true,
+  rules:[cmdRules.isHere],
+  regex:/^inp/,
+  script:function() {
+    msg("First some preamble...")
+    showMenu("What colour?", [w.book, w.coin, w.Kyle, 'None of them'], function(result) {
+      if (typeof result === 'string') {
+        msg("You picked " + result + ".");
+      }
+      else {
+        msg("You picked " + result.byname({article:DEFINITE}) + ".");
+      }
+    })
+/*    askQuestion("What colour?", function(result) {
+      msg("You picked " + result + ".");
+      showYesNoMenu("Are you sure?", function(result) {
+        msg("You said " + result + ".")
+      })
+    })*/
+  }
+}));
 
 
 

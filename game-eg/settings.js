@@ -10,7 +10,7 @@ settings.noAskTell = false
 
 settings.tests = true
 
-settings.typewriterDelay = 100
+settings.textEffectDelay = 100
 
 settings.status = [
   "hitpoints",

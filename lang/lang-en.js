@@ -695,6 +695,7 @@ const lang = {
   all_exclude_regex:/^((all|everything) (but|bar|except)\b)/,
   go_pre_regex:"go to |goto |go |head |",
 
+  yesNo:['Yes', 'No'],
 
   contentsForData:{
     surface:{prefix:'with ', suffix:' on it'},
