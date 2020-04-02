@@ -1,16 +1,5 @@
-"use strict";
+'use strict'
 
+test.tests = function () {
 
-
-test.tests = function() {
-
-};
-
- 
-    
-    
-    
-    
-    
-    
-  
+}

@@ -1,0 +1,36 @@
+{
+  "name": "questhive",
+  "version": "0.1.0",
+  "description": "QuestJS port to the node ecosystem",
+  "main": "main",
+  "module": "main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "readme",
+    "docs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KilianKilmister/QuestJS.git"
+  },
+  "keywords": [
+    "QuestJS"
+  ],
+  "author": "Kilian (original: ThePix)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KilianKilmister/QuestJS/issues"
+  },
+  "homepage": "https://github.com/KilianKilmister/QuestJS#readme",
+  "dependencies": {
+    "esm": "^3.2.25"
+  },
+  "devDependencies": {
+    "standard": "^14.3.3"
+  }
+}
