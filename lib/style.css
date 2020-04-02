@@ -14,7 +14,7 @@
   cursor: pointer;
   color:blue;
 }
-  
+
 
 
 
@@ -54,7 +54,7 @@
   right: 0px;
 }
 .sidepanesNone {
-  display: None;
+  util.display: None;
 }
 
 
@@ -91,7 +91,7 @@
   font-weight: bold;
   font-size: larger;
 }
-/* Various msg options */
+/* Various io.msg options */
 .meta {
   color: grey;
 }
@@ -106,23 +106,23 @@
   color: red;
 }
 .error21::before {
-  content: "QUEST CODE ERROR: ";
+  content: "QUEST CODE util.ERROR: ";
   font-style: italic;
 }
 .error22::before {
-  content: "GAME CODE ERROR: ";
+  content: "GAME CODE util.ERROR: ";
   font-style: italic;
 }
 .error23::before {
-  content: "PARSER ERROR: ";
+  content: "PARSER util.ERROR: ";
   font-style: italic;
 }
 .error25::before {
-  content: "TEXT PROCESSOR ERROR: ";
+  content: "TEXT PROCESSOR util.ERROR: ";
   font-style: italic;
 }
 .error26::before {
-  content: "SAVE/LOAD ERROR: ";
+  content: "SAVE/LOAD util.ERROR: ";
   font-style: italic;
 }
 .error27::before {
@@ -137,7 +137,7 @@
   font-size: 10pt;
   color: grey;
   font-family: monospace;
-  /*display: none;*/
+  /*util.display: none;*/
 }
 
 
@@ -150,13 +150,13 @@ td.compassbutton {
     background-color: #c0c0ff;
     width: 20px;
     height: 15px;
-}  
+}
 span.compassbutton {
     cursor: pointer;
     text-align: center;
     width: 18px;
-    display: block;
-}  
+    util.display: block;
+}
 
 
 /* Items in inventories */
@@ -199,14 +199,14 @@ span.compassbutton {
   padding-left: 5pt;
 }
 #dialog {
-  display:none;
+  util.display:none;
 }
 
 
 
 /* For dialog panels */
 .no-close .ui-dialog-titlebar-close {
-  display: none;
+  util.display: none;
 }
 .ui-dialog-titlebar {
   background-image: none;
@@ -226,4 +226,3 @@ th, td {
   padding:4px;
   text-align:center;
 }
-

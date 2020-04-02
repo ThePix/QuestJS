@@ -40,7 +40,7 @@ h2, h4 {
   cursor: pointer;
   color:blue;
 }
-  
+
 
 
 
@@ -82,7 +82,7 @@ h2, h4 {
   right: 0px;
 }
 .sidepanesNone {
-  display: None;
+  util.display: None;
 }
 
 
@@ -110,7 +110,7 @@ h2, h4 {
 
 
 #dialog {
-  font-size: 16px; 
+  font-size: 16px;
   //font-family: 'Orbitron';
   font-family: 'Ubuntu Condensed', sans-serif;
 }
@@ -137,7 +137,7 @@ h2, h4 {
 }
 
 
-/* Various msg options */
+/* Various io.msg options */
 .meta {
   color: grey;
 }
@@ -159,7 +159,7 @@ h2, h4 {
   font-size: 10pt;
   color: grey;
   font-family: monospace;
-  /*display: none;*/
+  /*util.display: none;*/
 }
 
 
@@ -172,13 +172,13 @@ td.compassbutton {
     background-color: #d0d0d0;
     width: 20px;
     height: 15px;
-}  
+}
 span.compassbutton {
     cursor: pointer;
     text-align: center;
     width: 18px;
-    display: block;
-}  
+    util.display: block;
+}
 
 
 /* Items in inventories */
@@ -221,14 +221,14 @@ span.compassbutton {
   padding-left: 5pt;
 }
 #dialog {
-  display:none;
+  util.display:none;
 }
 
 
 
 /* For dialog panels */
 .no-close .ui-dialog-titlebar-close {
-  display: none;
+  util.display: none;
 }
 .ui-dialog-titlebar {
   background-image: none;
@@ -271,4 +271,3 @@ th, td {
   color:blue;
   cursor: pointer;
 }
-  

@@ -12,7 +12,7 @@ createItem('me',
     maxArmour: 20,
     armour: 10,
     examine: function (isMultiple) {
-      msg(util.prefix(this, isMultiple) + 'A ' + (this.isFemale ? 'chick' : 'guy') + ' called ' + this.alias)
+      io.msg(util.util.prefix(this, isMultiple) + 'A ' + (this.isFemale ? 'chick' : 'guy') + ' called ' + this.alias)
     }
   }
 )
@@ -35,9 +35,9 @@ createItem('knife',
     sharp: true,
     examine: function (isMultiple) {
       if (this.sharp) {
-        msg(util.prefix(item, isMultiple) + 'A really sharp knife.')
+        io.msg(util.util.prefix(item, isMultiple) + 'A really sharp knife.')
       } else {
-        msg(util.prefix(item, isMultiple) + 'A blunt knife.')
+        io.msg(util.util.prefix(item, isMultiple) + 'A blunt knife.')
       }
     }
   }
@@ -51,9 +51,9 @@ createItem('flail',
     sharp: true,
     examine: function (isMultiple) {
       if (this.sharp) {
-        msg(util.prefix(item, isMultiple) + 'A really sharp knife.')
+        io.msg(util.util.prefix(item, isMultiple) + 'A really sharp knife.')
       } else {
-        msg(util.prefix(item, isMultiple) + 'A blunt knife.')
+        io.msg(util.util.prefix(item, isMultiple) + 'A blunt knife.')
       }
     }
   }

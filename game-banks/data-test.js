@@ -6,7 +6,7 @@ createItem('me',
     loc: 'lounge',
     regex: /^(me|myself|player)$/,
     examine: function (isMultiple) {
-      msg(util.prefix(this, isMultiple) + 'A ' + (this.isFemale ? 'chick' : 'guy') + ' called ' + this.alias)
+      io.msg(util.util.prefix(this, isMultiple) + 'A ' + (this.isFemale ? 'chick' : 'guy') + ' called ' + this.alias)
     }
   }
 )
@@ -18,13 +18,13 @@ createItem('knife',
     sharp: false,
     examine: function (isMultiple) {
       if (this.sharp) {
-        msg(util.prefix(this, isMultiple) + 'A really sharp knife.')
+        io.msg(util.util.prefix(this, isMultiple) + 'A really sharp knife.')
       } else {
-        msg(util.prefix(this, isMultiple) + 'A blunt knife.')
+        io.msg(util.util.prefix(this, isMultiple) + 'A blunt knife.')
       }
     },
     chargeResponse: function (participant) {
-      msg('There is a loud bang, and the knife is destroyed.')
+      io.msg('There is a loud bang, and the knife is destroyed.')
       delete this.loc
       return false
     }

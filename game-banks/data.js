@@ -11,7 +11,7 @@ createItem('me',
     status: 100,
     bonus: 0,
     examine: function (isMultiple) {
-      msg(util.prefix(this, isMultiple) + 'You feel fine...')
+      io.msg(util.util.prefix(this, isMultiple) + 'You feel fine...')
     },
     canMove: function (ex) {
       let room1 = w[this.loc]
@@ -19,7 +19,7 @@ createItem('me',
       let room2 = w[ex.name]
       if (typeof room2.vacuum === 'string') room2 = w[room2.vacuum]
       if (room1.vacuum === room2.vacuum) return true
-      msg('The door to ' + room2.byname({ article: DEFINITE }) + ' will not open while it is ' + (room1.vacuum ? 'pressurised' : 'depressurised') + ' and ' + room1.byname({ article: DEFINITE }) + ' is not.')
+      io.msg('The door to ' + room2.byname({ article: util.DEFINITE }) + ' will not open while it is ' + (room1.vacuum ? 'pressurised' : 'depressurised') + ' and ' + room1.byname({ article: util.DEFINITE }) + ' is not.')
       return false
     }
   }
@@ -34,7 +34,7 @@ createItem('your_jumpsuit', WEARABLE(2, ['body']), {
   onMove: function (toLoc, fromLoc) {
     if (fromLoc === 'stasis_pod_drawer') {
       delete w.stasis_pod_drawer.loc
-      msg('The stasis pod drawer slides shut.')
+      io.msg('The stasis pod drawer slides shut.')
     }
   }
 })
@@ -65,13 +65,13 @@ createRoom('stasis_bay', {
       case 0: return 'All pods are currently open.'
       case 4: return 'Currently only your pod and the spare pod are open.'
       case 1: return arr[0].byname({ possessive: true }) + "'s stasis pod is closed."
-      default: return 'The stasis pods of ' + formatList(arr) + ' are closed.'
+      default: return 'The stasis pods of ' + util.formatList(arr) + ' are closed.'
     }
   },
   vacuum: false,
   port: new Exit('hallway'),
   aft: new Exit('cargo_bay'),
-  in: new Exit('stasis_pod_room', { msg: 'You climb into the stasis pod.' })
+  in: new Exit('stasis_pod_room', { io.msg: 'You climb into the stasis pod.' })
 })
 
 createItem('pile_of_vomit', {
@@ -102,25 +102,25 @@ createItem('stasis_locker', CONTAINER(true), {
   loc: 'stasis_bay',
   examine: function (isMultiple) {
     if (this.closed) {
-      msg(util.prefix(this, isMultiple) + 'This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.')
+      io.msg(util.util.prefix(this, isMultiple) + 'This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.')
     } else {
-      msg(util.prefix(this, isMultiple) + 'This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see ' + formatList(this.getContents(display.LOOK), { lastJoiner: ' and ', article: INDEFINITE }) + '.')
+      io.msg(util.util.prefix(this, isMultiple) + 'This metal locker is taller than you, and just as wide; it is where util.spacesuits are stored. Inside you can see ' + util.formatList(this.getContents(util.display.LOOK), { lastJoiner: ' and ', article: util.INDEFINITE }) + '.')
     }
   }
 })
 
-createItem('your_spacesuit', WEARABLE(2, ['body']), {
-  alias: 'spacesuit',
+createItem('your_util.spacesuit', WEARABLE(2, ['body']), {
+  alias: 'util.spacesuit',
   loc: 'stasis_locker',
   defArticle: 'your',
   indefArticle: 'your',
-  examine: 'Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility.'
+  examine: 'Your util.spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility.'
 })
 
-createItem('other_spacesuit', {
-  alias: 'spare spacesuit',
+createItem('other_util.spacesuit', {
+  alias: 'spare util.spacesuit',
   loc: 'stasis_locker',
-  examine: 'The other spacesuit is identical to your own.'
+  examine: 'The other util.spacesuit is identical to your own.'
 })
 
 createRoom('stasis_pod_room', {
@@ -129,11 +129,11 @@ createRoom('stasis_pod_room', {
   vacuum: 'stasis_bay',
   out: new Exit('stasis_bay', {
     use: function () {
-      msg('You climb out of the stasis pod.')
+      io.msg('You climb out of the stasis pod.')
       world.setRoom(game.player, this.name, 'out')
       if (w.your_jumpsuit.loc === 'stasis_pod_drawer') {
         w.stasis_pod_drawer.loc = 'stasis_bay'
-        msg('A drawer under the pod slides open to reveal your jumpsuit.')
+        io.msg('A drawer under the pod slides open to reveal your jumpsuit.')
       }
       return true
     }
@@ -151,17 +151,17 @@ createItem('stasis_pod_interior',
     examine: 'Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}',
     close: function (isMultiple, char) {
       if (w.Kyle.deploySatelliteAction < 5) {
-        msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'closing the lid of a stasis pod will put you back in stasis. That is not permitted until the satellite is deployed, and not advised until probes have been deployed and data collected.' The lid rises to its fully open position.")
+        io.msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'closing the lid of a stasis pod will put you back in stasis. That is not permitted until the satellite is deployed, and not advised until probes have been deployed and data collected.' The lid rises to its fully open position.")
         return false
       }
       if (w.your_jumpsuit.loc === game.player.name) {
-        msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'your jumpsuit should be left outside the pod when going into stasis.' The lid rises to its fully open position.")
+        io.msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'your jumpsuit should be left outside the pod when going into stasis.' The lid rises to its fully open position.")
         return false
       }
 
       w.your_jumpsuit.loc = 'stasis_pod_drawer'
       w.stasis_pod_drawer.scenery = true
-      msg('You give pod lid a pull, and it starts to descend, sealing you in. You feel a sharp pain in your shoulder, and almost immediately you start to feel sleepy... so sleepy you cannot keep your eyes open.')
+      io.msg('You give pod lid a pull, and it starts to descend, sealing you in. You feel a sharp pain in your shoulder, and almost immediately you start to feel sleepy... so sleepy you cannot keep your eyes open.')
       arrival()
       // MORE STUFF HERE ???
       return true
@@ -174,7 +174,7 @@ createRoom('cargo_bay', {
   vacuum: false,
   forward: new Exit('stasis_bay'),
   port: new Exit('top_deck_aft', {
-    msg: 'You walk up the narrow stair way to the top deck.',
+    io.msg: 'You walk up the narrow stair way to the top deck.',
     alsoDir: ['up']
   }),
   starboard: new Exit('airlock'),
@@ -182,7 +182,7 @@ createRoom('cargo_bay', {
 })
 
 createRoom('airlock', {
-  desc: 'The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the [controls].',
+  desc: 'The airlock is just big enough for two persons wearing util.spacesuits, and is featureless besides the doors, port and starboard, and the [controls].',
   vacuum: false,
   port: new Exit('cargo_bay'),
   starboard: new Exit('space', { locked: true })
@@ -255,7 +255,7 @@ createRoom('lab4', {
   forward: new Exit('lab2'),
   port: new Exit('lab3'),
   starboard: new Exit('probes_aft', {
-    msg: 'You walk down the narrow stair way to the bottom deck.',
+    io.msg: 'You walk down the narrow stair way to the bottom deck.',
     alsoDir: ['down']
   }),
   aft: new Exit('engineering1')
@@ -311,7 +311,7 @@ createRoom('probes_aft', {
   desc: 'The aft probe hanger has the scientific probes. Each probe is contained in a crate, and needs unpacking before deployment. On the port side there is a delivery system into which a probe can be placed, to be sent to the planet. Various types of probes are available.',
   vacuum: false,
   port: new Exit('lab4', {
-    msg: 'You walk up the narrow stair way to the middle deck.',
+    io.msg: 'You walk up the narrow stair way to the middle deck.',
     alsoDir: ['up']
   }),
   forward: new Exit('probes_forward')
@@ -336,9 +336,9 @@ createRoom('top_deck_forward', {
   desc: function () {
     if (!w.top_deck_aft.meFirst) {
       this.meFirst = true
-      msg(w.top_deck_aft.descStart + this.descThis + w.top_deck_aft.descFinish)
+      io.msg(w.top_deck_aft.descStart + this.descThis + w.top_deck_aft.descFinish)
     } else {
-      msg(this.descThis)
+      io.msg(this.descThis)
     }
   },
   descThis: 'You are stood at the forward end of a narrow corridor, with your cabin to port, and the canteen to starboard. Ahead, is the lounge.',
@@ -366,7 +366,7 @@ createRoom('top_deck_aft', {
   port: new Exit('guys_cabin'),
   aft: new Exit('girls_cabin'),
   starboard: new Exit('cargo_bay', {
-    msg: 'You walk down the narrow stair way to the middle deck.',
+    io.msg: 'You walk down the narrow stair way to the middle deck.',
     alsoDir: ['down']
   }),
   forward: new Exit('top_deck_forward')
@@ -445,7 +445,7 @@ createItem('probe_prototype', COUNTABLE([]),
       } else if (char === w.Ostap) {
         type = 'bio'
       } else {
-        msg('To launch a probe, see either Aada or Ostap.')
+        io.msg('To launch a probe, see either Aada or Ostap.')
         return false
       }
 
@@ -454,30 +454,30 @@ createItem('probe_prototype', COUNTABLE([]),
       const available = w.Xsansi[type + 'Probes']
 
       if (number === 1) {
-        msg("'Launch a " + type + "-probe,' you say to " + char.byname({ article: DEFINITE }) + '.')
+        io.msg("'Launch a " + type + "-probe,' you say to " + char.byname({ article: util.DEFINITE }) + '.')
       } else {
-        msg("'Launch " + number + ' ' + type + "-probes,' you say to " + char.byname({ article: DEFINITE }) + '.')
+        io.msg("'Launch " + number + ' ' + type + "-probes,' you say to " + char.byname({ article: util.DEFINITE }) + '.')
       }
       if (number > available) {
-        msg("'We only have " + available + " and we should save some for the other planets on our itinerary.'")
+        io.msg("'We only have " + available + " and we should save some for the other planets on our itinerary.'")
         return false
       }
 
       if (number > (5 - char.deployProbeTotal)) {
-        msg("'Are you sure? Protocol says we should deploy no more than five on a single planets.'")
-        msg("'Hey, I'm the captain. It's my bonus on the line here. Get those probes deployed.'")
+        io.msg("'Are you sure? Protocol says we should deploy no more than five on a single planets.'")
+        io.msg("'Hey, I'm the captain. It's my bonus on the line here. Get those probes deployed.'")
       }
 
       if (char.deployProbeAction === 0 || char.deployProbeAction === 4) {
-        msg("'Okay captain.'")
-        char.agenda = ['walkTo:probes_aft:' + char.byname({ article: DEFINITE }) + ' goes to the probe deployment console.', 'text:deployProbe:' + number]
+        io.msg("'Okay captain.'")
+        char.agenda = ['walkTo:probes_aft:' + char.byname({ article: util.DEFINITE }) + ' goes to the probe deployment console.', 'text:deployProbe:' + number]
         char.deployProbeAction = 0
         char.deployProbeCount = 0
       } else {
         // already part way through launching
         // skip walking there, skip first deploy action
         // the old number should be replaced
-        msg("'Okay captain.'")
+        io.msg("'Okay captain.'")
         char.agenda = ['text:deployProbe:' + number]
         char.deployProbeAction = 1
       }

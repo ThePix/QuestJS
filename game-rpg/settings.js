@@ -34,9 +34,9 @@ settings.setup = function() {
       w[key].maxHealth = w[key].health;
     }
   }
-  
+
   //ioCreateCustom();
-  
+
 //  parser.parse("attack goblin");
 }
 
@@ -73,26 +73,26 @@ const ioCreateCustom = function() {
   }
   document.writeln('</table>');
   document.writeln('</div>');
-  
+
   document.writeln('<div id="choose-weapon-div" title="Select a weapon">');
   document.writeln('<select id="weapon-select"></select>');
   document.writeln('</div>');
   $(function() {
     $( "#choose-weapon-div" ).dialog({
-      autoOpen: false,  
+      autoOpen: false,
       buttons: {
         OK: function() {chosenWeapon();}
       },
     });
   });
-};  
+};
 
 
 const ioUpdateCustom = function() {
   console.log("in ioUpdateCustom");
   $('#weaponImage').attr('src', 'images/icon-' + w[game.player.equipped].image + '.png');
   $('#weapon-td').prop('title', "Weapon: " + w[game.player.equipped].alias);
-  
+
   $('#hits-indicator').css('padding-right', 120 * game.player.health / game.player.maxHealth);
   $('#hits-td').prop('title', "Hits: " + game.player.health + "/" + game.player.maxHealth);
 
@@ -118,8 +118,8 @@ const chooseWeapon = function() {
   const s = weapons.join('');
   console.log(s);
 
-  $('#weapon-select').html(s);  
-  
+  $('#weapon-select').html(s);
+
   $("#choose-weapon-div").dialog("open");
 };
 
@@ -129,7 +129,7 @@ const chosenWeapon = function() {
   const selected = $("#weapon-select").val();
   console.log("in chosenWeapon: " + selected);
   w[selected].equip(false, game.player);
-  world.endTurn(SUCCESS);
+  world.endTurn(util.SUCCESS);
 };
 
 
@@ -140,22 +140,22 @@ const chosenWeapon = function() {
 const skills = {
   list:[
     { name:"Basic attack", icon:"sword1", tooltip:"A simple attack", processAttack:function(attack, options) {}},
-    
-    { 
+
+    {
       name:"Double attack",
       icon:"sword2",
-      tooltip:"Attack one foe twice, but at -2 to the attack roll", 
-      attackNumber:2, 
+      tooltip:"Attack one foe twice, but at -2 to the attack roll",
+      attackNumber:2,
       processAttack:function(attack, options) {
         attack.offensiveBonus -= 2;
       },
     },
-    
-    { 
-      name:"Sweeping attack", 
-      icon:"sword3", 
-      tooltip:"Attack one foe for normal damage, and any other for 4 damage; at -3 to the attack roll for reach", 
-      attackTarget:"foes", 
+
+    {
+      name:"Sweeping attack",
+      icon:"sword3",
+      tooltip:"Attack one foe for normal damage, and any other for 4 damage; at -3 to the attack roll for reach",
+      attackTarget:"foes",
       processAttack:function(attack, options) {
         if (options.secondary) {
           attack.damageNumber = 0;
@@ -164,11 +164,11 @@ const skills = {
         attack.offensiveBonus -= 3;
       },
     },
-    
+
     { name:"Sword of Fire", icon:"sword-fire", tooltip:"Attack with a flaming sword", processAttack:function(attack, options) {
       attack.element = "fire";
     },},
-    
+
     { name:"Ice Sword", icon:"sword-ice", tooltip:"Attack with a freezing blade", processAttack:function(attack, options) {
       attack.element = "ice";
     },},
@@ -206,7 +206,7 @@ const skills = {
     }
     return null;
   },
-  
+
 }
 
 
@@ -231,7 +231,7 @@ $(function() {
     p.job = settings.professions[0];
     p.isFemale = true;
     p.fullname = "Shaala";
-    return; 
+    return;
   }
   const diag = $("#dialog");
   diag.prop("title", "Who are you?");
@@ -244,7 +244,7 @@ $(function() {
     s += '<option value="' + profession.name + '">' + profession.name + '</option>';
   }
   s += '</select></p>';
-  
+
   diag.html(s);
   diag.dialog({
     modal:true,
@@ -374,7 +374,7 @@ function scrollPara(element) {
     paraPositions[paraNumber] = 0;
   }
   para.html(paraOpts[paraNumber][paraPositions[paraNumber]]);
-}    
+}
 
 function setValues() {
   game.player.alias = $('#name_input').val();
@@ -384,8 +384,8 @@ function setValues() {
   game.player.hairColour = $('#para6').html();
   game.player.eyeColour = $('#para7').html();
   game.player.spellColour = $('#para8').html();
-  msg(game.player.alias);
-  msg($("#diag-inner").text());
+  io.msg(game.player.alias);
+  io.msg($("#diag-inner").text());
 }
 
 /*
@@ -401,7 +401,7 @@ $(document).ready(function () {
             "Done": function() { setValues();}
         }
       });
-      $("button[title='Close']")[0].style.display = 'none';
+      $("button[title='Close']")[0].style.util.display = 'none';
 });*/
 
 function scrollWizard() {

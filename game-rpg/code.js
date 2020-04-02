@@ -96,12 +96,12 @@ function Attack (weapon) {
   this.armour = 0
   for (const key in weapon) this[key] = weapon[key]
   if (this.damage === undefined) {
-    errormsg(`Weapon ${weapon.name} has no damage attribute.`)
+    io.errorio.msg(`Weapon ${weapon.name} has no damage attribute.`)
     return
   }
   const regexMatch = /^(\d*)d(\d+)([\+|\-]\d+)?$/i.exec(this.damage)
   if (regexMatch === null) {
-    errormsg(`Weapon ${weapon.name} has a bad damage attribute.`)
+    io.errorio.msg(`Weapon ${weapon.name} has a bad damage attribute.`)
     return
   }
   this.damageNumber = regexMatch[1] === '' ? 1 : parseInt(regexMatch[1])
@@ -114,11 +114,11 @@ function Attack (weapon) {
     }
     damage -= this.damageSides - this.armour
     if (damage < 1) damage = 1
-    msg(lang.nounVerb(attacker, 'attack', true) + ' ' + target.byname({ article: DEFINITE }) + '.')
-    msg('Element: ' + this.element)
-    msg('Offensive bonus: ' + this.offensiveBonus)
-    msg(`Damage: ${this.damageNumber}d${this.damageSides}+${this.damageBonus}`)
-    msg('Damage: ' + damage)
+    io.msg(lang.nounVerb(attacker, 'attack', true) + ' ' + target.byname({ article: util.DEFINITE }) + '.')
+    io.msg('Element: ' + this.element)
+    io.msg('Offensive bonus: ' + this.offensiveBonus)
+    io.msg(`Damage: ${this.damageNumber}d${this.damageSides}+${this.damageBonus}`)
+    io.msg('Damage: ' + damage)
   }
 }
 
@@ -190,31 +190,31 @@ const WEAPON = function () {
     if (char.equipped === this.name) {
       char.equipped = 'weapon_unarmed'
     }
-    msg(util.prefix(this, isMultiple) + drop_successful(char, this))
+    io.msg(util.util.prefix(this, isMultiple) + drop_successful(char, this))
     this.moveToFrom(char.loc, this.loc)
     return true
   },
 
   res.equip = function (isMultiple, char) {
     if (char.equipped === this.name) {
-      msg('It already is.')
+      io.msg('It already is.')
       return false
     }
     if (char.equipped !== 'weapon_unarmed') {
-      msg(lang.pronounVerb(char, 'put', true) + ' away ' + w[char.equipped].byname({ article: DEFINITE }) + '.')
+      io.msg(lang.pronounVerb(char, 'put', true) + ' away ' + w[char.equipped].byname({ article: util.DEFINITE }) + '.')
     }
     char.equipped = this.name
-    msg(lang.pronounVerb(char, 'draw', true) + ' ' + this.byname({ article: DEFINITE }) + '.')
+    io.msg(lang.pronounVerb(char, 'draw', true) + ' ' + this.byname({ article: util.DEFINITE }) + '.')
     return true
   }
 
   res.unequip = function (isMultiple, char) {
     if (char.equipped !== this.name) {
-      msg('It already is.')
+      io.msg('It already is.')
       return false
     }
     char.equipped = 'weapon_unarmed'
-    msg(lang.pronounVerb(char, 'put', true) + ' away ' + this.byname({ article: DEFINITE }) + '.')
+    io.msg(lang.pronounVerb(char, 'put', true) + ' away ' + this.byname({ article: util.DEFINITE }) + '.')
     return true
   }
 
@@ -230,7 +230,7 @@ commands.push(new Cmd('Attack', {
     { scope: parser.isPresent }
   ],
   default: function (item, isMultiple, char) {
-    msg(util.prefix(item, isMultiple) + 'No point attacking ' + item.byname({ article: DEFINITE }) + '.')
+    io.msg(util.util.prefix(item, isMultiple) + 'No point attacking ' + item.byname({ article: util.DEFINITE }) + '.')
     return false
   }
 }))
@@ -244,7 +244,7 @@ commands.push(new Cmd('Equip', {
     { scope: parser.isHeld }
   ],
   default: function (item, isMultiple, char) {
-    msg(util.prefix(item, isMultiple) + lang.pronounVerb(item, 'be', true) + ' not something you can equip.')
+    io.msg(util.util.prefix(item, isMultiple) + lang.pronounVerb(item, 'be', true) + ' not something you can equip.')
     return false
   }
 }))
@@ -258,7 +258,7 @@ commands.push(new Cmd('Unequip', {
     { scope: parser.isHeld }
   ],
   default: function (item, isMultiple, char) {
-    msg(util.prefix(item, isMultiple) + lang.pronounVerb(item, 'be', true) + ' not something you can equip.')
+    io.msg(util.util.prefix(item, isMultiple) + lang.pronounVerb(item, 'be', true) + ' not something you can equip.')
     return false
   }
 }))

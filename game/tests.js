@@ -1,5 +1,5 @@
 'use strict'
 
-test.tests = function () {
+util.test.util.tests = function () {
 
 }

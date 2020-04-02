@@ -20,7 +20,7 @@ body {
   cursor: pointer;
   color:blue;
 }
-  
+
 
 
 
@@ -61,14 +61,14 @@ body {
   right: 0px;
 }
 .sidepanesNone {
-  display: None;
+  util.display: None;
 }
 
 #rightstatus {
   background-color: #c0c0ff;
   margin:10px;
   border:black solid 1px;
-}  
+}
 
 /*
 .paneDiv {
@@ -96,7 +96,7 @@ body {
 }
 
 
-/* Various msg options */
+/* Various io.msg options */
 .meta {
   color: grey;
 }
@@ -116,7 +116,7 @@ body {
   font-size: 10pt;
   color: grey;
   font-family: monospace;
-  /*display: none;*/
+  /*util.display: none;*/
 }
 
 
@@ -129,13 +129,13 @@ td.compassbutton {
     background-color: #c0c0ff;
     width: 20px;
     height: 15px;
-}  
+}
 span.compassbutton {
     cursor: pointer;
     text-align: center;
     width: 18px;
-    display: block;
-}  
+    util.display: block;
+}
 
 
 /* Items in inventories */
@@ -178,14 +178,14 @@ span.compassbutton {
   padding-left: 5pt;
 }
 #dialog {
-  display:none;
+  util.display:none;
 }
 
 
 
 /* For dialog panels */
 .no-close .ui-dialog-titlebar-close {
-  display: none;
+  util.display: none;
 }
 .ui-dialog-titlebar {
   background-image: none;

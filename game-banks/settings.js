@@ -21,27 +21,27 @@ settings.roomTemplate = [
 ]
 
 settings.status = [
-  function () { return '<td colspan="2" align="center">' + getDateTime() + '</td>' },
+  function () { return '<td colspan="2" align="center">' + util.getDateTime() + '</td>' },
   function () { return '<td width="100px"><b><i>Bonus:</i></b></td><td width="30px" align="right"><b>$' + game.player.bonus + 'k</b></td>' },
   function () { return '<td colspan="2" align="center"> </td>' },
   function () { return '<td><i>You:</i></td><td align="right">' + game.player.status + '%</td>' },
   function () { return '<td><i>Ship:</i></td><td align="right">' + w.Xsansi.status + '%</td>' },
-  function () { return '<td><i>Ha-yoon:</i></td><td align="right">' + displayStatus(w.Ha_yoon) + '</td>' },
-  function () { return '<td><i>Kyle:</i></td><td align="right">' + displayStatus(w.Kyle) + '</td>' },
-  function () { return '<td><i>Ostap:</i></td><td align="right">' + displayStatus(w.Ostap) + '</td>' },
-  function () { return '<td><i>Aada:</i></td><td align="right">' + displayStatus(w.Aada) + '</td>' }
+  function () { return '<td><i>Ha-yoon:</i></td><td align="right">' + util.displayStatus(w.Ha_yoon) + '</td>' },
+  function () { return '<td><i>Kyle:</i></td><td align="right">' + util.displayStatus(w.Kyle) + '</td>' },
+  function () { return '<td><i>Ostap:</i></td><td align="right">' + util.displayStatus(w.Ostap) + '</td>' },
+  function () { return '<td><i>Aada:</i></td><td align="right">' + util.displayStatus(w.Aada) + '</td>' }
 ]
 
-function displayStatus (obj) {
+function util.displayStatus (obj) {
   if (typeof obj.status === 'string') return obj.status
   return obj.status + '%'
 }
 
-// Change the name values to alter how items are displayed
+// Change the name values to alter how items are util.displayed
 // You can add (or remove) inventories too
 settings.inventories = [
-//  {name:'Items Held', alt:'itemsHeld', test:util.isHeldNotWorn, getLoc:function() { return game.player.name; } },
-//  {name:'Items Here', alt:'itemsHere', test:util.isHere, getLoc:function() { return game.player.loc; } },
+//  {name:'Items Held', alt:'itemsHeld', util.test:util.isHeldNotWorn, getLoc:function() { return game.player.name; } },
+//  {name:'Items Here', alt:'itemsHere', util.test:util.isHere, getLoc:function() { return game.player.loc; } },
 ]
 
 const ooc_intro = '<p>You are on a mission to survey planets around five stars, the captain of a crew of five (including yourself). There is also a computer system, Xsansi (you can also use "AI" or "computer"), that you can talk to anywhere on the ship. </p><p>Your objective is to maximise your bonus. Collecting data will give a bonus, but geo-data about planets suitable for mining and bio-data about planets suitable for colonisation will give higher bonuses. Evidence of alien intelligence will be especially rewarding!</p><p>You have just arrived at your first destination after years in a "stasis" pod in suspended animation. ASK AI ABOUT MISSION or CREW might be a good place to start, once you have created your character. Later you want to try OSTAP, LAUNCH PROBE or ASK AADA ABOUT PLANET.'
@@ -54,10 +54,10 @@ settings.setup = function () {
 
   // showStartDiag();
 
-  // console.log(getDateTime());
+  // console.log(util.getDateTime());
 
   // for(let key in w) {
-  //  debugmsg(key);
+  //  debugio.msg(key);
   // }
   arrival()
 }

@@ -5,7 +5,7 @@ createItem('me', PLAYER(), {
   regex: /^(me|myself|player)$/,
   money: 10,
   examine: function (isMultiple) {
-    msg(util.prefix(this, isMultiple) + 'A ' + (this.isFemale ? 'chick' : 'guy') + ' called ' + this.alias)
+    io.msg(util.util.prefix(this, isMultiple) + 'A ' + (this.isFemale ? 'chick' : 'guy') + ' called ' + this.alias)
   }
 })
 
@@ -16,13 +16,13 @@ createItem('knife',
     sharp: false,
     examine: function (isMultiple) {
       if (this.sharp) {
-        msg(util.prefix(this, isMultiple) + 'A really sharp knife.')
+        io.msg(util.util.prefix(this, isMultiple) + 'A really sharp knife.')
       } else {
-        msg(util.prefix(this, isMultiple) + 'A blunt knife.')
+        io.msg(util.util.prefix(this, isMultiple) + 'A blunt knife.')
       }
     },
     chargeResponse: function (participant) {
-      msg('There is a loud bang, and the knife is destroyed.')
+      io.msg('There is a loud bang, and the knife is destroyed.')
       delete this.loc
       return false
     }
@@ -59,13 +59,13 @@ createItem('book',
     read: function (isMultiple, char) {
       if (cmdRules.isHeld(null, char, this, isMultiple)) {
         if (char === w.Lara) {
-          msg("'Okay.' Lara spends a few minutes reading the book.")
-          msg("'I meant, read it to me.'")
-          msg("'All of it?'")
-          msg("'Quick summary.'")
-          msg("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
+          io.msg("'Okay.' Lara spends a few minutes reading the book.")
+          io.msg("'I meant, read it to me.'")
+          io.msg("'All of it?'")
+          io.msg("'Quick summary.'")
+          io.msg("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
         } else {
-          msg(util.prefix(this, isMultiple) + 'It is not in a language ' + lang.pronounVerb(char, 'understand') + '.')
+          io.msg(util.util.prefix(this, isMultiple) + 'It is not in a language ' + lang.pronounVerb(char, 'understand') + '.')
         }
         return true
       } else {
@@ -89,16 +89,16 @@ createItem('boots',
 createItem('waterskin',
   TAKEABLE(),
   {
-    examine: function (isMultiple) { msg(util.prefix(item, isMultiple) + 'The waterskin is ' + Math.floor(this.full / this.capacity * 100) + '% full.') },
+    examine: function (isMultiple) { io.msg(util.util.prefix(item, isMultiple) + 'The waterskin is ' + Math.floor(this.full / this.capacity * 100) + '% full.') },
     capacity: 10,
     full: 3,
     loc: 'lounge',
     fill: function (isMultiple) {
       if (game.player.loc != 'garage') {
-        msg(util.prefix(this, isMultiple) + 'There is nothing to charge the torch with here.')
+        io.msg(util.util.prefix(this, isMultiple) + 'There is nothing to charge the torch with here.')
         return false
       } else {
-        msg(util.prefix(this, isMultiple) + 'You charge the torch - it should last for hours now.')
+        io.msg(util.util.prefix(this, isMultiple) + 'You charge the torch - it should last for hours now.')
         this.power = 20
         return true
       }
@@ -139,7 +139,7 @@ createItem('cardboard_box',
 
 createItem('sandwich',
   EDIBLE(false),
-  { loc: 'lounge', examine: 'A tasty looking thing.', onIngesting: function () { msg('That was Great!') } }
+  { loc: 'lounge', examine: 'A tasty looking thing.', onIngesting: function () { io.msg('That was Great!') } }
 )
 
 createItem('ornate_doll',
@@ -153,7 +153,7 @@ createItem('coin',
     loc: 'lounge',
     examine: 'A gold coin.',
     take: function (isMultiple, participant) {
-      msg(util.prefix(this, isMultiple) + lang.pronounVerb(participant, 'try', true) + ' to pick up the coin, but it just will not budge.')
+      io.msg(util.util.prefix(this, isMultiple) + lang.pronounVerb(participant, 'try', true) + ' to pick up the coin, but it just will not budge.')
       return false
     }
   }
@@ -170,12 +170,12 @@ createItem('flashlight', TAKEABLE(), SWITCHABLE(false), {
   regex: /^torch$/,
   byname: function (options) {
     let res = this.alias
-    if (options.article) { res = (options.article === DEFINITE ? 'the' : 'a') + ' ' + this.alias }
+    if (options.article) { res = (options.article === util.DEFINITE ? 'the' : 'a') + ' ' + this.alias }
     if (this.switchedon && options.modified) { res += ' (providing light)' }
     return res
   },
   lightSource: function () {
-    return this.switchedon ? LIGHT_FULL : LIGHT_none
+    return this.switchedon ? util.LIGHT_FULL : util.LIGHT_none
   },
   eventPeriod: 1,
   eventIsActive: function () {
@@ -184,23 +184,23 @@ createItem('flashlight', TAKEABLE(), SWITCHABLE(false), {
   eventScript: function () {
     this.power--
     if (this.power === 2) {
-      msg('The torch flickers.')
+      io.msg('The torch flickers.')
     }
     if (this.power < 0) {
-      msg('The torch flickers and dies.{once: Perhaps there is a charger in the garage?}')
+      io.msg('The torch flickers and dies.{once: Perhaps there is a charger in the garage?}')
       this.doSwitchoff()
     }
   },
   checkCanSwitchOn () {
     if (this.power < 0) {
-      msg('The torch is dead.')
+      io.msg('The torch is dead.')
       return false
     }
     return true
   },
   power: 2,
   chargeResponse: function (participant) {
-    msg(lang.pronounVerb(participant, 'push', true) + ' the button. There is a brief hum of power, and a flash.')
+    io.msg(lang.pronounVerb(participant, 'push', true) + ' the button. There is a brief hum of power, and a flash.')
     w.flashlight.power = 20
     return true
   }
@@ -223,7 +223,7 @@ createItem('chair',
     loc: 'dining_room',
     examine: 'A wooden chair.',
     onsitting: function (char) {
-      msg('The chair makes a strange noise when ' + lang.nounVerb(char, 'sit') + ' on it.')
+      io.msg('The chair makes a strange noise when ' + lang.nounVerb(char, 'sit') + ' on it.')
     }
   }
 )
@@ -236,9 +236,9 @@ createRoom('lift',
     transitMenuPrompt: 'Where do you want to go?'
     // afterEnter:transitOfferMenu,
     // transitAutoMove:true,
-    // transitOnMove:function(toLoc, fromLoc) { debugmsg("MOVING to " + toLoc + " from " + fromLoc); },
+    // transitOnMove:function(toLoc, fromLoc) { debugio.msg("MOVING to " + toLoc + " from " + fromLoc); },
     // transitCheck:function() {
-    //  msg("The lift is out of order");
+    //  io.msg("The lift is out of order");
     //  return false;
     // },
   }
@@ -295,17 +295,17 @@ createRoom('kitchen', {
   west: new Exit('lounge'),
   down: new Exit('basement', {
     isHidden: function () { return w.trapdoor.closed },
-    msg: function (isMultiple, char) {
+    io.msg: function (isMultiple, char) {
       if (char === game.player) {
-        msg('You go through the trapdoor, and down the ladder.')
+        io.msg('You go through the trapdoor, and down the ladder.')
       } else {
-        msg('You watch ' + char.byname({ article: DEFINITE }) + ' disappear through the trapdoor.')
+        io.msg('You watch ' + char.byname({ article: util.DEFINITE }) + ' disappear through the trapdoor.')
       }
     }
   }),
-  north: new Exit('garage', { use: useWithDoor, door: 'garage_door', doorName: 'garage door' }),
+  north: new Exit('garage', { use: command.useWithDoor, door: 'garage_door', doorName: 'garage door' }),
   afterFirstEnter: function () {
-    msg('A fresh smell here!')
+    io.msg('A fresh smell here!')
   },
   hint: 'This room features two doors that open and close. The garage door needs a key.',
   source: 'water'
@@ -370,7 +370,7 @@ createRoom('basement', {
   darkDesc: 'It is dark, but you can just see the outline of the trapdoor above you.',
   up: new Exit('kitchen', { isHidden: function () { return false } }),
   lightSource: function () {
-    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_none
+    return w.light_switch.switchedon ? util.LIGHT_FULL : util.LIGHT_none
   },
   hint: 'The basement illustrates light and dark. There is a torch in the lounge that may be useful.'
 })
@@ -383,7 +383,7 @@ createItem('light_switch',
     alias: 'light switch',
     checkCanSwitchOn: function () {
       if (!w.crates.moved) {
-        msg('You cannot reach the light switch, without first moving the crates.')
+        io.msg('You cannot reach the light switch, without first moving the crates.')
         return false
       } else {
         return true
@@ -397,7 +397,7 @@ createItem('crates',
     loc: 'basement',
     examine: 'A bunch of old crates.',
     move: function () {
-      msg('You move the crates, so the light switch is accessible.')
+      io.msg('You move the crates, so the light switch is accessible.')
       this.moved = true
       return true
     }
@@ -406,7 +406,7 @@ createItem('crates',
 
 createRoom('garage', {
   desc: 'An empty garage.',
-  south: new Exit('kitchen', { use: useWithDoor, door: 'garage_door', doorName: 'kitchen door' }),
+  south: new Exit('kitchen', { use: command.useWithDoor, door: 'garage_door', doorName: 'kitchen door' }),
   hint: 'The garage features a complex mechanism, with two components.'
 })
 
@@ -416,7 +416,7 @@ createItem('charger',
     examine: 'A device bigger than a washing machine to charge a torch? It has a compartment and a button. {charger_state}.',
     mended: false,
     use: function () {
-      metamsg('To use the charge, you need to put the torch in the compartment and press the button.')
+      metaio.msg('To use the charge, you need to put the torch in the compartment and press the button.')
     }
   }
 )
@@ -427,10 +427,10 @@ createItem('charger_compartment',
   {
     alias: 'compartment',
     examine: 'The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.',
-    testRestrictions: function (item) {
-      const contents = w.charger_compartment.getContents(display.LOOK)
+    util.testRestrictions: function (item) {
+      const contents = w.charger_compartment.getContents(util.display.LOOK)
       if (contents.length > 0) {
-        msg('The compartment is full.')
+        io.msg('The compartment is full.')
         return false
       }
       return true
@@ -444,12 +444,12 @@ createItem('charger_button',
     examine: 'A big red button.',
     alias: 'button',
     push: function (isMultiple, participant) {
-      const contents = w.charger_compartment.getContents(display.ALL)[0]
+      const contents = w.charger_compartment.getContents(util.display.ALL)[0]
       if (!w.charger_compartment.closed || !contents) {
-        msg(lang.pronounVerb(participant, 'push', true) + ' the button, but nothing happens.')
+        io.msg(lang.pronounVerb(participant, 'push', true) + ' the button, but nothing happens.')
         return false
       } else if (!contents.chargeResponse) {
-        msg(lang.pronounVerb(participant, 'push', true) + ' the button. There is a brief hum of power, but nothing happens.')
+        io.msg(lang.pronounVerb(participant, 'push', true) + ' the button. There is a brief hum of power, but nothing happens.')
         return false
       } else {
         return contents.chargeResponse(participant)
@@ -556,9 +556,9 @@ createItem('Arthur',
     loc: 'garden',
     examine: function (isMultiple) {
       if (this.suspended) {
-        msg(util.prefix(item, isMultiple) + 'Arthur is asleep.')
+        io.msg(util.util.prefix(item, isMultiple) + 'Arthur is asleep.')
       } else {
-        msg(util.prefix(item, isMultiple) + 'Arthur is awake.')
+        io.msg(util.util.prefix(item, isMultiple) + 'Arthur is awake.')
       }
     },
     suspended: true,
@@ -573,14 +573,14 @@ createItem('Arthur',
     ],
     inTheGardenWithLara: function (arr) {
       if (this.here()) {
-        msg(arr[0])
+        io.msg(arr[0])
       }
       if (game.player.loc === 'dining_room') {
-        msg(arr[1])
+        io.msg(arr[1])
       }
     },
     talkto: function () {
-      msg("'Hey, wake up,' you say to Arthur.")
+      io.msg("'Hey, wake up,' you say to Arthur.")
       this.suspended = false
       this.pause()
       this.multiMsg([
@@ -604,60 +604,60 @@ createItem('Kyle', NPC(false),
     askOptions: [
       {
         name: 'House',
-        test: function (p) { return p.text.match(/house/) },
-        msg: "'I like it,' says Kyle."
+        util.test: function (p) { return p.text.match(/house/) },
+        io.msg: "'I like it,' says Kyle."
       },
       {
         name: 'Garden',
-        test: function (p) { return p.text.match(/garden/) },
+        util.test: function (p) { return p.text.match(/garden/) },
         responses: [
           {
-            test: function (p) { return w.garden.fixed },
-            msg: "'Looks much better now,' Kyle says with a grin."
+            util.test: function (p) { return w.garden.fixed },
+            io.msg: "'Looks much better now,' Kyle says with a grin."
           },
           {
-            test: function (p) { return w.Kyle.needsWorkCount === 0 },
-            msg: "'Needs some work,' Kyle says with a sign.",
+            util.test: function (p) { return w.Kyle.needsWorkCount === 0 },
+            io.msg: "'Needs some work,' Kyle says with a sign.",
             script: function (p) { w.Kyle.needsWorkCount++ }
           },
           {
-            msg: "'I'm giving up hope of it ever getting sorted,' Kyle says."
+            io.msg: "'I'm giving up hope of it ever getting sorted,' Kyle says."
           }
         ]
       },
       {
-        test: function (p) { return p.text.match(/park/) },
+        util.test: function (p) { return p.text.match(/park/) },
         responses: [
           {
             name: 'Park',
             mentions: ['Swings'],
-            msg: "'Going to the park sounds like fun,' Kyle says with a grin. 'We can go on the swings!'"
+            io.msg: "'Going to the park sounds like fun,' Kyle says with a grin. 'We can go on the swings!'"
           }
         ]
       },
       {
         name: 'Fountain',
-        test: function (p) { return p.text.match(/fountain/) && p.actor.specialFlag },
-        msg: "'The fountain does not work.'"
+        util.test: function (p) { return p.text.match(/fountain/) && p.actor.specialFlag },
+        io.msg: "'The fountain does not work.'"
       },
       {
         name: 'Swings',
         silent: true,
-        test: function (p) { return p.text.match(/swing/) },
-        msg: "'The swings are fun!'"
+        util.test: function (p) { return p.text.match(/swing/) },
+        io.msg: "'The swings are fun!'"
       },
       {
-        msg: 'Kyle has no interest in that subject.',
+        io.msg: 'Kyle has no interest in that subject.',
         failed: true
       }
     ],
     needsWorkCount: 0,
     talkto: function () {
       switch (this.talktoCount) {
-        case 0 : msg("You say 'Hello,' to Kyle, and he replies in kind."); break
-        case 1 : msg("You ask Kyle how to get upstairs. 'You know,' he replies, 'I have no idea.'"); break
-        case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break
-        default: msg('You wonder what you can talk to Kyle about.'); break
+        case 0 : io.msg("You say 'Hello,' to Kyle, and he replies in kind."); break
+        case 1 : io.msg("You ask Kyle how to get upstairs. 'You know,' he replies, 'I have no idea.'"); break
+        case 2 : io.msg("'Where do you sleep?' you ask Kyle."); io.msg("'What's \"sleep\"?'"); break
+        default: io.msg('You wonder what you can talk to Kyle about.'); break
       }
       this.pause()
       return true
@@ -669,18 +669,18 @@ createItem('kyle_question', QUESTION(), {
     {
       regex: /^(yes)$/,
       response: function () {
-        msg("'Oh, cool,' says Kyle.")
+        io.msg("'Oh, cool,' says Kyle.")
       }
     },
     {
       regex: /^(no)$/,
       response: function () {
-        msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.")
+        io.msg("'Oh, well, Lara, this is Tester, he or she is util.testing Quest 6,' says Kyle.")
       }
     },
     {
       response: function () {
-        msg("'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'")
+        io.msg("'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'")
         w.Kyle.askQuestion('kyle_question')
       }
     }
@@ -699,7 +699,7 @@ createItem('Kyle_The_Garden',
     alias: "What's the deal with the garden?",
     nowShow: ['Mary_The_Garden_Again'],
     script: function () {
-      msg("You ask Kyle about the garden, but he's not talking.")
+      io.msg("You ask Kyle about the garden, but he's not talking.")
     }
   }
 )
@@ -710,7 +710,7 @@ createItem('Kyle_The_Garden_Again',
     loc: 'Kyle',
     alias: "Seriously, what's the deal with the garden?",
     script: function () {
-      msg("You ask Kyle about the garden, but he's STILL not talking.")
+      io.msg("You ask Kyle about the garden, but he's STILL not talking.")
     }
   }
 )
@@ -721,7 +721,7 @@ createItem('Kyle_The_Weather',
     loc: 'Kyle',
     alias: 'The weather',
     script: function () {
-      msg('You talk to Kyle about the weather.')
+      io.msg('You talk to Kyle about the weather.')
     }
   }
 )
@@ -735,28 +735,28 @@ createItem('Lara',
     happy: false,
     giveReaction: function (item, multiple, char) {
       if (item === w.ring) {
-        msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
+        io.msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
         w.ring.loc = 'Lara'
         w.ring.worn = true
         w.garage_key.loc = char.name
       }
       if (item === w.book) {
-        msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'")
+        io.msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'")
         w.book.loc = 'Lara'
       } else {
-        msg("'Why would I want {i:that}?'")
+        io.msg("'Why would I want {i:that}?'")
       }
     },
     getAgreementTake: function (item) {
       if (item === w.brick) {
-        msg("'I'm not picking up any bricks,' says Lara indignantly.")
+        io.msg("'I'm not picking up any bricks,' says Lara indignantly.")
         return false
       }
       return true
     },
     getAgreementGo: function (dir) {
       if (!this.happy) {
-        msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like that room.'")
+        io.msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like that room.'")
         return false
       }
       return true
@@ -772,13 +772,13 @@ createItem('Lara',
     },
     getAgreementPosture: function () {
       if (!this.happy) {
-        msg("'I don't think so!' says Lara indignantly.")
+        io.msg("'I don't think so!' says Lara indignantly.")
         return false
       }
       return true
     },
     getAgreement () {
-      msg("'I'm not doing that!' says Lara indignantly.")
+      io.msg("'I'm not doing that!' says Lara indignantly.")
       return false
     },
     canTalkPlayer: function () { return true },
@@ -789,9 +789,9 @@ createItem('Lara',
         regex: /^(hi|hello)$/,
         id: 'hello',
         response: function () {
-          msg("'Oh, hello there,' replies Lara.")
+          io.msg("'Oh, hello there,' replies Lara.")
           if (w.Kyle.isHere()) {
-            msg("'Have you two met before?' asks Kyle.")
+            io.msg("'Have you two met before?' asks Kyle.")
             w.Kyle.askQuestion('kyle_question')
           }
         }
@@ -811,7 +811,7 @@ createItem('Lara_garage_key',
     loc: 'Lara',
     alias: 'Can I have the garden key?',
     script: function () {
-      msg('You ask Lara about the garage key; she agrees to give it to you if you give her a ring. Perhaps there is one in the glass cabinet?')
+      io.msg('You ask Lara about the garage key; she agrees to give it to you if you give her a ring. Perhaps there is one in the glass cabinet?')
     }
   }
 )
@@ -822,7 +822,7 @@ createItem('Lara_very_attractive',
     loc: 'Lara',
     alias: "You're very attractive",
     script: function () {
-      msg("You tell Lara she looks very attractive. 'Why thank you!' she replies, smiling at last.")
+      io.msg("You tell Lara she looks very attractive. 'Why thank you!' she replies, smiling at last.")
       w.Lara.happy = true
     }
   }
@@ -835,7 +835,7 @@ createItem('walls',
     scenery: true,
     isAtLoc: function (loc, situation) {
       if (typeof loc !== 'string') loc = loc.name
-      return w[loc].room && situation === display.PARSER
+      return w[loc].room && situation === util.display.PARSER
     }
   }
 )

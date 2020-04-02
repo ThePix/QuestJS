@@ -13,9 +13,9 @@ createItem('knife',
     sharp: false,
     examine: function (isMultiple) {
       if (this.sharp) {
-        msg(util.prefix(this, isMultiple) + 'A really sharp knife.')
+        io.msg(util.util.prefix(this, isMultiple) + 'A really sharp knife.')
       } else {
-        msg(util.prefix(this, isMultiple) + 'A blunt knife.')
+        io.msg(util.util.prefix(this, isMultiple) + 'A blunt knife.')
       }
     }
   }
@@ -34,7 +34,7 @@ createRoom('kitchen', {
   east: new Exit('lounge', {
     locked: true,
     use: function () {
-      msg('No cannot.')
+      io.msg('No cannot.')
     }
   }
   ),

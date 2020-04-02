@@ -8,7 +8,7 @@ settings.thanks = ['Kyle', 'Lara']
 settings.noTalkTo = false
 settings.noAskTell = false
 
-settings.tests = true
+settings.util.tests = true
 
 settings.textEffectDelay = 100
 

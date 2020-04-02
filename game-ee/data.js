@@ -24,7 +24,7 @@ createItem('consult_brittany',
     alias: 'Ship: Brittany',
     nowShow: ['consult_fastness', 'consult_fastness_council'],
     script: function () {
-      msg('{b:Ship: Brittany}|The SS Brittany was a frigate of the Systems Accord fleet, fitted with specialised stealth and exploration equipment It was lost in a battle with the Gith six months ago.')
+      io.msg('{b:Ship: Brittany}|The SS Brittany was a frigate of the Systems Accord fleet, fitted with specialised stealth and exploration equipment It was lost in a battle with the Gith six months ago.')
     }
   }
 )
@@ -36,7 +36,7 @@ createItem('consult_accord',
     alias: 'Organisation: Systems Accord',
     nowShow: ['consult_fastness', 'consult_fastness_council'],
     script: function () {
-      msg('{b:Organisation: Systems Accord}|The Accord is an agreement between Earth and most human colony worlds. It involves trade agreements, defence agreements and a common legal system. it was established in 2465, and now includes over sixty worlds, howabout at least twenty human colonies are not part of the Accord, feeling it to be too restrictive.')
+      io.msg('{b:Organisation: Systems Accord}|The Accord is an agreement between Earth and most human colony worlds. It involves trade agreements, defence agreements and a common legal system. it was established in 2465, and now includes over sixty worlds, howabout at least twenty human colonies are not part of the Accord, feeling it to be too restrictive.')
     }
   }
 )
@@ -48,7 +48,7 @@ createItem('consult_garmr',
     alias: 'Organisation: GARMR',
     nowShow: ['consult_fastness', 'consult_fastness_council'],
     script: function () {
-      msg('{b:Organisation: GARMR}|GARMR is a para-milirary organisation that hold to human supremacy at the expense of other species. Due to their disregard for the lives of alien species in their activities, they are considered a terrorist organisation by both the Systems Accord and the Fastness Council.|GARMR stands for Guardian Agent Response for Mankind Required. That it is als the name of the guarddog of Hell in Norse mythology is just coincidence...')
+      io.msg('{b:Organisation: GARMR}|GARMR is a para-milirary organisation that hold to human supremacy at the expense of other species. Due to their disregard for the lives of alien species in their activities, they are considered a terrorist organisation by both the Systems Accord and the Fastness Council.|GARMR stands for Guardian Agent Response for Mankind Required. That it is als the name of the guarddog of Hell in Norse mythology is just coincidence...')
     }
   }
 )
@@ -59,7 +59,7 @@ createItem('consult_fastness',
     loc: 'all_tool',
     alias: 'Station: Fastness',
     script: function () {
-      msg('{b:Station: Fastness}|The Fastness is a huge, deep-space orbital, built eons ago. As an independent site, it has become a meeting place of all the great space-faring aliens, and is the home of the Fastness Council|It is definitely not a trap.')
+      io.msg('{b:Station: Fastness}|The Fastness is a huge, deep-space orbital, built eons ago. As an independent site, it has become a meeting place of all the great space-faring aliens, and is the home of the Fastness Council|It is definitely not a trap.')
     }
   }
 )
@@ -70,7 +70,7 @@ createItem('consult_fastness_council',
     loc: 'all_tool',
     alias: 'Organisation: Fastness Council',
     script: function () {
-      msg('{b:Organisation: Fastness Council}|The council is the body responsibly for resolving inter-species disputes, and is run by the more important space-faring races (in their opinion anyway).')
+      io.msg('{b:Organisation: Fastness Council}|The council is the body responsibly for resolving inter-species disputes, and is run by the more important space-faring races (in their opinion anyway).')
     }
   }
 )
@@ -122,7 +122,7 @@ createRoom('captains_room',
 
 createRoom('flight_deck',
   {
-    desc: 'From here, you cmmand the ship. Forward is the galaxy map, a huge holographic display you can use to plot a destination. Beyond, is the cockpit, where the pilot sits.',
+    desc: 'From here, you cmmand the ship. Forward is the galaxy map, a huge holographic util.display you can use to plot a destination. Beyond, is the cockpit, where the pilot sits.',
     south: new Exit('brittany_lift'),
     north: new Exit('cockpit'),
     west: new Exit('armoury'),
@@ -159,7 +159,7 @@ createRoom('mess',
     east: new Exit('sickbay'),
     west: new Exit('malinda_office'),
     afterFirstEnter: function () {
-      msg("A man steps up to you. 'Commander Herdsman, it's an honour to finally meet you.' He is dressed in a military uniform - the insignia is GARMR. 'I'm James Couturier. I'm the weapons specialist assigned to the Brittany. You can usually find me in the armoury, but when I heard you were awake, I just had to come and talk to the greatesrt man ever.'")
+      io.msg("A man steps up to you. 'Commander Herdsman, it's an honour to finally meet you.' He is dressed in a military uniform - the insignia is GARMR. 'I'm James Couturier. I'm the weapons specialist assigned to the Brittany. You can usually find me in the armoury, but when I heard you were awake, I just had to come and talk to the greatesrt man ever.'")
     }
   }
 )
@@ -195,7 +195,7 @@ createItem('quechua_what_was_wrong',
     alias: 'What was wrong with me?',
     // nowShow: ["consult_fastness", "consult_fastness_council"],
     script: function () {
-      msg('.')
+      io.msg('.')
     }
   }
 )
