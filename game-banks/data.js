@@ -1,10 +1,10 @@
 'use strict'
 
-createRoom('nowhere', {
+world.createItem('nowhere', {
 })
 
-createItem('me',
-  PLAYER(),
+('me',
+  templates.PLAYER(),
   {
     loc: 'stasis_pod_room',
     regex: /^(me|myself|player)$/,
@@ -25,7 +25,7 @@ createItem('me',
   }
 )
 
-createItem('your_jumpsuit', WEARABLE(2, ['body']), {
+('your_jumpsuit', templates.WEARABLE(2, ['body']), {
   alias: 'jumpsuit',
   loc: 'stasis_pod_drawer',
   defArticle: 'your',
@@ -39,7 +39,7 @@ createItem('your_jumpsuit', WEARABLE(2, ['body']), {
   }
 })
 
-createItem('your_underwear', WEARABLE(1, ['body']), {
+('your_underwear', templates.WEARABLE(1, ['body']), {
   alias: 'underwear',
   loc: 'me',
   worn: true,
@@ -51,7 +51,7 @@ createItem('your_underwear', WEARABLE(1, ['body']), {
 // -----------------------------------------------------
 // STARBOARD POD
 
-createRoom('stasis_bay', {
+world.createItem('stasis_bay', {
   alias: 'stasis bay',
   desc: 'There are six stasis pods here (despite only five crew members), four on one side and two on the other. {podStatus} Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant alive. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
   tpStatus: function () {
@@ -69,18 +69,18 @@ createRoom('stasis_bay', {
     }
   },
   vacuum: false,
-  port: new Exit('hallway'),
-  aft: new Exit('cargo_bay'),
-  in: new Exit('stasis_pod_room', { io.msg: 'You climb into the stasis pod.' })
+  port: new world.Exit('hallway'),
+  aft: new world.Exit('cargo_bay'),
+  in: new world.Exit('stasis_pod_room', { io.msg: 'You climb into the stasis pod.' })
 })
 
-createItem('pile_of_vomit', {
+('pile_of_vomit', {
   scenery: true,
   regex: /vomit|sick/,
   examine: 'A large splat of vomit, it stinks. You decide not to look too closely. You do know what you ate last, so what is the point?'
 })
 
-createItem('stasis_pod', {
+('stasis_pod', {
   alias: 'pod',
   regex: /^(stasis )?pods?$/,
   scenery: true,
@@ -88,7 +88,7 @@ createItem('stasis_pod', {
   examine: 'Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}'
 })
 
-createItem('stasis_pod_drawer', CONTAINER(false), {
+('stasis_pod_drawer', defaults.CONTAINER(false), {
   alias: 'drawer',
   // scenery:true,
   loc: 'stasis_bay',
@@ -96,7 +96,7 @@ createItem('stasis_pod_drawer', CONTAINER(false), {
   examine: 'The drawer extends out from the foot of the pod; it is white and quite shallow, and almost the width of the pod.{ifHere:pile_of_vomit: Fortunately, it is well away from the vomit.}'
 })
 
-createItem('stasis_locker', CONTAINER(true), {
+('stasis_locker', defaults.CONTAINER(true), {
   alias: 'locker',
   scenery: true,
   loc: 'stasis_bay',
@@ -109,7 +109,7 @@ createItem('stasis_locker', CONTAINER(true), {
   }
 })
 
-createItem('your_util.spacesuit', WEARABLE(2, ['body']), {
+('your_util.spacesuit', templates.WEARABLE(2, ['body']), {
   alias: 'util.spacesuit',
   loc: 'stasis_locker',
   defArticle: 'your',
@@ -117,17 +117,17 @@ createItem('your_util.spacesuit', WEARABLE(2, ['body']), {
   examine: 'Your util.spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility.'
 })
 
-createItem('other_util.spacesuit', {
+('other_util.spacesuit', {
   alias: 'spare util.spacesuit',
   loc: 'stasis_locker',
   examine: 'The other util.spacesuit is identical to your own.'
 })
 
-createRoom('stasis_pod_room', {
+world.createItem('stasis_pod_room', {
   alias: 'stasis pod',
   desc: 'The stasis pod is shaped uncomfortably like a coffin, and is a pale grey colour. The lid is in the raised position.',
   vacuum: 'stasis_bay',
-  out: new Exit('stasis_bay', {
+  out: new world.Exit('stasis_bay', {
     use: function () {
       io.msg('You climb out of the stasis pod.')
       world.setRoom(game.player, this.name, 'out')
@@ -140,7 +140,7 @@ createRoom('stasis_pod_room', {
   })
 })
 
-createItem('stasis_pod_interior',
+('stasis_pod_interior',
   OPENABLE(true),
   {
     alias: 'stasis pod',
@@ -169,170 +169,170 @@ createItem('stasis_pod_interior',
   }
 )
 
-createRoom('cargo_bay', {
+world.createItem('cargo_bay', {
   desc: "The cargo bay is a large,open area, with numerous [crates:crate], several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
   vacuum: false,
-  forward: new Exit('stasis_bay'),
-  port: new Exit('top_deck_aft', {
+  forward: new world.Exit('stasis_bay'),
+  port: new world.Exit('top_deck_aft', {
     io.msg: 'You walk up the narrow stair way to the top deck.',
     alsoDir: ['up']
   }),
-  starboard: new Exit('airlock'),
-  aft: new Exit('engineering3')
+  starboard: new world.Exit('airlock'),
+  aft: new world.Exit('engineering3')
 })
 
-createRoom('airlock', {
+world.createItem('airlock', {
   desc: 'The airlock is just big enough for two persons wearing util.spacesuits, and is featureless besides the doors, port and starboard, and the [controls].',
   vacuum: false,
-  port: new Exit('cargo_bay'),
-  starboard: new Exit('space', { locked: true })
+  port: new world.Exit('cargo_bay'),
+  starboard: new world.Exit('space', { locked: true })
 })
 
 // -----------------------------------------------------
 // CENTRAL AXIS
 
-createRoom('hallway', {
+world.createItem('hallway', {
   desc: 'This is, in a sense, the central nexus of the ship. The flight-deck is forward, the stasis bay to starboard, the labs to port. A ladder goes up to the living quarters and down to the probe hangers.',
   vacuum: false,
-  starboard: new Exit('stasis_bay'),
-  port: new Exit('lab2'),
-  up: new Exit('top_deck_forward'),
-  down: new Exit('probes_forward'),
-  forward: new Exit('flightdeck'),
-  aft: new Exit('service_passage', {
+  starboard: new world.Exit('stasis_bay'),
+  port: new world.Exit('lab2'),
+  up: new world.Exit('top_deck_forward'),
+  down: new world.Exit('probes_forward'),
+  forward: new world.Exit('flightdeck'),
+  aft: new world.Exit('service_passage', {
     isHidden: function () { return true }
   })
 })
 
-createRoom('service_passage', {
+world.createItem('service_passage', {
   desc: '',
   vacuum: false,
-  forward: new Exit('hallway', {
+  forward: new world.Exit('hallway', {
     isHidden: function () { return true }
   }),
-  aft: new Exit('engineering2', {
+  aft: new world.Exit('engineering2', {
     isHidden: function () { return true }
   })
 })
 
-createRoom('flightdeck', {
+world.createItem('flightdeck', {
   alias: 'flight-deck',
   desc: 'The flight deck is semi-circular, with windows looking out in all directions. In the centre is the command chair, and there are four other chairs at the various workstations. The flight-deck can be used as an escape capsule, and can be landed on a suitable planet (but cannot be used to get back to space). The only exit is aft.',
   vacuum: false,
-  aft: new Exit('hallway')
+  aft: new world.Exit('hallway')
 })
 
 // -----------------------------------------------------
 // LABS
 
-createRoom('lab1', {
+world.createItem('lab1', {
   desc: '',
   vacuum: false,
-  starboard: new Exit('lab2'),
-  aft: new Exit('lab3')
+  starboard: new world.Exit('lab2'),
+  aft: new world.Exit('lab3')
 })
 
-createRoom('lab2', {
+world.createItem('lab2', {
   alias: 'Bio-lab',
   desc: '',
   vacuum: false,
-  starboard: new Exit('hallway'),
-  port: new Exit('lab1'),
-  aft: new Exit('lab4')
+  starboard: new world.Exit('hallway'),
+  port: new world.Exit('lab1'),
+  aft: new world.Exit('lab4')
 })
 
-createRoom('lab3', {
+world.createItem('lab3', {
   desc: '',
   vacuum: false,
-  forward: new Exit('lab1'),
-  starboard: new Exit('lab4')
+  forward: new world.Exit('lab1'),
+  starboard: new world.Exit('lab4')
 })
 
-createRoom('lab4', {
+world.createItem('lab4', {
   alias: 'Geo-lab',
   desc: '',
   vacuum: false,
-  forward: new Exit('lab2'),
-  port: new Exit('lab3'),
-  starboard: new Exit('probes_aft', {
+  forward: new world.Exit('lab2'),
+  port: new world.Exit('lab3'),
+  starboard: new world.Exit('probes_aft', {
     io.msg: 'You walk down the narrow stair way to the bottom deck.',
     alsoDir: ['down']
   }),
-  aft: new Exit('engineering1')
+  aft: new world.Exit('engineering1')
 })
 
 // -----------------------------------------------------
 // ENGINEERING
 
-createRoom('engineering1', {
+world.createItem('engineering1', {
   desc: '',
   alias: 'Engineering (port)',
   properName: true,
   vacuum: 'engineering2',
-  starboard: new Exit('engineering2'),
-  forward: new Exit('lab4')
+  starboard: new world.Exit('engineering2'),
+  forward: new world.Exit('lab4')
 })
 
-createRoom('engineering2', {
+world.createItem('engineering2', {
   desc: '',
   alias: 'Engineering',
   properName: true,
   vacuum: false,
-  starboard: new Exit('engineering3'),
-  port: new Exit('engineering1'),
-  forward: new Exit('service_passage', {
+  starboard: new world.Exit('engineering3'),
+  port: new world.Exit('engineering1'),
+  forward: new world.Exit('service_passage', {
     isHidden: function () { return true }
   })
 })
 
-createRoom('engineering3', {
+world.createItem('engineering3', {
   desc: '',
   properName: true,
   alias: 'Engineering (starboard)',
   vacuum: 'engineering2',
-  port: new Exit('engineering2'),
-  forward: new Exit('cargo_bay')
+  port: new world.Exit('engineering2'),
+  forward: new world.Exit('cargo_bay')
 })
 
 // -----------------------------------------------------
 // LOWER DECK
 
-createRoom('probes_forward', {
+world.createItem('probes_forward', {
   alias: 'Forward probe hanger',
   desc: 'The forward probe hanger is where the satellites are stored ready for deployment. The six satellites are kept in a dust-free environment on the starboard side of the hanger, each on a cradle. A robot arm is available to pick them up and eject them through a hatch in the floor.|On the port side, the seeder pods are stored. Each pod contains a variety of simple lifeforms, such as algae, which, it is hoped, will kick-start life on a suitable planet. It is a long term plan. There are six pods, three to be deployed at distant locations on a planet.| There is a control console to handle it all, though it can also be done remotely.',
   vacuum: false,
-  up: new Exit('hallway'),
-  aft: new Exit('probes_aft'),
-  forward: new Exit('server_room')
+  up: new world.Exit('hallway'),
+  aft: new world.Exit('probes_aft'),
+  forward: new world.Exit('server_room')
 })
 
-createRoom('probes_aft', {
+world.createItem('probes_aft', {
   alias: 'Aft probe hanger',
   desc: 'The aft probe hanger has the scientific probes. Each probe is contained in a crate, and needs unpacking before deployment. On the port side there is a delivery system into which a probe can be placed, to be sent to the planet. Various types of probes are available.',
   vacuum: false,
-  port: new Exit('lab4', {
+  port: new world.Exit('lab4', {
     io.msg: 'You walk up the narrow stair way to the middle deck.',
     alsoDir: ['up']
   }),
-  forward: new Exit('probes_forward')
+  forward: new world.Exit('probes_forward')
 })
 
-createRoom('server_room', {
+world.createItem('server_room', {
   desc: 'The heart of the IT systems, including Xsansi, This room holds three racks of processors, each rack having four shelves and each shelf having eight units. The room is kept cool and smells slightly of ozone.',
   vacuum: false,
-  aft: new Exit('probes_forward')
+  aft: new world.Exit('probes_forward')
 })
 
 // -----------------------------------------------------
 // UPPER DECK
 
-createRoom('lounge', {
+world.createItem('lounge', {
   desc: '',
   vacuum: false,
-  aft: new Exit('top_deck_forward')
+  aft: new world.Exit('top_deck_forward')
 })
 
-createRoom('top_deck_forward', {
+world.createItem('top_deck_forward', {
   desc: function () {
     if (!w.top_deck_aft.meFirst) {
       this.meFirst = true
@@ -343,14 +343,14 @@ createRoom('top_deck_forward', {
   },
   descThis: 'You are stood at the forward end of a narrow corridor, with your cabin to port, and the canteen to starboard. Ahead, is the lounge.',
   vacuum: false,
-  down: new Exit('hallway'),
-  starboard: new Exit('canteen'),
-  port: new Exit('your_cabin'),
-  aft: new Exit('top_deck_aft'),
-  forward: new Exit('lounge')
+  down: new world.Exit('hallway'),
+  starboard: new world.Exit('canteen'),
+  port: new world.Exit('your_cabin'),
+  aft: new world.Exit('top_deck_aft'),
+  forward: new world.Exit('lounge')
 })
 
-createRoom('top_deck_aft', {
+world.createItem('top_deck_aft', {
   descStart: 'The top deck is where the living quarters - such as they are - are accessed. ',
   descFinish: ' The corridor is very utilitarian, with a metal floor and ceiling. The sides are mostly covered in white plastic panels, as a small concession to aesthetics.',
   desc: function () {
@@ -363,22 +363,22 @@ createRoom('top_deck_aft', {
   },
   descThis: "You are stood at the aft end of a narrow corridor, with the women's cabin behind you, the men's to port. To starboard, steps lead down to the cargo bay on the lower deck.",
   vacuum: 'top_deck_forward',
-  port: new Exit('guys_cabin'),
-  aft: new Exit('girls_cabin'),
-  starboard: new Exit('cargo_bay', {
+  port: new world.Exit('guys_cabin'),
+  aft: new world.Exit('girls_cabin'),
+  starboard: new world.Exit('cargo_bay', {
     io.msg: 'You walk down the narrow stair way to the middle deck.',
     alsoDir: ['down']
   }),
-  forward: new Exit('top_deck_forward')
+  forward: new world.Exit('top_deck_forward')
 })
 
-createRoom('canteen', {
+world.createItem('canteen', {
   desc: 'The canteen, like everything else of the ship, is pretty small. There is a table, with one short side against the wall, and five plastic [chairs:chair] around it.{tableDesc} At the back is the food preparation area; a work surface across the width of the room, with a sink on the right and a hob on the left.',
   vacuum: false,
-  port: new Exit('top_deck_forward')
+  port: new world.Exit('top_deck_forward')
 })
 
-createItem('canteen_table',
+('canteen_table',
   SURFACE(),
   {
     alias: 'table',
@@ -389,32 +389,32 @@ createItem('canteen_table',
   }
 )
 
-createRoom('your_cabin', {
+world.createItem('your_cabin', {
   desc: '',
   vacuum: false,
-  starboard: new Exit('top_deck_forward')
+  starboard: new world.Exit('top_deck_forward')
 })
 
-createRoom('guys_cabin', {
+world.createItem('guys_cabin', {
   desc: '',
   vacuum: false,
-  starboard: new Exit('top_deck_aft')
+  starboard: new world.Exit('top_deck_aft')
 })
 
-createRoom('girls_cabin', {
+world.createItem('girls_cabin', {
   desc: '',
   vacuum: false,
-  forward: new Exit('top_deck_aft')
+  forward: new world.Exit('top_deck_aft')
 })
 
 // -----------------------------------------------------
 // EXTERIOR
 
-createRoom('space', {
+world.createItem('space', {
   desc: '',
   vacuum: true,
   isSpace: true,
-  port: new Exit('airlock'),
+  port: new world.Exit('airlock'),
   notOnShip: true
 })
 
@@ -424,7 +424,7 @@ createRoom('space', {
 // 2 approached
 // 3 docked
 
-createItem('alienShip', {
+('alienShip', {
   regex: /^alien ship|alien vessel|ship|vessel$/,
   desc: '',
   isShip: true,
@@ -434,7 +434,7 @@ createItem('alienShip', {
 // -----------------------------------------------------
 // SPECIAL ITEMS
 
-createItem('probe_prototype', COUNTABLE([]),
+('probe_prototype', COUNTABLE([]),
   {
     alias: 'Probe X',
     regex: /^(\d+ )?(bio-|geo-|bio|geo)?probes?$/,
@@ -474,7 +474,7 @@ createItem('probe_prototype', COUNTABLE([]),
         char.deployProbeAction = 0
         char.deployProbeCount = 0
       } else {
-        // already part way through launching
+        // lang.already part way through launching
         // skip walking there, skip first deploy action
         // the old number should be replaced
         io.msg("'Okay captain.'")

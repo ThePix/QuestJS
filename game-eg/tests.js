@@ -1,5 +1,5 @@
 'use strict'
-
+import { util, parser, w, game, text, lang, settings, io, world, saveLoad, npc } from '../lib/main'
 util.test.tests = function () {
   util.test.title('parser.scoreObjectMatch')
   util.test.assertEqual(70, parser.scoreObjectMatch('me', w.me, ''))
@@ -29,7 +29,7 @@ util.test.tests = function () {
   const ary2 = []
   for (let i = 0; i < 3; i++) {
     const res = util.randomFromArray(ary, true)
-    if (ary2.includes(res)) util.test.fail('ary2 already has that value')
+    if (ary2.includes(res)) util.test.fail('ary2 lang.already has that value')
     ary2.push(res)
   }
   util.test.assertEqual(0, ary.length)
@@ -46,60 +46,60 @@ util.test.tests = function () {
   util.test.assertEqual([w.coin, w.boots], util.arraySubtract([w.coin, w.boots, w.ring], [w.ring]))
 
   util.test.title('Text processor 1')
-  util.test.assertEqual('Simple text', processText('Simple text'))
-  util.test.assertEqual('Simple <i>text</i>', processText('Simple {i:text}'))
-  util.test.assertEqual('Simple <span style="color:red">text</span>.', processText('Simple {colour:red:text}.'))
-  util.test.assertEqual('Simple <span style="color:red">text with <i>nesting</i></span>.', processText('Simple {colour:red:text with {i:nesting}}.'))
-  util.test.assertEqual('Simple text', processText('Simple {random:text}'))
-  util.test.assertEqual('Simple text: no', processText('Simple text: {if:player:someOddAtt:yes:no}'))
+  util.test.assertEqual('Simple text', text.processText('Simple text'))
+  util.test.assertEqual('Simple <i>text</i>', text.processText('Simple {i:text}'))
+  util.test.assertEqual('Simple <span style="color:red">text</span>.', text.processText('Simple {colour:red:text}.'))
+  util.test.assertEqual('Simple <span style="color:red">text with <i>nesting</i></span>.', text.processText('Simple {colour:red:text with {i:nesting}}.'))
+  util.test.assertEqual('Simple text', text.processText('Simple {random:text}'))
+  util.test.assertEqual('Simple text: no', text.processText('Simple text: {if:player:someOddAtt:yes:no}'))
   game.player.someOddAtt = 67
-  util.test.assertEqual('Simple text: 67', processText('Simple text: {show:player:someOddAtt}'))
+  util.test.assertEqual('Simple text: 67', text.processText('Simple text: {show:player:someOddAtt}'))
 
   util.test.title('Text processor 2')
-  util.test.assertEqual('Simple text: no', processText('Simple text: {if:player:someOddAtt:50:yes:no}'))
-  util.test.assertEqual('Simple text: yes', processText('Simple text: {if:player:someOddAtt:67:yes:no}'))
-  util.test.assertEqual('Simple text: ', processText('Simple text: {if:player:someOddAtt:50:yes}'))
-  util.test.assertEqual('Simple text: yes', processText('Simple text: {if:player:someOddAtt:67:yes}'))
-  util.test.assertEqual('Simple text: yes', processText('Simple text: {ifMoreThan:player:someOddAtt:50:yes:no}'))
-  util.test.assertEqual('Simple text: no', processText('Simple text: {ifLessThan:player:someOddAtt:50:yes:no}'))
-  util.test.assertEqual('Simple text: ', processText('Simple text: {ifLessThan:player:someOddAtt:50:yes}'))
+  util.test.assertEqual('Simple text: no', text.processText('Simple text: {if:player:someOddAtt:50:yes:no}'))
+  util.test.assertEqual('Simple text: yes', text.processText('Simple text: {if:player:someOddAtt:67:yes:no}'))
+  util.test.assertEqual('Simple text: ', text.processText('Simple text: {if:player:someOddAtt:50:yes}'))
+  util.test.assertEqual('Simple text: yes', text.processText('Simple text: {if:player:someOddAtt:67:yes}'))
+  util.test.assertEqual('Simple text: yes', text.processText('Simple text: {ifMoreThan:player:someOddAtt:50:yes:no}'))
+  util.test.assertEqual('Simple text: no', text.processText('Simple text: {ifLessThan:player:someOddAtt:50:yes:no}'))
+  util.test.assertEqual('Simple text: ', text.processText('Simple text: {ifLessThan:player:someOddAtt:50:yes}'))
   game.player.someOddAtt = true
-  util.test.assertEqual('Simple text: true', processText('Simple text: {show:player:someOddAtt}'))
-  util.test.assertEqual('Simple text: yes', processText('Simple text: {if:player:someOddAtt:yes:no}'))
-  util.test.assertEqual('Simple text: no', processText('Simple text: {ifNot:player:someOddAtt:yes:no}'))
-  util.test.assertEqual('Simple text: seen first time only', processText('Simple text: {once:seen first time only}{notOnce:other times}'))
+  util.test.assertEqual('Simple text: true', text.processText('Simple text: {show:player:someOddAtt}'))
+  util.test.assertEqual('Simple text: yes', text.processText('Simple text: {if:player:someOddAtt:yes:no}'))
+  util.test.assertEqual('Simple text: no', text.processText('Simple text: {ifNot:player:someOddAtt:yes:no}'))
+  util.test.assertEqual('Simple text: seen first time only', text.processText('Simple text: {once:seen first time only}{notOnce:other times}'))
 
   util.test.title('Text processor 3')
-  util.test.assertEqual('Simple text: other times', processText('Simple text: {once:seen first time only}{notOnce:other times}'))
-  util.test.assertEqual('Simple text: other times', processText('Simple text: {once:seen first time only}{notOnce:other times}'))
-  util.test.assertEqual('Simple text: p2=red', processText('Simple text: p2={param:p2}', { p1: 'yellow', p2: 'red' }))
+  util.test.assertEqual('Simple text: other times', text.processText('Simple text: {once:seen first time only}{notOnce:other times}'))
+  util.test.assertEqual('Simple text: other times', text.processText('Simple text: {once:seen first time only}{notOnce:other times}'))
+  util.test.assertEqual('Simple text: p2=red', text.processText('Simple text: p2={param:p2}', { p1: 'yellow', p2: 'red' }))
   w.book.func1 = function () { return 'util.test1' }
   w.book.func2 = function (a, b) { return 'util.test2(' + a + ', ' + b + ')' }
   w.book.func3 = function (a) { return 'It is ' + w[a].alias + ' reading the book.' }
-  util.test.assertEqual('Simple text: p2=util.test1', processText('Simple text: p2={param:item:func1}', { item: 'book' }))
-  util.test.assertEqual('Simple text: p2=util.test2(one, two)', processText('Simple text: p2={param:item:func2:one:two}', { item: 'book' }))
-  util.test.assertEqual('Simple text: p2=It is Kyle reading the book.', processText('Simple text: p2={param:item:func3:char}', { item: 'book', char: 'Kyle' }))
+  util.test.assertEqual('Simple text: p2=util.test1', text.processText('Simple text: p2={param:item:func1}', { item: 'book' }))
+  util.test.assertEqual('Simple text: p2=util.test2(one, two)', text.processText('Simple text: p2={param:item:func2:one:two}', { item: 'book' }))
+  util.test.assertEqual('Simple text: p2=It is Kyle reading the book.', text.processText('Simple text: p2={param:item:func3:char}', { item: 'book', char: 'Kyle' }))
 
   util.test.title('Text processor 4')
-  util.test.assertEqual('Kyle is a bear.', processText('{nv:chr:be} a bear.', { chr: 'Kyle' }))
-  util.test.assertEqual('Kyle is a bear.', processText('{nv:chr:be} a bear.', { chr: w.Kyle }))
-  util.test.assertEqual('Kyle is your bear.', processText('{nv:Kyle:be} {pa:me} bear.'))
-  util.test.assertEqual('Kyle is her bear.', processText('{nv:Kyle:be} {pa:Lara} bear.'))
-  util.test.assertEqual('There is Kyle.', processText('There is {nm:chr:a}.', { chr: w.Kyle }))
-  util.test.assertEqual('There is a book.', processText('There is {nm:chr:a}.', { chr: w.book }))
-  util.test.assertEqual('Kyle is here.', processText('{nm:chr:the:true} is here.', { chr: w.Kyle }))
-  util.test.assertEqual('The book is here.', processText('{nm:chr:the:true} is here.', { chr: w.book }))
-  util.test.assertEqual('It is your book.', processText('It is {nms:chr:the} book.', { chr: game.player }))
-  util.test.assertEqual("It is Kyle's book.", processText('It is {nms:chr:the} book.', { chr: w.Kyle }))
+  util.test.assertEqual('Kyle is a bear.', text.processText('{nv:chr:be} a bear.', { chr: 'Kyle' }))
+  util.test.assertEqual('Kyle is a bear.', text.processText('{nv:chr:be} a bear.', { chr: w.Kyle }))
+  util.test.assertEqual('Kyle is your bear.', text.processText('{nv:Kyle:be} {pa:me} bear.'))
+  util.test.assertEqual('Kyle is her bear.', text.processText('{nv:Kyle:be} {pa:Lara} bear.'))
+  util.test.assertEqual('There is Kyle.', text.processText('There is {nm:chr:a}.', { chr: w.Kyle }))
+  util.test.assertEqual('There is a book.', text.processText('There is {nm:chr:a}.', { chr: w.book }))
+  util.test.assertEqual('Kyle is here.', text.processText('{nm:chr:the:true} is here.', { chr: w.Kyle }))
+  util.test.assertEqual('The book is here.', text.processText('{nm:chr:the:true} is here.', { chr: w.book }))
+  util.test.assertEqual('It is your book.', text.processText('It is {nms:chr:the} book.', { chr: game.player }))
+  util.test.assertEqual("It is Kyle's book.", text.processText('It is {nms:chr:the} book.', { chr: w.Kyle }))
 
   util.test.title('Text processor 5')
-  util.test.assertEqual('Kyle is a bear.', processText('{Kyle.alias} is a bear.'))
-  util.test.assertEqual('Kyle is a bear.', processText('{show:Kyle:alias} is a bear.'))
-  util.test.assertEqual('Kyle is a bear.', processText('{Kyle:alias} is a bear.'))
-  util.test.assertEqual('You have $10.', processText('You have ${show:me:money}.'))
-  util.test.assertEqual('You have $10.', processText('You have ${player.money}.'))
-  util.test.assertEqual('You have $10.', processText('You have ${me.money}.'))
-  util.test.assertEqual('You have $10.', processText('You have ${player.money}.'))
+  util.test.assertEqual('Kyle is a bear.', text.processText('{Kyle.alias} is a bear.'))
+  util.test.assertEqual('Kyle is a bear.', text.processText('{show:Kyle:alias} is a bear.'))
+  util.test.assertEqual('Kyle is a bear.', text.processText('{Kyle:alias} is a bear.'))
+  util.test.assertEqual('You have $10.', text.processText('You have ${show:me:money}.')) // -LOOKATME I finally found the reason of some of the garbage!
+  util.test.assertEqual('You have $10.', text.processText('You have ${player.money}.')) // -LOOKATME and now that I look at it, I realise it's still UTTER GARBAGE!
+  util.test.assertEqual('You have $10.', text.processText('You have ${me.money}.')) // -LOOKATME     I finally found the reason of some of the garbage!
+  util.test.assertEqual('You have $10.', text.processText('You have ${player.money}.')) // -LOOKATME and now that I look at it, I realise it's still UTTER GARBAGE!
 
   util.test.title('Numbers')
   util.test.assertEqual('fourteen', lang.toWords(14))
@@ -369,7 +369,7 @@ util.test.tests = function () {
   util.test.assertCmd('get torch', "You can't see anything you might call 'torch' here.")
   util.test.assertCmd('open compartment', 'You open the compartment.')
   util.test.assertCmd('get torch', 'You take the flashlight.')
-  util.test.assertCmd('open compartment', 'It already is.')
+  util.test.assertCmd('open compartment', 'It lang.already is.')
   util.test.assertCmd('put knife in compartment', 'Done.')
   util.test.assertCmd('close compartment', 'You close the compartment.')
   util.test.assertCmd('push button', 'There is a loud bang, and the knife is destroyed.')
@@ -378,11 +378,11 @@ util.test.tests = function () {
 
   util.test.title('Clone')
   const count = Object.keys(w).length
-  const clone = cloneObject(w.book)
+  const clone = world.cloneObject(w.book)
   util.test.assertEqual(count + 1, Object.keys(w).length)
   util.test.assertEqual(w.book, clone.clonePrototype)
   util.test.assertEqual(w.book.examine, clone.examine)
-  const clone2 = cloneObject(clone)
+  const clone2 = world.cloneObject(clone)
   util.test.assertEqual(count + 2, Object.keys(w).length)
   util.test.assertEqual(w.book, clone2.clonePrototype)
   util.test.assertEqual(w.book.examine, clone2.examine)
@@ -435,7 +435,7 @@ util.test.tests = function () {
   w.boots.unusualString = 'Some boring text'
   w.boots.notableFlag = false
   w.boots.examine = 'This will not remain'
-  const clone3 = cloneObject(clone) // should not be there later
+  const clone3 = world.cloneObject(clone) // should not be there later // -review: it's never there... "clone3" is not referenced again
   w.far_away.north.locked = true
   saveLoad.loadTheWorld(s, 4)
   util.test.assertEqual(count + 2, Object.keys(w).length)
@@ -450,10 +450,10 @@ util.test.tests = function () {
   util.test.assertEqual(false, w.far_away.north.hidden)
 
   util.test.title('Path finding')
-  util.test.assertEqual('lounge', util.formatList(agenda.findPath(w.dining_room, w.lounge)))
-  util.test.assertEqual('', util.formatList(agenda.findPath(w.dining_room, w.dining_room)))
-  util.test.assertEqual(false, agenda.findPath(w.dining_room, w.far_away))
-  util.test.assertEqual('conservatory, dining room, lounge', util.formatList(agenda.findPath(w.garden, w.dining_room)))
+  util.test.assertEqual('lounge', util.formatList(npc.agenda.findPath(w.dining_room, w.lounge)))
+  util.test.assertEqual('', util.formatList(npc.agenda.findPath(w.dining_room, w.dining_room)))
+  util.test.assertEqual(false, npc.agenda.findPath(w.dining_room, w.far_away))
+  util.test.assertEqual('conservatory, dining room, lounge', util.formatList(npc.agenda.findPath(w.garden, w.dining_room)))
   util.test.assertEqual(null, w.dining_room.findExit(w.far_away))
   util.test.assertEqual('east', w.dining_room.findExit(w.lounge).dir)
   util.test.assertCmd('s', ['#The kitchen', 'A clean room. There is a sink in the corner.', /You can see/, 'You can go down, north or west.'])
@@ -483,7 +483,7 @@ util.test.tests = function () {
 
   util.test.title('Transit')
   util.test.assertCmd('w', ['You head west.', '#The lift', 'A curious lift.', 'You can see a Button: G, a Button: 1 and a Button: 2 here.', 'You can go east.'])
-  util.test.assertCmd('push button: g', ["You're already there mate!"])
+  util.test.assertCmd('push button: g', ["You're lang.already there mate!"])
   util.test.assertCmd('push 1', ['You press the button; the door closes and the lift heads to the first floor. The door opens again.'])
   util.test.assertCmd('e', ['You head east.', '#The bedroom', 'A large room, with a big bed and a wardrobe.', 'You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.', 'You can go down, in or west.'])
   util.test.assertCmd('w', ['You head west.', '#The lift', 'A curious lift.', 'You can see a Button: G, a Button: 1 and a Button: 2 here.', 'You can go east.'])
@@ -497,7 +497,7 @@ util.test.tests = function () {
     return false
   }
   w.lift.transitAutoMove = true
-  w.lift.afterEnter = transitOfferMenu
+  //  w.lift.afterEnter = transitOfferMenu // -review: don't know where this is from
   util.test.assertCmd('w', ['You head west.', '#The lift', 'A curious lift.', 'You can see a Button: G, a Button: 1 and a Button: 2 here.', 'You can go east.', 'The lift is out of order', '#The dining room', 'An old-fashioned room.', 'You can see a brick, a chair and a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) here.', 'You can go east, up or west.'])
 
   util.test.title('Push')
@@ -540,27 +540,27 @@ util.test.tests = function () {
   w.me.money = 20
 
   util.test.title('shop - text processor')
-  util.test.assertEqual('The carrot is $0,02', processText('The carrot is {money:carrot}'))
-  util.test.assertEqual('The carrot is $0,02', processText('The carrot is {$:carrot}'))
-  util.test.assertEqual('You see $0,12', processText('You see {$:12}'))
-  util.test.assertEqual('The carrot is $0,02', processText('{nm:item:the:true} is {$:carrot}', { item: w.carrot }))
-  util.test.assertEqual('The carrot is $0,02', processText('{nm:item:the:true} is {$:carrot}', { item: 'carrot' }))
+  util.test.assertEqual('The carrot is $0,02', text.processText('The carrot is {money:carrot}'))
+  util.test.assertEqual('The carrot is $0,02', text.processText('The carrot is {$:carrot}'))
+  util.test.assertEqual('You see $0,12', text.processText('You see {$:12}'))
+  util.test.assertEqual('The carrot is $0,02', text.processText('{nm:item:the:true} is {$:carrot}', { item: w.carrot }))
+  util.test.assertEqual('The carrot is $0,02', text.processText('{nm:item:the:true} is {$:carrot}', { item: 'carrot' }))
 
-  util.test.title('shop - buy')
+  util.test.title('shop - lang.buy')
   util.test.assertEqual(true, parser.isForSale(w.carrot))
   util.test.assertEqual(true, parser.isForSale(w.trophy))
   util.test.assertEqual(undefined, parser.isForSale(w.flashlight))
-  util.test.assertCmd('buy carrot', ['You buy the carrot for $0,02.'])
-  util.test.assertCmd('buy carrot', ['You buy the carrot for $0,02.'])
+  util.test.assertCmd('lang.buy carrot', ['You lang.buy the carrot for $0,02.'])
+  util.test.assertCmd('lang.buy carrot', ['You lang.buy the carrot for $0,02.'])
   util.test.assertEqual(16, w.me.money)
-  util.test.assertCmd('buy flashlight', ["You can't buy it."])
-  util.test.assertCmd('buy trophy', ['You buy the trophy for $0,15.'])
+  util.test.assertCmd('lang.buy flashlight', ["You can't lang.buy it."])
+  util.test.assertCmd('lang.buy trophy', ['You lang.buy the trophy for $0,15.'])
   util.test.assertEqual(1, w.me.money)
   util.test.assertEqual(true, parser.isForSale(w.carrot))
   // console.log("----------------------");
   util.test.assertEqual(false, parser.isForSale(w.trophy))
-  util.test.assertCmd('buy trophy', ["You can't buy the trophy here - probably because you are already holding it."])
-  util.test.assertCmd('buy carrot', ["You can't afford the carrot (need $0,02)."])
+  util.test.assertCmd('lang.buy trophy', ["You can't lang.buy the trophy here - probably because you are lang.already holding it."])
+  util.test.assertCmd('lang.buy carrot', ["You can't afford the carrot (need $0,02)."])
   util.test.assertEqual(1, w.me.money)
 
   util.test.title('shop - sell')
@@ -573,7 +573,7 @@ util.test.tests = function () {
   w.me.money = 20
   w.shop.sellingDiscount = 20
   util.test.assertEqual(12, w.trophy.getBuyingPrice(w.me))
-  util.test.assertCmd('buy trophy', ['You buy the trophy for $0,12.'])
+  util.test.assertCmd('lang.buy trophy', ['You lang.buy the trophy for $0,12.'])
   util.test.assertEqual(8, w.me.money)
   w.shop.buyingValue = 80
   util.test.assertCmd('sell trophy', ['You sell the trophy for $0,12.'])
@@ -587,7 +587,7 @@ util.test.tests = function () {
   util.test.assertCmd('fill jug with tears', ["You can't see anything you might call 'tears' here."])
   util.test.assertCmd('fill jug with honey', ["There's no honey here."])
   util.test.assertCmd('fill jug with water', ['You fill the jug.'])
-  util.test.assertCmd('fill jug with water', ['It already is.'])
+  util.test.assertCmd('fill jug with water', ['It lang.already is.'])
   util.test.assertCmd('fill jug with lemonade', ["It's not something you can mix liquids in."])
 
   /* */

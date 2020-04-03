@@ -1,24 +1,25 @@
 'use strict'
+import { io, template, npc, world } from './main'
 
-createItem('me',
-  PLAYER(),
+template.createItem('me',
+  template.PLAYER(),
   { loc: 'sickbay', regex: /^(me|myself|player)$/, examine: 'Just a regular guy.' }
 )
 
-createItem('all_tool',
+template.createItem('all_tool',
   {
     loc: 'me',
     alias: 'AllTool',
     getVerbs: function () { return ['Examine', 'Use'] },
     examine: 'Your AllTool is a high-spec version of the device. You can use it to access numerous databases and IT systems, as well as controlling certain drones and make cyber attacks. For reasons that I am sure are obvious, you would need to go to a terminal to read your e-mails.|[Do USE ALLTOOL to look things up on it.]',
-    getTopics: npc_utilities.getTopics,
-    use: npc_utilities.talkto,
+    getTopics: npc.npcUtilities.getTopics,
+    use: npc.npcUtilities.talkto,
     pause: function () {}
   }
 )
 
-createItem('consult_brittany',
-  TOPIC(true),
+template.createItem('consult_brittany',
+  npc.createItem(true),
   {
     loc: 'all_tool',
     alias: 'Ship: Brittany',
@@ -29,8 +30,8 @@ createItem('consult_brittany',
   }
 )
 
-createItem('consult_accord',
-  TOPIC(true),
+template.createItem('consult_accord',
+  npc.createItem(true),
   {
     loc: 'all_tool',
     alias: 'Organisation: Systems Accord',
@@ -41,8 +42,8 @@ createItem('consult_accord',
   }
 )
 
-createItem('consult_garmr',
-  TOPIC(true),
+template.createItem('consult_garmr',
+  npc.createItem(true),
   {
     loc: 'all_tool',
     alias: 'Organisation: GARMR',
@@ -53,8 +54,8 @@ createItem('consult_garmr',
   }
 )
 
-createItem('consult_fastness',
-  TOPIC(false),
+template.createItem('consult_fastness',
+  npc.createItem(false),
   {
     loc: 'all_tool',
     alias: 'Station: Fastness',
@@ -64,8 +65,8 @@ createItem('consult_fastness',
   }
 )
 
-createItem('consult_fastness_council',
-  TOPIC(false),
+template.createItem('consult_fastness_council',
+  npc.createItem(false),
   {
     loc: 'all_tool',
     alias: 'Organisation: Fastness Council',
@@ -75,15 +76,15 @@ createItem('consult_fastness_council',
   }
 )
 
-createRoom('brittany_lift',
-  TRANSIT('north'),
+world.createItem('brittany_lift',
+  world.createItem('north'),
   {
     desc: 'The lift is large and well l;it, with a set of buttons at the back.',
-    north: new Exit('flight_deck')
+    north: new world.Exit('flight_deck')
   }
 )
-createItem('button_1',
-  TRANSIT_BUTTON('brittany_lift'),
+template.createItem('button_1',
+  world.createItem('brittany_lift'),
   {
     alias: 'Button: 1',
     examine: 'A button with the number 1 on it.',
@@ -92,8 +93,8 @@ createItem('button_1',
     transitGoToDest: 'You press the button; the door closes  and the lift goes to level 1.'
   }
 )
-createItem('button_2',
-  TRANSIT_BUTTON('brittany_lift'),
+template.createItem('button_2',
+  world.createItem('brittany_lift'),
   {
     alias: 'Button: 2',
     examine: 'A button with the number 2 on it.',
@@ -102,8 +103,8 @@ createItem('button_2',
     transitGoToDest: 'You press the button; the door closes  and the lift goes to level 2.'
   }
 )
-createItem('button_3',
-  TRANSIT_BUTTON('brittany_lift'),
+template.createItem('button_3',
+  world.createItem('brittany_lift'),
   {
     alias: 'Button: 3',
     examine: 'A button with the number 3 on it.',
@@ -113,73 +114,73 @@ createItem('button_3',
   }
 )
 
-createRoom('captains_room',
+world.createItem('captains_room',
   {
     desc: '.',
-    south: new Exit('brittany_lift')
+    south: world.Exit('brittany_lift')
   }
 )
 
-createRoom('flight_deck',
+world.createItem('flight_deck',
   {
     desc: 'From here, you cmmand the ship. Forward is the galaxy map, a huge holographic util.display you can use to plot a destination. Beyond, is the cockpit, where the pilot sits.',
-    south: new Exit('brittany_lift'),
-    north: new Exit('cockpit'),
-    west: new Exit('armoury'),
-    east: new Exit('laboratory')
+    south: world.Exit('brittany_lift'),
+    north: world.Exit('cockpit'),
+    west: world.Exit('armoury'),
+    east: world.Exit('laboratory')
   }
 )
 
-createRoom('cockpit',
+world.createItem('cockpit',
   {
     desc: 'This is where Jester sits... {once:All the time. Seriously, it is like he eats and sleeps here. Does he never go to the bathroom? Jester is sat in a contour chair, and is surrounded by screens, giving an all arouund view of outside of the ship. {once:About half of the are filled with Lambda Station.}',
-    south: new Exit('flight_deck')
+    south: new world.Exit('flight_deck')
   }
 )
 
-createRoom('armoury',
+world.createItem('armoury',
   {
     desc: '.',
-    east: new Exit('flight_deck')
+    east: new world.Exit('flight_deck')
   }
 )
 
-createRoom('laboratory',
+world.createItem('laboratory',
   {
     desc: '.',
-    west: new Exit('flight_deck')
+    west: new world.Exit('flight_deck')
   }
 )
 
-createRoom('mess',
+world.createItem('mess',
   {
     desc: '.',
-    south: new Exit('britanny_lift'),
-    north: new Exit('guns_battery'),
-    east: new Exit('sickbay'),
-    west: new Exit('malinda_office'),
+    south: new world.Exit('britanny_lift'),
+    north: new world.Exit('guns_battery'),
+    east: new world.Exit('sickbay'),
+    west: new world.Exit('malinda_office'),
     afterFirstEnter: function () {
       io.msg("A man steps up to you. 'Commander Herdsman, it's an honour to finally meet you.' He is dressed in a military uniform - the insignia is GARMR. 'I'm James Couturier. I'm the weapons specialist assigned to the Brittany. You can usually find me in the armoury, but when I heard you were awake, I just had to come and talk to the greatesrt man ever.'")
     }
   }
 )
 
-createRoom('guns_battery',
+world.createItem('guns_battery',
   {
     desc: '.',
-    south: new Exit('mess')
+    south: new world.Exit('mess')
   }
 )
 
-createRoom('sickbay',
+world.createItem('sickbay',
   {
     desc: 'The sickbay is small, with just two beds on one side, and a desk on the other. Nevertheless, it looks very well equipped, with various monitors and devices surrounding each bed.',
-    west: new Exit('mess')
+    west: new world.Exit('mess')
   }
 )
 
-createItem('quechua',
-  NPC(true),
+template.createItem('quechua',
+  npc.NPC(true),
   {
     alias: 'Dr Quechua',
     regex: /doctor|quechua|dr/,
@@ -188,8 +189,8 @@ createItem('quechua',
   }
 )
 
-createItem('quechua_what_was_wrong',
-  TOPIC(true),
+template.createItem('quechua_what_was_wrong',
+  npc.createItem(true),
   {
     loc: 'quechua',
     alias: 'What was wrong with me?',
@@ -200,9 +201,9 @@ createItem('quechua_what_was_wrong',
   }
 )
 
-createRoom('malinda_office',
+world.createItem('malinda_office',
   {
     desc: '.',
-    east: new Exit('mess')
+    east: new world.Exit('mess')
   }
 )

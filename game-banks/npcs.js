@@ -4,7 +4,7 @@
 // If they can die, may need to reflect that in Xsansi's responses.
 // though perjaps it is mourning Kyle that does it for her
 
-createItem('Xsansi',
+('Xsansi',
   NPC(true),
   {
     isAtLoc: function (loc, situation) {
@@ -27,7 +27,7 @@ createItem('Xsansi',
     askOptions: [
       {
         name: 'mission',
-        util.test: function (p) { return p.text.match(/mission/) },
+        test: function (p) { return p.text.match(/mission/) },
         response: function () {
           io.msg("'Remind me of the mission, Xsansi,' you say.")
           io.msg("'The ship's mission is to survey five planets orbiting stars in the Ophiuchus and Serpens constellations. At each planet, a satellite is to be launched to collect data from the surface. At your discretion, bio-probes and geo-probes can be dropped to the surface to collect data. Note that there is no capability for probes to return to the ship or for the ship to land on a planet.'")
@@ -38,7 +38,7 @@ createItem('Xsansi',
 
       {
         name: 'crew',
-        util.test: function (p) { return p.text.match(/crew|team/) },
+        test: function (p) { return p.text.match(/crew|team/) },
         response: function () {
           io.msg("'Tell me about the crew, Xsansi,' you say.")
           io.msg("'" + w.Ostap.crewStatus())
@@ -50,7 +50,7 @@ createItem('Xsansi',
 
       {
         name: 'kyle',
-        util.test: function (p) { return p.text.match(/kyle/) },
+        test: function (p) { return p.text.match(/kyle/) },
         response: function () {
           io.msg("'Tell me about Kyle, Xsansi,' you say.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -63,7 +63,7 @@ createItem('Xsansi',
 
       {
         name: 'aada',
-        util.test: function (p) { return p.text.match(/house/) },
+        test: function (p) { return p.text.match(/house/) },
         response: function () {
           io.msg("'Tell me about Aada, Xsansi,' you say.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -76,7 +76,7 @@ createItem('Xsansi',
 
       {
         name: 'ha_yoon',
-        util.test: function (p) { return p.text.match(/ha-yoon|ha yoon|ha|yoon/) },
+        test: function (p) { return p.text.match(/ha-yoon|ha yoon|ha|yoon/) },
         response: function () {
           io.msg("'Tell me about Ha-yoon, Xsansi,' you say.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -91,7 +91,7 @@ createItem('Xsansi',
 
       {
         name: 'ostap',
-        util.test: function (p) { return p.text.match(/ostap/) },
+        test: function (p) { return p.text.match(/ostap/) },
         response: function () {
           io.msg("'Tell me about Ostap, Xsansi,' you say.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -104,7 +104,7 @@ createItem('Xsansi',
 
       {
         name: 'xsansi',
-        util.test: function (p) { return p.text.match(/^(ai|xsan|computer)$/) },
+        test: function (p) { return p.text.match(/^(ai|xsan|computer)$/) },
         response: function () {
           io.msg("'Tell me about yourself, Xsansi,' you say.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -117,7 +117,7 @@ createItem('Xsansi',
 
       {
         name: 'ship',
-        util.test: function (p) { return p.text.match(/status|ship/) },
+        test: function (p) { return p.text.match(/status|ship/) },
         response: function () {
           io.msg("'What is the ship's status, Xsansi?' you ask.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -130,7 +130,7 @@ createItem('Xsansi',
 
       {
         name: 'vacuum',
-        util.test: function (p) { return p.text.match(/vacuum|pressur/) },
+        test: function (p) { return p.text.match(/vacuum|pressur/) },
         response: function () {
           io.msg("'What areas of the ship are not pressurised, Xsansi?' you ask.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -156,7 +156,7 @@ createItem('Xsansi',
 
       {
         name: 'satellite',
-        util.test: function (p) { return p.text.match(/satellite/) },
+        test: function (p) { return p.text.match(/satellite/) },
         response: function () {
           io.msg("'Tell me about the satellite, Xsansi.'")
           if (w.Xsansi.currentPlanet > 2) {
@@ -179,7 +179,7 @@ createItem('Xsansi',
 
       {
         name: 'stasis',
-        util.test: function (p) { return p.text.match(/status/) },
+        test: function (p) { return p.text.match(/status/) },
         response: function () {
           io.msg("'Tell me about the stasis system, Xsansi.'")
           if (w.Xsansi.currentPlanet < 3) {
@@ -192,7 +192,7 @@ createItem('Xsansi',
 
       {
         name: 'Joseph Banks',
-        util.test: function (p) { return p.text.match(/joseph|banks/) },
+        test: function (p) { return p.text.match(/joseph|banks/) },
         response: function () {
           io.msg("'Who was this Joseph Banks guy the ship is named after, Xsansi?'")
           io.msg("'Sir Joseph Banks, 1st Baronet, GCB, PRS was born on 24 February 1743 in London, UK, and died 19 June 1820 in London, UK. He was a naturalist, botanist, and patron of the natural sciences, who played a major role in the colonisation of Australia by Europeans, and is credited with discovering approximately 1,400 species of plants, some 80 of which bear his name.'")
@@ -202,7 +202,7 @@ createItem('Xsansi',
 
       {
         name: 'itinerary',
-        util.test: function (p) { return p.text.match(/itinerary|stars|planets|route|destinations/) },
+        test: function (p) { return p.text.match(/itinerary|stars|planets|route|destinations/) },
         response: function () {
           io.msg("'Remind me of the itinerary, Xsansi,' you say.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -219,7 +219,7 @@ createItem('Xsansi',
 
       {
         name: 'radioSignals',
-        util.test: function (p) { return p.text.match(/radio|signal/) },
+        test: function (p) { return p.text.match(/radio|signal/) },
         response: function () {
           io.msg("'Tell me of the radio signals, Xsansi,' you say.")
           if (w.Xsansi.currentPlanet < 2) {
@@ -238,7 +238,7 @@ createItem('Xsansi',
 
       {
         name: 'planet',
-        util.test: function (p) { return p.text.match(/this planet|this star|planet|star|the planet|the star/) },
+        test: function (p) { return p.text.match(/this planet|this star|planet|star|the planet|the star/) },
         response: function () {
           io.msg("'Tell me about this planet, Xsansi,' you say.")
           if (w.Xsansi.currentPlanet < 3) {
@@ -255,7 +255,7 @@ createItem('Xsansi',
 
       {
         name: 'meteors',
-        util.test: function (p) { return p.text.match(/meteor|incident/) },
+        test: function (p) { return p.text.match(/meteor|incident/) },
         response: function () {
           if (w.Xsansi.currentPlanet === 0) {
             io.msg("'Is there any risk of being hit by something, like a meteor shower, Xsansi?' you ask.")
@@ -277,7 +277,7 @@ createItem('Xsansi',
       {
         name: 'damage',
         regex: /damage/,
-        util.test: function (p) { return p.text.match(/damage/) },
+        test: function (p) { return p.text.match(/damage/) },
         response: function () {
           if (w.Xsansi.currentPlanet === 0) {
             io.msg("'Is the ship damaged at all, Xsansi?' you ask.")
@@ -293,7 +293,7 @@ createItem('Xsansi',
       {
         name: 'repairs',
         regex: /repairs/,
-        util.test: function (p) { return p.text.match(/repairs/) },
+        test: function (p) { return p.text.match(/repairs/) },
         response: function () {
           if (w.Xsansi.currentPlanet === 0) {
             io.msg("'How do we do repairs, Xsansi?' you ask.")
@@ -312,7 +312,7 @@ createItem('Xsansi',
   }
 )
 
-createItem('Kyle',
+('Kyle',
   NPC(false),
   {
     notes: 'Kyle (M) is from Australia (born Newcastle but raised in Sydney), 32, a gay nerd. Expert in computing and cooking. Kyle handles the satellite and understanding radio transmissions. Joined up so he can see the future - it is a kind of time travel; hopes to upload himself to become immortal. Terminally ill.',
@@ -376,7 +376,7 @@ createItem('Kyle',
     },
     askOptions: [
       {
-        util.test: function (p) { return p.text.match(/newcastle/) },
+        test: function (p) { return p.text.match(/newcastle/) },
         response: function () {
           io.msg("'What's Newcastle like?' you ask Kyle.")
           io.msg("'It's... okay. But no better than that. I guess it's too close to Sydney, and anything interesting goes there, so its kinda dull.'")
@@ -385,7 +385,7 @@ createItem('Kyle',
       },
 
       {
-        util.test: function (p) { return p.text.match(/sydney/) },
+        test: function (p) { return p.text.match(/sydney/) },
         esponse: function () {
           io.msg("'What's Sydney like?' you ask Kyle.")
           io.msg("'It's great! Really great nightlife, just so lively. Everyone said when they banned vehicles from the CBD, back in '68, it would die a death, but I think it made it even better.'")
@@ -395,7 +395,7 @@ createItem('Kyle',
 
       {
         name: 'radioSignals',
-        util.test: function (p) { return p.text.match(this.regex) },
+        test: function (p) { return p.text.match(this.regex) },
         regex: /radio|signal/,
         response: function () {
           io.msg("'Talk to me about the radio signal,' you say.")
@@ -428,7 +428,7 @@ createItem('Kyle',
 
       {
         regex: /virus|program/,
-        util.test: function (p) { return p.text.match(this.regex) },
+        test: function (p) { return p.text.match(this.regex) },
         response: function () {
           io.msg("'You say the signal could be a virus,' you say to Kyle. 'Is it dangerous?'")
           io.msg("'No way, mate. It's completely isolated, and anyway couldf only be dangerous if we're using the same computer architecture. Hey, you got any alien chips in you, Xsansi?'")
@@ -474,7 +474,7 @@ createItem('Kyle',
   }
 )
 
-createItem('Ostap',
+('Ostap',
   NPC(false),
   {
     notes: 'Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she is not interested. Later couples up with Ha-yoon',
@@ -581,7 +581,7 @@ createItem('Ostap',
     askOptions: [
       {
         nameLost: 'lost probe',
-        util.test: function (p) { return p.text.match(/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/) },
+        test: function (p) { return p.text.match(/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/) },
         response: function () {
           if (w.Ostap.lostProbe) {
             io.msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Ostap.")
@@ -593,7 +593,7 @@ createItem('Ostap',
       },
       {
         regex: /babusya/,
-        util.test: function (p) { return p.text.match(/babusya/) },
+        test: function (p) { return p.text.match(/babusya/) },
         response: function () {
           io.msg("'What does babusya?' you ask Ostap.")
           io.msg("'Is Ukrainian for grandmother. Professor Oliynyk was my father's mother. I think she was disappointed when he became a software engineer, and he felt bad, so encouraged us to follow in her footsteps.'")
@@ -639,7 +639,7 @@ createItem('Ostap',
   }
 )
 
-createItem('Aada',
+('Aada',
   NPC(true),
   {
     notes: "Aada (F) is from Finland (Oulu), 35, father genetically engineered her, planning to create a dynasty. Her older sister (effectively a lone) rebelled, so the father kept a very tight rein on this one (ef Miranda's sister). Drinks vodka a lot. Signed on as geologist, but not really her speciality - the corp was desperate and so was she. Aada handles the geo-probes.",
@@ -701,7 +701,7 @@ createItem('Aada',
     askOptions: [
       {
         name: 'lost probe',
-        util.test: function (p) { return p.text.match(/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/) },
+        test: function (p) { return p.text.match(/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/) },
         response: function () {
           if (w.Ostap.lostProbe) {
             io.msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Aada.")
@@ -716,7 +716,7 @@ createItem('Aada',
       },
 
       {
-        util.test: function (p) { return p.text.match(/lack of*|inability/) },
+        test: function (p) { return p.text.match(/lack of*|inability/) },
         response: function () {
           io.msg("'You don't seem that... well up on geology,' you suggest to Aada.")
           io.msg("'What's that supposed to mean?'")
@@ -731,7 +731,7 @@ createItem('Aada',
 
     tellOptions: [
       {
-        util.test: function (p) { return p.text.match(/.* hot/) },
+        test: function (p) { return p.text.match(/.* hot/) },
         response: function () {
           io.msg("'You look hot!' you say Aada.")
           io.msg("'If you're trying to get in my knickers, forget it.'")
@@ -783,7 +783,7 @@ createItem('Aada',
   }
 )
 
-createItem('Ha_yoon',
+('Ha_yoon',
   NPC(true),
   {
     alias: 'Ha-yoon',

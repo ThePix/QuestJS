@@ -1,16 +1,16 @@
 'use strict'
-
+import { settings, io, game, util, commands, w, Cmd, cmdRules, parser, lang, text } from '../lib/main'
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function () {
   io.msg('Some text')
   /*
-  io.addToOutputQueue({text:"The real message is revealed!!", action:'effect', tag:'pre', effect:io.unscrambleEffect, randomPlacing:true, incSpaces:true, pick:function(i) {return 'At first this message is shown'.charAt(i) }})
-  wait()
-  io.addToOutputQueue({text:"If there are multiple lines of text...", action:'effect', tag:'p', effect:io.typewriterEffect})
-  wait()
-  io.msg("Even more text")
-  wait(3) */
+              io.addToOutputQueue({text:"The real message is revealed!!", action:'effect', tag:'pre', effect:io.unscrambleEffect, randomPlacing:true, incSpaces:true, pick:function(i) {return 'At first this message is shown'.charAt(i) }})
+              wait()
+              io.addToOutputQueue({text:"If there are multiple lines of text...", action:'effect', tag:'p', effect:io.typewriterEffect})
+              wait()
+              io.msg("Even more text")
+              wait(3) */
 
   game.player.hitpoints = 20
   game.player.status = 'You are feeling fine'
@@ -41,7 +41,7 @@ commands.unshift(new Cmd('Test input', {
   regex: /^inp/,
   script: function () {
     io.msg('First some preamble...')
-    showMenu('What colour?', [w.book, w.coin, w.Kyle, 'None of them'], function (result) {
+    io.showMenu('What colour?', [w.book, w.coin, w.Kyle, 'None of them'], function (result) {
       if (typeof result === 'string') {
         io.msg('You picked ' + result + '.')
       } else {
@@ -49,11 +49,11 @@ commands.unshift(new Cmd('Test input', {
       }
     })
     /*    askQuestion("What colour?", function(result) {
-      io.msg("You picked " + result + ".");
-      showYesNoMenu("Are you sure?", function(result) {
-        io.msg("You said " + result + ".")
-      })
-    }) */
+                      io.msg("You picked " + result + ".");
+                      showYesNoMenu("Are you sure?", function(result) {
+                        io.msg("You said " + result + ".")
+                      })
+                    }) */
   }
 }))
 
@@ -116,14 +116,14 @@ commands.unshift(new Cmd('EgHint', {
   regex: /^hint$|^hints$/,
   script: function () {
     if (w[game.player.loc].hint) {
-      metaio.msg(w[game.player.loc].hint)
+      io.metamsg(w[game.player.loc].hint)
     } else {
-      metaio.msg('Sorry, no hints here.')
+      io.metaio.msg('Sorry, no hints here.')
     }
   }
 }))
 
-tp.addDirective('charger_state', function () {
+text.tp.addDirective('charger_state', function () {
   if (w.charger_compartment.closed) {
     return 'The compartment is closed'
   }
@@ -133,3 +133,5 @@ tp.addDirective('charger_state', function () {
   }
   return 'The compartment contains ' + util.formatList(contents, { article: util.INDEFINITE })
 })
+
+export const code = { firstTimeTesting }

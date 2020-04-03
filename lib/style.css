@@ -54,13 +54,13 @@
   right: 0px;
 }
 .sidepanesNone {
-  util.display: None;
+  display: None;
 }
 
 
 
 
-// Used by showMenu
+/* Used by io.showMenu */
 .menutitle {
   color: grey;
   font-style: italic;
@@ -155,7 +155,7 @@ span.compassbutton {
     cursor: pointer;
     text-align: center;
     width: 18px;
-    util.display: block;
+    display: block;
 }
 
 
@@ -199,14 +199,14 @@ span.compassbutton {
   padding-left: 5pt;
 }
 #dialog {
-  util.display:none;
+  display:none;
 }
 
 
 
 /* For dialog panels */
 .no-close .ui-dialog-titlebar-close {
-  util.display: none;
+  display: none;
 }
 .ui-dialog-titlebar {
   background-image: none;

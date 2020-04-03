@@ -1,4 +1,5 @@
 'use strict'
+import { settings, game } from '../lib/main'
 
 settings.title = 'A First Step...'
 settings.author = 'The Pixie'

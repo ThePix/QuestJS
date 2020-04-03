@@ -101,9 +101,9 @@ export const lang = {
   GiveTo: /^(?:give) (.+) (?:to) (.+)$/,
   NpcGiveTo1: /^(.+), ?(?:give) (.+) (?:to) (.+)$/,
   NpcGiveTo2: /^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/,
-  PushExit: /^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-  NpcPushExit1: /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-  NpcPushExit2: /^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+  Pushworld.Exit: /^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+  NpcPushworld.Exit1: /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+  NpcPushworld.Exit2: /^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
   AskAbout: /^(?:ask) (.+) (about|what|who|how|why|where|when) (.+)$/,
   TellAbout: /^(?:tell) (.+) (about|what|who|how|why|where|when) (.+)$/,
   DebugWalkThrough: /^wt (.+)$/,
@@ -333,7 +333,7 @@ export const lang = {
 
   not_known_msg: "I don't even know where to begin with that.",
   disambig_msg: 'Which do you mean?',
-  no_multiples_msg: 'You cannot use multiple objects with that command.',
+  noMultiplesMsg: 'You cannot use multiple objects with that command.',
   nothing_msg: 'Nothing there to do that with.',
   general_obj_error: 'So I kind of get what you want to do, but not what you want to do it with.',
   done_msg: 'Done.',
@@ -537,7 +537,7 @@ export const lang = {
     }
     if (flag || npc.here()) {
       s += lang.nounVerb(npc, 'leave', !flag) + ' ' + w[npc.loc].byname({ article: util.DEFINITE })
-      const exit = w[npc.loc].findExit(dest)
+      const exit = w[npc.loc].findworld.Exit(dest)
       if (exit) s += ', heading ' + exit.dir
       s += '.'
       msg(s)
@@ -555,7 +555,7 @@ export const lang = {
     }
     if (flag || npc.here()) {
       s += lang.nounVerb(npc, 'enter', !flag) + ' ' + w[npc.loc].byname({ article: util.DEFINITE })
-      const exit = w[npc.loc].findExit(origin)
+      const exit = w[npc.loc].findworld.Exit(origin)
       if (exit) s += ' from ' + util.niceDirections(exit.dir)
       s += '.'
       msg(s)
@@ -565,8 +565,8 @@ export const lang = {
   // ----------------------------------------------------------------------------------------------
   // Save/load messages
 
-  sl_dir_headings: '<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>',
-  sl_dir_msg: 'Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.',
+  slDirHeadings: '<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>',
+  slDirMsg: 'Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.',
   sl_no_filename: 'Trying to save with no filename',
 
   // ----------------------------------------------------------------------------------------------
@@ -596,47 +596,47 @@ export const lang = {
 
   helpScript: function () {
     if (settings.textInput) {
-      metamsg('Type commands in the command bar to interact with the world.')
-      metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean. You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
-      metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.")
-      metamsg('{b:Using items:} You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!')
-      metamsg("{b:Language: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).")
-      metamsg('{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will util.respond..')
+      io.metamsg('Type commands in the command bar to interact with the world.')
+      io.metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean. You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
+      io.metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.")
+      io.metamsg('{b:Using template.items:} You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!')
+      io.metamsg("{b:Language: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).")
+      io.metamsg('{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will util.respond..')
     }
     if (settings.panes !== 'None') {
       if (settings.compass) {
-        metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.")
+        io.metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.")
       }
-      metamsg('To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.')
+      io.metamsg('To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.')
     }
     return util.util.SUCCESS_NO_TURNSCRIPTS
   },
 
   aboutScript: function () {
-    metamsg('{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6.', { settings: settings })
+    io.metamsg('{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6.', { settings: settings })
     if (settings.thanks && settings.thanks.length > 0) {
-      metamsg('Thanks to ' + util.formatList(settings.thanks, { lastJoiner: lang.list_and }) + '.')
+      io.metamsg('Thanks to ' + util.formatList(settings.thanks, { lastJoiner: lang.list_and }) + '.')
     }
     return util.util.SUCCESS_NO_TURNSCRIPTS
   },
 
   saveLoadScript: function () {
-    metamsg('To save your progress, type SAVE followed by the name to save with.')
-    metamsg('To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.')
-    metamsg('To see a list of save games, type DIR.')
+    io.metamsg('To save your progress, type SAVE followed by the name to save with.')
+    io.metamsg('To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.')
+    io.metamsg('To see a list of save games, type DIR.')
     return util.util.SUCCESS_NO_TURNSCRIPTS
   },
 
   transcriptScript: function () {
-    metamsg('The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output.')
-    metamsg('Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to util.display it. To empty the file, use SCRIPT CLEAR.')
-    metamsg('You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.')
-    metamsg('Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.')
+    io.metamsg('The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output.')
+    io.metamsg('Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to util.display it. To empty the file, use SCRIPT CLEAR.')
+    io.metamsg('You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.')
+    io.metamsg('Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.')
     return util.util.SUCCESS_NO_TURNSCRIPTS
   },
 
   topicsScript: function () {
-    metamsg('Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).')
+    io.metamsg('Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).')
     return util.util.SUCCESS_NO_TURNSCRIPTS
   },
 

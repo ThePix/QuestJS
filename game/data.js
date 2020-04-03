@@ -1,13 +1,13 @@
 'use strict'
 
-createItem('me', PLAYER(), {
+('me', templates.PLAYER(), {
   loc: 'lounge',
   regex: /^me|myself|player$/,
   examine: 'Just a regular guy.',
   hitpoints: 100
 })
 
-createRoom('lounge', {
+world.createItem('lounge', {
   desc: 'The lounge is boring, you really need to put stuff in it.',
   locs: ['one', 'two', 'three']
 })

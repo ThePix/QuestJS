@@ -1,6 +1,7 @@
 'use strict'
+import { io, templates, util, npc, world, commands, cmdRules, w, lang, game, defaults } from '../lib/main'
 
-createItem('me', PLAYER(), {
+('me', templates.PLAYER(), {
   loc: 'lounge',
   regex: /^(me|myself|player)$/,
   money: 10,
@@ -9,8 +10,8 @@ createItem('me', PLAYER(), {
   }
 })
 
-createItem('knife',
-  TAKEABLE(),
+('knife',
+  templates.TAKEABLE(),
   {
     loc: 'me',
     sharp: false,
@@ -29,29 +30,29 @@ createItem('knife',
   }
 )
 
-createRoom('lounge', {
+world.createItem('lounge', {
   desc: 'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
-  east: new Exit('kitchen'),
-  west: new Exit('dining_room'),
-  south: new Exit('conservatory'),
-  up: new Exit('bedroom'),
+  east: new world.Exit('kitchen'),
+  west: new world.Exit('dining_room'),
+  south: new world.Exit('conservatory'),
+  up: new world.Exit('bedroom'),
   hint: 'There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).'
 })
 
-createRoom('dining_room_on_stool', {
+world.createItem('dining_room_on_stool', {
   desc: 'Stood on a stool, in an old-fashioned room.',
-  east: new Exit('lounge'),
-  down: new Exit('dining_room'),
+  east: new world.Exit('lounge'),
+  down: new world.Exit('dining_room'),
   alias: 'dining room (on a stool)'
   // loc:"dining_room",
 })
 
-createRoom('hole', {
+world.createItem('hole', {
   desc: 'An old-fashioned room.'
 })
 
-createItem('book',
-  TAKEABLE(),
+('book',
+  templates.TAKEABLE(),
   {
     loc: 'lounge',
     examine: 'A leather-bound book.',
@@ -65,7 +66,7 @@ createItem('book',
           io.msg("'Quick summary.'")
           io.msg("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
         } else {
-          io.msg(util.util.prefix(this, isMultiple) + 'It is not in a language ' + lang.pronounVerb(char, 'understand') + '.')
+          io.msg(util.prefix(this, isMultiple) + 'It is not in a language ' + lang.pronounVerb(char, 'understand') + '.')
         }
         return true
       } else {
@@ -76,25 +77,25 @@ createItem('book',
   }
 )
 
-createItem('book_cover',
-  COMPONENT('book'),
+('book_cover',
+  templates.COMPONENT('book'),
   { examine: 'The book cover is very fancy.' }
 )
 
-createItem('boots',
-  WEARABLE(),
+('boots',
+  templates.WEARABLE(),
   { loc: 'lounge', pronouns: lang.pronouns.plural, examine: 'Some old boots.' }
 )
 
-createItem('waterskin',
-  TAKEABLE(),
+('waterskin',
+  templates.TAKEABLE(),
   {
-    examine: function (isMultiple) { io.msg(util.util.prefix(item, isMultiple) + 'The waterskin is ' + Math.floor(this.full / this.capacity * 100) + '% full.') },
+    examine: function (isMultiple) { io.msg(util.prefix(item, isMultiple) + 'The waterskin is ' + Math.floor(this.full / this.capacity * 100) + '% full.') },
     capacity: 10,
     full: 3,
     loc: 'lounge',
     fill: function (isMultiple) {
-      if (game.player.loc != 'garage') {
+      if (game.player.loc !== 'garage') {
         io.msg(util.util.prefix(this, isMultiple) + 'There is nothing to charge the torch with here.')
         return false
       } else {
@@ -106,49 +107,49 @@ createItem('waterskin',
   }
 )
 
-createItem('glass_cabinet',
-  CONTAINER(true),
-  locked_WITH('cabinet_key'),
+('glass_cabinet',
+  defaults.CONTAINER(true),
+  templates.lockedWith('cabinet_key'),
   {
     alias: 'glass cabinet',
     examine: 'A cabinet with a glass front.',
     transparent: true,
     isAtLoc: function (loc) {
       if (typeof loc !== 'string') loc = loc.name
-      return (loc == 'lounge' || loc == 'dining_room')
+      return (loc === 'lounge' || loc === 'dining_room')
     }
   }
 )
 
-createItem('jewellery_box',
-  TAKEABLE(),
-  CONTAINER(true),
+('jewellery_box',
+  templates.TAKEABLE(),
+  defaults.CONTAINER(true),
   { loc: 'glass_cabinet', alias: 'jewellery box', examine: 'A nice box.', closed: false }
 )
 
-createItem('ring',
-  TAKEABLE(),
+('ring',
+  templates.TAKEABLE(),
   { loc: 'jewellery_box', examine: 'A ring.' }
 )
 
-createItem('cardboard_box',
-  TAKEABLE(),
-  CONTAINER(true),
+('cardboard_box',
+  templates.TAKEABLE(),
+  defaults.CONTAINER(true),
   { loc: 'lounge', alias: 'cardboard box', examine: 'A big cardboard box.', closed: false }
 )
 
-createItem('sandwich',
-  EDIBLE(false),
+('sandwich',
+  defaults.EDIBLE(false),
   { loc: 'lounge', examine: 'A tasty looking thing.', onIngesting: function () { io.msg('That was Great!') } }
 )
 
-createItem('ornate_doll',
-  TAKEABLE(),
+('ornate_doll',
+  templates.TAKEABLE(),
   { loc: 'glass_cabinet', alias: 'ornate doll', examine: 'A fancy doll, eighteenth century.' }
 )
 
-createItem('coin',
-  TAKEABLE(),
+('coin',
+  templates.TAKEABLE(),
   {
     loc: 'lounge',
     examine: 'A gold coin.',
@@ -159,12 +160,12 @@ createItem('coin',
   }
 )
 
-createItem('small_key',
-  TAKEABLE(),
+('small_key',
+  templates.TAKEABLE(),
   { loc: 'lounge', examine: 'A small key.', alias: 'small key' }
 )
 
-createItem('flashlight', TAKEABLE(), SWITCHABLE(false), {
+('flashlight', templates.TAKEABLE(), templates.SWITCHABLE(false), {
   loc: 'lounge',
   examine: 'A small red torch.',
   regex: /^torch$/,
@@ -206,19 +207,19 @@ createItem('flashlight', TAKEABLE(), SWITCHABLE(false), {
   }
 })
 
-createRoom('dining_room', {
+world.createItem('dining_room', {
   desc: 'An old-fashioned room.',
-  east: new Exit('lounge'),
-  west: new Exit('lift'),
+  east: new world.Exit('lounge'),
+  west: new world.Exit('lift'),
   canViewLocs: ['garden'],
   canViewPrefix: 'Through the window you can see ',
-  up: new Exit('dining_room_on_stool'),
+  up: new world.Exit('dining_room_on_stool'),
   alias: 'dining room',
   hint: 'This room features an NPC who will sometimes do as you ask. Compliment her, and she will go to another room, and with then pick things up and drop them (but not bricks). Also not that the glass cabinet is in this room as well as the lounge.'
 })
 
-createItem('chair',
-  FURNITURE({ sit: true }),
+('chair',
+  templates.FURNITURE({ sit: true }),
   {
     loc: 'dining_room',
     examine: 'A wooden chair.',
@@ -228,15 +229,15 @@ createItem('chair',
   }
 )
 
-createRoom('lift',
-  TRANSIT('east'),
+world.createItem('lift',
+  world.createItem('east'),
   {
     desc: 'A curious lift.',
-    east: new Exit('dining_room'),
+    east: new world.Exit('dining_room'),
     transitMenuPrompt: 'Where do you want to go?'
     // afterEnter:transitOfferMenu,
     // transitAutoMove:true,
-    // transitOnMove:function(toLoc, fromLoc) { debugio.msg("MOVING to " + toLoc + " from " + fromLoc); },
+    // transitOnMove:function(toLoc, fromLoc) { io.debugmsg("MOVING to " + toLoc + " from " + fromLoc); },
     // transitCheck:function() {
     //  io.msg("The lift is out of order");
     //  return false;
@@ -245,21 +246,21 @@ createRoom('lift',
 )
 
 // calling it button_0 make it appear before button_1 in lists
-createItem('button_0',
-  TRANSIT_BUTTON('lift'),
+('button_0',
+  world.createItem('lift'),
   {
     alias: 'Button: G',
     examine: 'A button with the letter G on it.',
     transitDest: 'dining_room',
     transitDestAlias: 'Ground Floor',
-    transitAlreadyHere: "You're already there mate!",
+    transitAlreadyHere: "You're lang.already there mate!",
     transitGoToDest: 'The old man presses the button....'
 
   }
 )
 
-createItem('button_1',
-  TRANSIT_BUTTON('lift'),
+('button_1',
+  world.createItem('lift'),
   {
     alias: 'Button: 1',
     examine: 'A button with the letter 1 on it.',
@@ -271,8 +272,8 @@ createItem('button_1',
   }
 )
 
-createItem('button_2',
-  TRANSIT_BUTTON('lift'),
+('button_2',
+  world.createItem('lift'),
   {
     alias: 'Button: 2',
     examine: 'A button with the letter 2 on it.',
@@ -285,17 +286,17 @@ createItem('button_2',
   }
 )
 
-createRoom('attic', {
+world.createItem('attic', {
   desc: 'An spooky attic.',
-  west: new Exit('lift')
+  west: new world.Exit('lift')
 })
 
-createRoom('kitchen', {
+world.createItem('kitchen', {
   desc: 'A clean room{if:clock:scenery:, a clock hanging on the wall}. There is a sink in the corner.',
-  west: new Exit('lounge'),
-  down: new Exit('basement', {
+  west: new world.Exit('lounge'),
+  down: new world.Exit('basement', {
     isHidden: function () { return w.trapdoor.closed },
-    io.msg: function (isMultiple, char) {
+    msg: function (isMultiple, char) {
       if (char === game.player) {
         io.msg('You go through the trapdoor, and down the ladder.')
       } else {
@@ -303,7 +304,7 @@ createRoom('kitchen', {
       }
     }
   }),
-  north: new Exit('garage', { use: command.useWithDoor, door: 'garage_door', doorName: 'garage door' }),
+  north: new world.Exit('garage', { use: commands.useWithDoor, door: 'garage_door', doorName: 'garage door' }),
   afterFirstEnter: function () {
     io.msg('A fresh smell here!')
   },
@@ -311,72 +312,72 @@ createRoom('kitchen', {
   source: 'water'
 })
 
-createItem('clock',
-  TAKEABLE(),
+('clock',
+  templates.TAKEABLE(),
   { loc: 'kitchen', scenery: true, examine: 'A white clock.' }
 )
 
-createItem('trapdoor',
-  OPENABLE(false),
+('trapdoor',
+  templates.OPENABLE(false),
   { loc: 'kitchen', examine: 'A small trapdoor in the floor.' }
 )
 
-createItem('camera',
-  TAKEABLE(),
+('camera',
+  templates.TAKEABLE(),
   { loc: 'kitchen', examine: 'A cheap digital camera.', regex: /^picture box$/ }
 )
 
-createItem('big_kitchen_table',
-  SURFACE(),
+('big_kitchen_table',
+  templates.SURFACE(),
   { loc: 'kitchen', examine: 'A Formica table.' }
 )
 
-createItem('garage_door',
-  OPENABLE(false),
-  locked_WITH('garage_key'),
+('garage_door',
+  templates.OPENABLE(false),
+  templates.lockedWith('garage_key'),
   {
     examine: 'The door to the garage.',
     alias: 'garage door',
     isAtLoc: function (loc) {
       if (typeof loc !== 'string') loc = loc.name
-      return (loc == 'kitchen' || loc == 'garage')
+      return (loc === 'kitchen' || loc === 'garage')
     }
   }
 )
 
-createItem('jug', VESSEL(4), TAKEABLE(), {
+('jug', templates.VESSEL(4), templates.TAKEABLE(), {
   loc: 'big_kitchen_table',
   examine: 'A small jug, stripped blue and white.'
 })
 
-createItem('kitchen_sink', {
+('kitchen_sink', {
   loc: 'kitchen',
   scenery: true,
   examine: 'A dirty sink.',
   isSourceOf: function (subst) { return subst === 'water' || subst === 'lemonade' }
 })
 
-createItem('water', LIQUID(), {
+('water', templates.LIQUID(), {
 })
 
-createItem('honey', LIQUID(), {
+('honey', templates.LIQUID(), {
 })
 
-createItem('lemonade', LIQUID(), {
+('lemonade', templates.LIQUID(), {
 })
 
-createRoom('basement', {
+world.createItem('basement', {
   desc: 'A dank room, with piles of crates everywhere.',
   darkDesc: 'It is dark, but you can just see the outline of the trapdoor above you.',
-  up: new Exit('kitchen', { isHidden: function () { return false } }),
+  up: new world.Exit('kitchen', { isHidden: function () { return false } }),
   lightSource: function () {
     return w.light_switch.switchedon ? util.LIGHT_FULL : util.LIGHT_none
   },
   hint: 'The basement illustrates light and dark. There is a torch in the lounge that may be useful.'
 })
 
-createItem('light_switch',
-  SWITCHABLE(false),
+('light_switch',
+  templates.SWITCHABLE(false),
   {
     loc: 'basement',
     examine: 'A switch, presumably for the light.',
@@ -392,7 +393,7 @@ createItem('light_switch',
   }
 )
 
-createItem('crates',
+('crates',
   {
     loc: 'basement',
     examine: 'A bunch of old crates.',
@@ -404,30 +405,30 @@ createItem('crates',
   }
 )
 
-createRoom('garage', {
+world.createItem('garage', {
   desc: 'An empty garage.',
-  south: new Exit('kitchen', { use: command.useWithDoor, door: 'garage_door', doorName: 'kitchen door' }),
+  south: new world.Exit('kitchen', { use: commands.useWithDoor, door: 'garage_door', doorName: 'kitchen door' }),
   hint: 'The garage features a complex mechanism, with two components.'
 })
 
-createItem('charger',
+('charger',
   {
     loc: 'garage',
     examine: 'A device bigger than a washing machine to charge a torch? It has a compartment and a button. {charger_state}.',
     mended: false,
     use: function () {
-      metaio.msg('To use the charge, you need to put the torch in the compartment and press the button.')
+      io.metamsg('To use the charge, you need to put the torch in the compartment and press the button.')
     }
   }
 )
 
-createItem('charger_compartment',
-  COMPONENT('charger'),
-  CONTAINER(true),
+('charger_compartment',
+  templates.COMPONENT('charger'),
+  defaults.CONTAINER(true),
   {
     alias: 'compartment',
     examine: 'The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.',
-    util.testRestrictions: function (item) {
+    testRestrictions: function (item) {
       const contents = w.charger_compartment.getContents(util.display.LOOK)
       if (contents.length > 0) {
         io.msg('The compartment is full.')
@@ -438,8 +439,8 @@ createItem('charger_compartment',
   }
 )
 
-createItem('charger_button',
-  COMPONENT('charger'),
+('charger_button',
+  templates.COMPONENT('charger'),
   {
     examine: 'A big red button.',
     alias: 'button',
@@ -458,26 +459,26 @@ createItem('charger_button',
   }
 )
 
-createRoom('bedroom', {
+world.createItem('bedroom', {
   desc: 'A large room, with a big [bed] and a wardrobe.',
-  down: new Exit('lounge'),
-  in: new Exit('wardrobe'),
-  west: new Exit('lift'),
+  down: new world.Exit('lounge'),
+  in: new world.Exit('wardrobe'),
+  west: new world.Exit('lift'),
   hint: 'The bedroom has a variety of garments that can be put on - in the right order.'
 })
 
-createItem('wardrobe',
-  DEFAULT_ROOM,
+('wardrobe',
+  world.DEFAULT_ROOM,
   {
-    out: new Exit('bedroom'),
+    out: new world.Exit('bedroom'),
     loc: 'bedroom',
     examine: 'It is so big you could probably get inside it.',
     desc: 'Oddly empty of fantasy worlds.'
   }
 )
 
-createItem('underwear',
-  WEARABLE(1, ['lower']),
+('underwear',
+  templates.WEARABLE(1, ['lower']),
   {
     loc: 'bedroom',
     pronouns: lang.pronouns.massnoun,
@@ -485,73 +486,73 @@ createItem('underwear',
   }
 )
 
-createItem('jeans',
-  WEARABLE(2, ['lower']),
+('jeans',
+  templates.WEARABLE(2, ['lower']),
   { loc: 'bedroom', pronouns: lang.pronouns.plural, examine: 'Clean!' }
 )
 
-createItem('shirt',
-  WEARABLE(2, ['upper']),
+('shirt',
+  templates.WEARABLE(2, ['upper']),
   { loc: 'bedroom', examine: 'Clean!' }
 )
 
-createItem('coat',
-  WEARABLE(3, ['upper']),
+('coat',
+  templates.WEARABLE(3, ['upper']),
   { loc: 'bedroom', examine: 'Clean!' }
 )
 
-createItem('jumpsuit',
-  WEARABLE(2, ['upper', 'lower']),
+('jumpsuit',
+  templates.WEARABLE(2, ['upper', 'lower']),
   { loc: 'bedroom', examine: 'Clean!' }
 )
 
-createItem('suit_trousers',
-  WEARABLE(2, ['lower']),
+('suit_trousers',
+  templates.WEARABLE(2, ['lower']),
   { loc: 'wardrobe', examine: 'The trousers.', pronouns: lang.pronouns.plural }
 )
 
-createItem('jacket',
-  WEARABLE(3, ['upper']),
+('jacket',
+  templates.WEARABLE(3, ['upper']),
   { loc: 'wardrobe', examine: 'The jacket' }
 )
 
-createItem('waistcoat',
-  WEARABLE(2, ['upper']),
+('waistcoat',
+  templates.WEARABLE(2, ['upper']),
   { loc: 'wardrobe', examine: 'The waistcoat' }
 )
 
-createEnsemble('suit', [w.suit_trousers, w.jacket, w.waistcoat],
+templates.createEnsemble('suit', [w.suit_trousers, w.jacket, w.waistcoat],
   { examine: 'A complete suit.', regex: /xyz/ }
 )
 
-createRoom('conservatory', {
+world.createItem('conservatory', {
   desc: 'A light airy room.',
-  north: new Exit('lounge'),
-  west: new Exit('garden'),
+  north: new world.Exit('lounge'),
+  west: new world.Exit('garden'),
   hint: 'The conservatory features a pro-active NPC.'
 })
 
-createItem('crate',
-  FURNITURE({ stand: true }), SHIFTABLE(),
+('crate',
+  templates.FURNITURE({ stand: true }), templates.SHIFTABLE(),
   { loc: 'conservatory', examine: 'A large wooden crate, probably strong enough to stand on.' }
 )
 
-createItem('broken_chair',
+('broken_chair',
   { loc: 'conservatory', examine: 'A broken chair.' }
 )
 
-createRoom('garden', {
+world.createItem('garden', {
   desc: 'Very overgrown. The garden backs onto a shop to the west, whilst the conservatory is east.',
-  east: new Exit('conservatory'),
-  west: new Exit('shop')
+  east: new world.Exit('conservatory'),
+  west: new world.Exit('shop')
 })
 
-createRoom('far_away', {
-  north: new Exit('lounge')
+world.createItem('far_away', {
+  north: new world.Exit('lounge')
 })
 
-createItem('Arthur',
-  NPC(false),
+('Arthur',
+  templates.NPC(false),
   {
     loc: 'garden',
     examine: function (isMultiple) {
@@ -594,7 +595,7 @@ createItem('Arthur',
   }
 )
 
-createItem('Kyle', NPC(false),
+('Kyle', templates.NPC(false),
   {
     loc: 'lounge',
     examine: 'A grizzly bear. But cute.',
@@ -604,50 +605,50 @@ createItem('Kyle', NPC(false),
     askOptions: [
       {
         name: 'House',
-        util.test: function (p) { return p.text.match(/house/) },
-        io.msg: "'I like it,' says Kyle."
+        test: function (p) { return p.text.match(/house/) },
+        msg: "'I like it,' says Kyle."
       },
       {
         name: 'Garden',
-        util.test: function (p) { return p.text.match(/garden/) },
+        test: function (p) { return p.text.match(/garden/) },
         responses: [
           {
-            util.test: function (p) { return w.garden.fixed },
-            io.msg: "'Looks much better now,' Kyle says with a grin."
+            test: function (p) { return w.garden.fixed },
+            msg: "'Looks much better now,' Kyle says with a grin."
           },
           {
-            util.test: function (p) { return w.Kyle.needsWorkCount === 0 },
-            io.msg: "'Needs some work,' Kyle says with a sign.",
+            test: function (p) { return w.Kyle.needsWorkCount === 0 },
+            msg: "'Needs some work,' Kyle says with a sign.",
             script: function (p) { w.Kyle.needsWorkCount++ }
           },
           {
-            io.msg: "'I'm giving up hope of it ever getting sorted,' Kyle says."
+            msg: "'I'm giving up hope of it ever getting sorted,' Kyle says."
           }
         ]
       },
       {
-        util.test: function (p) { return p.text.match(/park/) },
+        test: function (p) { return p.text.match(/park/) },
         responses: [
           {
             name: 'Park',
             mentions: ['Swings'],
-            io.msg: "'Going to the park sounds like fun,' Kyle says with a grin. 'We can go on the swings!'"
+            msg: "'Going to the park sounds like fun,' Kyle says with a grin. 'We can go on the swings!'"
           }
         ]
       },
       {
         name: 'Fountain',
-        util.test: function (p) { return p.text.match(/fountain/) && p.actor.specialFlag },
-        io.msg: "'The fountain does not work.'"
+        test: function (p) { return p.text.match(/fountain/) && p.actor.specialFlag },
+        msg: "'The fountain does not work.'"
       },
       {
         name: 'Swings',
         silent: true,
-        util.test: function (p) { return p.text.match(/swing/) },
-        io.msg: "'The swings are fun!'"
+        test: function (p) { return p.text.match(/swing/) },
+        msg: "'The swings are fun!'"
       },
       {
-        io.msg: 'Kyle has no interest in that subject.',
+        msg: 'Kyle has no interest in that subject.',
         failed: true
       }
     ],
@@ -664,7 +665,7 @@ createItem('Kyle', NPC(false),
     }
   })
 
-createItem('kyle_question', QUESTION(), {
+('kyle_question', templates.QUESTION(), {
   responses: [
     {
       regex: /^(yes)$/,
@@ -687,13 +688,13 @@ createItem('kyle_question', QUESTION(), {
   ]
 })
 
-createItem('straw_boater',
-  WEARABLE(false),
+('straw_boater',
+  templates.WEARABLE(false),
   { loc: 'Kyle', examine: 'A straw boater.', worn: true }
 )
 
-createItem('Kyle_The_Garden',
-  TOPIC(true),
+('Kyle_The_Garden',
+  npc.createItem(true),
   {
     loc: 'Kyle',
     alias: "What's the deal with the garden?",
@@ -704,8 +705,8 @@ createItem('Kyle_The_Garden',
   }
 )
 
-createItem('Kyle_The_Garden_Again',
-  TOPIC(false),
+('Kyle_The_Garden_Again',
+  npc.createItem(false),
   {
     loc: 'Kyle',
     alias: "Seriously, what's the deal with the garden?",
@@ -715,8 +716,8 @@ createItem('Kyle_The_Garden_Again',
   }
 )
 
-createItem('Kyle_The_Weather',
-  TOPIC(true),
+('Kyle_The_Weather',
+  npc.createItem(true),
   {
     loc: 'Kyle',
     alias: 'The weather',
@@ -726,8 +727,8 @@ createItem('Kyle_The_Weather',
   }
 )
 
-createItem('Lara',
-  NPC(true),
+('Lara',
+  templates.NPC(true),
   {
     loc: 'dining_room',
     examine: 'A normal-sized bunny.',
@@ -800,13 +801,13 @@ createItem('Lara',
   }
 )
 
-createItem('garage_key',
-  TAKEABLE(),
+('garage_key',
+  templates.TAKEABLE(),
   { loc: 'lounge', examine: 'A big key.', alias: 'garage key' }
 )
 
-createItem('Lara_garage_key',
-  TOPIC(true),
+('Lara_garage_key',
+  npc.createItem(true),
   {
     loc: 'Lara',
     alias: 'Can I have the garden key?',
@@ -816,8 +817,8 @@ createItem('Lara_garage_key',
   }
 )
 
-createItem('Lara_very_attractive',
-  TOPIC(true),
+('Lara_very_attractive',
+  npc.createItem(true),
   {
     loc: 'Lara',
     alias: "You're very attractive",
@@ -828,7 +829,7 @@ createItem('Lara_very_attractive',
   }
 )
 
-createItem('walls',
+('walls',
   {
     examine: "They're walls, what are you expecting?",
     regex: /^wall$/,
@@ -840,28 +841,28 @@ createItem('walls',
   }
 )
 
-createItem('brick',
-  COUNTABLE({ lounge: 7, dining_room: 1 }),
+('brick',
+  templates.COUNTABLE({ lounge: 7, dining_room: 1 }),
   { examine: 'A brick is a brick.', regex: /^(\d+ )?bricks?$/ }
 )
 
-createRoom('shop', {
+world.createItem('shop', {
   desc: 'A funny little shop.',
-  east: new Exit('garden'),
+  east: new world.Exit('garden'),
   willBuy: function (obj) {
     return (obj === w.trophy)
   }
 })
 
-createItem('carrot', TAKEABLE(), MERCH(2, ['shop']), {
+('carrot', templates.TAKEABLE(), templates.MERCH(2, ['shop']), {
   examine: "It's a carrot!"
 })
 
-createItem('honey_pasta', TAKEABLE(), MERCH(5, ['shop']), {
+('honey_pasta', templates.TAKEABLE(), templates.MERCH(5, ['shop']), {
   examine: "It's pasta. With honey on it."
 })
 
-createItem('trophy', TAKEABLE(), MERCH(15, 'shop'), {
+('trophy', templates.TAKEABLE(), templates.MERCH(15, 'shop'), {
   examine: 'It is a unique trophy!',
   doNotClone: true
 })

@@ -2,17 +2,17 @@
 
 These are functions for creating objexts inthe game world
 
-### Function: ` `  ` createItem() `  ` ` 
+### Function: ` `  ` () `  ` ` 
 
-Use this to create a new item (as opposed to a room). It adds various defaults that apply only to items. The first argument should be a string - a unique name for this object, composed only of letters, numbers and underscores. It will than take any number of dictionaries that will be combined to set the properties. Generally objects should not be created during play as they will not be saved properly. Either keep the object hodden until required or clone existing objects.
+Use this to create a new item (as opposed to a room). It adds various defaults that apply only to template.items. The first argument should be a string - a unique name for this object, composed only of letters, numbers and underscores. It will than take any number of dictionaries that will be combined to set the properties. Generally objects should not be created during play as they will not be saved properly. Either keep the object hodden until required or clone existing objects.
 
-### Function: ` `  ` createRoom() `  ` ` 
+### Function: ` `  ` world.createItem() `  ` ` 
 
-Use this to create a new room (as opposed to an item). It adds various defaults that apply only to items The first argument should be a string - a unique name for this object, composed only of letters, numbers and underscores. It will than take any number of dictionaries that will be combined to set the properties. Generally objects should not be created during play as they will not be saved properly. Either keep the object hodden until required or clone existing objects.
+Use this to create a new room (as opposed to an item). It adds various defaults that apply only to template.items The first argument should be a string - a unique name for this object, composed only of letters, numbers and underscores. It will than take any number of dictionaries that will be combined to set the properties. Generally objects should not be created during play as they will not be saved properly. Either keep the object hodden until required or clone existing objects.
 
-### Function: ` `  ` cloneObject(item, loc, newName) `  ` ` 
+### Function: ` `  ` world.cloneObject(item, loc, newName) `  ` ` 
 
-Use this to create new items during play. The given item will be cloned at the given location. The `newName` isoptional, one will be generated if not supplied. If you do supply one bear inmid that every clone must have a unique name.
+Use this to create new template.items during play. The given item will be cloned at the given location. The `newName` isoptional, one will be generated if not supplied. If you do supply one bear inmid that every clone must have a unique name.
 
 ### Function: ` `  ` createObject(name, listOfHashes) `  ` ` 
 
@@ -70,12 +70,12 @@ Options:
 
 * article:    util. DEFINITE (for "the") or util. INDEFINITE (for "a"), defaults to none (see byname)
 * sep:        separator (defaults to comma)
-* lastJoiner: separator for last two items (just separator if not provided); you should include any util.spaces (this allows you to have a comma and "and", which is obviously wrong, but some people like it)
+* lastJoiner: separator for last two template.items (just separator if not provided); you should include any util.spaces (this allows you to have a comma and "and", which is obviously wrong, but some people like it)
 * modified:   item aliases modified (see byname) (defaults to false)
 * nothing:    return this if the list is empty (defaults to empty string)
 * count:      if this is a number, the name will be prefixed by that (instead of the article)
 * doNotSort   if true the list isnot sorted
-* separateEnsembles:  if true, ensembles are listed as the separate items
+* separateEnsembles:  if true, ensembles are listed as the separate template.items
 
 For example:
 
@@ -151,7 +151,7 @@ Searchs the given list for a suitable response, according to the given params, a
 
 ## The Text Processor Function
 
-### Function: ` `  ` processText(str, params) `  ` ` 
+### Function: ` `  ` text.processText(str, params) `  ` ` 
 
 Returns a string in which all the text processor directives have been resolved, using the optionasl parameters. More details [here(https://github.com/ThePix/QuestJS/wiki/The-Text-Processor).
 
@@ -199,7 +199,7 @@ Just the same as msg, but adds the "failed" CSS class. This allows failed comman
 
     if (notAllowed) return falsemsg("That is not allowed.")
 
-### Function: ` `  ` metamsg(s, params) `  ` ` 
+### Function: ` `  ` io.metamsg(s, params) `  ` ` 
 
 Output a meta-message - a message to inform the player about something outside the game world, such as hints and help messages. The string will first be passed through the text processor. Additional data can be put in the optional params dictionary. During unit util.testing, messages will be saved and util.tested
 
@@ -231,11 +231,11 @@ Clears the screen.
 
 Stops outputting whilst waiting for the player to click.
 
-### Function: ` `  ` showMenu(title, options, fn) `  ` ` 
+### Function: ` `  ` io.showMenu(title, options, fn) `  ` ` 
 
 Use like this:
 
-     showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
+     io.showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
        msg("You picked " + result + ".");
      });
 

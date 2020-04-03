@@ -1,7 +1,7 @@
 'use strict'
 
-createItem('me',
-  RPG_PLAYER(), {
+('me',
+  RPG_templates.PLAYER(), {
     loc: 'lounge',
     regex: /^(me|myself|player)$/,
     equipped: 'weapon_unarmed',
@@ -17,7 +17,7 @@ createItem('me',
   }
 )
 
-createItem('weapon_unarmed',
+('weapon_unarmed',
   WEAPON(), {
     image: 'fist',
     damage: 'd4',
@@ -26,7 +26,7 @@ createItem('weapon_unarmed',
   }
 )
 
-createItem('knife',
+('knife',
   WEAPON(), {
     loc: 'me',
     image: 'knife',
@@ -43,7 +43,7 @@ createItem('knife',
   }
 )
 
-createItem('flail',
+('flail',
   WEAPON(), {
     loc: 'me',
     image: 'flail',
@@ -59,12 +59,12 @@ createItem('flail',
   }
 )
 
-createRoom('lounge', {
+world.createItem('lounge', {
   desc: 'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
   hint: 'There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).'
 })
 
-createItem('goblin',
+('goblin',
   RPG_NPC(false), {
     loc: 'lounge',
     damage: '3d6',
@@ -72,7 +72,7 @@ createItem('goblin',
   }
 )
 
-createItem('orc',
+('orc',
   RPG_NPC(false), {
     loc: 'lounge',
     damage: '2d10+4',
@@ -80,7 +80,7 @@ createItem('orc',
   }
 )
 
-createItem('snotling',
+('snotling',
   RPG_NPC(false), {
     loc: 'lounge',
     damage: '2d4',
@@ -88,7 +88,7 @@ createItem('snotling',
   }
 )
 
-createItem('friend',
+('friend',
   RPG_NPC(false), {
     loc: 'lounge',
     damage: '2d4',
@@ -97,8 +97,8 @@ createItem('friend',
   }
 )
 
-createItem('chest',
-  CONTAINER(true), {
+('chest',
+  defaults.CONTAINER(true), {
     loc: 'lounge'
   }
 )

@@ -145,8 +145,8 @@ const RPG_TEMPLATE = {
   }
 }
 
-const RPG_PLAYER = function () {
-  const res = PLAYER()
+const RPG_templates.PLAYER = function () {
+  const res = templates.PLAYER()
 
   for (const key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key]
 
@@ -172,7 +172,7 @@ const RPG_NPC = function (female) {
 }
 
 const WEAPON = function () {
-  const res = $.extend({}, TAKEABLE_DICTIONARY)
+  const res = $.extend({}, templates.TAKEABLE_DICTIONARY)
 
   res.weapon = true
 
@@ -197,7 +197,7 @@ const WEAPON = function () {
 
   res.equip = function (isMultiple, char) {
     if (char.equipped === this.name) {
-      io.msg('It already is.')
+      io.msg('It lang.already is.')
       return false
     }
     if (char.equipped !== 'weapon_unarmed') {
@@ -210,7 +210,7 @@ const WEAPON = function () {
 
   res.unequip = function (isMultiple, char) {
     if (char.equipped !== this.name) {
-      io.msg('It already is.')
+      io.msg('It lang.already is.')
       return false
     }
     char.equipped = 'weapon_unarmed'

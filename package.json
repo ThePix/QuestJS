@@ -10,10 +10,6 @@
   "scripts": {
     "util.test": "echo \"Error: no util.test specified\" && exit 1"
   },
-  "files": [
-    "readme",
-    "docs"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KilianKilmister/QuestJS.git"

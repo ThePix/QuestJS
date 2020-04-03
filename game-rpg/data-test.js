@@ -1,13 +1,13 @@
 'use strict'
 
-createItem('me',
-  PLAYER(),
+('me',
+  templates.PLAYER(),
   { loc: 'lounge', regex: /^(me|myself|player)$/, examine: 'Just some guy.' }
 )
 
 // This is for the player
-createItem('knife',
-  TAKEABLE(),
+('knife',
+  templates.TAKEABLE(),
   {
     loc: 'me',
     sharp: false,
@@ -21,23 +21,23 @@ createItem('knife',
   }
 )
 
-createRoom('lounge', {
+world.createItem('lounge', {
   desc: 'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
-  east: new Exit('kitchen'),
-  west: new Exit('dining_room'),
-  up: new Exit('bedroom')
+  east: new world.Exit('kitchen'),
+  west: new world.Exit('dining_room'),
+  up: new world.Exit('bedroom')
 }
 )
 
-createRoom('kitchen', {
+world.createItem('kitchen', {
   desc: 'A nice room.',
-  east: new Exit('lounge', {
+  east: new world.Exit('lounge', {
     locked: true,
     use: function () {
       io.msg('No cannot.')
     }
   }
   ),
-  west: new Exit('lounge')
+  west: new world.Exit('lounge')
 }
 )

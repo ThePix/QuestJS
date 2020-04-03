@@ -23,6 +23,7 @@ Each awakening gets steadily worse, by the fourth you are throwing up.
 */
 
 'use strict'
+import { io, w, world, commands } from './main'
 
 $('#panes').append('<img src="images/spaceship.png" style="margin-left:10px;margin-top:15px;"/>')
 
@@ -197,7 +198,7 @@ const PLANETS = [
   {
     starName: 'Gliese 1214',
     planet: 'A',
-    comment: 'Planet 5 (already colonised): This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off. Any probes will be shot down!',
+    comment: 'Planet 5 (lang.already colonised): This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off. Any probes will be shot down!',
     atmosphere: 'Pretty good.',
     radio: 'Radio signals have been detected.',
     lights: 'There are numerous light sources on the night side of the planet.',
@@ -439,7 +440,7 @@ function createTopics (npc) {
   npc.askOptions.unshift({
     name: 'health',
     regex: /(his |her )?(health|well\-?being)/,
-    util.test: function (p) { return p.text.match(this.regex) },
+    test: function (p) { return p.text.match(this.regex) },
     response: howAreYouFeeling
   })
   npc.askOptions.unshift({
@@ -450,7 +451,7 @@ function createTopics (npc) {
   npc.askOptions.unshift({
     name: 'probes',
     regex: /probes?/,
-    util.test: function (p) { return p.text.match(this.regex) },
+    test: function (p) { return p.text.match(this.regex) },
     response: function (npc) {
       npc.probesAskResponse()
     }
@@ -458,7 +459,7 @@ function createTopics (npc) {
   npc.askOptions.unshift({
     name: 'expertise',
     regex: /(your |his |her )?(area|special.*|expert.*|job|role)/,
-    util.test: function (p) { return p.text.match(this.regex) },
+    test: function (p) { return p.text.match(this.regex) },
     response: function (npc) {
       io.msg("'What is your area of expertise?' you ask " + npc.byname({ article: util.DEFINITE }) + '.')
       npc.areaAskResponse()
@@ -467,7 +468,7 @@ function createTopics (npc) {
   npc.askOptions.unshift({
     name: 'background',
     regex: /^((his |her )?(background))|((him|her)self)$/,
-    util.test: function (p) { return p.text.match(this.regex) },
+    test: function (p) { return p.text.match(this.regex) },
     response: function (npc) {
       io.msg("'Tell me about yourself,' you say to " + npc.byname({ article: util.DEFINITE }) + '.')
       npc.backgroundAskResponse()
@@ -501,22 +502,22 @@ function planetAnalysis (npc) {
 
 function createPlanets () {
   for (let i = 0; i < PLANETS.length; i++) {
-    createItem('planet' + i,
-      {
-        starName: PLANETS[i].starName,
-        alias: PLANETS[i].starName + ' ' + PLANETS[i].planet,
-        geology: 0,
-        marine: 0,
-        biology: 0,
-        coms: 0,
-        satellite: false,
-        probeLandingSuccess: PLANETS[i].probeLandingSuccess,
-        eventIsActive: function () { return this.satellite },
-        eventPeriod: 5,
-        eventScript: function () {
-          this.coms++
-        }
+    ('planet' + i,
+    {
+      starName: PLANETS[i].starName,
+      alias: PLANETS[i].starName + ' ' + PLANETS[i].planet,
+      geology: 0,
+      marine: 0,
+      biology: 0,
+      coms: 0,
+      satellite: false,
+      probeLandingSuccess: PLANETS[i].probeLandingSuccess,
+      eventIsActive: function () { return this.satellite },
+      eventPeriod: 5,
+      eventScript: function () {
+        this.coms++
       }
+    }
     )
   }
 }
@@ -539,7 +540,7 @@ function arrival () {
 }
 
 // If a topic has an attribute "name2", then using code=2,
-// "name" will be changed to "name2". This means new topics get added to the TOPIC command
+// "name" will be changed to "name2". This means new topics get added to the npc.createItem command
 // util.tested
 function updateTopics (npc, code) {
   for (let i = 0; i < npc.askOptions.length; i++) {
@@ -566,7 +567,7 @@ function reviveNpc (npc, object) {
 
 function deployProbe (npc, probeType, probeNumber) {
   w.Xsansi[probeType + 'Probes']--
-  const probe = cloneObject(w.probe_prototype)
+  const probe = world.cloneObject(w.probe_prototype)
 
   probe.alias = util.sentenCecase(probeType) + '-probe ' + util.toRoman(16 - w.Xsansi[probeType + 'Probes'])
   probe.probeType = probeType
@@ -574,7 +575,7 @@ function deployProbe (npc, probeType, probeNumber) {
   probe.probeNumber = probeNumber
   probe.launched = true
   probe.owner = npc.name
-  // debugio.msg("Launched: " + probe.alias);
+  // io.debugmsg("Launched: " + probe.alias);
 }
 
 function getProbes () {
@@ -621,11 +622,11 @@ io.clickToContinueLink = function () {
   io.continuePrintId = io.nextid - 1
 }
 
-tp.text_processors.tableDesc = function (arr, params) {
+text.tp.text_processors.tableDesc = function (arr, params) {
   return w.canteen_table.tpDesc
 }
 
-tp.text_processors.podStatus = function (arr, params) {
+text.tp.text_processors.podStatus = function (arr, params) {
   return w.stasis_bay.tpStatus
 }
 
@@ -666,7 +667,7 @@ commands.push(new Cmd('Get in pod1', {
   objects: [
     { scope: parser.isHere, attName: 'npc' }
   ],
-  defio.msg: "That's not about to get in a stasis!"
+  defmsg: "That's not about to get in a stasis!"
 }))
 commands.push(new Cmd('Get in pod2', {
   regex: /^tell (.+) to (?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
@@ -675,7 +676,7 @@ commands.push(new Cmd('Get in pod2', {
   objects: [
     { scope: parser.isHere, attName: 'npc' }
   ],
-  defio.msg: "That's not about to get in a stasis!"
+  defmsg: "That's not about to get in a stasis!"
 }))
 
 commands.push(new Cmd('Stop1', {
@@ -685,7 +686,7 @@ commands.push(new Cmd('Stop1', {
   objects: [
     { scope: parser.isHere, attName: 'npc' }
   ],
-  defio.msg: "That's not doing anything!"
+  defmsg: "That's not doing anything!"
 }))
 commands.push(new Cmd('Stop2', {
   regex: /^tell (.+) to (?:stop|halt|forget it)$/,
@@ -694,7 +695,7 @@ commands.push(new Cmd('Stop2', {
   objects: [
     { scope: parser.isHere, attName: 'npc' }
   ],
-  defio.msg: "That's not doing anything"
+  defmsg: "That's not doing anything"
 }))
 
 commands.push(new Cmd('Launch', {
@@ -704,7 +705,7 @@ commands.push(new Cmd('Launch', {
     { ignore: true },
     { scope: parser.isInWorld }
   ],
-  defio.msg: "You can't launch that!"
+  defmsg: "You can't launch that!"
 }))
 
 commands.push(new Cmd('Revive', {
@@ -714,7 +715,7 @@ commands.push(new Cmd('Revive', {
     { ignore: true },
     { scope: parser.isInWorld }
   ],
-  defio.msg: "You can't revive that!"
+  defmsg: "You can't revive that!"
 }))
 
 commands.push(new Cmd('Pressurise', {
@@ -831,7 +832,7 @@ function handlePressurise (char, objects, pressurise) {
   }
   const mainRoom = (typeof baseRoom.vacuum === 'string' ? w[baseRoom.vacuum] : baseRoom)
   if (mainRoom.vacuum !== pressurise) {
-    io.msg("'" + util.sentenCecase(mainRoom.byname({ article: util.DEFINITE })) + ' is already ' + (pressurise ? 'pressurised' : 'depressurised') + '.')
+    io.msg("'" + util.sentenCecase(mainRoom.byname({ article: util.DEFINITE })) + ' is lang.already ' + (pressurise ? 'pressurised' : 'depressurised') + '.')
     return util.SUCCESS
   }
   if (!w.Xsansi.pressureOverride && mainRoom.name !== 'airlock' && !pressurise) {
@@ -872,7 +873,7 @@ commands.push(new Cmd('Approach', {
       return util.FAILED
     }
     if (w.alienShip.status > 1) {
-      io.msg("The {i:Joseph Banks} is already adjacent to the unidentified vessel.'")
+      io.msg("The {i:Joseph Banks} is lang.already adjacent to the unidentified vessel.'")
       return util.FAILED
     }
     io.msg('You sit at the controls, and unlock the console. You type the co-ordinates into the system, and feel a noticeable pull as the ship accelerates to the target. At the half way point, the ship swings around, so the rockets are firing towards the target, slowing the ship down, so it comes to a stop, relative to the other ship.')
