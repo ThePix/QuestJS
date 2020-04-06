@@ -7,3 +7,4 @@ docs
 rollup.config.js
 .vscode/**
 .gitignore
+DS_store
