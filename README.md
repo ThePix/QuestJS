@@ -1,4 +1,4 @@
-## forked from [ThePix/QuestJS](https://github.com/ThePix/QuestJS)
+# QuestJS
 
 This is an experiment in moving Quest, an interactive fiction app, to pure JavaScript. An experimental game can be found [here](http://textadventures.co.uk/games/view/48pkf40on0soigganjtatq/first-steps).
 
@@ -32,5 +32,3 @@ No, but it is under development. It is in another repository [here](https://gith
 ### Will it be possible to convert existing games?
 
 Originally the answer was a definite no, however during developmenmt of the editor it became apparent that an XML file would be good to support blockly, so I have changed my position somewhat. The editor will now convert most things, but not ASL code currently.
-
-*
