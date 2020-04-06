@@ -11,13 +11,14 @@
       // launch Chrome in debug mode
       // /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
       "port": 9222,
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}/dist",
+      "url": "http://localhost:8080/dist/",
     },
     {
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome against localhost",
-      "url": "http://localhost:8080",
+      "url": "http://localhost:8080/dist/",
       "webRoot": "${workspaceFolder}"
     }
   ]

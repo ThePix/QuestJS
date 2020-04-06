@@ -1,14 +1,1 @@
-tmp.*
-*.xml
-*.aslx
-*.yml
-*.rb
-*.txt
-*.zip
-game-x*/
-libx/
-page-x*.html
-images/Joseph Banks.svg
-misc/
 node_modules
-.QuestJS*
