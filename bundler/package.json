@@ -1,19 +1,15 @@
 {
-  "name": "questhive",
+  "name": "questenvelope",
   "version": "0.2.2",
-  "description": "QuestJS port to the node ecosystem",
-  "main": "dist/QuestJS.umd.js",
-  "module": "dist/QuestJS.esm.js",
+  "description": "standalone bundler for QuestJS",
+  "main": "./lib/rollup.script.js",
+  "module": "./lib/rollup.script.js",
   "type": "module",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "build": "rollup -c ./rollup.config.js -w"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KilianKilmister/QuestJS.git"
+    "build": "node ./rollup.script.js"
   },
   "keywords": [
     "QuestJS"

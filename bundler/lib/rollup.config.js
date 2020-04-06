@@ -9,6 +9,7 @@ import generatePkg from 'rollup-plugin-generate-package-json'
 import gzip from 'rollup-plugin-gzip'
 import rebase from 'rollup-plugin-rebase'
 import staticSite from 'rollup-plugin-static-site'
+import path from 'path'
 /* eslint-enable */
 
 /*

@@ -24,7 +24,7 @@ more info: https://rollupjs.org/guide/en/
 
 export default {
   external: [
-    path.resolve(__dirname, './QuestJS.js')
+    path.resolve( __dirname, './QuestJS.js)
   ],
   input: [
     './src/main.js'

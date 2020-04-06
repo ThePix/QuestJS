@@ -1,5 +1,5 @@
 {
-  "name": "questhive",
+  "name": "game-eg",
   "version": "0.2.2",
   "description": "QuestJS port to the node ecosystem",
   "main": "dist/QuestJS.umd.js",
@@ -11,14 +11,10 @@
   "scripts": {
     "build": "rollup -c ./rollup.config.js -w"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KilianKilmister/QuestJS.git"
-  },
   "keywords": [
     "QuestJS"
   ],
-  "author": "Kilian (original: ThePix)",
+  "author": "Kilian",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/KilianKilmister/QuestJS/issues"
