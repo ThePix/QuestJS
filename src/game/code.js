@@ -1,4 +1,5 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import { INDEFINITE, prefix, firsttime, arrayRemove, display, formatList, DEFINITE, spaces, failedmsg, msg, io, metamsg, showMenu, settings, commands, game, w, Cmd, cmdRules, parser, lang, tp } from '../main.js'
 
 // This function will be called at the start of the game, so can be used

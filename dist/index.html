@@ -1,83 +1,97 @@
 <!DOCTYPE html>
 <html lang="en-US">
 
-    <head>
-        <meta charset="utf-8" />
-        <title>A Test Page</title>
-        <link rel="shortcut icon" type="image/png" href="../images/favicon.png" />
+  <head>
+    <meta charset="utf-8" />
+    <title>A Test Page</title>
+    <link rel="shortcut icon" type="image/png" href="../images/favicon.png" />
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <link rel="stylesheet"
-            href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!--!!!TEMPORARILY REMOVED CIONTENT SECURITY POLICY!!!
+        It just interfered with my task, and it confused
+        me to much to fix it right away. It can be added
+        back any time with some minor adjustments.-->
 
-        <link rel="stylesheet" href="../src/style.css" />
-        <link rel="stylesheet" href="../src/game/style.css" />
-        <script type="module" src="./QuestJS.umd.js"></script>
+    <!--JQuery should be phased out of the pro as it is
+        simply not very benefitial anymore in modern web-development.-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-    </head>
+    <!-- this imports a script for a markdown parser. Not used currently -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <body>
+    <!-- style sheet import. will ultimatly be contained within the bundle-->
+    <link rel="stylesheet" href="../src/style.css" />
+    <link rel="stylesheet" href="../src/game/style.css" />
 
-        <div id="main">
-            <div id="output"></div>
-            <div id="input"></div>
-        </div>
-        <div id="dialog"></div>
-        <!--strart of io.createPanes -->
-        <div id="panes" class="sidepanes">
-            <div class="paneDiv">
-                <table id="compass-table">
-                    <!-- 3x -->
-                    <td class="compassbutton">
-                        <span class="compassbutton" id="exit1"></span>
-                    </td>
-                    <td class="compassbutton">
-                        <span class="compassbutton" id="exit1"></span>
-                    </td>
-                    <td class="compassbutton">
-                        <span class="compassbutton" id="exit1"></span>
-                    </td>
-                    <td class="compassbutton">
-                        <span class="compassbutton" id="exit1"></span>
-                    </td>
-                    <td class="compassbutton">
-                        <span class="compassbutton" id="exit1"></span>
-                    </td>
-                    <!--3x end-->
+    <!--import of the bundle.
+        NOTE how we have to specify `type="module"`-->
+    <script type="module" src="./QuestJS.umd.js"></script>
 
-                </table>
-            </div>
+  </head>
 
-            <div class="paneDiv">
-                <h4>status:</h4>
-                <table id="status-pane">
-                </table>
-            </div>
+  <body>
 
-            <div class="paneDiv">
-                <script>
-                    const inventories = [
-                        {name: 'Items Held',alt: 'itemsHeld',getLoc: function() {return game.player.name}},
-                        {name: 'Items Worn',alt: 'itemsWorn',getLoc: function() {return game.player.name}},
-                        {name: 'Items Here',alt: 'itemsHere',getLoc: function() {return game.player.loc}}
-                    ]
-                    for( const inv of inventories ) {
-                        document.writeln( '<div class="paneDiv">' )
-                        document.writeln( '<h4>' + inv.name + ':</h4>' )
-                        document.writeln( '<div id="' + inv.alt + '">' )
-                        document.writeln( '</div>' )
-                        document.writeln( '</div>' )
-                    }
-                </script>
-            </div>
-        </div>
-        </div>
+    <div id="main">
+      <div id="output"></div>
+      <div id="input"></div>
+    </div>
+    <div id="dialog"></div>
+
+    <!--strart of io.createPanes -->
+    <div id="panes" class="sidepanes">
+      <div class="paneDiv">
+        <table id="compass-table">
+          <!-- Compass isn't working right now. this is just a placeholder -->
+          <td class="compassbutton">
+            <span class="compassbutton" id="exit1"></span>
+          </td>
+          <td class="compassbutton">
+            <span class="compassbutton" id="exit1"></span>
+          </td>
+          <td class="compassbutton">
+            <span class="compassbutton" id="exit1"></span>
+          </td>
+          <td class="compassbutton">
+            <span class="compassbutton" id="exit1"></span>
+          </td>
+          <td class="compassbutton">
+            <span class="compassbutton" id="exit1"></span>
+          </td>
+          <!--placeholder end-->
+
+        </table>
+      </div>
+
+      <div class="paneDiv">
+        <h4>status:</h4>
+        <table id="status-pane">
+        </table>
+      </div>
+
+      <div class="paneDiv">
         <script>
-            $( '#input' ).html( '>' + '<input type="text" name="textbox" id="textbox"  autofocus/>' )
+          const inventories = [
+            {name: 'Items Held',alt: 'itemsHeld',getLoc: function() {return game.player.name}},
+            {name: 'Items Worn',alt: 'itemsWorn',getLoc: function() {return game.player.name}},
+            {name: 'Items Here',alt: 'itemsHere',getLoc: function() {return game.player.loc}}
+          ]
+          for( const inv of inventories ) {
+            document.writeln( '<div class="paneDiv">' )
+            document.writeln( '<h4>' + inv.name + ':</h4>' )
+            document.writeln( '<div id="' + inv.alt + '">' )
+            document.writeln( '</div>' )
+            document.writeln( '</div>' )
+          }
         </script>
+      </div>
+    </div>
+    </div>
+    <script>
+      // it would be smart to generally phase out JQuery, as it simply isn't nescessary, with modern JS and Browser standards.
+      $( '#input' ).html( '>' + '<input type="text" name="textbox" id="textbox"  autofocus/>' )
+    </script>
 
-    </body>
+  </body>
 
 </html>

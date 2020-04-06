@@ -34,8 +34,6 @@
     "@rollup/plugin-node-resolve": "^7.1.1",
     "http-server": "^0.12.1",
     "marked": "^0.8.2",
-    "parcel-bundler": "^1.12.4",
-    "rimraf": "^3.0.2",
     "rollup": "^2.3.3",
     "standard": "^14.3.3"
   }

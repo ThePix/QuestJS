@@ -1,4 +1,5 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import {
   failedmsg, errormsg, printOrRun, msg /* alert */,
   commands,

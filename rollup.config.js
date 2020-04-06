@@ -1,9 +1,22 @@
+/* eslint-disable */
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import html from '@rollup/plugin-html'
 import image from '@rollup/plugin-image'
 import multi from '@rollup/plugin-multi-entry'
+/* eslint-enable */
+
+/*
+This is the config file for the Rollup-Bundler.
+It will need adjustments down the line as the projects needs evolve. But for now it's good to go.
+It includes some basic plugins, but there are a lot more i want to take a look at.
+To build the Bundle you can run the "build" task in the Package.json.
+It will also start a Wather, that will automatically rebuild the bundle as soon as aa change to
+any of the sourcefiles is detected.
+You can start it ba using `npm run build` on the command line.
+more info: https://rollupjs.org/guide/en/
+*/
 
 export default {
   input: [
@@ -44,7 +57,10 @@ export default {
   }
 }
 
-// for reference only
+/*
+this next object isn't used it just serves for reference.
+it's a little messy but i think it contains the most vital notes.
+*/
 // eslint-disable-next-line
 const ref = Object.freeze({
   inputOptions: {

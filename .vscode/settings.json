@@ -1,4 +1,6 @@
-{
+{ // settings used for the COMMENT ANCHOR extension.
+  // it automatically highlights and cataloguesn
+  // certain keywords for easy development in a group.
   "commentAnchors.scrollPosition": "center",
   "commentAnchors.tags.list": [
     {

@@ -1,5 +1,6 @@
 'use strict'
-import { printOrRun, msg, errormsg, falsemsg, INDEFINITE, sentenceCase, display, randomFromArray, LIGHT_none, LIGHT_FULL, VISIBLE, REACHABLE, DEFINITE, NULL_FUNC, game, w, lang, settings, saveLoad} from './main.js'
+// -fixme: serious namespace pollution.
+import { printOrRun, msg, errormsg, falsemsg, INDEFINITE, sentenceCase, display, randomFromArray, LIGHT_none, LIGHT_FULL, VISIBLE, REACHABLE, DEFINITE, NULL_FUNC, game, w, lang, settings, saveLoad } from './main.js'
 // Should all be language neutral
 
 export const DEFAULT_OBJECT = {

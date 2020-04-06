@@ -1,4 +1,5 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import { printOrRun, msg, io, metamsg, debugmsg, errormsg, endTurnUI, msgHeading, clearScreen, SUCCESS, FAILED, sentenceCase, display, VERBOSE, LIGHT_none, LIGHT_MEAGRE, VISIBLE, REACHABLE, lang, settings, saveLoad, DEFAULT_ITEM, DEFAULT_ROOM, DEFAULT_OBJECT, initCommands } from './main.js'
 
 // This is where the world exist!

@@ -1,4 +1,5 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import { errormsg, game, w, world, lang, settings } from './main.js'
 
 // ============  Utilities  =================================
@@ -9,6 +10,7 @@ import { errormsg, game, w, world, lang, settings } from './main.js'
 // (but a verb will return true or false, so the command that uses it
 // can in turn return one of these - a verb is an attribute of an object)
 
+// -fixme: the implementation of these constants needs to change
 export const SUCCESS = 1
 export const SUCCESS_NO_TURNSCRIPTS = 2
 export const SUPPRESS_ENDTURN = 3

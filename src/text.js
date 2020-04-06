@@ -1,4 +1,5 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import { io, errormsg, INDEFINITE, sentenceCase, display, TERSE, VERBOSE, formatList, displayMoney, scopeHereListed, DEFINITE, COLOURS, randomFromArray, util, game, w, lang } from './main.js'
 
 // @DOC

@@ -1,4 +1,5 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import { failedmsg, printOrRun, msg, falsemsg, debugmsg, errormsg, showMenu, INDEFINITE, prefix, SUCCESS, sentenceCase, display, formatList, scopeReachable, scopeHeldBy, DEFINITE, INFINITY, NULL_FUNC, util, game, w, world, createItem, cloneObject, lang, CONTAINER_BASE } from './main.js'
 //  PLAYER, items, cloneObject
 

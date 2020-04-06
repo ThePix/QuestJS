@@ -11,7 +11,7 @@
 // Should all be language neutral (except the inspect function, which is just for debugging)
 
 'use strict'
-
+// -fixme: serious namespace pollution.
 import { commands, settings, game, w, world, display, PARSER_FAILURE, REACHABLE, parsermsg, debugmsg, errormsg, showMenu, lang } from './main.js'
 // @DOC
 // ## Parser Functions

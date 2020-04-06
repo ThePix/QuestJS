@@ -1,8 +1,9 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import { errormsg, metamsg, msg, settings, DEFINITE, display, displayMoney, formatList, INDEFINITE, sentenceCase, SUCCESS_NO_TURNSCRIPTS, util, game, w } from '../src/main.js'
 
 // Language support
-
+// -fixme: needs to be overhauled
 export const lang = {
 
   // ----------------------------------------------------------------------------------------------

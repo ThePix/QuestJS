@@ -1,8 +1,11 @@
 // ============  Output  =======================================
-
+// -fixme: serious namespace pollution.
 'use strict'
 import { prefix, FAILED, sentenceCase, display, DEFINITE, test, randomInt, parser, game, w, lang, settings, processText, commands } from './main.js'
-import postscribe from 'postscribe'
+
+// not used at the moment
+// import postscribe from 'postscribe'
+
 // @DOC
 // ##Output functions
 //

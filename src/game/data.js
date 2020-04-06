@@ -1,4 +1,5 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import { msg, metamsg, prefix, display, LIGHT_none, LIGHT_FULL, DEFINITE, NPC, QUESTION, TOPIC, game, w, Exit, createItem, createRoom, lang, cmdRules, useWithDoor, DEFAULT_ROOM, PLAYER, TAKEABLE, COMPONENT, WEARABLE, TRANSIT, TRANSIT_BUTTON, CONTAINER, OPENABLE, VESSEL, locked_WITH, SURFACE, LIQUID, EDIBLE, SHIFTABLE, COUNTABLE, SWITCHABLE, createEnsemble, MERCH, FURNITURE } from '../main.js'
 
 createItem('me', PLAYER(), {

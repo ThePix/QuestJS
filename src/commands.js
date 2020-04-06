@@ -1,3 +1,5 @@
+// -fixme: serious namespace pollution.
+import { failedmsg, printOrRun, msg, metamsg, msgTable, debugmsg, INDEFINITE, prefix, SUCCESS_NO_TURNSCRIPTS, SUCCESS, FAILED, getDir, test, sentenceCase, display, BRIEF, TERSE, VERBOSE, formatList, displayMoney, parser, game, w, lang, Cmd, cmdRules, settings, saveLoad } from './main.js'
 // A command has an arbitrary name, a regex or pattern,
 // and a script as a minimum.
 // regex           A regex to match against
@@ -6,7 +8,6 @@
 // attName         If there is no script, then this attribute on the object will be used
 // nothingForAll   If the player uses ALL and there is nothing there, use this error message
 // noTurnscripts   Set to true to prevent turnscripts firing even when this command is successful
-import { failedmsg, printOrRun, msg, metamsg, msgTable, debugmsg, INDEFINITE, prefix, SUCCESS_NO_TURNSCRIPTS, SUCCESS, FAILED, getDir, test, sentenceCase, display, BRIEF, TERSE, VERBOSE, formatList, displayMoney, parser, game, w, lang, Cmd, cmdRules, settings, saveLoad } from './main.js'
 
 export const cmdDirections = []
 for (const exit of lang.exit_list) {

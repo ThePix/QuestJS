@@ -1,4 +1,6 @@
 # http://editorconfig.org
+# an unofficial standard that works cross editor.
+# this are default values.
 root = true
 
 [*]

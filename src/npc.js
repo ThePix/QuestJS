@@ -1,4 +1,5 @@
 'use strict'
+// -fixme: serious namespace pollution.
 import { failedmsg, msg, showDropDown, metamsg, debugmsg, errormsg, showMenu, SUCCESS, getResponseList, display, formatList, SUPPRESS_ENDTURN, respond, NULL_FUNC, game, w, world, lang, settings, PLAYER } from './main.js'
 // Should all be language neutral
 
