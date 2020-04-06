@@ -1,0 +1,9 @@
+needs_updating/**
+node_modules/**
+src/**
+.editorconfig
+architecture.png
+docs
+rollup.config.js
+.vscode/**
+.gitignore
