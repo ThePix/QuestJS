@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+    <head>
+        <meta charset="utf-8" />
+        <title>A Test Page</title>
+        <link rel="shortcut icon" type="image/png" href="../images/favicon.png" />
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet"
+            href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+        <link rel="stylesheet" href="../src/style.css" />
+        <link rel="stylesheet" href="../src/game/style.css" />
+        <script type="module" src="./QuestJS.umd.js"></script>
+
+    </head>
+
+    <body>
+
+        <div id="main">
+            <div id="output"></div>
+            <div id="input"></div>
+        </div>
+        <div id="dialog"></div>
+        <!--strart of io.createPanes -->
+        <div id="panes" class="sidepanes">
+            <div class="paneDiv">
+                <table id="compass-table">
+                    <!-- 3x -->
+                    <td class="compassbutton">
+                        <span class="compassbutton" id="exit1"></span>
+                    </td>
+                    <td class="compassbutton">
+                        <span class="compassbutton" id="exit1"></span>
+                    </td>
+                    <td class="compassbutton">
+                        <span class="compassbutton" id="exit1"></span>
+                    </td>
+                    <td class="compassbutton">
+                        <span class="compassbutton" id="exit1"></span>
+                    </td>
+                    <td class="compassbutton">
+                        <span class="compassbutton" id="exit1"></span>
+                    </td>
+                    <!--3x end-->
+
+                </table>
+            </div>
+
+            <div class="paneDiv">
+                <h4>status:</h4>
+                <table id="status-pane">
+                </table>
+            </div>
+
+            <div class="paneDiv">
+                <script>
+                    const inventories = [
+                        {name: 'Items Held',alt: 'itemsHeld',getLoc: function() {return game.player.name}},
+                        {name: 'Items Worn',alt: 'itemsWorn',getLoc: function() {return game.player.name}},
+                        {name: 'Items Here',alt: 'itemsHere',getLoc: function() {return game.player.loc}}
+                    ]
+                    for( const inv of inventories ) {
+                        document.writeln( '<div class="paneDiv">' )
+                        document.writeln( '<h4>' + inv.name + ':</h4>' )
+                        document.writeln( '<div id="' + inv.alt + '">' )
+                        document.writeln( '</div>' )
+                        document.writeln( '</div>' )
+                    }
+                </script>
+            </div>
+        </div>
+        </div>
+        <script>
+            $( '#input' ).html( '>' + '<input type="text" name="textbox" id="textbox"  autofocus/>' )
+        </script>
+
+    </body>
+
+</html>
