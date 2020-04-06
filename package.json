@@ -2,13 +2,14 @@
   "name": "questhive",
   "version": "0.1.0",
   "description": "QuestJS port to the node ecosystem",
-  "main": "main",
-  "module": "main.js",
+  "main": "dist/QuestJS.umd.js",
+  "module": "dist/QuestJS.esm.js",
+  "type": "module",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "util.test": "echo \"Error: no util.test specified\" && exit 1"
+    "build": "rollup -c ./rollup.config.js -w"
   },
   "repository": {
     "type": "git",
@@ -23,10 +24,19 @@
     "url": "https://github.com/KilianKilmister/QuestJS/issues"
   },
   "homepage": "https://github.com/KilianKilmister/QuestJS#readme",
-  "dependencies": {
-    "esm": "^3.2.25"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-html": "^0.1.1",
+    "@rollup/plugin-image": "^2.0.4",
+    "@rollup/plugin-json": "^4.0.2",
+    "@rollup/plugin-multi-entry": "^3.0.0",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "http-server": "^0.12.1",
+    "marked": "^0.8.2",
+    "parcel-bundler": "^1.12.4",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.3.3",
     "standard": "^14.3.3"
   }
 }
