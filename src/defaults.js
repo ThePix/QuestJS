@@ -1,13 +1,13 @@
 'use strict'
-import { game, lang, util, w, io, saveLoad, settings } from './main'
+import { printOrRun, msg, errormsg, falsemsg, INDEFINITE, sentenceCase, display, randomFromArray, LIGHT_none, LIGHT_FULL, VISIBLE, REACHABLE, DEFINITE, NULL_FUNC, game, w, lang, settings, saveLoad} from './main.js'
 // Should all be language neutral
 
-const DEFAULT_OBJECT = {
+export const DEFAULT_OBJECT = {
   byname: function (options) {
     let s
-    if (options && options.article === util.DEFINITE) {
+    if (options && options.article === DEFINITE) {
       s = lang.addDefiniteArticle(this) + this.alias
-    } else if (options && options.article === util.INDEFINITE) {
+    } else if (options && options.article === INDEFINITE) {
       s = lang.addIndefiniteArticle(this) + this.alias
     } else {
       s = this.alias
@@ -19,22 +19,22 @@ const DEFAULT_OBJECT = {
         s += "'s"
       }
     }
-    if (options && options.capital) s = util.sentenCecase(s)
+    if (options && options.capital) s = sentenceCase(s)
     return s
   },
   pronouns: lang.pronouns.thirdperson,
 
   isAtLoc: function (loc, situation) {
     if (typeof loc !== 'string') loc = loc.name
-    if (!w[loc]) io.errorio.msg('The location name `' + loc + '`, does not match anything in the game.')
+    if (!w[loc]) errormsg('The location name `' + loc + '`, does not match anything in the game.')
     if (this.complexIsAtLoc) {
       if (!this.complexIsAtLoc(loc, situation)) return false
     } else {
       if (this.loc !== loc) return false
     }
     if (situation === undefined) return true
-    if (situation === util.display.LOOK && this.scenery) return false
-    if (situation === util.display.SIDE_PANE && this.scenery) return false
+    if (situation === display.LOOK && this.scenery) return false
+    if (situation === display.SIDE_PANE && this.scenery) return false
     return true
   },
 
@@ -56,9 +56,9 @@ const DEFAULT_OBJECT = {
   },
 
   scopeSnapshot: function (visible) {
-    if (this.scopeStatus) { return } // lang.already done this one
+    if (this.scopeStatus) { return } // already done this one
 
-    this.scopeStatus = visible ? util.VISIBLE : util.REACHABLE // set the value
+    this.scopeStatus = visible ? VISIBLE : REACHABLE // set the value
 
     if (!this.getContents && !this.componentHolder) { return } // no lower levels so done
 
@@ -66,8 +66,8 @@ const DEFAULT_OBJECT = {
     if (this.getContents) {
       // this is a container, so get the contents
       if (!this.canSeeThrough() && !this.scopeStatusForRoom) { return } // cannot see or reach contents
-      if (!this.canReachThrough() && this.scopeStatusForRoom !== util.REACHABLE) { visible = true } // can see but not reach contents
-      l = this.getContents(util.display.SCOPING)
+      if (!this.canReachThrough() && this.scopeStatusForRoom !== REACHABLE) { visible = true } // can see but not reach contents
+      l = this.getContents(display.SCOPING)
     } else {
       // this has components, so get them
       l = []
@@ -81,34 +81,34 @@ const DEFAULT_OBJECT = {
     }
   },
 
-  canReachThrough: () => false, // <-- Searchers after horror haunt strange, far places...
+  canReachThrough: () => false,
   canSeeThrough: () => false,
-  itemTaken: util.NULL_FUNC,
-  itemDropped: util.NULL_FUNC,
+  itemTaken: NULL_FUNC,
+  itemDropped: NULL_FUNC,
   canTalkPlayer: () => false,
   getExits: function () { return {} },
-  hasExit: dir => false, // -fixme: never use "dir" to mean something besides "directory"
+  hasExit: dir => false,
   getWorn: () => false,
 
   moveToFrom: function (toLoc, fromLoc) {
     if (fromLoc === undefined) fromLoc = this.loc
     if (fromLoc === toLoc) return
 
-    if (!w[fromLoc]) io.errorio.msg('The location name `' + fromLoc + '`, does not match anything in the game.')
-    if (!w[toLoc]) io.errorio.msg('The location name `' + toLoc + '`, does not match anything in the game.')
+    if (!w[fromLoc]) errormsg('The location name `' + fromLoc + '`, does not match anything in the game.')
+    if (!w[toLoc]) errormsg('The location name `' + toLoc + '`, does not match anything in the game.')
     this.loc = toLoc
     w[fromLoc].itemTaken(this)
     w[toLoc].itemDropped(this)
     if (this.onMove !== undefined) this.onMove(toLoc, fromLoc)
   },
 
-  postLoad: util.NULL_FUNC,
+  postLoad: NULL_FUNC,
 
   templatePostLoad: function () {
     this.postLoad()
   },
 
-  preSave: util.NULL_FUNC,
+  preSave: NULL_FUNC,
 
   templatePreSave: function () {
     this.preSave()
@@ -129,9 +129,10 @@ const DEFAULT_OBJECT = {
 
   eventActive: false,
   eventCountdown: 0,
-  eventIsActive: () => this.eventActive,
+  eventIsActive: () => false, // this.eventActive, // -fixme:  'this.eventActive' is undefined. changed to 'false'
+
   doEvent: function (turn) {
-    // io.debugmsg("this=" + this.name);
+    // debugmsg("this=" + this.name);
     // Not active, so stop
     if (!this.eventIsActive()) return
     // Countdown running, so stop
@@ -150,15 +151,10 @@ const DEFAULT_OBJECT = {
   }
 }
 
-const CONTAINER_BASE = {
-  // -review: why not just use proper object construction?
-  // `if (container) (return this.container.getContent())` // this way you can use getContent() on everything and dynamically request it
-  // `function getContent () {return this.contaier.content}` and content is an object: `content: [item1, item2, item3]`
+export const CONTAINER_BASE = {
   container: true,
 
-  getContents: function (situation) { // -fixme: "situation" is way too ambiguous of an arg. name
-    // -review: this is pure madness:
-    // - dont use a global array to log every single thing in the game, use objects to catigorise them
+  getContents: function (situation) {
     const list = []
     for (const key in w) {
       if (w[key].isAtLoc(this.name, situation)) {
@@ -168,14 +164,12 @@ const CONTAINER_BASE = {
     return list
   },
 
-  // Is this container lang.already inside the given object, and hence
+  // Is this container already inside the given object, and hence
   // putting the object in the container will destroy the universe
-  testForRecursion: function (char, item) { // -review: why does this need a "char" argument?
-  // instead simply use: if (item === this) throw [some error]
-  // then catch the error and report it
+  testForRecursion: function (char, item) {
     let contName = this.name
     while (w[contName]) {
-      if (w[contName].loc === item.name) return io.falsemsg(lang.container_recursion(char, this, item))
+      if (w[contName].loc === item.name) return falsemsg(lang.container_recursion(char, this, item))
       contName = w[contName].loc
     }
     return true
@@ -183,62 +177,62 @@ const CONTAINER_BASE = {
 
 }
 
-const DEFAULT_ROOM = {
-  room: true, // -fixme: declare a new type and then if you want to check if this object is a room then check `typeof === 'Room'`
-  beforeEnter: util.NULL_FUNC,
-  beforeFirstEnter: util.NULL_FUNC,
-  afterEnter: util.NULL_FUNC,
+export const DEFAULT_ROOM = {
+  room: true,
+  beforeEnter: NULL_FUNC,
+  beforeFirstEnter: NULL_FUNC,
+  afterEnter: NULL_FUNC,
   afterEnterIf: [],
   afterEnterIfFlags: '',
-  afterFirstEnter: util.NULL_FUNC,
-  onExit: util.NULL_FUNC,
+  afterFirstEnter: NULL_FUNC,
+  onExit: NULL_FUNC,
   visited: 0,
 
-  lightSource: () => util.LIGHT_FULL,
+  lightSource: () => LIGHT_FULL,
 
   description: function () {
     if (game.dark) {
-      io.printOrRun(game.player, this, 'darkDesc')
+      printOrRun(game.player, this, 'darkDesc')
       return true
     }
     for (const line of settings.roomTemplate) {
-      io.msg(line)
+      msg(line)
     }
     return true
   },
 
-  darkDescription: () => io.msg('It is dark.'), // -fixme: hardcoded output string
+  darkDescription: () => msg('It is dark.'),
 
   getContents: CONTAINER_BASE.getContents,
 
   getExits: function (options) {
     const list = []
-    for (const exit of lang.exit_list) { // -fixme: hardcode implementation, dont load from a language list,
-      if (this.hasworld.Exit(exit.name, options)) { // directly from game script at initiation and return an array of exits at the game config level
+    for (const exit of lang.exit_list) {
+      if (this.hasExit(exit.name, options)) {
         list.push(this[exit.name])
       }
     }
     return list
   },
 
-  // returns null if there are no exits // -fixme: returns "void" actually
-  getRandomExit: options => util.randomFromArray(this.getworld.Exits(options)), // -review: when is this called? why not just save the exits and request it again
+  // returns null if there are no exits
+  getRandomExit: options => randomFromArray(1), // this.getExits(options)), // -fixme:  this.getExits() is undefined, changed to 1
 
-  hasExit: function (dir, options) { // -fixme: again, just
+  hasExit: function (dir, options) {
     // console.log(this.name)
     // console.log(dir)
-    if (options === undefined) options = {} // -review: why nullcheck instead of setting the object property for the default 'options = {}'?
+    if (options === undefined) options = {}
     if (!this[dir]) return false
     // console.log(this[dir])
     if (options.excludeLocked && this[dir].isLocked()) return false
     if (options.excludeScenery && this[dir].scenery) return false
-    return !this[dir].isHidden() // --review: what?
+    return !this[dir].isHidden()
   },
 
-  findworld: function (dest, options) {
+  findExit: function (dest, options) {
     if (typeof dest === 'object') dest = dest.name
     for (const exit of lang.exit_list) {
-      if (this.hasworld.Exit(exit.name, options) && this[exit.name].name === dest) {
+      if (this.hasExit(exit.name, options) && this[exit.name].name === dest) {
         return this[exit.name]
       }
     }
@@ -246,17 +240,17 @@ const DEFAULT_ROOM = {
   },
 
   // Lock or unlock the exit indicated
-  // Returns false if the exit does not exist or is not an world.Exit object
+  // Returns false if the exit does not exist or is not an Exit object
   // Returns true if successful
   setExitLock: function (dir, locked) {
     if (!this[dir]) { return false }
-    // const ex = this[dir] // -fixme: unuse variable "ex"
+    const ex = this[dir]
     this[dir].locked = locked
     return true
   },
 
   // Hide or unhide the exit indicated
-  // Returns false if the exit does not exist or is not an world.Exit object
+  // Returns false if the exit does not exist or is not an Exit object
   // Returns true if successful
   setExitHide: function (dir, hidden) {
     if (!this[dir]) { return false }
@@ -268,9 +262,9 @@ const DEFAULT_ROOM = {
     /* for (let i = 0; i < lang.exit_list.length; i++) {
       const dir = lang.exit_list[i].name;
       if (this[dir] !== undefined) {
-        this["customSaveworld.Exit" + dir] = (this[dir].locked ? "locked" : "");
-        this["customSaveworld.Exit" + dir] += "/" + (this[dir].hidden ? "hidden" : "");
-        if (this.saveworld.ExitDests) this["customSaveworld.ExitDest" + dir] = this[dir].name;
+        this["customSaveExit" + dir] = (this[dir].locked ? "locked" : "");
+        this["customSaveExit" + dir] += "/" + (this[dir].hidden ? "hidden" : "");
+        if (this.saveExitDests) this["customSaveExitDest" + dir] = this[dir].name;
       }
     } */
     this.preSave()
@@ -279,14 +273,14 @@ const DEFAULT_ROOM = {
   templatePostLoad: function () {
     for (const exit of lang.exit_list) {
       const dir = exit.name
-      if (this['customSaveworld.Exit' + dir]) {
-        this[dir].locked = /locked/.util.test(this['customSaveworld.Exit' + dir])
-        this[dir].hidden = /hidden/.util.test(this['customSaveworld.Exit' + dir])
-        delete this['customSaveworld.Exit' + dir]
-        if (this.saveworld.ExitDests) {
-          this[dir].name = this['customSaveworld.ExitDest' + dir]
-          // console.log("Just set " + dir + " in " + this.name + " to " + this["customSaveworld.ExitDest" + dir])
-          delete this['customSaveworld.ExitDest' + dir]
+      if (this['customSaveExit' + dir]) {
+        this[dir].locked = /locked/.test(this['customSaveExit' + dir])
+        this[dir].hidden = /hidden/.test(this['customSaveExit' + dir])
+        delete this['customSaveExit' + dir]
+        if (this.saveExitDests) {
+          this[dir].name = this['customSaveExitDest' + dir]
+          // console.log("Just set " + dir + " in " + this.name + " to " + this["customSaveExitDest" + dir])
+          delete this['customSaveExitDest' + dir]
         }
       }
     }
@@ -295,17 +289,12 @@ const DEFAULT_ROOM = {
 
 }
 
-const DEFAULT_ITEM = {
-  lightSource: () => util.LIGHT_none, // -fixme: why use an anonymus function to return a constant? just use '[key]: [value]'
+export const DEFAULT_ITEM = {
+  lightSource: () => LIGHT_none,
   icon: () => '',
-  testKeys: (char, toLock) => false, // -fixme: again just use "[key]: [bool]", in a case like this you could even use "[key]: boolean" to get a Boolean-constructor
+  testKeys: (char, toLock) => false,
   here: function () { return this.isAtLoc(game.player.loc) },
   getVerbs: function () {
     return this.use === undefined ? [lang.verbs.examine] : [lang.verbs.examine, lang.verbs.use]
   }
-}
-export const defaults = {
-  DEFAULT_OBJECT,
-  DEFAULT_ITEM,
-  DEFAULT_ROOM
 }

@@ -1,0 +1,17 @@
+// ESM syntax is supported.
+
+export * from '../lang/lang-en.js'
+export * from './command.js'
+export * from './npc.js'
+export * from './parser.js'
+export * from './saveload.js'
+export * from './settings.js'
+export * from './templates.js'
+export * from './text.js'
+export * from './util.js'
+export * from './defaults.js'
+export * from './world.js'
+export * from './io.js'
+export * from './commands.js'
+export * from './test-lib.js'
+export * from './game/game.js'

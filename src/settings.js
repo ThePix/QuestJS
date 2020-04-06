@@ -1,33 +1,35 @@
 'use strict'
-import { game, util, world } from './main'
+
 // Comment necessary for require in QEdit
 
-const settings = {
+import { SUCCESS, display, game, world } from './main.js'
+
+export const settings = {
 
   // Functions for the side panes lists
   isHeldNotWorn: function (item) {
-    return item.isAtLoc(game.player.name, util.display.SIDE_PANE) && world.ifNotDark(item) && !item.getWorn()
+    return item.isAtLoc(game.player.name, display.SIDE_PANE) && world.ifNotDark(item) && !item.getWorn()
   },
   isHere: function (item) {
-    return item.isAtLoc(game.player.loc, util.display.SIDE_PANE) && world.ifNotDark(item)
+    return item.isAtLoc(game.player.loc, display.SIDE_PANE) && world.ifNotDark(item)
   },
 
   isWorn: function (item) {
-    return item.isAtLoc(game.player.name, util.display.SIDE_PANE) && world.ifNotDark(item) && item.getWorn()
+    return item.isAtLoc(game.player.name, display.SIDE_PANE) && world.ifNotDark(item) && item.getWorn()
   },
 
   // Also title, author, thanks (option; array)
 
   // Files
   lang: 'lang-en', // Set to the language file of your choice
-  // customworld.Exits: false, // Set to true to use custom exits, in exits.js
+  customExits: false, // Set to true to use custom exits, in exits.js
   files: ['code', 'data'], // Additional files to load
-  libraries: ['saveload', 'text', 'io', 'command', 'defaults', 'templates', 'world', 'npc', 'parser', 'commands'], // util and saveload lang.already loaded
+  libraries: ['saveload', 'text', 'io', 'command', 'defaults', 'templates', 'world', 'npc', 'parser', 'commands'], // util and saveload already loaded
   customLibraries: [],
 
   // The side panes
   panes: 'left', // Can be set to Left, Right or None (setting PANES to None will more than double the speed of your game!)
-  compass: true, // Set to true to have a compass util.display
+  compass: true, // Set to true to have a compass display
   divider: false, // Image used to divide the panes at the side; set to false if not used
   statusPane: 'Status', // Title of the panel; set to false to turn off
   statusWidthLeft: 120, // How wide the left column is in the status pane
@@ -90,14 +92,14 @@ const settings = {
 
   writeScript: function (folder) {
     settings.folder = folder
-    document.writeln('<link rel="stylesheet" href="lib/style.css"/>')
+    document.writeln('<link rel="stylesheet" href="src/style.css"/>')
     document.writeln('<link rel="stylesheet" href="' + settings.folder + '/style.css"/>')
-    if (settings.util.tests) {
-      document.writeln('<script src="lib/util.test-lib.js"></scr' + 'ipt>')
-      document.writeln('<script src="' + settings.folder + '/util.tests.js"></scr' + 'ipt>')
+    if (settings.tests) {
+      document.writeln('<script src="lib/test-lib.js"></scr' + 'ipt>')
+      document.writeln('<script src="' + settings.folder + '/tests.js"></scr' + 'ipt>')
     }
     document.writeln('<script src="lang/' + settings.lang + '.js"></scr' + 'ipt>')
-    if (settings.customworld.Exits) {
+    if (settings.customExits) {
       document.writeln('<script src="' + settings.folder + '/' + settings.exits + '.js"></scr' + 'ipt>')
     }
     for (const file of settings.libraries) {
@@ -121,6 +123,6 @@ settings.inventories = [
 ]
 
 // Used by the editor
-// try { util.SUCCESS } catch (e) {
-//  module.exports = { settings: settings }
+// try { SUCCESS } catch (e) {
+//   module.exports = { settings: settings }
 // }

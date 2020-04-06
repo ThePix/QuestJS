@@ -19,23 +19,20 @@ If the datam is a number, a string or true it is saved as such.
 Any other objects or values will not be saved.
 
 */
-import { io, lang, settings, w, game, world } from './main'
+import { metamsg, errormsg, endTurnUI, game, w, Exit, cloneObject, lang, settings } from './main.js'
 
-const localStorage = {}
-const hash = {}
-
-const saveLoad = {
+export const saveLoad = {
 
   saveGame: function (filename, comment) {
     if (filename === undefined) {
-      io.errormsg(lang.sl_no_filename)
+      errormsg(lang.sl_no_filename)
       return false
     }
     if (comment === undefined) { comment = '-' }
     const s = saveLoad.saveTheWorld(comment)
     console.log(s)
     localStorage.setItem(settings.title + ': ' + filename, s)
-    io.metamsg('Saved')
+    metamsg('Saved')
     return true
   },
 
@@ -71,9 +68,9 @@ const saveLoad = {
     const s = localStorage.getItem(settings.title + ': ' + filename)
     if (s != null) {
       saveLoad.loadTheWorld(s, 4)
-      io.metamsg('Loaded')
+      metamsg('Loaded')
     } else {
-      io.metamsg('Load failed: File not found')
+      metamsg('Load failed: File not found')
     }
   },
 
@@ -94,13 +91,13 @@ const saveLoad = {
       this.setLoadString(el)
     }
     game.update()
-    io.endTurnUI(true)
+    endTurnUI(true)
   },
 
   setLoadString: function (s) {
     const parts = s.split('=')
     if (parts.length !== 3) {
-      io.errorio.msg('Bad format in saved data (' + s + ')')
+      errormsg('Bad format in saved data (' + s + ')')
       return
     }
     const name = parts[0]
@@ -110,10 +107,10 @@ const saveLoad = {
     if (saveType.startsWith('Clone')) {
       const clonePrototype = saveType.split(':')[1]
       if (!w[clonePrototype]) {
-        io.errorio.msg("Cannot find prototype '" + clonePrototype + "'")
+        errormsg("Cannot find prototype '" + clonePrototype + "'")
         return
       }
-      const obj = world.cloneObject(w[clonePrototype])
+      const obj = cloneObject(w[clonePrototype])
       this.setFromArray(obj, arr)
       w[obj.name] = obj
       obj.templatePostLoad()
@@ -122,7 +119,7 @@ const saveLoad = {
 
     if (saveType === 'Object') {
       if (!w[name]) {
-        io.errorio.msg("Cannot find object '" + name + "'")
+        errormsg("Cannot find object '" + name + "'")
         return
       }
       const obj = w[name]
@@ -137,7 +134,7 @@ const saveLoad = {
       return;
     } */
 
-    io.errormsg("Unknown save type for object '" + name + "' (" + hash.saveType + ')') // -fixme: theFuq?
+    errormsg("Unknown save type for object '" + name + "' (" + hash.saveType + ')')
   },
 
   // UTILs
@@ -189,7 +186,7 @@ const saveLoad = {
       if (typeof value[0] === 'string') return key + ':array:' + saveLoad.encodeArray(value) + ';'
       return ''
     }
-    if (value instanceof world.Exit) {
+    if (value instanceof Exit) {
       if (value.name) return key + ':exit:' + value.name + ':' + (value.locked ? 'l' : 'u') + ':' + (value.hidden ? 'h' : 'v') + ';'
       return ''
     }
@@ -214,6 +211,7 @@ const saveLoad = {
       s = s.replace(new RegExp(d.unescaped, 'g'), '@@@' + d.escaped + '@@@')
     }
     return s
+    return '"' + s + '"'
   },
 
   decodeString: function (s) {
@@ -231,37 +229,35 @@ const saveLoad = {
     return s.split('~').map(el => saveLoad.decodeString(el))
   },
 
-  // -fixme:  this
-  // decodeworld.Exit function (s) {
-  //   return s.split('~').map(el => saveLoad.decodeString(el))
-  // },
+  decodeExit: function (s) {
+    return s.split('~').map(el => saveLoad.decodeString(el))
+  },
 
   lsTest: function () {
-    const test = 'util.test'
+    const test = 'test'
     try {
-      //      localStorage.setItem(util.test, util.test)
-      //      localStorage.removeItem(util.test)
-      // return true
+      localStorage.setItem(test, test)
+      localStorage.removeItem(test)
+      return true
     } catch (e) {
       return false
     }
-    return true
   },
 
   // Other functions
 
   deleteGame: function (filename) {
     localStorage.removeItem(settings.title + ': ' + filename)
-    io.metamsg('Deleted')
+    metamsg('Deleted')
   },
 
   dirGame: function () {
-    let s = '<table class="meta">' + lang.slDirHeadings
+    let s = '<table class="meta">' + lang.sl_dir_headings
     $.each(localStorage, function (key, value) {
-      // io.debugmsg("key=" + key);
+      // debugmsg("key=" + key);
       const regex = new RegExp('^' + settings.title + ': ')
       const name = key.replace(regex, '')
-      if (regex.util.test(key)) {
+      if (regex.test(key)) {
         const dic = saveLoad.getHeader(value)
         s += '<tr><td>' + name + '</td>'
         s += '<td>' + dic.version + '</td>'
@@ -270,8 +266,8 @@ const saveLoad = {
       }
     })
     s += '</table>'
-    io.metamsg(s)
-    io.metamsg(lang.slDirMsg)
+    metamsg(s)
+    metamsg(lang.sl_dir_msg)
   },
 
   setFromArray: function (obj, arr) {

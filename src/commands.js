@@ -6,11 +6,9 @@
 // attName         If there is no script, then this attribute on the object will be used
 // nothingForAll   If the player uses ALL and there is nothing there, use this error message
 // noTurnscripts   Set to true to prevent turnscripts firing even when this command is successful
+import { failedmsg, printOrRun, msg, metamsg, msgTable, debugmsg, INDEFINITE, prefix, SUCCESS_NO_TURNSCRIPTS, SUCCESS, FAILED, getDir, test, sentenceCase, display, BRIEF, TERSE, VERBOSE, formatList, displayMoney, parser, game, w, lang, Cmd, cmdRules, settings, saveLoad } from './main.js'
 
-'use strict'
-import { lang, Cmd, game, util, io, settings, saveLoad, w, parser, cmdRules } from './main'
-
-const cmdDirections = []
+export const cmdDirections = []
 for (const exit of lang.exit_list) {
   if (exit.nocmd) continue
   cmdDirections.push(exit.name)
@@ -18,13 +16,13 @@ for (const exit of lang.exit_list) {
   if (exit.alt) cmdDirections.push(exit.alt)
 }
 
-const commands = [
+export const commands = [
   // ----------------------------------
   // Single word commands
 
   // Cannot just set the script to helpScript as we need to allow the
   // author to change it in code.js, which is loaded after this.
-  new Cmd('MetaHelp', { // -fixme: call of "new" is ignored when not calling a JS6 class-
+  new Cmd('MetaHelp', {
     script: lang.helpScript
   }),
   new Cmd('MetaCredits', {
@@ -34,43 +32,43 @@ const commands = [
   new Cmd('MetaSpoken', {
     script: function () {
       game.spoken = true
-      io.metamsg(lang.spoken_on)
-      return util.SUCCESS_NO_TURNSCRIPTS
+      metamsg(lang.spoken_on)
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaIntro', {
     script: function () {
       game.spoken = true
-      if (typeof settings.intro === 'string') io.msg(settings.intro)
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      if (typeof settings.intro === 'string') msg(settings.intro)
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaUnspoken', {
     script: function () {
       game.spoken = false
-      io.metamsg(lang.spoken_off)
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      metamsg(lang.spoken_off)
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaBrief', {
     script: function () {
-      game.verbosity = util.BRIEF
-      io.metamsg(lang.mode_brief)
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      game.verbosity = BRIEF
+      metamsg(lang.mode_brief)
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaTerse', {
     script: function () {
-      game.verbosity = util.TERSE
-      io.metamsg(lang.mode_terse)
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      game.verbosity = TERSE
+      metamsg(lang.mode_terse)
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaVerbose', {
     script: function () {
-      game.verbosity = util.VERBOSE
-      io.metamsg(lang.mode_verbose)
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      game.verbosity = VERBOSE
+      metamsg(lang.mode_verbose)
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
 
@@ -80,39 +78,39 @@ const commands = [
   new Cmd('MetaTranscriptOn', {
     script: function () {
       if (game.transcript) {
-        io.metamsg(lang.transcript_lang.already_on)
-        return util.FAILED
+        metamsg(lang.transcript_already_on)
+        return FAILED
       }
       game.scriptStart()
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaTranscriptOff', {
     script: function () {
       if (!game.transcript) {
-        io.metamsg(lang.transcript_lang.already_off)
-        return util.FAILED
+        metamsg(lang.transcript_already_off)
+        return FAILED
       }
       game.scriptEnd()
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaTranscriptClear', {
     script: function () {
       game.scriptClear()
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaTranscriptShow', {
     script: function () {
       game.scriptShow()
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaTranscriptShowWithOptions', {
     script: function (arr) {
       game.scriptShow(arr[0])
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
       { text: true }
@@ -127,7 +125,7 @@ const commands = [
   new Cmd('MetaSaveGame', {
     script: function (arr) {
       saveLoad.saveGame(arr[0])
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
       { text: true }
@@ -139,7 +137,7 @@ const commands = [
   new Cmd('MetaLoadGame', {
     script: function (arr) {
       saveLoad.loadGame(arr[0])
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
       { text: true }
@@ -148,13 +146,13 @@ const commands = [
   new Cmd('MetaDir', {
     script: function () {
       saveLoad.dirGame()
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('MetaDeleteGame', {
     script: function (arr) {
       saveLoad.deleteGame(arr[0])
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
       { text: true }
@@ -164,16 +162,16 @@ const commands = [
   new Cmd('Undo', {
     script: function () {
       if (settings.maxUndo === 0) {
-        io.metamsg(lang.undo_disabled)
-        return util.FAILED
+        metamsg(lang.undo_disabled)
+        return FAILED
       }
       if (game.gameState.length < 2) {
-        io.metamsg(lang.undo_not_available)
-        return util.FAILED
+        metamsg(lang.undo_not_available)
+        return FAILED
       }
       game.gameState.pop()
       const gameState = game.gameState[game.gameState.length - 1]
-      io.metamsg(lang.undo_done)
+      metamsg(lang.undo_done)
       saveLoad.loadTheWorld(gameState)
       w[game.player.loc].description()
     }
@@ -182,19 +180,19 @@ const commands = [
   new Cmd('Look', {
     script: function () {
       game.room.description()
-      return settings.lookCountsAsTurn ? util.SUCCESS : util.util.SUCCESS_NO_TURNSCRIPTS
+      return settings.lookCountsAsTurn ? SUCCESS : SUCCESS_NO_TURNSCRIPTS
     }
   }),
-  new Cmd('world.Exits', {
+  new Cmd('Exits', {
     script: function () {
-      io.msg(lang.can_go())
-      return settings.lookCountsAsTurn ? util.SUCCESS : util.util.SUCCESS_NO_TURNSCRIPTS
+      msg(lang.can_go())
+      return settings.lookCountsAsTurn ? SUCCESS : SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('Wait', {
     script: function () {
-      io.msg(lang.wait_io.msg)
-      return util.SUCCESS
+      msg(lang.wait_msg)
+      return SUCCESS
     }
   }),
   new Cmd('TopicsNote', {
@@ -203,39 +201,39 @@ const commands = [
 
   new Cmd('Inv', {
     script: function () {
-      const listOfOjects = game.player.getContents(util.display.ALL)
-      io.msg(lang.inventoryPreamble + ' ' + util.formatList(listOfOjects, { article: util.INDEFINITE, lastJoiner: lang.list_and, modified: true, nothing: lang.list_nothing, loc: game.player.name }) + '.')
-      return settings.lookCountsAsTurn ? util.SUCCESS : util.util.SUCCESS_NO_TURNSCRIPTS
+      const listOfOjects = game.player.getContents(display.ALL)
+      msg(lang.inventoryPreamble + ' ' + formatList(listOfOjects, { article: INDEFINITE, lastJoiner: lang.list_and, modified: true, nothing: lang.list_nothing, loc: game.player.name }) + '.')
+      return settings.lookCountsAsTurn ? SUCCESS : SUCCESS_NO_TURNSCRIPTS
     }
   }),
   new Cmd('Map', {
     script: function () {
       if (typeof showMap !== 'undefined') {
-        //        showMap()
-        return settings.lookCountsAsTurn ? util.SUCCESS : util.util.SUCCESS_NO_TURNSCRIPTS
+        lang.showMap()
+        return settings.lookCountsAsTurn ? SUCCESS : SUCCESS_NO_TURNSCRIPTS
       } else {
-        return io.failedio.msg(lang.no_map)
+        return failedmsg(lang.no_map)
       }
     }
   }),
   new Cmd('Smell', {
     script: function () {
       if (game.room.onSmell) {
-        io.printOrRun(game.player, game.room, 'onSmell')
+        printOrRun(game.player, game.room, 'onSmell')
       } else {
-        io.msg(lang.no_smell(game.player)) //  -review: Way send a function to the messenger
-      } // -review: and not just call the function itselve and that in return calls the messanger?
-      return util.SUCCESS
+        msg(lang.no_smell(game.player))
+      }
+      return SUCCESS
     }
   }),
   new Cmd('Listen', {
     script: function () {
       if (game.room.onListen) {
-        io.printOrRun(game.player, game.room, 'onListen')
+        printOrRun(game.player, game.room, 'onListen')
       } else {
-        io.msg(lang.no_listen(game.player))
+        msg(lang.no_listen(game.player))
       }
-      return util.SUCCESS
+      return SUCCESS
     }
   }),
   new Cmd('PurchaseFromList', {
@@ -244,17 +242,17 @@ const commands = [
       for (const key in w) {
         if (parser.isForSale(w[key])) {
           const price = w[key].getBuyingPrice(game.player)
-          const row = [util.sentenCecase(w[key].byname()), util.util.displayMoney(price)]
-          row.push(price > game.player.money ? '-' : '{cmd:lang.buy ' + w[key].alias + ':' + lang.buy + '}')
+          const row = [sentenceCase(w[key].byname()), displayMoney(price)]
+          row.push(price > game.player.money ? '-' : '{cmd:buy ' + w[key].alias + ':' + lang.buy + '}')
           l.push(row)
         }
       }
       if (l.length === 0) {
-        return io.failedio.msg(lang.nothing_for_sale)
+        return failedmsg(lang.nothing_for_sale)
       }
-      io.msg(lang.current_money + ': ' + util.util.displayMoney(game.player.money))
-      io.msgTable(l, lang.buy_headings)
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      msg(lang.current_money + ': ' + displayMoney(game.player.money))
+      msgTable(l, lang.buy_headings)
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }),
 
@@ -609,7 +607,7 @@ const commands = [
       { scope: parser.isNpcAndHere }
     ],
     default: function (item) {
-      return io.failedio.msg(lang.cannot_talk_to(game.player, item))
+      return failedmsg(lang.cannot_talk_to(game.player, item))
     }
   }),
 
@@ -619,7 +617,7 @@ const commands = [
       { scope: parser.isNpcAndHere }
     ],
     default: function (item) {
-      return io.failedio.msg(lang.no_topics(game.player, item))
+      return failedmsg(lang.no_topics(game.player, item))
     }
   }),
 
@@ -634,21 +632,21 @@ const commands = [
       }
       l.sort(function (a, b) { return (b.sayPriority + b.sayBonus) - (a.sayPriority + b.sayBonus) })
       if (l.length === 0) {
-        io.msg(lang.say_no_one_here(game.player, arr[0], arr[1]))
-        return util.SUCCESS
+        msg(lang.say_no_one_here(game.player, arr[0], arr[1]))
+        return SUCCESS
       }
 
-      if (settings.givePlayerSayMsg) io.msg(lang.nounVerb(game.player, arr[0], true) + ", '" + util.sentenCecase(arr[1]) + ".'") // <---eww<---
+      if (settings.givePlayerSayMsg) msg(lang.nounVerb(game.player, arr[0], true) + ", '" + sentenceCase(arr[1]) + ".'")
       for (const chr of l) {
-        if (chr.sayQuestion && w[chr.sayQuestion].sayResponse(chr, arr[1])) return util.SUCCESS
-        if (chr.sayResponse && chr.sayResponse(arr[1], arr[0])) return util.SUCCESS
+        if (chr.sayQuestion && w[chr.sayQuestion].sayResponse(chr, arr[1])) return SUCCESS
+        if (chr.sayResponse && chr.sayResponse(arr[1], arr[0])) return SUCCESS
       }
       if (settings.givePlayerSayMsg) {
-        io.msg(lang.say_no_response(game.player, arr[0], arr[1]))
+        msg(lang.say_no_response(game.player, arr[0], arr[1]))
       } else {
-        io.msg(lang.say_no_response_full(game.player, arr[0], arr[1])) // <-- Searchers after horror haunt strange, far places...
+        msg(lang.say_no_response_full(game.player, arr[0], arr[1]))
       }
-      return util.SUCCESS
+      return SUCCESS
     },
     objects: [
       { text: true },
@@ -698,8 +696,8 @@ const commands = [
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handleFillWithLiquid(npc, objects[0][0], objects[1][0])
@@ -716,8 +714,8 @@ const commands = [
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handleFillWithLiquid(npc, objects[0][0], objects[1][0])
@@ -746,8 +744,8 @@ const commands = [
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handlePutInContainer(npc, objects)
@@ -764,8 +762,8 @@ const commands = [
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handlePutInContainer(npc, objects)
@@ -794,8 +792,8 @@ const commands = [
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handleTakeFromContainer(npc, objects)
@@ -812,8 +810,8 @@ const commands = [
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handleTakeFromContainer(npc, objects)
@@ -841,8 +839,8 @@ const commands = [
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handleGiveToNpc(npc, objects)
@@ -859,15 +857,15 @@ const commands = [
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handleGiveToNpc(npc, objects)
     }
   }),
 
-  new Cmd('Pushworld.Exit', {
+  new Cmd('PushExit', {
     rules: [cmdRules.canManipulate, cmdRules.isHereNotHeld],
     cmdCategory: 'Push',
     script: function (objects) {
@@ -879,14 +877,14 @@ const commands = [
       { text: true }
     ]
   }),
-  new Cmd('NpcPushworld.Exit1', {
+  new Cmd('NpcPushExit1', {
     rules: [cmdRules.canManipulate, cmdRules.isHereNotHeld],
     cmdCategory: 'Push',
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handlePushExit(npc, objects)
@@ -898,14 +896,14 @@ const commands = [
       { text: true }
     ]
   }),
-  new Cmd('NpcPushworld.Exit2', {
+  new Cmd('NpcPushExit2', {
     rules: [cmdRules.canManipulate, cmdRules.isHereNotHeld],
     cmdCategory: 'Push',
     script: function (objects) {
       const npc = objects[0][0]
       if (!npc.npc) {
-        io.failedio.msg(lang.not_npc(npc))
-        return util.FAILED
+        failedmsg(lang.not_npc(npc))
+        return FAILED
       }
       objects.shift()
       return handlePushExit(npc, objects)
@@ -922,9 +920,9 @@ const commands = [
     rules: [cmdRules.canTalkTo],
     script: function (arr) {
       if (!game.player.canTalk()) return false
-      if (!arr[0][0].askabout) return io.failedio.msg(lang.cannot_ask_about(game.player, arr[0][0], arr[1]))
+      if (!arr[0][0].askabout) return failedmsg(lang.cannot_ask_about(game.player, arr[0][0], arr[1]))
 
-      return arr[0][0].askabout(arr[2], arr[1]) ? util.SUCCESS : util.FAILED
+      return arr[0][0].askabout(arr[2], arr[1]) ? SUCCESS : FAILED
     },
     objects: [
       { scope: parser.isNpcAndHere },
@@ -936,9 +934,9 @@ const commands = [
     rules: [cmdRules.canTalkTo],
     script: function (arr) {
       if (!game.player.canTalk()) return false
-      if (!arr[0][0].tellabout) return io.failedio.msg(lang.cannot_tell_about(game.player, arr[0][0], arr[1]))
+      if (!arr[0][0].tellabout) return failedmsg(lang.cannot_tell_about(game.player, arr[0][0], arr[1]))
 
-      return arr[0][0].tellabout(arr[2], arr[1]) ? util.SUCCESS : util.FAILED
+      return arr[0][0].tellabout(arr[2], arr[1]) ? SUCCESS : FAILED
     },
     objects: [
       { scope: parser.isNpcAndHere },
@@ -957,13 +955,13 @@ if (settings.debug) {
       { text: true }
     ],
     script: function (objects) {
-      const wt = walkthroughs[objects[0]] // -fixme:  this
+      const wt = walkthroughs[objects[0]]
       if (wt === undefined) {
-        io.debugmsg('No walkthought found called ' + objects[0])
+        debugmsg('No walkthought found called ' + objects[0])
         return
       }
       for (const el of wt) {
-        io.debugmsg(el)
+        debugmsg(el)
         parser.parse(el)
       }
     }
@@ -972,9 +970,9 @@ if (settings.debug) {
   commands.push(new Cmd('DebugInspect', {
     script: function (arr) {
       const item = arr[0][0]
-      io.debugmsg('See the console for details on the object ' + item.name + ' (press F12 to util.display the console)')
+      debugmsg('See the console for details on the object ' + item.name + ' (press F12 to display the console)')
       console.log(item)
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
       { scope: parser.isInWorld }
@@ -983,15 +981,15 @@ if (settings.debug) {
 
   commands.push(new Cmd('DebugInspectByName', {
     script: function (arr) {
-      const item_name = arr[0] // -fixme: camelCase
+      const item_name = arr[0]
       if (!w[item_name]) {
-        io.debugmsg('No object called ' + item_name)
-        return util.FAILED
+        debugmsg('No object called ' + item_name)
+        return FAILED
       }
 
-      io.debugmsg('See the console for details on the object ' + item_name + ' (press F12 to util.display the console)')
+      debugmsg('See the console for details on the object ' + item_name + ' (press F12 to display the console)')
       console.log(w[item_name])
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
       { text: true }
@@ -1000,25 +998,25 @@ if (settings.debug) {
 
   commands.push(new Cmd('DebugTest', {
     script: function () {
-      util.test.runTests()
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      test.runTests()
+      return SUCCESS_NO_TURNSCRIPTS
     }
   }))
 
   commands.push(new Cmd('DebugInspectCommand', {
     script: function (arr) {
-      io.debugmsg('Looking for ' + arr[0])
+      debugmsg('Looking for ' + arr[0])
       for (const cmd of commands) {
         if (cmd.name.toLowerCase() === arr[0] || (cmd.cmdCategory && cmd.cmdCategory.toLowerCase() === arr[0])) {
-          io.debugmsg('Name: ' + cmd.name)
+          debugmsg('Name: ' + cmd.name)
           for (const key in cmd) {
-            if (cmd.hasOwnProperty(key)) { // -fixme: thefuck is this?
-              io.debugmsg('--' + key + ': ' + cmd[key])
+            if (cmd.hasOwnProperty(key)) {
+              debugmsg('--' + key + ': ' + cmd[key])
             }
           }
         }
       }
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
       { text: true }
@@ -1043,12 +1041,12 @@ if (settings.debug) {
 
           const npcCmd = commands.find(el => el.name === 'Npc' + cmd.name + '2')
           if (npcCmd) s += ' - NPC too'
-          io.debugmsg(s)
+          debugmsg(s)
           count++
         }
       }
-      io.debugmsg('... Found ' + count + ' commands.')
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      debugmsg('... Found ' + count + ' commands.')
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
     ]
@@ -1059,26 +1057,26 @@ if (settings.debug) {
       let count = 0
       for (const cmd of commands) {
         const s = cmd.name + ' (' + cmd.regex + ')'
-        io.debugmsg(s)
+        debugmsg(s)
         count++
       }
-      io.debugmsg('... Found ' + count + ' commands.')
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      debugmsg('... Found ' + count + ' commands.')
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
     ]
   }))
 
   commands.push(new Cmd('DebugParserToggle', {
-    script: function (arr) { // -fixme: unused arr
+    script: function (arr) {
       if (parser.debug) {
         parser.debug = false
-        io.debugmsg('Parser debugging messages are off.')
+        debugmsg('Parser debugging messages are off.')
       } else {
         parser.debug = true
-        io.debugmsg('Parser debugging messages are on.')
+        debugmsg('Parser debugging messages are on.')
       }
-      return util.util.SUCCESS_NO_TURNSCRIPTS
+      return SUCCESS_NO_TURNSCRIPTS
     },
     objects: [
     ]
@@ -1089,30 +1087,30 @@ if (settings.debug) {
 // (but not in the commands array)
 
 // Cannot handle multiple vessels
-function handleFillWithLiquid (char, vessel, liquid) {
-  if (!vessel.vessel) return io.failedio.msg(lang.not_vessel(char, vessel))
-  if (vessel.closed) return io.failedio.msg(lang.container_closed(char, vessel))
-  if (!char.canManipulate(vessel, 'fill')) return util.FAILED
-  if (!char.getAgreement('Fill', vessel)) return util.FAILED
-  if (!vessel.isAtLoc(char.name)) return io.failedio.msg(lang.not_carrying(char, vessel))
+export function handleFillWithLiquid (char, vessel, liquid) {
+  if (!vessel.vessel) return failedmsg(lang.not_vessel(char, vessel))
+  if (vessel.closed) return failedmsg(lang.container_closed(char, vessel))
+  if (!char.canManipulate(vessel, 'fill')) return FAILED
+  if (!char.getAgreement('Fill', vessel)) return FAILED
+  if (!vessel.isAtLoc(char.name)) return failedmsg(lang.not_carrying(char, vessel))
 
-  return vessel.fill(false, char, liquid) ? util.SUCCESS : util.FAILED
+  return vessel.fill(false, char, liquid) ? SUCCESS : FAILED
 }
 
-function handlePutInContainer (char, objects) {
+export function handlePutInContainer (char, objects) {
   let success = false
   const container = objects[1][0]
   const multiple = objects[0].length > 1 || parser.currentCommand.all
   if (!container.container) {
-    io.failedio.msg(lang.not_container(char, container))
-    return util.FAILED
+    failedmsg(lang.not_container(char, container))
+    return FAILED
   }
   if (container.closed) {
-    io.failedio.msg(lang.container_closed(char, container))
-    return util.FAILED
+    failedmsg(lang.container_closed(char, container))
+    return FAILED
   }
   if (!char.canManipulate(objects[0], 'put')) {
-    return util.FAILED
+    return FAILED
   }
   for (const obj of objects[0]) {
     let flag = true
@@ -1120,41 +1118,41 @@ function handlePutInContainer (char, objects) {
       // The getAgreement should give the response
       continue
     }
-    if (!container.util.testForRecursion(char, obj)) {
+    if (!container.testForRecursion(char, obj)) {
       flag = false
     }
-    if (container.util.testRestrictions) {
-      flag = container.util.testRestrictions(obj, char)
+    if (container.testRestrictions) {
+      flag = container.testRestrictions(obj, char)
     }
     if (flag) {
       if (!obj.isAtLoc(char.name)) {
-        io.failedio.msg(util.prefix(obj, multiple) + lang.not_carrying(char, obj))
+        failedmsg(prefix(obj, multiple) + lang.not_carrying(char, obj))
       } else {
         obj.moveToFrom(container.name, char.name)
-        io.msg(util.prefix(obj, multiple) + lang.done_io.msg)
+        msg(prefix(obj, multiple) + lang.done_msg)
         success = true
       }
     }
   }
   if (success && container.putInResponse) container.putInResponse()
-  if (success === util.SUCCESS) char.pause()
-  return success ? util.SUCCESS : util.FAILED
+  if (success === SUCCESS) char.pause()
+  return success ? SUCCESS : FAILED
 }
 
-function handleTakeFromContainer (char, objects) {
+export function handleTakeFromContainer (char, objects) {
   let success = false
   const container = objects[1][0]
   const multiple = objects[0].length > 1 || parser.currentCommand.all
   if (!container.container) {
-    io.failedio.msg(lang.not_container(char, container))
-    return util.FAILED
+    failedmsg(lang.not_container(char, container))
+    return FAILED
   }
   if (container.closed) {
-    io.failedio.msg(lang.container_closed(char, container))
-    return util.FAILED
+    failedmsg(lang.container_closed(char, container))
+    return FAILED
   }
   if (!char.canManipulate(objects[0], 'get')) {
-    return util.FAILED
+    return FAILED
   }
   for (const obj of objects[0]) {
     const flag = true
@@ -1164,10 +1162,10 @@ function handleTakeFromContainer (char, objects) {
     }
     if (flag) {
       if (!obj.isAtLoc(container.name)) {
-        io.failedio.msg(util.prefix(obj, multiple) + lang.not_inside(container, obj))
+        failedmsg(prefix(obj, multiple) + lang.not_inside(container, obj))
       } else {
         obj.moveToFrom(char.name, container.name)
-        io.msg(util.prefix(obj, multiple) + lang.done_io.msg)
+        msg(prefix(obj, multiple) + lang.done_msg)
         success = true
       }
     }
@@ -1175,123 +1173,120 @@ function handleTakeFromContainer (char, objects) {
   // This works for put in as this is the only way to do it, but not here
   // as TAKE can remove itsms from a container too.
   // if (success && container.putInResponse) container.putInResponse();
-  if (success === util.SUCCESS) char.pause()
-  return success ? util.SUCCESS : util.FAILED
+  if (success === SUCCESS) char.pause()
+  return success ? SUCCESS : FAILED
 }
 
-function handleGiveToNpc (char, objects) {
+export function handleGiveToNpc (char, objects) {
   let success = false
   const npc = objects[1][0]
   const multiple = objects[0].length > 1 || parser.currentCommand.all
   if (!npc.npc && npc !== game.player) {
-    io.failedio.msg(lang.not_npc_for_give(char, npc))
-    return util.FAILED
+    failedmsg(lang.not_npc_for_give(char, npc))
+    return FAILED
   }
   for (const obj of objects[0]) {
     let flag = true
     if (!char.getAgreement('Give', obj)) {
       // The getAgreement should give the response
     }
-    if (npc.util.testRestrictions) {
-      flag = npc.util.testRestrictions(obj)
+    if (npc.testRestrictions) {
+      flag = npc.testRestrictions(obj)
     }
     if (!npc.canManipulate(obj, 'give')) {
-      return util.FAILED
+      return FAILED
     }
     if (flag) {
       if (!obj.isAtLoc(char.name)) {
-        io.failedio.msg(util.prefix(obj, multiple) + lang.not_carrying(char, obj))
+        failedmsg(prefix(obj, multiple) + lang.not_carrying(char, obj))
       } else {
         if (npc.giveReaction) {
           npc.giveReaction(obj, multiple, char)
         } else {
-          io.msg(util.prefix(obj, multiple) + lang.done_io.msg)
+          msg(prefix(obj, multiple) + lang.done_msg)
           obj.moveToFrom(npc.name, char.name)
         }
         success = true
       }
     }
   }
-  if (success === util.SUCCESS) char.pause()
-  return success ? util.SUCCESS : util.FAILED
+  if (success === SUCCESS) char.pause()
+  return success ? SUCCESS : FAILED
 }
 
-function handleStandUp (objects) {
+export function handleStandUp (objects) {
   const npc = objects.length === 0 ? game.player : objects[0][0]
   if (!npc.npc) {
-    io.failedio.msg(lang.not_npc(npc))
-    return util.FAILED
+    failedmsg(lang.not_npc(npc))
+    return FAILED
   }
   if (!npc.posture) {
-    io.failedio.msg(lang.already(npc))
-    return util.FAILED
+    failedmsg(lang.already(npc))
+    return FAILED
   }
   if (npc.getAgreementPosture && !npc.getAgreementPosture('stand')) {
     // The getAgreement should give the response
-    return util.FAILED
+    return FAILED
   } else if (!npc.getAgreementPosture && npc.getAgreement && !npc.getAgreement('Posture', 'stand')) {
-    return util.FAILED
+    return FAILED
   }
   if (!npc.canPosture()) {
-    return util.FAILED
+    return FAILED
   }
   if (npc.posture) {
-    io.msg(lang.stop_posture(npc))
+    msg(lang.stop_posture(npc))
     npc.pause()
-    return util.SUCCESS
+    return SUCCESS
   }
 }
 
 // we know the char can manipulate, we know the obj is here and not held
-function handlePushExit (char, objects) {
-  const verb = util.getDir(objects[0])
+export function handlePushExit (char, objects) {
+  const verb = getDir(objects[0])
   const obj = objects[1][0]
-  const dir = util.getDir(objects[2])
+  const dir = getDir(objects[2])
   const room = w[char.loc]
 
   if (!obj.shiftable && obj.takeable) {
-    io.msg(lang.TAKE_not_push(char, obj))
-    return util.FAILED
+    msg(lang.TAKE_not_push(char, obj))
+    return FAILED
   }
   if (!obj.shiftable) {
-    io.msg(lang.cannot_push(char, obj))
-    return util.FAILED
+    msg(lang.cannot_push(char, obj))
+    return FAILED
   }
   if (!room[dir] || room[dir].isHidden()) {
-    io.msg(lang.not_that_way(char, dir))
-    return util.FAILED
+    msg(lang.not_that_way(char, dir))
+    return FAILED
   }
   if (room[dir].isLocked()) {
-    io.msg(lang.locked_exit(char, room[dir]))
-    return util.FAILED
+    msg(lang.locked_exit(char, room[dir]))
+    return FAILED
   }
   if (typeof room[dir].noShiftingMsg === 'function') {
-    io.msg(room[dir].noShiftingMsg(char, 'item')) // -fixme: "item" is undefined
-    return util.FAILED
+    msg(room[dir].noShiftingMsg(char, item))
+    return FAILED
   }
   if (typeof room[dir].noShiftingMsg === 'string') {
-    io.msg(room[dir].noShiftingMsg)
-    return util.FAILED
+    msg(room[dir].noShiftingMsg)
+    return FAILED
   }
 
   if (typeof obj.shift === 'function') {
     const res = obj.shift(char, dir, verb)
-    return res ? util.SUCCESS : util.FAILED
+    return res ? SUCCESS : FAILED
   }
 
   // by default, objects cannot be pushed up
   if (dir === 'up') {
-    io.msg(lang.cannot_push_up(char, obj))
-    return util.FAILED
+    msg(lang.cannot_push_up(char, obj))
+    return FAILED
   }
 
   // not using moveToFrom; if there are
   const dest = room[dir].name
   obj.moveToFrom(dest)
   char.loc = dest
-  io.msg(lang.push_exit_successful(char, obj, dir, w[dest]))
-  return util.SUCCESS
-}
-export {
-  handlePushExit
+  msg(lang.push_exit_successful(char, obj, dir, w[dest]))
+  return SUCCESS
 }

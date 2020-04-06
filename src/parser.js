@@ -11,16 +11,17 @@
 // Should all be language neutral (except the inspect function, which is just for debugging)
 
 'use strict'
-import { world, util, io, lang, settings, commands, game, template } from './main'
+
+import { commands, settings, game, w, world, display, PARSER_FAILURE, REACHABLE, parsermsg, debugmsg, errormsg, showMenu, lang } from './main.js'
 // @DOC
 // ## Parser Functions
 //
 // Most of these are only for internal use!
 // @UNDOC
 
-const parser = {}
+export const parser = {}
 
-parser.currentCommand()
+parser.currentCommand
 // Stores the current values for it, him, etc.
 // put hat in box
 // x it
@@ -33,12 +34,12 @@ parser.debug = false
 // This allows us to keep trying to process a single command until all the
 //  disambiguations have been resolved.
 parser.parse = function (inputText) {
-  parser.io.msg('Input string: ' + inputText)
+  parser.msg('Input string: ' + inputText)
 
   // This allows the command system to be temporarily overriden,
   // say if the game asks a question
   if (parser.override) {
-    parser.io.msg('Parser overriden')
+    parser.msg('Parser overriden')
     parser.override(inputText)
     delete parser.override
     return
@@ -47,8 +48,8 @@ parser.parse = function (inputText) {
   if (inputText) {
     const res = parser.convertInputTextToCommandCandidate(inputText)
     if (typeof res === 'string') {
-      parser.msg(res)
-      world.endTurn(util.PARSER_FAILURE)
+      parsermsg(res)
+      world.endTurn(PARSER_FAILURE)
       return
     }
     parser.currentCommand = res
@@ -65,7 +66,7 @@ parser.parse = function (inputText) {
           flag = true
           parser.currentCommand.disambiguate1 = i
           parser.currentCommand.disambiguate2 = j
-          io.showMenu(lang.disambig_io.msg, parser.currentCommand.objects[i][j], function (result) {
+          showMenu(lang.disambig_msg, parser.currentCommand.objects[i][j], function (result) {
             parser.currentCommand.objects[parser.currentCommand.disambiguate1][parser.currentCommand.disambiguate2] = result
             parser.parse(null)
           })
@@ -84,7 +85,7 @@ parser.parse = function (inputText) {
 //
 // Used by the panes when the player clicks on a verb for an item
 parser.quickCmd = function (cmd, item) {
-  parser.io.msg('quickCmd: ' + cmd.name)
+  parser.msg('quickCmd: ' + cmd.name)
   parser.currentCommand = {
     cmdString: (item ? cmd.name + ' ' + item.name : cmd.name),
     cmd: cmd,
@@ -118,7 +119,7 @@ parser.execute = function () {
 parser.convertInputTextToCommandCandidate = function (inputText) {
   // let s = inputText.toLowerCase().split(' ').filter(function(el) { return !IGnored_words.includes(el); }).join(' ');
 
-  // remove multiple util.spaces, and any from the ends
+  // remove multiple spaces, and any from the ends
   let cmdString = inputText.toLowerCase().trim().replace(/\s+/g, ' ')
 
   // convert numbers in weords to digits
@@ -128,12 +129,12 @@ parser.convertInputTextToCommandCandidate = function (inputText) {
 
   // Get a list of candidate commands that match the regex
   const candidates = commands.filter(function (el) {
-    return el.regex.util.test(cmdString)
+    return el.regex.test(cmdString)
   })
   if (candidates.length === 0) {
-    return lang.not_known_io.msg
+    return lang.not_known_msg
   }
-  parser.io.msg('Number of commands that have a regex match:' + candidates.length)
+  parser.msg('Number of commands that have a regex match:' + candidates.length)
 
   // We now want to match potential objects
   // This will help us narrow down the candidates (maybe)
@@ -147,32 +148,32 @@ parser.convertInputTextToCommandCandidate = function (inputText) {
     // either because multiple were specified or because it was ambiguous (or both)
     // We just keep the last error message as hopefully the most relevant.
     // NB: Inside function so cannot use 'this'
-    parser.io.msg('* Looking at candidate: ' + el.name)
+    parser.msg('* Looking at candidate: ' + el.name)
     const res = parser.matchItemsToCmd(cmdString, el)
     if (!res) {
-      parser.io.msg('No result!')
+      parser.msg('No result!')
       error = 'Res is ' + res
     }
-    parser.io.msg('Result score is: ' + res.score)
+    parser.msg('Result score is: ' + res.score)
     if (res.score === -1) {
       error = res.error
     } else {
-      parser.io.msg('Candidate accepted!')
+      parser.msg('Candidate accepted!')
       matchedCandidates.push(res)
     }
   })
-  parser.io.msg('Number of candidates accepted: ' + matchedCandidates.length)
+  parser.msg('Number of candidates accepted: ' + matchedCandidates.length)
   if (matchedCandidates.length === 0) {
     return error
   }
   // pick between matchedCandidates based on score
   let command = matchedCandidates[0]
   if (matchedCandidates.length > 1) {
-    parser.io.msg('Need to pick just one; start with the first (score ' + command.score + ').')
+    parser.msg('Need to pick just one; start with the first (score ' + command.score + ').')
     for (const candidate of matchedCandidates) {
       // give preference to earlier commands
       if (command.score < candidate.score) {
-        parser.io.msg('This one is better:' + command.cmd.name + ' (score ' + candidate.score + ')')
+        parser.msg('This one is better:' + command.cmd.name + ' (score ' + candidate.score + ')')
         command = candidate
       }
     }
@@ -180,7 +181,7 @@ parser.convertInputTextToCommandCandidate = function (inputText) {
   if (!command) console.log(inputText)
   command.string = inputText
   command.cmdString = cmdString
-  parser.io.msg('This is the one:' + command.cmd.name)
+  parser.msg('This is the one:' + command.cmd.name)
   return command
 }
 
@@ -204,11 +205,11 @@ parser.matchItemsToCmd = function (s, cmd) {
   const fallbackScope = parser.scope(parser.isVisible)
   arr.shift() // first element is the whole match, so discard
 
-  parser.io.msg('..Base score: ' + res.score)
+  parser.msg('..Base score: ' + res.score)
 
   for (let i = 0; i < arr.length; i++) {
     if (!cmd.objects[i]) {
-      io.errorio.msg("That command seems to have an error. It has more capture groups than there are elements in the 'objects' attribute.")
+      errormsg("That command seems to have an error. It has more capture groups than there are elements in the 'objects' attribute.")
       return false
     }
     if (cmd.objects[i].ignore) {
@@ -221,7 +222,7 @@ parser.matchItemsToCmd = function (s, cmd) {
       // this capture group has been flagged to be text
       res.objects.push(arr[i])
       score = 1
-    } else if (lang.all_regex.util.test(arr[i]) || lang.all_exclude_regex.util.test(arr[i])) {
+    } else if (lang.all_regex.test(arr[i]) || lang.all_exclude_regex.test(arr[i])) {
       // Handle ALL and ALL BUT
       let list = cmd.objects[i].scope ? parser.scope(cmd.objects[i].scope) : fallbackScope
       const exclude = [game.player]
@@ -233,27 +234,27 @@ parser.matchItemsToCmd = function (s, cmd) {
         }
       }
 
-      if (list.length === 0) { // -fixme: disgusting
+      if (list.length === 0) {
         res.error = cmd.nothingForAll ? cmd.nothingForAll : lang.nothing_msg
         res.score = -1
         return res
       }
-      if (lang.all_exclude_regex.util.test(arr[i])) {
+      if (lang.all_exclude_regex.test(arr[i])) {
         // if this is ALL BUT we need to remove some things from the list
         // excludes must be in isVisible
         // if it is ambiguous or not recognised it does not get added to the list
         const s = arr[i].replace(lang.all_exclude_regex, '').trim()
         objectNames = s.split(lang.joiner_regex).map(function (el) { return el.trim() })
         for (const s in objectNames) {
-          template.items = parser.findInList(s, fallbackScope)
-          if (template.items.length === 1) {
-            exclude.push(template.items[0])
+          items = parser.findInList(s, fallbackScope)
+          if (items.length === 1) {
+            exclude.push(items[0])
           }
         }
       }
       list = list.filter(function (el) { return !exclude.includes(el) })
       if (list.length > 1 && !cmd.objects[i].multiple) {
-        res.error = lang.noMultiplesMsg
+        res.error = lang.no_multiples_msg
         res.score = -1
         return res
       }
@@ -264,7 +265,7 @@ parser.matchItemsToCmd = function (s, cmd) {
     } else {
       objectNames = arr[i].split(lang.joiner_regex).map(function (el) { return el.trim() })
       if (objectNames.length > 1 && !cmd.objects[i].multiple) {
-        res.error = lang.noUltiplesMsg
+        res.error = lang.no_multiples_msg
         res.score = -1
         return res
       }
@@ -275,12 +276,12 @@ parser.matchItemsToCmd = function (s, cmd) {
       for (const s of objectNames) {
         const objNameMatch = lang.article_filter_regex.exec(s)
         if (objNameMatch === null) {
-          io.errorio.msg("Failed to match to article_filter_regex with '" + s + "', - probably an error in article_filter_regex!")
+          errormsg("Failed to match to article_filter_regex with '" + s + "', - probably an error in article_filter_regex!")
           return null
         }
         [objs2, n] = this.findInScope(objNameMatch[1], scopes, cmd.objects[i])
         if (n === 0) {
-          res.error = (cmd.noobjecterror ? cmd.noobjecterror : lang.object_unknown_io.msg(s))
+          res.error = (cmd.noobjecterror ? cmd.noobjecterror : lang.object_unknown_msg(s))
           res.score = -1
           return res
         } else {
@@ -292,7 +293,7 @@ parser.matchItemsToCmd = function (s, cmd) {
       res.objects.push(objs)
       res.matches.push(matches)
     }
-    parser.io.msg('..Adding to the score: ' + score)
+    parser.msg('..Adding to the score: ' + score)
     res.score += score
   }
   return res
@@ -324,15 +325,15 @@ parser.findInScope = function (s, listOfLists, cmdParams) {
 // Tries to match an object to the given string
 // But if there are more than 1 with the same score, it returns them all
 // s is the string to match
-// list is an array of template.items to match again
+// list is an array of items to match again
 parser.findInList = function (s, list, cmdParams) {
-  parser.io.msg('..Looking for a match for: ' + s)
+  parser.msg('..Looking for a match for: ' + s)
   let res = []
   let score = 0
   let n
   for (const item of list) {
     n = this.scoreObjectMatch(s, item, cmdParams)
-    if (n >= 0) parser.io.msg('....Considering: ' + item.name + ' (score ' + n + ')')
+    if (n >= 0) parser.msg('....Considering: ' + item.name + ' (score ' + n + ')')
     if (n > score) {
       res = []
       score = n
@@ -341,7 +342,7 @@ parser.findInList = function (s, list, cmdParams) {
       res.push(item)
     }
   }
-  parser.io.msg(res.length > 1 ? 'Cannot decide between: ' + res.map(el => el.name).join(', ') : (res.length === 1 ? '..Going with: ' + res[0].name : 'Found no suitable objects'))
+  parser.msg(res.length > 1 ? 'Cannot decide between: ' + res.map(el => el.name).join(', ') : (res.length === 1 ? '..Going with: ' + res[0].name : 'Found no suitable objects'))
   return res
 }
 
@@ -363,7 +364,7 @@ parser.scoreObjectMatch = function (s, item, cmdParams) {
       })
     }
   }
-  //  const itemName = item.alias.toLowerCase() // -fixme:  this
+  const itemName = item.alias.toLowerCase()
   let res = -1
   if (cmdParams.items && cmdParams.items.includes(item.name)) {
     // The command specifically mentions this item, so highest priority
@@ -371,7 +372,7 @@ parser.scoreObjectMatch = function (s, item, cmdParams) {
   } else if (s === item.parserItemName) {
     // The player has used the exact alias
     res = 70
-  } else if (item.regex && item.regex.util.test(s)) {
+  } else if (item.regex && item.regex.test(s)) {
     // The player has used the exact string allowed in the regex
     res = 60
   } else if (item.parserItemNameParts && item.parserItemNameParts.some(function (el) { return el === s })) {
@@ -421,20 +422,20 @@ parser.inspect = function () {
       s += '&nbsp;&nbsp;&nbsp;&nbsp;Objects:' + obj.map(function (el) { return el.name }).join(', ') + '<br/>'
     }
   }
-  io.debugmsg(s)
+  debugmsg(s)
 }
 
-parser.io.msg = function (...ary) {
+parser.msg = function (...ary) {
   if (parser.debug) {
-    for (const s of ary) io.debugmsg('PARSER&gt; ' + s)
+    for (const s of ary) debugmsg('PARSER&gt; ' + s)
   }
 }
 
 parser.scope = function (fn, options) {
   const list = []
-  for (const key in io.w) {
-    if (fn(io.w[key], options)) {
-      list.push(io.w[key])
+  for (const key in w) {
+    if (fn(w[key], options)) {
+      list.push(w[key])
     }
   }
   return list
@@ -449,7 +450,7 @@ parser.isInWorld = function (item) {
 }
 // Anywhere in the world
 parser.isReachable = function (item) {
-  return item.scopeStatus === util.REACHABLE && world.ifNotDark(item)
+  return item.scopeStatus === REACHABLE && world.ifNotDark(item)
 }
 // Anywhere in the location (used by the parser for the fallback)
 parser.isVisible = function (item) {
@@ -465,10 +466,10 @@ parser.isPresentOrMe = function (item) {
 }
 // ... but not in a container
 parser.isHeldNotWorn = function (item) {
-  return item.isAtLoc(game.player.name, util.display.PARSER) && world.ifNotDark(item) && !item.getWorn()
+  return item.isAtLoc(game.player.name, display.PARSER) && world.ifNotDark(item) && !item.getWorn()
 }
 parser.isHeld = function (item) {
-  return item.isAtLoc(game.player.name, util.display.PARSER) && world.ifNotDark(item)
+  return item.isAtLoc(game.player.name, display.PARSER) && world.ifNotDark(item)
 }
 parser.isForSale = function (item) {
   return item.isForSale && item.isForSale(game.player.loc) && world.ifNotDark(item)
@@ -477,29 +478,29 @@ parser.isForSale = function (item) {
 parser.isHeldByNpc = function (item) {
   const npcs = parser.scope(parser.isReachable).filter(el => el.npc)
   for (const npc of npcs) {
-    if (item.isAtLoc(npc.name, util.display.PARSER)) return true
+    if (item.isAtLoc(npc.name, display.PARSER)) return true
   }
   return false
 }
 
 parser.isNpcOrHere = function (item) {
-  return (item.isAtLoc(game.player.loc, util.display.PARSER) && world.ifNotDark(item)) || item.npc || item.player
+  return (item.isAtLoc(game.player.loc, display.PARSER) && world.ifNotDark(item)) || item.npc || item.player
 }
 parser.isNpcAndHere = function (item) {
-  return item.isAtLoc(game.player.loc, util.display.PARSER) && (item.npc || item.player)
+  return item.isAtLoc(game.player.loc, display.PARSER) && (item.npc || item.player)
 }
 parser.isHere = function (item) {
-  return item.isAtLoc(game.player.loc, util.display.PARSER) && world.ifNotDark(item)
+  return item.isAtLoc(game.player.loc, display.PARSER) && world.ifNotDark(item)
 }
 // parser.isWorn = function(item) {
-//  return item.isAtLoc(game.player.name, util.display.PARSER) && world.ifNotDark(item) && item.getWorn();
+//  return item.isAtLoc(game.player.name, display.PARSER) && world.ifNotDark(item) && item.getWorn();
 // }
 // parser.isWornBy = function(item, options) {
-//  return item.isAtLoc(options.npc.name, util.display.PARSER) && item.getWorn() && !item.ensemble;
+//  return item.isAtLoc(options.npc.name, display.PARSER) && item.getWorn() && !item.ensemble;
 // }
 
 // parser.isInside = function(item, options) {
-//  return item.isAtLoc(options.container.name, util.display.PARSER) && world.ifNotDark(item);
+//  return item.isAtLoc(options.container.name, display.PARSER) && world.ifNotDark(item);
 // }
 
 // parser.isRoom = function(item) {
@@ -510,7 +511,7 @@ parser.isContained = function (item) {
   const containers = parser.scope(parser.isReachable).filter(el => el.container)
   for (const container of containers) {
     if (container.closed) continue
-    if (item.isAtLoc(container.name, util.display.PARSER)) return true
+    if (item.isAtLoc(container.name, display.PARSER)) return true
   }
   return false
 }

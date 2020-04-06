@@ -1,10 +1,10 @@
 'use strict'
-import { templates, lang, util, settings, game, io, w, world } from './main'
+import { failedmsg, msg, showDropDown, metamsg, debugmsg, errormsg, showMenu, SUCCESS, getResponseList, display, formatList, SUPPRESS_ENDTURN, respond, NULL_FUNC, game, w, world, lang, settings, PLAYER } from './main.js'
 // Should all be language neutral
 
-const NPC = function (isFemale) {
+export const NPC = function (isFemale) {
   // A whole bunch of defaults are the same as the player
-  const res = Object.assign({}, templates.PLAYER(), CONSULTABLE())
+  const res = Object.assign({}, PLAYER(), CONSULTABLE())
 
   // These from the player need adjusting
   delete res.player
@@ -18,19 +18,19 @@ const NPC = function (isFemale) {
   res.agenda = []
   res.followers = []
   res.excludeFromAll = true
-  res.reactions = util.NULL_FUNC
+  res.reactions = NULL_FUNC
   res.canReachThrough = () => false
   res.suspended = false
   res.getVerbs = () => settings.noTalkTo ? [lang.verbs.lookat] : [lang.verbs.lookat, lang.verbs.talkto]
   res.icon = () => '<img src="images/npc12.png" />'
 
   res.isAtLoc = function (loc, situation) {
-    if (situation === util.display.LOOK && this.scenery) return false
+    if (situation === display.LOOK && this.scenery) return false
     return (this.loc === loc)
   }
 
   res.heading = function (dir) {
-    return templates.npc_heading(this, dir)
+    return lang.npc_heading(this, dir)
   }
 
   // This does not work properly, it just gets all clothing!!!
@@ -39,14 +39,14 @@ const NPC = function (isFemale) {
     return this.getWearing()
   }
 
-  res.getTopics = npcUtilities.getTopics
+  res.getTopics = npc_utilities.getTopics
 
   res.isHere = function () {
     return this.isAtLoc(game.player.loc)
   }
 
-  res.io.msg = function (s, params) {
-    if (this.isHere()) io.msg(s, params)
+  res.msg = function (s, params) {
+    if (this.isHere()) msg(s, params)
   }
 
   res.multiMsg = function (ary) {
@@ -55,7 +55,7 @@ const NPC = function (isFemale) {
     if (this[counter] === undefined) this[counter] = -1
     this[counter]++
     if (this[counter] >= ary.length) this[counter] = ary.length - 1
-    if (ary[this[counter]]) io.msg(ary[this[counter]])
+    if (ary[this[counter]]) msg(ary[this[counter]])
   }
 
   res.templatePreSave = function () {
@@ -99,7 +99,7 @@ const NPC = function (isFemale) {
         for (const key in this.reactions) {
           // console.log("key:" + key);
           if (this.reactionFlags.split(' ').includes(key)) continue
-          if (this.reactions[key].util.test()) {
+          if (this.reactions[key].test()) {
             this.reactions[key].action()
             this.reactionFlags += ' ' + key
             if (this.reactions[key].override) this.reactionFlags += ' ' + this.reactions[key].override
@@ -117,14 +117,14 @@ const NPC = function (isFemale) {
       this.savedAlias = this.alias
       this.pronouns = lang.pronouns.plural
       this.followers.unshift(this)
-      this.alias = util.formatList(this.followers, { lastJoiner: lang.list_and })
+      this.alias = formatList(this.followers, { lastJoiner: lang.list_and })
       this.followers.shift()
     }
 
     const arr = this.agenda[0].split(':')
     const fn = arr.shift()
     if (typeof agenda[fn] !== 'function') {
-      io.errormsg('Unknown function `' + fn + "' in agenda for " + this.name)
+      errormsg('Unknown function `' + fn + "' in agenda for " + this.name)
       return
     }
     const flag = agenda[fn](this, arr)
@@ -153,33 +153,33 @@ const NPC = function (isFemale) {
     lang.npcEnteringMsg(this, origin)
   }
 
-  res.talkto = npcUtilities.talkto
+  res.talkto = npc_utilities.talkto
 
   res.topics = function () {
     if (this.askOptions.length === 0 && this.tellOptions.length === 0) {
-      io.metamsg(lang.topics_no_ask_tell)
-      return util.SUPPRESS_ENDTURN
+      metamsg(lang.topics_no_ask_tell)
+      return SUPPRESS_ENDTURN
     }
 
     let flag = false
     for (const action of ['ask', 'tell']) {
-      const arr = util.getResponseList({ actor: this, action: action }, this[action + 'Options'])
+      const arr = getResponseList({ actor: this, action: action }, this[action + 'Options'])
       const arr2 = []
       for (const res of arr) {
         if (res.silent && !game.player.mentionedTopics.includes(res.name)) continue
         arr2.push(res.name)
       }
       if (arr2.length !== 0) {
-        io.metamsg(lang['topics_' + action + '_list'](this, arr2.sort()))
+        metamsg(lang['topics_' + action + '_list'](this, arr2.sort()))
         flag = true
       }
     }
 
     if (!flag) {
-      io.metamsg(lang.topics_none_found(this))
+      metamsg(lang.topics_none_found(this))
     }
 
-    return util.SUPPRESS_ENDTURN
+    return SUPPRESS_ENDTURN
   }
 
   res.sayBonus = 0
@@ -190,7 +190,7 @@ const NPC = function (isFemale) {
     if (!this.sayResponses) return false
     for (const res of this.sayResponses) {
       if (res.id && this.sayUsed.includes(' ' + res.id + ' ')) continue
-      if (!res.regex.util.test(s)) continue
+      if (!res.regex.test(s)) continue
       res.response()
       if (res.id) this.sayUsed += res.id + ' '
       return true
@@ -217,35 +217,35 @@ const NPC = function (isFemale) {
   return res
 }
 
-const npcUtilities = {
+export const npc_utilities = {
   talkto: function () {
     if (!game.player.canTalk(this)) {
       return false
     }
     if (settings.noTalkTo !== false) {
-      io.metamsg(settings.noTalkTo)
+      metamsg(settings.noTalkTo)
       return false
     }
 
     const topics = this.getTopics(this)
-    if (topics.length === 0) return io.failedmsg(lang.no_topics(game.player, this))
+    if (topics.length === 0) return failedmsg(lang.no_topics(game.player, this))
 
     topics.push(lang.never_mind)
     if (settings.dropdownForConv) {
-      io.showDropDown(lang.speak_to_menu_title(this), topics, function (result) {
+      showDropDown(lang.speak_to_menu_title(this), topics, function (result) {
         if (result !== lang.never_mind) {
           result.runscript()
         }
       })
     } else {
-      io.showMenu(lang.speak_to_menu_title(this), topics, function (result) {
+      showMenu(lang.speak_to_menu_title(this), topics, function (result) {
         if (result !== lang.never_mind) {
           result.runscript()
         }
       })
     }
 
-    return util.SUPPRESS_ENDTURN
+    return SUPPRESS_ENDTURN
   },
 
   getTopics: function () {
@@ -260,7 +260,7 @@ const npcUtilities = {
 
 }
 
-const agenda = {
+export const agenda = {
   // print the array as text if the player is here
   // otherwise this will be skipped
   // Used by several other functions, so this applies to them too
@@ -273,7 +273,7 @@ const agenda = {
 
     if (npc.here()) {
       for (const item of arr) {
-        io.msg(item)
+        msg(item)
       }
     }
     return true
@@ -286,10 +286,10 @@ const agenda = {
     const item = arr.shift()
     const att = arr.shift()
     let value = arr.shift()
-    if (!w[item]) io.errormsg("Item '" + item + "' not recognised in the agenda of " + npc.name)
+    if (!w[item]) errormsg("Item '" + item + "' not recognised in the agenda of " + npc.name)
     if (value === 'true') value = true
     if (value === 'false') value = false
-    if (/^\d+$/.util.test(value)) parseInt(value)
+    if (/^\d+$/.test(value)) parseInt(value)
     w[item][att] = value
     this.text(npc, arr)
     return true
@@ -298,7 +298,7 @@ const agenda = {
   // Wait n turns
   wait: function (npc, arr) {
     if (arr.length === 0) return true
-    if (isNaN(arr[0])) io.errormsg("Expected wait to be given a number in the agenda of '" + npc.name + "'")
+    if (isNaN(arr[0])) errormsg("Expected wait to be given a number in the agenda of '" + npc.name + "'")
     const count = parseInt(arr.shift())
     if (npc.agendaWaitCounter !== undefined) {
       npc.agendaWaitCounter++
@@ -357,14 +357,14 @@ const agenda = {
   },
 
   // Move the given item directly to the given location, then print the rest of the array as text
-  // Do not use for template.items with a funny location, such as COUNTABLES
+  // Do not use for items with a funny location, such as COUNTABLES
   moveItem: function (npc, arr) {
     // debugmsg("Moving item...");
     const item = arr.shift()
     const dest = arr.shift()
     // debugmsg("dest:" + dest);
-    if (!w[item]) io.errormsg("Item '" + item + "' was not recognised in the agenda of " + npc.name)
-    if (!w[dest]) io.errormsg("Location '" + dest + "' was not recognised in the agenda of " + npc.name)
+    if (!w[item]) errormsg("Item '" + item + "' was not recognised in the agenda of " + npc.name)
+    if (!w[dest]) errormsg("Location '" + dest + "' was not recognised in the agenda of " + npc.name)
     w[item].moveToFrom(dest)
     this.text(npc, arr)
     return true
@@ -379,9 +379,9 @@ const agenda = {
     let dest = arr.shift()
     // debugmsg("dest:" + dest);
     if (dest === 'player') dest = game.player.loc
-    if (!w[dest]) io.debugmsg("Location '" + dest + "' not recognised in the agenda of " + npc.name)
+    if (!w[dest]) debugmsg("Location '" + dest + "' not recognised in the agenda of " + npc.name)
     if (!w[dest].room) dest = dest.loc
-    if (!w[dest]) io.errormsg("Location '" + dest + "' not recognized in the agenda of " + npc.name)
+    if (!w[dest]) errormsg("Location '" + dest + "' not recognized in the agenda of " + npc.name)
     npc.moveWithDescription(dest)
     this.text(npc, arr)
     return true
@@ -397,12 +397,12 @@ const agenda = {
   // Move to another room via a random, unlocked exit, then print the rest of the array as text
   walkRandom: function (npc, arr) {
     // debugmsg("Moving random...");
-    const exit = w[npc.loc].getRandomworld.Exit(true)
+    const exit = w[npc.loc].getRandomExit(true)
     if (exit === null) {
       this.text(npc, arr)
       return true
     }
-    if (!w[exit.name]) io.errormsg("Location '" + exit.name + "' not recognised in the agenda of " + npc.name)
+    if (!w[exit.name]) errormsg("Location '" + exit.name + "' not recognised in the agenda of " + npc.name)
     npc.moveWithDescription(exit.name)
     return false
   },
@@ -420,13 +420,13 @@ const agenda = {
     // debugmsg("dest:" + dest);
     if (dest === 'player') dest = game.player.loc
     if (w[dest] === undefined) {
-      io.errormsg("Location '" + dest + "' not recognised in the agenda of " + npc.name)
+      errormsg("Location '" + dest + "' not recognised in the agenda of " + npc.name)
       return true
     }
     if (!w[dest].room) {
       dest = w[dest].loc
       if (w[dest] === undefined) {
-        io.errormsg("Object location '" + dest + "' not recognised in the agenda of " + npc.name)
+        errormsg("Object location '" + dest + "' not recognised in the agenda of " + npc.name)
         return true
       }
     }
@@ -435,8 +435,8 @@ const agenda = {
       return true
     } else {
       const route = agenda.findPath(w[npc.loc], w[dest])
-      if (!route) io.errormsg("Location '" + dest + "' not reachable in the agenda of " + npc.name)
-      // debugmsg(util.formatList(route));
+      if (!route) errormsg("Location '" + dest + "' not reachable in the agenda of " + npc.name)
+      // debugmsg(formatList(route));
       npc.moveWithDescription(route[0])
       if (npc.isAtLoc(dest)) {
         this.text(npc, arr)
@@ -468,10 +468,10 @@ agenda.findPath = function (start, end, maxlength) {
     nextList = []
     length++
     for (const room of currentList) {
-      exits = room.getworld.Exits(true)
+      exits = room.getExits(true)
       for (const exit of exits) {
         dest = w[exit.name]
-        if (dest === undefined) io.errormsg('Dest is undefined: ' + exit.name)
+        if (dest === undefined) errormsg('Dest is undefined: ' + exit.name)
         if (dest.pathfinderNote && dest.pathfinderNote.id === game.pathID) continue
         dest.pathfinderNote = { jumpFrom: room, id: game.pathID }
         if (dest === end) return agenda.extractPath(start, end)
@@ -497,24 +497,20 @@ agenda.extractPath = function (start, end) {
   return res.reverse()
 }
 
-const CONSULTABLE = function () {
+export const CONSULTABLE = function () {
   const res = {}
 
-  res.askabout = function (text1, text2) {
-    return this.asktellabout(text1, text2, lang.ask_about_intro, this.askOptions, 'ask')
-  }
-  res.tellabout = function (text1, text2) {
-    return this.asktellabout(text1, text2, lang.tell_about_intro, this.tellOptions, 'tell')
-  }
+  res.askabout = function (text1, text2) { return this.asktellabout(text1, text2, lang.ask_about_intro, this.askOptions, 'ask') }
+  res.tellabout = function (text1, text2) { return this.asktellabout(text1, text2, lang.tell_about_intro, this.tellOptions, 'tell') }
   res.asktellabout = function (text1, text2, intro, list, action) {
     if (!game.player.canTalk(this)) {
       return false
     }
     if (settings.noAskTell !== false) {
-      io.metamsg(settings.noAskTell)
+      metamsg(settings.noAskTell)
       return false
     }
-    if (settings.givePlayerAskTellMsg) io.msg(intro(this, text1, text2))
+    if (settings.givePlayerAskTellMsg) msg(intro(this, text1, text2))
 
     const params = {
       text: text1,
@@ -522,11 +518,11 @@ const CONSULTABLE = function () {
       actor: this,
       action: action
     }
-    return util.respond(params, list, this.asktelldone)
+    return respond(params, list, this.asktelldone)
   }
   res.asktelldone = function (params, response) {
     if (!response) {
-      io.msg(lang.npc_no_interest_in(params.actor))
+      msg(lang.npc_no_interest_in(params.actor))
       return
     }
     if (response.mentions) {
@@ -540,11 +536,11 @@ const CONSULTABLE = function () {
   return res
 }
 
-const QUESTION = function () {
+export const QUESTION = function () {
   const res = {
     sayResponse: function (actor, s) {
       for (const res of this.responses) {
-        if (!res.regex || res.regex.util.test(s)) {
+        if (!res.regex || res.regex.test(s)) {
           actor.sayBonus = 0
           delete actor.sayQuestion
           res.response(s)
@@ -557,7 +553,7 @@ const QUESTION = function () {
   return res
 }
 
-const TOPIC = function (fromStart) {
+export const TOPIC = function (fromStart) {
   const res = {
     conversationTopic: true,
     showTopic: fromStart,
@@ -572,32 +568,30 @@ const TOPIC = function (fromStart) {
       obj.pause()
       this.hideTopic = this.hideAfter
       this.script(obj)
-      if (typeof this.nowShow === 'string') io.errormsg('nowShow for topic ' + this.nname + ' is a string.')
+      if (typeof this.nowShow === 'string') errormsg('nowShow for topic ' + this.nname + ' is a string.')
       for (const s of this.nowShow) {
         obj = w[s]
-        if (obj === undefined) io.errormsg('No topic called ' + s + ' found.')
+        if (obj === undefined) errormsg('No topic called ' + s + ' found.')
         obj.showTopic = true
       }
-      if (typeof this.nowHide === 'string') io.errormsg('nowHide for topic ' + this.nname + ' is a string.')
+      if (typeof this.nowHide === 'string') errormsg('nowHide for topic ' + this.nname + ' is a string.')
       for (const s of this.nowHide) {
         obj = w[s]
-        if (obj === undefined) io.errormsg('No topic called ' + s + ' found.')
+        if (obj === undefined) errormsg('No topic called ' + s + ' found.')
         obj.hideTopic = true
       }
       this.count++
-      world.endTurn(util.SUCCESS)
+      world.endTurn(SUCCESS)
     },
     isTopicVisible: function (char) {
       return this.showTopic && !this.hideTopic && char.name === this.loc
     },
     show: function () {
-      this.showTopic = true
+      return this.showTopic = true
     },
     hide: function () {
-      this.hideTopic = true
+      return this.hideTopic = true
     }
   }
   return res
 }
-
-export { NPC, npcUtilities, QUESTION, TOPIC }

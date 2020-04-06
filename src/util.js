@@ -1,36 +1,36 @@
 'use strict'
-import { settings, lang, io, game, world, w } from './main'
+import { errormsg, game, w, world, lang, settings } from './main.js'
 
 // ============  Utilities  =================================
+
 // Should all be language neutral
 
 // A command should return one of these
 // (but a verb will return true or false, so the command that uses it
 // can in turn return one of these - a verb is an attribute of an object)
 
-const SUCCESS = 1
-const SUCCESS_NO_TURNSCRIPTS = 2
-const SUPPRESS_ENDTURN = 3
+export const SUCCESS = 1
+export const SUCCESS_NO_TURNSCRIPTS = 2
+export const SUPPRESS_ENDTURN = 3
+export const FAILED = -1
+export const PARSER_FAILURE = -2
+export const ERROR = -3
 
-const FAILED = -1
-const PARSER_FAILURE = -2
-const ERROR = -3
+export const BRIEF = 1
+export const TERSE = 2
+export const VERBOSE = 3
 
-const BRIEF = 1
-const TERSE = 2
-const VERBOSE = 3
-
-const TEXT_COLOUR = $('.sidepanes').css('color') // -DEPRICATE JQuery-
+export const TEXT_COLOUR = $('.sidepanes').css('color')
 
 // A bug in Quest I need to sort out
-const ERR_QUEST_BUG = 21
+export const ERR_QUEST_BUG = 21
 // A bug in the game the creator needs to sort out
-const ERR_GAME_BUG = 22
-const ERR_TP = 25
-const ERR_SAVE_LOAD = 26
-const ERR_DEBUG_CMD = 27
+export const ERR_GAME_BUG = 22
+export const ERR_TP = 25
+export const ERR_SAVE_LOAD = 26
+export const ERR_DEBUG_CMD = 27
 
-const display = {
+export const display = {
   ALL: 0,
   LOOK: 1,
   PARSER: 2,
@@ -41,26 +41,26 @@ const display = {
 
 // const PARSER = 1
 
-const LIGHT_none = 0 // -FIXME: don't change case pattern-
-const LIGHT_SELF = 1
-const LIGHT_MEAGRE = 2
-const LIGHT_FULL = 3
-const LIGHT_EXTREME = 4
+export const LIGHT_none = 0
+export const LIGHT_SELF = 1
+export const LIGHT_MEAGRE = 2
+export const LIGHT_FULL = 3
+export const LIGHT_EXTREME = 4
 
-const VISIBLE = 1
-const REACHABLE = 2
+export const VISIBLE = 1
+export const REACHABLE = 2
 
-const INDEFINITE = 1
-const DEFINITE = 2
+export const INDEFINITE = 1
+export const DEFINITE = 2
 
-const INFINITY = 9999
+export const INFINITY = 9999
 // const INFINITY = {infinity:true};
 
-const NULL_FUNC = function () {}
+export const NULL_FUNC = function () {}
 
-const COLOURS = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
+export const COLOURS = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
 
-const test = {}
+export const test = {}
 test.testing = false
 
 // @DOC
@@ -68,7 +68,7 @@ test.testing = false
 // @UNDOC
 
 // @DOC
-// This is an attempt to mimic the util.firsttime functionality of Quest 5. Unfortunately, JavaScript does not
+// This is an attempt to mimic the firsttime functionality of Quest 5. Unfortunately, JavaScript does not
 // lend itself well to that!
 // If this is the first time the give `id` has been encountered, the `first` function will be run.
 // Otherwise the `other` function will be run, if given.
@@ -79,7 +79,7 @@ test.testing = false
 //       msg("This was NOT the first time.")
 //     }, function() {
 //
-function firsttime (id, first, other) {
+export function firsttime (id, first, other) {
   if (firsttimeTracker.includes(id)) {
     if (other) other()
   } else {
@@ -87,7 +87,7 @@ function firsttime (id, first, other) {
     first()
   }
 }
-const firsttimeTracker = []
+export const firsttimeTracker = []
 
 // ============  Random Utilities  =======================================
 // @DOC
@@ -96,7 +96,7 @@ const firsttimeTracker = []
 
 // @DOC
 // Returns a random number from 0 to n1, or n1 to n2, inclusive.
-function randomInt (n1, n2) {
+export function randomInt (n1, n2) {
   if (n2 === undefined) {
     n2 = n1
     n1 = 0
@@ -106,7 +106,7 @@ function randomInt (n1, n2) {
 
 // @DOC
 // Returns true 'percentile' times out of 100, false otherwise.
-function randomChance (percentile) {
+export function randomChance (percentile) {
   return randomInt(99) < percentile
 }
 
@@ -114,7 +114,7 @@ function randomChance (percentile) {
 // Returns a random element from the array, or null if it is empty
 // If the second parameter is true, then the selected value is also deleted from the array,
 // preventing it from being selected a second time
-function randomFromArray (arr, deleteEntry) {
+export function randomFromArray (arr, deleteEntry) {
   if (arr.length === 0) return null
   const index = Math.floor(Math.random() * arr.length)
   const res = arr[index]
@@ -130,16 +130,16 @@ function randomFromArray (arr, deleteEntry) {
 // You can also specify unusual dice, i.e., not a sequence from one to n, by separating each value with a colon,
 // so d1:5:6 rolls a three sided die, with 1, 5 and 6 on the sides.
 // It will cope with any number of parts, so -19+2d1:5:6-d4 will be fine.
-function diceRoll (s) {
+export function diceRoll (s) {
   if (typeof s === 'number') return s
-  s = s.replace(/ /g, '').replace(/-/g, '+-') // -FIXME: unnessecary escape character-
+  s = s.replace(/ /g, '').replace(/-/g, '+-')
   let total = 0
 
   console.log(s)
   for (let dice of s.split('+')) {
     if (dice === '') continue
     let negative = 1
-    if (/^-/.test(dice)) { // -FIXME: unnessecary escape character-
+    if (/^-/.test(dice)) {
       dice = dice.substring(1)
       negative = -1
     }
@@ -150,7 +150,7 @@ function diceRoll (s) {
         dice = '1' + dice
       }
       const parts = dice.split('d')
-      if (parts.length === 2 && /^\d+$/.test(parts[0]) && /^[0-9:]+$/.test(parts[1])) { // -FIXME: unnessecary escape character-
+      if (parts.length === 2 && /^\d+$/.test(parts[0]) && /^[0-9:]+$/.test(parts[1])) {
         const number = parseInt(parts[0])
         for (let i = 0; i < number; i++) {
           if (/^\d+$/.test(parts[1])) {
@@ -161,7 +161,7 @@ function diceRoll (s) {
         }
       } else {
         console.log("Can't parse dice type (but will attempt to use what I can): " + dice)
-        io.errormsg("Can't parse dice type (but will attempt to use what I can): " + dice)
+        errormsg("Can't parse dice type (but will attempt to use what I can): " + dice)
       }
     }
   }
@@ -176,14 +176,14 @@ function diceRoll (s) {
 
 // @DOC
 // Returns the string with the first letter capitalised
-function sentenceCase (str) {
+export function sentenceCase (str) {
   return str.replace(/[a-z]/i, letter => letter.toUpperCase()).trim()
 }
 
 // @DOC
-// Returns a string with the given number of hard util.spaces. Browsers collapse multiple white util.spaces to just show
-// one, so you need to use hard util.spaces (NBSPs) if you want several together.
-function spaces (n) {
+// Returns a string with the given number of hard spaces. Browsers collapse multiple white spaces to just show
+// one, so you need to use hard spaces (NBSPs) if you want several together.
+export function spaces (n) {
   return '&nbsp;'.repeat(n)
 }
 
@@ -191,8 +191,8 @@ function spaces (n) {
 // If isMultiple is true, returns the item name, otherwise nothing. This is useful in commands that handle
 // multiple objects, as you can have this at the start of the response string. For example, if the player does GET BALL,
 // the response might be "Done". If she does GET ALL, then the response for the ball needs to be "Ball: Done".
-// In the command, you can have `msg(util.prefix(item, isMultiple) + "Done"), and it is sorted.
-function prefix (item, isMultiple) {
+// In the command, you can have `msg(prefix(item, isMultiple) + "Done"), and it is sorted.
+export function prefix (item, isMultiple) {
   if (!isMultiple) { return '' }
   return sentenceCase(item.name) + ': '
 }
@@ -204,12 +204,12 @@ function prefix (item, isMultiple) {
 //
 // * article:    DEFINITE (for "the") or INDEFINITE (for "a"), defaults to none (see byname)
 // * sep:        separator (defaults to comma)
-// * lastJoiner: separator for last two template.items (just separator if not provided); you should include any util.spaces (this allows you to have a comma and "and", which is obviously wrong, but some people like it)
+// * lastJoiner: separator for last two items (just separator if not provided); you should include any spaces (this allows you to have a comma and "and", which is obviously wrong, but some people like it)
 // * modified:   item aliases modified (see byname) (defaults to false)
 // * nothing:    return this if the list is empty (defaults to empty string)
 // * count:      if this is a number, the name will be prefixed by that (instead of the article)
 // * doNotSort   if true the list isnot sorted
-// * separateEnsembles:  if true, ensembles are listed as the separate template.items
+// * separateEnsembles:  if true, ensembles are listed as the separate items
 //
 // For example:
 //
@@ -222,7 +222,7 @@ function prefix (item, isMultiple) {
 // ```
 //
 // Note that you can add further options for your own game, and then write your own byname function that uses it.
-function formatList (itemArray, options) {
+export function formatList (itemArray, options) {
   if (options === undefined) { options = {} }
 
   if (itemArray.length === 0) {
@@ -241,7 +241,7 @@ function formatList (itemArray, options) {
         if (!toAdd.includes(item.ensembleMaster)) toAdd.push(item.ensembleMaster)
       }
     }
-    itemArray = util.arraySubtract(itemArray, toRemove)
+    itemArray = arraySubtract(itemArray, toRemove)
     itemArray = itemArray.concat(toAdd)
   }
 
@@ -275,18 +275,18 @@ function formatList (itemArray, options) {
 // @DOC
 // Lists the properties of the given object; useful for debugging only.
 // To inspect an object use JSON.stringify(obj)
-function listProperties (obj) {
+export function listProperties (obj) {
   return Object.keys(obj).join(', ')
 }
 
-const arabic = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
-const roman = 'M;CM;D;CD;C;XC;L;XL;X;IX;V;IV;I'.split(';')
+export const arabic = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+export const roman = 'M;CM;D;CD;C;XC;L;XL;X;IX;V;IV;I'.split(';')
 
 // @DOC
 // Returns the given number as a string in Roman numerals.
-function toRoman (number) {
+export function toRoman (number) {
   if (typeof number !== 'number') {
-    io.errormsg('util.toRoman can only handle numbers')
+    errormsg('toRoman can only handle numbers')
     return number
   }
 
@@ -303,7 +303,7 @@ function toRoman (number) {
 
 // @DOC
 // Returns the game time as a string. The game time is game.elapsedTime seconds after game.startTime.
-function getDateTime () {
+export function getDateTime () {
   const time = new Date(game.elapsedTime * 1000 + game.startTime.getTime())
   // console.log(time);
   return time.toLocaleString(settings.dateTime.locale, settings.dateTime)
@@ -311,9 +311,9 @@ function getDateTime () {
 
 // @DOC
 // Returns the given number as a string formatted as money. The formatting is defined by settings.moneyFormat.
-function displayMoney (n) {
+export function displayMoney (n) {
   if (typeof settings.moneyFormat === 'undefined') {
-    io.errormsg('No format for money set (set settings.moneyFormat in settings.js).')
+    errormsg('No format for money set (set settings.moneyFormat in settings.js).')
     return '' + n
   }
   const ary = settings.moneyFormat.split('!')
@@ -338,7 +338,7 @@ function displayMoney (n) {
     const options = n < 0 ? ary[2] : ary[1]
     return ary[0] + displayNumber(n, options) + ary[3]
   } else {
-    io.errormsg('settings.moneyFormat in settings.js expected to have either 1, 2 or 3 exclamation marks.')
+    errormsg('settings.moneyFormat in settings.js expected to have either 1, 2 or 3 exclamation marks.')
     return '' + n
   }
 }
@@ -351,11 +351,11 @@ function displayMoney (n) {
 // The third is a single non-digit character; the decimal marker.
 // The fourth is a sequence of digits and it the number of characters right of the decimal point; this is padded with zeros to make it longer.
 // The fifth is a sequence of characters that are not digits that will be added to the end of the string, and is optional.
-function displayNumber (n, control) {
+export function displayNumber (n, control) {
   n = Math.abs(n) // must be positive
   const regex = /^(\D*)(\d+)(\D)(\d*)(\D*)$/
   if (!regex.test(control)) {
-    io.errormsg('Unexpected format in displayNumber (' + control + '). Should be a number, followed by a single character separator, followed by a number.')
+    errormsg('Unexpected format in displayNumber (' + control + '). Should be a number, followed by a single character separator, followed by a number.')
     return '' + n
   }
   const options = regex.exec(control)
@@ -374,7 +374,7 @@ function displayNumber (n, control) {
 // @DOC
 // Converts the string to the standard direction name, so "down", "dn" and "d" will all return "down".
 // Uses the EXITS array, so language neutral.
-function getDir (s) { // FIXME: `Dir` is universal for directory -> change to not pollute Namespace
+export function getDir (s) {
   for (const exit of lang.exit_list) {
     if (exit.nocmd) continue
     if (exit.name === s) return exit.name
@@ -393,8 +393,7 @@ function getDir (s) { // FIXME: `Dir` is universal for directory -> change to no
 // Returns a new array, derived by subtracting each element in b from the array a.
 // If b is not an array, then b itself will be removed.
 // Unit tested.
-// FIXME: use native functions like array.map((element, index, array) => {})
-function arraySubtract (a, b) {
+export function arraySubtract (a, b) {
   if (!Array.isArray(b)) b = [b]
   const res = []
   for (let i = 0; i < a.length; i++) {
@@ -408,8 +407,7 @@ function arraySubtract (a, b) {
 // and each element in order is the same.
 // Assumes a is an array, but not b.
 // Unit tested
-// FIXME use native function
-function arrayCompare (a, b) {
+export function arrayCompare (a, b) {
   if (!Array.isArray(b)) return false
   if (a.length !== b.length) return false
   for (let i = 0; i < a.length; i++) {
@@ -420,9 +418,8 @@ function arrayCompare (a, b) {
 
 // @DOC
 // Removes the element el from the array, ary.
-// Unlike util.arraySubtract, no new array is created; the original aray is modified, and nothing is returned.
-// FIXME: just replace array
-function arrayRemove (ary, el) {
+// Unlike arraySubtract, no new array is created; the original aray is modified, and nothing is returned.
+export function arrayRemove (ary, el) {
   const index = ary.indexOf(el)
   if (index !== -1) {
     ary.splice(index, 1)
@@ -432,7 +429,7 @@ function arrayRemove (ary, el) {
 // @DOC
 // Returns a new array based on ary, but including only those objects for which the attribute attName is equal to value.
 // To filter for objects that do not have the attribute you can filter for the value undefined.
-function arrayFilterByAttribute (ary, attName, value) {
+export function arrayFilterByAttribute (ary, attName, value) {
   return ary.filter(el => el[attName] === value)
 }
 
@@ -444,7 +441,7 @@ function arrayFilterByAttribute (ary, attName, value) {
 
 // @DOC
 // Returns an array of objects the player can currently reach and see.
-function scopeReachable () {
+export function scopeReachable () {
   const list = []
   for (const key in w) {
     if (w[key].scopeStatus === REACHABLE && world.ifNotDark(w[key])) {
@@ -456,7 +453,7 @@ function scopeReachable () {
 
 // @DOC
 // Returns an array of objects held by the given character.
-function scopeHeldBy (chr) {
+export function scopeHeldBy (chr) {
   const list = []
   for (const key in w) {
     if (w[key].isAtLoc(chr)) {
@@ -468,7 +465,7 @@ function scopeHeldBy (chr) {
 
 // @DOC
 // Returns an array of objects at the player's location that can be seen.
-function scopeHereListed () {
+export function scopeHereListed () {
   const list = []
   for (const key in w) {
     if (w[key].isAtLoc(game.player.loc, display.LOOK) && world.ifNotDark(w[key])) {
@@ -478,7 +475,7 @@ function scopeHereListed () {
   return list
 }
 
-const util = {}
+export const util = {}
 
 // ============  Response Utilities  =======================================
 
@@ -489,7 +486,7 @@ const util = {}
 // @DOC
 // Searchs the given list for a suitable response, according to the given params, and runs that response.
 // This is a big topic, see [here](https://github.com/ThePix/QuestJS/wiki/The-respond-function) for more.
-function respond (params, list, func) {
+export function respond (params, list, func) {
   // console.log(params)
   // if (!params.action) throw "No action in params"
   // if (!params.actor) throw "No action in params"
@@ -497,7 +494,7 @@ function respond (params, list, func) {
   const response = util.findResponse(params, list)
   if (!response) {
     if (func) func(params)
-    io.errormsg('Failed to find a response (F12 for more)')
+    errormsg('Failed to find a response (F12 for more)')
     console.log('Failed to find a response')
     console.log(params)
     console.log(list)
@@ -510,7 +507,7 @@ function respond (params, list, func) {
   return !response.failed
 }
 
-function getResponseList (params, list, result) {
+export function getResponseList (params, list, result) {
   if (!result) result = []
   for (const item of list) {
     if (item.name) {
@@ -554,7 +551,7 @@ util.getResponseSubList = function (route, list) {
   const s = route.shift()
   if (s) {
     const sublist = list.find(el => el.name === s)
-    if (!sublist) throw 'Failed to add sub-list with ' + s // -FIXME: throw error object and not literal-
+    if (!sublist) throw 'Failed to add sub-list with ' + s
     return util.getResponseSubList(route, sublist.responses)
   } else {
     return list
@@ -597,57 +594,4 @@ util.exitList = function () {
     }
   }
   return list
-}
-
-export {
-  SUCCESS,
-  SUCCESS_NO_TURNSCRIPTS,
-  SUPPRESS_ENDTURN,
-  FAILED,
-  PARSER_FAILURE,
-  ERROR,
-  BRIEF,
-  TERSE,
-  VERBOSE,
-  TEXT_COLOUR,
-  ERR_QUEST_BUG,
-  ERR_GAME_BUG,
-  ERR_TP,
-  ERR_SAVE_LOAD,
-  ERR_DEBUG_CMD,
-  LIGHT_none, //
-  LIGHT_SELF,
-  LIGHT_MEAGRE,
-  LIGHT_FULL,
-  LIGHT_EXTREME,
-  VISIBLE,
-  REACHABLE,
-  INDEFINITE,
-  DEFINITE,
-  INFINITY,
-  NULL_FUNC,
-  COLOURS,
-  firsttime,
-  firsttimeTracker,
-  randomInt,
-  randomChance,
-  randomFromArray,
-  diceRoll,
-  sentenceCase,
-  spaces,
-  prefix,
-  listProperties,
-  toRoman,
-  getDateTime,
-  displayMoney,
-  getDir,
-  arraySubtract,
-  arrayCompare,
-  arrayRemove,
-  arrayFilterByAttribute,
-  scopeReachable,
-  scopeHeldBy,
-  scopeHereListed,
-  respond,
-  getResponseList
 }

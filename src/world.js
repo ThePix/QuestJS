@@ -1,7 +1,8 @@
 'use strict'
-import { util, saveLoad, settings, io, lang, commands } from 'module'
+import { printOrRun, msg, io, metamsg, debugmsg, errormsg, endTurnUI, msgHeading, clearScreen, SUCCESS, FAILED, sentenceCase, display, VERBOSE, LIGHT_none, LIGHT_MEAGRE, VISIBLE, REACHABLE, lang, settings, saveLoad, DEFAULT_ITEM, DEFAULT_ROOM, DEFAULT_OBJECT, initCommands } from './main.js'
+
 // This is where the world exist!
-const w = {} // // -fixme: don't be cheep while naming the central object, use a full word, autocomlete is smart enough to know what you mean anyways
+export const w = {}
 
 // @DOC
 // ## World Functions
@@ -11,37 +12,37 @@ const w = {} // // -fixme: don't be cheep while naming the central object, use a
 
 // @DOC
 // Use this to create a new item (as opposed to a room).
-// It adds various defaults that apply only to template.items.
+// It adds various defaults that apply only to items.
 // The first argument should be a string - a unique name for this object, composed only of letters, numbers and underscores.
 // It will than take any number of dictionaries that will be combined to set the properties.
 // Generally objects should not be created during play as they will not be saved properly.
 // Either keep the object hodden until required or clone existing objects.
-function createItem () {
+export function createItem () {
   const args = Array.prototype.slice.call(arguments)
   const name = args.shift()
-  args.unshift(util.DEFAULT_ITEM)
+  args.unshift(DEFAULT_ITEM)
   return createObject(name, args)
 }
 
 // @DOC
 // Use this to create a new room (as opposed to an item).
-// It adds various defaults that apply only to template.items
+// It adds various defaults that apply only to items
 // The first argument should be a string - a unique name for this object, composed only of letters, numbers and underscores.
 // It will than take any number of dictionaries that will be combined to set the properties.
 // Generally objects should not be created during play as they will not be saved properly.
 // Either keep the object hodden until required or clone existing objects.
-function createRoom () {
+export function createRoom () {
   const args = Array.prototype.slice.call(arguments)
   const name = args.shift()
-  args.unshift(util.DEFAULT_ROOM)
+  args.unshift(DEFAULT_ROOM)
   return createObject(name, args)
 }
 
 // @DOC
-// Use this to create new template.items during play. The given item will be cloned at the given location.
+// Use this to create new items during play. The given item will be cloned at the given location.
 // The `newName` isoptional, one will be generated if not supplied. If you do supply one bear inmid that
 // every clone must have a unique name.
-function cloneObject (item, loc, newName) {
+export function cloneObject (item, loc, newName) {
   if (item === undefined) { console.log('Item is not defined.') }
   const clone = {}
   for (const key in item) {
@@ -79,25 +80,25 @@ function cloneObject (item, loc, newName) {
 
 // @DOC
 // Creates a basic object. Generally it is better to use CreateItem or CreateRoom.
-function createObject (name, listOfHashes) {
+export function createObject (name, listOfHashes) {
   if (world.isCreated && !settings.saveDisabled) {
     console.log('Attempting to use createObject with `' + name + '` after set up. To ensure games save properly you should use cloneObject to create ites during play.')
-    io.errorio.msg('Attempting to use createObject with `' + name + '` after set up. To ensure games save properly you should use cloneObject to create ites during play.')
+    errormsg('Attempting to use createObject with `' + name + '` after set up. To ensure games save properly you should use cloneObject to create ites during play.')
     return null
   }
 
-  if (/\W/.util.test(name)) {
-    console.log('Attempting to use the disallowed name `' + name + "`; a name can only include letters and digits - no util.spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.")
-    io.errorio.msg('Attempting to use the disallowed name `' + name + "`; a name can only include letters and digits - no util.spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.")
+  if (/\W/.test(name)) {
+    console.log('Attempting to use the disallowed name `' + name + "`; a name can only include letters and digits - no spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.")
+    errormsg('Attempting to use the disallowed name `' + name + "`; a name can only include letters and digits - no spaces or accented characters. Use the 'alias' attribute to give an item a name with other characters.")
     return null
   }
   if (w[name]) {
-    console.log('Attempting to use the name `' + name + '` when there is lang.already an item with that name in the world.')
-    io.errorio.msg('Attempting to use the name `' + name + '` when there is lang.already an item with that name in the world.')
+    console.log('Attempting to use the name `' + name + '` when there is already an item with that name in the world.')
+    errormsg('Attempting to use the name `' + name + '` when there is already an item with that name in the world.')
     return null
   }
 
-  listOfHashes.unshift(util.DEFAULT_OBJECT)
+  listOfHashes.unshift(DEFAULT_OBJECT)
 
   const item = {
     name: name
@@ -111,7 +112,7 @@ function createObject (name, listOfHashes) {
 
   // Give every object an alias and list alias (used in the inventories)
   if (!item.alias) item.alias = item.name.replace(/_/g, ' ')
-  if (!item.listalias) item.listalias = util.sentenCecase(item.alias)
+  if (!item.listalias) item.listalias = sentenceCase(item.alias)
   if (!item.getListAlias) item.getListAlias = function (loc) { return this.listalias }
   if (!item.pluralAlias) item.pluralAlias = item.alias + 's'
   if (item.pluralAlias === '*') item.pluralAlias = item.alias
@@ -121,7 +122,7 @@ function createObject (name, listOfHashes) {
   return item
 }
 
-const world = {
+export const world = {
   isCreated: false,
   exits: [],
 
@@ -145,7 +146,7 @@ const world = {
       if (w[key].player) { player = w[key] }
     }
     if (!player) {
-      io.errorio.msg('No player object found. This is probably due to an error in data.js. Do [Ctrl][Shft]-I to open the developer tools, and go to the console tab, and look at the first error in the list (if it mentions jQuery, skip it and look at the second one). It should tell you exactly which line in which file. But also check one object is actually flagged as the player.')
+      errormsg('No player object found. This is probably due to an error in data.js. Do [Ctrl][Shft]-I to open the developer tools, and go to the console tab, and look at the first error in the list (if it mentions jQuery, skip it and look at the second one). It should tell you exactly which line in which file. But also check one object is actually flagged as the player.')
       return
     }
     game.update(player)
@@ -154,21 +155,21 @@ const world = {
     // This handles the player wanting to interact with things in room descriptions
     // that are not implemented by changing its regex when a room is entered.
     if (w.background === undefined) {
-      w.background = ('background', {
+      w.background = createItem('background', {
         scenery: true,
         examine: lang.default_description,
         background: true,
         name: 'default_background_object',
-        lightSource: function () { return util.LIGHT_none },
+        lightSource: function () { return LIGHT_none },
         isAtLoc: function (loc, situation) {
           if (typeof loc !== 'string') loc = loc.name
-          if (!w[loc]) io.errorio.msg('Unknown location: ' + loc)
-          return w[loc] && w[loc].room && situation === util.display.PARSER
+          if (!w[loc]) errormsg('Unknown location: ' + loc)
+          return w[loc] && w[loc].room && situation === display.PARSER
         }
       })
     }
     if (!w.background.background) {
-      io.errorio.msg("It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.")
+      errormsg("It looks like an item has been named 'background`, but is not set as the background item. If you intended to do this, ensure the background property is set to true.")
     }
 
     for (const key in w) {
@@ -177,12 +178,12 @@ const world = {
     this.isCreated = true
 
     // Go through each command
-    commands.initCommands()
+    initCommands()
 
     // Set up the UI
-    // io.endTurnUI();
-    io.msgHeading(settings.title, 2)
-    if (settings.subtitle) io.msgHeading(settings.subtitle, 3)
+    // endTurnUI();
+    msgHeading(settings.title, 2)
+    if (settings.subtitle) msgHeading(settings.subtitle, 3)
     io.setTitle(settings.title)
 
     game.ticker = setInterval(game.gameTimer, 1000)
@@ -190,10 +191,10 @@ const world = {
 
   // Every item or room should have this called for them.
   // That will be done at the start, but you need to do it yourself
-  // if creating template.items on the fly.
+  // if creating items on the fly.
   initItem: function (item) {
     if (item.loc && !w[item.loc]) {
-      io.errorio.msg('The item `' + item.name + '` is in an unknown location (' + item.loc + ')')
+      errormsg('The item `' + item.name + '` is in an unknown location (' + item.loc + ')')
     }
     for (const exit of lang.exit_list) {
       const ex = item[exit.name]
@@ -211,12 +212,12 @@ const world = {
     }
   },
 
-  // Call after the player takes a turn, sending it a result, util.SUCCESS, util.SUCCESS_NO_TURNSCRIPTS or util.FAILED
+  // Call after the player takes a turn, sending it a result, SUCCESS, SUCCESS_NO_TURNSCRIPTS or FAILED
   endTurn: function (result) {
-    // io.debugmsg("endTurn=" + result);
-    if (result === true) io.debugmsg("That command returned 'true', rather than the proper result code.")
-    if (result === false) io.debugmsg("That command returned 'false', rather than the proper result code.")
-    if (result === util.SUCCESS || (settings.failCountsAsTurn && result === util.FAILED)) {
+    // debugmsg("endTurn=" + result);
+    if (result === true) debugmsg("That command returned 'true', rather than the proper result code.")
+    if (result === false) debugmsg("That command returned 'false', rather than the proper result code.")
+    if (result === SUCCESS || (settings.failCountsAsTurn && result === FAILED)) {
       game.turnCount++
       game.elapsedTime += settings.dateTime.secondsPerTurn
       // events.runEvents();
@@ -226,9 +227,9 @@ const world = {
       world.resetPauses()
       game.update()
       game.saveGameState()
-      io.endTurnUI(true) // // -review: why would you handle this here?
+      endTurnUI(true)
     } else {
-      io.endTurnUI(false)
+      endTurnUI(false)
     }
   },
 
@@ -242,7 +243,7 @@ const world = {
 
   // Returns true if bad lighting is not obscuring the item
   ifNotDark: function (item) {
-    return (!game.dark || item.lightSource() > util.LIGHT_none)
+    return (!game.dark || item.lightSource() > LIGHT_none)
   },
 
   // scopeStatus is used to track what the player can see and reach; it is a lot faster than working
@@ -257,13 +258,13 @@ const world = {
     // start from the current room
     let room = w[game.player.loc]
     if (room === undefined) {
-      io.errorio.msg('Error in scopeSnapshot; the location assigned to the player does not exist.')
+      errormsg('Error in scopeSnapshot; the location assigned to the player does not exist.')
     }
-    room.scopeStatusForRoom = util.REACHABLE
+    room.scopeStatusForRoom = REACHABLE
     // crawl up the room hierarchy to the topmost visible
     while (room.loc && room.canReachThrough()) {
-      room = w[room.loc] // -fixme: you are trying to reassing a constant
-      room.scopeStatusForRoom = util.REACHABLE
+      room = w[room.loc]
+      room.scopeStatusForRoom = REACHABLE
     }
     // room is now the top level applicable, so now work downwards from here (recursively)
 
@@ -271,8 +272,8 @@ const world = {
 
     // Also want to go further upwards if room is transparent
     while (room.loc && room.canSeeThrough()) {
-      room = w[room.loc] // -fixme: you are trying to reassing a constant
-      room.scopeStatusForRoom = util.VISIBLE
+      room = w[room.loc]
+      room.scopeStatusForRoom = VISIBLE
     }
     // room is now the top level applicable
 
@@ -287,8 +288,8 @@ const world = {
   setRoom: function (char, roomName, dir) {
     if (char !== game.player) {
       if (dir) {
-        io.msg(lang.stop_posture(char))
-        io.msg(lang.npc_heading(char, dir))
+        msg(lang.stop_posture(char))
+        msg(lang.npc_heading(char, dir))
       }
       char.previousLoc = char.loc
       char.loc = roomName
@@ -301,11 +302,11 @@ const world = {
     }
     const room = w[roomName]
     if (room === undefined) {
-      io.errorio.msg('Failed to find room: ' + roomName + '.')
+      errormsg('Failed to find room: ' + roomName + '.')
       return false
     }
 
-    if (settings.clearScreenOnRoomEnter) util.clearScreen()
+    if (settings.clearScreenOnRoomEnter) clearScreen()
 
     game.room.onExit()
 
@@ -322,7 +323,7 @@ const world = {
   // Runs the script and gives the description
   enterRoom: function () {
     if (game.room.beforeEnter === undefined) {
-      io.errorio.msg('This room, ' + game.room.name + ", has no 'beforeEnter` function defined.  This is probably because it is not actually a room (it was not created with 'createRoom' and has not got the DEFAULT_ROOM template), but it an item. It is not clear what state the game will continue in.")
+      errormsg('This room, ' + game.room.name + ", has no 'beforeEnter` function defined.  This is probably because it is not actually a room (it was not created with 'createRoom' and has not got the DEFAULT_ROOM template), but it an item. It is not clear what state the game will continue in.")
       return
     }
     game.room.beforeEnter()
@@ -338,8 +339,8 @@ const world = {
     if (game.room.afterEnterIf) {
       for (const key in game.room.afterEnterIf) {
         if (game.room.afterEnterIfFlags.split(' ').includes(key)) continue
-        if (game.room.afterEnterIf[key].util.test()) {
-          game.room.afterEnterIf[key].action()
+        if (game.room.afterEnterIf[key].test()) {
+          game.room.afterEnterIf[key].action
           game.room.afterEnterIfFlags += ' ' + key
         }
       }
@@ -351,11 +352,11 @@ const world = {
   // It will set the regex of the ubiquitous background object
   // to any objects highlighted in the room description.
   setBackground: function () {
-    let md // -fixme is it MarkDown? or does this stand for a doctorate in medicine?
+    let md
     if (typeof game.room.desc === 'string') {
       if (!game.room.backgroundNames) {
         game.room.backgroundNames = []
-        while (md = world.BACK_REGEX.exec(game.room.desc)) { // yes it is an assignment! // -fixme yes this is garbage
+        while (md = world.BACK_REGEX.exec(game.room.desc)) { // yes it is an assignment!
           const arr = md[0].substring(1, md[0].length - 1).split(':')
           game.room.desc = game.room.desc.replace(md[0], arr[0])
           for (const el of arr) game.room.backgroundNames.push(el)
@@ -369,8 +370,8 @@ const world = {
 
 }
 
-const game = createObject('game', [{
-  verbosity: util.VERBOSE,
+export const game = createObject('game', [{
+  verbosity: VERBOSE,
   transcript: false,
   transcriptText: [],
   spoken: false,
@@ -390,7 +391,7 @@ const game = createObject('game', [{
   },
 
   begin: function () {
-    if (typeof settings.intro === 'string') io.msg(settings.intro)
+    if (typeof settings.intro === 'string') msg(settings.intro)
     if (typeof settings.setup === 'function') settings.setup()
     world.enterRoom()
   },
@@ -400,24 +401,24 @@ const game = createObject('game', [{
   // Sets the scoping snapshot
   // Sets the light/dark
   update: function (player) {
-    // io.debugmsg("update");
+    // debugmsg("update");
     if (player !== undefined) {
       this.player = player
     }
 
     if (!this.player) {
-      io.errorio.msg('No player object found. This will not go well...')
+      errormsg('No player object found. This will not go well...')
       return
     }
     if (!this.player.loc || !w[this.player.loc]) {
-      io.errorio.msg('No player location set or set to location that does no exist. This will not go well...')
-      io.errorio.msg("This is likely to be because of an error in one of the .js files. Press F12, and go to the 'Console' tab (if not lang.already open), to see the error. Look at the vey first error (but ignore any that mentions 'jquery'). It should tell you the file and line number that is causing the problem.")
+      errormsg('No player location set or set to location that does no exist. This will not go well...')
+      errormsg("This is likely to be because of an error in one of the .js files. Press F12, and go to the 'Console' tab (if not already open), to see the error. Look at the vey first error (but ignore any that mentions 'jquery'). It should tell you the file and line number that is causing the problem.")
     }
     this.room = w[this.player.loc]
-    // io.debugmsg("About to take snapshot");
+    // debugmsg("About to take snapshot");
     world.scopeSnapshot()
 
-    let light = util.LIGHT_none
+    let light = LIGHT_none
     for (const key in w) {
       if (w[key].scopeStatus) {
         if (light < w[key].lightSource()) {
@@ -425,8 +426,8 @@ const game = createObject('game', [{
         }
       }
     }
-    this.dark = (light < util.LIGHT_MEAGRE)
-    // io.endTurnUI();
+    this.dark = (light < LIGHT_MEAGRE)
+    // endTurnUI();
     // io.updateUIItems();
   },
 
@@ -441,10 +442,10 @@ const game = createObject('game', [{
   // TRANSCRIPT SUPPORT
   scriptStart: function () {
     this.transcript = true
-    io.metamsg('Transcript is now on.')
+    metamsg('Transcript is now on.')
   },
   scriptEnd: function () {
-    io.metamsg('Transcript is now off.')
+    metamsg('Transcript is now off.')
     this.transcript = false
   },
   scriptShow: function (opts) {
@@ -466,7 +467,7 @@ const game = createObject('game', [{
   },
   scriptClear: function () {
     this.transcriptText = []
-    io.metamsg('Transcript cleared.')
+    metamsg('Transcript cleared.')
   },
   scriptAppend: function (s) {
     this.transcriptText.push(s)
@@ -493,7 +494,7 @@ const game = createObject('game', [{
             delete el.triggerTime
           }
         } else {
-          io.errorio.msg("A timer is trying to call event '" + el.eventName + "' but no such function is registered.")
+          errormsg("A timer is trying to call event '" + el.eventName + "' but no such function is registered.")
           // console.log(game.eventFunctions);
         }
       }
@@ -521,26 +522,26 @@ const game = createObject('game', [{
 
 }])
 
-function Exit (name, hash) {
+export function Exit (name, hash) {
   if (!hash) hash = {}
   this.name = name
   this.use = function (char, dir) {
-    if (char.util.testMobility && !char.util.testMobility()) {
+    if (char.testMobility && !char.testMobility()) {
       return false
     }
     if (this.isLocked()) {
-      if (this.lockedio.msg) {
-        io.msg(this.lockedio.msg)
+      if (this.lockedmsg) {
+        msg(this.lockedmsg)
       } else {
-        io.msg(lang.locked_exit(char, this))
+        msg(lang.locked_exit(char, this))
       }
       return false
     } else {
-      io.msg(lang.stop_posture(char))
-      if (this.io.msg) {
-        io.printOrRun(char, this, 'io.msg')
+      msg(lang.stop_posture(char))
+      if (this.msg) {
+        printOrRun(char, this, 'msg')
       } else {
-        io.msg(lang.npc_heading(char, dir))
+        msg(lang.npc_heading(char, dir))
       }
       world.setRoom(char, this.name, false)
       return true
@@ -552,10 +553,4 @@ function Exit (name, hash) {
   for (const key in hash) {
     this[key] = hash[key]
   }
-}
-export {
-  createItem,
-  createRoom,
-  cloneObject,
-  world
 }

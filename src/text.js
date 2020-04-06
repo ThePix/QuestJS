@@ -1,5 +1,6 @@
 'use strict'
-import { util, io, w, game, lang } from './util'
+import { io, errormsg, INDEFINITE, sentenceCase, display, TERSE, VERBOSE, formatList, displayMoney, scopeHereListed, DEFINITE, COLOURS, randomFromArray, util, game, w, lang } from './main.js'
+
 // @DOC
 // ## The Text Processor Function
 // @UNDOC
@@ -7,12 +8,12 @@ import { util, io, w, game, lang } from './util'
 // @DOC
 // Returns a string in which all the text processor directives have been resolved, using the optionasl parameters.
 // More details [here(https://github.com/ThePix/QuestJS/wiki/The-Text-Processor).
-function processText (str, params) {
+export function processText (str, params) {
   if (params === undefined) {
     params = {}
   }
   if (typeof str !== 'string') {
-    str = '' + str // -fixme: what is this?
+    str = '' + str
   }
   params.tpOriginalString = str
   if (tp.usedStrings.includes(str)) {
@@ -25,13 +26,13 @@ function processText (str, params) {
   // try {
   return tp.processText(str, params)
   // } catch (err) {
-  //  io.errorio.msg("Text processor string caused an error, returning unmodified (reported error: " + err + ")");
+  //  errormsg("Text processor string caused an error, returning unmodified (reported error: " + err + ")");
   //  return str;
   // }
 }
 
 // Most of the text processors are set up in text.js; these are the language specific ones.
-const tp = {
+export const tp = {
   text_processors: {}
 }
 
@@ -45,8 +46,6 @@ tp.addDirective = function (name, fn) {
   tp.text_processors[name] = fn
 }
 
-// -fixme: all of this is an absolute mess with dysecting strings only to reassemble them agiain
-// -review: simple way to fix this: DONT REQUEST RANDOM STRINGS AS INPUT, request proper input
 tp.processText = function (str, params) {
   const s = tp.findFirstToken(str)
   if (s) {
@@ -63,7 +62,7 @@ tp.processText = function (str, params) {
         arr = left.split('.')
         left = 'show'
       } else {
-        io.errorio.msg("Attempting to use unknown text processor directive '" + left + "' (<i>" + params.tpOriginalString + '</i>)')
+        errormsg("Attempting to use unknown text processor directive '" + left + "' (<i>" + params.tpOriginalString + '</i>)')
         return str
       }
     }
@@ -75,41 +74,17 @@ tp.processText = function (str, params) {
 
 // Find the first token. This is the first to end, so
 // we get nested.
-// -fixme: what is this useless garbage?
 tp.findFirstToken = function (s) {
   const end = s.indexOf('}')
   if (end === -1) { return false }
   const start = s.lastIndexOf('{', end)
   if (start === -1) {
-    io.errorio.msg('Failed to find starting curly brace in text processor (<i>' + s + '</i>)')
+    errormsg('Failed to find starting curly brace in text processor (<i>' + s + '</i>)')
     return false
   }
   return s.substring(start + 1, end)
 }
 
-// -fixme: this is a mess, you are creating 11 functions that are doing the exact same thing but still use a different name
-// -fixme: instead proccessText() calls:
-// function text_processors (arr, param, targetFormat) { // -review I dont get why this needs to be a seperate function from processTest anyways...
-//  const format = someObjectListingFormats.format
-//  if (format) {
-//    return arr.concat(format[0], param.join('[Insert unnessecary token here]'), format[1])
-//  } else {
-//    throw someErrror
-//  }
-// }
-// var someObjectListingFormats = {
-//  i: ['<i>', '</i>'],
-//  b: ['<b>', '</b>'],
-//  u: ['<u>', '</u>'],
-//  s: ['<strike>', '</strike>'],
-//  sup: ['<sup>', '</sup>'],
-//  sub: ['<sub>', '</sub>'],
-//  huge: ['<span style"font-size:2em">', '</span>'],
-//  big: ['<span style"font-size:1.5em">', '</span>'],
-//  small: ['<span style"font-size:0.8em">', '</span>'],
-//  tiny: ['<span style"font-size:0.6em">', '</span>'],
-//  smallcaps: ['<span style"font-variant:small-caps">', '</span>']
-// }
 tp.text_processors.i = function (arr, params) { return '<i>' + arr.join(':') + '</i>' }
 tp.text_processors.b = function (arr, params) { return '<b>' + arr.join(':') + '</b>' }
 tp.text_processors.u = function (arr, params) { return '<u>' + arr.join(':') + '</u>' }
@@ -124,10 +99,10 @@ tp.text_processors.smallcaps = function (arr, params) { return '<span style="fon
 
 tp.text_processors.rainbow = function (arr, params) {
   const s = arr.pop()
-  const colours = arr.length === 0 ? util.COLOURS : arr
+  const colours = arr.length === 0 ? COLOURS : arr
   let result = ''
   for (let i = 0; i < s.length; i++) {
-    result += '<span style="color:' + util.randomFromArray(colours) + '">' + s.charAt(i) + '</span>'
+    result += '<span style="color:' + randomFromArray(colours) + '">' + s.charAt(i) + '</span>'
   }
   return result
 }
@@ -155,10 +130,10 @@ tp.text_processors.encode = function (arr, params) {
 
 tp.text_processors.rainbow = function (arr, params) {
   const s = arr.pop()
-  const colours = arr.length === 0 ? util.COLOURS : arr
+  const colours = arr.length === 0 ? COLOURS : arr
   let result = ''
   for (let i = 0; i < s.length; i++) {
-    result += '<span style="color:' + util.randomFromArray(colours) + '">' + s.charAt(i) + '</span>'
+    result += '<span style="color:' + randomFromArray(colours) + '">' + s.charAt(i) + '</span>'
   }
   return result
 }
@@ -194,7 +169,7 @@ tp.text_processors.show = function (arr, params) {
   let name = arr.shift()
   const obj = tp._findObject(name, params)
   if (!obj) {
-    io.errorio.msg("Failed to find object '" + name + "' in text processor 'show' (<i>" + params.tpOriginalString + '</i>)')
+    errormsg("Failed to find object '" + name + "' in text processor 'show' (<i>" + params.tpOriginalString + '</i>)')
     return false
   }
   name = arr.shift()
@@ -211,28 +186,28 @@ tp.text_processors.money = function (arr, params) {
   if (!name.match(/^\d+$/)) {
     const obj = tp._findObject(name, params)
     if (!obj) {
-      io.errorio.msg("Failed to find object '" + name + "' in text processor 'money' (<i>" + params.tpOriginalString + '</i>)')
+      errormsg("Failed to find object '" + name + "' in text processor 'money' (<i>" + params.tpOriginalString + '</i>)')
       return false
     }
     if (obj.loc === game.player.name && obj.getSellingPrice) {
-      return util.displayMoney(obj.getSellingPrice(game.player))
+      return displayMoney(obj.getSellingPrice(game.player))
     }
     if (obj.loc === game.player.name && obj.getBuyingPrice) {
-      return util.util.displayMoney(obj.getBuyingPrice(game.player))
+      return displayMoney(obj.getBuyingPrice(game.player))
     }
     if (obj.getPrice) {
-      return util.util.displayMoney(obj.getPrice())
+      return displayMoney(obj.getPrice())
     }
     if (obj.price) {
-      return util.util.displayMoney(obj.price)
+      return displayMoney(obj.price)
     }
     if (obj.money) {
-      return util.util.displayMoney(obj.money)
+      return displayMoney(obj.money)
     }
-    io.errorio.msg("Failed to find a price for object '" + name + "' in text processor (<i>" + params.tpOriginalString + '</i>)')
+    errormsg("Failed to find a price for object '" + name + "' in text processor (<i>" + params.tpOriginalString + '</i>)')
     return false
   }
-  return util.util.displayMoney(parseInt(name))
+  return displayMoney(parseInt(name))
 }
 tp.text_processors.$ = tp.text_processors.money
 
@@ -264,7 +239,7 @@ tp.text_processors.handleIf = function (arr, params, reverse) {
   let name = arr.shift(); let flag
   const obj = tp._findObject(name, params)
   if (!obj) {
-    io.errorio.msg("Failed to find object '" + name + "' in text processor 'if' (<i>" + params.tpOriginalString + '</i>)')
+    errormsg("Failed to find object '" + name + "' in text processor 'if' (<i>" + params.tpOriginalString + '</i>)')
     return false
   }
   name = arr.shift()
@@ -275,7 +250,7 @@ tp.text_processors.handleIf = function (arr, params, reverse) {
     let value = arr.shift()
     if (typeof obj[name] === 'number') {
       if (isNaN(value)) {
-        io.errorio.msg("Trying to compare a numeric attribute, '" + name + "' with a string.")
+        errormsg("Trying to compare a numeric attribute, '" + name + "' with a string.")
         return false
       }
       value = parseInt(value)
@@ -290,33 +265,34 @@ tp.text_processors.handleIfHere = function (arr, params, reverse) {
   const name = arr.shift()
   const obj = tp._findObject(name, params)
   if (!obj) {
-    io.errorio.msg("Failed to find object '" + name + "' in text processor 'ifHere' (<i>" + params.tpOriginalString + '</i>)')
+    errormsg("Failed to find object '" + name + "' in text processor 'ifHere' (<i>" + params.tpOriginalString + '</i>)')
     return false
   }
-  let flag = obj.isAtLoc(game.player.loc, util.display.ALL)
+  let flag = obj.isAtLoc(game.player.loc, display.ALL)
   if (reverse) flag = !flag
   return (flag ? arr[0] : (arr[1] ? arr[1] : ''))
 }
 
 tp.text_processors.handleIfLessMoreThan = function (arr, params, moreThan) {
   let name = arr.shift()
+  let flag = {}
   const obj = tp._findObject(name, params)
   if (!obj) {
-    io.errorio.msg("Failed to find object '" + name + "' in text processor 'ifLessMoreThan' (<i>" + params.tpOriginalString + '</i>)')
+    errormsg("Failed to find object '" + name + "' in text processor 'ifLessMoreThan' (<i>" + params.tpOriginalString + '</i>)')
     return false
   }
   name = arr.shift()
   if (typeof obj[name] !== 'number') {
-    io.errorio.msg("Trying to use ifLessThan with a non-numeric (or nonexistent) attribute, '" + name + "'.")
+    errormsg("Trying to use ifLessThan with a non-numeric (or nonexistent) attribute, '" + name + "'.")
     return false
   }
   let value = arr.shift()
   if (isNaN(value)) {
-    io.errorio.msg("Trying to compare a numeric attribute, '" + name + "' with a string.")
+    errormsg("Trying to compare a numeric attribute, '" + name + "' with a string.")
     return false
   }
   value = parseInt(value)
-  const flag = moreThan ? (obj[name] > value) : (obj[name] < value) // -fixme: "flag" is static, use const
+  flag = moreThan ? (obj[name] > value) : (obj[name] < value)
   return (flag ? arr[0] : (arr[1] ? arr[1] : ''))
 }
 
@@ -351,7 +327,7 @@ tp.text_processors.command = function (arr, params) {
 tp.text_processors.param = function (arr, params) {
   const x = params[arr[0]]
   if (x === undefined) {
-    // io.errorio.msg("In text processor param, could not find a value with the key '" + arr[0] + "'. Check the console (F12) to see what params is. [" + params.tpOriginalString + "]");
+    // errormsg("In text processor param, could not find a value with the key '" + arr[0] + "'. Check the console (F12) to see what params is. [" + params.tpOriginalString + "]");
     console.log('params:')
     console.log(params)
     return false
@@ -369,15 +345,15 @@ tp.text_processors.param = function (arr, params) {
 }
 
 tp.text_processors.terse = function (arr, params) {
-  if ((game.verbosity === util.TERSE && game.room.visited === 0) || game.verbosity === util.VERBOSE) {
-    return util.sentenCecase(arr.join(':'))
+  if ((game.verbosity === TERSE && game.room.visited === 0) || game.verbosity === VERBOSE) {
+    return sentenceCase(arr.join(':'))
   } else {
     return ''
   }
 }
 
 tp.text_processors.cap = function (arr, params) {
-  return util.sentenCecase(arr.join(':'))
+  return sentenceCase(arr.join(':'))
 }
 
 tp.text_processors.hereDesc = function (arr, params) {
@@ -389,11 +365,11 @@ tp.text_processors.hereDesc = function (arr, params) {
 
 tp.text_processors.hereName = function (arr, params) {
   const room = w[game.player.loc]
-  return room.byname({ article: util.DEFINITE })
+  return room.byname({ article: DEFINITE })
 }
 
 tp.text_processors.objectsHere = function (arr, params) {
-  const listOfOjects = util.scopeHereListed()
+  const listOfOjects = scopeHereListed()
   return listOfOjects.length === 0 ? '' : arr.join(':')
 }
 
@@ -403,13 +379,13 @@ tp.text_processors.exitsHere = function (arr, params) {
 }
 
 tp.text_processors.objects = function (arr, params) {
-  const listOfOjects = util.scopeHereListed()
-  return util.formatList(listOfOjects, { article: util.INDEFINITE, lastJoiner: lang.list_and, modified: true, nothing: lang.list_nothing, loc: game.player.loc })
+  const listOfOjects = scopeHereListed()
+  return formatList(listOfOjects, { article: INDEFINITE, lastJoiner: lang.list_and, modified: true, nothing: lang.list_nothing, loc: game.player.loc })
 }
 
 tp.text_processors.exits = function (arr, params) {
   const list = util.exitList()
-  return util.formatList(list, { lastJoiner: lang.list_or, nothing: lang.list_nowhere })
+  return formatList(list, { lastJoiner: lang.list_or, nothing: lang.list_nowhere })
 }
 
 // Then {nv:char:try} to get
@@ -420,7 +396,7 @@ tp.findSubject = function (arr, params) {
     subject = params[arr[0]]
     if (typeof subject === 'string') subject = w[subject]
     if (subject === undefined) {
-      io.errorio.msg("In text processor findSubject, could not find a subject with '" + arr[0] + "'. Check the console (F12) to see what params is. [" + params.tpOriginalString + ']')
+      errormsg("In text processor findSubject, could not find a subject with '" + arr[0] + "'. Check the console (F12) to see what params is. [" + params.tpOriginalString + ']')
       console.log('params:')
       console.log(params)
       console.fdjkh.fkgh.fdkyh = 3
@@ -429,7 +405,7 @@ tp.findSubject = function (arr, params) {
   } else {
     subject = w[arr[0]]
     if (subject === undefined) {
-      io.errorio.msg("In text processor findSubject, could not find a key called '" + arr[0] + "'. [" + params.tpOriginalString + ']')
+      errormsg("In text processor findSubject, could not find a key called '" + arr[0] + "'. [" + params.tpOriginalString + ']')
       console.log(arr[0])
       console.log('params:')
       console.log(params)
@@ -444,18 +420,18 @@ tp.text_processors.nm = function (arr, params) {
   const subject = tp.findSubject(arr, params)
   if (!subject) return false
   const opt = {}
-  if (arr[1] === 'the') opt.article = util.DEFINITE
-  if (arr[1] === 'a') opt.article = util.INDEFINITE
-  return arr[2] === 'true' ? util.sentenCecase(subject.byname(opt)) : subject.byname(opt)
+  if (arr[1] === 'the') opt.article = DEFINITE
+  if (arr[1] === 'a') opt.article = INDEFINITE
+  return arr[2] === 'true' ? sentenceCase(subject.byname(opt)) : subject.byname(opt)
 }
 
 tp.text_processors.nms = function (arr, params) {
   const subject = tp.findSubject(arr, params)
   if (!subject) return false
   const opt = { possessive: true }
-  if (arr[1] === 'the') opt.article = util.DEFINITE
-  if (arr[1] === 'a') opt.article = util.INDEFINITE
-  return arr[2] === 'true' ? util.sentenCecase(subject.byname(opt)) : subject.byname(opt)
+  if (arr[1] === 'the') opt.article = DEFINITE
+  if (arr[1] === 'a') opt.article = INDEFINITE
+  return arr[2] === 'true' ? sentenceCase(subject.byname(opt)) : subject.byname(opt)
 }
 
 // {name:subject:verb:capitalise}
@@ -487,7 +463,7 @@ tp.text_processors.vp = function (arr, params) {
 tp.text_processors.cj = function (arr, params) {
   const subject = tp.findSubject(arr, params)
   if (!subject) return false
-  return arr[2] === 'true' ? util.sentenCecase(lang.conjugate(subject, arr[1])) : lang.conjugate(subject, arr[1])
+  return arr[2] === 'true' ? sentenceCase(lang.conjugate(subject, arr[1])) : lang.conjugate(subject, arr[1])
 }
 
 // {name:subject:article:capitalise}
@@ -495,7 +471,7 @@ tp.text_processors.cj = function (arr, params) {
 tp.handlePronouns = function (arr, params, pronoun) {
   const subject = tp.findSubject(arr, params)
   if (!subject) return false
-  return arr[2] === 'true' ? util.sentenCecase(subject.pronouns[pronoun]) : subject.pronouns[pronoun]
+  return arr[2] === 'true' ? sentenceCase(subject.pronouns[pronoun]) : subject.pronouns[pronoun]
 }
 
 tp.text_processors.pa = function (arr, params) {
@@ -525,11 +501,11 @@ tp.text_processors.pa2 = function (arr, params) {
   if (!chr2) return false
 
   if (chr1.pronouns === chr2.pronouns) {
-    const opt = { article: util.DEFINITE, possessive: true }
-    return arr[1] === 'true' ? util.sentenCecase(chr1.byname(opt)) : chr1.byname(opt)
+    const opt = { article: DEFINITE, possessive: true }
+    return arr[1] === 'true' ? sentenceCase(chr1.byname(opt)) : chr1.byname(opt)
   }
 
-  return arr[1] === 'true' ? util.sentenCecase(chr1.pronouns.poss_adj) : chr1.pronouns.poss_adj
+  return arr[1] === 'true' ? sentenceCase(chr1.pronouns.poss_adj) : chr1.pronouns.poss_adj
 }
 
 // {pa3:chr1:chr2}
@@ -541,13 +517,9 @@ tp.text_processors.pa3 = function (arr, params) {
   if (!chr2) return false
 
   if (chr1 !== chr2) {
-    const opt = { article: util.DEFINITE, possessive: true }
-    return arr[1] === 'true' ? util.sentenCecase(chr1.byname(opt)) : chr1.byname(opt)
+    const opt = { article: DEFINITE, possessive: true }
+    return arr[1] === 'true' ? sentenceCase(chr1.byname(opt)) : chr1.byname(opt)
   }
 
-  return arr[1] === 'true' ? util.sentenCecase(chr1.pronouns.poss_adj) : chr1.pronouns.poss_adj
-}
-export const text = {
-  processText,
-  tp
+  return arr[1] === 'true' ? sentenceCase(chr1.pronouns.poss_adj) : chr1.pronouns.poss_adj
 }

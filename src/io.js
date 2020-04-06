@@ -1,17 +1,18 @@
 // ============  Output  =======================================
 
 'use strict'
-import { util, settings, game, text, parser, lang, w, commands } from './util'
+import { prefix, FAILED, sentenceCase, display, DEFINITE, test, randomInt, parser, game, w, lang, settings, processText, commands } from './main.js'
+import postscribe from 'postscribe'
 // @DOC
 // ##Output functions
 //
-// The idea is that you can have them util.display differently - or not at all -
-// so error messages can be util.displayed in red, meta-data (help., etc)
+// The idea is that you can have them display differently - or not at all -
+// so error messages can be displayed in red, meta-data (help., etc)
 // is grey, and debug messages can be turned on and off as required.
 //
 // Note that not all use the text processor (so if there is an issue with
 // the text processor, we can use the others to report it). Also unit tests
-// capture output with msg and io.errormsg, but not debugmsg or headings.
+// capture output with msg and errormsg, but not debugmsg or headings.
 //
 // Should all be language neutral
 // @UNDOC
@@ -21,27 +22,22 @@ import { util, settings, game, text, parser, lang, w, commands } from './util'
 // The string will first be passed through the text processor.
 // Additional data can be put in the optional params dictionary.
 // You can specify a CSS class to use.
-// During unit util.testing, messages will be saved and util.tested
-
-// -fixme: ALL OUTPUTFUNCTIONS ARE HARDCODED
-// -fixme: zero flexibity on the side of a game creator
-// -fixme: properly expose API and dont call it directly from the source code
-
-function msg (s, params, cssClass) {
+// During unit testing, messages will be saved and tested
+export function msg (s, params, cssClass) {
   if (cssClass === undefined) cssClass = 'defaultP'
-  const processed = text.processText(s, params).trim()
+  const processed = processText(s, params).trim()
   if (processed === '') return
 
-  if (util.test.util.testing) {
-    util.test.util.testOutput.push(processed)
+  if (test.testing) {
+    test.testOutput.push(processed)
     return
   }
   const lines = processed.split('|')
   for (let line of lines) {
-    const tag = (/^#/.util.test(line) ? 'h4' : 'p')
+    const tag = (/^#/.test(line) ? 'h4' : 'p')
     line = line.replace(/^#/, '')
     if (settings.typewriter) {
-      //     typeWriter.write(tag, line)
+      typeWriter.write(tag, line)
     } else {
       io.addToOutputQueue('<' + tag + ' @@@@ class="' + cssClass + '">' + line + '</' + tag + '>')
     }
@@ -50,17 +46,17 @@ function msg (s, params, cssClass) {
   }
 }
 
-function msgUnscramble (s, params, cssClass) {
+export function msgUnscramble (s, params, cssClass) {
   if (cssClass === undefined) cssClass = 'defaultP'
-  const processed = text.processText(s, params).trim()
+  const processed = processText(s, params).trim()
   if (processed === '') return
 
-  if (util.test.util.testing) {
+  if (test.testing) {
     return
   }
   const lines = processed.split('|')
   for (let i = 0; i < lines.length; i++) {
-    text.unscrambler.write('p', lines[i])
+    unscrambler.write('p', lines[i])
     if (game.spoken) io.speak(lines[i])
     if (game.transcript) game.scriptAppend('-' + lines[i])
   }
@@ -69,11 +65,11 @@ function msgUnscramble (s, params, cssClass) {
 // @DOC
 // As `msg`, but handles an array of strings. Each string is put in its own HTML paragraph,
 // and the set is put in an HTML division (DIV). The cssClass is applied to the division.
-function msgDiv (arr, params, cssClass) {
-  if (util.test.util.testing) return
+export function msgDiv (arr, params, cssClass) {
+  if (test.testing) return
   let s = '<div class="' + cssClass + '" @@@@>\n'
   for (const item of arr) {
-    const processed = text.processText(item, params).trim()
+    const processed = processText(item, params).trim()
     if (processed === '') continue
     s += '  <p>' + processed + '</p>\n'
     if (game.spoken) io.speak(processed)
@@ -85,11 +81,11 @@ function msgDiv (arr, params, cssClass) {
 // @DOC
 // As `msg`, but handles an array of strings in a list. Each string is put in its own HTML list item (LI),
 // and the set is put in an HTML order list (OL) or unordered list (UL), depending on the value of `ordered`.
-function msgList (arr, ordered, params) {
-  if (util.test.util.testing) return
+export function msgList (arr, ordered, params) {
+  if (test.testing) return
   let s = ordered ? '<ol>\n' : '<ul @@@@>\n'
   for (const item of arr) {
-    const processed = text.processText(item, params).trim()
+    const processed = processText(item, params).trim()
     if (processed === '') continue
     s += '  <li>' + processed + '</li>\n'
     if (game.spoken) io.speak(processed)
@@ -101,13 +97,13 @@ function msgList (arr, ordered, params) {
 // @DOC
 // As `msg`, but handles an array of arrays of strings in a list. This is laid out in an HTML table.
 // If `headings` is present, this array of strings is used as the column headings.
-function msgTable (arr, headings, params) {
-  if (util.test.util.testing) return
+export function msgTable (arr, headings, params) {
+  if (test.testing) return
   let s = '<table @@@@>\n'
   if (headings) {
     s += '  <tr>\n'
     for (const item of headings) {
-      const processed = text.processText(item, params).trim()
+      const processed = processText(item, params).trim()
       s += '    <th>' + processed + '</th>\n'
       if (game.spoken) io.speak(processed)
       if (game.transcript) game.scriptAppend('|' + processed)
@@ -117,7 +113,7 @@ function msgTable (arr, headings, params) {
   for (const row of arr) {
     s += '  <tr>\n'
     for (const item of row) {
-      const processed = text.processText(item, params).trim()
+      const processed = processText(item, params).trim()
       s += '    <td>' + processed + '</td>\n'
       if (game.spoken) io.speak(processed)
       if (game.transcript) game.scriptAppend('|' + processed)
@@ -130,12 +126,12 @@ function msgTable (arr, headings, params) {
 // @DOC
 // As `msg`, but the string is presented as an HTML heading (H1 to H6).
 // The level of the heading is determined by `level`, with 1 being the top, and 6 the bottom.
-// Headings are ignored during unit util.testing.
-function msgHeading (s, level, params) {
-  const processed = text.processText(s, params)
-  if (!util.test.util.testing) {
+// Headings are ignored during unit testing.
+export function msgHeading (s, level, params) {
+  const processed = processText(s, params)
+  if (!test.testing) {
     if (settings.typewriter) {
-      //     typeWriter.write('h' + level, processed)
+      typeWriter.write('h' + level, processed)
     } else {
       io.addToOutputQueue('<h' + level + ' @@@@">' + processed + '</h' + level + '>\n')
     }
@@ -150,7 +146,7 @@ function msgHeading (s, level, params) {
 // If height is omitted, the height will be proportional to the given width.
 // The file name should include the path. For a local image, that would probably be the images folder,
 // but it could be the web address of an image hosted elsewhere.
-function picture (filename, width, height) {
+export function picture (filename, width, height) {
   let s = '<img src="' + filename + '"'
   if (width) s += ' width="' + width + '"'
   if (height) s += ' height="' + height + '"'
@@ -160,18 +156,18 @@ function picture (filename, width, height) {
 
 // @DOC
 // Just the same as msg, but adds the "failed" CSS class. This allows failed command responses to be differentiated.
-// Returns the value util.FAILED, allowing commands to give a message and give up
+// Returns the value FAILED, allowing commands to give a message and give up
 //     if (notAllowed) return failedmsg("That is not allowed.")
-function failedmsg (s, params) {
+export function failedmsg (s, params) {
   msg(s, params, 'failed')
-  return util.FAILED
+  return FAILED
 }
 
 // @DOC
 // Just the same as msg, but adds the "failed" CSS class. This allows failed command responses to be differentiated.
 // Returns the value false, allowing commands to give a message and give up
 //     if (notAllowed) return falsemsg("That is not allowed.")
-function falsemsg (s, params) {
+export function falsemsg (s, params) {
   msg(s, params, 'failed')
   return false
 }
@@ -181,11 +177,11 @@ function falsemsg (s, params) {
 // such as hints and help messages.
 // The string will first be passed through the text processor.
 // Additional data can be put in the optional params dictionary.
-// During unit util.testing, messages will be saved and util.tested
-function metamsg (s, params) {
-  const processed = text.processText(s, params)
-  if (util.test.util.testing) {
-    util.test.util.testOutput.push(processed)
+// During unit testing, messages will be saved and tested
+export function metamsg (s, params) {
+  const processed = processText(s, params)
+  if (test.testing) {
+    test.testOutput.push(processed)
     return
   }
   io.addToOutputQueue('<p @@@@ class="meta">' + processed + '</p>')
@@ -198,11 +194,11 @@ function metamsg (s, params) {
 // Use for when something has gone wrong, but not when the player types something odd -
 // if you see this during play, there is a bug in your game (or my code!), it is not the player
 // to blame.
-// During unit util.testing, error messages will be saved and util.tested.
+// During unit testing, error messages will be saved and tested.
 // Does not use the text processor (as it could be an error in there!).
-function errormsg (s) {
-  if (util.test.util.testing) {
-    util.test.util.testOutput.push(s)
+export function errormsg (s) {
+  if (test.testing) {
+    test.testOutput.push(s)
     return
   }
   io.addToOutputQueue('<p @@@@ class="error">' + s + '</p>')
@@ -213,11 +209,11 @@ function errormsg (s) {
 
 // @DOC
 // Output a message from the parser indicating the input text could not be parsed.
-// During unit util.testing, messages will be saved and util.tested.
+// During unit testing, messages will be saved and tested.
 // Does not use the text processor.
-function parsermsg (s) {
-  if (util.test.util.testing) {
-    util.test.util.testOutput.push(s)
+export function parsermsg (s) {
+  if (test.testing) {
+    test.testOutput.push(s)
     return
   }
   io.addToOutputQueue('<p @@@@ class="parser">' + s + '</p>')
@@ -229,12 +225,12 @@ function parsermsg (s) {
 // @DOC
 // Output a debug message.
 // Debug messages are ignored if DEBUG is false
-// and are printed normally during unit util.testing.
+// and are printed normally during unit testing.
 // You should also consider using `console.log` when debugging; it gives a message in the console,
 // and outputs objects and array far better.
 // Does not use the text processor.
 // Does not get spoken allowed.
-function debugmsg (s) {
+export function debugmsg (s) {
   if (settings.debug) {
     io.addToOutputQueue('<p @@@@ class="debug">' + s + '</p>')
     if (game.transcript) game.scriptAppend('D' + s)
@@ -245,8 +241,8 @@ function debugmsg (s) {
 // If the given attribute is a string it is printed, if it is a
 // function it is called. Otherwise an error is generated.
 // It isMultiple is true, the object name is prefixed.
-// TODO: util.test array with function
-function printOrRun (char, item, attname, options) {
+// TODO: test array with function
+export function printOrRun (char, item, attname, options) {
   if (options === undefined) options = {}
   let flag, i
   if (Array.isArray(item[attname])) {
@@ -262,7 +258,7 @@ function printOrRun (char, item, attname, options) {
     // The value is an array
     flag = true
     for (i = 0; i < attname.length; i++) {
-      flag = io.printOrRun(char, item, attname[i], options) && flag
+      flag = printOrRun(char, item, attname[i], options) && flag
     }
     return flag
   } else if (!item[attname]) {
@@ -275,21 +271,21 @@ function printOrRun (char, item, attname, options) {
     }
   } else if (typeof item[attname] === 'string') {
     // The attribute is a string
-    msg(util.prefix(item, options.multi) + item[attname], { char: char, item: item })
+    msg(prefix(item, options.multi) + item[attname], { char: char, item: item })
     return true
   } else if (typeof item[attname] === 'function') {
     // The attribute is a function
     const res = item[attname](options.multi, char, options)
     return res
   } else {
-    io.errormsg('Unsupported type for io.printOrRun')
+    errormsg('Unsupported type for printOrRun')
     return false
   }
 }
 
 // @DOC
 // Clears the screen.
-function clearScreen () {
+export function clearScreen () {
   for (let i = 0; i < io.nextid; i++) {
     $('#n' + i).remove()
   }
@@ -297,8 +293,8 @@ function clearScreen () {
 
 // @DOC
 // Stops outputting whilst waiting for the player to click.
-function wait (delay) {
-  if (util.test.util.testing) return
+export function wait (delay) {
+  if (test.testing) return
   if (delay === undefined) {
     io.outputQueue.push({ action: 'wait', disable: true })
   } else {
@@ -306,7 +302,7 @@ function wait (delay) {
   }
 }
 
-function askQuestion (title, fn) {
+export function askQuestion (title, fn) {
   msg(title)
   parser.override = fn
 }
@@ -316,25 +312,25 @@ function askQuestion (title, fn) {
 //      showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
 //        msg("You picked " + result + ".");
 //      });
-function showMenu (title, options, fn) {
+export function showMenu (title, options, fn) {
   io.input(title, options, fn, function (options) {
     for (let i = 0; i < options.length; i++) {
       let s = '<a class="menuoption" onclick="io.menuResponse(' + i + ')">'
-      s += (options[i].byname ? util.sentenCecase(options[i].byname({ article: util.DEFINITE })) : options[i])
+      s += (options[i].byname ? sentenceCase(options[i].byname({ article: DEFINITE })) : options[i])
       s += '</a>'
       msg(s)
     }
   })
 }
 
-function showDropDown (title, options, fn) {
+export function showDropDown (title, options, fn) {
   io.input(title, options, fn, function (options) {
     let s = '<select id="menu-select" class="custom-select" style="width:400px;" '
-    s += 'onchange="io.menuResponse($(\'#menu-select\').find(\':selected\').val())">'
+    s += 'onchange=\"io.menuResponse($(\'#menu-select\').find(\':selected\').val())\">'
     s += '<option value="-1">-- Select one --</option>'
     for (let i = 0; i < options.length; i++) {
       s += '<option value="' + i + '">'
-      s += (options[i].byname ? util.sentenCecase(options[i].byname({ article: util.DEFINITE })) : options[i])
+      s += (options[i].byname ? sentenceCase(options[i].byname({ article: DEFINITE })) : options[i])
       s += '</option>'
     }
     msg(s + '</select>')
@@ -343,28 +339,28 @@ function showDropDown (title, options, fn) {
   })
 }
 
-function showYesNoMenu (title, fn) {
+export function showYesNoMenu (title, fn) {
   showMenu(title, lang.yesNo, fn)
 }
 
-function showYesNoDropDown (title, fn) {
+export function showYesNoDropDown (title, fn) {
   showDropDown(title, lang.yesNo, fn)
 }
 
 // This should be called after each turn to ensure we are at the end of the page and the text box has the focus
-function endTurnUI (update) {
+export function endTurnUI (update) {
   // debugmsg("In endTurnUI");
   if (settings.panes !== 'None' && update) {
     // set the lang.exit_list
     for (const exit of lang.exit_list) {
-      if (game.room.hasworld.Exit(exit.name, { excludeScenery: true }) || exit.nocmd) {
+      if (game.room.hasExit(exit.name, { excludeScenery: true }) || exit.nocmd) {
         $('#exit' + exit.name).show()
       } else {
         $('#exit' + exit.name).hide()
       }
     }
     io.updateStatus()
-    if (typeof ioUpdateCustom === 'function') settings.ioUpdateCustom()
+    if (typeof ioUpdateCustom === 'function') ioUpdateCustom()
     io.updateUIItems()
   }
 
@@ -376,26 +372,26 @@ function endTurnUI (update) {
 
 // ============  Hidden from creators!  =======================================
 
-const io = {} // -review for what is this object?
+export const io = {}
 
 io.input = function (title, options, reactFunction, displayFunction) {
   io.menuStartId = io.nextid
   io.menuFn = reactFunction
   io.menuOptions = options
 
-  if (util.test.util.testing) {
-    if (util.test.menuResponseNumber === undefined) {
-      debugmsg('Error when util.testing menu (possibly due to disambiguation?), util.test.menuResponseNumber = ' + util.test.menuResponseNumber)
+  if (test.testing) {
+    if (test.menuResponseNumber === undefined) {
+      debugmsg('Error when testing menu (possibly due to disambiguation?), test.menuResponseNumber = ' + test.menuResponseNumber)
     } else {
-      io.menuResponse(util.test.menuResponseNumber)
-      util.test.menuResponseNumber = undefined
+      io.menuResponse(test.menuResponseNumber)
+      test.menuResponseNumber = undefined
     }
     return
   }
 
   io.disable()
   msg(title, {}, 'menutitle')
-  util.displayFunction(options)
+  displayFunction(options)
 }
 
 io.outputQueue = []
@@ -420,7 +416,7 @@ io.addToOutputQueue = function (s) {
 
 io.outputFromQueue = function () {
   if (io.outputQueue.length === 0) {
-    io.enable()
+    io.enable
     return
   }
   if (io.outputSuspended) return
@@ -452,16 +448,16 @@ io.clickToContinueLink = function () {
 
 io.waitContinue = function () {
   const el = document.getElementById('n' + io.continuePrintId)
-  el.style.util.display = 'none'
+  el.style.display = 'none'
   io.unpause()
   //  io.enable();
 }
 
 io.typewriterEffect = function (data) {
   if (!data.position) {
-    $('#output').append('<' + data.tag + ' id="n' + data.id + '" class="typewriter"></' + data.tag + '>')
+    $('#output').append('<' + data.tag + ' id="n' + data.id + '" class=\"typewriter\"></' + data.tag + '>')
     data.position = 0
-    data.text = text.processText(data.text, data.params)
+    data.text = processText(data.text, data.params)
   }
   const el = $('#n' + data.id)
   el.html(data.text.slice(0, data.position) + '<span class="typewriter-active">' + data.text.slice(data.position, data.position + 1) + '</span>')
@@ -475,7 +471,7 @@ io.unscrambleEffect = function (data) {
   if (!data.count) {
     $('#output').append('<' + data.tag + ' id="n' + data.id + '" class="unscrambler"></' + data.tag + '>')
     data.count = 0
-    data.text = text.processText(data.text, data.params)
+    data.text = processText(data.text, data.params)
     if (!data.pick) data.pick = io.unscamblePick
     data.mask = ''
     data.scrambled = ''
@@ -492,7 +488,7 @@ io.unscrambleEffect = function (data) {
   }
 
   if (data.randomPlacing) {
-    let pos = util.randomInt(0, data.count - 1)
+    let pos = randomInt(0, data.count - 1)
     let newMask = ''
     for (let i = 0; i < data.mask.length; i++) {
       if (data.mask.charAt(i) === ' ') {
@@ -516,7 +512,7 @@ io.unscrambleEffect = function (data) {
 }
 
 io.unscamblePick = function () {
-  const c = String.fromCharCode(util.randomInt(33, 125))
+  const c = String.fromCharCode(randomInt(33, 125))
   return c === '<' ? '~' : c
 }
 
@@ -548,10 +544,10 @@ io.nextid = 0
 // This is used by showMenu to prevent the user ignoring the menu
 io.inputIsDisabled = false
 // Also used by showMenu
-io.menuStartId()
-io.menuFn()
-io.menuOptions()
-// A list of names for template.items currently util.display in the inventory panes
+io.menuStartId
+io.menuFn
+io.menuOptions
+// A list of names for items currently display in the inventory panes
 io.currentItemList = []
 
 io.setTitle = function (s) {
@@ -561,7 +557,7 @@ io.setTitle = function (s) {
 io.disable = function () {
   if (io.inputIsDisabled) return
   io.inputIsDisabled = true
-  $('#input').css('util.display', 'none')
+  $('#input').css('display', 'none')
   $('.compassbutton').css('color', '#808080')
   $('.item').css('color', '#808080')
   $('.itemaction').css('color', '#808080')
@@ -570,7 +566,7 @@ io.disable = function () {
 io.enable = function () {
   if (!io.inputIsDisabled) return
   io.inputIsDisabled = false
-  $('#input').css('util.display', 'block')
+  $('#input').css('display', 'block')
   $('.compassbutton').css('color', io.textColour)
   $('.item').css('color', io.textColour)
   $('.itemaction').css('color', io.textColour)
@@ -588,7 +584,7 @@ io.updateUIItems = function () {
     const item = w[key]
     for (const inv of settings.inventories) {
       const loc = inv.getLoc()
-      if (inv.util.test(item) && !item.inventorySkip) {
+      if (inv.test(item) && !item.inventorySkip) {
         io.appendItem(item, inv.alt, loc)
       }
     }
@@ -603,7 +599,7 @@ io.updateStatus = function () {
   for (const st of settings.status) {
     if (typeof st === 'string') {
       if (game.player[st] !== undefined) {
-        let s = '<tr><td width="' + settings.statusWidthLeft + '">' + util.sentenCecase(st) + '</td>'
+        let s = '<tr><td width="' + settings.statusWidthLeft + '">' + sentenceCase(st) + '</td>'
         s += '<td width="' + settings.statusWidthRight + '">' + game.player[st] + '</td></tr>'
         $('#status-pane').append(s)
       }
@@ -615,7 +611,7 @@ io.updateStatus = function () {
 
 io.menuResponse = function (n) {
   io.enable()
-  $('#input').css('util.display', 'block')
+  $('#input').css('display', 'block')
   for (let i = io.menuStartId; i < io.nextid; i++) {
     $('#n' + i).remove()
   }
@@ -628,12 +624,13 @@ io.menuResponse = function (n) {
   if (settings.textInput) $('#textbox').focus()
 }
 
-io.clickworld.Exit = function (dir) {
+io.clickExit = function (dir) {
   if (io.inputIsDisabled) return
 
+  const failed = false
   io.msgInputText(dir)
-  let cmd = io.getCommand('Go' + util.sentenCecase(dir))
-  if (!cmd) cmd = io.getCommand(util.sentenCecase(dir))
+  let cmd = io.getCommand('Go' + sentenceCase(dir))
+  if (!cmd) cmd = io.getCommand(sentenceCase(dir))
   parser.quickCmd(cmd)
 }
 
@@ -653,25 +650,25 @@ io.clickItemAction = function (itemName, action) {
   if (io.inputIsDisabled) return
 
   const item = w[itemName]
-  action = action.split(' ').map(el => util.sentenCecase(el)).join('')
+  action = action.split(' ').map(el => sentenceCase(el)).join('')
   const cmd = io.getCommand(action)
   if (cmd === undefined) {
-    io.errormsg("I don't know that command (" + action + ') - and obviously I should as you just clicked it. Please alert the game author about this bug (F12 for more).')
+    errormsg("I don't know that command (" + action + ') - and obviously I should as you just clicked it. Please alert the game author about this bug (F12 for more).')
     console.log('Click action failed')
     console.log('Action: ' + action)
     console.log('Item: ' + itemName)
-    console.log('Click actions in the side pane by-pass the usual parsing process because it is considered safe to say they will lang.already match a command and an item. This process assumes there are commands with that exact name (case sensitive). In this case you need a command called "' + action + '" (with only one element in its actions list).')
+    console.log('Click actions in the side pane by-pass the usual parsing process because it is considered safe to say they will already match a command and an item. This process assumes there are commands with that exact name (case sensitive). In this case you need a command called "' + action + '" (with only one element in its actions list).')
     console.log('One option would be to create a new command just to catch the side pane click, and give it a nonsense regex so it never gets used when the player types a command.')
   } else if (cmd.objects.filter(el => !el.ignore).length !== 1) {
-    io.errormsg('That command (' + action + ') cannot be used with an action in the side pane. Please alert the game author about this bug (F12 for more).')
+    errormsg('That command (' + action + ') cannot be used with an action in the side pane. Please alert the game author about this bug (F12 for more).')
     console.log('Click action failed')
     console.log('Action: ' + action)
     console.log('Item: ' + itemName)
-    console.log('Click actions in the side pane by-pass the usual parsing process because it is considered safe to say they will lang.already match a command and an item. This process assumes a command with exactly one entry in the objects list, and will fail if that is not the case.')
-    console.log('If you think this is lang.already the case, it may be worth checking that there are not two (or more) commands with the same name.')
+    console.log('Click actions in the side pane by-pass the usual parsing process because it is considered safe to say they will already match a command and an item. This process assumes a command with exactly one entry in the objects list, and will fail if that is not the case.')
+    console.log('If you think this is already the case, it may be worth checking that there are not two (or more) commands with the same name.')
     console.log('One option would be to create a new command just to catch the side pane click, and give it a nonsense regex so it never gets used when the player types a command.')
   } else if (item === undefined) {
-    io.errormsg("I don't know that object (" + itemName + ') - and obviously I should as it was listed. Please alert this as a bug in Quest.')
+    errormsg("I don't know that object (" + itemName + ') - and obviously I should as it was listed. Please alert this as a bug in Quest.')
   } else {
     io.msgInputText(action + ' ' + item.alias)
     parser.quickCmd(cmd, item)
@@ -688,7 +685,7 @@ io.appendItem = function (item, htmlDiv, loc, isSubItem) {
   $('#' + htmlDiv).append('<p class="item' + (isSubItem ? ' subitem' : '') + '" onclick="io.clickItem(\'' + item.name + '\')">' + item.icon() + item.getListAlias(loc) + '</p>')
   io.currentItemList.push(item.name)
   const verbList = item.getVerbs(loc)
-  if (verbList === undefined) { io.errormsg('No verbs for ' + item.name); console.log(item) }
+  if (verbList === undefined) { errormsg('No verbs for ' + item.name); console.log(item) }
   for (const verb of verbList) {
     let s = '<div class="' + item.name + '-actions itemaction" onclick="io.clickItemAction(\'' + item.name + '\', \'' + verb + '\')">'
     s += verb
@@ -700,7 +697,7 @@ io.appendItem = function (item, htmlDiv, loc, isSubItem) {
       console.log('item flagged as container but no getContents function:')
       console.log(item)
     }
-    const l = item.getContents(util.display.SIDE_PANE)
+    const l = item.getContents(display.SIDE_PANE)
     for (const el of l) {
       io.appendItem(el, htmlDiv, item.name, true)
     }
@@ -719,12 +716,12 @@ io.createPanes = function () {
     document.writeln('<table id="compass-table">')
     for (let i = 0; i < 3; i++) {
       document.writeln('<tr>')
-      io.writeworld.Exit(0 + 5 * i)
-      io.writeworld.Exit(1 + 5 * i)
-      io.writeworld.Exit(2 + 5 * i)
+      io.writeExit(0 + 5 * i)
+      io.writeExit(1 + 5 * i)
+      io.writeExit(2 + 5 * i)
       document.writeln('<td></td>')
-      io.writeworld.Exit(3 + 5 * i)
-      io.writeworld.Exit(4 + 5 * i)
+      io.writeExit(3 + 5 * i)
+      io.writeExit(4 + 5 * i)
       document.writeln('</tr>')
     }
     document.writeln('</table>')
@@ -751,14 +748,14 @@ io.createPanes = function () {
   if (settings.divider) document.writeln('<img src="images/' + settings.divider + '" />')
   document.writeln('</div>')
 
-  if (typeof ioCreateCustom === 'function') settings.ioCreateCustom()
+  if (typeof ioCreateCustom === 'function') ioCreateCustom()
 
   $('#input').html(settings.cursor + '<input type="text" name="textbox" id="textbox"  autofocus/>')
 }
 
-io.writeworld.Exit = function (n) {
+io.writeExit = function (n) {
   document.writeln('<td class="compassbutton">')
-  document.writeln('<span class="compassbutton" id="exit' + lang.exit_list[n].name + '" onclick="io.clickworld.Exit(\'' + lang.exit_list[n].name + '\')">' + lang.exit_list[n].abbrev + '</span>')
+  document.writeln('<span class="compassbutton" id="exit' + lang.exit_list[n].name + '" onclick="io.clickExit(\'' + lang.exit_list[n].name + '\')">' + lang.exit_list[n].abbrev + '</span>')
   document.writeln('</td>')
 }
 
@@ -770,7 +767,7 @@ io.getCommand = function (name) {
   return found
 }
 
-io.io.msgInputText = function (s) {
+io.msgInputText = function (s) {
   if (!settings.cmdEcho) return
   $('#output').append('<p id="n' + io.nextid + '" class="inputtext">&gt; ' + s + '</p>')
   io.nextid++
@@ -785,7 +782,7 @@ $(document).ready(function () {
     const keycode = (event.keyCode ? event.keyCode : event.which)
     for (const exit of lang.exit_list) {
       if (exit.key && exit.key === keycode) {
-        io.io.msgInputText(exit.name)
+        io.msgInputText(exit.name)
         parser.parse(exit.name)
         $('#textbox').val('')
         event.stopPropagation()
@@ -797,7 +794,7 @@ $(document).ready(function () {
     if (keycode === 13) {
       // enter
       const s = $('#textbox').val()
-      io.io.msgInputText(s)
+      io.msgInputText(s)
       if (s) {
         if (io.savedCommands[io.savedCommands.length - 1] !== s) {
           io.savedCommands.push(s)
@@ -836,7 +833,7 @@ $(document).ready(function () {
       $('#textbox').val('')
     }
     if (keycode === 96 && settings.debug) {
-      parser.parse('util.test')
+      parser.parse('test')
       setTimeout(function () { $('#textbox').val('') }, 1)
     }
   })
@@ -854,36 +851,36 @@ io.voice2 = null
 io.speak = function (str, altVoice) {
   if (!io.voice) {
     io.voice = io.synth.getVoices().find(function (el) {
-      return /UK/.util.test(el.name) && /Female/.util.test(el.name)
+      return /UK/.test(el.name) && /Female/.test(el.name)
     })
     if (!io.voice) io.voice = io.synth.getVoices()[0]
   }
   if (!io.voice2) {
     io.voice2 = io.synth.getVoices().find(function (el) {
-      return /UK/.util.test(el.name) && /Male/.util.test(el.name)
+      return /UK/.test(el.name) && /Male/.test(el.name)
     })
     if (!io.voice2) io.voice2 = io.synth.getVoices()[0]
   }
-  // -review: where is this from?
-  // const utterThis = new SpeechSynthesisUtterance(str)
-  //  utterThis.onend = function (event) {
-  //    // console.log('SpeechSynthesisUtterance.onend');
-  //  }
-  //  utterThis.onerror = function (event) {
-  //    // console.error('SpeechSynthesisUtterance.onerror: ' + event.name);
-  //  }
-  //  utterThis.voice = altVoice ? io.voice2 : io.voice
-  //  // I think these can vary from 0 to 2
-  //  utterThis.pitch = 1
-  //  utterThis.rate = 1
-  io.synth.speak(str)
+
+  const utterThis = new SpeechSynthesisUtterance(str)
+  utterThis.onend = function (event) {
+    // console.log('SpeechSynthesisUtterance.onend');
+  }
+  utterThis.onerror = function (event) {
+    // console.error('SpeechSynthesisUtterance.onerror: ' + event.name);
+  }
+  utterThis.voice = altVoice ? io.voice2 : io.voice
+  // I think these can vary from 0 to 2
+  utterThis.pitch = 1
+  utterThis.rate = 1
+  io.synth.speak(utterThis)
 }
 
 io.dialogShowing = false
 // @DOC
 // Appends an HTML DIV, with the given title and content,
 // and shows it as a dialog. Used by the transcript
-// (and really only useful for util.displaying data).
+// (and really only useful for displaying data).
 io.showHtml = function (title, html) {
   if (io.dialogShowing) return false
   $('body').append('<div id="showHtml" title="' + title + '">' + html + '</div>')
@@ -893,23 +890,4 @@ io.showHtml = function (title, html) {
     close: function () { $('#showHtml').remove(); io.dialogShowing = false }
   })
   return true
-}
-export const IO = {
-  msgUnscramble,
-  msgDiv,
-  msgList,
-  msgTable,
-  msgHeading,
-  picture,
-  failedmsg,
-  falsemsg,
-  metamsg,
-  errormsg,
-  parsermsg,
-  printOrRun,
-  clearScreen,
-  wait,
-  askQuestion,
-  showYesNoMenu,
-  showYesNoDropDown
 }
