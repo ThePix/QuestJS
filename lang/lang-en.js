@@ -1,4 +1,5 @@
 'use strict'
+import { errormsg, metamsg, msg, settings, DEFINITE, display, displayMoney, formatList, INDEFINITE, sentenceCase, SUCCESS_NO_TURNSCRIPTS, util, game, w } from '../src/main.js'
 
 // Language support
 
@@ -42,7 +43,6 @@ export const lang = {
   PurchaseFromList: /^buy$|^purchase$/,
 
   // Use item
-  // -fixme: save this shit in arrays and define the regex dynamically
   Examine: /^(?:examine|exam|ex|x) (.+)$/,
   LookAt: /^(?:look at|look) (.+)$/,
   LookOut: /^(?:look out of|look out) (.+)$/,
@@ -57,7 +57,6 @@ export const lang = {
   Remove: /^(?:remove|doff|take off) (?:my |your |his |her |)(.+)$/,
   Remove2: /^take (?:my |your |his |her |)(.+) off$/,
   Read: /^(?:read) (.+)$/,
-  Eat: /^(?:eat) (.+)$/,
   Purchase: /^(?:purchase|buy) (.+)$/,
   Sell: /^(?:sell) (.+)$/,
   Smash: /^(?:smash|break|destroy) (.+)$/,
@@ -101,15 +100,15 @@ export const lang = {
   GiveTo: /^(?:give) (.+) (?:to) (.+)$/,
   NpcGiveTo1: /^(.+), ?(?:give) (.+) (?:to) (.+)$/,
   NpcGiveTo2: /^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/,
-  Pushworld.Exit: /^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-  NpcPushworld.Exit1: /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-  NpcPushworld.Exit2: /^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+  PushExit: /^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+  NpcPushExit1: /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+  NpcPushExit2: /^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
   AskAbout: /^(?:ask) (.+) (about|what|who|how|why|where|when) (.+)$/,
   TellAbout: /^(?:tell) (.+) (about|what|who|how|why|where|when) (.+)$/,
   DebugWalkThrough: /^wt (.+)$/,
   DebugInspect: /^inspect (.+)$/,
   DebugInspectByName: /^inspect2 (.+)$/,
-  DebugTest: /^util.test$/,
+  DebugTest: /^test$/,
   DebugInspectCommand: /^(?:cmd) (.+)$/,
   DebugListCommands: /^cmds$/,
   DebugListCommands2: /^cmds2$/,
@@ -157,64 +156,64 @@ export const lang = {
   // SUCCESSFUL Messages
 
   take_successful: function (char, item, count) {
-    return lang.nounVerb(char, 'take', true) + ' ' + item.byname({ article: util.DEFINITE, count: count }) + '.'
+    return lang.nounVerb(char, 'take', true) + ' ' + item.byname({ article: DEFINITE, count: count }) + '.'
   },
   drop_successful: function (char, item, count) {
-    return lang.nounVerb(char, 'drop', true) + ' ' + item.byname({ article: util.DEFINITE, count: count }) + '.'
+    return lang.nounVerb(char, 'drop', true) + ' ' + item.byname({ article: DEFINITE, count: count }) + '.'
   },
   wear_successful: function (char, item) {
-    return lang.nounVerb(char, 'put', true) + ' on ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'put', true) + ' on ' + item.byname({ article: DEFINITE }) + '.'
   },
   remove_successful: function (char, item) {
-    return lang.nounVerb(char, 'take', true) + ' ' + item.byname({ article: util.DEFINITE }) + ' off.'
+    return lang.nounVerb(char, 'take', true) + ' ' + item.byname({ article: DEFINITE }) + ' off.'
   },
   open_successful: function (char, item) {
-    return lang.nounVerb(char, 'open', true) + ' ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'open', true) + ' ' + item.byname({ article: DEFINITE }) + '.'
   },
   close_successful: function (char, item) {
-    return lang.nounVerb(char, 'close', true) + ' ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'close', true) + ' ' + item.byname({ article: DEFINITE }) + '.'
   },
   lock_successful: function (char, item) {
-    return lang.nounVerb(char, 'lock', true) + 'k ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'lock', true) + 'k ' + item.byname({ article: DEFINITE }) + '.'
   },
   unlock_successful: function (char, item) {
-    return lang.nounVerb(char, 'unlock', true) + ' ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'unlock', true) + ' ' + item.byname({ article: DEFINITE }) + '.'
   },
   fill_successful: function (char, item) {
-    return lang.nounVerb(char, 'fill', true) + ' ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'fill', true) + ' ' + item.byname({ article: DEFINITE }) + '.'
   },
   empty_successful: function (char, item) {
-    return lang.nounVerb(char, 'empty', true) + ' ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'empty', true) + ' ' + item.byname({ article: DEFINITE }) + '.'
   },
   turn_on_successful: function (char, item) {
-    return lang.nounVerb(char, 'switch', true) + ' ' + item.byname({ article: util.DEFINITE }) + ' on.'
+    return lang.nounVerb(char, 'switch', true) + ' ' + item.byname({ article: DEFINITE }) + ' on.'
   },
   turn_off_successful: function (char, item) {
-    return lang.nounVerb(char, 'switch', true) + ' ' + item.byname({ article: util.DEFINITE }) + ' off.'
+    return lang.nounVerb(char, 'switch', true) + ' ' + item.byname({ article: DEFINITE }) + ' off.'
   },
   sit_on_successful: function (char, item) {
-    return lang.nounVerb(char, 'sit', true) + ' on ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'sit', true) + ' on ' + item.byname({ article: DEFINITE }) + '.'
   },
   stand_on_successful: function (char, item) {
-    return lang.nounVerb(char, 'stand', true) + ' on ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'stand', true) + ' on ' + item.byname({ article: DEFINITE }) + '.'
   },
   recline_on_successful: function (char, item) {
-    return lang.nounVerb(char, 'lie', true) + ' down on ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'lie', true) + ' down on ' + item.byname({ article: DEFINITE }) + '.'
   },
   eat_successful: function (char, item) {
-    return lang.nounVerb(char, 'eat', true) + ' ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'eat', true) + ' ' + item.byname({ article: DEFINITE }) + '.'
   },
   drink_successful: function (char, item) {
-    return lang.nounVerb(char, 'drink', true) + ' ' + item.byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, 'drink', true) + ' ' + item.byname({ article: DEFINITE }) + '.'
   },
   purchase_successful: function (char, item, amt) {
-    return lang.nounVerb(char, 'buy', true) + ' ' + item.byname({ article: util.DEFINITE }) + ' for ' + util.util.displayMoney(amt) + '.'
+    return lang.nounVerb(char, 'buy', true) + ' ' + item.byname({ article: DEFINITE }) + ' for ' + displayMoney(amt) + '.'
   },
   sell_successful: function (char, item, amt) {
-    return lang.nounVerb(char, 'sell', true) + ' ' + item.byname({ article: util.DEFINITE }) + ' for ' + util.util.displayMoney(amt) + '.'
+    return lang.nounVerb(char, 'sell', true) + ' ' + item.byname({ article: DEFINITE }) + ' for ' + displayMoney(amt) + '.'
   },
   push_exit_successful: function (char, item, dir, destRoom) {
-    return lang.nounVerb(char, 'push', true) + ' ' + item.byname({ article: util.DEFINITE }) + ' ' + dir + '.'
+    return lang.nounVerb(char, 'push', true) + ' ' + item.byname({ article: DEFINITE }) + ' ' + dir + '.'
   },
 
   npc_heading: function (char, dir) {
@@ -260,19 +259,19 @@ export const lang = {
   },
   cannot_purchase_here: function (char, item) {
     if (item.doNotClone && item.isAtLoc(char.name)) {
-      return lang.nounVerb(char, "can't", true) + ' buy ' + item.byname({ article: util.DEFINITE }) + ' here - probably because ' + lang.nounVerb(char, 'be') + ' already holding ' + item.pronouns.objective + '.'
+      return lang.nounVerb(char, "can't", true) + ' buy ' + item.byname({ article: DEFINITE }) + ' here - probably because ' + lang.nounVerb(char, 'be') + ' already holding ' + item.pronouns.objective + '.'
     } else {
-      return lang.nounVerb(char, "can't", true) + ' buy ' + item.byname({ article: util.DEFINITE }) + ' here.'
+      return lang.nounVerb(char, "can't", true) + ' buy ' + item.byname({ article: DEFINITE }) + ' here.'
     }
   },
   cannot_afford: function (char, item, amt) {
-    return lang.nounVerb(char, "can't", true) + ' afford ' + item.byname({ article: util.DEFINITE }) + ' (need ' + util.util.displayMoney(amt) + ').'
+    return lang.nounVerb(char, "can't", true) + ' afford ' + item.byname({ article: DEFINITE }) + ' (need ' + displayMoney(amt) + ').'
   },
   cannot_sell: function (char, item, amt) {
     return lang.nounVerb(char, "can't", true) + ' sell ' + item.pronouns.objective + '.'
   },
   cannot_sell_here: function (char, item, amt) {
-    return lang.nounVerb(char, "can't", true) + ' sell ' + item.byname({ article: util.DEFINITE }) + ' here.'
+    return lang.nounVerb(char, "can't", true) + ' sell ' + item.byname({ article: DEFINITE }) + ' here.'
   },
 
   cannot_use: function (char, item) {
@@ -291,7 +290,7 @@ export const lang = {
     return lang.pronounVerb(item, "'be", true) + ' not something you can empty.'
   },
   cannot_look_out: function (char, item) {
-    lang.pronounVerb(char, "can't", true) + ' look out of ' + item.pronouns.objective + '.'
+    return lang.pronounVerb(char, "can't", true) + ' look out of ' + item.pronouns.objective + '.'
   },
   cannot_stand_on: function (char, item) {
     return lang.pronounVerb(item, "'be", true) + ' not something you can stand on.'
@@ -316,7 +315,7 @@ export const lang = {
     return lang.pronounVerb(item, "'be", true) + ' not something you can move around like that.'
   },
   cannot_push_up: function (char, item) {
-    return lang.pronounVerb(char, "'be", true) + ' not getting ' + item.byname({ article: util.DEFINITE }) + ' up there!'
+    return lang.pronounVerb(char, "'be", true) + ' not getting ' + item.byname({ article: DEFINITE }) + ' up there!'
   },
   cannot_ask_about: function (char, item, text) {
     return 'You can ask ' + item.pronouns.objective + ' about ' + text + ' all you like, but ' + lang.pronounVerb(item, "'be") + ' not about to reply.'
@@ -325,7 +324,7 @@ export const lang = {
     return 'You can tell ' + item.pronouns.objective + ' about ' + text + ' all you like, but ' + lang.pronounVerb(item, "'be") + ' not interested.'
   },
   cannot_talk_to: function (char, item) {
-    return 'You chat to ' + item.byname({ article: util.DEFINITE }) + ' for a few moments, before releasing that ' + lang.pronounVerb(item, "'be") + ' not about to reply.'
+    return 'You chat to ' + item.byname({ article: DEFINITE }) + ' for a few moments, before releasing that ' + lang.pronounVerb(item, "'be") + ' not about to reply.'
   },
 
   // ----------------------------------------------------------------------------------------------
@@ -333,7 +332,7 @@ export const lang = {
 
   not_known_msg: "I don't even know where to begin with that.",
   disambig_msg: 'Which do you mean?',
-  noMultiplesMsg: 'You cannot use multiple objects with that command.',
+  no_multiples_msg: 'You cannot use multiple objects with that command.',
   nothing_msg: 'Nothing there to do that with.',
   general_obj_error: 'So I kind of get what you want to do, but not what you want to do it with.',
   done_msg: 'Done.',
@@ -381,33 +380,33 @@ export const lang = {
     return "That's not going to do anything useful."
   },
   already: function (item) {
-    return util.sentenCecase(item.pronouns.subjective) + ' already ' + lang.conjugate(item, 'be') + '.'
+    return sentenceCase(item.pronouns.subjective) + ' already ' + lang.conjugate(item, 'be') + '.'
   },
   default_examine: function (char, item) {
     return lang.pronounVerb(item, 'be', true) + ' just your typical, every day ' + item.byname() + '.'
   },
   no_topics: function (char, target) {
-    return lang.nounVerb(char, 'have', true) + ' nothing to talk to ' + target.byname({ article: util.DEFINITE }) + ' about.'
+    return lang.nounVerb(char, 'have', true) + ' nothing to talk to ' + target.byname({ article: DEFINITE }) + ' about.'
   },
   say_no_one_here: function (char, verb, text) {
-    return lang.nounVerb(char, verb, true) + ", '" + util.sentenCecase(text) + ",' but no one notices."
+    return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one notices."
   },
   say_no_response: function (char, verb, text) {
     return 'No one seemed interested in what you say.'
   },
   say_no_response_full: function (char, verb, text) {
-    return lang.nounVerb(char, verb, true) + ", '" + util.sentenCecase(text) + ",' but no one seemed interested in what you say."
+    return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one seemed interested in what you say."
   },
 
   container_recursion: function (char, container, item) {
-    return 'What? You want to put ' + item.byname({ article: util.DEFINITE }) + ' in ' + container.byname({ article: util.DEFINITE }) + ' when ' + container.byname({ article: util.DEFINITE }) + ' is already in ' + item.byname({ article: util.DEFINITE }) + "? That's just too freaky for me."
+    return 'What? You want to put ' + item.byname({ article: DEFINITE }) + ' in ' + container.byname({ article: DEFINITE }) + ' when ' + container.byname({ article: DEFINITE }) + ' is already in ' + item.byname({ article: DEFINITE }) + "? That's just too freaky for me."
   },
 
   // ----------------------------------------------------------------------------------------------
   // Specific command messages
 
   not_npc: function (item) {
-    return lang.nounVerb(game.player, 'can', true) + ' tell ' + item.byname({ article: util.DEFINITE }) + ' to do what you like, but there is no way ' + lang.pronounVerb(item, "'ll") + ' do it.'
+    return lang.nounVerb(game.player, 'can', true) + ' tell ' + item.byname({ article: DEFINITE }) + ' to do what you like, but there is no way ' + lang.pronounVerb(item, "'ll") + ' do it.'
   },
   not_npc_for_give: function (char, item) {
     return 'Realistically, ' + lang.nounVerb(item, 'be') + ' not interested in anything ' + char.pronouns.subjective + ' might give ' + item.pronouns.objective + '.'
@@ -416,10 +415,10 @@ export const lang = {
     return 'Doubtful ' + lang.nounVerb(item, 'will') + ' be interested in anything ' + char.pronouns.subjective + ' has to say.'
   },
   not_container: function (char, item) {
-    return util.sentenCecase(item.byname({ article: util.DEFINITE })) + ' is not a container.'
+    return sentenceCase(item.byname({ article: DEFINITE })) + ' is not a container.'
   },
   not_vessel: function (char, item) {
-    return util.sentenCecase(item.byname({ article: util.DEFINITE })) + ' is not a vessel.'
+    return sentenceCase(item.byname({ article: DEFINITE })) + ' is not a vessel.'
   },
 
   not_carrying: function (char, item) {
@@ -435,7 +434,7 @@ export const lang = {
     return lang.pronounVerb(char, "'be", true) + ' not wearing ' + item.pronouns.objective + '.'
   },
   cannot_wear_over: function (char, item, outer) {
-    return lang.pronounVerb(char, "can't", true) + ' put ' + item.byname({ article: util.INDEFINITE }) + ' on over ' + char.pronouns.poss_adj + ' ' + outer.byname() + '.'
+    return lang.pronounVerb(char, "can't", true) + ' put ' + item.byname({ article: INDEFINITE }) + ' on over ' + char.pronouns.poss_adj + ' ' + outer.byname() + '.'
   },
   cannot_remove_under: function (char, item, outer) {
     return lang.pronounVerb(char, "can't", true) + ' take off ' + char.pronouns.poss_adj + ' ' + item.byname() + ' whilst wearing ' + char.pronouns.poss_adj + ' ' + outer.byname() + '.'
@@ -447,24 +446,24 @@ export const lang = {
     return lang.pronounVerb(char, "'ve", true) + ' already wearing ' + item.pronouns.objective + '.'
   },
   cannot_take_component: function (char, item) {
-    return lang.nounVerb(char, "can't", true) + ' take ' + item.pronouns.objective + '; ' + lang.pronounVerb(item, "'be") + ' part of ' + w[item.loc].byname({ article: util.DEFINITE }) + '.'
+    return lang.nounVerb(char, "can't", true) + ' take ' + item.pronouns.objective + '; ' + lang.pronounVerb(item, "'be") + ' part of ' + w[item.loc].byname({ article: DEFINITE }) + '.'
   },
   container_closed: function (char, item) {
     return lang.nounVerb(item, 'be', true) + ' closed.'
   },
   inside_container: function (char, item, cont) {
-    return lang.pronounVerb(item, 'be', true) + ' inside ' + cont.byname({ article: util.DEFINITE }) + '.'
+    return lang.pronounVerb(item, 'be', true) + ' inside ' + cont.byname({ article: DEFINITE }) + '.'
   },
   look_inside: function (char, item) {
-    const l = util.formatList(item.getContents(util.display.LOOK), { article: util.INDEFINITE, lastJoiner: ' and ', nothing: 'nothing' })
-    return 'Inside ' + item.byname({ article: util.DEFINITE }) + ' ' + lang.pronounVerb(char, 'can') + ' see ' + l + '.'
+    const l = formatList(item.getContents(display.LOOK), { article: INDEFINITE, lastJoiner: ' and ', nothing: 'nothing' })
+    return 'Inside ' + item.byname({ article: DEFINITE }) + ' ' + lang.pronounVerb(char, 'can') + ' see ' + l + '.'
   },
   stop_posture: function (char) {
     if (!char.posture || char.posture === 'standing') return ''
     let s
     // You could split up sitting, standing and lying
     if (char.postureFurniture) {
-      s = lang.nounVerb(char, 'get', true) + ' off ' + w[char.postureFurniture].byname({ article: util.DEFINITE }) + '.'
+      s = lang.nounVerb(char, 'get', true) + ' off ' + w[char.postureFurniture].byname({ article: DEFINITE }) + '.'
     } else {
       s = lang.nounVerb(char, 'stand', true) + ' up.'
     }
@@ -488,15 +487,15 @@ export const lang = {
 
   // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
   speak_to_menu_title: function (char) {
-    return 'Talk to ' + char.byname({ article: util.DEFINITE }) + ' about:'
+    return 'Talk to ' + char.byname({ article: DEFINITE }) + ' about:'
   },
   // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
   tell_about_intro: function (char, text1, text2) {
-    return 'You tell ' + char.byname({ article: util.DEFINITE }) + ' ' + text2 + ' ' + text1 + '.'
+    return 'You tell ' + char.byname({ article: DEFINITE }) + ' ' + text2 + ' ' + text1 + '.'
   },
   // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
   ask_about_intro: function (char, text1, text2) {
-    return 'You ask ' + char.byname({ article: util.DEFINITE }) + ' ' + text2 + ' ' + text1 + '.'
+    return 'You ask ' + char.byname({ article: DEFINITE }) + ' ' + text2 + ' ' + text1 + '.'
   },
   // This will be added to the start of the regex of a command to make an NPC command
   // The saved capture group is the NPC's name
@@ -536,8 +535,8 @@ export const lang = {
       flag = true
     }
     if (flag || npc.here()) {
-      s += lang.nounVerb(npc, 'leave', !flag) + ' ' + w[npc.loc].byname({ article: util.DEFINITE })
-      const exit = w[npc.loc].findworld.Exit(dest)
+      s += lang.nounVerb(npc, 'leave', !flag) + ' ' + w[npc.loc].byname({ article: DEFINITE })
+      const exit = w[npc.loc].findExit(dest)
       if (exit) s += ', heading ' + exit.dir
       s += '.'
       msg(s)
@@ -554,8 +553,8 @@ export const lang = {
       flag = true
     }
     if (flag || npc.here()) {
-      s += lang.nounVerb(npc, 'enter', !flag) + ' ' + w[npc.loc].byname({ article: util.DEFINITE })
-      const exit = w[npc.loc].findworld.Exit(origin)
+      s += lang.nounVerb(npc, 'enter', !flag) + ' ' + w[npc.loc].byname({ article: DEFINITE })
+      const exit = w[npc.loc].findExit(origin)
       if (exit) s += ' from ' + util.niceDirections(exit.dir)
       s += '.'
       msg(s)
@@ -565,8 +564,8 @@ export const lang = {
   // ----------------------------------------------------------------------------------------------
   // Save/load messages
 
-  slDirHeadings: '<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>',
-  slDirMsg: 'Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.',
+  sl_dir_headings: '<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>',
+  sl_dir_msg: 'Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.',
   sl_no_filename: 'Trying to save with no filename',
 
   // ----------------------------------------------------------------------------------------------
@@ -574,13 +573,13 @@ export const lang = {
 
   topics_no_ask_tell: 'This character has no ASK/ABOUT or TELL/ABOUT options set up.',
   topics_none_found: function (char) {
-    return 'No suggestions for what to ask or tell ' + char.byname({ article: util.DEFINITE }) + ' available.'
+    return 'No suggestions for what to ask or tell ' + char.byname({ article: DEFINITE }) + ' available.'
   },
   topics_ask_list: function (char, arr) {
-    return 'Some suggestions for what to ask ' + char.byname({ article: util.DEFINITE }) + ' about: ' + arr.join('; ') + '.'
+    return 'Some suggestions for what to ask ' + char.byname({ article: DEFINITE }) + ' about: ' + arr.join('; ') + '.'
   },
   topics_tell_list: function (char, arr) {
-    return 'Some suggestions for what to tell ' + char.byname({ article: util.DEFINITE }) + ' about: ' + arr.join('; ') + '.'
+    return 'Some suggestions for what to tell ' + char.byname({ article: DEFINITE }) + ' about: ' + arr.join('; ') + '.'
   },
 
   spoken_on: "Game mode is now 'spoken'. Type INTRO to hear the introductory text.",
@@ -596,48 +595,48 @@ export const lang = {
 
   helpScript: function () {
     if (settings.textInput) {
-      io.metamsg('Type commands in the command bar to interact with the world.')
-      io.metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean. You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
-      io.metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.")
-      io.metamsg('{b:Using template.items:} You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!')
-      io.metamsg("{b:Language: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).")
-      io.metamsg('{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will util.respond..')
+      metamsg('Type commands in the command bar to interact with the world.')
+      metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean. You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
+      metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.")
+      metamsg('{b:Using items:} You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!')
+      metamsg("{b:Language: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).")
+      metamsg('{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..')
     }
     if (settings.panes !== 'None') {
       if (settings.compass) {
-        io.metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.")
+        metamsg("Use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.")
       }
-      io.metamsg('To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.')
+      metamsg('To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.')
     }
-    return util.util.SUCCESS_NO_TURNSCRIPTS
+    return SUCCESS_NO_TURNSCRIPTS
   },
 
   aboutScript: function () {
-    io.metamsg('{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6.', { settings: settings })
+    metamsg('{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6.', { settings: settings })
     if (settings.thanks && settings.thanks.length > 0) {
-      io.metamsg('Thanks to ' + util.formatList(settings.thanks, { lastJoiner: lang.list_and }) + '.')
+      metamsg('Thanks to ' + formatList(settings.thanks, { lastJoiner: lang.list_and }) + '.')
     }
-    return util.util.SUCCESS_NO_TURNSCRIPTS
+    return SUCCESS_NO_TURNSCRIPTS
   },
 
   saveLoadScript: function () {
-    io.metamsg('To save your progress, type SAVE followed by the name to save with.')
-    io.metamsg('To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.')
-    io.metamsg('To see a list of save games, type DIR.')
-    return util.util.SUCCESS_NO_TURNSCRIPTS
+    metamsg('To save your progress, type SAVE followed by the name to save with.')
+    metamsg('To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.')
+    metamsg('To see a list of save games, type DIR.')
+    return SUCCESS_NO_TURNSCRIPTS
   },
 
   transcriptScript: function () {
-    io.metamsg('The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output.')
-    io.metamsg('Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to util.display it. To empty the file, use SCRIPT CLEAR.')
-    io.metamsg('You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.')
-    io.metamsg('Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.')
-    return util.util.SUCCESS_NO_TURNSCRIPTS
+    metamsg('The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output.')
+    metamsg('Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it. To empty the file, use SCRIPT CLEAR.')
+    metamsg('You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.')
+    metamsg('Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.')
+    return SUCCESS_NO_TURNSCRIPTS
   },
 
   topicsScript: function () {
-    io.metamsg('Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).')
-    return util.util.SUCCESS_NO_TURNSCRIPTS
+    metamsg('Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).')
+    return SUCCESS_NO_TURNSCRIPTS
   },
 
   // ----------------------------------------------------------------------------------------------
@@ -657,7 +656,7 @@ export const lang = {
   current_money: 'Current money',
 
   article_filter_regex: /^(?:the |an |a )?(.+)$/,
-  joiner_regex: /\,|\band\b/,
+  joiner_regex: /,|\band\b/,
   all_regex: /^(all|everything)$/,
   all_exclude_regex: /^((all|everything) (but|bar|except)\b)/,
   go_pre_regex: 'go to |goto |go |head |',
@@ -665,8 +664,8 @@ export const lang = {
   yesNo: ['Yes', 'No'],
 
   contentsForData: {
-    surface: { util.util.prefix: 'with ', suffix: ' on it' },
-    container: { util.util.prefix: 'containing ', suffix: '' }
+    surface: { prefix: 'with ', suffix: ' on it' },
+    container: { prefix: 'containing ', suffix: '' }
   },
 
   // ----------------------------------------------------------------------------------------------
@@ -819,7 +818,7 @@ export const lang = {
     if (item.pronouns === lang.pronouns.massnoun) {
       return ''
     }
-    if (/^[aeiou]/i.util.test(item.alias)) {
+    if (/^[aeiou]/i.test(item.alias)) {
       return 'an '
     }
     return 'a '
@@ -831,7 +830,7 @@ export const lang = {
   // so 2001 is returned as '2001'.
   toWords: function (number) {
     if (typeof number !== 'number') {
-      io.errormsg('toWords can only handle numbers')
+      errormsg('toWords can only handle numbers')
       return number
     }
 
@@ -873,13 +872,13 @@ export const lang = {
   // so 2001 is returned as '2001th'.
   toOrdinal: function (number) {
     if (typeof number !== 'number') {
-      io.errormsg('toOrdinal can only handle numbers')
+      errormsg('toOrdinal can only handle numbers')
       return number
     }
 
     const s = lang.toWords(number)
     for (const or of lang.ordinalReplacements) {
-      if (or.regex.util.test(s)) {
+      if (or.regex.test(s)) {
         return s.replace(or.regex, or.replace)
       }
     }
@@ -889,7 +888,7 @@ export const lang = {
   convertNumbers: function (s) {
     for (let i = 0; i < lang.numberUnits.length; i++) {
       const regex = new RegExp('\\b' + lang.numberUnits[i] + '\\b')
-      if (regex.util.test(s)) s = s.replace(regex, '' + i)
+      if (regex.test(s)) s = s.replace(regex, '' + i)
     }
     return s
   },
@@ -906,7 +905,7 @@ export const lang = {
     const arr = lang.conjugations[gender.toLowerCase()]
 
     if (!arr) {
-      io.errormsg('No conjugations found: conjugations_' + gender.toLowerCase())
+      errormsg('No conjugations found: conjugations_' + gender.toLowerCase())
       return verb
     }
     for (const conj of arr) {
@@ -934,20 +933,20 @@ export const lang = {
   // The first letter is capitalised if 'capitalise' is true.
   pronounVerb: function (item, verb, capitalise) {
     let s = item.pronouns.subjective + ' ' + lang.conjugate(item, verb)
-    s = s.replace(/ +\'/, "'") // yes this is a hack!
-    return capitalise ? util.sentenCecase(s) : s
+    s = s.replace(/ +'/, "'") // yes this is a hack!
+    return capitalise ? sentenceCase(s) : s
   },
 
   pronounVerbForGroup: function (item, verb, capitalise) {
     let s = item.groupPronouns().subjective + ' ' + lang.conjugate(item.group(), verb)
-    s = s.replace(/ +\'/, "'") // yes this is a hack!
-    return capitalise ? util.sentenCecase(s) : s
+    s = s.replace(/ +'/, "'") // yes this is a hack!
+    return capitalise ? sentenceCase(s) : s
   },
 
   verbPronoun: function (item, verb, capitalise) {
     let s = lang.conjugate(item, verb) + ' ' + item.pronouns.subjective
-    s = s.replace(/ +\'/, "'") // yes this is a hack!
-    return capitalise ? util.sentenCecase(s) : s
+    s = s.replace(/ +'/, "'") // yes this is a hack!
+    return capitalise ? sentenceCase(s) : s
   },
 
   // @DOC
@@ -960,23 +959,22 @@ export const lang = {
     if (item === game.player) {
       return lang.pronounVerb(item, verb, capitalise)
     }
-    let s = item.byname({ article: util.DEFINITE }) + ' ' + lang.conjugate(item, verb)
-    s = s.replace(/ +\'/, "'") // yes this is a hack!
-    return capitalise ? util.sentenCecase(s) : s
+    let s = item.byname({ article: DEFINITE }) + ' ' + lang.conjugate(item, verb)
+    s = s.replace(/ +'/, "'") // yes this is a hack!
+    return capitalise ? sentenceCase(s) : s
   },
 
   verbNoun: function (item, verb, capitalise) {
     if (item === game.player) {
       return lang.pronounVerb(item, verb, capitalise)
     }
-    let s = lang.conjugate(item, verb) + ' ' + item.byname({ article: util.DEFINITE })
-    s = s.replace(/ +\'/, "'") // yes this is a hack!
-    return capitalise ? util.sentenCecase(s) : s
+    let s = lang.conjugate(item, verb) + ' ' + item.byname({ article: DEFINITE })
+    s = s.replace(/ +'/, "'") // yes this is a hack!
+    return capitalise ? sentenceCase(s) : s
   }
-
 }
 
 // Used by the editor
-try { util.SUCCESS } catch (e) {
-  module.exports = { lang: lang }
-}
+// try { SUCCESS } catch (e) {
+//   module.exports = { lang: lang }
+// }
