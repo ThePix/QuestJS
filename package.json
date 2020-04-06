@@ -1,6 +1,6 @@
 {
   "name": "questhive",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "QuestJS port to the node ecosystem",
   "main": "dist/QuestJS.umd.js",
   "module": "dist/QuestJS.esm.js",
