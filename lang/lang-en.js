@@ -26,6 +26,7 @@ const lang = {
   MetaTranscriptClear:/^transcript clear|script clear|transcript delete|script delete$/,
   MetaTranscriptShow:/^transcript show|script show$/,
   MetaTranscriptShowWithOptions:/^(?:transcript|script) show (\w+)$/,
+  MetaPlayerComment:/^\*(.+)$/,
   MetaSave:/^save$/,
   MetaSaveGame:/^(?:save) (.+)$/,
   MetaLoad:/^reload$|^load$/,
@@ -387,7 +388,7 @@ const lang = {
   none_held:function(char, item) {
     return pronoun(char, "have", true) + " no " + item.pluralAlias + ".";
   },
-  TAKE_not_push:function(char, item) {
+  take_not_push:function(char, item) {
     return "Just pick the thing up already!";
   },
 

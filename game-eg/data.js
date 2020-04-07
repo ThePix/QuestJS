@@ -113,7 +113,7 @@ createItem("boots",
 createItem("waterskin",
   TAKEABLE(),
   { 
-    examine:function(isMultiple) { msg(prefix(item, isMultiple) + "The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full."); },
+    examine:function(isMultiple) { msg(prefix(this, isMultiple) + "The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full."); },
     capacity:10,
     full:3,
     loc:"lounge",

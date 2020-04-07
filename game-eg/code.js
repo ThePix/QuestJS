@@ -9,14 +9,7 @@
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
-  msg("Some text")
-  /*
-  io.addToOutputQueue({text:"The real message is revealed!!", action:'effect', tag:'pre', effect:io.unscrambleEffect, randomPlacing:true, incSpaces:true, pick:function(i) {return 'At first this message is shown'.charAt(i) }})
-  wait()
-  io.addToOutputQueue({text:"If there are multiple lines of text...", action:'effect', tag:'p', effect:io.typewriterEffect})
-  wait()
-  msg("Even more text")
-  wait(3)*/
+
 
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
@@ -68,6 +61,40 @@ commands.unshift(new Cmd('Test input', {
   }
 }));
 
+
+
+commands.unshift(  new Cmd('TextReveal', {
+  regex:/^reveal$/,
+  script:function() {
+    msg("Some text")
+    msg("More")
+    //_msg("The real message is revealed!!", {}, {action:'effect', tag:'pre', effect:io.unscrambleEffect, randomPlacing:true, incSpaces:true, pick:function(i) {return 'At first this message is shown'.charAt(i) }})
+    //wait()
+    //_msg("Or appears as though typed.", {}, {action:'effect', tag:'p', effect:io.typewriterEffect})
+    wait()
+    clearScreen()
+    msg("Some more text.")
+    wait(3, "Wait three seconds...")
+    msg("... and done!")
+  },
+}));
+  
+commands.unshift(  new Cmd('Image', {
+  regex:/^img$/,
+  script:function() {
+    msg("Some more text.")
+    picture('favicon.png')
+  },
+}));
+  
+commands.unshift(  new Cmd('Audio', {
+  regex:/^beep$/,
+  script:function() {
+    msg("Can you hear this?")
+    sound('hrn06.wav')
+  },
+}));
+  
 
 
 
