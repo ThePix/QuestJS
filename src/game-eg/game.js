@@ -5,3 +5,4 @@ this is useful for ckeeping everything neat and clean and could potentially gene
 export * from './settings.js'
 export * from './code.js'
 export * from './data.js'
+export * from './tests.js'

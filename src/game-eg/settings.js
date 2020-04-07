@@ -13,6 +13,8 @@ settings.tests = true
 
 settings.textEffectDelay = 100
 
+settings.imagesFolder = 'images'
+
 settings.status = [
   'hitpoints',
   function () { return '<td>Spell points:</td><td>3</td>' },
