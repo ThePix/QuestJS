@@ -129,7 +129,7 @@ const chosenWeapon = function() {
   const selected = $("#weapon-select").val();
   console.log("in chosenWeapon: " + selected);
   w[selected].equip(false, game.player);
-  world.endTurn(SUCCESS);
+  world.endTurn(world.SUCCESS);
 };
 
 
@@ -367,7 +367,7 @@ function scrollPara(element) {
   if (typeof paraPositions[paraNumber] !== 'number') {
     var list = dialogeOptions['para' + paraNumber + 'Opts'];
     paraOpts[paraNumber] = list;
-    paraPositions[paraNumber] = randomInt(list.length - 1);
+    paraPositions[paraNumber] = random.int(list.length - 1);
   }
   paraPositions[paraNumber]++;
   if (paraPositions[paraNumber] >= paraOpts[paraNumber].length) {
@@ -401,7 +401,7 @@ $(document).ready(function () {
             "Done": function() { setValues();}
         }
       });
-      $("button[title='Close']")[0].style.display = 'none';
+      $("button[title='Close']")[0].style.world. = 'none';
 });*/
 
 function scrollWizard() {

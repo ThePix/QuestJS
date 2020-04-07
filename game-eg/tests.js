@@ -27,11 +27,11 @@ test.tests = function() {
   test.assertEqual("You", w.me.byname({article:INDEFINITE, capital:true}));
   
   
-  test.title("randomFromArray");
+  test.title("random.fromArray");
   const ary = ["one", "two", "three"];
   const ary2 = [];
   for (let i = 0; i < 3; i++) {
-    const res = randomFromArray(ary, true);
+    const res = random.fromArray(ary, true);
     if (ary2.includes(res)) test.fail("ary2 already has that value");
     ary2.push(res);
   }

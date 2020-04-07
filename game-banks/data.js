@@ -112,7 +112,7 @@ createItem("stasis_locker", CONTAINER(true), {
       msg(prefix(this, isMultiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
     }
     else {
-      msg(prefix(this, isMultiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(display.LOOK), {lastJoiner:" and ", article:INDEFINITE}) + ".");
+      msg(prefix(this, isMultiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(world.LOOK), {lastJoiner:" and ", article:INDEFINITE}) + ".");
     }
   },
 });

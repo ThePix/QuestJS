@@ -124,7 +124,7 @@ function Attack(weapon) {
   this.apply = function(attacker, target, options) {
     let damage = this.damageBonus;
     for (let i = 0; i < this.damageNumber; i++) {
-      damage += randomInt(1, this.damageSides);
+      damage += random.int(1, this.damageSides);
     }
     damage -= this.damageSides - this.armour;
     if (damage < 1) damage = 1;

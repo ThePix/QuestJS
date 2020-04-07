@@ -14,7 +14,7 @@ createItem("Xsansi",
   { 
     isAtLoc:function(loc, situation) {
       if (typeof loc !== "string") loc = loc.name
-      return isOnShip() && (situation === display.PARSER || situation === display.SIDE_PANE);
+      return isOnShip() && (situation === world.PARSER || situation === world.SIDE_PANE);
     },
     properName:true,
     regex:/^(ai|xsan|computer)$/,

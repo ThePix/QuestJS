@@ -146,7 +146,7 @@ createRoom("captains_room",
 
 createRoom("flight_deck",
   {
-    desc: "From here, you cmmand the ship. Forward is the galaxy map, a huge holographic display you can use to plot a destination. Beyond, is the cockpit, where the pilot sits.",
+    desc: "From here, you cmmand the ship. Forward is the galaxy map, a huge holographic world. you can use to plot a destination. Beyond, is the cockpit, where the pilot sits.",
     south:new Exit('brittany_lift'),
     north:new Exit('cockpit'),
     west:new Exit('armoury'),

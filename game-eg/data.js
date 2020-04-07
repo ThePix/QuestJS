@@ -204,7 +204,7 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
     return res;
   },
   lightSource:function() {
-    return this.switchedon ? LIGHT_FULL : LIGHT_none;
+    return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
   eventPeriod:1,
   eventIsActive:function() {
@@ -414,7 +414,7 @@ createRoom("basement", {
   darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
   up:new Exit('kitchen', {isHidden:function() { return false; } }),
   lightSource:function() {
-    return w.light_switch.switchedon ? LIGHT_FULL : LIGHT_none;
+    return w.light_switch.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
   hint:"The basement illustrates light and dark. There is a torch in the lounge that may be useful.",
 });
@@ -470,7 +470,7 @@ createItem("charger_compartment",
   CONTAINER(true),
   { alias:"compartment", examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.", 
     testRestrictions:function(item) {
-      const contents = w.charger_compartment.getContents(display.LOOK);
+      const contents = w.charger_compartment.getContents(world.LOOK);
       if (contents.length > 0) {
         msg("The compartment is full.");
         return false;
@@ -484,7 +484,7 @@ createItem("charger_button",
   COMPONENT("charger"),
   { examine:"A big red button.", alias:"button",
     push:function(isMultiple, participant) {
-      const contents = w.charger_compartment.getContents(display.ALL)[0];
+      const contents = w.charger_compartment.getContents(world.ALL)[0];
       if (!w.charger_compartment.closed || !contents) {
         msg(lang.pronounVerb(participant, "push", true) + " the button, but nothing happens.");
         return false;
@@ -898,7 +898,7 @@ createItem("walls",
     scenery:true,
     isAtLoc:function(loc, situation) {
       if (typeof loc !== "string") loc = loc.name
-      return w[loc].room && situation === display.PARSER; 
+      return w[loc].room && situation === world.PARSER; 
     },
   }
 );

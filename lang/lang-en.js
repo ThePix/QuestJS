@@ -472,7 +472,7 @@ const lang = {
     return lang.pronounVerb(item, "be", true) + " inside " + cont.byname({article:DEFINITE}) + ".";
   },
   look_inside:function(char, item) {
-    const l = formatList(item.getContents(display.LOOK), {article:INDEFINITE, lastJoiner:" and ", nothing:"nothing"});
+    const l = formatList(item.getContents(world.LOOK), {article:INDEFINITE, lastJoiner:" and ", nothing:"nothing"});
     return "Inside " + item.byname({article:DEFINITE}) + " " + lang.pronounVerb(char, "can") + " see " + l + ".";
   },
   stop_posture:function(char) {
@@ -640,7 +640,7 @@ const lang = {
       }
       metamsg("To interact with an object, click on it, and a set of possible actions will appear under it. Click on the appropriate action.");
     }
-    return SUCCESS_NO_TURNSCRIPTS;
+    return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
   aboutScript:function() {
@@ -648,27 +648,27 @@ const lang = {
     if (settings.thanks && settings.thanks.length > 0) {
       metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".");
     }
-    return SUCCESS_NO_TURNSCRIPTS;
+    return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
   saveLoadScript:function() {
     metamsg("To save your progress, type SAVE followed by the name to save with.");
     metamsg("To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.");
     metamsg("To see a list of save games, type DIR.");
-    return SUCCESS_NO_TURNSCRIPTS;
+    return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
   transcriptScript:function() {
     metamsg("The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output.");
-    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it. To empty the file, use SCRIPT CLEAR.");
+    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to world. it. To empty the file, use SCRIPT CLEAR.");
     metamsg("You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.");
     metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.");
-    return SUCCESS_NO_TURNSCRIPTS;
+    return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
   topicsScript:function() {
     metamsg("Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).");
-    return SUCCESS_NO_TURNSCRIPTS;
+    return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
   //----------------------------------------------------------------------------------------------
@@ -1055,7 +1055,7 @@ const lang = {
 
 
 // Used by the editor
-try { SUCCESS; }
+try { util; }
 catch (e) {
   module.exports = { lang:lang }
 }

@@ -26,20 +26,20 @@ settings.status = [
   function() { return "<td colspan=\"2\" align=\"center\"> </td>"; },
   function() { return "<td><i>You:</i></td><td align=\"right\">" + game.player.status + "%</td>"; },
   function() { return "<td><i>Ship:</i></td><td align=\"right\">" + w.Xsansi.status + "%</td>"; },
-  function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + displayStatus(w.Ha_yoon) + "</td>"; },
-  function() { return "<td><i>Kyle:</i></td><td align=\"right\">" + displayStatus(w.Kyle) + "</td>"; },
-  function() { return "<td><i>Ostap:</i></td><td align=\"right\">" + displayStatus(w.Ostap) + "</td>"; },
-  function() { return "<td><i>Aada:</i></td><td align=\"right\">" + displayStatus(w.Aada) + "</td>"; },
+  function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + world.Status(w.Ha_yoon) + "</td>"; },
+  function() { return "<td><i>Kyle:</i></td><td align=\"right\">" + world.Status(w.Kyle) + "</td>"; },
+  function() { return "<td><i>Ostap:</i></td><td align=\"right\">" + world.Status(w.Ostap) + "</td>"; },
+  function() { return "<td><i>Aada:</i></td><td align=\"right\">" + world.Status(w.Aada) + "</td>"; },
 ];
 
 
 
-function displayStatus(obj) {
+function world.Status(obj) {
   if (typeof obj.status === "string") return obj.status;
   return obj.status + "%";
 }
 
-// Change the name values to alter how items are displayed
+// Change the name values to alter how items are world.ed
 // You can add (or remove) inventories too
 settings.inventories = [
 //  {name:'Items Held', alt:'itemsHeld', test:util.isHeldNotWorn, getLoc:function() { return game.player.name; } },
