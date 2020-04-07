@@ -1,6 +1,0 @@
-# some usual gitignore properties.
-node_modules
-temp*
-.temp*
-# if you're wondering: this is a hidden config file on macOS
-DS_store

@@ -2,13 +2,9 @@
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import nodeResolve from '@rollup/plugin-node-resolve'
+import html from '@rollup/plugin-html'
+import image from '@rollup/plugin-image'
 import multi from '@rollup/plugin-multi-entry'
-import copyAssets from 'rollup-plugin-copy-assets'
-import html from 'rollup-plugin-generate-html-template'
-import generatePkg from 'rollup-plugin-generate-package-json'
-import gzip from 'rollup-plugin-gzip'
-import rebase from 'rollup-plugin-rebase'
-import staticSite from 'rollup-plugin-static-site'
 /* eslint-enable */
 
 /*
@@ -23,9 +19,6 @@ more info: https://rollupjs.org/guide/en/
 */
 
 export default {
-  external: [
-    path.resolve(__dirname, './QuestJS.js')
-  ],
   input: [
     './src/main.js'
   ],
@@ -33,9 +26,7 @@ export default {
     commonjs(),
     nodeResolve(),
     json(),
-    html(getConfigHTML()),
-    rebase(getRebaseConfig()) // TODO: add version injector
-    // write HTML plugin
+    multi()
   ],
   cache: true,
   inlineDynamicImports: false,
@@ -51,8 +42,7 @@ export default {
   experimentalCacheExpiry: 10,
   perf: true,
   output: {
-    dir: 'dist',
-    // file: 'dist/bundle/QuestJS.umd.js',
+    file: './dist/QuestJS.umd.js',
     format: 'umd',
     name: 'QuestJS',
     plugins: [
@@ -64,25 +54,6 @@ export default {
     sourcemap: true,
     sourcemapExcludeSources: false,
     treeshake: true
-  }
-}
-
-function getRebaseConfig () {
-  return {
-    assetFolder: '',
-    keepName: false,
-    verbose: false
-    // include:
-    // exclude:
-  }
-}
-
-function getConfigHTML () {
-  return {
-    template: 'src/template.html',
-    target: 'index.html',
-    attrs: [],
-    replaceVars: {}
   }
 }
 

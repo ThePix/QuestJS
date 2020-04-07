@@ -20,5 +20,4 @@ export * from './world.js'
 export * from './io.js'
 export * from './commands.js'
 export * from './test-lib.js'
-
-// export * from './games/game.js'
+export * from './game/game.js'
