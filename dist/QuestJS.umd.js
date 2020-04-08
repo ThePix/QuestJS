@@ -6246,8 +6246,14 @@
   // Does not use the text processor.
   // Does not get spoken allowed.
   function debugmsg (s) {
+    /*
+       * this flag is provided with the scope and seems entirely unnescessary
+       * to be checked, as a debug massage should not be called at all
+       * unless you are trying to debug want to debug.
+      * If anythig it should throw a warnign
+      */
     if (settings.debug) {
-      io.addToOutputQueue('<p @@@@ class="debug">' + s + '</p>');
+      io.addToOutputQueue('<p @@@@ class="debug">' + s + '</> p>');
       if (game.transcript) game.scriptAppend('D' + s);
     }
   }
@@ -6419,35 +6425,71 @@
   };
 
   io.addToOutputQueue = function (s) {
+    // typechecking only nescessary because of the preprocessing into a string
     if (typeof s === 'string') {
+      // now here the data is encoded into a key-value-pair `html: String`
+      // this is implicit, as it otakes ALL strings and only outputs HTML.
+      // the second key value pair is also implicit, as there are no other choices.
       io.outputQueue.push({ html: s.replace('@@@@', 'id="n' + io.nextid + '"'), action: 'output', id: io.nextid });
     } else {
+      // the output-queue is an array,
+      // so every stored value has a corresponding key by default
+      // it also itroduces major riskks for desyncronisation, as `io.nextid` is just
+      // some varioable in the global scope and not directly tied to
+      // the data flowing in and out.
       s.id = io.nextid;
       io.outputQueue.push(s);
     }
     io.nextid++;
+    // imlicit. the postprocessor should simply call `outputQueue.push(data)` at the start
     io.outputFromQueue();
   };
 
   io.outputFromQueue = function () {
+    // implicit, this function should not be called unless there is something to output
+    // throw an error, if anything.
     if (io.outputQueue.length === 0) {
       return
     }
+    // the output function should not be called unless it should output something.
+    // move to seperate function and not at the beginning of the preprocesser.
     if (io.outputSuspended) return
-
+    // this part is simply baffeling to me. I don't see any reason to make this
+    // perfectly good index utterly useless. all the data that is displayed in the main
+    // output HAS to pass through `io.outputQueue`. It is the Ultimate reference point to
+    // and from ANYTHING on the main portion of the screen. And with this reference
+    // point, everything can be dynamically changed at will.
     const data = io.outputQueue.shift();
+    // `io.disable` is, `io.outputSuspend`, and the `wait()` function represent 3 versions to
+    // hard-pause program execution. They are also all interconnected AND exposed to the
+    // global scope of the package. A program should have 0-1 of those.
+    // And the only reason to have one trigger is through the enduser wanting to pause the program. If
+    // they are neccessary for program flow, then the flow is flawed.
     if (data.disable) io.disable();
+    // major program operation. it should not be processed here.
+    // instead the `data.action` property should be the actuall function call
+    //   // `data.action = function()` and here the line `data.action()`
     if (data.action === 'wait') {
       io.outputSuspended = true;
       io.clickToContinueLink();
     }
+    // same here
     if (data.action === 'delay') {
       setTimeout(io.outputFromQueue, data.delay * 1000);
     }
+    // only things that need outputting should use this function in the first place.
     if (data.action === 'output') {
+      // !!HERE!! this is the point where ALL the relevant
+      // data of the of the input object should be processed.
+      // There should be NO actual html before this point,
+      // as this is the node between the code and the display.
       $('#output').append(data.html);
       io.outputFromQueue();
+      // !!STOP!! and nothing should be done after this with the input. It has been sent to the renderer and that marks the point where the output function forgets the object ever existed.
     }
+    // I'm not sure what this is for, as all the references are commented out.
+    // from what i can tell `effect` is somekind of encoding for rendering effects?
+    // this should be handled like this. just include some callback function, like abouve.
     if (data.action === 'effect') {
       data.effect(data);
     }
@@ -8234,7 +8276,9 @@
       } else {
         return expected[index].test(value)
       }
-    })) ; else {
+    })) {
+      debugmsg(cmdStr);
+    } else {
       test.printTitle();
       for (let i = 0; i < Math.max(test.testOutput.length, expected.length); i++) {
         if (typeof expected[i] === 'string') {

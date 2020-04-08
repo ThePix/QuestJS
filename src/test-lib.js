@@ -52,7 +52,7 @@ test.assertCmd = function (cmdStr, expected, extraOutput) {
       return expected[index].test(value)
     }
   })) {
-    // debugmsg(".");
+    debugmsg(cmdStr)
   } else {
     test.printTitle()
     for (let i = 0; i < Math.max(test.testOutput.length, expected.length); i++) {
