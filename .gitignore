@@ -5,3 +5,16 @@ temp{!late}*
 # if you're wondering: this is a hidden config file on macOS
 DS_store
 it
+
+tmp.*
+*.xml
+*.aslx
+*.yml
+*.rb
+*.txt
+*.zip
+game-x*/
+libx/
+page-x*.html
+images/Joseph Banks.svg
+misc/
