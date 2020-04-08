@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat|ZCOOL+XiaoWei');
+
+body {
+  color: black;
+  font-family: 'Montserrat', sans-serif;;
+}
+
+#main {
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+
+.sidepanes {
+  font-size: 9pt;
+  font-family: 'Montserrat', sans-serif;;
+}
