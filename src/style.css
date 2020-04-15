@@ -14,7 +14,7 @@
   cursor: pointer;
   color:blue;
 }
-  
+
 
 
 
@@ -150,13 +150,13 @@ td.compassbutton {
     background-color: #c0c0ff;
     width: 20px;
     height: 15px;
-}  
+}
 span.compassbutton {
     cursor: pointer;
     text-align: center;
     width: 18px;
     display: block;
-}  
+}
 
 
 /* Items in inventories */
@@ -226,4 +226,3 @@ th, td {
   padding:4px;
   text-align:center;
 }
-
