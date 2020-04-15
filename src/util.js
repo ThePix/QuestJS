@@ -1,17 +1,19 @@
 'use strict'
+// -fixme: serious namespace pollution.
+import { errormsg, game, w, world, lang, settings, msg } from './main.js'
 
 // ============  Utilities  =================================
 
 // Should all be language neutral
 
-const INDEFINITE = 1
-const DEFINITE = 2
+export const INDEFINITE = 1
+export const DEFINITE = 2
 
-const INFINITY = 9999
+export const INFINITY = 9999
 
-const NULL_FUNC = function () {}
+export const NULL_FUNC = function () {}
 
-const test = {}
+export const test = {}
 test.testing = false
 
 // @DOC
@@ -30,7 +32,7 @@ test.testing = false
 //       msg("This was NOT the first time.")
 //     }, function() {
 //
-function firsttime (id, first, other) {
+export function firsttime (id, first, other) {
   if (firsttimeTracker.includes(id)) {
     if (other) other()
   } else {
@@ -38,14 +40,14 @@ function firsttime (id, first, other) {
     first()
   }
 }
-const firsttimeTracker = []
+export const firsttimeTracker = []
 
 // @DOC
 // If the given attribute is a string it is printed, if it is a
 // function it is called. Otherwise an error is generated.
 // It isMultiple is true, the object name is prefixed.
 // TODO: test array with function
-function printOrRun (char, item, attname, options) {
+export function printOrRun (char, item, attname, options) {
   if (options === undefined) options = {}
   let flag, i
   if (Array.isArray(item[attname])) {
@@ -91,7 +93,7 @@ function printOrRun (char, item, attname, options) {
 // ## Random Functions
 // @UNDOC
 
-const random = {}
+export const random = {}
 
 // @DOC
 // Returns a random number from 0 to n1, or n1 to n2, inclusive.
@@ -175,14 +177,14 @@ random.dice = function (s) {
 
 // @DOC
 // Returns the string with the first letter capitalised
-function sentenceCase (str) {
+export function sentenceCase (str) {
   return str.replace(/[a-z]/i, letter => letter.toUpperCase()).trim()
 }
 
 // @DOC
 // Returns a string with the given number of hard spaces. Browsers collapse multiple white spaces to just show
 // one, so you need to use hard spaces (NBSPs) if you want several together.
-function spaces (n) {
+export function spaces (n) {
   return '&nbsp;'.repeat(n)
 }
 
@@ -191,7 +193,7 @@ function spaces (n) {
 // multiple objects, as you can have this at the start of the response string. For example, if the player does GET BALL,
 // the response might be "Done". If she does GET ALL, then the response for the ball needs to be "Ball: Done".
 // In the command, you can have `msg(prefix(item, isMultiple) + "Done"), and it is sorted.
-function prefix (item, isMultiple) {
+export function prefix (item, isMultiple) {
   if (!isMultiple) { return '' }
   return sentenceCase(item.name) + ': '
 }
@@ -221,7 +223,7 @@ function prefix (item, isMultiple) {
 // ```
 //
 // Note that you can add further options for your own game, and then write your own byname function that uses it.
-function formatList (itemArray, options) {
+export function formatList (itemArray, options) {
   if (options === undefined) { options = {} }
 
   if (itemArray.length === 0) {
@@ -274,16 +276,16 @@ function formatList (itemArray, options) {
 // @DOC
 // Lists the properties of the given object; useful for debugging only.
 // To inspect an object use JSON.stringify(obj)
-function listProperties (obj) {
+export function listProperties (obj) {
   return Object.keys(obj).join(', ')
 }
 
-const arabic = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
-const roman = 'M;CM;D;CD;C;XC;L;XL;X;IX;V;IV;I'.split(';')
+export const arabic = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+export const roman = 'M;CM;D;CD;C;XC;L;XL;X;IX;V;IV;I'.split(';')
 
 // @DOC
 // Returns the given number as a string in Roman numerals.
-function toRoman (number) {
+export function toRoman (number) {
   if (typeof number !== 'number') {
     errormsg('toRoman can only handle numbers')
     return number
@@ -302,7 +304,7 @@ function toRoman (number) {
 
 // @DOC
 // Returns the game time as a string. The game time is game.elapsedTime seconds after game.startTime.
-function getDateTime () {
+export function getDateTime () {
   const time = new Date(game.elapsedTime * 1000 + game.startTime.getTime())
   // console.log(time);
   return time.toLocaleString(settings.dateTime.locale, settings.dateTime)
@@ -310,7 +312,7 @@ function getDateTime () {
 
 // @DOC
 // Returns the given number as a string formatted as money. The formatting is defined by settings.moneyFormat.
-function displayMoney (n) {
+export function displayMoney (n) {
   if (typeof settings.moneyFormat === 'undefined') {
     errormsg('No format for money set (set settings.moneyFormat in settings.js).')
     return '' + n
@@ -350,7 +352,7 @@ function displayMoney (n) {
 // The third is a single non-digit character; the decimal marker.
 // The fourth is a sequence of digits and it the number of characters right of the decimal point; this is padded with zeros to make it longer.
 // The fifth is a sequence of characters that are not digits that will be added to the end of the string, and is optional.
-function displayNumber (n, control) {
+export function displayNumber (n, control) {
   n = Math.abs(n) // must be positive
   const regex = /^(\D*)(\d+)(\D)(\d*)(\D*)$/
   if (!regex.test(control)) {
@@ -373,7 +375,7 @@ function displayNumber (n, control) {
 // @DOC
 // Converts the string to the standard direction name, so "down", "dn" and "d" will all return "down".
 // Uses the EXITS array, so language neutral.
-function getDir (s) {
+export function getDir (s) {
   for (const exit of lang.exit_list) {
     if (exit.nocmd) continue
     if (exit.name === s) return exit.name
@@ -392,7 +394,7 @@ function getDir (s) {
 // Returns a new array, derived by subtracting each element in b from the array a.
 // If b is not an array, then b itself will be removed.
 // Unit tested.
-function arraySubtract (a, b) {
+export function arraySubtract (a, b) {
   if (!Array.isArray(b)) b = [b]
   const res = []
   for (let i = 0; i < a.length; i++) {
@@ -406,7 +408,7 @@ function arraySubtract (a, b) {
 // and each element in order is the same.
 // Assumes a is an array, but not b.
 // Unit tested
-function arrayCompare (a, b) {
+export function arrayCompare (a, b) {
   if (!Array.isArray(b)) return false
   if (a.length !== b.length) return false
   for (let i = 0; i < a.length; i++) {
@@ -418,7 +420,7 @@ function arrayCompare (a, b) {
 // @DOC
 // Removes the element el from the array, ary.
 // Unlike arraySubtract, no new array is created; the original aray is modified, and nothing is returned.
-function arrayRemove (ary, el) {
+export function arrayRemove (ary, el) {
   const index = ary.indexOf(el)
   if (index !== -1) {
     ary.splice(index, 1)
@@ -428,7 +430,7 @@ function arrayRemove (ary, el) {
 // @DOC
 // Returns a new array based on ary, but including only those objects for which the attribute attName is equal to value.
 // To filter for objects that do not have the attribute you can filter for the value undefined.
-function arrayFilterByAttribute (ary, attName, value) {
+export function arrayFilterByAttribute (ary, attName, value) {
   return ary.filter(el => el[attName] === value)
 }
 
@@ -440,7 +442,7 @@ function arrayFilterByAttribute (ary, attName, value) {
 
 // @DOC
 // Returns an array of objects the player can currently reach and see.
-function scopeReachable () {
+export function scopeReachable () {
   const list = []
   for (const key in w) {
     if (w[key].scopeStatus === world.REACHABLE && world.ifNotDark(w[key])) {
@@ -452,7 +454,7 @@ function scopeReachable () {
 
 // @DOC
 // Returns an array of objects held by the given character.
-function scopeHeldBy (chr) {
+export function scopeHeldBy (chr) {
   const list = []
   for (const key in w) {
     if (w[key].isAtLoc(chr)) {
@@ -464,7 +466,7 @@ function scopeHeldBy (chr) {
 
 // @DOC
 // Returns an array of objects at the player's location that can be seen.
-function scopeHereListed () {
+export function scopeHereListed () {
   const list = []
   for (const key in w) {
     if (w[key].isAtLoc(game.player.loc, world.LOOK) && world.ifNotDark(w[key])) {
@@ -474,7 +476,7 @@ function scopeHereListed () {
   return list
 }
 
-const util = {}
+export const util = {}
 
 // ============  Response Utilities  =======================================
 
@@ -485,7 +487,7 @@ const util = {}
 // @DOC
 // Searchs the given list for a suitable response, according to the given params, and runs that response.
 // This is a big topic, see [here](https://github.com/ThePix/QuestJS/wiki/The-respond-function) for more.
-function respond (params, list, func) {
+export function respond (params, list, func) {
   // console.log(params)
   // if (!params.action) throw "No action in params"
   // if (!params.actor) throw "No action in params"
@@ -506,7 +508,7 @@ function respond (params, list, func) {
   return !response.failed
 }
 
-function getResponseList (params, list, result) {
+export function getResponseList (params, list, result) {
   if (!result) result = []
   for (const item of list) {
     if (item.name) {

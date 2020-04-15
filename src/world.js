@@ -1,7 +1,9 @@
 'use strict'
+// -fixme: serious namespace pollution.
+import { printOrRun, msg, io, metamsg, debugmsg, errormsg, endTurnUI, msgHeading, clearScreen, sentenceCase, lang, settings, saveLoad, DEFAULT_ITEM, DEFAULT_ROOM, DEFAULT_OBJECT, initCommands } from './main.js'
 
 // This is where the world exist!
-const w = {}
+export const w = {}
 
 // @DOC
 // ## World Functions
@@ -16,7 +18,7 @@ const w = {}
 // It will than take any number of dictionaries that will be combined to set the properties.
 // Generally objects should not be created during play as they will not be saved properly.
 // Either keep the object hodden until required or clone existing objects.
-function createItem () {
+export function createItem () {
   const args = Array.prototype.slice.call(arguments)
   const name = args.shift()
   args.unshift(DEFAULT_ITEM)
@@ -30,7 +32,7 @@ function createItem () {
 // It will than take any number of dictionaries that will be combined to set the properties.
 // Generally objects should not be created during play as they will not be saved properly.
 // Either keep the object hodden until required or clone existing objects.
-function createRoom () {
+export function createRoom () {
   const args = Array.prototype.slice.call(arguments)
   const name = args.shift()
   args.unshift(DEFAULT_ROOM)
@@ -41,7 +43,7 @@ function createRoom () {
 // Use this to create new items during play. The given item will be cloned at the given location.
 // The `newName` isoptional, one will be generated if not supplied. If you do supply one bear inmid that
 // every clone must have a unique name.
-function cloneObject (item, loc, newName) {
+export function cloneObject (item, loc, newName) {
   if (item === undefined) { console.log('Item is not defined.') }
   const clone = {}
   for (const key in item) {
@@ -79,7 +81,7 @@ function cloneObject (item, loc, newName) {
 
 // @DOC
 // Creates a basic object. Generally it is better to use CreateItem or CreateRoom.
-function createObject (name, listOfHashes) {
+export function createObject (name, listOfHashes) {
   if (world.isCreated && !settings.saveDisabled) {
     console.log('Attempting to use createObject with `' + name + '` after set up. To ensure games save properly you should use cloneObject to create ites during play.')
     errormsg('Attempting to use createObject with `' + name + '` after set up. To ensure games save properly you should use cloneObject to create ites during play.')
@@ -121,7 +123,7 @@ function createObject (name, listOfHashes) {
   return item
 }
 
-const world = {
+export const world = {
   VISIBLE: 1,
   REACHABLE: 2,
 
@@ -401,7 +403,7 @@ const world = {
 
 }
 
-const game = createObject('game', [{
+export const game = createObject('game', [{
   verbosity: world.VERBOSE,
   transcript: false,
   transcriptText: [],
@@ -554,7 +556,7 @@ const game = createObject('game', [{
 
 }])
 
-function Exit (name, hash) {
+export function Exit (name, hash) {
   if (!hash) hash = {}
   this.name = name
   this.use = function (char, dir) {

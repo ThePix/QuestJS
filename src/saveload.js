@@ -19,8 +19,9 @@ If the datam is a number, a string or true it is saved as such.
 Any other objects or values will not be saved.
 
 */
+import { metamsg, errormsg, endTurnUI, game, w, Exit, cloneObject, settings } from './main.js'
 
-const saveLoad = {
+export const saveLoad = {
 
   saveGame: function (filename, comment) {
     if (filename === undefined) {

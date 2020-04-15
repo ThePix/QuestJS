@@ -1,8 +1,10 @@
 'use strict'
+// -fixme: serious namespace pollution.
+import { printOrRun, msg, errormsg, falsemsg, INDEFINITE, sentenceCase, DEFINITE, NULL_FUNC, game, w, lang, settings, saveLoad, world } from './main.js'
 
 // Should all be language neutral
 
-const DEFAULT_OBJECT = {
+export const DEFAULT_OBJECT = {
   byname: function (options) {
     let s
     if (options && options.article === DEFINITE) {
@@ -129,11 +131,11 @@ const DEFAULT_OBJECT = {
 
   eventActive: false,
   eventCountdown: 0,
-  eventIsActive: () => this.eventActive,
+  // eventIsActive: () => this.eventActive,
   doEvent: function (turn) {
     // debugmsg("this=" + this.name);
     // Not active, so stop
-    if (!this.eventIsActive()) return
+    if (!this.eventActive) return
     // Countdown running, so stop
     if (this.eventCountdown > 1) {
       this.eventCountdown--
@@ -150,7 +152,7 @@ const DEFAULT_OBJECT = {
   }
 }
 
-const CONTAINER_BASE = {
+export const CONTAINER_BASE = {
   container: true,
 
   getContents: function (situation) {
@@ -176,7 +178,7 @@ const CONTAINER_BASE = {
 
 }
 
-const DEFAULT_ROOM = {
+export const DEFAULT_ROOM = {
   room: true,
   beforeEnter: NULL_FUNC,
   beforeFirstEnter: NULL_FUNC,
@@ -288,7 +290,7 @@ const DEFAULT_ROOM = {
 
 }
 
-const DEFAULT_ITEM = {
+export const DEFAULT_ITEM = {
   lightSource: () => world.LIGHT_NONE,
   icon: () => '',
   testKeys: (char, toLock) => false,

@@ -1,0 +1,107 @@
+{ // settings used for the COMMENT ANCHOR extension.
+  // it automatically highlights and cataloguesn
+  // certain keywords for easy development in a group.
+  "commentAnchors.scrollPosition": "center",
+  "commentAnchors.tags.list": [
+    {
+      "borderRadius": 10,
+      "highlightColor": "#77CCFF",
+      "iconColor": "default",
+      "scope": "file",
+      "tag": "INFO",
+      "borderStyle": "1px solid #77CCFF"
+    },
+    {
+      "borderRadius": 10,
+      "highlightColor": "#A8C023",
+      "iconColor": "default",
+      "scope": "file",
+      "tag": "ANCHOR"
+      //"borderStyle": "1px solid #c55a",
+    },
+    {
+      "borderRadius": 10,
+      "borderStyle": "1px solid #c55a",
+      "highlightColor": "#c55a",
+      "iconColor": "default",
+      "scope": "workspace",
+      "styleComment": true,
+      "tag": "DEPRICATE"
+    },
+    {
+      "borderRadius": 10,
+      "highlightColor": "orange",
+      "iconColor": "orange",
+      "scope": "workspace",
+      "styleComment": true,
+      "tag": "TODO",
+      "borderStyle": "1px solid #fc0a"
+    },
+    {
+      "borderRadius": 10,
+      "highlightColor": "#F44336",
+      "iconColor": "red",
+      "scope": "workspace",
+      "styleComment": true,
+      "tag": "FIXME",
+      "borderStyle": "1px solid #F44336aa"
+    },
+    {
+      "borderRadius": 10,
+      "highlightColor": "#BA68C8",
+      "iconColor": "purple",
+      "isItalic": true,
+      "scope": "file",
+      "tag": "STUB",
+      "borderStyle": "1px solid #BA68C8"
+    },
+    {
+      "borderRadius": 10,
+      "highlightColor": "yellow",
+      "iconColor": "yellow",
+      "scope": "file",
+      "styleComment": true,
+      "tag": "NOTE",
+      "borderStyle": "1px solid #ff0a"
+    },
+    {
+      "borderRadius": 10,
+      "highlightColor": "#44cc55",
+      "iconColor": "green",
+      "scope": "workspace",
+      "styleComment": true,
+      "tag": "REVIEW",
+      "borderStyle": "1px solid #44cc55"
+    },
+    {
+      "borderRadius": 10,
+      "highlightColor": "#896afc",
+      "iconColor": "blurple",
+      "isRegion": true,
+      "scope": "workspace",
+      "tag": "SECTION",
+      "borderStyle": "1px solid #896afc"
+    },
+    {
+      "borderRadius": 10,
+      "highlightColor": "#3ea8ff",
+      "iconColor": "blue",
+      "isRegion": true,
+      "scope": "workspace",
+      "styleComment": true,
+      "tag": "REVIEWSECTION",
+      "borderStyle": "1px solid #3ea8ff"
+    }
+  ],
+  "commentAnchors.tags.matchCase": false,
+  "commentAnchors.tags.provideAutoCompletion": true,
+  "commentAnchors.tags.rulerStyle": "left",
+  "commentAnchors.tags.separators": [
+    ": ",
+    "- ",
+    "-",
+    " "
+  ],
+  "commentAnchors.workspace.excludeFiles": "**/{node_modules,.git,.idea,target,dist,out,vendor,.cache,.ref}/**/*",
+  "commentAnchors.workspace.matchFiles": "**/*/*"
+}

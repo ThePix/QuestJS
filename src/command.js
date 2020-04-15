@@ -1,8 +1,17 @@
 'use strict'
+// -fixme: serious namespace pollution.
+import {
+  failedmsg, errormsg, printOrRun, msg /* alert */,
+  commands,
+  prefix, sentenceCase,
+  parser,
+  game, world, w,
+  lang
+} from './main.js'
 
 // Should all be language neutral (except the inspect function, which is just for debugging)
 
-function Cmd (name, hash) {
+export function Cmd (name, hash) {
   this.name = name
   this.objects = []
   this.rules = []
@@ -84,7 +93,7 @@ function Cmd (name, hash) {
 // Use only for NPC commands that you are not giving your
 // own custom script attribute. Commands must be an order to a single
 // NPC in the form verb-object.
-function NpcCmd (name, hash) {
+export function NpcCmd (name, hash) {
   Cmd.call(this, name, hash)
   if (!this.cmdCategory) this.cmdCategory = name
   this.script = function (objects) {
@@ -126,11 +135,11 @@ function NpcCmd (name, hash) {
   }
 }
 
-function ExitCmd (name, dir, hash) {
+export function ExitCmd (name, dir, hash) {
   Cmd.call(this, name, hash)
   this.exitCmd = true
   this.dir = dir
-  this.objects = [{ ignore: true }, { ignore: true }],
+  this.objects = [{ ignore: true }, { ignore: true }]
   this.script = function (objects) {
     if (!game.room.hasExit(this.dir)) {
       failedmsg(lang.not_that_way(game.player, this.dir))
@@ -155,11 +164,11 @@ function ExitCmd (name, dir, hash) {
   }
 }
 
-function NpcExitCmd (name, dir, hash) {
+export function NpcExitCmd (name, dir, hash) {
   Cmd.call(this, name, hash)
   this.exitCmd = true
   this.dir = dir
-  this.objects = [{ scope: parser.isHere, attName: 'npc' }, { ignore: true }, { ignore: true }],
+  this.objects = [{ scope: parser.isHere, attName: 'npc' }, { ignore: true }, { ignore: true }]
   this.script = function (objects) {
     const npc = objects[0][0]
     if (!game.room.hasExit(this.dir)) {
@@ -188,7 +197,7 @@ function NpcExitCmd (name, dir, hash) {
   }
 }
 
-function useWithDoor (char, dir) {
+export function useWithDoor (char, dir) {
   const obj = w[this.door]
   if (obj === undefined) {
     errormsg("Not found an object called '" + this.door + "'. Any exit that uses the 'useWithDoor' function must also set a 'door' attribute.")
@@ -216,7 +225,7 @@ function useWithDoor (char, dir) {
 };
 
 // Should be called during the initialisation process
-function initCommands () {
+export function initCommands () {
   const newCmds = []
   commands.forEach(function (el) {
     if (el.verb) {
@@ -283,7 +292,7 @@ function initCommands () {
 }
 
 // Useful in a command's script when handling NPCs as well as the player
-function extractChar (cmd, objects) {
+export function extractChar (cmd, objects) {
   let char
   if (cmd.forNpc) {
     char = objects[0][0]
@@ -298,7 +307,7 @@ function extractChar (cmd, objects) {
   return char
 }
 
-const cmdRules = {}
+export const cmdRules = {}
 
 // Item's location is the char and it is not worn
 cmdRules.isHeldNotWorn = function (cmd, char, item, isMultiple) {

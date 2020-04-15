@@ -1,4 +1,6 @@
 'use strict'
+// -fixme: serious namespace pollution.
+import { io, errormsg, INDEFINITE, sentenceCase, world, formatList, displayMoney, scopeHereListed, DEFINITE, util, game, w, lang } from './main.js'
 
 // @DOC
 // ## The Text Processor Function
@@ -7,7 +9,7 @@
 // @DOC
 // Returns a string in which all the text processor directives have been resolved, using the optionasl parameters.
 // More details [here(https://github.com/ThePix/QuestJS/wiki/The-Text-Processor).
-function processText (str, params) {
+export function processText (str, params) {
   if (params === undefined) {
     params = {}
   }
@@ -31,7 +33,7 @@ function processText (str, params) {
 }
 
 // Most of the text processors are set up in text.js; these are the language specific ones.
-const tp = {
+export const tp = {
   text_processors: {}
 }
 

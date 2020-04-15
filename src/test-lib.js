@@ -1,6 +1,12 @@
 'use strict'
-
-// This is not language neutral, but should not be shipping with the game, so tough
+import { debugmsg } from './main.js'
+import {
+  INDEFINITE, getDir, settings, msg, cloneObject, saveLoad, agenda,
+  sentenceCase, formatList, displayMoney, test, transitOfferMenu, world,
+  w, processText, lang, arraySubtract,
+  DEFINITE, parser, arrayCompare, game, displayNumber
+} from './main'
+import { io } from './io.js'
 
 // Note that the test object was defined in util.js
 

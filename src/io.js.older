@@ -24,11 +24,11 @@
 // Additional data can be put in the optional params dictionary.
 // You can specify a CSS class to use.
 // During unit testing, messages will be saved and tested
-function msg(s, params, cssClass) {
+export function msg(s, params, cssClass) {
   if (cssClass === undefined) cssClass = 'defaultP';
   const processed = processText(s, params).trim();
   if (processed === "") return;
-  
+
   if (test.testing) {
     test.testOutput.push(processed);
     return;
@@ -50,11 +50,11 @@ function msg(s, params, cssClass) {
 
 
 
-function msgUnscramble(s, params, cssClass) {
+export function msgUnscramble(s, params, cssClass) {
   if (cssClass === undefined) cssClass = 'defaultP';
   const processed = processText(s, params).trim();
   if (processed === "") return;
-  
+
   if (test.testing) {
     return;
   }
@@ -72,7 +72,7 @@ function msgUnscramble(s, params, cssClass) {
 //@DOC
 // As `msg`, but handles an array of strings. Each string is put in its own HTML paragraph,
 // and the set is put in an HTML division (DIV). The cssClass is applied to the division.
-function msgDiv(arr, params, cssClass) {
+export function msgDiv(arr, params, cssClass) {
   if (test.testing) return
   let s = '<div class="' + cssClass + '" @@@@>\n'
   for (let item of arr) {
@@ -90,7 +90,7 @@ function msgDiv(arr, params, cssClass) {
 //@DOC
 // As `msg`, but handles an array of strings in a list. Each string is put in its own HTML list item (LI),
 // and the set is put in an HTML order list (OL) or unordered list (UL), depending on the value of `ordered`.
-function msgList(arr, ordered, params) {
+export function msgList(arr, ordered, params) {
   if (test.testing) return
   let s = ordered ? '<ol>\n' : '<ul @@@@>\n'
   for (let item of arr) {
@@ -108,7 +108,7 @@ function msgList(arr, ordered, params) {
 //@DOC
 // As `msg`, but handles an array of arrays of strings in a list. This is laid out in an HTML table.
 // If `headings` is present, this array of strings is used as the column headings.
-function msgTable(arr, headings, params) {
+export function msgTable(arr, headings, params) {
   if (test.testing) return
   let s = '<table @@@@>\n'
   if (headings) {
@@ -140,7 +140,7 @@ function msgTable(arr, headings, params) {
 // As `msg`, but the string is presented as an HTML heading (H1 to H6).
 // The level of the heading is determined by `level`, with 1 being the top, and 6 the bottom.
 // Headings are ignored during unit testing.
-function msgHeading(s, level, params) {
+export function msgHeading(s, level, params) {
   const processed = processText(s, params);
   if (!test.testing) {
     if (settings.typewriter) {
@@ -161,7 +161,7 @@ function msgHeading(s, level, params) {
 // If height is omitted, the height will be proportional to the given width.
 // The file name should include the path. For a local image, that would probably be the images folder,
 // but it could be the web address of an image hosted elsewhere.
-function picture(filename, width, height) {
+export function picture(filename, width, height) {
   let s = '<img src="' + filename + '"'
   if (width) s += ' width="' + width + '"'
   if (height) s += ' height="' + height + '"'
@@ -175,7 +175,7 @@ function picture(filename, width, height) {
 // Just the same as msg, but adds the "failed" CSS class. This allows failed command responses to be differentiated.
 // Returns the value FAILED, allowing commands to give a message and give up
 //     if (notAllowed) return failedmsg("That is not allowed.")
-function failedmsg(s, params) {
+export function failedmsg(s, params) {
   msg(s, params, "failed");
   return FAILED;
 }
@@ -186,7 +186,7 @@ function failedmsg(s, params) {
 // Just the same as msg, but adds the "failed" CSS class. This allows failed command responses to be differentiated.
 // Returns the value false, allowing commands to give a message and give up
 //     if (notAllowed) return falsemsg("That is not allowed.")
-function falsemsg(s, params) {
+export function falsemsg(s, params) {
   msg(s, params, "failed");
   return false;
 }
@@ -199,7 +199,7 @@ function falsemsg(s, params) {
 // The string will first be passed through the text processor.
 // Additional data can be put in the optional params dictionary.
 // During unit testing, messages will be saved and tested
-function metamsg(s, params) {
+export function metamsg(s, params) {
   const processed = processText(s, params);
   if (test.testing) {
     test.testOutput.push(processed);
@@ -219,7 +219,7 @@ function metamsg(s, params) {
 // to blame.
 // During unit testing, error messages will be saved and tested.
 // Does not use the text processor (as it could be an error in there!).
-function errormsg(s) {
+export function errormsg(s) {
   if (test.testing) {
     test.testOutput.push(s);
     return;
@@ -236,7 +236,7 @@ function errormsg(s) {
 // Output a message from the parser indicating the input text could not be parsed.
 // During unit testing, messages will be saved and tested.
 // Does not use the text processor.
-function parsermsg(s) {
+export function parsermsg(s) {
   if (test.testing) {
     test.testOutput.push(s);
     return;
@@ -257,7 +257,7 @@ function parsermsg(s) {
 // and outputs objects and array far better.
 // Does not use the text processor.
 // Does not get spoken allowed.
-function debugmsg(s) {
+export function debugmsg(s) {
   if (settings.debug) {
     io.addToOutputQueue('<p @@@@ class="debug">' + s + '</p>');
     if (game.transcript) game.scriptAppend("D" + s);
@@ -272,7 +272,7 @@ function debugmsg(s) {
 // function it is called. Otherwise an error is generated.
 // It isMultiple is true, the object name is prefixed.
 // TODO: test array with function
-function printOrRun(char, item, attname, options) {
+export function printOrRun(char, item, attname, options) {
   if (options === undefined) options = {};
   let flag, i;
   if (Array.isArray(item[attname])) {
@@ -301,7 +301,7 @@ function printOrRun(char, item, attname, options) {
       msg(attname, {char:char, item:item});
       return true;
     }
-  }  
+  }
   else if (typeof item[attname] === "string") {
     // The attribute is a string
     msg(prefix(item, options.multi) + item[attname], {char:char, item:item});
@@ -325,7 +325,7 @@ function printOrRun(char, item, attname, options) {
 
 //@DOC
 // Clears the screen.
-function clearScreen() {
+export function clearScreen() {
   for (let i = 0; i < io.nextid; i++) {
     $('#n' + i).remove();
   }
@@ -335,7 +335,7 @@ function clearScreen() {
 
 //@DOC
 // Stops outputting whilst waiting for the player to click.
-function wait(delay) {
+export function wait(delay) {
   if (test.testing) return;
   if (delay === undefined) {
     io.outputQueue.push({action:'wait', disable:true})
@@ -354,7 +354,7 @@ function wait(delay) {
 
 
 
-function askQuestion(title, fn) {
+export function askQuestion(title, fn) {
   msg(title);
   parser.overrideWith(fn)
 }
@@ -367,7 +367,7 @@ function askQuestion(title, fn) {
 //      showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
 //        msg("You picked " + result + ".");
 //      });
-function showMenu(title, options, fn) {
+export function showMenu(title, options, fn) {
   io.input(title, options, fn, function(options) {
     for (let i = 0; i < options.length; i++) {
       let s = '<a class="menuoption" onclick="io.menuResponse(' + i + ')">';
@@ -378,7 +378,7 @@ function showMenu(title, options, fn) {
   })
 }
 
-function showDropDown(title, options, fn) {
+export function showDropDown(title, options, fn) {
   io.input(title, options, fn, function(options) {
     let s = '<select id="menu-select" class="custom-select" style="width:400px;" ';
     s += 'onchange=\"io.menuResponse($(\'#menu-select\').find(\':selected\').val())\">';
@@ -394,11 +394,11 @@ function showDropDown(title, options, fn) {
   })
 }
 
-function showYesNoMenu(title, fn) {
+export function showYesNoMenu(title, fn) {
   showMenu(title, lang.yesNo, fn)
 }
 
-function showYesNoDropDown(title, fn) {
+export function showYesNoDropDown(title, fn) {
   showDropDown(title, lang.yesNo, fn)
 }
 
@@ -406,7 +406,7 @@ function showYesNoDropDown(title, fn) {
 
 
 // This should be called after each turn to ensure we are at the end of the page and the text box has the focus
-function endTurnUI(update) {
+export function endTurnUI(update) {
   //debugmsg("In endTurnUI");
   if (settings.panes !== 'None' && update) {
     // set the lang.exit_list
@@ -441,14 +441,14 @@ function endTurnUI(update) {
 
 
 
-const io = {};
+export const io = {};
 
 
 io.input = function(title, options, reactFunction, displayFunction) {
   io.menuStartId = io.nextid;
   io.menuFn = reactFunction;
   io.menuOptions = options;
-  
+
   if (test.testing) {
     if (test.menuResponseNumber === undefined) {
       debugmsg("Error when testing menu (possibly due to disambiguation?), test.menuResponseNumber = " + test.menuResponseNumber);
@@ -457,9 +457,9 @@ io.input = function(title, options, reactFunction, displayFunction) {
       io.menuResponse(test.menuResponseNumber);
       test.menuResponseNumber = undefined
     }
-    return; 
+    return;
   }
-  
+
   io.disable();
   msg(title, {}, 'menutitle');
   displayFunction(options)
@@ -510,7 +510,7 @@ io.outputFromQueue = function() {
   if (data.action === 'effect') {
     data.effect(data)
   }
-  window.scrollTo(0, document.getElementById('main').scrollHeight)  
+  window.scrollTo(0, document.getElementById('main').scrollHeight)
 }
 
 io.clickToContinueLink = function() {
@@ -560,7 +560,7 @@ io.unscrambleEffect = function(data) {
       }
     }
   }
-  
+
   if (data.randomPlacing) {
     let pos = randomInt(0, data.count - 1)
     let newMask = ''
@@ -611,7 +611,7 @@ io.cmdLink = function(command, str) {
 
 
 io.scrollToEnd = function() {
-   window.scrollTo(0,document.getElementById('main').scrollHeight);  
+   window.scrollTo(0,document.getElementById('main').scrollHeight);
 };
 
 
@@ -667,7 +667,7 @@ io.updateUIItems = function() {
   for (let inv of settings.inventories) {
     $('#' + inv.alt).empty();
   }
-  
+
   io.currentItemList = [];
   for (let key in w) {
     const item = w[key];
@@ -684,7 +684,7 @@ io.updateUIItems = function() {
 
 io.updateStatus = function() {
   if (!settings.statusPane) return;
-  
+
   $("#status-pane").empty();
   for (let st of settings.status) {
     if (typeof st === "string") {
@@ -838,7 +838,7 @@ io.createPanes = function() {
     document.writeln('</table>');
     document.writeln('</div>');
   }
-  
+
   for (let inv of settings.inventories) {
     if (settings.divider) document.writeln('<img src="images/' + settings.divider + '" />');
     document.writeln('<div class="paneDiv">');
@@ -851,7 +851,7 @@ io.createPanes = function() {
   document.writeln('</div>');
 
   if (typeof ioCreateCustom === "function") ioCreateCustom();
-  
+
   $('#input').html(settings.cursor + '<input type="text" name="textbox" id="textbox"  autofocus/>')
 
 };
@@ -919,7 +919,7 @@ $(document).ready(function() {
         // Get cursor to end of text
         const el = $('#textbox')[0]
         if (el.setSelectionRange) {
-          setTimeout(function() {el.setSelectionRange(9999, 9999); }, 0);  
+          setTimeout(function() {el.setSelectionRange(9999, 9999); }, 0);
         }
         else if (typeof el.selectionStart == "number") {
           el.selectionStart = el.selectionEnd = el.value.length;
@@ -945,7 +945,7 @@ $(document).ready(function() {
         parser.parse("test");
         setTimeout(function() { $('#textbox').val(''); }, 1);
       }
-  });    
+  });
   io.textColour = $(".sidepanes").css("color");
   game.initialise();
 
@@ -957,7 +957,7 @@ $(document).ready(function() {
 io.synth = window.speechSynthesis;
 io.voice = null;
 io.voice2 = null;
- 
+
 io.speak = function(str, altVoice){
   if (!io.voice) {
     io.voice = io.synth.getVoices().find(function(el) {
@@ -971,7 +971,7 @@ io.speak = function(str, altVoice){
     });
     if (!io.voice2) io.voice2 = io.synth.getVoices()[0];
   }
-  
+
   const utterThis = new SpeechSynthesisUtterance(str);
   utterThis.onend = function (event) {
     //console.log('SpeechSynthesisUtterance.onend');
@@ -1002,7 +1002,3 @@ io.showHtml = function(title, html) {
   });
   return true;
 }
-
-
-
-

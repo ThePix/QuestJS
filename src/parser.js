@@ -11,6 +11,8 @@
 // Should all be language neutral (except the inspect function, which is just for debugging)
 
 'use strict'
+// -fixme: serious namespace pollution.
+import { commands, settings, game, w, world, parsermsg, debugmsg, errormsg, showMenu, lang } from './main.js'
 
 // @DOC
 // ## Parser Functions
@@ -18,7 +20,7 @@
 // Most of these are only for internal use!
 // @UNDOC
 
-const parser = {}
+export const parser = {}
 
 parser.currentCommand
 // Stores the current values for it, him, etc.

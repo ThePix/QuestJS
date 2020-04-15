@@ -1,6 +1,8 @@
 // ============  Output  =======================================
-
+// -fixme: serious namespace pollution.
 'use strict'
+import { sentenceCase, DEFINITE, test, world, parser, game, w, lang, settings, processText, commands } from './main.js'
+// import { Message } from './ioHelper'
 
 // @DOC
 // ##Output functions
@@ -23,7 +25,7 @@ cssClass
 printBlank
 */
 
-function _msg (s, params, options) {
+export function _msg (s, params, options) {
   if (options.tag === undefined) options.tag = 'p'
   if (options.cssClass === undefined) options.cssClass = 'default' + options.tag.toUpperCase()
   const processed = params ? processText(s, params).trim() : s.trim()
@@ -49,7 +51,7 @@ function _msg (s, params, options) {
 // Additional data can be put in the optional params dictionary.
 // You can specify a CSS class to use.
 // During unit testing, messages will be saved and tested
-function msg (s, params, cssClass) {
+export function msg (s, params, cssClass) {
   // if (!params) params = {}
   const lines = s.split('|')
   for (let line of lines) {
@@ -63,14 +65,14 @@ function msg (s, params, cssClass) {
 // As `msg`, but the string is presented as an HTML heading (H1 to H6).
 // The level of the heading is determined by `level`, with 1 being the top, and 6 the bottom.
 // Headings are ignored during unit testing.
-function msgBlankLine () {
+export function msgBlankLine () {
   _msg('', false, { tag: 'p', printBlank: true })
 }
 
 // @DOC
 // As `msg`, but handles an array of strings. Each string is put in its own HTML paragraph,
 // and the set is put in an HTML division (DIV). The cssClass is applied to the division.
-function msgDiv (arr, params, cssClass) {
+export function msgDiv (arr, params, cssClass) {
   let s = ''
   for (const item of arr) {
     s += '  <p>' + item + '</p>\n'
@@ -81,7 +83,7 @@ function msgDiv (arr, params, cssClass) {
 // @DOC
 // As `msg`, but handles an array of strings in a list. Each string is put in its own HTML list item (LI),
 // and the set is put in an HTML order list (OL) or unordered list (UL), depending on the value of `ordered`.
-function msgList (arr, ordered, params) {
+export function msgList (arr, ordered, params) {
   let s = ''
   for (const item of arr) {
     s += '  <li>' + item + '</li>\n'
@@ -92,7 +94,7 @@ function msgList (arr, ordered, params) {
 // @DOC
 // As `msg`, but handles an array of arrays of strings in a list. This is laid out in an HTML table.
 // If `headings` is present, this array of strings is used as the column headings.
-function msgTable (arr, headings, params) {
+export function msgTable (arr, headings, params) {
   let s = ''
   if (headings) {
     s += '  <tr>\n'
@@ -115,7 +117,7 @@ function msgTable (arr, headings, params) {
 // As `msg`, but the string is presented as an HTML heading (H1 to H6).
 // The level of the heading is determined by `level`, with 1 being the top, and 6 the bottom.
 // Headings are ignored during unit testing.
-function msgHeading (s, level, params) {
+export function msgHeading (s, level, params) {
   _msg(s, params || {}, { tag: 'h' + level })
 }
 
@@ -125,13 +127,13 @@ function msgHeading (s, level, params) {
 // If height is omitted, the height will be proportional to the given width.
 // The file name should include the path. For a local image, that would probably be the images folder,
 // but it could be the web address of an image hosted elsewhere.
-function picture (filename, width, height) {
+export function picture (filename, width, height) {
   _msg('', {}, { action: 'output', width: width, height: height, tag: 'img', src: settings.imagesFolder + '/' + filename, printBlank: true })
 }
 
 // @DOC
 // Plays a sound. The filename must include the extension, and the file should be in the folder specified by audioFolder (defaults to the game folder).
-function sound (filename) {
+export function sound (filename) {
   // console.log(settings.ssFolder)
   _msg('Your browser does not support the <code>audio</code> element.', {}, { action: 'output', autoplay: true, tag: 'audio', src: settings.audioFolder + '/' + filename })
 }
@@ -139,7 +141,7 @@ function sound (filename) {
 // @DOC
 // Plays a video. The filename must include the extension, and the file should be in the folder specified by audioFolder (defaults to the game folder).
 // There are some issues about codecs and formats; use at your discretion.
-function video (filename) {
+export function video (filename) {
   // console.log(settings.ssFolder)
   _msg('Your browser does not support the <code>video</code> element.', {}, { action: 'output', autoplay: true, tag: 'video', src: settings.videoFolder + '/' + filename })
 }
@@ -148,7 +150,7 @@ function video (filename) {
 // Just the same as msg, but adds the "failed" CSS class. This allows failed command responses to be differentiated.
 // Returns the value FAILED, allowing commands to give a message and give up
 //     if (notAllowed) return failedmsg("That is not allowed.")
-function failedmsg (s, params) {
+export function failedmsg (s, params) {
   _msg(s, params || {}, { cssClass: 'failed', tag: 'p' })
   return world.FAILED
 }
@@ -157,7 +159,7 @@ function failedmsg (s, params) {
 // Just the same as msg, but adds the "failed" CSS class. This allows failed command responses to be differentiated.
 // Returns the value false, allowing commands to give a message and give up
 //     if (notAllowed) return falsemsg("That is not allowed.")
-function falsemsg (s, params) {
+export function falsemsg (s, params) {
   _msg(s, params || {}, { cssClass: 'failed', tag: 'p' })
   return false
 }
@@ -168,7 +170,7 @@ function falsemsg (s, params) {
 // The string will first be passed through the text processor.
 // Additional data can be put in the optional params dictionary.
 // During unit testing, messages will be saved and tested
-function metamsg (s, params) {
+export function metamsg (s, params) {
   _msg(s, params || {}, { cssClass: 'meta', tag: 'p' })
 }
 
@@ -176,7 +178,7 @@ function metamsg (s, params) {
 // Output a message from the parser indicating the input text could not be parsed.
 // During unit testing, messages will be saved and tested.
 // Does not use the text processor.
-function parsermsg (s) {
+export function parsermsg (s) {
   _msg(s, false, { cssClass: 'parser', tag: 'p' })
   return false
 }
@@ -190,7 +192,7 @@ function parsermsg (s) {
 // This bypasses the normal output system. It will not wait for other text to be output (for example
 // after wait). During unit testing, error messages will be output to screen as they occur.
 // It does not use the text processor.
-function errormsg (s) {
+export function errormsg (s) {
   io.print({ tag: 'p', cssClass: 'error', text: s })
   return false
 }
@@ -204,7 +206,7 @@ function errormsg (s) {
 // This bypasses the normal output system. It will not wait for other text to be output (for example
 // after wait). During unit testing, error messages will be output to screen as they occur.
 // It does not use the text processor.
-function debugmsg (s) {
+export function debugmsg (s) {
   if (settings.debug) {
     io.print({ tag: 'p', cssClass: 'debug', text: s })
   }
@@ -212,13 +214,13 @@ function debugmsg (s) {
 
 // @DOC
 // Clears the screen.
-function clearScreen () {
+export function clearScreen () {
   io.outputQueue.push({ action: 'clear' })
 }
 
 // @DOC
 // Stops outputting whilst waiting for the player to click.
-function wait (delay, text) {
+export function wait (delay, text) {
   if (test.testing) return
   // io.outputSuspended = true
   if (delay === undefined) {
@@ -228,7 +230,7 @@ function wait (delay, text) {
   }
 }
 
-function askQuestion (title, fn) {
+export function askQuestion (title, fn) {
   msg(title)
   parser.overrideWith(fn)
 }
@@ -238,7 +240,7 @@ function askQuestion (title, fn) {
 //      showMenu('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
 //        msg("You picked " + result + ".");
 //      });
-function showMenu (title, options, fn) {
+export function showMenu (title, options, fn) {
   io.input(title, options, fn, function (options) {
     for (let i = 0; i < options.length; i++) {
       let s = '<a class="menuoption" onclick="io.menuResponse(' + i + ')">'
@@ -249,7 +251,7 @@ function showMenu (title, options, fn) {
   })
 }
 
-function showDropDown (title, options, fn) {
+export function showDropDown (title, options, fn) {
   io.input(title, options, fn, function (options) {
     let s = '<select id="menu-select" class="custom-select" style="width:400px;" '
     s += 'onchange=\"io.menuResponse($(\'#menu-select\').find(\':selected\').val())\">'
@@ -265,16 +267,16 @@ function showDropDown (title, options, fn) {
   })
 }
 
-function showYesNoMenu (title, fn) {
+export function showYesNoMenu (title, fn) {
   showMenu(title, lang.yesNo, fn)
 }
 
-function showYesNoDropDown (title, fn) {
+export function showYesNoDropDown (title, fn) {
   showDropDown(title, lang.yesNo, fn)
 }
 
 // This should be called after each turn to ensure we are at the end of the page and the text box has the focus
-function endTurnUI (update) {
+export function endTurnUI (update) {
   // debugmsg("In endTurnUI");
   if (settings.panes !== 'None' && update) {
     // set the lang.exit_list
@@ -298,7 +300,7 @@ function endTurnUI (update) {
 
 // ============  Hidden from creators!  =======================================
 
-const io = {}
+export const io = {}
 
 io.input = function (title, options, reactFunction, displayFunction) {
   io.menuStartId = io.nextid

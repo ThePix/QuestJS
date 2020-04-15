@@ -1,8 +1,11 @@
 'use strict'
+// -fixme: serious namespace pollution.
+import { failedmsg, msg, showDropDown, metamsg, debugmsg, errormsg, showMenu, getResponseList, formatList, respond, NULL_FUNC, game, w, world, lang, settings, PLAYER } from './main.js'
+// Should all be language neutral"use strict";
 
 // Should all be language neutral
 
-const NPC = function (isFemale) {
+export const NPC = function (isFemale) {
   // A whole bunch of defaults are the same as the player
   const res = Object.assign({}, PLAYER(), CONSULTABLE())
 
@@ -217,7 +220,7 @@ const NPC = function (isFemale) {
   return res
 }
 
-const npc_utilities = {
+export const npc_utilities = {
   talkto: function () {
     if (!game.player.canTalk(this)) {
       return false
@@ -260,7 +263,7 @@ const npc_utilities = {
 
 }
 
-const agenda = {
+export const agenda = {
   // print the array as text if the player is here
   // otherwise this will be skipped
   // Used by several other functions, so this applies to them too
@@ -497,11 +500,11 @@ agenda.extractPath = function (start, end) {
   return res.reverse()
 }
 
-const CONSULTABLE = function () {
+export const CONSULTABLE = function () {
   const res = {}
 
-  res.askabout = function (text1, text2) { return this.asktellabout(text1, text2, lang.ask_about_intro, this.askOptions, 'ask') },
-  res.tellabout = function (text1, text2) { return this.asktellabout(text1, text2, lang.tell_about_intro, this.tellOptions, 'tell') },
+  res.askabout = function (text1, text2) { return this.asktellabout(text1, text2, lang.ask_about_intro, this.askOptions, 'ask') }
+  res.tellabout = function (text1, text2) { return this.asktellabout(text1, text2, lang.tell_about_intro, this.tellOptions, 'tell') }
   res.asktellabout = function (text1, text2, intro, list, action) {
     if (!game.player.canTalk(this)) {
       return false
@@ -536,7 +539,7 @@ const CONSULTABLE = function () {
   return res
 }
 
-const QUESTION = function () {
+export const QUESTION = function () {
   const res = {
     sayResponse: function (actor, s) {
       for (const res of this.responses) {
@@ -553,7 +556,7 @@ const QUESTION = function () {
   return res
 }
 
-const TOPIC = function (fromStart) {
+export const TOPIC = function (fromStart) {
   const res = {
     conversationTopic: true,
     showTopic: fromStart,

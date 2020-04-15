@@ -1,8 +1,11 @@
 'use strict'
+// -fixme: serious namespace pollution.
+import { failedmsg, printOrRun, msg, falsemsg, debugmsg, errormsg, showMenu, INDEFINITE, prefix, sentenceCase, formatList, scopeReachable, scopeHeldBy, DEFINITE, INFINITY, NULL_FUNC, util, game, w, world, createItem, cloneObject, lang, CONTAINER_BASE } from './main.js'
+//  PLAYER, items, cloneObject
 
 // Should all be language neutral
 
-const TAKEABLE_DICTIONARY = {
+export const TAKEABLE_DICTIONARY = {
   getVerbs: function () {
     const verbList = this.use === undefined ? [lang.verbs.examine] : [lang.verbs.examine, lang.verbs.use]
     if (this.isAtLoc(game.player.name)) {
@@ -36,16 +39,16 @@ const TAKEABLE_DICTIONARY = {
 
 }
 
-const TAKEABLE = () => TAKEABLE_DICTIONARY
+export const TAKEABLE = () => TAKEABLE_DICTIONARY
 
-const SHIFTABLE = function () {
+export const SHIFTABLE = function () {
   const res = {
     shiftable: true
   }
   return res
 }
 
-const createEnsemble = function (name, members, dict) {
+export const createEnsemble = function (name, members, dict) {
   const res = createItem(name, dict)
   res.ensemble = true
   res.members = members
@@ -124,7 +127,7 @@ const createEnsemble = function (name, members, dict) {
   return res
 }
 
-const MERCH = function (value, locs) {
+export const MERCH = function (value, locs) {
   const res = {
     price: value,
     getPrice: function () { return this.price },
@@ -217,7 +220,7 @@ const MERCH = function (value, locs) {
 }
 
 // countableLocs should be a dictionary, with the room name as the key, and the number there as the value
-const COUNTABLE = function (countableLocs) {
+export const COUNTABLE = function (countableLocs) {
   const res = $.extend({}, TAKEABLE_DICTIONARY)
   res.countable = true
   res.countableLocs = countableLocs
@@ -376,7 +379,7 @@ const COUNTABLE = function (countableLocs) {
   return res
 }
 
-const WEARABLE = function (wear_layer, slots) {
+export const WEARABLE = function (wear_layer, slots) {
   const res = $.extend({}, TAKEABLE_DICTIONARY)
   res.wearable = true
   res.wear_layer = wear_layer || false
@@ -471,7 +474,7 @@ const WEARABLE = function (wear_layer, slots) {
   return res
 }
 
-const CONTAINER = function (openable) {
+export const CONTAINER = function (openable) {
   const res = CONTAINER_BASE
   res.closed = openable
   res.openable = openable
@@ -574,7 +577,7 @@ const CONTAINER = function (openable) {
   return res
 }
 
-const SURFACE = function () {
+export const SURFACE = function () {
   const res = CONTAINER_BASE
   res.closed = false
   res.openable = false
@@ -586,7 +589,7 @@ const SURFACE = function () {
   return res
 }
 
-const OPENABLE = function (alreadyOpen) {
+export const OPENABLE = function (alreadyOpen) {
   const res = {}
   res.closed = !alreadyOpen
   res.openable = true
@@ -624,7 +627,7 @@ const OPENABLE = function (alreadyOpen) {
   return res
 }
 
-const locked_WITH = function (keyNames) {
+export const locked_WITH = function (keyNames) {
   if (typeof keyNames === 'string') { keyNames = [keyNames] }
   if (keyNames === undefined) { keyNames = [] }
   const res = {
@@ -676,7 +679,7 @@ const locked_WITH = function (keyNames) {
   return res
 }
 
-const FURNITURE = function (options) {
+export const FURNITURE = function (options) {
   const res = {
     testForPosture: (char, posture) => true,
     getoff: function (isMultiple, char) {
@@ -727,7 +730,7 @@ const FURNITURE = function (options) {
   return res
 }
 
-const SWITCHABLE = function (alreadyOn) {
+export const SWITCHABLE = function (alreadyOn) {
   const res = {}
   res.switchedon = alreadyOn
 
@@ -789,7 +792,7 @@ const SWITCHABLE = function (alreadyOn) {
 // Ideally Quest will check components when doing a command for the whole
 // I think?
 
-const COMPONENT = function (nameOfWhole) {
+export const COMPONENT = function (nameOfWhole) {
   const res = {
     scenery: true,
     component: true,
@@ -812,7 +815,7 @@ const COMPONENT = function (nameOfWhole) {
   return res
 }
 
-const EDIBLE = function (isLiquid) {
+export const EDIBLE = function (isLiquid) {
   const res = $.extend({}, TAKEABLE_DICTIONARY)
   res.isLiquid = isLiquid
   res.eat = function (isMultiple, char) {
@@ -853,7 +856,7 @@ const EDIBLE = function (isLiquid) {
   return res
 }
 
-const VESSEL = function (capacity) {
+export const VESSEL = function (capacity) {
   const res = {}
   res.vessel = true
   res.containedLiquidName = false
@@ -930,7 +933,7 @@ const VESSEL = function (capacity) {
 // room.isSourceOf("water")
 //
 
-const LIQUID = function (locs) {
+export const LIQUID = function (locs) {
   const res = EDIBLE(true)
   res.liquid = true
   res.pronouns = lang.pronouns.massnoun
@@ -958,7 +961,7 @@ const LIQUID = function (locs) {
   return res
 }
 
-const TRANSIT_BUTTON = function (nameOfTransit) {
+export const TRANSIT_BUTTON = function (nameOfTransit) {
   const res = {
     loc: nameOfTransit,
     transitButton: true,
@@ -984,7 +987,7 @@ const TRANSIT_BUTTON = function (nameOfTransit) {
 }
 
 // This is for rooms
-const TRANSIT = function (exitDir) {
+export const TRANSIT = function (exitDir) {
   const res = {
     saveExitDests: true,
     transitDoorDir: exitDir,
@@ -1004,7 +1007,7 @@ const TRANSIT = function (exitDir) {
 }
 
 // This function is useful only to the TRANSIT template so is here
-function transitOfferMenu () {
+export function transitOfferMenu () {
   if (typeof this.transitCheck === 'function' && !this.transitCheck()) {
     if (this.transitAutoMove) world.setRoom(game.player, game.player.previousLoc, this.transitDoorDir)
     return false
@@ -1029,7 +1032,7 @@ function transitOfferMenu () {
   })
 }
 
-const PLAYER = function () {
+export const PLAYER = function () {
   const res = {
     pronouns: lang.pronouns.secondperson,
     player: true,

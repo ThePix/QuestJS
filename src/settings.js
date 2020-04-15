@@ -2,7 +2,9 @@
 
 // Comment necessary for require in QEdit
 
-const settings = {
+import { game, world } from './main.js'
+
+export const settings = {
 
   // Functions for the side panes lists
   isHeldNotWorn: function (item) {
@@ -135,6 +137,6 @@ settings.inventories = [
 ]
 
 // Used by the editor
-try { util } catch (e) {
-  module.exports = { settings: settings }
-}
+// try { util } catch (e) {
+//   module.exports = { settings: settings }
+// }

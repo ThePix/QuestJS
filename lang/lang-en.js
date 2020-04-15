@@ -1,9 +1,13 @@
 'use strict'
+// -fixme: serious namespace pollution.
+import {
+  game, DEFINITE, sentenceCase, formatList, INDEFINITE, w, world, msg, util, settings, metamsg, errormsg,
+  displayMoney
+} from '../src/main.js'
 
 // Language support
-
-const lang = {
-
+// -fixme: needs to be overhauled
+export const lang = {
   // ----------------------------------------------------------------------------------------------
   // Regular expressions for commands
 
@@ -977,6 +981,6 @@ const lang = {
 }
 
 // Used by the editor
-try { util } catch (e) {
-  module.exports = { lang: lang }
-}
+// try { util } catch (e) {
+//   module.exports = { lang: lang }
+// }

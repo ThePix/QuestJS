@@ -1,3 +1,5 @@
+// -fixme: serious namespace pollution.
+import { failedmsg, printOrRun, msg, metamsg, msgTable, debugmsg, INDEFINITE, prefix, getDir, test, sentenceCase, formatList, parser, game, w, lang, Cmd, cmdRules, settings, saveLoad, world } from './main.js'
 // A command has an arbitrary name, a regex or pattern,
 // and a script as a minimum.
 // regex           A regex to match against
@@ -8,9 +10,7 @@
 // noobjecterror   If the player specifies an object
 // noTurnscripts   Set to true to prevent turnscripts firing even when this command is successful
 
-'use strict'
-
-const cmdDirections = []
+export const cmdDirections = []
 for (const exit of lang.exit_list) {
   if (exit.nocmd) continue
   cmdDirections.push(exit.name)
@@ -18,7 +18,7 @@ for (const exit of lang.exit_list) {
   if (exit.alt) cmdDirections.push(exit.alt)
 }
 
-const commands = [
+export const commands = [
   // ----------------------------------
   // Single word commands
 
@@ -1099,7 +1099,7 @@ if (settings.debug) {
 // (but not in the commands array)
 
 // Cannot handle multiple vessels
-function handleFillWithLiquid (char, vessel, liquid) {
+export function handleFillWithLiquid (char, vessel, liquid) {
   if (!vessel.vessel) return failedmsg(lang.not_vessel(char, vessel))
   if (vessel.closed) return failedmsg(lang.container_closed(char, vessel))
   if (!char.canManipulate(vessel, 'fill')) return world.FAILED
@@ -1109,7 +1109,7 @@ function handleFillWithLiquid (char, vessel, liquid) {
   return vessel.fill(false, char, liquid) ? world.SUCCESS : world.FAILED
 }
 
-function handlePutInContainer (char, objects) {
+export function handlePutInContainer (char, objects) {
   let success = false
   const container = objects[1][0]
   const multiple = objects[0].length > 1 || parser.currentCommand.all
@@ -1151,7 +1151,7 @@ function handlePutInContainer (char, objects) {
   return success ? world.SUCCESS : world.FAILED
 }
 
-function handleTakeFromContainer (char, objects) {
+export function handleTakeFromContainer (char, objects) {
   let success = false
   const container = objects[1][0]
   const multiple = objects[0].length > 1 || parser.currentCommand.all
@@ -1189,7 +1189,7 @@ function handleTakeFromContainer (char, objects) {
   return success ? world.SUCCESS : world.FAILED
 }
 
-function handleGiveToNpc (char, objects) {
+export function handleGiveToNpc (char, objects) {
   let success = false
   const npc = objects[1][0]
   const multiple = objects[0].length > 1 || parser.currentCommand.all
@@ -1226,7 +1226,7 @@ function handleGiveToNpc (char, objects) {
   return success ? world.SUCCESS : world.FAILED
 }
 
-function handleStandUp (objects) {
+export function handleStandUp (objects) {
   const npc = objects.length === 0 ? game.player : objects[0][0]
   if (!npc.npc) {
     failedmsg(lang.not_npc(npc))
@@ -1253,7 +1253,7 @@ function handleStandUp (objects) {
 }
 
 // we know the char can manipulate, we know the obj is here and not held
-function handlePushExit (char, objects) {
+export function handlePushExit (char, objects) {
   const verb = getDir(objects[0])
   const obj = objects[1][0]
   const dir = getDir(objects[2])
