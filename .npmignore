@@ -1,0 +1,21 @@
+# NPM packages should be as light as possible and exclude everything that isn't used purely to tun it.
+# except for LICENCE and README, which will be included in any case. even if mentioned here.
+
+# these are all used to build. But this is is taken care of before the package gets published.
+needs_updating/**
+node_modules/**
+src/**
+temp*
+.temp*
+
+# these various config files are not needed, as they are purely used for development.
+.editorconfig
+architecture.png
+rollup.config.js
+.vscode/**
+.gitignore
+DS_store
+
+# there is no use of normal docfiles. But if you are making a tool for the command line,
+# you can specify `man` files in the package.json that will automatically installed alongside the package.
+docs
