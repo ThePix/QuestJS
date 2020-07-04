@@ -397,10 +397,10 @@ createRoom("top_deck_forward", {
   desc:function() {
     if (!w.top_deck_aft.meFirst) {
       this.meFirst = true;
-      msg(w.top_deck_aft.descStart + this.descThis + w.top_deck_aft.descFinish);
+      return w.top_deck_aft.descStart + this.descThis + w.top_deck_aft.descFinish
     }
     else {
-      msg(this.descThis);
+      return this.descThis;
     }
   },
   descThis: "You are stood at the forward end of a narrow corridor, with your cabin to port, and the canteen to starboard. Ahead, is the lounge.",
