@@ -745,23 +745,22 @@ const lang = {
 
   // Change the abbrev values to suit your game (or language)
   // You may want to do that in settings, which is loaded first
-  // One time we need var rather than const/let!
   exit_list:[
-    {name:'northwest', abbrev:'NW', niceDir:"the northwest", key:103}, 
-    {name:'north', abbrev:'N', niceDir:"the north", key:104}, 
-    {name:'northeast', abbrev:'NE', niceDir:"the northeast", key:105}, 
+    {name:'northwest', abbrev:'NW', niceDir:"the northwest", key:103, x:-1 ,y:1 }, 
+    {name:'north', abbrev:'N', niceDir:"the north", key:104, x:0 ,y:1 }, 
+    {name:'northeast', abbrev:'NE', niceDir:"the northeast", key:105, x:1 ,y:1 }, 
     {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside"}, 
     {name:'up', abbrev:'U', niceDir:"above", key:107},
     
-    {name:'west', abbrev:'W', niceDir:"the west", key:100}, 
+    {name:'west', abbrev:'W', niceDir:"the west", key:100, x:-1 ,y:0 }, 
     {name:'Look', abbrev:'Lk', nocmd:true, key:101}, 
-    {name:'east', abbrev:'E', niceDir:"the east", key:102}, 
+    {name:'east', abbrev:'E', niceDir:"the east", key:102, x:1 ,y:0 }, 
     {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside"}, 
     {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", key:109}, 
 
-    {name:'southwest', abbrev:'SW', niceDir:"the southwest", key:97}, 
-    {name:'south', abbrev:'S', niceDir:"the south", key:98}, 
-    {name:'southeast', abbrev:'SE', niceDir:"the southeast", key:99}, 
+    {name:'southwest', abbrev:'SW', niceDir:"the southwest", key:97, x:-1 ,y:-1 }, 
+    {name:'south', abbrev:'S', niceDir:"the south", key:98, x:0 ,y:-1 }, 
+    {name:'southeast', abbrev:'SE', niceDir:"the southeast", key:99, x:1 ,y:-1 }, 
     {name:'Wait', abbrev:'Z', nocmd:true, key:110}, 
     {name:'Help', abbrev:'?', nocmd:true}, 
   ],
