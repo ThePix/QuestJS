@@ -84,7 +84,6 @@ function performAttack(attacker, target) {
 
 
 
-
 // Get a list of foes in the current room, with target first (whether a foe or not)
 function getFoes(target) {
   const l = scope(isHere).filter(function(el) {
@@ -213,7 +212,7 @@ const WEAPON = function() {
     if (char.equipped === this.name) {
       char.equipped = "weapon_unarmed";
     }
-    msg(prefix(this, isMultiple) + drop_successful(char, this));
+    msg(prefix(this, isMultiple) + lang.drop_successful(char, this));
     this.moveToFrom(char.loc, this.loc);
     return true;
   },
@@ -294,6 +293,23 @@ commands.push(new Cmd('Unequip', {
   },
 }));
 
+
+
+commands.unshift(new Cmd('Map', {
+  regex:/^(map)$/,
+  objects:[
+    {ignore:true},
+  ],
+  script:function() {
+    draw(600,600, [
+      '<polygon points="0,0, 0,300, 300,300, 300,0" fill="none" stroke="red" stroke-width="10"/>',
+      '<polygon points="0,100 50,25 50,75 100,0" />',
+      '<polygon points="100,100,150,25 150,75 200,0" fill="none" stroke="black" />',
+      '<polygon points="0,0, 0,100, 100,100, 100,0" fill="yellow" stroke="none" />',
+    ])
+    return world.SUCCESS_NO_TURNSCRIPTS;
+  },
+}));
 
 
 

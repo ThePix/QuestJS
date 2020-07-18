@@ -1,23 +1,12 @@
 "use strict";
 
-settings.title = "A First Step...";
+settings.title = "A First RPG...";
 settings.author = "The Pixie"
 settings.version = "1.1";
 settings.thanks = ["Kyle", "Lara"];
 
-settings.status = [
-  "hitpoints",
-  function() { return "<td>Spell points:</td><td>3</td>"; },
-  function() { return "<td>Health points:</td><td>" + game.player.hitpoints + "</td>"; },
-  function() { return '<td colspan="2">' + game.player.status + "</td>"; },
-];
-
-
-
-
-
-
-
+settings.statusPane = false;
+settings.tests = true
 
 
 // This function will be called at the start of the game, so can be used
@@ -39,14 +28,6 @@ settings.setup = function() {
   
 //  parser.parse("attack goblin");
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -110,7 +91,7 @@ const chooseWeapon = function() {
   console.log("in chooseWeapon");
   const weapons = [];
   for (let o in w) {
-    if (w[o].loc === game.player.name && w[o].weapon) {
+    if (w[o].isAtLoc(game.player) && w[o].weapon) {
       console.log(o);
       weapons.push('<option value="'+ o +'">' + w[o].listalias + '</option>');
     }
