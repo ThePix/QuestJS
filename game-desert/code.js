@@ -200,13 +200,3 @@ commands.unshift(new Cmd('Polar', {
 
 
 
-tp.addDirective("charger_state", function(){
-  if (w.charger_compartment.closed) {
-    return "The compartment is closed";
-  }
-  const contents = w.charger_compartment.getContents(world.LOOK);
-  if (contents.length === 0) {
-    return "The compartment is empty";
-  }
-  return "The compartment contains " + formatList(contents, {article:INDEFINITE});
-});

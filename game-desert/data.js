@@ -98,10 +98,13 @@ createItem("huge_rock", ZONE_FEATURE('desert', 2, -3, 3, true), {
   featureNoExit:"There is a big rock stopping you going #.",
   featureLook:"To the #, you can see a huge rock.",
   examine:"An outcropping of sandstone; it does not look like you could climb it.",
+  //zoneMapName:'Huge rock',
 });
 
 createItem("cactus", ZONE_FEATURE('desert', -1, 4, 2), {
   featureLook:"There is a big cactus to the #.",
+  zoneColour:'green',
+  zoneMapName:'Strange cactus',
   featureLookHere:"There is a big cactus here; it looks strangely like a hand giving you the finger.",
   examine:"The only thing to thrive in the desert is this solitary cactus. It looks to be a saguaro, one of the bigger species of cacti. It is strange to see one this far north.",
 });
@@ -116,7 +119,7 @@ createItem("barrier", ZONE_BORDER('desert'), {
   examine:"It is invisible!",
   scenery:true,
   border:function(x, y) {
-    return (x * x + y * y > 25)
+    return (x * x + y * y > 85)
   },
   borderMsg:"You try to head #, but hit an invisible barrier.",
   borderDesc:"The air seems to kind of shimmer.",
@@ -134,6 +137,11 @@ createRoom("desert", ZONE(), {
     {x:-1, y:0, dir:'in', dest:'kitchen', msg:'You walk inside the back of the gas station.'},
     {x:-1, y:0, dir:'south', dest:'kitchen', msg:'You walk inside the back of the gas station.'},
   ],
+  size:10,
+  mapCells:[
+    '<rect x="0" y="162" width="336" height="12" stroke="none" fill="#666"/>'
+  ],
+  outsideColour:'lemonchiffon',
   desc:function() {
     let s = ''
     if (game.player.positionY === 0) {
