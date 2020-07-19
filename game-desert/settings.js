@@ -23,4 +23,4 @@ settings.roomTemplate = [
   "{objectsHere:You can see {objects} here.}",
 ]
 
-settings.intro = "Screaming, a squeal of tyres, and suddenly you are launched into the seat in front of you.\nFor a moment you sit there, head resting on the other seat, too dazed to move. At the front of the bus, you can hear a woman saying 'Oh my God. Oh my God. Oh my God...', and you are vaguely aware of others talking too."
+settings.intro = "You wake up, and realise the bus has stopped."

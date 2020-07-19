@@ -600,9 +600,9 @@ createItem("broken_chair",
 
 
 createRoom("garden", {
-  desc:"Very overgrown. The garden backs onto a shop to the west, whilst the conservatory is east.",
+  desc:"Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east.",
   east:new Exit("conservatory"),
-  west:new Exit("shop"),
+  west:new Exit("road"),
 });
 
 
@@ -912,10 +912,17 @@ createItem("brick",
 
 createRoom("shop", {
   desc:"A funny little shop.",
-  east:new Exit("garden"),
+  south:new Exit("road"),
   willBuy:function(obj) {
     return (obj === w.trophy);
   }
+});
+
+createRoom("road", {
+  desc:"A road heading west over a bridge. You can see a shop to the north.",
+  east:new Exit("garden"),
+  west:new Exit("bridge"),
+  north:new Exit("shop"),
 });
 
 createItem("carrot", TAKEABLE(), MERCH(2, ["shop"]), {
@@ -929,4 +936,100 @@ createItem("honey_pasta",  TAKEABLE(), MERCH(5, ["shop"]),{
 createItem("trophy",  TAKEABLE(), MERCH(15, "shop"),{
   examine:"It is a unique trophy!",
   doNotClone:true,
+});
+
+
+
+
+
+
+createItem("cactus", ZONE_FEATURE('desert', -1, 4, 2), {
+  featureLook:"There is a big cactus to the #.",
+  zoneColour:'green',
+  zoneMapName:'Strange cactus',
+  examine:"Prickly!",
+});
+
+createItem("tower", ZONE_FEATURE('desert', -7, 4, 3), {
+  featureLook:"There is a tower to the #.",
+  featureLookHere:"There is a tall stone tower here.",
+  examine:"The tower looks ancient, but in a fair state of repair. It is about four storeys high.",
+});
+
+
+
+createItem("barrier", ZONE_BORDER('desert'), {
+  examine:"It is invisible!",
+  scenery:true,
+  border:function(x, y) {
+    return (x * x + y * y > 49)
+  },
+  borderMsg:"You try to head #, but hit an invisible barrier.",
+  borderDesc:"The air seems to kind of shimmer.",
+});
+
+createItem("canyon", ZONE_BORDER('desert'), {
+  examine:"It looks very deep!",
+  scenery:true,
+  border:function(x, y) {
+    return (x - y > 5)
+  },
+  borderMsg:"You cannot go #, the canyon is too wide to jump and too steep to climb.",
+  borderDesc:"A deep canyon runs from the southwest to the north east.",
+});
+
+
+
+createRoom("desert", ZONE(), {
+  exits:[
+    {x:-7, y:4, dir:'in', dest:'inside_tower', msg:'You step inside the tower.'},
+    {x:-7, y:4, dir:'east', dest:'bridge', msg:'You start across the bridge.'},
+  ],
+  desc:function() {
+    // start with a variable, s
+    let s = ''
+    // add text too it depending on the current x and y co-ordinates
+    if (game.player.positionY === 0) {
+      if (game.player.positionX === 5) {
+        s +='You are stood on a road heading west through a desert, and east over a bridge.'
+      }
+      else {
+        s +='You are stood on a road running east to west through a desert.'
+      }
+    }
+    else if (game.player.positionY > 0) {
+      s += 'You are stood in the desert, north of the road.'
+    }
+    else {
+      s += 'You are stood in the desert, south of the road.'
+    }
+    // add this.getFeatureDescs()
+    s += this.getFeatureDescs()
+    // return the results
+    return s
+  },
+  size:10,
+  insideColour:'green',         // Locations the player can access
+  outsideColour:'transparent',  // Locations the player cannot access
+  mapBorder:false,              // Hide the map border
+  featureColour:'blue',         // Default colour for features
+  playerColour:'black',         // Colour of the player
+  cellSize:20,                  // The size of each location, if less than 10 the player will disappear!
+  mapFont:'italic 10px serif',   // Style of the labels for features
+  mapCells:[
+    '<rect x="0" y="162" width="336" height="12" stroke="none" fill="#666"/>'
+  ],
+
+});
+
+
+
+createRoom("bridge", {
+  desc:'From the bridge you can just how deep the canyon is.',
+  west:new Exit('desert'),
+  east:new Exit('road'),
+  beforeEnter:function() {
+    game.player.positionX = 5
+    game.player.positionY = 0
+  },
 });

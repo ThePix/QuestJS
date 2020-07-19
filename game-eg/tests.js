@@ -498,7 +498,7 @@ test.tests = function() {
   test.assertCmd("s", ["The kitchen", "A clean room. There is a sink in the corner.", /You can see/, "You can go down, north or west."]);
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv.", /^You can see/, "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", /You can see/, "You can go north or west."]);
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden backs onto a shop to the west, whilst the conservatory is east.", "You can see Arthur here.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east.", "You can see Arthur here.", "You can go east or west."]);
   
   
   test.title("Agendas");
@@ -579,8 +579,11 @@ test.tests = function() {
   test.assertCmd("o", ["You head out.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair here.", "You can go north or west."]);
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden backs onto a shop to the west, whilst the conservatory is east.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
-  test.assertCmd("w", ["You head west.", "The shop", "A funny little shop.", "You can go east."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
+  
+  test.assertCmd("w", ["You head west.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
+  test.assertCmd("n", ["You head north.", "The shop", "A funny little shop.", "You can go south."]);
+  
   w.me.money = 20
 
   test.title("shop - text processor");
@@ -630,6 +633,23 @@ test.tests = function() {
   test.assertCmd("sell trophy", ["You sell the trophy for $0,12."]);
   test.assertEqual(20, w.me.money)
   
+  test.title("the zone");
+  test.assertCmd("s", ["You head south.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
+  test.assertCmd("w", ["You head west.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."]);
+  
+  
+  
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. A deep canyon runs from the southwest to the north east.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. A deep canyon runs from the southwest to the north east.", "You can go east or west."]);
+  
+  
+  
+  
+  
+  
+  
+  
+  
   test.title("vessels and liquids");
   game.player.loc = "kitchen"
   w.jug.loc = "big_kitchen_table"
@@ -640,6 +660,9 @@ test.tests = function() {
   test.assertCmd("fill jug with water", ["You fill the jug."]);
   test.assertCmd("fill jug with water", ["It already is."]);
   test.assertCmd("fill jug with lemonade", ["It's not something you can mix liquids in."]);
+  
+  
+  
   
   
   /* */
