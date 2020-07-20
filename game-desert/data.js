@@ -162,7 +162,7 @@ createRoom("desert", ZONE(), {
   descs:[
     {
       x:-1, y:-2,
-    desc: 'You are stood on the road, beside the bus. The road stretches east and west for miles before disappearing in the heat haze, but there is a gas station just ahead.{once: Has the driver gone there? There is literally nothing else here. Perhaps it would be best to get back in the bus, and wait for him to get back.}',
+      desc: 'You are stood on the road, beside the bus. The road stretches east and west for miles before disappearing in the heat haze, but there is a gas station just ahead.{once: Has the driver gone there? There is literally nothing else here. Perhaps it would be best to get back in the bus, and wait for him to get back.}',
     },
     {
       x:0, y:-2,
@@ -205,34 +205,9 @@ createRoom("desert", ZONE(), {
       desc: 'You are stood in the desert, north of the road.',
     },
     {
-      desc: 'You are stood in the desert, sorth of the road.',
+      desc: 'You are stood in the desert, south of the road.',
     },
   ],
-  desc2:function() {
-    let s = ''
-    if (game.player.positionY === 0) {
-      if (game.player.positionX === 0) {
-        return 'You are stood on the road, by a gas station.'
-      }
-      if (game.player.positionX === -1) {
-        return 'You are stood on the side of the road somewhere in the Nevada desert. The road heads east and west, disappearing into the heat haze in both directions. You can see a gas station a short way to the east,\nSouth is the bus, and to the southeast the car that crashed into it.'
-      }
-      if (game.player.positionX < -1) {
-        s = 'You are stood on the road, to the east you can see the bus.'
-      }
-      else {
-        s = 'You are stood on the road, to the west you can see the gas station.'
-      }
-    }
-    else if (game.player.positionY > 0) {
-      s = 'You are stood in the desert, north of the road.'
-    }
-    else {
-      s = 'You are stood in the desert, south of the road.'
-    }
-
-    return s + this.getFeatureDescs()
-  },
 });
 
 

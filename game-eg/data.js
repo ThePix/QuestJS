@@ -943,16 +943,20 @@ createItem("trophy",  TAKEABLE(), MERCH(15, "shop"),{
 
 
 
-createItem("cactus", ZONE_FEATURE('desert', -1, 4, 2), {
+
+
+
+createItem("cactus", ZONE_FEATURE('desert', 1, -2, 3), {
   featureLook:"There is a big cactus to the #.",
   zoneColour:'green',
   zoneMapName:'Strange cactus',
   examine:"Prickly!",
 });
 
-createItem("tower", ZONE_FEATURE('desert', -7, 4, 3), {
+createItem("tower", ZONE_FEATURE('desert', -1, 3, 4), {
   featureLook:"There is a tower to the #.",
   featureLookHere:"There is a tall stone tower here.",
+  zoneMapName:'Ancient tower',
   examine:"The tower looks ancient, but in a fair state of repair. It is about four storeys high.",
 });
 
@@ -962,7 +966,7 @@ createItem("barrier", ZONE_BORDER('desert'), {
   examine:"It is invisible!",
   scenery:true,
   border:function(x, y) {
-    return (x * x + y * y > 49)
+    return (x * x + y * y > 55)
   },
   borderMsg:"You try to head #, but hit an invisible barrier.",
   borderDesc:"The air seems to kind of shimmer.",
@@ -974,42 +978,35 @@ createItem("canyon", ZONE_BORDER('desert'), {
   border:function(x, y) {
     return (x - y > 5)
   },
-  borderMsg:"You cannot go #, the canyon is too wide to jump and too steep to climb.",
-  borderDesc:"A deep canyon runs from the southwest to the north east.",
+  //borderMsg:"You cannot go #, the canyon is too wide to jump and too steep to climb.",
+  borderDesc:"There is a deep canyon southeast of you, running from the southwest to the northeast.",
 });
 
 
 
 createRoom("desert", ZONE(), {
   exits:[
-    {x:-7, y:4, dir:'in', dest:'inside_tower', msg:'You step inside the tower.'},
-    {x:-7, y:4, dir:'east', dest:'bridge', msg:'You start across the bridge.'},
+    {x:-1, y:3, dir:'in', dest:'inside_tower', msg:'You step inside the tower, and climb the step, spiral staircase to the top.'},
+    {x:5, y:0, dir:'east', dest:'bridge', msg:'You start across the bridge.'},
   ],
-  desc:function() {
-    // start with a variable, s
-    let s = ''
-    // add text too it depending on the current x and y co-ordinates
-    if (game.player.positionY === 0) {
-      if (game.player.positionX === 5) {
-        s +='You are stood on a road heading west through a desert, and east over a bridge.'
-      }
-      else {
-        s +='You are stood on a road running east to west through a desert.'
-      }
-    }
-    else if (game.player.positionY > 0) {
-      s += 'You are stood in the desert, north of the road.'
-    }
-    else {
-      s += 'You are stood in the desert, south of the road.'
-    }
-    // add this.getFeatureDescs()
-    s += this.getFeatureDescs()
-    // return the results
-    return s
-  },
-  size:10,
-  insideColour:'green',         // Locations the player can access
+  descs:[
+    {
+      x:5, y:0,
+      desc: 'You are stood on a road heading west through a desert, and east over a bridge.'
+    },
+    {
+      when:function(x, y) { return y === 0 },
+      desc:'You are stood on a road running east to west through a desert.',
+    },
+    {
+      when:function(x, y) { return y > 0 },
+      desc:'You are stood in the desert, north of the road.',
+    },
+    {
+      desc:'You are stood in the desert, south of the road.',
+    },
+  ],
+  size:8,
   outsideColour:'transparent',  // Locations the player cannot access
   mapBorder:false,              // Hide the map border
   featureColour:'blue',         // Default colour for features
@@ -1017,10 +1014,18 @@ createRoom("desert", ZONE(), {
   cellSize:20,                  // The size of each location, if less than 10 the player will disappear!
   mapFont:'italic 10px serif',   // Style of the labels for features
   mapCells:[
-    '<rect x="0" y="162" width="336" height="12" stroke="none" fill="#666"/>'
+    '<rect x="0" y="162" width="336" height="16" stroke="none" fill="#999"/>'
   ],
 
 });
+
+
+
+createItem("silver_coin", TAKEABLE(), ZONE_ITEM('desert', 1, 1), {
+  examine:"A curious silver coin; you do not recognise it. It says it is worth two dollars.",
+});
+
+
 
 
 
@@ -1033,3 +1038,16 @@ createRoom("bridge", {
     game.player.positionY = 0
   },
 });
+
+createRoom("inside_tower", {
+  desc:"A tower, looking out over the desert. To the south is the road, heading east back to your house. To the north is a magic portal, going who knows where.",
+  down:new Exit("desert"),
+  north:new Exit("shop"),
+  alias:'Inside the tower',
+  properName:true,
+  beforeEnter:function() {
+    game.player.positionX = -1
+    game.player.positionY = 3
+  },
+});
+
