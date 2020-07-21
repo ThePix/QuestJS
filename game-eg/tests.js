@@ -638,20 +638,20 @@ test.tests = function() {
   test.assertCmd("w", ["You head west.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."]);
   // Takes us to 5,0
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
-  // Takes us to 4,0  
-  test.assertCmd("w", ["You walk west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, south, southwest or west."]);
+    // Takes us to 4,0  
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, south, southwest or west."]);
   
   test.assertCmd("drop carrot", ["You drop the carrot."]);
   test.assertCmd("look", ["The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
   
   
   // Takes us to 4,-1
-  test.assertCmd("s", ["You walk south.", "The desert", "You are stood in the desert, south of the road. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go north, northeast, northwest, southwest or west."]);
+  test.assertCmd("s", ["You head south.", "The desert", "You are stood in the desert, south of the road. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go north, northeast, northwest, southwest or west."]);
   test.assertCmd("s", ["You can't go south."]);  
   // Takes us to 4,0  
-  test.assertCmd("n", ["You walk north.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
+  test.assertCmd("n", ["You head north.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
   // Takes us to 5,0
-  test.assertCmd("e", ["You walk east.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
+  test.assertCmd("e", ["You head east.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
   test.assertCmd("e", ["You start across the bridge.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."]);
   // Takes us to 5,0
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
@@ -659,40 +659,40 @@ test.tests = function() {
   
   test.title("the zone - features");
   // 1. Takes us to 4,0  
-  test.assertCmd("w", ["You walk west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
   // 2. Takes us to 3,0  
-  test.assertCmd("w", ["You walk west.", "The desert", "You are stood on a road running east to west through a desert. There is a big cactus to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a big cactus to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   // 3. Takes us to 1,0  
-  test.assertCmd("w", ["You walk west.", "The desert", "You are stood on a road running east to west through a desert. There is a big cactus to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a big cactus to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   // 4. Takes us to 1,0  
-  test.assertCmd("w", ["You walk west.", "The desert", "You are stood on a road running east to west through a desert. There is a big cactus to the south. There is a tower to the northwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a big cactus to the south. There is a tower to the northwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   // 5. Takes us to 1,1
-  test.assertCmd("n", ["You walk north.", "The desert", "You are stood in the desert, north of the road. There is a big cactus to the south. There is a tower to the northwest.", "You can see a silver coin here.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("n", ["You head north.", "The desert", "You are stood in the desert, north of the road. There is a big cactus to the south. There is a tower to the northwest.", "You can see a silver coin here.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   // 6. Takes us to 1,2
-  test.assertCmd("n", ["You walk north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the northwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("n", ["You head north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the northwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   // 7. Takes us to 1,3
-  test.assertCmd("n", ["You walk north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the west.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("n", ["You head north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the west.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   // 8. Takes us to 1,4
-  test.assertCmd("n", ["You walk north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("n", ["You head north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   // 9. Takes us to 1,5
-  test.assertCmd("n", ["You walk north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("n", ["You head north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   // 10. Takes us to 1,6
-  test.assertCmd("n", ["You walk north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("n", ["You head north.", "The desert", "You are stood in the desert, north of the road. There is a tower to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   
   
   test.title("the zone - invisible border");
   test.assertCmd("x barrier", ["You can't see anything you might call 'barrier' here."]);
-  test.assertCmd("n", ["You walk north.", "The desert", "You are stood in the desert, north of the road. The air seems to kind of shimmer.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("n", ["You head north.", "The desert", "You are stood in the desert, north of the road. The air seems to kind of shimmer.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   test.assertCmd("n", ["You try to head north, but hit an invisible barrier."]);
   test.assertCmd("x barrier", ["It is invisible!"]);
   
   
   test.title("the zone - exits again");
-  test.assertCmd("w", ["You walk west.", "The desert", "You are stood in the desert, north of the road. The air seems to kind of shimmer.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
-  test.assertCmd("s", ["You walk south.", "The desert", "You are stood in the desert, north of the road. There is a tower to the south.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
-  test.assertCmd("s", ["You walk south.", "The desert", "You are stood in the desert, north of the road. There is a tower to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
-  test.assertCmd("sw", ["You walk southwest.", "The desert", "You are stood in the desert, north of the road. There is a tower to the south.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
-  test.assertCmd("s", ["You walk south.", "The desert", "You are stood in the desert, north of the road. There is a tall stone tower here.", "You can go east, in, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood in the desert, north of the road. The air seems to kind of shimmer.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("s", ["You head south.", "The desert", "You are stood in the desert, north of the road. There is a tower to the south.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("s", ["You head south.", "The desert", "You are stood in the desert, north of the road. There is a tower to the southwest.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("sw", ["You head southwest.", "The desert", "You are stood in the desert, north of the road. There is a tower to the south.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
+  test.assertCmd("s", ["You head south.", "The desert", "You are stood in the desert, north of the road. There is a tall stone tower here.", "You can go east, in, north, northeast, northwest, south, southeast, southwest or west."]);
   test.assertCmd("in", ["You step inside the tower, and climb the step, spiral staircase to the top.", "Inside the tower", "A tower, looking out over the desert. To the south is the road, heading east back to your house. To the north is a magic portal, going who knows where.", "You can go down or north."]);
   
   test.assertCmd("n", ["You head north.", "The shop", "A funny little shop.", "You can go south."]);
@@ -701,7 +701,7 @@ test.tests = function() {
   // Takes us to 5,0
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
   
-  test.assertCmd("w", ["You walk west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
+  test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
   
   test.assertCmd("get carrot", ["You take the carrot."]);
   

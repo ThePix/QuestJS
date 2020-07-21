@@ -411,7 +411,7 @@ function endTurnUI(update) {
   if (settings.panes !== 'None' && update) {
     // set the lang.exit_list
     for (let exit of lang.exit_list) {
-      if (game.room.hasExit(exit.name, {excludeScenery:true}) || exit.nocmd) {
+      if (game.room.hasExit(exit.name, {excludeScenery:true}) || exit.type === 'nocmd') {
         $('#exit' + exit.name).show();
       }
       else {

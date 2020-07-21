@@ -6,15 +6,8 @@
 
 
 
-// This function will be called at the start of the game, so can be used
-// to introduce your game.
-settings.setup = function() {
 
 
-  game.player.hitpoints = 20;
-  game.player.status = "You are feeling fine";
-  io.updateStatus()
-}
 
 
 
