@@ -13,9 +13,9 @@ settings.tests = true
 settings.textEffectDelay = 100
 
 settings.imagesFolder = 'images'
-settings.files = ["code", "data"]
+settings.files = ["code", "data", "npcs"]
 
-settings.panes = 'None'
+settings.panes = 'Left'
 settings.statusPane = false
 
 settings.roomTemplate = [

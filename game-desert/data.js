@@ -4,7 +4,7 @@
 
   
 createItem("me", PLAYER(), { 
-  loc:"bus_front",
+  loc:"bus_seat",
   regex:/^(me|myself|player)$/,
   money:10,
   positionX:-1,
@@ -35,31 +35,66 @@ createItem("knife",
 
 
 createRoom("bus_seat", {
-  desc:'You are sat on a bus somewhere is Nevada. Out of the window you can see desert, and not a lot else.{once: You have not arrived at Salt Lake City, that is for sure!}',
-  up:new Exit("bus"),
+  desc:'You are sat on a bus somewhere in Nevada. Out of the window you can see desert, and not a lot else.{once: You have not arrived at Salt Lake City, that is for sure! Has the bus stopped for gas or something? You wonder if you have time to buy a snack.}',
+  up:new Exit("bus", {alsoDir:['out'], msg:'You get up, out of your seat.'}),
   alias:"Sat on the Bus",
+  backgroundNames:['seat', 'window', 'bus'],
 });
 
-
+createItem("window", {
+  scenery:true,
+  examine:'The window could do with a clean, but nevertheless it gives a good view out of the right side of the bus. It had not crossed you mind that you would have the sun on you pretty much all the way when you left Fresno; the bus had been facing the other way when you got on it!.',
+});
 
 
 
 createRoom("bus", {
-  desc:'You are stood up in the aisle of the bus, beside your seat.',
+  desc:'You are stood up in the aisle of the bus, beside your seat. Ahead of you you can see out the windscreen, and the road, stretching eastwards through the desert.{once: There are four other passengers on the bus; two men and two women.}',
   east:new Exit('bus_front'),
   down:new Exit("bus_seat"),
-  alias:"Stood up on the Bus",
+  alias:"aisle of the bus",
+  visibleFrom:['bus_front', 'bus_seat'],
+  backgroundNames:['seat', 'window', 'bus', 'windscreen']
+});
+
+createItem("passengers", {
+  scenery:true,
+  loc:'bus',
+  examine:function() {
+    let count = 0
+    let s = ''
+    if (w.Lucas.isHere()) {
+      count++
+      s += ' A black guy with spike blonde hair.'
+    }
+    if (w.Emily.isHere()) {
+      count++
+      s += ' A redhead in tiny denim shorts.'
+    }
+    if (w.Amy.isHere()) {
+      count++
+      s += ' An oriental woman in her thirties.'
+    }
+    if (w.Elijah.isHere()) {
+      count++
+      s += ' An older guy in a "Ramones" tee-shirt.'
+    }
+    msg('You can see ' + count + ' passenger' + (count === 1 ? '' : 's') + ' here.' + s)
+  },
 });
 
 
 
-
 createRoom("bus_front", {
-  desc:'From the front of the bus, you can see the road ahead, heading east for many, many miles of straight road.{once: There is no sign of the driver.}',
+  desc:"From the front of the bus, you can see the road ahead, heading east for many, many miles of straight road, featureless other than a gas station not far away, on the left of the road. {once: There is no sign of the driver.|'What's going on?' one of the other passengers shouts down at you - a guy in his forties.|You shrug. 'Don't know; driver's not here. There's a gas station. I guess he went there.'}",
   west:new Exit('bus'),
-  north:new Exit('desert'),
+  south:new Exit('desert'),
   out:new Exit('desert'),
-  alias:"Front of the Bus",
+  alias:"front of the bus",
+  visibleFrom:['bus'],
+  afterFirstEnter:function() {
+    w.Emily.suspended = false
+  }
 });
 
 

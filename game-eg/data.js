@@ -635,7 +635,7 @@ createItem("Arthur",
       "text:Lara smells the flowers.",
     ],
     inTheGardenWithLara:function(arr) {
-      if (this.here()) {
+      if (this.isHere()) {
         msg(arr[0]);
       }
       if (game.player.loc === "dining_room") {

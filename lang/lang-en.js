@@ -558,7 +558,7 @@ const lang = {
       s = w[game.player.loc].canViewPrefix;
       flag = true;
     }
-    if (flag || npc.here()) {
+    if (flag || npc.inSight()) {
       s += lang.nounVerb(npc, "leave", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
       const exit = w[npc.loc].findExit(dest);
       if (exit) s += ", heading " + exit.dir;
@@ -578,7 +578,7 @@ const lang = {
       s = w[game.player.loc].canViewPrefix;
       flag = true;
     }
-    if (flag || npc.here()) {
+    if (flag || npc.inSight()) {
       s += lang.nounVerb(npc, "enter", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
       const exit = w[npc.loc].findExit(origin);
       if (exit) s += " from " + util.niceDirections(exit.dir);

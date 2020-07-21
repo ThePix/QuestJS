@@ -180,20 +180,10 @@ commands.unshift(  new Cmd('EgHint', {
 
 
 
-commands.unshift(new Cmd('Polar', {
-  regex:/^polar$/,
+commands.unshift(new Cmd('Test', {
+  regex:/^t$/,
   script:function() {
-    game.player.positionX = 0
-    game.player.positionY = 0
-    msg(getDirection(game.player, 1, 0))
-    msg(getDirection(game.player, 1, -1))
-    msg(getDirection(game.player, 0, -1))
-    msg(getDirection(game.player, -1, -1))
-    msg(getDirection(game.player, -1, 0))
-    msg(getDirection(game.player, -1, 1))
-    msg(getDirection(game.player, 0, 1))
-    msg(getDirection(game.player, 1, 1))
-    msg(getDirection(game.player, 0, 0))
+    console.log(w.Emily)
   },
 }));
 
