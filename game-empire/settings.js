@@ -34,10 +34,11 @@ settings.setup = function() {
       return []
     },
     getLeftBorder:function(x, y) {
-      if (x === 4) return 'stroke="blue" stroke-width="5"'
+      if (nation.map[x][y].riverLeft) return 'stroke="blue" stroke-width="' + nation.map[x][y].riverLeft + '"'
       return false
     },
     getRightBorder:function(x, y) {
+      if (nation.map[x][y].riverRight) return 'stroke="blue" stroke-width="' + nation.map[x][y].riverRight + '"'
       return false
     },
     features:{

@@ -36,9 +36,77 @@ for (let x = 0; x < nation.size; x++) {
   
 /*
 high x and low y is sea
-
-
+want three rivers, one or two branching
+with five cities along them, including a port and a capital
 */
+
+
+
+const setRiver = function(x, y, side, n) {
+  if (x < 0 || y < 0 || x >= nation.size || y >= nation.size) return
+  if (side.startsWith('l')) nation.map[x][y].riverLeft = n
+  if (side.startsWith('r')) nation.map[x][y].riverRight = n
+}    
+  
+const riverRight = function(x, y, count) {
+  x--
+  for (let j = count; j > 0; j--) {
+    for (let i = 0; i < random.int(4) + 2; i++) {
+      y++
+      setRiver(x, y, 'right', j)
+    }
+    y++
+    x++
+    for (let i = 0; i < random.int(4) + 1; i++) {
+      x--
+      setRiver(x, y, 'left', j)
+    }
+    x--
+    y--
+  }
+}
+const riverLeft = function(x, y, count) {
+  y++
+  for (let j = count; j > 0; j--) {
+    for (let i = 0; i < random.int(4) + 2; i++) {
+      x--
+      setRiver(x, y, 'left', j)
+    }
+    x--
+    y--
+    for (let i = 0; i < random.int(4) + 1; i++) {
+      y++
+      setRiver(x, y, 'right', j)
+    }
+    y++
+    x++
+  }
+}
+nation.map[27][13].colour = 'blue'
+riverRight(27, 13, random.int(3) + 2)
+nation.map[17][3].colour = 'blue'
+riverLeft(17, 3, random.int(3) + 2)
+
+nation.map[22][8].colour = 'blue'
+nation.map[21][9].riverRight = 5
+nation.map[21][10].riverLeft = 5
+nation.map[20][10].riverLeft = 5
+nation.map[19][10].riverLeft = 5
+nation.map[18][10].riverRight = 5
+nation.map[18][11].colour = 'grey'
+nation.map[21][10].colour = 'grey'
+nation.map[18][11].riverLeft = 2
+nation.map[18][11].riverRight = 2
+riverRight(19, 11, 2)
+riverLeft(18, 10, 2)
+
+
+
+
+
+
+
+
 
 const takeATurn = function() {
   msg("Time passes...")
@@ -51,6 +119,21 @@ const takeATurn = function() {
 
 
 
+
+
+const word = {}
+word.start = ['', '', 'b', 'c', 'ch', 'd', 'c', 'ch', 'd', 'f', 'fl', 'fr', 'g', 'l', 'm', 'n', 'p', 'pl', 'pr', 'r', 's', 'sl', 'st', 'sh', 't', 'tr', 'v', 'y']
+word.middle = ['a', 'aa', 'ai', 'e', 'ea', 'ei', 'i', 'ie', 'o', 'oa', 'oe', 'ou', 'oo', 'u', 'ui', 'ue']
+word.end = ['', '', 'b', 'mb', 'ck', 'ch', 'rk', 'd', 'nd', 'rd', 'gg', 'ng', 'gh', 'l', 'll', 'm', 'n', 'pp', 'mp', 'r', 'ss', 'sh', 't', 'rt', 'th']
+word.syllable = function() { return random.fromArray(this.start) + random.fromArray(this.middle) + random.fromArray(this.end) }
+word.word = function() {
+  let s = ''
+  for (let i = random.int(2,4); i > 0; i--) s += this.syllable()
+  return s
+}
+  
+
+for (let i = 0; i < 20; i++) console.log(word.word())
 
 
 
