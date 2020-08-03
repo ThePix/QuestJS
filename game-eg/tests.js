@@ -37,6 +37,18 @@ test.tests = function() {
   }
   test.assertEqual(0, ary.length);
   
+  test.title("random.int");
+  for (let i = 0; i < 100; i++) {
+    const res = random.int(10);
+    test.assertEqual(true, res >= 0 && res <= 10);
+  }
+  
+  test.title("random.chance");
+  for (let i = 0; i < 100; i++) {
+    test.assertEqual(true, random.chance(100));
+    test.assertEqual(false, random.chance(0));
+  }
+  
   
   
   test.title("arrayCompare");
