@@ -5,15 +5,16 @@ settings.title = "Nation!";
 settings.author = "The Pixie"
 settings.version = "0.1";
 settings.thanks = [];
-settings.files = ["board", "code", "data", "npcs"]
+settings.files = ["code", "data", "npcs"]
+settings.libraries.push('board')
 
 
 
 
 settings.setup = function() {
-  const settings = {
-    cellSize:20,
-    size:31,
+  const boardSettings = {
+    cellSize:40,
+    size:11,
     height:400,
     width:1000,
     angle:75,
@@ -27,9 +28,9 @@ settings.setup = function() {
       return this.map[x][y].colour
     },
     getFeaturesAt:function(x, y) {
-      if (x === 3 && y === 7) return [this.features.text2, this.features.black, this.features.yellow]
-      if (x === 8 && y === 1) return [this.features.yellow, this.features.green]
-      if (x === 0 && y === 0) return [this.features.go]
+      if (x === 3 && y === 7) return ['black']
+      if (x === 8 && y === 1) return ['yellow', 'green']
+      if (x === 0 && y === 0) return ['go']
       return []
     },
     features:{
@@ -47,12 +48,12 @@ settings.setup = function() {
     map:[],
   }
   
-  for (let x = 0; x < settings.size; x++) {
+  for (let x = 0; x < boardSettings.size; x++) {
     const row = []
-    for (let y = 0; y < settings.size; y++) {
+    for (let y = 0; y < boardSettings.size; y++) {
       row.push({colour:'green'})
     }
-    settings.map.push(row)
+    boardSettings.map.push(row)
   }
   
   // need to add:
@@ -63,7 +64,7 @@ settings.setup = function() {
   // mountain area filling 0,size corner
   // four towns and one city, some on rivers
   
-  board.setup(settings)
+  board.setup(boardSettings)
 }
 
 
