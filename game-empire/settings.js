@@ -22,7 +22,7 @@ settings.setup = function() {
     baseHeight:100,
     compass:true,
     title:'The Game!',
-    showRegions:false,
+    showRegions:true,
     titleStyle:'font: 20pt bold',
     defs:function() {
       let s = '  <filter id="displacementFilter"><feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"/>'
@@ -51,10 +51,15 @@ settings.setup = function() {
       return nation.map[x][y].colour
     },
     getFeaturesAt:function(x, y) {
-      if (x === 3 && y === 7) return ['black']
-      if (x === 8 && y === 1) return ['yellow', 'green']
-      if (x === 0 && y === 0) return ['go']
-      return []
+      const result = []
+      for (let el of nation.regions) {
+        const city = el.cityAt(x,y)
+        if (city) result.push('city' + city)
+      }
+      if (x === 3 && y === 3) result.push('black')
+      //if (x === 8 && y === 1) return ['yellow', 'green']
+      //if (x === 0 && y === 0) return ['go']
+      return result
     },
     getLeftBorder:function(x, y) {
       if (nation.map[x][y].riverLeft) return 'stroke="blue" stroke-width="' + nation.map[x][y].riverLeft + '"'
@@ -65,6 +70,13 @@ settings.setup = function() {
       return false
     },
     features:{
+      city1:{width:60, height:80, y:4, file:'city0.png',},
+      city2:{width:60, height:80, y:4, file:'city1.png',},
+      city3:{width:60, height:80, y:4, file:'city2.png',},
+      city4:{width:60, height:80, y:4, file:'city3.png',},
+      city5:{width:60, height:80, y:4, file:'city4.png',},
+      city6:{width:60, height:80, y:4, file:'city5.png',},
+      city7:{width:60, height:80, y:4, file:'city6.png',},
       go:{width:30, height:30, flatFile:'square_one.png',},
       black:{width:30, height:60, x:0, y:-2, file:'icon_man.png',},
       blue:{width:30, height:60, x:5, y:0, file:'icon_man_blue.png',},

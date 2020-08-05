@@ -56,13 +56,13 @@ class Region {
     return false
   }
   
-  addCity(name, x, y, desc) {
-    this.cities.push({name:name, x:x, y:y, pop:1, desc:desc})
+  addCity(name, x, y, size, desc) {
+    this.cities.push({name:name, x:x, y:y, pop:size, desc:desc})
   }
   
   cityAt(x, y) {
     for (let el of this.cities) {
-      if (el.x === x && el.y === y) return true
+      if (el.x === x && el.y === y) return el.pop
     }
     return false 
   }
@@ -127,13 +127,40 @@ nation.resources = [
   {name:'precious metals', },
 ]*/
 
+//prof moo cow
 
 nation.regions = [
-  new Region('Bunnitonia', 'orange', 7, '4,5 3,7 2,8 2,8 3,8 3,7 5,6'),
+  new Region('Bunnitonia', 'orange', 5, '5,7 4,10 4,11 3,11 2,11 3,8 3,8'),
+  new Region('Seaside', '#8888ff', 12, '4,7 4,7 4,8 4,9 4,12 4,13 4,14 5,14 6,15 7,15 9,14 9,13 10,12 11,11'),
+  new Region('Piggyville', 'pink', 22, '15,17 14,18 13,20 12,20 12,20 16,20 14,18 15,16'),
+  new Region('Nicetown', 'yellow', 7, '12,14 12,16 12,17 9,17 9,17 8,16 8,15 9,14, 10,12'),
+  new Region('Picnicland', '#800000', 10, '18,20 18,21 17,21 16,21 15,22 13,22 13,22 14,22 15,21 15,21 16,21 16,22 18,21 19,21'),
 ]
 
 
-nation.regions[0].addCity('Bunniton', 11, 5)
+nation.regions[0].addCity('Bunniton', 11, 5, 3, 'The city of rabbits.')
+nation.regions[1].addCity('Capital city', 18, 11, 7, 'The main city, on the confluence of two rivers.')
+nation.regions[2].addCity('Quieton', 13, 19, 1, 'The smallest city, and most isolated, being further from the sea.')
+nation.regions[3].addCity('Apreville', 13, 11, 2, 'A beautiful city.')
+nation.regions[4].addCity('Bearport', 26, 15, 5, 'A busy port, with a notable fishing industry.')
+
+/*
+// on confluence
+nation.map[18][11].colour = 'grey'
+
+
+// top
+nation.map[11][21].colour = 'grey'
+
+
+// left
+//nation.map[11][5].colour = 'grey'
+
+// right
+nation.map[26][15].colour = 'grey'
+*/
+
+
 
 nation.resources = [
   {name:'carrots', desc:'Rabbits eat carrots.', spoilage:0.07},
@@ -266,19 +293,6 @@ nation.map[18][11].riverRight = 2
 riverSet(19, 11, 2, '0 3 2 4 2 1 3 2 4 2 3 1')
 riverSet(18, 11, 2, '4 3 3 2 3 2 1')
 
-// on confluence
-nation.map[18][11].colour = 'grey'
-
-
-// top
-nation.map[11][21].colour = 'grey'
-
-
-// left
-//nation.map[11][5].colour = 'grey'
-
-// right
-nation.map[26][15].colour = 'grey'
 
 
 const toggleregion = function() {
