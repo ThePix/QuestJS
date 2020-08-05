@@ -8,7 +8,6 @@ settings.thanks = [];
 settings.files = ["code", "data", "npcs"]
 settings.libraries.push('board')
 
-//settings.intro = 'So here you are in your own throne room...|Becoming the ruler was quite a surprise, but after the goblin hoard wiped out the entire royal family, you were next in line, so here you are, ruler of one of the smallest kingdoms on the continent, recovering from a goblin invasion.'
 
 
 settings.setup = function() {
@@ -23,8 +22,32 @@ settings.setup = function() {
     baseHeight:100,
     compass:true,
     title:'The Game!',
+    showRegions:false,
     titleStyle:'font: 20pt bold',
+    defs:function() {
+      let s = '  <filter id="displacementFilter"><feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"/>'
+      s += '<feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G"/></filter>'
+      s += ' <animate xlink:href="#displacementFilter" id="anim-dialiate" attributeName="scale" from="40" to="0" dur="3s" fill="freeze"/>'
+      return s
+    },
+    extras:function() {
+      let s = '<circle cx="820" cy="70" r="12" fill="'
+      s += (this.showRegions ? 'orange' : 'green') + '" onclick="toggleregion()"/>'
+      s += '<text x="850" y="80" fill="black">Click to toggle region display</text>'
+      s += '<circle cx="820" cy="140" r="30" fill="yellow" style="filter: url(#displacementFilter)"/>'
+      return s
+    },
     getColourAt:function(x, y) {
+      if (this.showRegions) {
+        for (let el of nation.regions) {
+          if (el.contains(x, y)) return el.colour
+        }
+      }
+      else {
+        for (let el of nation.regions) {
+          if (el.cityAt(x, y)) return 'grey'
+        }
+      }
       return nation.map[x][y].colour
     },
     getFeaturesAt:function(x, y) {
@@ -68,7 +91,7 @@ settings.setup = function() {
   msg('So here you are in your own throne room...')
   msg('Becoming the ruler was quite a surprise, but after the goblin hoard wiped out the entire royal family, you were next in line. Your realm is one of the smallest kingdoms on the continent, and it is still reeling from a goblin invasion, so it will be no easy task. Oh, and some of your subjects are demanding a republic...')
   metamsg('This game is about ruling you kingdom wisely - or not. You will need to talk to your advisors to learn what needs doing, and give them orders to get it done. They are not all necessarily to be trusted...')
-  metamsg('Use the SLEEP command in your bedroom to have time pass (i.e., tale a turn).')
+  metamsg('Use the SLEEP command in your bedroom to have time pass (i.e., tale a turn). You may want to use the HELP command too.')
   metamsg('Good luck, your majesty.')
 }
 
