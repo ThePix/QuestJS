@@ -72,7 +72,7 @@ class Region {
 
 
 const nation = {
-  size:31,
+  size:36,
   map:[],
   cityAt:function(x, y) {
     for (let el of this.regions) {
