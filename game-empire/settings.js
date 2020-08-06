@@ -5,8 +5,9 @@ settings.title = "Nation!";
 settings.author = "The Pixie"
 settings.version = "0.1";
 settings.thanks = [];
-settings.files = ["code", "data", "npcs"]
+settings.files = ["geography", "code", "data", "npcs"]
 settings.libraries.push('board')
+settings.tests = true
 
 
 
@@ -20,23 +21,35 @@ settings.setup = function() {
     offsetX:20,
     offsetY:25,
     baseHeight:100,
-    compass:true,
+    compass:{x: 1000, y:300},
     title:'The Game!',
     showRegions:true,
+    showLabels:true,
     titleStyle:'font: 20pt bold',
-    defs:function() {
-      let s = '  <filter id="displacementFilter"><feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"/>'
+    /*defs:function() {
+      let s = '<filter id="dilate"><feMorphology id="morph" operator="dilate" radius="0" /></filter>'
+      s += '<animate xlink:href="#morph" id="anim-dialiate" attributeName="radius" from="40" to="0" dur="3s" fill="freeze"/>'
+      
+      s += '  <filter id="displacementFilter"><feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"/>'
       s += '<feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G"/></filter>'
-      s += ' <animate xlink:href="#displacementFilter" id="anim-dialiate" attributeName="scale" from="40" to="0" dur="3s" fill="freeze"/>'
+      s += ' <animate xlink:href="#displacementFilter" id="anim-turbulent" attributeName="scale" from="100" to="0" dur="5s" fill="freeze"/>'
       return s
-    },
-    extras:function() {
-      let s = '<circle cx="820" cy="70" r="12" fill="'
-      s += (this.showRegions ? 'orange' : 'green') + '" onclick="toggleregion()"/>'
-      s += '<text x="850" y="80" fill="black">Click to toggle region display</text>'
-      s += '<circle cx="820" cy="140" r="30" fill="yellow" style="filter: url(#displacementFilter)"/>'
+    },*/
+    switchesPos:{x:900, y:80},
+    switchesWidth:240,
+    switches:[
+      {on:'orange', off:'green', att:'showRegions', text:'Toggle region display'},
+      {on:'black', off:'silver', att:'showLabels', text:'Toggle label display'},
+    ],
+    /*extras:function() {
+      let s = '<circle cx="820" cy="70" r="10" fill="'
+      s += (this.showRegions ? 'orange' : 'green') + '" onclick="toggle(\'showRegions\')"/>'
+      s += '<text x="850" y="77" fill="black">Toggle region display</text>'
+      s += '<circle cx="820" cy="90" r="10" fill="'
+      s += (this.showLabels ? 'black' : 'grey') + '" onclick="toggle(\'showLabels\')"/>'
+      s += '<text x="850" y="97" fill="black">Toggle label display</text>'
       return s
-    },
+    },*/
     getColourAt:function(x, y) {
       if (this.showRegions) {
         for (let el of nation.regions) {
@@ -52,9 +65,10 @@ settings.setup = function() {
     },
     getFeaturesAt:function(x, y) {
       const result = []
-      for (let el of nation.regions) {
-        const city = el.cityAt(x,y)
-        if (city) result.push('city' + city)
+      const city = nation.cityAt(x,y)
+      if (city) {
+        result.push('city' + city.pop)
+        if (this.showLabels) result.push('cityName')
       }
       if (x === 3 && y === 3) result.push('black')
       //if (x === 8 && y === 1) return ['yellow', 'green']
@@ -77,6 +91,10 @@ settings.setup = function() {
       city5:{width:60, height:80, y:4, file:'city4.png',},
       city6:{width:60, height:80, y:4, file:'city5.png',},
       city7:{width:60, height:80, y:4, file:'city6.png',},
+      cityName:{width:30, height:60, layer:'labels', script:function(x2, y2, x, y) {
+        const city = nation.cityAt(x,y)
+        return '<text x="' + x2 + '" y="' + (y2+15) + '" style="font-weight:bold;text-anchor:middle" fill="black">' + city.name + '</text>'
+      }},
       go:{width:30, height:30, flatFile:'square_one.png',},
       black:{width:30, height:60, x:0, y:-2, file:'icon_man.png',},
       blue:{width:30, height:60, x:5, y:0, file:'icon_man_blue.png',},
