@@ -81,6 +81,15 @@ const nation = {
     }
     return false
   },
+  resource:function(s) {
+    return this.resources.find(el => el.name === s)
+  },
+  resources = [
+    {name:'carrots', desc:'Rabbits eat carrots.', spoilage:0.07, amount:10},
+    {name:'wheat', desc:'Used to make pasta.', spoilage:0.11, amount:15},
+    {name:'pasta', desc:'Bears eat pasta, often with honey.', spoilage:0.03, amount:5},
+    {name:'honey', desc:'Bears like honey. A lot.', spoilage:0.01, amount:5},
+  ],
 }
 /*
 nation.factions = [
@@ -114,33 +123,28 @@ nation.regions = [
 ]
 
 
-nation.regions[0].addCity('Bunniton', 11, 5, 3, 'The city of rabbits.')
+nation.regions[0].addCity('Bunniholme', 11, 5, 3, 'The city of rabbits.')
 nation.regions[1].addCity('Capital city', 18, 11, 7, 'The main city, on the confluence of two rivers.')
 nation.regions[2].addCity('Quieton', 13, 19, 1, 'The smallest city, and most isolated, being further from the sea.')
-nation.regions[3].addCity('Apreville', 13, 11, 2, 'A beautiful city.')
+nation.regions[3].addCity('Apeville', 13, 11, 2, 'A beautiful city.')
 nation.regions[4].addCity('Bearport', 26, 15, 5, 'A busy port, with a notable fishing industry.')
 
-nation.resources = [
-  {name:'carrots', desc:'Rabbits eat carrots.', spoilage:0.07},
-  {name:'wheat', desc:'Used to make pasta.', spoilage:0.11},
-  {name:'pasta', desc:'Bears eat pasta, often with honey.', spoilage:0.03},
-  {name:'honey', desc:'Bears like honey. A lot.', spoilage:0.01},
-]
+nation.
 
 
-nation.plants = [
+nation.units = [
   {name:'Carrot farm', script:function(nation) {
-    nation.carrots += nation.carrot_farm_count
+    nation.resource('carrots').amount += nation.carrot_farm_count
   }},
   {name:'Rabbits', script:function(nation) {
-    nation.carrots -= nation.population_rabbits
+    nation.resource('carrots').amount -= nation.population_rabbits
   }},
   {name:'Mines', script:function(nation) {
-    nation.base_metal += nation.mine_count
+    nation.resource('base_metal').amount += nation.mine_count
   }},
   {name:'Spoilage', script:function(nation) {
-    for (let el of resources) {
-      if (el.spoilage) nation[el.name] *= (1 - el.spoilage)
+    for (let el of nation.resources) {
+      if (el.spoilage) el.amount *= (1 - el.spoilage)
     }
   }},
 ]
