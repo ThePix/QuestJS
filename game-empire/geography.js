@@ -84,7 +84,7 @@ const nation = {
   resource:function(s) {
     return this.resources.find(el => el.name === s)
   },
-  resources = [
+  resources:[
     {name:'carrots', desc:'Rabbits eat carrots.', spoilage:0.07, amount:10},
     {name:'wheat', desc:'Used to make pasta.', spoilage:0.11, amount:15},
     {name:'pasta', desc:'Bears eat pasta, often with honey.', spoilage:0.03, amount:5},
@@ -129,7 +129,6 @@ nation.regions[2].addCity('Quieton', 13, 19, 1, 'The smallest city, and most iso
 nation.regions[3].addCity('Apeville', 13, 11, 2, 'A beautiful city.')
 nation.regions[4].addCity('Bearport', 26, 15, 5, 'A busy port, with a notable fishing industry.')
 
-nation.
 
 
 nation.units = [

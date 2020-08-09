@@ -38,7 +38,7 @@ Each awakening gets steadily worse, by the fourth you are throwing up.
 
 
 
-$("#panes").append("<img src=\"images/spaceship.png\" style=\"margin-left:10px;margin-top:15px;\"/>");
+$("#panes").append("<img src=\"" + settings.imagesFolder + "/spaceship.png\" style=\"margin-left:10px;margin-top:15px;\"/>");
 
 const TURNS_TO_LANDING = 3;
 const TURNS_TO_DATA = 3;

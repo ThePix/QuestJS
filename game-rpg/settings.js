@@ -71,7 +71,7 @@ const ioCreateCustom = function() {
 
 const ioUpdateCustom = function() {
   console.log("in ioUpdateCustom");
-  $('#weaponImage').attr('src', 'images/icon-' + w[game.player.equipped].image + '.png');
+  $('#weaponImage').attr('src', settings.imagesFolder + '/icon-' + w[game.player.equipped].image + '.png');
   $('#weapon-td').prop('title', "Weapon: " + w[game.player.equipped].alias);
   
   $('#hits-indicator').css('padding-right', 120 * game.player.health / game.player.maxHealth);
@@ -157,7 +157,7 @@ const skills = {
 
   addButton:function(skill) {
     const cell = $('#cell' + game.player.slotsUsed);
-    cell.html('<img src="images/icon-' + skill.icon + '.png" title="' + skill.tooltip + '" />');
+    cell.html('<img src="' + settings.imagesFolder + '/icon-' + skill.icon + '.png" title="' + skill.tooltip + '" />');
     cell.click(skills.buttonClickHandler);
     cell.css("background-color", "black");
     cell.css("padding", "2px");
