@@ -2,7 +2,7 @@
 
 createItem("me", PLAYER(), {
   loc:"throne_room",
-  regex:/^me|myself|player$/,
+  regex:/^(me|myself|player)$/,
   examine: "Just a regular guy.",
   hitpoints:100,
 })

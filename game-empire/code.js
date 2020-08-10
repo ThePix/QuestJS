@@ -102,7 +102,7 @@ commands.push(new Cmd('Sleep', {
     }
     else {
       metamsg("You can only sleep in the bedroom");
-      return world.FAILURE
+      return world.FAILED
     }
   },
 }));
