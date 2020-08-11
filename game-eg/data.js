@@ -97,10 +97,10 @@ createItem("book",
 
 
 
-createItem("book_cover",
-  COMPONENT("book"),
-  { examine:"The book cover is very fancy.", }
-);
+createItem("book_cover", COMPONENT("book"), { 
+  examine:"The book cover is very fancy.",
+  parsePriority:-20,
+});
 
 
 createItem("boots", 
@@ -137,7 +137,7 @@ createItem("waterskin",
 
 createItem("glass_cabinet",
   CONTAINER(true),
-  locked_WITH("cabinet_key"),
+  LOCKED_WITH("cabinet_key"),
   { alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, isAtLoc:function(loc) {
     if (typeof loc !== "string") loc = loc.name
     return (loc == "lounge" || loc == "dining_room");
@@ -155,11 +155,13 @@ createItem("ring",
   { loc:"jewellery_box", examine:"A ring.", }
 );
 
-createItem("cardboard_box",
-  TAKEABLE(),
-  CONTAINER(true),
-  { loc:"lounge", alias:"cardboard box", examine:"A big cardboard box.", closed:false }
-);
+createItem("cardboard_box", TAKEABLE(), CONTAINER(true), { 
+  loc:"lounge",
+  alias:"cardboard box",
+  regex:/cardboard/,
+  examine:"A big cardboard box.",
+  closed:false,
+});
 
 createItem("sandwich",
   EDIBLE(false),
@@ -373,14 +375,14 @@ createItem("big_kitchen_table",
   { loc:"kitchen", examine: "A Formica table."  }
 );
 
-createItem("garage_door",
-  OPENABLE(false),
-  locked_WITH("garage_key"),
-  { examine: "The door to the garage.", alias: "garage door", isAtLoc:function(loc) {
+createItem("garage_door", OPENABLE(false), LOCKED_WITH("garage_key"), {
+  examine: "The door to the garage.",
+  alias: "garage door",
+  isAtLoc:function(loc) {
     if (typeof loc !== "string") loc = loc.name
     return (loc == "kitchen" || loc == "garage");
-  }}
-);
+  }
+});
 
 createItem("jug", VESSEL(4), TAKEABLE(), {
   loc:"big_kitchen_table",
@@ -661,12 +663,17 @@ createItem("Arthur",
 
 
 
+createItem("ball", {
+  //loc:"Kyle",
+  examine:"Some old boots.",
+});
 
 
 
 createItem("Kyle", NPC(false),
 { 
   loc:"lounge",
+  //alias:'Bobby',
   examine:"A grizzly bear. But cute.", 
   properName:true,
   //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],

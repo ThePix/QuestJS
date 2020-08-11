@@ -3,14 +3,14 @@
 test.tests = function() {
   
   test.title("parser.scoreObjectMatch");
-  test.assertEqual(70, parser.scoreObjectMatch("me", w.me, ""));
+  test.assertEqual(60, parser.scoreObjectMatch("me", w.me, ""));
   test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.me, ""));
   test.assertEqual(-1, parser.scoreObjectMatch("xme", w.me, ""));
-  test.assertEqual(70, parser.scoreObjectMatch("flashlight", w.flashlight, ""));
+  test.assertEqual(60, parser.scoreObjectMatch("flashlight", w.flashlight, ""));
   test.assertEqual(16, parser.scoreObjectMatch("f", w.flashlight, ""));
   test.assertEqual(18, parser.scoreObjectMatch("fla", w.flashlight, ""));
-  test.assertEqual(60, parser.scoreObjectMatch("torch", w.flashlight, ""));
-  test.assertEqual(70, parser.scoreObjectMatch("glass cabinet", w.glass_cabinet, ""));
+  test.assertEqual(55, parser.scoreObjectMatch("torch", w.flashlight, ""));
+  test.assertEqual(60, parser.scoreObjectMatch("glass cabinet", w.glass_cabinet, ""));
   test.assertEqual(50, parser.scoreObjectMatch("glass", w.glass_cabinet, ""));
   test.assertEqual(50, parser.scoreObjectMatch("cabinet", w.glass_cabinet, ""));
   test.assertEqual(3, parser.scoreObjectMatch("cab", w.glass_cabinet, ""));
@@ -252,10 +252,10 @@ test.tests = function() {
   test.assertCmd("drop three bricks in box", "Done.");
   test.assertCmd("drop bricks", "You drop four bricks.");
   test.assertCmd("get bricks", "You take four bricks.");
-  test.assertCmd("get bricks", "You take three bricks.");
+  test.assertCmd("get bricks", "You take three bricks.");/*
   test.assertCmd("drop box", "You drop the cardboard box.");
   
-
+/*
   test.title("Restricting");
   game.player.canTalk = function() { msg("You are gagged."); return false; }
   test.assertCmd("talk to kyle", "You are gagged.");
