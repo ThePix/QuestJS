@@ -746,21 +746,21 @@ const lang = {
   // Change the abbrev values to suit your game (or language)
   // You may want to do that in settings, which is loaded first
   exit_list:[
-    {name:'northwest', abbrev:'NW', niceDir:"the northwest", type:'compass', key:103, x:-1 ,y:1, z:0 }, 
-    {name:'north', abbrev:'N', niceDir:"the north", type:'compass', key:104, x:0 ,y:1, z:0 }, 
-    {name:'northeast', abbrev:'NE', niceDir:"the northeast", type:'compass', key:105, x:1 ,y:1, z:0 }, 
-    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside", type:'inout'}, 
-    {name:'up', abbrev:'U', niceDir:"above", type:'vertical', key:107, x:0 ,y:0, z:1},
+    {name:'northwest', abbrev:'NW', niceDir:"the northwest", type:'compass', key:103, x:-1 ,y:1, z:0, opp:'southeast'}, 
+    {name:'north', abbrev:'N', niceDir:"the north", type:'compass', key:104, x:0 ,y:1, z:0, opp:'south'}, 
+    {name:'northeast', abbrev:'NE', niceDir:"the northeast", type:'compass', key:105, x:1 ,y:1, z:0, opp:'southwest'}, 
+    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside", type:'inout', opp:'out'}, 
+    {name:'up', abbrev:'U', niceDir:"above", type:'vertical', key:107, x:0 ,y:0, z:1, opp:'down'},
     
-    {name:'west', abbrev:'W', niceDir:"the west", type:'compass', key:100, x:-1 ,y:0, z:0 }, 
+    {name:'west', abbrev:'W', niceDir:"the west", type:'compass', key:100, x:-1 ,y:0, z:0, opp:'east'}, 
     {name:'Look', abbrev:'Lk', type:'nocmd', key:101}, 
-    {name:'east', abbrev:'E', niceDir:"the east", type:'compass', key:102, x:1 ,y:0, z:0 }, 
-    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside", type:'inout'}, 
-    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", type:'vertical', key:109, x:0 ,y:0, z:-1 }, 
+    {name:'east', abbrev:'E', niceDir:"the east", type:'compass', key:102, x:1 ,y:0, z:0, opp:'west'}, 
+    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside", type:'inout', opp:'in'}, 
+    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", type:'vertical', key:109, x:0 ,y:0, z:-1, opp:'up'}, 
 
-    {name:'southwest', abbrev:'SW', niceDir:"the southwest", type:'compass', key:97, x:-1 ,y:-1, z:0 }, 
-    {name:'south', abbrev:'S', niceDir:"the south", type:'compass', key:98, x:0 ,y:-1, z:0 }, 
-    {name:'southeast', abbrev:'SE', niceDir:"the southeast", type:'compass', key:99, x:1 ,y:-1, z:0 }, 
+    {name:'southwest', abbrev:'SW', niceDir:"the southwest", type:'compass', key:97, x:-1 ,y:-1, z:0, opp:'northeast'}, 
+    {name:'south', abbrev:'S', niceDir:"the south", type:'compass', key:98, x:0 ,y:-1, z:0, opp:'north'}, 
+    {name:'southeast', abbrev:'SE', niceDir:"the southeast", type:'compass', key:99, x:1 ,y:-1, z:0, opp:'northwest'}, 
     {name:'Wait', abbrev:'Z', type:'nocmd', key:110}, 
     {name:'Help', abbrev:'?', type:'nocmd'}, 
   ],

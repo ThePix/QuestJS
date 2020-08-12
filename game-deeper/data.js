@@ -1,7 +1,7 @@
 "use strict"
 
 createItem("me", PLAYER(), {
-  loc:"lounge",
+  loc:"entrance",
   regex:/^(me|myself|player)$/,
   examine: "Just a regular guy.",
   hitpoints:100,
