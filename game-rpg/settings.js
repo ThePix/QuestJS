@@ -14,20 +14,13 @@ settings.tests = true
 settings.setup = function() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
-  game.player.slotsUsed = 0;
-  for (let i = 0; i < skills.list.length; i++) {
-    skills.addButton(skills.list[i]);
-  }
-  for (let key in w) {
-    if (w[key].health !== undefined && w[key].maxHealth === undefined) {
-      w[key].maxHealth = w[key].health;
-    }
-  }
-  
-  //ioCreateCustom();
-  
-//  parser.parse("attack goblin");
+  game.player.skillsLearnt = ["Double attack", "Fireball"]
+
+  ioUpdateCustom()
 }
+
+
+
 
 
 
@@ -48,9 +41,12 @@ const ioCreateCustom = function() {
   document.writeln('</div>');
 
   document.writeln('<table align="center">');
-  document.writeln('<tr><td id="cell0" width="40"></td><td id="cell1" width="40"></td><td id="cell2" width="40"></td></tr>');
-  for (let i = 3; i < 24; i += 3) {
-    document.write(`  <tr><td id="cell${i}"></td><td id="cell${i + 1}"></td><td id="cell${i + 2}"></td></tr>`);
+  for (let row = 0; row < 8; row++) {
+    document.writeln('  <tr>');
+    for (let col = 0; col < 3; col++) {
+      document.write(`    <td id="cell${row * 3 + col}" width="40"></td>`);
+    }
+    document.writeln('  </tr>');
   }
   document.writeln('</table>');
   document.writeln('</div>');
@@ -71,8 +67,8 @@ const ioCreateCustom = function() {
 
 const ioUpdateCustom = function() {
   console.log("in ioUpdateCustom");
-  $('#weaponImage').attr('src', settings.imagesFolder + '/icon-' + w[game.player.equipped].image + '.png');
-  $('#weapon-td').prop('title', "Weapon: " + w[game.player.equipped].alias);
+  $('#weaponImage').attr('src', settings.imagesFolder + '/icon-' + game.player.getEquippedWeapon().image + '.png');
+  $('#weapon-td').prop('title', "Weapon: " + game.player.getEquippedWeapon().alias);
   
   $('#hits-indicator').css('padding-right', 120 * game.player.health / game.player.maxHealth);
   $('#hits-td').prop('title', "Hits: " + game.player.health + "/" + game.player.maxHealth);
@@ -84,6 +80,22 @@ const ioUpdateCustom = function() {
   $('#armour-td').prop('title', "Armour: " + game.player.armour + "/" + game.player.maxArmour);
 
   console.log($('#hits-td').prop('title'));
+
+  // assume you never lose a skill/spell 
+  game.player.slotsUsed = 0
+  console.log(game.player.skillsLearnt)
+  for (let skill of skills.list) {
+    console.log(skill.name)
+    if (game.player.skillsLearnt.includes(skill.name)) {
+      console.log(skill)
+      skillUI.setButton(skill)
+    }
+  }
+  for (let key in w) {
+    if (w[key].health !== undefined && w[key].maxHealth === undefined) {
+      w[key].maxHealth = w[key].health;
+    }
+  }
 };
 
 
@@ -118,47 +130,12 @@ const chosenWeapon = function() {
 
 
 
-const skills = {
-  list:[
-    { name:"Basic attack", icon:"sword1", tooltip:"A simple attack", processAttack:function(attack, options) {}},
-    
-    { 
-      name:"Double attack",
-      icon:"sword2",
-      tooltip:"Attack one foe twice, but at -2 to the attack roll", 
-      attackNumber:2, 
-      processAttack:function(attack, options) {
-        attack.offensiveBonus -= 2;
-      },
-    },
-    
-    { 
-      name:"Sweeping attack", 
-      icon:"sword3", 
-      tooltip:"Attack one foe for normal damage, and any other for 4 damage; at -3 to the attack roll for reach", 
-      attackTarget:"foes", 
-      processAttack:function(attack, options) {
-        if (options.secondary) {
-          attack.damageNumber = 0;
-          attack.damageBonus = 4;
-        }
-        attack.offensiveBonus -= 3;
-      },
-    },
-    
-    { name:"Sword of Fire", icon:"sword-fire", tooltip:"Attack with a flaming sword", processAttack:function(attack, options) {
-      attack.element = "fire";
-    },},
-    
-    { name:"Ice Sword", icon:"sword-ice", tooltip:"Attack with a freezing blade", processAttack:function(attack, options) {
-      attack.element = "ice";
-    },},
-  ],
 
-  addButton:function(skill) {
+const skillUI = {
+  setButton:function(skill) {
     const cell = $('#cell' + game.player.slotsUsed);
     cell.html('<img src="' + settings.imagesFolder + '/icon-' + skill.icon + '.png" title="' + skill.tooltip + '" />');
-    cell.click(skills.buttonClickHandler);
+    cell.click(skillUI.buttonClickHandler);
     cell.css("background-color", "black");
     cell.css("padding", "2px");
     cell.attr("name", skill.name);
@@ -168,21 +145,24 @@ const skills = {
   resetButtons:function() {
     for (let i = 0; i < game.player.slotsUsed; i++) {
       $('#cell' + i).css("background-color", "black");
-      $('#cell' + i).attr("name", "");
+      $('#cell' + i).attr("selected", "");
     }
   },
 
   buttonClickHandler:function(event) {
-    skills.resetButtons();
+    console.log(event)
+    skillUI.resetButtons();
     const cell = $("#" + event.currentTarget.id);
     cell.css("background-color", "yellow");
-    cell.attr("name", "selected");
+    cell.attr("selected", "selected");
   },
 
   getSkillFromButtons:function() {
-    for (let i = 1; i <= game.player.slotsUsed; i++) {
-      if ($("#cell" + i).attr("name") === "selected") {
-        return skills.list[i];
+    for (let i = 0; i <= game.player.slotsUsed; i++) {
+      const cell = $("#cell" + i)
+      if (cell && cell.attr("selected") === "selected") {
+        console.log(cell.attr("name"))
+        return cell.attr("name")
       }
     }
     return null;
@@ -197,7 +177,7 @@ const skills = {
 
 
 
-settings.startingDialogDisabled = false;
+settings.startingDialogDisabled = true;
 
 settings.professions = [
   {name:"Farm hand", bonus:"strength"},
@@ -208,10 +188,11 @@ settings.professions = [
 
 $(function() {
   if (settings.startingDialogDisabled) {
-    const p = game.player;
+    const p = w.me;
     p.job = settings.professions[0];
     p.isFemale = true;
-    p.fullname = "Shaala";
+    p.fullname = "Shaala"
+    settings.gui = true
     return; 
   }
   const diag = $("#dialog");
@@ -224,14 +205,17 @@ $(function() {
   for (let profession of settings.professions) {
     s += '<option value="' + profession.name + '">' + profession.name + '</option>';
   }
-  s += '</select></p>';
+  s += '</select></p>'
+  
+  s += '<p>Classic interface: <input type="radio" id="classic" name="interface" value="classic" checked>&nbsp;&nbsp;&nbsp;&nbsp;'
+  s += 'GUI<input type="radio" id="gui" name="interface" value="gui"></p>'
   
   diag.html(s);
   diag.dialog({
     modal:true,
     dialogClass: "no-close",
     width: 400,
-    height: 300,
+    height: 340,
     buttons: [
       {
         text: "OK",
@@ -241,6 +225,7 @@ $(function() {
           const job = $("#job").val();
           p.job = settings.professions.find(function(el) { return el.name === job; });
           p.isFemale = $("#female").is(':checked');
+          settings.gui = $("#gui").is(':checked');
           p.fullname = $("#namefield").val();
           if (settings.textInput) { $('#textbox').focus(); }
           console.log(p)
@@ -252,7 +237,7 @@ $(function() {
 
 
 
-
+/*
 
 
 
@@ -369,7 +354,7 @@ function setValues() {
   msg($("#diag-inner").text());
 }
 
-/*
+
 $(document).ready(function () {
       $('.scrolling').each(function() {
         scrollPara(this);
@@ -383,7 +368,7 @@ $(document).ready(function () {
         }
       });
       $("button[title='Close']")[0].style.world. = 'none';
-});*/
+});
 
 function scrollWizard() {
   wizardMale = !wizardMale;
@@ -431,3 +416,4 @@ function showStartDiag() {
   });
 
 }
+*/

@@ -1,385 +1,593 @@
 "use strict";
 
 
+  tp.addDirective("gem", function(arr, params) {
+    return random.fromArray("ruby|sapphire|crystal|amethyst|emerald|diamond|opal|moonstone|chrysoberyl|garnet|jade|sunstone|topaz|tourmaline|turquoise"); 
+  });
+  tp.addDirective("gems", function(arr, params) {
+    return random.fromArray("rubies|sapphires|crystals|amethysts|emeralds|diamonds|opals|moonstones|chrysoberyls|garnets|jades|sunstones|topazes|tourmalines|turquoises"); 
+  });
+  tp.addDirective("precious metal", function(arr, params) {
+    return random.fromArray("electrum|gold|silver|silver|silver|white gold|crown gold|meteorite iron|mithril|adamantine|blood alloy"); 
+  });
+  tp.addDirective("base metal", function(arr, params) {
+    return random.fromArray("brass|pewter|bronze|iron|steel|lead|copper|brass|pewter|bronze|iron|steel|lead|copper|constantan|phosphor bronze|speculum|terne"); 
+  });
+  tp.addDirective("stone", function(arr, params) {
+    return random.fromArray("alabaster|soapstone|chlorite|wonderstone|limestone|onyx|obsidian|marble|moonstone|coral|amber|agate"); 
+  });
+
+
+
+
 
 /*
-Have one prototype dungeon room with six exits, and disable exits as appropriate
-Have themes and regions
-Whether an exit is present is set by exit_???, and its type by exit_???_type
+
+Shadowmage
+Shadowbolt/ball
+Clouded mind
+Darkness
+Shadow portal
+
+
+
+Priest
+Divine light
+Holy Channel
+Sacred sword
+
+
+Elementalist
+
+
+
+Conjuror
+Summon monster
+Control monster
+Circle of power
+Banish monster
+
+
+
+Druid
+Call lightning
+Control beast
+Take familiar
+
+
+
+
+
+
+
+
+Table and chairs/benches/stools
+Lectern and pews
+Mirror
+Bed/bunk
+Desk
+Workbench
+Font
+Brazier
+Alter
+Chest/crate/box/coffin/barrel/sack/pouch/bottle/jar/pot
+Cabinet/cupboard/dresser/shelves
+winerack
+Rack of tools/herbs/weapons
+Forge/grindstone/drill/saw
+Arcane machinery (pipes)
+Cart/wheelbarrow (rails)
+Wheel
+Tapestry/rug/carpet
+Boat/canoe
+Mannequin/practice dummy
+Musical instrument
+Cage/cell
+Lantern/candlestick
+Throne
+Book/tome
+Bones/skeletons/hair/excrement/trophies/fetishes/horn/dead insects etc./spider webs
+
+Cracks/leaks
+Mould/fungus
+Rock/rock pile/collapsed ceiling/broken door/broken glass/broken pottery
+
+
+
+altar
+armchair
+armoire
+arross
+bag
+barrel
+bed
+bench
+blanket
+box (large)
+brazier & charcoal
+bucket
+buffet
+bunks
+butt (large barrel)
+cabinet
+candelabrum
+carpet (large)
+cask
+chandelier
+charcoal
+chair
+chair, padded
+chair, padded, arm
+chest, large
+chest, medium
+chest of drawers
+closet (wardrobe)
+coal
+couch
+crate
+cresset
+cupboard
+cushion
+dias
+desk
+fireplace & wood
+fireplace with mantle
+firkin
+fountain
+fresco
+grindstone
+hamper
+hassock
+hogshead
+idol (large)
+keg
+loom
+mat
+mattress
+pail
+painting
+pallet
+pedestal
+pegs
+pillow
+pipe (large cask)
+quilt
+rug(small/medium)
+rushes
+sack
+sconce, wall
+screen
+sheet
+shelf
+shrine
+sideboard
+sofa
+staff, normal
+stand
+statue
+stool, high
+stool, normal
+table, large
+table, long
+table, low
+table, round
+table, small
+table, trestle
+tapestry
+throne
+trunk
+tub
+tun
+urn
+wall basin and font
+wood billets
+workbench
+
+
+
+altar
+bell(s)
+brazier(s)
+candleabra
+candles
+candlesticks
+cassocks
+chime(s)
+cloth (altar)
+columns/pillars
+curtain/tapestry
+drum
+font
+gong
+holy/unholy symbol(s)
+holy/unholy writings
+idol(s)
+incense burner(s)
+kneeling bench
+lamp(s)
+lectern
+mosaics
+offertory container
+paintings/frescoes
+pews
+pipes (musical)
+prayer rug
+pulpit
+rail
+robes
+sanctuary
+screen
+shrine
+side chair(s)
+stand
+statues(s)
+throne
+thurible
+tripod
+vestry
+vestments
+votive light
+whistle
+
+
+
+
+
+
+bastinadoes
+bell (huge)
+bench
+boots (iron)
+branding irons
+brazier
+cage
+chains
+chair with straps
+clamps
+cressets
+fetters
+fire pit
+grill
+hooks
+iron maiden
+knives
+manacles
+oubliette
+oil (barrel of)
+pillory
+pincers
+pliers
+pot (huge)
+rack
+ropes
+stocks
+stool
+strappado
+straw
+table
+thongs
+thumb screws
+torches
+"U" rack
+vice
+well
+wheel
+whips
+
+
+
+
+
+alembic
+balance & weights
+beaker
+bellows
+bladder
+bottle
+book
+bowl
+box
+brazier
+cage
+cauldron
+candle
+candlestick
+carafe
+chalk
+crucible
+cruet
+crystal ball
+decanter
+desk
+dish
+flask
+funnel
+furnace
+herbs
+horn
+hourglass
+jar
+jug
+kettle
+ladle
+lamp
+lens (concave, convex, etc...)
+magic circle
+mortar & pestle
+pan
+parchment
+pentacle
+pentagram
+phial
+pipette
+pot
+prism
+quill
+retort
+rod, mixing/stirring
+scroll
+scroll tube
+sheet
+skin
+skull
+spatula
+spoon, measuring
+stand
+stool
+stuffed animal
+tank (container)
+tongs
+tripod
+tube (container)
+tube (piping)
+tweezers
+vial
+waterclock
+wire
+workbench
+
+
+
+
+
+ash
+bark
+bone
+chunks
+cinders
+crystals
+dust
+fibers
+gelatin
+globes
+grains
+greasy
+husks
+leaves
+liquid
+lump(s)
+oily
+paste
+pellets
+powder
+semi-liquid
+skin/hide
+splinters
+stalks
+strands
+strips
+viscous
+
+
+
+
+awl
+bandages
+basin
+basket
+beater
+book
+bottle
+bowl
+box (small)
+brush
+candle
+candle snuffer
+candlestick
+cane (walking stick)
+case
+casket (small)
+chopper
+coffer
+cologne
+comb
+cup
+decanter
+dipper
+dish
+earspoon
+ewer
+flagon
+flask
+food
+fork
+grater
+grinder
+hourglass
+jack (container)
+jar
+jug
+kettle
+knife
+knucklebones
+ladle
+lamp/lantern
+masher
+mirror
+mug
+needle(s)
+oil, cooking (or fuel)
+oil fuel
+oil, scented
+pan
+parchment
+pitcher
+pipe, musical
+pipe, smoking
+plate
+platter
+pot
+pouch
+puff
+quill
+razor
+rope
+salve
+saucer
+scraper
+scroll
+shaker
+sifter
+soap
+spigot
+spoon
+stopper
+statuette/figurine
+strainer
+tankard
+thongs
+thread
+tinderbox (with flint & steel)
+towel
+tray
+trivet
+tureen
+twine
+unguent
+vase
+vial
+wallet
+washcloth
+whetstone
+wig
+wool
+yarn
+
+
+
+
+
+apron
+belt
+blouse
+boots
+buskins
+cap
+cape
+cloak
+coat
+coif
+doublet
+dress
+frock/pinafore
+gauntlets
+girdle
+gloves
+gown
+hat
+habit
+hood
+hose
+jerkin
+jupon
+kerchief
+kirtle
+leggings
+linen (drawers)
+linen (undershirt)
+mantle
+pantaloons
+petticoat
+pouch/purse
+robe
+sandals
+scarf
+shawl
+shift
+slippers
+smock
+stockings
+surcoat
+toga
+trousers
+tunic
+veil
+vest
+wallet
+wrapper
+
+
+
+
+
+arrow, broken
+ashes
+bones
+bottle, broken
+chain, corroded
+club, splintered
+cobwebs
+coin, copper (bent)
+cracks, ceiling
+cracks, floor
+cracks, wall
+dagger hilt
+dampness, ceiling
+dampness, wall
+dripping
+dried blood
+dung
+dust
+flask, cracked
+food scraps
+fungi, common
+guano
+hair/fur bits
+hammer head, cracked
+helmet, badly dented
+iron bar, bent, rusted
+javelin head, blunt
+leather boot
+leaves (dry) & twigs
+mold (common)
+pick handle
+pole, broken
+pottery shards
+rags
+rope, rotten
+rubble & dirt
+sack, torn
+slimy coating, ceiling
+slimy coating, floor
+slimy coating, wall
+spike, rusted
+sticks
+stones, small
+straw
+sword blade, broken
+teeth/fangs, scattered
+torch stub
+wall scratchings
+water, small puddle
+water, large puddle
+water, trickle
+wax blob (candle stub)
+wood pieces, rotting
+
+
+
+
+
+
 
 */
-
-const dungeon = {
-  size:7,
-  cellSize:50,
-  cellpercentage:80,
-  exitpercentage:80,
-  themescount:10,
-  dirs:[
-    lang.exit_list.find(el => el.name === 'north'),
-    lang.exit_list.find(el => el.name === 'east'),
-    lang.exit_list.find(el => el.name === 'south'),
-    lang.exit_list.find(el => el.name === 'west'),
-  ],
-  shapes:[
-    {
-      name:'ew rectangle',
-      draw:function(x, y, fill) {
-        return '<rect x="' + (x + 5) + '" y="' + (y + 15) + '" width="40" height="20" stroke="none" fill="' + fill + '"/>'
-      },
-    },
-    {
-      name:'ns rectangle',
-      draw:function(x, y, fill) {
-        return '<rect x="' + (x + 15) + '" y="' + (y + 5) + '" width="20" height="40" stroke="none" fill="' + fill + '"/>'
-      },
-    },
-    {
-      name:'circle',
-      draw:function(x, y, fill) {
-        return '<circle cx="' + (x + 25) + '" cy="' + (y + 25) + '" r="15" stroke="none" fill="' + fill + '"/>'
-      },
-    },
-    {
-      name:'square',
-      draw:function(x, y, fill) {
-        return '<rect x="' + (x + 5) + '" y="' + (y + 5) + '" width="40" height="40" stroke="none" fill="' + fill + '"/>'
-      },
-    },
-    {
-      name:'small square',
-      draw:function(x, y, fill) {
-        return '<rect x="' + (x + 10) + '" y="' + (y + 10) + '" width="30" height="30" stroke="none" fill="' + fill + '"/>'
-      },
-    },
-    {
-      name:'octagon',
-      draw:function(x, y, fill) {
-        let s = '<polygon points="'
-        s += (x + 5) + ',' + (y + 17) + ' '
-        s += (x + 5) + ',' + (y + 33) + ' '
-        s += (x + 17) + ',' + (y + 45) + ' '
-        s += (x + 33) + ',' + (y + 45) + ' '
-        s += (x + 45) + ',' + (y + 33) + ' '
-        s += (x + 45) + ',' + (y + 17) + ' '
-        s += (x + 33) + ',' + (y + 5) + ' '
-        s += (x + 17) + ',' + (y + 5) + ' '
-        s += '" stroke="none" fill="' + fill + '"/>'
-        return s
-      }
-    }
-  ],
-  corridor:{
-    name:'corridor',
-    draw:function(x, y, fill) {
-      return '<rect x="' + (x + 20) + '" y="' + (y + 20) + '" width="10" height="10" stroke="none" fill="blue"/>'
-    }
-  },
-    
-}  
-
-
-
-//  Master function to generate the whole level.
-dungeon.generateLevel = function(from_room) {
-  console.log('About to generate...')
-  const limit = (dungeon.size - 1) / 2
-  const level = from_room.level + 1
-  let theme
-  if (3 > level) {
-    theme = 'e_dungeon'
-  }
-  else if (random.chance(50)) {
-    theme = from_room.theme
-  }
-  else if (random.chance(50)) {
-    theme = 'e_dungeon'
-  }
-  else {
-    theme = random.fromArray(['e_dungeon'])
-  }
-  dungeon.generateBasicRooms(level, theme)
-  console.log('Rooms created')
-  dungeon.setUpCentreRoom(level, from_room)
-  const levellist = dungeon.checkConnectivity(level)
-  const waydown = dungeon.setWayDown(levellist)
-  console.log('About to decorate ' + levellist.length)
-  for (let room of levellist) {
-    dungeon.decorateRoom(room)
-  }
-  //list remove (levellist, waydown)
-  //Populate (levellist, level)
-}
-
-
-
-dungeon.decorateRoom = function(room, level, theme) {
-  room.theme = theme
-  if ((room.x === 0 && room.y === 0) || (dungeon.exitCount(room) === 1) || random.chance(25)) {
-    room.roomType = random.fromArray(dungeon.shapes)
-  }
-  else {
-    room.roomType = dungeon.corridor
-  }
-}
-
-
-
-// Creates each room of the level.
-// Rooms are created in a grid, with a random chance of being there depending
-// on the distance from the centre.
-dungeon.generateBasicRooms = function(level, theme) {
-  for (let x = -dungeon.size; x <= dungeon.size; x++) {
-    for (let y = -dungeon.size; y <= dungeon.size; y++) {
-      //console.log('x=' + x + ' y=' + y + ' p=' + (100 - dungeon.cellpercentage * dungeon.fromCentre(x, y) / dungeon.size))
-      if (random.chance(100 - dungeon.cellpercentage * dungeon.fromCentre(x, y) / dungeon.size)) {
-        dungeon.generateBasicRoom(level, x, y, theme)
-      }
-    }
-  }
-}
-
-
-// Creates a single room with default values.
-// Also creates exits to south and west if there is a room there and at random.
-dungeon.generateBasicRoom = function(level, x, y, theme) {
-  const name = dungeon.getRoomName(x, y, level)
-  //console.log(name)
-  const name_west = dungeon.getRoomName(x - 1, y, level)
-  const name_south = dungeon.getRoomName(x, y - 1, level)
-  const room = cloneObject("dungeon_cell_prototype", undefined, name)
-  //console.log(room)
-  room.accessible = false
-  room.alias = "Lost in a dungeon"
-  room.level = level
-  room.x = x
-  room.y = y
-  const room_west = w[name_west]
-  if (room_west !== undefined && random.chance(dungeon.exitpercentage)) {
-    room.exit_west = true
-    room_west.exit_east = true
-    room_west.exit_east_type = room.exit_west_type = random.int(dungeon.themescount)
-  }
-  const room_south = w[name_south]
-  if (room_south !== undefined && random.chance(dungeon.exitpercentage)) {
-    room.exit_south = true
-    room_south.exit_north = true
-    room_south.exit_north_type = room.exit_south_type = random.int(dungeon.themescount)
-  }
-  w[name] = room
-}
-
-
-
-// Checks all rooms are connected, deleting any that are not.
-dungeon.checkConnectivity = function(level) {
-  // loop through each room, flagging those that are connected
-  // keep going until no new ones are flagged
-  w[dungeon.getRoomName(0, 0, level)].accessible = true
-  let flag = true
-  while (flag) {
-    console.log("LOOP")
-    flag = false
-    for (let x = -dungeon.size; x <= dungeon.size; x++) {
-      for (let y = -dungeon.size; y <= dungeon.size; y++) {
-        const room = w[dungeon.getRoomName(x, y, level)]
-        if (room !== undefined && room.accessible) {
-          flag = flag || dungeon.flagAllAdjacent(room)
-        }
-      }
-    }
-  }
-
-  // now delete rooms that are not accessible
-  // and pick the way to next level
-  const levellist = []
-  for (let x = -dungeon.size; x <= dungeon.size; x++) {
-    for (let y = -dungeon.size; y <= dungeon.size; y++) {
-      const room = w[dungeon.getRoomName(x, y, level)]
-      if (room !== undefined) {
-        if (!room.accessible) {
-          console.log("DELETE")
-          delete w[room.name]
-        }
-        else {
-          console.log("ADD")
-          levellist.push(room)
-        }
-      }
-    }
-  }
-  return levellist
-}  
-  
-  
-// Picks a room to be the way down.
-dungeon.setWayDown = function(levellist) {
-  const sublist = []
-  let dist = 7
-  while (sublist.length === 0) {
-    for(let o of levellist) {
-      if (dungeon.fromCentre(o.x, o.y) > dist) sublist.push(o)
-    }
-    dist--
-    //msg(dist)
-  }
-  const waydown = random.fromArray(sublist)
-  waydown.exit_down = true
-  return (waydown)
-}
-
-
-dungeon.fromCentre = function(x, y) {
-  return Math.abs(x) + Math.abs(y)
-}
-
-
-dungeon.getRoomName = function(x, y, level) {
-  return "cell_" + x + "_" + y + "_" + level
-}
-
-
-dungeon.exitCount = function(room) {
-  let count = 0
-  for (let dir of dungeon.dirs) {
-    if (room['exit_' + dir.name]) count++
-  }
-  return count
-}    
-
-
-
-dungeon.flagAllAdjacent = function(room) {
-  let flag = false
-  for (let dir of dungeon.dirs) flag = flag || dungeon.flagAdjacent(room, dir)
-  return flag
-}    
-
-// Attempts to find the adjacent room in the given direction.
-// Returns false if there is no room or if there is no exit from this room to that room.
-// Expects dir to be a dictionary from lang.exit_list
-dungeon.findAdjacent = function(room, dir) {
-  if (!room['exit_' + dir.name]) return (false)
-  return w[dungeon.getRoomName(room.x + dir.x, room.y + dir.y, room.level)]
-}
-
-
-
-// Attempts to flag the room in the given direction as accessible.
-// Returns false if there is no room, or if it is already flagged, true otherwise.
-// Expects dir to be a dictionary from lang.exit_list
-dungeon.flagAdjacent = function(room, dir) {
-  const adj = dungeon.findAdjacent(room, dir)
-  if (!adj || adj.accessible) return false
-  adj.accessible = true
-  return true
-}
-
-
-
-//Mostly just creates an exit from the centre to the from_room.
-dungeon.setUpCentreRoom = function(level, from_room) {
-  const centreroom = w[dungeon.getRoomName(0, 0, level)]
-  centreroom.exit_up = true
-  from_room.exit_down = true
-}
-
-
-
-
-dungeon.drawMap = function(level) {
-  if (w[this.getRoomName(0, 0, level)] === undefined) return false
-  const map = []
-  for (let x = -this.size; x <= this.size; x++) {
-    for (let y = -this.size; y <= this.size; y++) {
-      const room = w[this.getRoomName(x, y, level)]
-      if (room === undefined) continue
-      map.push(room.getSvg((x + this.size) * this.cellSize, (y + this.size) * this.cellSize))
-    }
-  }
-
-  const svgSize = (this.size * 2 + 1) * this.cellSize
-  //if (this.mapBorder) map.push('<rect x="0" y="0" width="' + svgSize + '" height="' + svgSize + '" stroke="black" fill="none"/>')
-  draw(svgSize, svgSize, map)
-  return true
-}  
-  
-
-const showMap = function() {
-  dungeon.drawMap(1)
-}
-
-
-createRoom('entrance', {
-  level:0,
-  theme:0,
-  desc:'The stairs go down...',
-  down:new Exit(dungeon.getRoomName(0, 0, 1)),
-  afterFirstEnter:function() {
-    dungeon.generateLevel(this)
-  },
-})
-
-
-dungeon.exitScript = function(char, dirName) {
-  const origin = w[char.loc]
-  if (!origin.hasExit(dirName)) {
-    msg('You can\'t go ' + dirName)
-    return false
-  }
-
-  const dir = lang.exit_list.find(el => el.name === dirName)
-  
-  // up and down are different!!!
-  const dest = w[dungeon.getRoomName(origin.x + dir.x, origin.y + dir.y, origin.level)]
-    
-  msg(lang.stop_posture(char));
-  msg(lang.go_successful(char, dirName));
-  world.setRoom(char, dest)
-  return true
-}
-
-
-createRoom('dungeon_cell_prototype', {
-  level:0,
-  theme:0,
-  desc:'The stairs go down...',
-  down:new Exit('entrance', {use:dungeon.exitScript}),
-  up:new Exit('entrance', {use:dungeon.exitScript}),
-  north:new Exit('entrance', {use:dungeon.exitScript}),
-  south:new Exit('entrance', {use:dungeon.exitScript}),
-  east:new Exit('entrance', {use:dungeon.exitScript}),
-  west:new Exit('entrance', {use:dungeon.exitScript}),
-  afterFirstEnter:function() {
-    if (this.exit_down) {
-      dungeon.generateLevel(this)
-    }
-  },
-
-  getExits:function(options) {
-    const exits = []
-    for (let ex of lang.exit_list) {
-      if (ex.type !== 'nocmd' && this.hasExit(options)) exits.push(ex)
-    }
-    return exits
-  },
-  
-  hasExit:function(dir, options) {
-    if (!this[dir]) return false;
-    return this['exit_' + dir]
-  },
-
-  getSvg:function(x, y) {
-    const fill = (this.exit_up || this.exit_down) ? 'yellow' : 'red'
-    //const fill = this.accessible ? 'yellow' : 'red'
-    let s = ''
-    if (this.exit_north) s += '<rect x="' + (x + 20) + '" y="' + (y + 30) + '" width="10" height="20" stroke="none" fill="blue"/>'
-    if (this.exit_east) s += '<rect x="' + (x + 30) + '" y="' + (y + 20) + '" width="20" height="10" stroke="none" fill="blue"/>'
-    if (this.exit_south) s += '<rect x="' + (x + 20) + '" y="' + (y) + '" width="10" height="20" stroke="none" fill="blue"/>'
-    if (this.exit_west) s += '<rect x="' + (x) + '" y="' + (y + 20) + '" width="20" height="10" stroke="none" fill="blue"/>'
-    s += this.roomType.draw(x, y, fill)
-    return s
-  },    
-})
-
-

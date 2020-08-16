@@ -3,8 +3,9 @@
 // About your game
 settings.title = "Deeper";
 settings.author = "The Pixie"
-settings.version = "2.0";
+settings.version = "3.0";
 settings.thanks = [];
+settings.files = ["geography", "code", "data", "npcs"]
 
 
 

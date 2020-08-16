@@ -63,6 +63,9 @@ test.tests = function() {
   test.assertEqual(['4', '6', '7'], arraySubtract(['1', '2', '4', '6', '7'], ['1', '2', '3']));
   test.assertEqual([w.coin, w.boots], arraySubtract([w.coin, w.boots, w.ring], [w.ring]));
   
+  test.title("arrayAtts");
+  const testAry = [w.boots, w.book, w.cardboard_box]
+  test.assertEqual(['boots', 'book', 'cardboard_box'], arrayAtts(testAry));
 
   test.title("Text processor 1");
   test.assertEqual("Simple text", processText("Simple text"));
