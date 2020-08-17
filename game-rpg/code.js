@@ -110,9 +110,8 @@ class Attack {
 
     // Find the skill
     if (attacker === game.player) {
-      const skillName = skillUI.getSkillFromButtons();
+      this.skill = skillUI.getSkillFromButtons();
       skillUI.resetButtons();
-      this.skill = skills.findName(skillName)
     }
     if (!this.skill) this.skill = defaultSkill;
 
@@ -402,6 +401,22 @@ const WEAPON = function() {
     return true;
   }
   
+  res.byname = function(options) {
+    if (!options) options = {};
+    let s = "";
+    if (options.article === DEFINITE) {
+      s = lang.addDefiniteArticle(this);
+    }
+    if (options.article === INDEFINITE) {
+      s = lang.addIndefiniteArticle(this);
+    }
+    s += this.alias;
+    if (options && options.possessive) s += "'s";
+    if (game.player.equipped === this.name && options.modified && (this.isAtLoc(game.player.name))) { s += " (equipped)"; }
+    if (options && options.capital) s = sentenceCase(s);
+    return s;
+  };
+
   return res;
 }  
   
@@ -422,9 +437,14 @@ createItem("weapon_unarmed", WEAPON(), {
   loc:"me",
   image:"fist",
   damage:"d4",
-  bonus:-2,
+  offensiveBonus:-2,
   alias:"unarmed",
   scenery:true,
+  isAtLoc:function(loc, situation) {
+    if (situation !== world.SCOPING) return false
+    if (typeof loc !== "string") loc = loc.name
+    return (this.loc === loc);
+  },
 });
 
 

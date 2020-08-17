@@ -23,31 +23,13 @@ createItem("knife", WEAPON(), {
   loc:"me",
   image:"knife",
   damage:"d4+2",
-  bonus:-2,
-  sharp:true,
-  examine:function(isMultiple) {
-    if (this.sharp) {
-      msg(prefix(item, isMultiple) + "A really sharp knife.");
-    }
-    else {
-      msg(prefix(item, isMultiple) + "A blunt knife.");
-    }
-  },
+  offensiveBonus:-2,
 });
 
 createItem("flail", WEAPON(), {
   loc:"me",
   image:"flail",
   damage:"2d10+4",
-  sharp:true,
-  examine:function(isMultiple) {
-    if (this.sharp) {
-      msg(prefix(item, isMultiple) + "A really sharp knife.");
-    }
-    else {
-      msg(prefix(item, isMultiple) + "A blunt knife.");
-    }
-  },
 });
 
 
@@ -142,7 +124,7 @@ skills.add(new Spell("Fireball", {
   castingScript:function() {
     msg("The room is momentarily filled with fire.")
   },
-  icon:"fireball", 
+  noTarget:true,
   noweapon:true,
   damage:'2d6',
   tooltip:"A fireball that fills the room (but does not affect you!)", 
@@ -157,6 +139,8 @@ skills.add(new Spell("Stoneskin", {
     msg("Your skin becomes as hard as stone - and yet still just as flexible.")
   },
   ongoing:true,
+  noTarget:true,
+  noweapon:true,
   incompatible:[/skin$/],
   modifyAttack:function(attack) {
     attack.armourModifier += 2
@@ -168,6 +152,8 @@ skills.add(new Spell("Steelskin", {
     msg("Your skin becomes as hard as steel - and yet still just as flexible.")
   },
   ongoing:true,
+  noTarget:true,
+  noweapon:true,
   incompatible:[/skin$/],
   modifyAttack:function(attack) {
     attack.armourModifier += 4

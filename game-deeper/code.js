@@ -53,7 +53,11 @@ Druid
 Call lightning
 Control beast
 Take familiar
+Beastform
 
+
+
+Necromancer
 
 
 

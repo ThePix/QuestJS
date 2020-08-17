@@ -211,3 +211,19 @@ th, td {
   font-weight: bold;
   font-size: larger;
 }
+
+
+
+
+
+
+.skill-container {
+    position: relative;
+    width: 40px;
+    height: 60px;
+}
+.skill-image {
+    top: 0;
+    right: 0;
+    position: absolute;
+}

@@ -30,7 +30,7 @@ const ioCreateCustom = function() {
   document.writeln('<div id="rightstatus">');
   document.writeln('<table align="center">');
   document.writeln('<tr><td width="120"><b>Current weapon</b></td></tr>');
-  document.writeln('<tr><td id="weapon-td"><img id="weaponImage" onclick="chooseWeapon();"/></td></tr>');
+  document.writeln('<tr><td id="weapon-td"><img id="weaponImage" onclick="skillUI.chooseWeapon();"/></td></tr>');
   document.writeln('<tr><td><b>Health</b></td></tr>');
   document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\" title="Your current hits" id="hits-td"><span id="hits-indicator" style="background-color:green;padding-right:100px;"></span></td></tr>');
   document.writeln('<tr><td><b>Spell points</b></td></tr>');
@@ -39,6 +39,8 @@ const ioCreateCustom = function() {
   document.writeln('<tr><td style="border: thin solid black;background:white;text-align:left;\" title="Your current armour" id="armour-td"><span id="armour-indicator" style="background-color:red;padding-right:100px;"></span></td></tr>');
   document.writeln('</table>');
   document.writeln('</div>');
+
+  document.writeln('<div style="text-align:center"><input type="button" id="castButton" text="Cast" value="Cast" onclick="skillUI.castButtonClick()" style="width: 80px" disabled="yes"/></div>');
 
   document.writeln('<table align="center">');
   for (let row = 0; row < 8; row++) {
@@ -58,7 +60,7 @@ const ioCreateCustom = function() {
     $( "#choose-weapon-div" ).dialog({
       autoOpen: false,  
       buttons: {
-        OK: function() {chosenWeapon();}
+        OK: function() { skillUI.chosenWeapon() }
       },
     });
   });
@@ -66,7 +68,6 @@ const ioCreateCustom = function() {
 
 
 const ioUpdateCustom = function() {
-  console.log("in ioUpdateCustom");
   $('#weaponImage').attr('src', settings.imagesFolder + '/icon-' + game.player.getEquippedWeapon().image + '.png');
   $('#weapon-td').prop('title', "Weapon: " + game.player.getEquippedWeapon().alias);
   
@@ -79,15 +80,15 @@ const ioUpdateCustom = function() {
   $('#armour-indicator').css('padding-right', 120 * game.player.armour / game.player.maxArmour);
   $('#armour-td').prop('title', "Armour: " + game.player.armour + "/" + game.player.maxArmour);
 
-  console.log($('#hits-td').prop('title'));
+  //console.log($('#hits-td').prop('title'));
 
-  // assume you never lose a skill/spell 
-  game.player.slotsUsed = 0
-  console.log(game.player.skillsLearnt)
+
+  //console.log(game.player.skillsLearnt)
+  skillUI.removeAllButtons()
   for (let skill of skills.list) {
-    console.log(skill.name)
+    //console.log(skill.name)
     if (game.player.skillsLearnt.includes(skill.name)) {
-      console.log(skill)
+      //console.log(skill)
       skillUI.setButton(skill)
     }
   }
@@ -99,75 +100,98 @@ const ioUpdateCustom = function() {
 };
 
 
-const chooseWeapon = function() {
-  console.log("in chooseWeapon");
-  const weapons = [];
-  for (let o in w) {
-    if (w[o].isAtLoc(game.player) && w[o].weapon) {
-      console.log(o);
-      weapons.push('<option value="'+ o +'">' + w[o].listalias + '</option>');
-    }
-  }
-  const s = weapons.join('');
-  console.log(s);
-
-  $('#weapon-select').html(s);  
-  
-  $("#choose-weapon-div").dialog("open");
-};
-
-
-const chosenWeapon = function() {
-  $("#choose-weapon-div").dialog("close");
-  const selected = $("#weapon-select").val();
-  console.log("in chosenWeapon: " + selected);
-  w[selected].equip(false, game.player);
-  world.endTurn(world.SUCCESS);
-};
-
-
-
 
 
 
 
 const skillUI = {
+  skills:[],
+  selected:false,
+  
   setButton:function(skill) {
-    const cell = $('#cell' + game.player.slotsUsed);
-    cell.html('<img src="' + settings.imagesFolder + '/icon-' + skill.icon + '.png" title="' + skill.tooltip + '" />');
-    cell.click(skillUI.buttonClickHandler);
-    cell.css("background-color", "black");
-    cell.css("padding", "2px");
-    cell.attr("name", skill.name);
-    game.player.slotsUsed++;
+    if (!skill.icon) skill.icon = skill.name.toLowerCase()
+    const cell = $('#cell' + skillUI.skills.length)
+    let s = '<div class="skill-container" title="' + skill.tooltip + '" >'
+    s += '<img class="skill-image" src="' + settings.imagesFolder + '/icon-' + skill.icon + '.png"/>'
+    if (skill.spell) s += '<img class="skill-image" src="' + settings.imagesFolder + '/flag-spell.png"/>'
+    s += '</div>'
+    cell.html(s)
+    cell.click(skillUI.buttonClickHandler)
+    cell.css("background-color", "black")
+    cell.css("padding", "2px")
+    cell.attr("name", skill.name)
+    skillUI.skills.push(skill)
   },
 
   resetButtons:function() {
-    for (let i = 0; i < game.player.slotsUsed; i++) {
+    console.log('reset')
+    for (let i = 0; i < skillUI.skills.length; i++) {
       $('#cell' + i).css("background-color", "black");
-      $('#cell' + i).attr("selected", "");
     }
+    $('#castButton').prop('disabled', true)
+    skillUI.selected = false
+  },
+
+
+  removeAllButtons:function() {
+    for (let i = 0; i < skillUI.skills.length; i++) {
+      $('#cell' + i).html("")
+    }
+    skillUI.skills = []
+    $('#castButton').prop('disabled', true)
+    skillUI.selected = false
   },
 
   buttonClickHandler:function(event) {
     console.log(event)
-    skillUI.resetButtons();
-    const cell = $("#" + event.currentTarget.id);
-    cell.css("background-color", "yellow");
-    cell.attr("selected", "selected");
+    skillUI.resetButtons()
+    
+    const n = parseInt(event.currentTarget.id.replace('cell', ''))
+    console.log(n)
+    skillUI.selected = n
+    const cell = $("#cell" + n)
+    cell.css("background-color", "yellow")
+    const skill = skillUI.skills[n]
+    if (skill.noTarget) $('#castButton').prop('disabled', false)
   },
 
   getSkillFromButtons:function() {
-    for (let i = 0; i <= game.player.slotsUsed; i++) {
-      const cell = $("#cell" + i)
-      if (cell && cell.attr("selected") === "selected") {
-        console.log(cell.attr("name"))
-        return cell.attr("name")
-      }
-    }
-    return null;
+    return skillUI.selected ? skillUI.skills[skillUI.selected] : null
   },
   
+  castButtonClick:function() {
+    console.log("CKLOICK!!!")
+    console.log("CKLOICK!!! " + skillUI.selected)
+    console.log("CKLOICK!!! " + skillUI.skills)
+    console.log("CKLOICK!!! " + skillUI.skills[skillUI.selected].name)
+  },
+
+
+  chooseWeapon:function() {
+    console.log("in chooseWeapon");
+    const weapons = [];
+    for (let o in w) {
+      if (w[o].isAtLoc(game.player, world.SCOPING) && w[o].weapon) {
+        console.log(o);
+        weapons.push('<option value="'+ o +'">' + w[o].listalias + '</option>');
+      }
+    }
+    const s = weapons.join('');
+    console.log(s);
+
+    $('#weapon-select').html(s);  
+    
+    $("#choose-weapon-div").dialog("open");
+  },
+
+  chosenWeapon:function() {
+    $("#choose-weapon-div").dialog("close");
+    const selected = $("#weapon-select").val();
+    console.log("in chosenWeapon: " + selected);
+    w[selected].equip(false, game.player);
+    world.endTurn(world.SUCCESS);
+  },
+
 }
 
 

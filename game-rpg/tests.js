@@ -30,9 +30,11 @@ test.tests = function() {
 
 
 
-  test.title("Equip");
+  test.title("Equip")
   test.assertEqual('unarmed', game.player.getEquippedWeapon().alias)
+  test.assertCmd("i", "You are carrying a flail and a knife.");
   test.assertCmd("equip knife", "You draw the knife.");
+  test.assertCmd("i", "You are carrying a flail and a knife (equipped).");
   test.assertEqual('knife', game.player.getEquippedWeapon().alias)
   test.assertCmd("equip knife", "It already is.");
   test.assertCmd("drop knife", "You drop the knife.");
@@ -131,6 +133,7 @@ test.tests = function() {
   skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
   
   const attack3 = new Attack(game.player, w.goblin)
+  console.log(attack3)
   attack3.outputLevel = -1
   test.assertEqual('me', attack3.attacker.name)
   test.assertEqual(undefined, attack3.weapon)
@@ -163,21 +166,7 @@ test.tests = function() {
   w.goblin.health = 40
   skillUI.getSkillFromButtons = oldgetSkillFromButtons
   
-  
-/*  class TestClass {
-    constructor(name) {
-      this.name = name
-      this.level = 1
-    }
-    
-    output() {
-      console.log(name)
-    }
-  }
-  
-  const tc = new TestClass("Lara")
-  console.log(tc)
-  tc.output()*/
+
 
 
 
@@ -208,6 +197,7 @@ test.tests = function() {
 
 
   test.title("learn fireball command")
+  game.player.skillsLearnt = ["Double attack"]
   test.assertCmd('cast nonsense', ['There is no spell called nonsense.'])
   test.assertCmd('cast fireball', ['You do not know the spell <i>Fireball</i>.'])
   test.assertCmd('learn nonsense', ['There is no spell called nonsense.'])
@@ -227,6 +217,7 @@ test.tests = function() {
   test.assertEqual(['Stoneskin'], game.player.activeSpells)
   test.assertCmd('cast steelskin', ['You cast <i>Steelskin</i>...', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> spell terminates.'])
   test.assertEqual(['Steelskin'], game.player.activeSpells)
+  game.player.skillsLearnt = ["Double attack", "Fireball"]
 
 
 
