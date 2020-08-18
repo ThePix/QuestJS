@@ -74,7 +74,7 @@ createItem("chest", CONTAINER(true), {
   loc:"practice_room",
 });
 
-createItem("spellbook", SPELLBOOK(["Fireball", "Stoneskin", "Steelskin"]), {
+createItem("spellbook", SPELLBOOK(["Fireball", "Stoneskin", "Steelskin", "Lightning bolt"]), {
   loc:"practice_room",
 });
 
@@ -125,12 +125,34 @@ skills.add(new Spell("Fireball", {
     msg("The room is momentarily filled with fire.")
   },
   noTarget:true,
-  noweapon:true,
   damage:'2d6',
   tooltip:"A fireball that fills the room (but does not affect you!)", 
   getPrimaryTargets:getAll,
   processAttack:function(attack) {
     attack.element = "fire";
+  },
+}))
+
+skills.add(new Spell("Lightning bolt", {
+  castingScript:function() {
+    msg("A lightning bolt jumps from your out-reached hand to your target!")
+  },
+  damage:'3d6',
+  icon:'lightning',
+  tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
+  processAttack:function(attack) {
+    attack.element = "storm";
+  },
+}))
+
+skills.add(new Spell("Cursed armour", {
+  castingScript:function() {
+    msg("The target!")
+  },
+  icon:'lightning',
+  tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
+  processAttack:function(attack) {
+    attack.armourModifier -= 2
   },
 }))
 
@@ -140,7 +162,6 @@ skills.add(new Spell("Stoneskin", {
   },
   ongoing:true,
   noTarget:true,
-  noweapon:true,
   incompatible:[/skin$/],
   modifyAttack:function(attack) {
     attack.armourModifier += 2
@@ -153,7 +174,8 @@ skills.add(new Spell("Steelskin", {
   },
   ongoing:true,
   noTarget:true,
-  noweapon:true,
+  noWeapon:true,
+  duration:3,
   incompatible:[/skin$/],
   modifyAttack:function(attack) {
     attack.armourModifier += 4

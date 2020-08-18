@@ -255,10 +255,11 @@ test.tests = function() {
   test.assertCmd("drop three bricks in box", "Done.");
   test.assertCmd("drop bricks", "You drop four bricks.");
   test.assertCmd("get bricks", "You take four bricks.");
-  test.assertCmd("get bricks", "You take three bricks.");/*
+  test.assertCmd("get bricks", "You take three bricks.");
   test.assertCmd("drop box", "You drop the cardboard box.");
   
-/*
+
+
   test.title("Restricting");
   game.player.canTalk = function() { msg("You are gagged."); return false; }
   test.assertCmd("talk to kyle", "You are gagged.");
@@ -456,6 +457,7 @@ test.tests = function() {
   test.assertEqual("tst:string:14;", saveLoad.encode("tst", '14'))
   test.assertEqual("tst:qobject:book;", saveLoad.encode("tst", w.book))
   test.assertEqual("tst:array:14~12;", saveLoad.encode("tst", ['14', '12']))
+  test.assertEqual("tst:numberarray:14~12;", saveLoad.encode("tst", [14, 12]))
 
   saveLoad.decode(w.far_away, "one:number:14")
   test.assertEqual(14, w.far_away.one)
@@ -470,6 +472,8 @@ test.tests = function() {
   //console.log(w.far_away.north)
   saveLoad.decode(w.far_away, "north:exit:lounge:l:h")
   test.assertEqual(true, w.far_away.north.hidden)
+  saveLoad.decode(w.far_away, "six:numberarray:4~67~9")
+  test.assertEqual([4, 67, 9], w.far_away.six)
 
   test.title("Save/Load 2");
   // Set up some changes to be saved
@@ -477,6 +481,7 @@ test.tests = function() {
   w.boots.unusualString = "Some interesting text";
   w.boots.notableFlag = true;
   w.boots.examine = "This will get saved";
+  w.boots.sizes = [4, 5, 8]
   clone.cloneCounter = 29;
   w.far_away.north.hidden = false
   w.far_away.north.locked = false
@@ -493,6 +498,7 @@ test.tests = function() {
   saveLoad.loadTheWorld(s, 4);
   test.assertEqual(count + 2, Object.keys(w).length);
   test.assertEqual(17, w.boots.counter);
+  test.assertEqual([4, 5, 8], w.boots.sizes);
   test.assertEqual("Some interesting text", w.boots.unusualString);
   test.assertEqual(true, w.boots.notableFlag);
   test.assertEqual("This will get saved", w.boots.examine);

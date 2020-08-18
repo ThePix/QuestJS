@@ -55,9 +55,9 @@ test.tests = function() {
   test.assertEqual('me', attack0.attacker.name)
   test.assertEqual([w.goblin], attack0.primaryTargets)
   test.assertEqual('d4', attack0.damage)
-  test.assertEqual(0, attack0.offensiveBonus)
+  test.assertEqual(-2, attack0.offensiveBonus)
   attack0.attacker.processAttack(attack0)
-  test.assertEqual(0, attack0.offensiveBonus)
+  test.assertEqual(-2, attack0.offensiveBonus)
   
   random.buffer.push(3)
   w.goblin.applyAttack(attack0, true, 0)
@@ -73,9 +73,9 @@ test.tests = function() {
   test.assertEqual('me', attack1.attacker.name)
   test.assertEqual([w.goblin], attack1.primaryTargets)
   test.assertEqual('d4', attack1.damage)
-  test.assertEqual(0, attack1.offensiveBonus)
+  test.assertEqual(-2, attack1.offensiveBonus)
   attack1.attacker.processAttack(attack1)
-  test.assertEqual(0, attack1.offensiveBonus)
+  test.assertEqual(-2, attack1.offensiveBonus)
   
   random.buffer.push(19)
   random.buffer.push(4)
@@ -196,7 +196,7 @@ test.tests = function() {
 
 
 
-  test.title("learn fireball command")
+  test.title("learn fireball")
   game.player.skillsLearnt = ["Double attack"]
   test.assertCmd('cast nonsense', ['There is no spell called nonsense.'])
   test.assertCmd('cast fireball', ['You do not know the spell <i>Fireball</i>.'])
@@ -204,19 +204,73 @@ test.tests = function() {
   test.assertCmd('learn fireball', ['You do not have anything you can learn <i>Fireball</i> from.'])
   test.assertCmd('get spellbook', ['You take the spellbook.'])
   test.assertCmd('learn fireball', ['You learn <i>Fireball</i> from the spellbook.'])
-  test.assertCmd('cast fireball', ['You cast <i>Fireball</i>...', 'The room is momentarily filled with fire.'])
+  game.player.skillsLearnt = ["Double attack", "Fireball"]
+  test.assertCmd('cast fireball', ['You cast the <i>Fireball</i> spell.', 'The room is momentarily filled with fire.'])
+
+
+
+
+
+
+  test.title("learn Lightning bolt")
+  test.assertCmd('learn lightning bolt', ['You learn <i>Lightning bolt</i> from the spellbook.'])
+  game.player.skillsLearnt = ["Double attack", "Fireball", "Lightning bolt"]
+  test.assertCmd('cast lightning bolt', ['You need a target to cast the <i>Lightning bolt</i> spell.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
+  skillUI.getSkillFromButtons = function() { return skills.findName('Lightning bolt') }
+  random.buffer.push(19)
+  random.buffer.push(4)
+  random.buffer.push(7)
+  random.buffer.push(9)
+  test.assertCmd('attack goblin', ['You attack the goblin.', 'A hit!', 'Damage: 20'])
+  w.goblin.health = 40
+  skillUI.getSkillFromButtons = oldgetSkillFromButtons
 
 
-  test.title("learn ongoing spells command")
+
+
+  random.buffer.push(19)
+  random.buffer.push(4)
+  random.buffer.push(7)
+  random.buffer.push(9)
+  test.assertCmd('cast lightning bolt at goblin', ['You cast the <i>Lightning bolt</i> spell on the goblin.'])
+  w.goblin.health = 40
+  skillUI.getSkillFromButtons = oldgetSkillFromButtons
+
+
+
+
+  test.title("learn ongoing spells")
   test.assertCmd('get spellbook', ['You take the spellbook.'])
   test.assertCmd('learn steelskin', ['You learn <i>Steelskin</i> from the spellbook.'])
   test.assertCmd('learn stoneskin', ['You learn <i>Stoneskin</i> from the spellbook.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
-  test.assertCmd('cast stoneskin', ['You cast <i>Stoneskin</i>...', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
+  test.assertEqual([], game.player.activeSpells)
+  test.assertCmd('cast stoneskin', ['You cast the <i>Stoneskin</i> spell.', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
   test.assertEqual(['Stoneskin'], game.player.activeSpells)
-  test.assertCmd('cast steelskin', ['You cast <i>Steelskin</i>...', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> spell terminates.'])
+  test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> spell terminates.'])
   test.assertEqual(['Steelskin'], game.player.activeSpells)
+
+
+
+
+
+
+
+  test.title("ongoing spells expire")
+  game.player.countdown_Steelskin = 3
+  w.spell_handler.eventScript()
+  test.assertEqual(2, game.player.countdown_Steelskin)
+  test.assertCmd('z', ['You wait one turn.'])
+  test.assertEqual(1, game.player.countdown_Steelskin)
+  test.assertCmd('z', ['You wait one turn.', 'The <i>Steelskin</i> spell terminates.'])
+  test.assertEqual(undefined, game.player.countdown_Steelskin)
+  test.assertEqual([], game.player.activeSpells)
+  test.assertCmd('z', ['You wait one turn.'])
+  
+
+
+
   game.player.skillsLearnt = ["Double attack", "Fireball"]
 
 

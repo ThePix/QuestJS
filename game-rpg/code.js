@@ -73,6 +73,7 @@ class Spell extends Skill {
   constructor(name, data) {
     super(name, data)
     this.spell = true
+    this.noWeapon = true
   }
 }
 
@@ -86,12 +87,39 @@ const defaultSkill = new Skill("Basic attack", {
 const skills = {
   list:[defaultSkill],
   add:function(skill) { this.list.push(skill) },
+  
   find:function(skillName) { 
     return this.list.find(el => skillName === el.name.toLowerCase() || (el.regex && skillName.match(el.regex))) 
   },
+  
   findName:function(skillName) { 
     return this.list.find(el => skillName === el.name) 
   },
+  
+  cast:function(spell, item) {
+    if (!spell.noTarget) return falsemsg("You need a target to cast the {i:" + spell.name + "} spell.", {item:item})
+    if (spell.ongoing) item.activeSpells.push(spell.name)
+    if (spell.duration) item['countdown_' + spell.name] = spell.duration
+    msg("{nv:item:cast:true} the {i:" + spell.name + "} spell.", {item:item})
+    if (spell.castingScript) spell.castingScript(item)
+    return true
+  },
+  
+  castAt:function(spell, item, target) {
+    if (spell.noTarget) return skills.cast(spell, item)
+    if (spell.ongoing) target.activeSpells.push(spell.name)
+    if (spell.duration) target['countdown_' + spell.name] = spell.duration
+    msg("{nv:item:cast:true} the {i:" + spell.name + "} spell on {nm:target:the}.", {item:item, target:target})
+    if (spell.castingScript) spell.castingScript(item, target)
+    return true
+  },
+  
+  terminate:function(spell, item) {
+    arrayRemove(item.activeSpells, spell.name)
+    delete item['countdown_' + spell.name]
+    msg("The {i:" + spell.name + "} spell" + (item === game.player ? '' : " on " + item.byname({article:DEFINITE})) + " terminates.")
+    if (spell.terminatingScript) spell.terminatingScript(item)
+  }
 }
 
 
@@ -131,7 +159,7 @@ class Attack {
     // Get the weapon (for most monsters, the monster IS the weapon)
     // Base the attack on the weapon
     // Some skills use no weapon
-    if (this.skill.noweapon) {
+    if (this.skill.noWeapon) {
       this.damage = this.skill.damage
     }
     else {
@@ -265,7 +293,10 @@ const RPG_TEMPLATE = {
     char.processAttack(attack)
     
     // Now take into account the attacker's weapon's active spell
-    if (attack.weapon && attack.weapon.activeSpell && attack.weapon.activeSpell.processAttack) attack.weapon.activeSpell.processAttack(attack)
+    if (attack.weapon && attack.weapon.activeSpell) {
+      const spell = spells.findName[attack.weapon.activeSpell]
+      if (spell.processAttack) spell.processAttack(attack)
+    }
     
     // Now take into account the attacker's active spells
     for (let spell of char.activeSpells) {
@@ -448,6 +479,28 @@ createItem("weapon_unarmed", WEAPON(), {
 });
 
 
+createItem("spell_handler", {
+  eventPeriod:1,
+  eventActive:true,
+  eventScript:function() { 
+    console.log("spell turnscript")
+    const objs = scopeBy(function(o) { return o.activeSpells !== undefined })
+    console.log(objs)
+    for (let el of objs) {
+      for (let spellName of el.activeSpells) {
+        if (el['countdown_' + spellName]) {
+          el['countdown_' + spellName]--
+          if (el['countdown_' + spellName] <= 0) {
+            skills.terminate(skills.findName(spellName), el)
+          }
+        }
+      }
+    }
+  },
+  isAtLoc:function() { return false },
+});
+
+
   
 
 
@@ -551,19 +604,57 @@ commands.push(new Cmd('CastSpell', {
       }
     }
     
-    console.log(terminatedSpells)
-
-    msg("You cast {i:" + spell.name + "}...")
-    spell.castingScript(game.player)
+    if (!skills.cast(spell, game.player)) return world.FAILED
     
-    if (spell.ongoing) {
-      for (let spellName of terminatedSpells) {
-        msg("The {i:" + spellName + "} spell terminates.")
-        const spl = skills.findName(spellName)
-        if (spl.terminatingScript) spl.terminatingScript(game.player)
-        arrayRemove(game.player.activeSpells, spellName)
+    for (let spellName of terminatedSpells) {
+      skills.terminate(skills.findName(spellName), game.player)
+    }
+    return world.SUCCESS
+  },
+}));
+
+
+
+commands.push(new Cmd('CastSpellAt', {
+  npcCmd:true,
+  rules:[cmdRules.isHere],
+  regex:/^(cast|invoke) (.+) (at|on) (.+)$/,
+  objects:[
+    {ignore:true},
+    {text:true},
+    {ignore:true},
+    {scope:parser.isPresent},
+  ],
+  script:function(objects) {
+    console.log("spell: " + objects[0])
+    const spell = skills.find(objects[0])
+    if (!spell || !spell.spell) return failedmsg("There is no spell called " + objects[0] + ".")
+      
+    if (!game.player.skillsLearnt.includes(spell.name)) return failedmsg("You do not know the spell {i:" + spell.name + "}.")
+    
+    console.log("target: " + objects[1][0])
+    const target = objects[1][0]
+
+    // check target
+    
+    if (spell.damage) {
+      if (!target.attack) return failedmsg("You can't attack that.")
+        return target.attack(false, game.player) ? world.SUCCESS : world.FAILED
+      // handle as standard attack
+      return
+    }
+
+    const terminatedSpells = []
+    for (let spellName of target.activeSpells) {
+      for (let regex of spell.incompatible) {
+        if (spellName.match(regex)) terminatedSpells.push(spellName)
       }
-      game.player.activeSpells.push(spell.name)
+    }
+    
+    if (!skills.castAt(spell, game.player, target)) return world.FAILED
+    
+    for (let spellName of terminatedSpells) {
+      skills.terminate(skills.findName(spellName), target)
     }
     return world.SUCCESS
   },
