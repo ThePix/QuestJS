@@ -106,6 +106,7 @@ const skills = {
   },
   
   castAt:function(spell, item, target) {
+    if (!spell.spell) return true
     if (spell.noTarget) return skills.cast(spell, item)
     if (spell.ongoing) target.activeSpells.push(spell.name)
     if (spell.duration) target['countdown_' + spell.name] = spell.duration
@@ -195,6 +196,22 @@ class Attack {
     this.report.push({t:"Roll: " + this.roll, level:4})
 
     if (this.result > 0) {
+
+    const terminatedSpells = []
+      if (this.skill.incompatible) {
+        for (let spellName of target.activeSpells) {
+          for (let regex of spell.incompatible) {
+            if (spellName.match(regex)) terminatedSpells.push(spellName)
+          }
+        }
+      }
+      
+      if (!skills.castAt(this.skill, this.attacker, target)) return world.FAILED
+      
+      for (let spellName of terminatedSpells) {
+        skills.terminate(skills.findName(spellName), target)
+      }
+
       // calculate base damage
       this.report.push({t:"A hit!", level:1})
       this.report.push({t:`Damage: ${this.damageNumber}d${this.damageSides}+${this.damageBonus}`, level:3})
@@ -270,7 +287,6 @@ const getAll = function(target) {
   if (target !== undefined) l.unshift(target);
   return l;
 }
-
 
 
 
@@ -597,21 +613,34 @@ commands.push(new Cmd('CastSpell', {
       
     if (!game.player.skillsLearnt.includes(spell.name)) return failedmsg("You do not know the spell {i:" + spell.name + "}.")
     
-    const terminatedSpells = []
-    for (let spellName of game.player.activeSpells) {
-      for (let regex of spell.incompatible) {
-        if (spellName.match(regex)) terminatedSpells.push(spellName)
-      }
-    }
-    
-    if (!skills.cast(spell, game.player)) return world.FAILED
-    
-    for (let spellName of terminatedSpells) {
-      skills.terminate(skills.findName(spellName), game.player)
-    }
-    return world.SUCCESS
+    return castSpell(spell, game.player)
   },
 }));
+
+
+
+const castSpell = function(spell, target) {
+  if (spell.damage) {
+    if (!target.attack) return failedmsg("You can't attack that.")
+      return target.attack(false, game.player) ? world.SUCCESS : world.FAILED
+    // handle as standard attack
+    return world.FAILED
+  }
+
+  const terminatedSpells = []
+  for (let spellName of target.activeSpells) {
+    for (let regex of spell.incompatible) {
+      if (spellName.match(regex)) terminatedSpells.push(spellName)
+    }
+  }
+  
+  if (!skills.castAt(spell, game.player, target)) return world.FAILED
+  
+  for (let spellName of terminatedSpells) {
+    skills.terminate(skills.findName(spellName), target)
+  }
+  return world.SUCCESS
+}
 
 
 
@@ -644,18 +673,8 @@ commands.push(new Cmd('CastSpellAt', {
       return
     }
 
-    const terminatedSpells = []
-    for (let spellName of target.activeSpells) {
-      for (let regex of spell.incompatible) {
-        if (spellName.match(regex)) terminatedSpells.push(spellName)
-      }
-    }
-    
-    if (!skills.castAt(spell, game.player, target)) return world.FAILED
-    
-    for (let spellName of terminatedSpells) {
-      skills.terminate(skills.findName(spellName), target)
-    }
-    return world.SUCCESS
+    return castSpell(spell, target)
   },
 }));
+
+
