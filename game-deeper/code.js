@@ -28,17 +28,23 @@ Shadowbolt/ball
 Clouded mind
 Darkness
 Shadow portal
-
+Foul changes
+Dark vision
 
 
 Priest
 Divine light
 Holy Channel
 Sacred sword
+Curse
 
 
 Elementalist
-
+Light
+Firedart
+Lightning bolt
+Ice storm
+Freeze
 
 
 Conjuror
