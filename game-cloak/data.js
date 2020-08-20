@@ -52,7 +52,7 @@ createItem("me", PLAYER(), {
 
 createItem('cloak', WEARABLE(), {
   examine:'The cloak is black... Very black... So black it seems to absorb light.',
-  //worn:true,
+  worn:true,
   loc:'me'
 })
 
@@ -61,10 +61,10 @@ createItem('cloak', WEARABLE(), {
 
 
 createRoom("lobby", {
-  desc:"There is something oppressive about the {cloakHere:dark:dingy} {once:room}{notOnce:foyer}; a presence in the air that almost suffocates you. It's former glory has all but faded, the walls still sport old posters from productions that ended over twenty years ago. Paint is peeling, dust is everywhere and it smells decidedly musty. You can see doors to the north, west and south.",
+  desc:"There is something oppressive about the {cloakHere:dark:dingy} {once:room}{notOnce:foyer}; a presence in the air that almost suffocates you. It's former glory has all but faded; the walls still sport old posters from productions that ended over twenty years ago. Paint is peeling, dust is everywhere and it smells decidedly musty. You can see doors to the north, west and south.",
   beforeFirstEnter:function() {
-    msg ("You hurry through the night, keen to get out of the rain. Ahead, you can see the old opera house, a brightly lit beacon of safety.")
-    msg ("Moments later you are pushing though the doors into a foyer. Now that you are here it does not seem so bright. The door closes behind you with an ominous finality...")
+    msg ("You hurry through the night, keen to get out of the rain. Ahead, you can see the old opera house, a brightly-lit beacon of safety.")
+    msg ("Moments later you are pushing though the doors into the foyer. Now that you are here it does not seem so bright. The doors close behind you with an ominous finality...")
     msg ("")
   },
   north:new Exit('lobby', { use:function() {
@@ -79,6 +79,7 @@ createRoom("lobby", {
 
 createItem('posters', {
   examine:'The posters are ripped and peeling off the wall.',
+  read:'You spend a few minutes reading about the shows they put on twenty-odd years ago.... {i:Die Zauberflöte}... {i:Guillaume Tell}... {i:A Streetcar Named Desire}. Wasn\'t that a play?',
   scenery:true,
   plural:true,
   loc:'lobby'
@@ -110,6 +111,7 @@ createRoom("cloakroom", {
 createItem('hook', SURFACE(), {
   regex:/^peg$/,
   hookable:true,
+  scenery:true,
   examine:function() {
     if (w.cloak.isAtLoc('hook')) {
       msg("An ornate brass hook, with a cloak hanging from it.")
@@ -155,6 +157,9 @@ createItem('message', {
   scenery:true,
   loc:'bar',
   examine:function() {
+    if (cloakHere()) {
+      msg ("You cannot see any message, it is too dark.")
+    }
     if (this.disturbed < 3) {
       msg ("The message in the dust says 'You have won!'")
     }
@@ -237,6 +242,22 @@ createItem('floor', {
   },
 })
 
+createItem('doors', {
+  regex:/^carpet$/,
+  examine:function() {
+    if (cloakHere() && game.player.isAtLoc('bar')) {
+      msg("It is too dark to see the door properly.")
+    }
+    else {
+      msg("All the doors are wooden, and painted white.")
+    }    
+  },
+  isAtLoc:function(loc, situation) {
+    if (typeof loc !== "string") loc = loc.name
+    return w[loc].room && situation === world.PARSER; 
+  },
+})
+
 
 
 
@@ -266,40 +287,34 @@ commands.push(new Cmd('HangUp', {
 
 
 
-
-
-
-
-
-
-
-
 commands.push(new Cmd('HangUp', {
-  regex:/^(hang up|hang) (.+)$/,
+  regex:/^(hang up|hang) (.+) on (|the )hook$/,
   objects:[
     {ignore:true},
     {scope:parser.isHeld},
+    {ignore:true},
   ],
   script:function(objects) {
-    let flag = false
-    for (let el of objects[0]) {
-      if (!el.isAtLoc(game.player)) {
-        return failedmsg ("You're not carrying {sb:obj}.", {obj:el})
-      }
-      else if (el.worn) {
-        return failedmsg ("Not while you're wearing {sb:obj}!", {obj:el})
-      }
-      else if (!game.player.isAtLoc('cloakroom')) {
-        return failedmsg ("Hang {sb:obj} where, exactly?", {obj:el})
-      }
-      else {
-        object.parent = hook
-        msg ("You hang {nm:obj:the} on the hook.", {obj:el})
-      }
+    if (!objects[0][0].isAtLoc(game.player)) {
+      return failedmsg ("You're not carrying {sb:obj}.", {obj:objects[0][0]})
     }
-    return flag ? World.SUCCESS : World.FAILED
+    else if (objects[0][0].worn) {
+      return failedmsg ("Not while you're wearing {sb:obj}!", {obj:objects[0][0]})
+    }
+    else if (!game.player.isAtLoc('cloakroom')) {
+      return failedmsg ("Hang {sb:obj} where, exactly?", {obj:objects[0][0]})
+    }
+    else {
+      objects[0][0].moveToFrom('hook')
+      msg ("You hang {nm:obj:the} on the hook.", {obj:objects[0][0]})
+      return world.SUCCESS
+    }
   }  
 }))
+
+
+
+
 
 
 

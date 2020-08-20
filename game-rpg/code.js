@@ -65,6 +65,7 @@ const elements = {
 class Skill {
   constructor(name, data) {
     this.name = name
+    this.reportText = "{nv:attacker:attack:true} {nm:target:the}."
     for (let key in data) this[key] = data[key]
   }
 }
@@ -73,7 +74,19 @@ class Spell extends Skill {
   constructor(name, data) {
     super(name, data)
     this.spell = true
+    //this.reportText = data.noTarget ? "{nv:attacker:cast:true} {i:" + name + "}." : "{nv:attacker:cast:true} {i:" + name + "} at {nm:target:the}."
+    this.reportText = "{nv:attacker:cast:true} {i:" + name + "} at {nm:target:the}."
     this.noWeapon = true
+  }
+}
+
+class SpellSelf extends Spell {
+  constructor(name, data) {
+    super(name, data)
+    this.primaryTargets = function() { return false }
+    this.reportText = "{nv:attacker:cast:true} {i:" + name + "} on {rf:attacker}."
+    this.noTarget = true
+    this.automaticSuccess = true
   }
 }
 
@@ -96,25 +109,48 @@ const skills = {
     return this.list.find(el => skillName === el.name) 
   },
   
-  cast:function(spell, item) {
-    if (!spell.noTarget) return falsemsg("You need a target to cast the {i:" + spell.name + "} spell.", {item:item})
-    if (spell.ongoing) item.activeSpells.push(spell.name)
-    if (spell.duration) item['countdown_' + spell.name] = spell.duration
-    msg("{nv:item:cast:true} the {i:" + spell.name + "} spell.", {item:item})
-    if (spell.castingScript) spell.castingScript(item)
-    return true
-  },
   
-  castAt:function(spell, item, target) {
-    if (!spell.spell) return true
-    if (spell.noTarget) return skills.cast(spell, item)
+
+  castSpell:function(spell, caster, target) {
+    if (!spell.spell) return true  // should never happen?
+
+    // ????
+    if (spell.damage && target) {
+      if (!target.attack) return falsemsg("You can't attack that.")
+      return target.attack(false, game.player)
+      // handle as standard attack
+    }
+
+    const terminatedSpells = []
+    for (let spellName of target.activeSpells) {
+      for (let regex of spell.incompatible) {
+        if (spellName.match(regex)) terminatedSpells.push(spellName)
+      }
+    }
+    
+    if (!spell.noTarget && !target) return falsemsg("You need a target to cast the {i:" + spell.name + "} spell.", {caster:caster})
+      
+    if (!target) target = caster
+      
     if (spell.ongoing) target.activeSpells.push(spell.name)
     if (spell.duration) target['countdown_' + spell.name] = spell.duration
-    msg("{nv:item:cast:true} the {i:" + spell.name + "} spell on {nm:target:the}.", {item:item, target:target})
-    if (spell.castingScript) spell.castingScript(item, target)
+    if (target === caster) {
+      msg("{nv:caster:cast:true} the {i:" + spell.name + "} spell.", {caster:caster})
+    }
+    else {
+      msg("{nv:caster:cast:true} the {i:" + spell.name + "} spell on {nm:target:the}.", {caster:caster, target:target})
+    }
+    if (spell.castingScript) spell.castingScript(caster, target)
+    return true
+
+    
+    for (let spellName of terminatedSpells) {
+      skills.terminate(skills.findName(spellName), target)
+    }
     return true
   },
   
+
   terminate:function(spell, item) {
     arrayRemove(item.activeSpells, spell.name)
     delete item['countdown_' + spell.name]
@@ -129,16 +165,20 @@ const skills = {
 
 
 
-
-// The attack object may get modified at several points in the process
-// Each can add to the report array to say what it has done
-
+// The Attack object is used when someone casts a spell or makes a weapon or unarmed attack.
+// The target could be the attacker, the room, a weapon or other item, or a number of characters.
+// The Attack object should only be created once we are sure the command is successful
+// (that is, the player input is okay - we can still throw errors if the code is wrong!).
+// The Attack object may get modified at several points in the process,
+// each can add to the report array to say what it has done
+// If the primaryTargets is false, the target is the attacker himself
 class Attack {
-  constructor(attacker, target) {
+  constructor(attacker, target, skill) {
     this.attacker = attacker
+    this.skill = skill
 
     // Find the skill
-    if (attacker === game.player) {
+    if (attacker === game.player && skill === undefined) {
       this.skill = skillUI.getSkillFromButtons();
       skillUI.resetButtons();
     }
@@ -149,12 +189,10 @@ class Attack {
     this.secondaryTargets = this.skill.getSecondaryTargets ? this.skill.getSecondaryTargets(target) : [];
 
     // Set some defaults first
-    this.element = null;
-    this.offensiveBonus = 0
     this.armour = 0
     this.attackNumber = 1
     this.report = []
-    this.outputLevel = 1
+    this.outputLevel = 10
     this.armourModifier = 0
 
     // Get the weapon (for most monsters, the monster IS the weapon)
@@ -162,21 +200,27 @@ class Attack {
     // Some skills use no weapon
     if (this.skill.noWeapon) {
       this.damage = this.skill.damage
+      if (this.damage) this.setDamageAtts(this.damage)
+      this.offensiveBonus = this.skill.offensiveBonus || 0
+      this.element = this.skill.element
     }
     else {
       this.weapon = attacker.getEquippedWeapon ? attacker.getEquippedWeapon() : attacker
-      for (let key in this.weapon) if (key !== 'weapon') this[key] = this.weapon[key]
+      this.offensiveBonus = this.weapon.offensiveBonus || 0
+      this.element = this.weapon.element
+      this.damage = this.weapon.damage
+      this.setDamageAtts(this.damage)
     }
+    
+    // modify for the skill
     if (this.skill.processAttack) this.skill.processAttack(this)
-
-    // process the damage    
-    if (this.damage === undefined) {
-      errormsg(`Weapon ${this.weapon.name} has no damage attribute.`);
-      return;
-    }
-    const regexMatch = /^(\d*)d(\d+)([\+|\-]\d+)?$/i.exec(this.damage);
+  }
+  
+  
+  setDamageAtts(string) {
+    const regexMatch = /^(\d*)d(\d+)([\+|\-]\d+)?$/i.exec(string);
     if (regexMatch === null) {
-      errormsg(`Weapon ${this.weapon.name} has a bad damage attribute.`);
+      errormsg(`Weapon ${this.weapon.name} has a bad damage attribute (${string}).`);
       return;
     }
     this.damageNumber = regexMatch[1] === ""  ? 1 : parseInt(regexMatch[1]);
@@ -185,35 +229,45 @@ class Attack {
     this.damageModifier = 1
   }
 
+
   resolve(target) {
-    this.roll = random.int(1, 20)
-    this.result = this.offensiveBonus - target.defensiveBonus + this.roll - 10
+    if (this.skill.automaticSuccess) {
+      this.report.push({t:processText(this.skill.reportText, {attacker:this.attacker, target:target}), level:1})
+      this.report.push({t:"Element: " + this.element, level:4})
+      this.report.push({t:"Automatic success", level:4})
+    }
+    else {
+      this.roll = random.int(1, 20)
+      this.result = this.offensiveBonus - target.defensiveBonus + this.roll - 10
+      this.report.push({t:processText(this.skill.reportText, {attacker:this.attacker, target:target}), level:1})
+      this.report.push({t:"Element: " + this.element, level:4})
+      this.report.push({t:"Offensive bonus: " + this.offensiveBonus, level:4})
+      this.report.push({t:"Roll: " + this.roll, level:4})
+      if (this.result < 0) {
+        this.report.push({t:"A miss...\n", level:1})
+        return
+      }        
+    }
 
-
-    this.report.push({t:lang.nounVerb(this.attacker, "attack", true) + " " + target.byname({article:DEFINITE}) + ".", level:1})
-    this.report.push({t:"Element: " + this.element, level:4})
-    this.report.push({t:"Offensive bonus: " + this.offensiveBonus, level:4})
-    this.report.push({t:"Roll: " + this.roll, level:4})
-
-    if (this.result > 0) {
 
     const terminatedSpells = []
-      if (this.skill.incompatible) {
-        for (let spellName of target.activeSpells) {
-          for (let regex of spell.incompatible) {
-            if (spellName.match(regex)) terminatedSpells.push(spellName)
-          }
+    if (this.skill.incompatible) {
+      for (let spellName of target.activeSpells) {
+        for (let regex of spell.incompatible) {
+          if (spellName.match(regex)) terminatedSpells.push(spellName)
         }
       }
-      
-      if (!skills.castAt(this.skill, this.attacker, target)) return world.FAILED
-      
-      for (let spellName of terminatedSpells) {
-        skills.terminate(skills.findName(spellName), target)
-      }
+    }
+    
+    if (!skills.castSpell(this.skill, this.attacker, target)) return world.FAILED
+    
+    for (let spellName of terminatedSpells) {
+      skills.terminate(skills.findName(spellName), target)
+    }
 
-      // calculate base damage
-      this.report.push({t:"A hit!", level:1})
+    // calculate base damage
+    this.report.push({t:"A hit!", level:1})
+    if (this.damageBonus || this.damageNumber) {
       this.report.push({t:`Damage: ${this.damageNumber}d${this.damageSides}+${this.damageBonus}`, level:3})
       let damage = this.damageBonus;
       for (let i = 0; i < this.damageNumber; i++) {
@@ -231,9 +285,8 @@ class Attack {
       target.health -= modifiedDamage
       this.report.push({t:"Health now: " + target.health, level:2})
     }
-    else {
-      this.report.push({t:"A miss...\n", level:1})
-    }
+    // now do spell effects
+    this.output()
   }
 
   modifyElementalAttack(element) {
@@ -523,7 +576,7 @@ createItem("spell_handler", {
 commands.push(new Cmd('Attack', {
   npcCmd:true,
   rules:[cmdRules.isHere],
-  regex:/^(attack) (.+)$/,
+  regex:/^(attack|att) (.+)$/,
   objects:[
     {ignore:true},
     {scope:parser.isPresent}
@@ -613,34 +666,11 @@ commands.push(new Cmd('CastSpell', {
       
     if (!game.player.skillsLearnt.includes(spell.name)) return failedmsg("You do not know the spell {i:" + spell.name + "}.")
     
-    return castSpell(spell, game.player)
+    return skills.castSpell(spell, game.player, game.player)
   },
 }));
 
 
-
-const castSpell = function(spell, target) {
-  if (spell.damage) {
-    if (!target.attack) return failedmsg("You can't attack that.")
-      return target.attack(false, game.player) ? world.SUCCESS : world.FAILED
-    // handle as standard attack
-    return world.FAILED
-  }
-
-  const terminatedSpells = []
-  for (let spellName of target.activeSpells) {
-    for (let regex of spell.incompatible) {
-      if (spellName.match(regex)) terminatedSpells.push(spellName)
-    }
-  }
-  
-  if (!skills.castAt(spell, game.player, target)) return world.FAILED
-  
-  for (let spellName of terminatedSpells) {
-    skills.terminate(skills.findName(spellName), target)
-  }
-  return world.SUCCESS
-}
 
 
 
@@ -673,7 +703,7 @@ commands.push(new Cmd('CastSpellAt', {
       return
     }
 
-    return castSpell(spell, target)
+    return skills.castSpell(spell, game.player, target)
   },
 }));
 

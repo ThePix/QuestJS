@@ -156,25 +156,22 @@ skills.add(new Spell("Cursed armour", {
   },
 }))
 
-skills.add(new Spell("Stoneskin", {
+skills.add(new SpellSelf("Stoneskin", {
   castingScript:function() {
     msg("Your skin becomes as hard as stone - and yet still just as flexible.")
   },
   ongoing:true,
-  noTarget:true,
   incompatible:[/skin$/],
   modifyAttack:function(attack) {
     attack.armourModifier += 2
   },
 }))
 
-skills.add(new Spell("Steelskin", {
+skills.add(new SpellSelf("Steelskin", {
   castingScript:function() {
     msg("Your skin becomes as hard as steel - and yet still just as flexible.")
   },
   ongoing:true,
-  noTarget:true,
-  noWeapon:true,
   duration:3,
   incompatible:[/skin$/],
   modifyAttack:function(attack) {

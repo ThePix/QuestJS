@@ -81,6 +81,8 @@ test.tests = function() {
   random.buffer.push(4)
   w.goblin.applyAttack(attack1, true, 0)
   test.assertEqual(36, w.goblin.health)
+  console.log(attack1)
+  attack1.output()
 
   w.goblin.armour = 2
   random.buffer.push(19)
@@ -89,9 +91,9 @@ test.tests = function() {
   test.assertEqual(34, w.goblin.health)
   w.goblin.armour = 0
   w.goblin.health = 40
-  //attack1.output(40)
+  attack1.output()
   
-    
+
 
   test.title("new Attack  (flail)");
   const oldProcessAttack = game.player.processAttack
@@ -127,7 +129,6 @@ test.tests = function() {
 
 
 
-
   test.title("new Attack  (fireball)");
   const oldgetSkillFromButtons = skillUI.getSkillFromButtons
   skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
@@ -147,8 +148,8 @@ test.tests = function() {
   random.buffer.push(3)
   w.goblin.applyAttack(attack3, true, 0)
   test.assertEqual(33, w.goblin.health)
+/*  
   attack3.report = []
-
   random.buffer.push(2)
   w.goblin.applyAttack(attack3, true, 0)
   test.assertEqual(33, w.goblin.health)
@@ -193,7 +194,7 @@ test.tests = function() {
 
   delete game.player.equipped
 
-
+/*
 
 
   test.title("learn fireball")
@@ -208,7 +209,7 @@ test.tests = function() {
   test.assertCmd('cast fireball', ['You cast the <i>Fireball</i> spell.', 'The room is momentarily filled with fire.'])
 
 
-
+/*
 
 
 
