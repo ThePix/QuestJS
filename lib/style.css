@@ -6,7 +6,7 @@
   margin-left: 160px; /* Same as the width of the sidebar */
   margin-right: 160px; /* Same as the width of the sidebar */
   padding: 0px 10px;
-  font-family: sans-serif;;
+  height: 100%;
 }
 
 
@@ -226,3 +226,6 @@ th, td {
   text-align:center;
 }
 
+h2 {
+  padding-top: 15px;
+}

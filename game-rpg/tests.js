@@ -49,8 +49,8 @@ test.tests = function() {
 
 
 
- test.title("new Attack  (unarmed) misses");
-  const attack0 = new Attack(game.player, w.goblin)
+ test.title("Attack.createAttack  (unarmed) misses");
+  const attack0 = Attack.createAttack(game.player, w.goblin)
   attack0.outputLevel = -1
   test.assertEqual('me', attack0.attacker.name)
   test.assertEqual([w.goblin], attack0.primaryTargets)
@@ -67,8 +67,8 @@ test.tests = function() {
 
 
 
-  test.title("new Attack  (unarmed)");
-  const attack1 = new Attack(game.player, w.goblin)
+  test.title("Attack.createAttack  (unarmed)");
+  const attack1 = Attack.createAttack(game.player, w.goblin)
   attack1.outputLevel = -1
   test.assertEqual('me', attack1.attacker.name)
   test.assertEqual([w.goblin], attack1.primaryTargets)
@@ -95,12 +95,12 @@ test.tests = function() {
   
 
 
-  test.title("new Attack  (flail)");
+  test.title("Attack.createAttack  (flail)");
   const oldProcessAttack = game.player.processAttack
   game.player.processAttack = function(attack) { attack.offensiveBonus += 2 }
   game.player.equipped = 'flail'
 
-  const attack2 = new Attack(game.player, w.orc)
+  const attack2 = Attack.createAttack(game.player, w.orc)
   attack2.outputLevel = -1
   test.assertEqual('me', attack2.attacker.name)
   test.assertEqual('2d10+4', attack2.damage)
@@ -129,11 +129,11 @@ test.tests = function() {
 
 
 
-  test.title("new Attack  (fireball)");
+  test.title("Attack.createAttack  (fireball)");
   const oldgetSkillFromButtons = skillUI.getSkillFromButtons
   skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
   
-  const attack3 = new Attack(game.player, w.goblin)
+  const attack3 = Attack.createAttack(game.player, w.goblin)
   console.log(attack3)
   attack3.outputLevel = -1
   test.assertEqual('me', attack3.attacker.name)
