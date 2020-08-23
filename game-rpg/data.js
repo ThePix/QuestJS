@@ -121,8 +121,8 @@ skills.add(new Skill("Ice Sword", {
 }))
 
 skills.add(new Spell("Fireball", {
-  castingScript:function() {
-    msg("The room is momentarily filled with fire.")
+  castingScript:function(attack) {
+    attack.report.push({t:"The room is momentarily filled with fire.", level:1})
   },
   noTarget:true,
   damage:'2d6',

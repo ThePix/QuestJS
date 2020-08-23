@@ -49,6 +49,14 @@ test.tests = function() {
     test.assertEqual(false, random.chance(0));
   }
   
+  test.title("Random primed");
+  random.prime(4)
+  random.prime(19)
+  test.assertEqual(4, random.int())
+  test.assertEqual(19, random.int())
+  random.prime([3, 8])
+  test.assertEqual(11, random.dice('2d6'))
+
   
   
   test.title("arrayCompare");

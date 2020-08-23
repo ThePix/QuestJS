@@ -3,7 +3,7 @@
 // About your game
 settings.title = "Cloak of Darkness";
 settings.author = "The Pixie"
-settings.version = "0.1";
+settings.version = "0.3";
 settings.thanks = [];
 
 settings.libraries = ["saveload", "text", "io", "command", "defaults", "templates", "world", "parser", "commands"],  // 

@@ -31,7 +31,7 @@ tp.addDirective("cloakHere", function(arr, params) {
 });
 
 findCmd('MetaCredits').script = function() {
-  metamsg('This game was created by The Pixie, following the Cloak of Darkness specification by Roger Firth. Thanks to KV for beta-testing.')
+  metamsg('This game was created by The Pixie, following the Cloak of Darkness specification by Roger Firth.')
 }
 
 findCmd('MetaHelp').script = function() {

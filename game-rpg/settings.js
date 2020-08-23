@@ -7,6 +7,7 @@ settings.thanks = ["Kyle", "Lara"];
 
 settings.statusPane = false;
 settings.tests = true
+settings.attackOutputLevel = 2
 
 
 // This function will be called at the start of the game, so can be used
@@ -17,6 +18,8 @@ settings.setup = function() {
   game.player.skillsLearnt = ["Double attack", "Fireball"]
 
   ioUpdateCustom()
+  
+
 }
 
 
@@ -124,7 +127,7 @@ const skillUI = {
   },
 
   resetButtons:function() {
-    console.log('reset')
+    //console.log('reset')
     for (let i = 0; i < skillUI.skills.length; i++) {
       $('#cell' + i).css("background-color", "black");
     }
