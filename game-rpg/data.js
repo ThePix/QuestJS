@@ -74,7 +74,7 @@ createItem("chest", CONTAINER(true), {
   loc:"practice_room",
 });
 
-createItem("spellbook", SPELLBOOK(["Fireball", "Stoneskin", "Steelskin", "Lightning bolt"]), {
+createItem("spellbook", SPELLBOOK(["Fireball", "Stoneskin", "Steelskin", "Lightning bolt", "Ice shard"]), {
   loc:"practice_room",
 });
 
@@ -121,44 +121,61 @@ skills.add(new Skill("Ice Sword", {
 }))
 
 skills.add(new Spell("Fireball", {
-  castingScript:function(attack) {
-    attack.report.push({t:"The room is momentarily filled with fire.", level:1})
-  },
   noTarget:true,
   damage:'2d6',
-  tooltip:"A fireball that fills the room (but does not affect you!)", 
+  tooltip:"A fireball that fills the room (but does not affect you!)",
+  primarySuccess:"{nv:target:reel:true} from the explosion.",
+  primaryFailure:"{nv:target:ignore:true} it.",
   getPrimaryTargets:getAll,
   processAttack:function(attack) {
     attack.element = "fire";
+    attack.report.push({t:"The room is momentarily filled with fire.", level:1})
+  },
+}))
+
+skills.add(new Spell("Ice shard", {
+  damage:'3d6',
+  icon:'lightning',
+  tooltip:"A shard of ice pierces your foe!",
+  primarySuccess:"A shard of ice jumps from your finger to your target!",
+  processAttack:function(attack) {
+    attack.element = "frost";
   },
 }))
 
 skills.add(new Spell("Lightning bolt", {
-  castingScript:function() {
-    msg("A lightning bolt jumps from your out-reached hand to your target!")
-  },
   damage:'3d6',
+  secondaryDamage:'2d6',
   icon:'lightning',
-  tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
+  tooltip:"A lightning bolt jumps from your out-reached hand to you foe!",
+  primarySuccess:"A lightning bolt jumps from your out-reached hand to your target!",
+  secondarySuccess:"A smaller bolt jumps your target to {nm:target:the}!",
+  primaryFailure:"A lightning bolt jumps from your out-reached hand to your target, fizzling out before it can actually do anything.",
+  secondaryFailure:"A smaller bolt jumps your target, but entirely misses {nm:target:the}!",
+  getSecondaryTargets:getFoesBut,
   processAttack:function(attack) {
     attack.element = "storm";
+  },
+  onPrimaryFailure:function(attack) {
+    attack.secondaryTargets = []
   },
 }))
 
 skills.add(new Spell("Cursed armour", {
-  castingScript:function() {
-    msg("The target!")
+  targetEffect:function(attack) {
+    attack.report.push({t:processText("{nms:target:the:true} armour is reduced.", {target:attack.target}), level:1})
   },
   icon:'lightning',
   tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
   processAttack:function(attack) {
-    attack.armourModifier -= 2
+    attack.armourModifier = (attack.armourModifier> 2 ? attack.armourModifier - 2 : 0)
   },
 }))
 
 skills.add(new SpellSelf("Stoneskin", {
-  castingScript:function() {
-    msg("Your skin becomes as hard as stone - and yet still just as flexible.")
+  targetEffect:function(attack) {
+    console.log('here')
+    attack.report.push({t:"Your skin becomes as hard as stone - and yet still just as flexible.", level:1})
   },
   ongoing:true,
   incompatible:[/skin$/],
@@ -168,8 +185,8 @@ skills.add(new SpellSelf("Stoneskin", {
 }))
 
 skills.add(new SpellSelf("Steelskin", {
-  castingScript:function() {
-    msg("Your skin becomes as hard as steel - and yet still just as flexible.")
+  targetEffect:function(attack) {
+    attack.report.push({t:"Your skin becomes as hard as steel - and yet still just as flexible.", level:1})
   },
   ongoing:true,
   duration:3,

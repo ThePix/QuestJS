@@ -46,7 +46,7 @@ test.tests = function() {
 
   random.prime(3)
   //w.goblin.applyAttack(attack0, true, 0)
-  attack0.resolve(attack0.report, w.goblin, true, 0)
+  attack0.resolve(w.goblin, true, 0)
   test.assertEqual(40, w.goblin.health)
 
   
@@ -65,14 +65,13 @@ test.tests = function() {
 
   random.prime(19)
   random.prime(4)
-  attack1.resolve(attack1.report, w.goblin, true, 0)
+  attack1.resolve(w.goblin, true, 0)
   test.assertEqual(36, w.goblin.health)
-  console.log(attack1)
 
   w.goblin.armour = 2
   random.prime(19)
   random.prime(4)
-  attack1.resolve(attack1.report, w.goblin, true, 0)
+  attack1.resolve(w.goblin, true, 0)
   test.assertEqual(34, w.goblin.health)
   w.goblin.armour = 0
   w.goblin.health = 40
@@ -93,14 +92,14 @@ test.tests = function() {
   random.prime(19)
   random.prime(4)
   random.prime(7)
-  attack2.resolve(attack2.report, w.goblin, true, 0)
+  attack2.resolve(w.goblin, true, 0)
   test.assertEqual(25, w.goblin.health)
 
   w.goblin.armour = 2
   random.prime(19)
   random.prime(4)
   random.prime(7)
-  attack2.resolve(attack2.report, w.goblin, true, 0)
+  attack2.resolve(w.goblin, true, 0)
   test.assertEqual(14, w.goblin.health)
   w.goblin.armour = 0
   w.goblin.health = 40
@@ -116,7 +115,6 @@ test.tests = function() {
   skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
   
   const attack3 = Attack.createAttack(game.player, w.goblin)
-  console.log(attack3)
   attack3.outputLevel = -1
   test.assertEqual('me', attack3.attacker.name)
   test.assertEqual(undefined, attack3.weapon)
@@ -128,19 +126,19 @@ test.tests = function() {
   random.prime(19)
   random.prime(4)
   random.prime(3)
-  attack3.resolve(attack3.report, w.goblin, true, 0)
+  attack3.resolve(w.goblin, true, 0)
   test.assertEqual(33, w.goblin.health)
 
   attack3.report = []
   random.prime(2)
-  attack3.resolve(attack3.report, w.goblin, true, 0)
+  attack3.resolve(w.goblin, true, 0)
   test.assertEqual(33, w.goblin.health)
   
   w.goblin.element = 'frost'
   random.prime(19)
   random.prime(4)
   random.prime(3)
-  attack3.resolve(attack3.report, w.goblin, true, 0)
+  attack3.resolve(w.goblin, true, 0)
   test.assertEqual(19, w.goblin.health)
   //attack3.output(40)
   
@@ -150,7 +148,7 @@ test.tests = function() {
   skillUI.getSkillFromButtons = oldgetSkillFromButtons
   
 
-/*
+
 
 
   test.title("attack command, success");
@@ -159,7 +157,7 @@ test.tests = function() {
   random.prime(7)
   game.player.equipped = 'flail'
 
-  test.assertCmd('attack goblin', ['You attack the goblin.', /A hit/, 'Damage: 15'])
+  test.assertCmd('attack goblin', ['You attack the goblin.', /A hit/, 'Damage: 15', 'Health now: 25'])
   test.assertEqual(25, w.goblin.health)
 
   w.goblin.health = 40
@@ -187,39 +185,81 @@ test.tests = function() {
   test.assertCmd('learn fireball', ['You do not have anything you can learn <i>Fireball</i> from.'])
   test.assertCmd('get spellbook', ['You take the spellbook.'])
   test.assertCmd('learn fireball', ['You learn <i>Fireball</i> from the spellbook.'])
-  game.player.skillsLearnt = ["Double attack", "Fireball"]
-  //test.assertCmd('rpg', [/All/])
-  //test.assertCmd('cast fireball', ['You cast the <i>Fireball</i> spell.', 'The room is momentarily filled with fire.'])
+  test.assertEqual(["Double attack", "Fireball"], game.player.skillsLearnt) 
+  //goblin, orc, snotling, friend
+
+  random.prime(19)
+  random.prime(4)
+  random.prime(4)
+
+  random.prime(19)
+  random.prime(2)
+  random.prime(2)
+
+  random.prime(4)
+
+  random.prime(4)
+  test.assertCmd('cast fireball', ['You cast <i>Fireball</i>.', 'The room is momentarily filled with fire.', 'The goblin reels from the explosion.', 'Damage: 16', 'Health now: 24', 'The orc reels from the explosion.', 'Damage: 4', 'Health now: 56', 'The snotling ignores it.', 'The friend ignores it.'])
+  w.goblin.health = 40
+  w.orc.health = 60
 
 
-/*
 
 
 
-  test.title("learn Lightning bolt")
-  test.assertCmd('learn lightning bolt', ['You learn <i>Lightning bolt</i> from the spellbook.'])
-  game.player.skillsLearnt = ["Double attack", "Fireball", "Lightning bolt"]
-  test.assertCmd('cast lightning bolt', ['You need a target to cast the <i>Lightning bolt</i> spell.'])
+  test.title("learn Ice shard")
+  test.assertCmd('learn ice shard', ['You learn <i>Ice shard</i> from the spellbook.'])
+  game.player.skillsLearnt = ["Double attack", "Fireball", "Ice shard"]
+  test.assertCmd('cast ice shard', ['You need a target for the spell <i>Ice shard</i>.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
+  skillUI.getSkillFromButtons = function() { return skills.findName('Ice shard') }
+  random.prime(19)
+  random.prime(4)
+  random.prime(7)
+  random.prime(9)
+  test.assertCmd('attack goblin', ['You cast <i>Ice shard</i>.', 'A shard of ice jumps from your finger to your target!', 'Damage: 10', 'Health now: 30'])
+  w.goblin.health = 40
+  skillUI.getSkillFromButtons = oldgetSkillFromButtons
+  random.prime(19)
+  random.prime(4)
+  random.prime(7)
+  random.prime(9)
+  test.assertCmd('cast Ice shard at goblin', ['You cast <i>Ice shard</i>.', 'A shard of ice jumps from your finger to your target!', 'Damage: 10', 'Health now: 30'])
+  w.goblin.health = 40
+  skillUI.getSkillFromButtons = oldgetSkillFromButtons
+
+
+
+
+
+  test.title("Lightning bolt")
+  game.player.skillsLearnt = ["Double attack", "Fireball", "Lightning bolt"]
+  test.assertCmd('cast lightning bolt', ['You need a target for the spell <i>Lightning bolt</i>.'])
   skillUI.getSkillFromButtons = function() { return skills.findName('Lightning bolt') }
   random.prime(19)
   random.prime(4)
   random.prime(7)
   random.prime(9)
-  test.assertCmd('attack goblin', ['You attack the goblin.', 'A hit!', 'Damage: 20'])
-  w.goblin.health = 40
-  skillUI.getSkillFromButtons = oldgetSkillFromButtons
-
-
-
-
+  
+  // For the orc
+  random.prime(2)
+  
+  // For the snotling
   random.prime(19)
   random.prime(4)
   random.prime(7)
-  random.prime(9)
-  test.assertCmd('cast lightning bolt at goblin', ['You cast the <i>Lightning bolt</i> spell on the goblin.'])
+  random.prime(4)
+  test.assertCmd('attack goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to your target!', 'Damage: 20', 'Health now: 20', 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', 'Damage: 15', 'Health now: 5'])
   w.goblin.health = 40
+  w.snotling.health = 20
+  
+  random.prime(4)
+  test.assertCmd('attack goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to your target, fizzling out before it can actually do anything.'])
+  
+  
   skillUI.getSkillFromButtons = oldgetSkillFromButtons
+
+
 
 
 
@@ -230,7 +270,9 @@ test.tests = function() {
   test.assertCmd('learn stoneskin', ['You learn <i>Stoneskin</i> from the spellbook.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
   test.assertEqual([], game.player.activeEffects)
+  console.log('-----------------------------')
   test.assertCmd('cast stoneskin', ['You cast the <i>Stoneskin</i> spell.', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
+
   test.assertEqual(['Stoneskin'], game.player.activeEffects)
   test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> spell terminates.'])
   test.assertEqual(['Steelskin'], game.player.activeEffects)
@@ -262,16 +304,6 @@ test.tests = function() {
 
 
 
-// Add some buffing spells for attacker and defender
-// Do spells need to be Quest objects? Could they be JS objects?
-// Spells spawn spell effects
-// a spell effect needs a processAttack function that modifies an attack object to modify attacks made by the character
-// and modifyAttack if the character is the target
-// spell effect also needs to have a system that potentially causes it to expire
-
-// Or just use the name of the spell, rather than a spell effect. This would then be saved.
-// So have a spell handler as there is for elements
-// Learning a spell is having the name in a list - both character and monsters
   
 
 /**/

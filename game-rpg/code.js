@@ -27,7 +27,6 @@ Apply damage
 
 
 
-
 const elements = {
   list:[
     {name:'fire', opposed:'frost'},
@@ -66,6 +65,7 @@ class Skill {
   constructor(name, data) {
     this.name = name
     this.reportText = "{nv:attacker:attack:true} {nm:target:the}."
+    this.targetText = "Targeting {nm:target:the}."
     for (let key in data) this[key] = data[key]
   }
   
@@ -79,17 +79,20 @@ class Spell extends Skill {
     super(name, data)
     this.spell = true
     this.noWeapon = true
-    this.reportText = "{nv:attacker:cast:true} {i:{nm:skill:the}} spell on {nm:target:the}."
+    this.reportText = "{nv:attacker:cast:true} {i:{nm:skill}}."
   }
 }
 
 class SpellSelf extends Spell {
   constructor(name, data) {
     super(name, data)
-    this.primaryTargets = function() { return false }
+    this.getPrimaryTargets = function() { 
+      console.log('here')
+      return false 
+    }
     this.noTarget = true
     this.automaticSuccess = true
-    this.reportText = "{nv:attacker:cast:true} {i:{nm:skill:the}} spell."
+    this.reportText = "{nv:attacker:cast:true} the {i:{nm:skill}} spell."
   }
 }
 
@@ -113,11 +116,11 @@ const skills = {
   },
   
 
-  terminate:function(spell, item) {
+  terminate:function(spell, item, report) {
     arrayRemove(item.activeEffects, spell.name)
     delete item['countdown_' + spell.name]
-    msg("The {i:" + spell.name + "} spell" + (item === game.player ? '' : " on " + item.byname({article:DEFINITE})) + " terminates.")
-    if (spell.terminatingScript) spell.terminatingScript(item)
+    report.push({t:"The {i:" + spell.name + "} spell" + (item === game.player ? '' : " on " + item.byname({article:DEFINITE})) + " terminates.", level:1})
+    if (spell.terminatingScript) spell.terminatingScript(item, report)
   }
 }
 
@@ -149,7 +152,14 @@ class Attack {
     if (!attack.skill) attack.skill = defaultSkill;
 
     // Set targets
-    attack.primaryTargets = attack.skill.getPrimaryTargets ? attack.skill.getPrimaryTargets(target) : [target];
+    if (attack.skill.noTarget) {
+      console.log('here')
+      attack.primaryTargets = attack.skill.getPrimaryTargets ? attack.skill.getPrimaryTargets() : [];
+    }
+    else {
+      attack.primaryTargets = attack.skill.getPrimaryTargets ? attack.skill.getPrimaryTargets(target) : [target];
+    }
+    console.log(attack.primaryTargets)
     attack.secondaryTargets = attack.skill.getSecondaryTargets ? attack.skill.getSecondaryTargets(target) : [];
 
     // Set some defaults first
@@ -157,6 +167,9 @@ class Attack {
     attack.attackNumber = 1
     attack.report = []
     attack.armourModifier = 0
+    
+    attack.report.push({t:processText(attack.skill.reportText, {skill:attack.skill, attacker:attack.attacker, target:target}), level:1})
+    
 
     // Get the weapon (for most monsters, the monster IS the weapon)
     // Base the attack on the weapon
@@ -174,6 +187,7 @@ class Attack {
       attack.damage = attack.weapon.damage
       attack.setDamageAtts(attack.damage)
     }
+    if (attack.secondaryDamage) attack.setDamageAtts(attack.secondaryDamage, 'secondaryDamage')
     
     // modify for the skill
     if (attack.skill.processAttack) attack.skill.processAttack(attack)
@@ -198,7 +212,7 @@ class Attack {
 
     // Now take into account the room's active spell
     if (room.activeSpell && room.activeSpell.processAttack) room.activeSpell.processAttack(attack)
-    
+
     return attack
   }
   
@@ -206,20 +220,25 @@ class Attack {
   // Once we have an attack object set up, call this to apply the attack to each target.
   // Calls applyAttack for each target to do the real work
   apply() {
+    // target self
+    if (!this.primaryTargets) {
+      console.log('here')
+      this.resolve(this.attacker, true, false)
+      return this
+    }
+    
     // Iterate through the targets and apply the attack
     // The attack may be modified by the target, so we send a clone
-    console.log(this)
     for (let target of this.primaryTargets) {
       for (let i = 0; i < this.attackNumber; i++) {
-        this.clone().resolve(this.report, target, true, i)
+        this.clone().resolve(target, true, i)
       }
     }
     for (let target of this.secondaryTargets) {
       for (let i = 0; i < this.attackNumber; i++) {
-        this.clone().resolve(this.report, target, false, i)
+        this.clone().resolve(target, false, i)
       }
     }
-    console.log(this.result)
     return this
   }
   
@@ -230,39 +249,59 @@ class Attack {
   // Once we have an attack object set up, call this to apply the attack to each target.
   // This applies all effects, and puts the descriptive text in report
   // (report is the attribute of the parent attack, not this clone)
-  resolve(report, target, isPrimary, count) {
-
+  resolve(target, isPrimary, count) {
+    console.log('here')
+    this.target = target
 
     // Now take into account the target's active spell
     for (let spellName of target.activeEffects) {
-      const spell = skills.findName(spellname)
-      if (spell.modifyAttack) spell.modifyAttack(this, target, report)
+      const spell = skills.findName(spellName)
+      if (spell.modifyAttack) spell.modifyAttack(this, target, this.report)
     }
     
     // Now take into account the target
-    if (target.modifyAttack) target.modifyAttack(this, report)
+    if (target.modifyAttack) target.modifyAttack(this, this.report)
     
     // Now take into account the target
-    if (this.element && target.element) this.modifyElementalAttack(target.element, report)
+    if (this.element && target.element) this.modifyElementalAttack(target.element, this.report)
 
     // Is the target affected (hit)?
     if (this.skill.automaticSuccess) {
-      this.report.push({t:processText(this.skill.reportText, {skill:this.skill, attacker:this.attacker, target:target}), level:1})
+      this.report.push({t:processText(this.skill.targetText, {skill:this.skill, attacker:this.attacker, target:target}), level:3})
       this.report.push({t:"Element: " + this.element, level:4})
       this.report.push({t:"Automatic success", level:4})
     }
     else {
       this.roll = random.int(1, 20)
       this.result = this.offensiveBonus - target.defensiveBonus + this.roll - 10
-      this.report.push({t:processText(this.skill.reportText, {skill:this.skill, attacker:this.attacker, target:target}), level:1})
+      this.report.push({t:processText(this.skill.targetText, {skill:this.skill, attacker:this.attacker, target:target}), level:3})
       if (this.element) this.report.push({t:"Element: " + this.element, level:4})
       this.report.push({t:"Offensive bonus: " + this.offensiveBonus, level:4})
       this.report.push({t:"Roll: " + this.roll, level:4})
+      
       if (this.result < 0) {
-        this.report.push({t:"A miss...\n", level:1})
+        if (isPrimary && this.skill.primaryFailure) {
+          this.report.push({t:processText(this.skill.primaryFailure, {target:target}), level:1})
+        }
+        else if (!isPrimary && this.skill.secondaryFailure) {
+          this.report.push({t:processText(this.skill.secondaryFailure, {target:target}), level:1})
+        }
+        else {
+          this.report.push({t:"A miss...\n", level:1})
+        }
+        if (isPrimary && this.skill.onPrimaryFailure) this.skill.onPrimaryFailure(this.prototype)
         return
       }
-      this.report.push({t:"A hit!", level:1})
+      
+      if (isPrimary && this.skill.primarySuccess) {
+        this.report.push({t:processText(this.skill.primarySuccess, {target:target}), level:1})
+      }
+      else if (!isPrimary && this.skill.secondarySuccess) {
+        this.report.push({t:processText(this.skill.secondarySuccess, {target:target}), level:1})
+      }
+      else {
+        this.report.push({t:"A hit!", level:1})
+      }
     }
 
     // check fr any spell effects that will be terminated by this for use later
@@ -277,7 +316,11 @@ class Attack {
       
     if (this.skill.ongoing) target.activeEffects.push(this.skill.name)
     if (this.skill.duration) target['countdown_' + this.skill.name] = this.skill.duration
-    if (this.skill.castingScript) this.skill.castingScript(this.attacker, target, report)
+    console.log(this.skill)
+    if (this.skill.targetEffect) {
+      console.log('here')
+      this.skill.targetEffect(this, isPrimary, count)
+    }
 
     // calculate base damage
     if (this.damageBonus || this.damageNumber) {
@@ -300,7 +343,7 @@ class Attack {
     }
 
     for (let spellName of terminatedSpells) {
-      skills.terminate(skills.findName(spellName), target)
+      skills.terminate(skills.findName(spellName), target, this.report)
     }
   }
 
@@ -331,19 +374,33 @@ class Attack {
   clone() {
     const copy = new Attack()  // !!!!!
     for (let key in this) copy[key] = this[key]
+    copy.prototype = this
     return copy
   }
 
-  setDamageAtts(string) {
+  setDamageAtts(string, prefix = 'damage') {
     const regexMatch = /^(\d*)d(\d+)([\+|\-]\d+)?$/i.exec(string);
     if (regexMatch === null) {
       errormsg(`Weapon ${this.weapon.name} has a bad damage attribute (${string}).`);
       return;
     }
-    this.damageNumber = regexMatch[1] === ""  ? 1 : parseInt(regexMatch[1]);
-    this.damageSides = parseInt(regexMatch[2]);
-    this.damageBonus = (regexMatch[3] === undefined  ? 0 : parseInt(regexMatch[3]));
-    this.damageModifier = 1
+    this[prefix + 'Number'] = regexMatch[1] === ""  ? 1 : parseInt(regexMatch[1]);
+    this[prefix + 'Sides'] = parseInt(regexMatch[2]);
+    this[prefix + 'Bonus'] = (regexMatch[3] === undefined  ? 0 : parseInt(regexMatch[3]));
+    this[prefix + 'Modifier'] = 1
+  }
+  getDamageAtts(string) {
+    const regexMatch = /^(\d*)d(\d+)([\+|\-]\d+)?$/i.exec(string);
+    if (regexMatch === null) {
+      errormsg(`Weapon ${this.weapon.name} has a bad damage attribute (${string}).`);
+      return;
+    }
+    const res = {}
+    res.number = regexMatch[1] === ""  ? 1 : parseInt(regexMatch[1]);
+    res.sides = parseInt(regexMatch[2]);
+    res.bonus = (regexMatch[3] === undefined  ? 0 : parseInt(regexMatch[3]));
+    res.modifier = 1
+    return res
   }
 }
 
@@ -368,6 +425,21 @@ const getAll = function(target) {
   return l;
 }
 
+// Get a list of foes in the current room, with target first (whether a foe or not)
+const getFoesBut = function(target) {
+  const l = scopeHereListed().filter(function(el) {
+    return el.npc && el.isHostile() && el !== target;
+  });
+  return l;
+}  
+
+// Get a list of NPCs in the current room, with target first
+const getAllBut = function(target) {
+  const l = scopeHereListed().filter(function(el) {
+    return el.npc && el !== target;
+  });
+  return l;
+}
 
 
 
@@ -530,16 +602,18 @@ createItem("spell_handler", {
   eventScript:function() {
     const objs = scopeBy(function(o) { return o.activeEffects !== undefined })
     //console.log(objs)
+    const report = []
     for (let el of objs) {
       for (let spellName of el.activeEffects) {
         if (el['countdown_' + spellName]) {
           el['countdown_' + spellName]--
           if (el['countdown_' + spellName] <= 0) {
-            skills.terminate(skills.findName(spellName), el)
+            skills.terminate(skills.findName(spellName), el, report)
           }
         }
       }
     }
+    for (let el of report) msg(el.t)
   },
   isAtLoc:function() { return false },
 });
@@ -664,25 +738,19 @@ commands.push(new Cmd('CastSpellAt', {
     {scope:parser.isPresent},
   ],
   script:function(objects) {
-    console.log("spell: " + objects[0])
     const spell = skills.find(objects[0])
     if (!spell || !spell.spell) return failedmsg("There is no spell called " + objects[0] + ".")
       
     if (!game.player.skillsLearnt.includes(spell.name)) return failedmsg("You do not know the spell {i:" + spell.name + "}.")
     
-    console.log("target: " + objects[1][0])
     const target = objects[1][0]
 
     // check target
     
-    if (spell.damage) {
-      if (!target.attack) return failedmsg("You can't attack that.")
-        return target.attack(false, game.player) ? world.SUCCESS : world.FAILED
-      // handle as standard attack
-      return
-    }
+    if (spell.damage && target.health === undefined) return failedmsg("You can't attack that.")
 
     const attack = Attack.createAttack(game.player, target, spell).apply().output()
+    return world.SUCCESS
   },
 }));
 
