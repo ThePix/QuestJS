@@ -34,6 +34,17 @@ createItem("flail", WEAPON(), {
   damage:"2d10+4",
 });
 
+createItem("ice_amulet", WEARABLE(), {
+  loc:"me",
+  modifyIncomingAttack:function(attack) {
+    console.log("one: " + attack.element)
+    if (this.worn && attack.element === 'frost') {
+      console.log("two")
+      attack.damageMultiplier = 0
+      attack.msg("The ice amulet protects {nm:target:the}.")
+    }
+  }
+});
 
 
 
@@ -87,7 +98,7 @@ createItem("spellbook", SPELLBOOK(["Fireball", "Stoneskin", "Steelskin", "Lightn
 skills.add(new Skill("Double attack", {
   icon:"sword2",
   tooltip:"Attack one foe twice, but at -2 to the attack roll",
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     attack.offensiveBonus -= 2
     attack.attackNumber = 2
   },
@@ -97,7 +108,7 @@ skills.add(new Skill("Sweeping attack", {
   icon:"sword3", 
   tooltip:"Attack one foe for normal damage, and any other for 4 damage; at -3 to the attack roll for reach", 
   getPrimaryTargets:getFoes,
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     if (options.secondary) {
       attack.damageNumber = 0;
       attack.damageBonus = 4;
@@ -109,7 +120,7 @@ skills.add(new Skill("Sweeping attack", {
 skills.add(new Skill("Sword of Fire", {
   icon:"sword-fire", 
   tooltip:"Attack with a flaming sword", 
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     attack.element = "fire";
   },
 }))
@@ -117,7 +128,7 @@ skills.add(new Skill("Sword of Fire", {
 skills.add(new Skill("Ice Sword", {
   icon:"sword-ice", 
   tooltip:"Attack with a freezing blade",
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     attack.element = "ice";
   },
 }))
@@ -129,7 +140,7 @@ skills.add(new Spell("Fireball", {
   primarySuccess:"{nv:target:reel:true} from the explosion.",
   primaryFailure:"{nv:target:ignore:true} it.",
   getPrimaryTargets:getAll,
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     attack.element = "fire";
     attack.msg("The room is momentarily filled with fire.", 1)
   },
@@ -140,7 +151,7 @@ skills.add(new Spell("Ice shard", {
   icon:'lightning',
   tooltip:"A shard of ice pierces your foe!",
   primarySuccess:"A shard of ice jumps from your finger to your target!",
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     attack.element = "frost";
   },
 }))
@@ -151,7 +162,7 @@ skills.add(new Spell("Psi-blast", {
   tooltip:"A blast of mental energy (ignores armour)",
   primarySuccess:"A blast of raw psi-energy sends {nm:target:the} reeling.",
   primaryFailure:"A blast of raw psi-energy... is barely noticed by {nm:target:the}.",
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     attack.armourMultiplier = 0
   },
 }))
@@ -166,7 +177,7 @@ skills.add(new Spell("Lightning bolt", {
   primaryFailure:"A lightning bolt jumps from your out-reached hand to your target, fizzling out before it can actually do anything.",
   secondaryFailure:"A smaller bolt jumps your target, but entirely misses {nm:target:the}!",
   getSecondaryTargets:getFoesBut,
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     attack.element = "storm";
   },
   onPrimaryFailure:function(attack) {
@@ -180,7 +191,7 @@ skills.add(new Spell("Cursed armour", {
   },
   icon:'lightning',
   tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     attack.armourModifier = (attack.armourModifier> 2 ? attack.armourModifier - 2 : 0)
   },
 }))
@@ -191,7 +202,7 @@ skills.add(new SpellSelf("Stoneskin", {
   },
   ongoing:true,
   incompatible:[/skin$/],
-  modifyAttack:function(attack) {
+  modifyIncomingAttack:function(attack) {
     attack.armourModifier += 2
   },
 }))
@@ -203,7 +214,7 @@ skills.add(new SpellSelf("Steelskin", {
   ongoing:true,
   duration:3,
   incompatible:[/skin$/],
-  modifyAttack:function(attack) {
+  modifyIncomingAttack:function(attack) {
     attack.armourModifier += 4
   },
 }))

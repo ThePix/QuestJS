@@ -101,7 +101,7 @@ class SpellSelf extends Spell {
 const defaultSkill = new Skill("Basic attack", {
   icon:"sword1",
   tooltip:"A simple attack",
-  processAttack:function(attack) {}
+  modifyOutgoingAttack:function(attack) {}
 })
 
 const skills = {
@@ -182,7 +182,8 @@ class Attack {
       attack.element = attack.skill.element
     }
     else {
-      attack.weapon = attacker.getEquippedWeapon ? attacker.getEquippedWeapon() : attacker
+      attack.weapon = attacker.getEquippedWeapon()
+      console.log(attack.weapon)
       attack.offensiveBonus = attack.weapon.offensiveBonus || 0
       attack.element = attack.weapon.element
       attack.damage = attack.weapon.damage
@@ -191,28 +192,26 @@ class Attack {
     if (attack.skill.secondaryDamage) attack.setDamageAtts(attack.skill.secondaryDamage, 'secondaryDamage')
     
     // modify for the skill
-    if (attack.skill.processAttack) attack.skill.processAttack(attack)
+    if (attack.skill.modifyOutgoingAttack) attack.skill.modifyOutgoingAttack(attack)
       
     // Now take into account the attacker's stats
-    attacker.processAttack(attack)
+    attacker.modifyOutgoingAttack(attack)
     
     // Now take into account the attacker's weapon's active spell
-    if (attack.weapon && attack.weapon.activeSpell) {
-      const spell = spells.findName[attack.weapon.activeSpell]
-      if (spell.processAttack) spell.processAttack(attack)
-    }
+    attack.applyActiveEffects(attack.weapon)
     
     // Now take into account the attacker's active spells
-    for (let spell of attacker.activeEffects) {
-      if (spell.processAttack) attacker.activeSpell.processAttack(attack)
+    attack.applyActiveEffects(attack.attacker)
+    
+    const items = scopeHeldBy(attack.attacker)
+    for (let el of items) {
+      if (el.modifyOutgoingAttack) el.modifyOutgoingAttack(attack)
     }
   
     // Now take into account the target's room
     const room = (target ? w[target.loc] : w[attacker.loc])
-    if (room.processAttack) room.processAttack(attack)
-
-    // Now take into account the room's active spell
-    if (room.activeSpell && room.activeSpell.processAttack) room.activeSpell.processAttack(attack)
+    if (room.modifyOutgoingAttack) room.modifyOutgoingAttack(attack)
+    attack.applyActiveEffects(room)
 
     return attack
   }
@@ -255,15 +254,16 @@ class Attack {
     this.target = target
 
     // Now take into account the target's active spell
-    for (let spellName of target.activeEffects) {
-      const spell = skills.findName(spellName)
-      if (spell.modifyAttack) spell.modifyAttack(this, target)
+    this.applyActiveEffects(target)
+    
+    const items = scopeHeldBy(target)
+    console.log(items)
+    for (let el of items) {
+      if (el.modifyIncomingAttack) el.modifyIncomingAttack(this)
     }
-    
+  
     // Now take into account the target
-    if (target.modifyAttack) target.modifyAttack(this)
-    
-    // Now take into account the target
+    if (target.modifyIncomingAttack) target.modifyIncomingAttack(this)
     if (this.element && target.element) this.modifyElementalAttack(target.element, this, isPrimary)
 
     // Is the target affected (hit)?
@@ -388,10 +388,20 @@ class Attack {
       damage -= this[prefix + 'Number'] * (target.armour * this.armourMultiplier + this.armourModifier)
       this.msg("Damage after armour: " + damage, 4)
       if (damage < 1) damage = 1;
+      this.msg("Damage before multiplier: " + damage, 6)
       const modifiedDamage = this[prefix + 'Multiplier'] * damage
       this.msg("Damage: " + modifiedDamage, 1)
       target.health -= modifiedDamage
       this.msg("Health now: " + target.health, 2)
+    }
+  }
+
+  
+  applyActiveEffects(source) {
+    if (!source || !source.activeEffects) return
+    for (let el of source.activeEffects) {
+      const effect = skills.findName(el)
+      if (effect.modifyOutgoingAttack) effect.modifyOutgoingAttack(this)
     }
   }
 }
@@ -451,8 +461,8 @@ const getAllBut = function(target) {
 
 
 
-// Give a character a processAttack function to have it modify an attack the character is making
-// or modifyAttack for an attack it is receiving
+// Give a character a modifyOutgoingAttack function to have it modify an attack the character is making
+// or modifyIncomingAttack for an attack it is receiving
 const RPG_TEMPLATE = {
   offensiveBonus:0,
   armour:0,
@@ -468,7 +478,7 @@ const RPG_TEMPLATE = {
     return true;
   },
 
-  processAttack:function(attack) {
+  modifyOutgoingAttack:function(attack) {
     if (!attack.skill.statForOffensiveBonus) {
       attack.offensiveBonus += this.offensiveBonus
     }
@@ -495,8 +505,13 @@ const RPG_PLAYER = function() {
   
   for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key];
   
-  res.getEquippedWeapon = function() { return this.equipped ? w[this.equipped] : w.weapon_unarmed; }
+  //res.getEquippedWeapon = function() { return this.equipped ? w[this.equipped] : w.weapon_unarmed; }
   
+  res.getEquippedWeapon = function() {
+    const carried = scopeHeldBy(this)
+    return carried.find(el => el.equipped && el.weapon) || w.weapon_unarmed
+  }
+
   return res;
 }
 
@@ -538,34 +553,44 @@ const WEAPON = function() {
   };
 
   res.drop = function(isMultiple, char) {
-    if (char.equipped === this.name) {
-      delete char.equipped
+    if (this.equipped) {
+      delete this.equipped
     }
     msg(prefix(this, isMultiple) + lang.drop_successful(char, this));
     this.moveToFrom(char.loc, this.loc);
     return true;
   },
   
+  res.isEquipped = function() {
+    return w[this.loc].equipped === this.name
+  }
+  
   res.equip = function(isMultiple, char) {
-    if (char.equipped === this.name) {
+    const equipped = char.getEquippedWeapon()
+    const params = {char:char, oldweapon:equipped, newweapon:this}
+    if (equipped === this) {
       msg("It already is.");
       return false;
     }
-    if (char.equipped) {
-      msg(lang.pronounVerb(char, "put", true) + " away " + w[char.equipped].byname({article:DEFINITE}) + ".");
+    if (equipped !== w.weapon_unarmed) {
+      msg("{nv:char:put:true} away {nm:oldweapon:the}, and draw {nm:newweapon:the}.", params)
+      delete equipped.equipped
     }
-    char.equipped = this.name;
-    msg(lang.pronounVerb(char, "draw", true) + " " + this.byname({article:DEFINITE}) + ".");
+    else {
+      msg("{nv:char:draw:true} {nm:newweapon:the}.", params)
+    }
+    this.equipped = true
     return true;
   }
 
   res.unequip = function(isMultiple, char) {
-    if (char.equipped !== this.name) {
+    if (!this.equipped) {
       msg("It already is.");
       return false;
     }
-    delete char.equipped
-    msg(lang.pronounVerb(char, "put", true) + " away " + this.byname({article:DEFINITE}) + ".");
+    delete this.equipped
+    const params = {char:char, weapon:this}
+    msg("{nv:char:put:true} away {nm:weapon:the}.", params)
     return true;
   }
   
@@ -580,7 +605,7 @@ const WEAPON = function() {
     }
     s += this.alias;
     if (options && options.possessive) s += "'s";
-    if (game.player.equipped === this.name && options.modified && (this.isAtLoc(game.player.name))) { s += " (equipped)"; }
+    if (this.equipped && options.modified && (this.isAtLoc(game.player.name))) { s += " (equipped)"; }
     if (options && options.capital) s = sentenceCase(s);
     return s;
   };

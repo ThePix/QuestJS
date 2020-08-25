@@ -17,9 +17,9 @@ test.tests = function() {
 
   test.title("Equip")
   test.assertEqual('unarmed', game.player.getEquippedWeapon().alias)
-  test.assertCmd("i", "You are carrying a flail and a knife.");
+  test.assertCmd("i", "You are carrying a flail, an ice amulet and a knife.");
   test.assertCmd("equip knife", "You draw the knife.");
-  test.assertCmd("i", "You are carrying a flail and a knife (equipped).");
+  test.assertCmd("i", "You are carrying a flail, an ice amulet and a knife (equipped).");
   test.assertEqual('knife', game.player.getEquippedWeapon().alias)
   test.assertCmd("equip knife", "It already is.");
   test.assertCmd("drop knife", "You drop the knife.");
@@ -73,9 +73,9 @@ test.tests = function() {
 
 
   test.title("Attack.createAttack  (flail)");
-  const oldProcessAttack = game.player.processAttack
-  game.player.processAttack = function(attack) { attack.offensiveBonus += 2 }
-  game.player.equipped = 'flail'
+  const oldProcessAttack = game.player.modifyOutgoingAttack
+  game.player.modifyOutgoingAttack = function(attack) { attack.offensiveBonus += 2 }
+  w.flail.equipped = true
 
   const attack2 = Attack.createAttack(game.player, w.orc)
   test.assertEqual('me', attack2.attacker.name)
@@ -97,8 +97,8 @@ test.tests = function() {
   w.goblin.armour = 0
   w.goblin.health = 40
   
-  game.player.processAttack = oldProcessAttack
-  delete game.player.equipped
+  game.player.modifyOutgoingAttack = oldProcessAttack
+  delete w.flail.equipped
 
 
 
@@ -170,24 +170,24 @@ test.tests = function() {
   random.prime(19)
   random.prime(4)
   random.prime(7)
-  game.player.equipped = 'flail'
+  w.flail.equipped = true
 
   test.assertCmd('attack goblin', ['You attack the goblin.', /A hit/, 'Damage: 15', 'Health now: 25'])
   test.assertEqual(25, w.goblin.health)
 
   w.goblin.health = 40
-  delete game.player.equipped
+  delete w.flail.equipped
 
 
 
   test.title("attack command, fails");
   random.prime(4)
-  game.player.equipped = 'flail'
+  w.flail.equipped = true
 
   test.assertCmd('attack goblin', ['You attack the goblin.', /A miss/])
   test.assertEqual(40, w.goblin.health)
 
-  delete game.player.equipped
+  delete w.flail.equipped
 
 
 
@@ -298,10 +298,21 @@ test.tests = function() {
   attack2c.resolve(w.me, true, 0)
   test.assertEqual(79, w.me.health)
   
+  
+  console.log('-------------------------')
+  
+  w.ice_amulet.worn = true
+  const attack2d = Attack.createAttack(w.goblin, game.player, skills.findName('Ice shard'))
+  random.prime(19)
+  attack2d.resolve(w.me, true, 0)
+  console.log(attack2d.damageMultiplier)
+  attack2d.output()
+  test.assertEqual(79, w.me.health)
+  
   w.me.health = 100
   delete w.goblin.spellCasting
   
-
+/*
 
 
   test.title("learn ongoing spells")
