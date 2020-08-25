@@ -6,12 +6,14 @@
 createItem("me", RPG_PLAYER(), {
   loc:"practice_room",
   regex:/^(me|myself|player)$/,
-  health:20,
+  health:100,
   maxHealth:100,
   pp:40,
   maxPP:40,
   maxArmour:20,
-  armour:10,
+  armour:3,
+  spellCasting:5,
+  offensiveBonus:3,
   examine:function(isMultiple) {
     msg(prefix(this, isMultiple) + "A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
   },
@@ -47,7 +49,7 @@ createRoom("practice_room", {
 
 createItem("goblin", RPG_NPC(false), {
   loc:"practice_room",
-  damage:"3d6",
+  damage:"d8",
   health:40,
 });
 
@@ -129,7 +131,7 @@ skills.add(new Spell("Fireball", {
   getPrimaryTargets:getAll,
   processAttack:function(attack) {
     attack.element = "fire";
-    attack.report.push({t:"The room is momentarily filled with fire.", level:1})
+    attack.msg("The room is momentarily filled with fire.", 1)
   },
 }))
 
@@ -140,6 +142,17 @@ skills.add(new Spell("Ice shard", {
   primarySuccess:"A shard of ice jumps from your finger to your target!",
   processAttack:function(attack) {
     attack.element = "frost";
+  },
+}))
+
+skills.add(new Spell("Psi-blast", {
+  damage:'3d6',
+  icon:'lightning',
+  tooltip:"A blast of mental energy (ignores armour)",
+  primarySuccess:"A blast of raw psi-energy sends {nm:target:the} reeling.",
+  primaryFailure:"A blast of raw psi-energy... is barely noticed by {nm:target:the}.",
+  processAttack:function(attack) {
+    attack.armourMultiplier = 0
   },
 }))
 
@@ -163,7 +176,7 @@ skills.add(new Spell("Lightning bolt", {
 
 skills.add(new Spell("Cursed armour", {
   targetEffect:function(attack) {
-    attack.report.push({t:processText("{nms:target:the:true} armour is reduced.", {target:attack.target}), level:1})
+    attack.msg("{nms:target:the:true} armour is reduced.", 1)
   },
   icon:'lightning',
   tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
@@ -174,8 +187,7 @@ skills.add(new Spell("Cursed armour", {
 
 skills.add(new SpellSelf("Stoneskin", {
   targetEffect:function(attack) {
-    console.log('here')
-    attack.report.push({t:"Your skin becomes as hard as stone - and yet still just as flexible.", level:1})
+    attack.msg("Your skin becomes as hard as stone - and yet still just as flexible.", 1)
   },
   ongoing:true,
   incompatible:[/skin$/],
@@ -186,7 +198,7 @@ skills.add(new SpellSelf("Stoneskin", {
 
 skills.add(new SpellSelf("Steelskin", {
   targetEffect:function(attack) {
-    attack.report.push({t:"Your skin becomes as hard as steel - and yet still just as flexible.", level:1})
+    attack.msg("Your skin becomes as hard as steel - and yet still just as flexible.", 1)
   },
   ongoing:true,
   duration:3,

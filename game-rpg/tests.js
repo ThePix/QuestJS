@@ -36,13 +36,10 @@ test.tests = function() {
 
  test.title("Attack.createAttack  (unarmed) misses");
   const attack0 = Attack.createAttack(game.player, w.goblin)
-  attack0.outputLevel = -1
   test.assertEqual('me', attack0.attacker.name)
   test.assertEqual([w.goblin], attack0.primaryTargets)
   test.assertEqual('d4', attack0.damage)
-  test.assertEqual(-2, attack0.offensiveBonus)
-  attack0.attacker.processAttack(attack0)
-  test.assertEqual(-2, attack0.offensiveBonus)
+  test.assertEqual(1, attack0.offensiveBonus)
 
   random.prime(3)
   //w.goblin.applyAttack(attack0, true, 0)
@@ -55,13 +52,10 @@ test.tests = function() {
 
   test.title("Attack.createAttack  (unarmed)");
   const attack1 = Attack.createAttack(game.player, w.goblin)
-  attack1.outputLevel = -1
   test.assertEqual('me', attack1.attacker.name)
   test.assertEqual([w.goblin], attack1.primaryTargets)
   test.assertEqual('d4', attack1.damage)
-  test.assertEqual(-2, attack1.offensiveBonus)
-  attack1.attacker.processAttack(attack1)
-  test.assertEqual(-2, attack1.offensiveBonus)
+  test.assertEqual(1, attack1.offensiveBonus)
 
   random.prime(19)
   random.prime(4)
@@ -84,7 +78,6 @@ test.tests = function() {
   game.player.equipped = 'flail'
 
   const attack2 = Attack.createAttack(game.player, w.orc)
-  attack2.outputLevel = -1
   test.assertEqual('me', attack2.attacker.name)
   test.assertEqual('2d10+4', attack2.damage)
   test.assertEqual(2, attack2.offensiveBonus)
@@ -110,17 +103,39 @@ test.tests = function() {
 
 
 
+  test.title("Attack.createAttack  (goblin)");
+  const attack2a = Attack.createAttack(w.goblin, game.player)
+  test.assertEqual('goblin', attack2a.attacker.name)
+  test.assertEqual([w.me], attack2a.primaryTargets)
+  test.assertEqual('d8', attack2a.damage)
+  test.assertEqual(0, attack2a.offensiveBonus)
+  random.prime(19)
+  random.prime(5)
+  attack2a.resolve(w.me, true, 0)
+  test.assertEqual(98, w.me.health)
+  w.me.health = 100
+  
+
+
+
+
+
+
+
   test.title("Attack.createAttack  (fireball)");
   const oldgetSkillFromButtons = skillUI.getSkillFromButtons
   skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
   
   const attack3 = Attack.createAttack(game.player, w.goblin)
-  attack3.outputLevel = -1
+  
+  test.assertEqual('spellCasting', attack3.skill.statForOffensiveBonus)
+  test.assertEqual(5, w.me.spellCasting)
+  
   test.assertEqual('me', attack3.attacker.name)
   test.assertEqual(undefined, attack3.weapon)
   test.assertEqual([w.goblin, w.orc, w.snotling, w.friend], attack3.primaryTargets)
   test.assertEqual('2d6', attack3.damage)
-  test.assertEqual(0, attack3.offensiveBonus)
+  test.assertEqual(5, attack3.offensiveBonus)
   test.assertEqual('fire', attack3.element)
 
   random.prime(19)
@@ -231,7 +246,6 @@ test.tests = function() {
 
 
 
-
   test.title("Lightning bolt")
   game.player.skillsLearnt = ["Double attack", "Fireball", "Lightning bolt"]
   test.assertCmd('cast lightning bolt', ['You need a target for the spell <i>Lightning bolt</i>.'])
@@ -248,8 +262,7 @@ test.tests = function() {
   random.prime(19)
   random.prime(4)
   random.prime(7)
-  random.prime(4)
-  test.assertCmd('attack goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to your target!', 'Damage: 20', 'Health now: 20', 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', 'Damage: 15', 'Health now: 5'])
+  test.assertCmd('attack goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to your target!', 'Damage: 20', 'Health now: 20', 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', 'Damage: 11', 'Health now: 9'])
   w.goblin.health = 40
   w.snotling.health = 20
   
@@ -261,6 +274,33 @@ test.tests = function() {
 
 
 
+  test.title("Attack.createAttack  (goblin, spells)")
+  w.goblin.spellCasting = 3
+  
+  const attack2b = Attack.createAttack(w.goblin, game.player, skills.findName('Ice shard'))
+  test.assertEqual('goblin', attack2b.attacker.name)
+  test.assertEqual([w.me], attack2b.primaryTargets)
+  test.assertEqual('3d6', attack2b.damage)
+  test.assertEqual(3, attack2b.offensiveBonus)
+  random.prime(19)
+  random.prime(5)
+  random.prime(5)
+  random.prime(5)
+  attack2b.resolve(w.me, true, 0)
+  test.assertEqual(94, w.me.health)
+
+  const attack2c = Attack.createAttack(w.goblin, game.player, skills.findName('Psi-blast'))
+  test.assertEqual('goblin', attack2c.attacker.name)
+  random.prime(19)
+  random.prime(5)
+  random.prime(5)
+  random.prime(5)
+  attack2c.resolve(w.me, true, 0)
+  test.assertEqual(79, w.me.health)
+  
+  w.me.health = 100
+  delete w.goblin.spellCasting
+  
 
 
 
@@ -270,7 +310,6 @@ test.tests = function() {
   test.assertCmd('learn stoneskin', ['You learn <i>Stoneskin</i> from the spellbook.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
   test.assertEqual([], game.player.activeEffects)
-  console.log('-----------------------------')
   test.assertCmd('cast stoneskin', ['You cast the <i>Stoneskin</i> spell.', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
 
   test.assertEqual(['Stoneskin'], game.player.activeEffects)
