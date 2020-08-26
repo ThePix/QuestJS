@@ -21,27 +21,23 @@ createItem("me", RPG_PLAYER(), {
 
 
 
-createItem("knife", WEAPON(), {
+createItem("knife", WEAPON("d4+2"), {
   loc:"me",
   image:"knife",
-  damage:"d4+2",
   offensiveBonus:-2,
 });
 
-createItem("flail", WEAPON(), {
+createItem("flail", WEAPON("2d10+4"), {
   loc:"me",
   image:"flail",
-  damage:"2d10+4",
 });
 
-createItem("ice_amulet", WEARABLE(), {
+createItem("ice_amulet", WEARABLE(4, ['neck']), {
   loc:"me",
   modifyIncomingAttack:function(attack) {
-    console.log("one: " + attack.element)
     if (this.worn && attack.element === 'frost') {
-      console.log("two")
       attack.damageMultiplier = 0
-      attack.msg("The ice amulet protects {nm:target:the}.")
+      attack.primarySuccess = attack.primarySuccess.replace(/[.!]/, ", but the ice amulet protects {sb:target}, and {pv:target:take} no damage.")
     }
   }
 });
@@ -51,8 +47,34 @@ createItem("ice_amulet", WEARABLE(), {
 
 
 createRoom("practice_room", {
-  desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
-  hint:"There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).",
+  desc:'A large room with straw scattered across the floor. The only exit is west',
+  west:new Exit('great_hall'),
+  south:new Exit('cupboard', {
+    locked:true,
+    lockedmsg:"It seems to be locked."
+  }),
+});
+
+
+
+
+createRoom("great_hall", {
+  desc:'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.',
+  east:new Exit('practice_room'),
+});
+
+createItem("practice_room_door", LOCKED_DOOR("small_key", "great_hall", "practice_room"), {
+  examine:'A very solid, wooden door.',
+});
+
+createRoom("cupboard", {
+  desc:'A small cupboard.',
+  north:new Exit('practice_room'),
+});
+
+createItem("small_key", KEY(), {
+  examine:'A small key.',
+  loc:"practice_room",
 });
 
 
@@ -70,17 +92,35 @@ createItem("orc", RPG_NPC(false), {
   health:60,
 });
 
+createItem("huge_shield", SHIELD(10), {
+  loc:"orc",
+});
+
 createItem("snotling", RPG_NPC(false), {
   loc:"practice_room",
   damage:"2d4",
   health:20,
 });
 
-createItem("friend", RPG_NPC(false), {
+createItem("rabbit", RPG_NPC(false), {
   loc:"practice_room",
   damage:"2d4",
   health:20,
-  isHostile:function() { return false; }
+  canTalkFlag:false,
+  isHostile:function() { return false; },
+  talkto:function() {
+    if (!this.canTalk()) {
+      msg("You spend a few minutes telling the rabbit about your life, but it does not seem interested. Possibly because it is rabbit.")
+      return
+    }
+    switch (this.talktoCount) {
+      case 0 : 
+        msg("You say 'Hello,' to the rabbit, 'how is it going?'");
+        msg("The rabbit looks at you. 'Need carrots.' It looks plaintively at it round tummy. 'Fading away bunny!");
+        break;
+      default: msg("You wonder what you can talk to the rabbit about."); break;
+    }
+  },  
 });
 
 createItem("chest", CONTAINER(true), {
@@ -89,6 +129,21 @@ createItem("chest", CONTAINER(true), {
 
 createItem("spellbook", SPELLBOOK(["Fireball", "Stoneskin", "Steelskin", "Lightning bolt", "Ice shard"]), {
   loc:"practice_room",
+});
+
+createItem("helmet", WEARABLE(2, ['head']), {
+  loc:"practice_room",
+  armour:10,
+});
+
+createItem("chestplate", WEARABLE(2, ['chest']), {
+  loc:"practice_room",
+  armour:20,
+});
+
+createItem("boots", WEARABLE(2, ['feet']), {
+  loc:"practice_room",
+  pronouns:lang.pronouns.plural,
 });
 
 
@@ -148,9 +203,9 @@ skills.add(new Spell("Fireball", {
 
 skills.add(new Spell("Ice shard", {
   damage:'3d6',
-  icon:'lightning',
+  icon:'ice-shard',
   tooltip:"A shard of ice pierces your foe!",
-  primarySuccess:"A shard of ice jumps from your finger to your target!",
+  primarySuccess:"A shard of ice jumps from {nms:attacker:the} finger to {nm:target:the}!",
   modifyOutgoingAttack:function(attack) {
     attack.element = "frost";
   },
@@ -158,7 +213,7 @@ skills.add(new Spell("Ice shard", {
 
 skills.add(new Spell("Psi-blast", {
   damage:'3d6',
-  icon:'lightning',
+  icon:'psi-blast',
   tooltip:"A blast of mental energy (ignores armour)",
   primarySuccess:"A blast of raw psi-energy sends {nm:target:the} reeling.",
   primaryFailure:"A blast of raw psi-energy... is barely noticed by {nm:target:the}.",
@@ -172,10 +227,10 @@ skills.add(new Spell("Lightning bolt", {
   secondaryDamage:'2d6',
   icon:'lightning',
   tooltip:"A lightning bolt jumps from your out-reached hand to you foe!",
-  primarySuccess:"A lightning bolt jumps from your out-reached hand to your target!",
-  secondarySuccess:"A smaller bolt jumps your target to {nm:target:the}!",
-  primaryFailure:"A lightning bolt jumps from your out-reached hand to your target, fizzling out before it can actually do anything.",
-  secondaryFailure:"A smaller bolt jumps your target, but entirely misses {nm:target:the}!",
+  primarySuccess:"A lightning bolt jumps from {nms:attacker:the} out-reached hand to {nm:target:the}!",
+  secondarySuccess:"A smaller bolt jumps {nms:attacker:the} target to {nm:target:the}!",
+  primaryFailure:"A lightning bolt jumps from {nms:attacker:the} out-reached hand to {nm:target:the}, fizzling out before it can actually do anything.",
+  secondaryFailure:"A smaller bolt jumps {nms:attacker:the} target, but entirely misses {nm:target:the}!",
   getSecondaryTargets:getFoesBut,
   modifyOutgoingAttack:function(attack) {
     attack.element = "storm";
@@ -189,7 +244,7 @@ skills.add(new Spell("Cursed armour", {
   targetEffect:function(attack) {
     attack.msg("{nms:target:the:true} armour is reduced.", 1)
   },
-  icon:'lightning',
+  icon:'unarmour',
   tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
   modifyOutgoingAttack:function(attack) {
     attack.armourModifier = (attack.armourModifier> 2 ? attack.armourModifier - 2 : 0)
@@ -218,3 +273,45 @@ skills.add(new SpellSelf("Steelskin", {
     attack.armourModifier += 4
   },
 }))
+
+skills.add(new SpellSelf("Unlock", {
+  targetEffect:function(attack) {
+    const room = w[attack.attacker.loc]
+    let flag = false
+    for (let el of util.exitList(attack.attacker)) {
+      if (room[el].locked) {
+        attack.msg("The door to " + util.niceDirections(el) + " unlocks.", 1)
+        room[el].locked = false
+        flag = true
+      }
+    }
+    if (!flag) attack.msg("There are no locked doors.", 1)
+  },
+}))
+
+skills.add(new Spell("Commune with animal", {
+  icon:'commune',
+  targetEffect:function(attack) {
+    if (attack.target.canTalkFlag) {
+      attack.msg("{nv:attacker:can:true} talk to {nm:target:the} for a short time (like before the spell...).", 1)
+    }
+    else {
+      attack.target.canTalkFlag = true
+      attack.target.canTalkFlagIsTemporary = true
+      attack.msg("{nv:attacker:can:true} now talk to {nm:target:the} for a short time.", 1)
+    }
+  },
+  regex:/commune/,
+  ongoing:true,
+  duration:5,
+  automaticSuccess:true,
+  terminatingScript:function(target) {
+    if (target.canTalkFlagIsTemporary) {
+      target.canTalkFlag = false
+      delete target.canTalkFlagIsTemporary
+      return "The {i:Commune with animal} spell on " + target.byname({article:DEFINITE}) + " expires."
+    }
+    return ''
+  },
+}))
+

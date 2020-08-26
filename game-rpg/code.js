@@ -97,6 +97,13 @@ class SpellSelf extends Spell {
   }
 }
 
+class SpellInanimate extends Spell {
+  constructor(name, data) {
+    super(name, data)
+    this.inanimateTarget = true
+  }
+}
+
 
 const defaultSkill = new Skill("Basic attack", {
   icon:"sword1",
@@ -168,7 +175,10 @@ class Attack {
     attack.report = []
     attack.armourModifier = 0
     attack.armourMultiplier = 1
-    
+    attack.primarySuccess = attack.skill.primarySuccess || 'A hit!'
+    attack.primaryFailure = attack.skill.primaryFailure || 'A miss!'
+    attack.secondarySuccess = attack.skill.secondarySuccess || 'A hit!'
+    attack.secondaryFailure = attack.skill.secondaryFailure || 'A miss!'
     attack.msg(attack.skill.reportText, 1)
     
 
@@ -183,7 +193,6 @@ class Attack {
     }
     else {
       attack.weapon = attacker.getEquippedWeapon()
-      console.log(attack.weapon)
       attack.offensiveBonus = attack.weapon.offensiveBonus || 0
       attack.element = attack.weapon.element
       attack.damage = attack.weapon.damage
@@ -228,6 +237,13 @@ class Attack {
       return this
     }
     
+    // target inanimate object
+    // TODO!!!
+    if (this.inanimateTarget) {
+      this.resolveForInanimate(this.attacker, this.primaryTargets)
+      return this
+    }
+
     // Iterate through the targets and apply the attack
     // The attack may be modified by the target, so we send a clone
     for (let target of this.primaryTargets) {
@@ -257,7 +273,6 @@ class Attack {
     this.applyActiveEffects(target)
     
     const items = scopeHeldBy(target)
-    console.log(items)
     for (let el of items) {
       if (el.modifyIncomingAttack) el.modifyIncomingAttack(this)
     }
@@ -281,11 +296,11 @@ class Attack {
       this.msg("Roll: " + this.roll, 4)
       
       if (this.result < 0) {
-        if (isPrimary && this.skill.primaryFailure) {
-          this.msg(processText(this.skill.primaryFailure, {target:target}), 1)
+        if (isPrimary && this.primaryFailure) {
+          this.msg(processText(this.primaryFailure, this), 1)
         }
-        else if (!isPrimary && this.skill.secondaryFailure) {
-          this.msg(processText(this.skill.secondaryFailure, {target:target}), 1)
+        else if (!isPrimary && this.secondaryFailure) {
+          this.msg(processText(this.secondaryFailure, this), 1)
         }
         else {
           this.msg("A miss...\n", 1)
@@ -294,11 +309,11 @@ class Attack {
         return
       }
       
-      if (isPrimary && this.skill.primarySuccess) {
-        this.msg(processText(this.skill.primarySuccess, {target:target}), 1)
+      if (isPrimary && this.primarySuccess) {
+        this.msg(processText(this.primarySuccess, this), 1)
       }
-      else if (!isPrimary && this.skill.secondarySuccess) {
-        this.msg(processText(this.skill.secondarySuccess, {target:target}), 1)
+      else if (!isPrimary && this.secondarySuccess) {
+        this.msg(processText(this.secondarySuccess, this), 1)
       }
       else {
         this.msg("A hit!", 1)
@@ -465,8 +480,8 @@ const getAllBut = function(target) {
 // or modifyIncomingAttack for an attack it is receiving
 const RPG_TEMPLATE = {
   offensiveBonus:0,
-  armour:0,
   defensiveBonus:0,
+  armour:0,
   activeEffects:[],
   skillsLearnt:[],
 
@@ -490,11 +505,11 @@ const RPG_TEMPLATE = {
     }
   },
   
-  modifyDamage(damage, attack) {
-    if (!attack.element) return damage
-    if (this[attack.element + 'Modifier']) return damage * this[attack.element + 'Modifier']
-    return damage
-  },
+  getEquippedWeapon:function() { return this; },
+  
+  isHostile:function() { return true; },
+
+  getArmour:function() { return this.armour },
 
 }
 
@@ -512,6 +527,13 @@ const RPG_PLAYER = function() {
     return carried.find(el => el.equipped && el.weapon) || w.weapon_unarmed
   }
 
+  res.getArmour = function() {
+    const garments = scopeHeldBy(this).filter(el => el.worn)
+    let armour = 0
+    for (let el of garments) armour += el.getArmour()
+    return armour / settings.armourScaling
+  }
+
   return res;
 }
 
@@ -526,19 +548,50 @@ const RPG_NPC = function(female) {
     return [lang.verbs.lookat, lang.verbs.talkto, "Attack"];
   };
   
-  res.getEquippedWeapon = function() { return this; }
-  
-  res.isHostile = function() { return true; }
+    
+  return res;
+}
+
+
+const RPG_CORPOREAL_UNDEAD = function(female) {
+  const res = RPG_NPC(female);
+
+  res.element = necrotic
+    
+  return res;
+}
+
+
+const RPG_NON_CORPOREAL_UNDEAD = function(female) {
+  const res = RPG_CORPOREAL_UNDEAD(female);
+
+  res.noCorpse = true
+
+  res.modifyIncomingAttack = function(attack) {
+    if (attack.element || attack.isMagic || attack.spell) {
+      attack.damageMultiplier = 0
+      attack.primarySuccess = attack.primarySuccess.replace(/[.!]/, ", but it passes straight through {sb:target}.")
+    }
+  }
     
   return res;
 }
 
 
 
-const WEAPON = function() {
+
+
+
+
+
+const EQUIPPABLE = function() {
   const res = $.extend({}, TAKEABLE_DICTIONARY);
   
-  res.weapon = true;
+  res.equippable = true;
+  
+  res.getObstructing = function(char) {
+    return scopeHeldBy(char).filter(el => el.equipped && this.match(el))
+  }
   
   res.getVerbs = function() {
     if (!this.isAtLoc(game.player.name)) {
@@ -561,23 +614,19 @@ const WEAPON = function() {
     return true;
   },
   
-  res.isEquipped = function() {
-    return w[this.loc].equipped === this.name
-  }
-  
   res.equip = function(isMultiple, char) {
-    const equipped = char.getEquippedWeapon()
-    const params = {char:char, oldweapon:equipped, newweapon:this}
-    if (equipped === this) {
+    const equipped = this.getObstructing(char)
+    if (equipped.includes(this)) {
       msg("It already is.");
       return false;
     }
-    if (equipped !== w.weapon_unarmed) {
-      msg("{nv:char:put:true} away {nm:oldweapon:the}, and draw {nm:newweapon:the}.", params)
-      delete equipped.equipped
+    if (equipped.length === 0) {
+      msg("{nv:char:draw:true} {nm:item:the}.", {char:char, item:this})
     }
-    else {
-      msg("{nv:char:draw:true} {nm:newweapon:the}.", params)
+    else if (equipped.length === 1) {
+      const params = {char:char, item:this}
+      msg("{nv:char:put:true} away " + formatList(equipped, {article:DEFINITE, joiner:" and "}) + ", and equip {nm:item:the}.", params)
+      for (let el of equipped) delete el.equipped
     }
     this.equipped = true
     return true;
@@ -615,14 +664,96 @@ const WEAPON = function() {
   
 
 
+const WEAPON = function(damage) {
+  const res = $.extend({}, EQUIPPABLE())
+  res.weapon = true
+  res.damage = damage
+  res.match = function(item) { return item.weapon }
+  res.icon = () => '<img src="' + settings.imagesFolder + '/weapon12.png" />'
+  return res;
+}  
+
+
+const SHIELD = function(bonus) {
+  const res = $.extend({}, EQUIPPABLE())
+  res.shield = true
+  res.shieldBonus = bonus
+  res.match = function(item) { return item.shield }
+  res.modifyIncomingAttack = function(attack) {
+    if (!this.equipped) return
+    attack.offensiveBonus -= this.shieldBonus
+  }
+  res.icon = () => '<img src="' + settings.imagesFolder + '/shield12.png" />'
+  return res;
+}  
+
+
 const SPELLBOOK = function(list) {
-  const res = $.extend({}, TAKEABLE_DICTIONARY);
-  res.spellbook = true;
+  const res = $.extend({}, TAKEABLE_DICTIONARY)
+  res.spellbook = true
   res.spellsAvailableToLearn = list
+  res.examineX = ''
+  res.examine = function() {
+    msg(this.examineX + ' It contains the spells ' + formatList(this.spellsAvailableToLearn.map(el => '<i>' + el + '</i>'), {lastJoiner:' and '}) + '.')
+  }
+  res.icon = () => '<img src="' + settings.imagesFolder + '/spell12.png" />'
   return res 
 }
 
 
+
+
+
+const LOCKED_DOOR = function(key, loc1, loc2, name1, name2) {
+  const res = $.extend({}, OPENABLE(false), LOCKED_WITH(key))
+  res.loc1 = loc1
+  res.loc2 = loc2
+  res.name1 = name1
+  res.name2 = name2
+  res.scenery = true
+
+  res._setup = function() {
+    const room1 = w[this.loc1]
+    if (!room1) return errormsg("Bad location name '" + this.loc1 + "' for door " + this.name)
+    const exit1 = room1.findExit(this.loc2)
+    if (!exit1) return errormsg("No exit to '" + this.loc2 + "' for door " + this.name)
+    this.dir1 = exit1.dir
+      
+    const room2 = w[this.loc2]
+    if (!room2) return errormsg("Bad location name '" + this.loc2 + "' for door " + this.name)
+    const exit2 = room2.findExit(this.loc1)
+    if (!exit2) return errormsg("No exit to '" + this.loc1 + "' for door " + this.name)
+    this.dir2 = exit2.dir
+
+    w[this.loc1][this.dir1].use = useWithDoor
+    w[this.loc1][this.dir1].door = this.name
+    w[this.loc1][this.dir1].doorName = this.name1 || 'door to ' + w[this.loc2].byname({article:DEFINITE})
+
+    w[this.loc2][this.dir2].use = useWithDoor
+    w[this.loc2][this.dir2].door = this.name
+    w[this.loc2][this.dir2].doorName = this.name2 || 'door to ' + w[this.loc1].byname({article:DEFINITE})
+  }
+  
+  res.isAtLoc = function(loc, situation) {
+    if (typeof loc !== "string") loc = loc.name
+    if (situation !== world.PARSER && this.scenery) return false;
+    return (loc == this.loc1 || loc == this.loc2);
+  }
+
+  res.icon = () => '<img src="' + settings.imagesFolder + '/door12.png" />';
+
+  return res;
+}  
+
+
+
+
+const KEY = function() {
+  const res = $.extend({}, TAKEABLE_DICTIONARY);
+  res.key = true
+  res.icon = () => '<img src="' + settings.imagesFolder + '/key12.png" />';
+  return res;
+}  
 
 
 

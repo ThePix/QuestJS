@@ -8,6 +8,8 @@ settings.thanks = ["Kyle", "Lara"];
 settings.statusPane = false;
 settings.tests = true
 settings.attackOutputLevel = 2
+settings.armourScaling = 10
+settings.noTalkTo = false
 settings.output = function(report) {
   for (let el of report) {
     if (el.level <= settings.attackOutputLevel) {
@@ -31,7 +33,6 @@ settings.setup = function() {
 
   ioUpdateCustom()
   
-
 }
 
 
@@ -103,7 +104,6 @@ const ioUpdateCustom = function() {
   for (let skill of skills.list) {
     //console.log(skill.name)
     if (game.player.skillsLearnt.includes(skill.name)) {
-      //console.log(skill)
       skillUI.setButton(skill)
     }
   }
