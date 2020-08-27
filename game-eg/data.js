@@ -135,14 +135,21 @@ createItem("waterskin",
 
 
 
-createItem("glass_cabinet",
-  CONTAINER(true),
-  LOCKED_WITH("cabinet_key"),
-  { alias:"glass cabinet", examine:"A cabinet with a glass front.", transparent:true, isAtLoc:function(loc) {
+createItem("glass_cabinet", CONTAINER(true), LOCKED_WITH("cabinet_key"), {
+  examine:"A cabinet with a glass front.",
+  transparent:true,
+  isAtLoc:function(loc) {
     if (typeof loc !== "string") loc = loc.name
     return (loc == "lounge" || loc == "dining_room");
   }}
 );
+
+createItem("cabinet_key", KEY(), { 
+  loc:"garage",
+  examine: "A small brass key."
+});
+
+
 
 createItem("jewellery_box",
   TAKEABLE(),
@@ -189,10 +196,9 @@ createItem("coin",
 );
 
 
-createItem("small_key",
-  TAKEABLE(),
-  { loc:"lounge", examine: "A small key.", alias: "small key"  }
-);
+createItem("small_key", KEY(), { 
+  loc:"lounge", examine: "A small key.", alias: "small key",
+});
 
 
 createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
@@ -347,7 +353,7 @@ createRoom("kitchen", {
       msg("You watch " + char.byname({article:DEFINITE}) + " disappear through the trapdoor.");
     }
   }}),
-  north:new Exit("garage", {use:useWithDoor, door:"garage_door", doorName:"garage door"},),
+  north:new Exit("garage"),
   afterFirstEnter:function() {
     msg("A fresh smell here!");
   },
@@ -374,15 +380,6 @@ createItem("big_kitchen_table",
   SURFACE(),
   { loc:"kitchen", examine: "A Formica table."  }
 );
-
-createItem("garage_door", OPENABLE(false), LOCKED_WITH("garage_key"), {
-  examine: "The door to the garage.",
-  alias: "garage door",
-  isAtLoc:function(loc) {
-    if (typeof loc !== "string") loc = loc.name
-    return (loc == "kitchen" || loc == "garage");
-  }
-});
 
 createItem("jug", VESSEL(4), TAKEABLE(), {
   loc:"big_kitchen_table",
@@ -453,8 +450,17 @@ createItem("crates",
 
 createRoom("garage", {
   desc:'An empty garage.',
-  south:new Exit("kitchen", {use:useWithDoor, door:"garage_door", doorName:"kitchen door"},),
+  south:new Exit("kitchen"),
   hint:"The garage features a complex mechanism, with two components.",
+});
+
+createItem("garage_door", LOCKED_DOOR("garage_key", "kitchen", "garage"), {
+  examine: "The door to the garage.",
+});
+
+createItem("garage_key", KEY(), {
+  loc:"lounge",
+  examine: "A big key.",
 });
 
 
@@ -871,11 +877,6 @@ createItem("Lara",
       }
     ],
   }
-);
-
-createItem("garage_key",
-  TAKEABLE(),
-  { loc:"lounge", examine: "A big key.", alias: "garage key"  }
 );
 
 createItem("Lara_garage_key",

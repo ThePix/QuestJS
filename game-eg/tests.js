@@ -228,15 +228,15 @@ test.tests = function() {
   test.assertCmd("drop 4 bricks", "You drop four bricks.");
   test.assertCmd("inv", "You are carrying a knife.");
   test.assertCmd("get 10 bricks", "You take seven bricks.");
-  test.assertCmd("e", ["You head east.", "The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a garage door and a trapdoor here.", "You can go north or west.", "A fresh smell here!"]);
+  test.assertCmd("e", ["You head east.", "The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west.", "A fresh smell here!"]);
   test.assertCmd("put 2 bricks on to the table", "Done.");
   test.assertCmd("inv", "You are carrying five bricks and a knife.");
-  test.assertCmd("look", ["The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with two bricks and a jug on it), a camera, a garage door and a trapdoor here.", "You can go north or west."]);
+  test.assertCmd("look", ["The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with two bricks and a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("get the bricks", "You take two bricks.");
   test.assertCmd("get clock", "You take the clock.");
-  test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a garage door and a trapdoor here.", "You can go north or west."]);
+  test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("drop clock", "You drop the clock.");
-  test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock, a garage door and a trapdoor here.", "You can go north or west."]);
+  test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, some boots, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), a small key and a waterskin here.", "You can go east, south, up or west."]);
   
 
@@ -402,9 +402,9 @@ test.tests = function() {
   test.assertCmd("kyle, get torch", "You can't see anything you might call 'kyle' here.");
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("get garage", "You take the garage key.");
-  test.assertCmd("e", ["You head east.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock, a garage door, Kyle (wearing a straw boater) and a trapdoor here.", "You can go north or west."]);
-  test.assertCmd("kyle,n", "Kyle tries the garage door, but it is locked.");
-  test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: Kyle can't take it.", "Camera: Kyle takes the camera.", "Big_kitchen_table: Kyle can't take it.", "Garage_door: Kyle can't take it.", "Jug: Kyle takes the jug."]);
+  test.assertCmd("e", ["You head east.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock, Kyle (wearing a straw boater) and a trapdoor here.", "You can go north or west."]);
+  test.assertCmd("kyle,n", "Kyle tries the door to the garage, but it is locked.");
+  test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: Kyle can't take it.", "Camera: Kyle takes the camera.", "Big_kitchen_table: Kyle can't take it.", "Jug: Kyle takes the jug."]);
   test.assertCmd("kyle, drop picture box", "Kyle drops the camera.");
   test.assertCmd("kyle, open trapdoor", "Kyle opens the trapdoor.");
   test.assertCmd("kyle, down", "You watch Kyle disappear through the trapdoor.");

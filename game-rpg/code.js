@@ -704,59 +704,6 @@ const SPELLBOOK = function(list) {
 
 
 
-const LOCKED_DOOR = function(key, loc1, loc2, name1, name2) {
-  const res = $.extend({}, OPENABLE(false), LOCKED_WITH(key))
-  res.loc1 = loc1
-  res.loc2 = loc2
-  res.name1 = name1
-  res.name2 = name2
-  res.scenery = true
-
-  res._setup = function() {
-    const room1 = w[this.loc1]
-    if (!room1) return errormsg("Bad location name '" + this.loc1 + "' for door " + this.name)
-    const exit1 = room1.findExit(this.loc2)
-    if (!exit1) return errormsg("No exit to '" + this.loc2 + "' for door " + this.name)
-    this.dir1 = exit1.dir
-      
-    const room2 = w[this.loc2]
-    if (!room2) return errormsg("Bad location name '" + this.loc2 + "' for door " + this.name)
-    const exit2 = room2.findExit(this.loc1)
-    if (!exit2) return errormsg("No exit to '" + this.loc1 + "' for door " + this.name)
-    this.dir2 = exit2.dir
-
-    w[this.loc1][this.dir1].use = useWithDoor
-    w[this.loc1][this.dir1].door = this.name
-    w[this.loc1][this.dir1].doorName = this.name1 || 'door to ' + w[this.loc2].byname({article:DEFINITE})
-
-    w[this.loc2][this.dir2].use = useWithDoor
-    w[this.loc2][this.dir2].door = this.name
-    w[this.loc2][this.dir2].doorName = this.name2 || 'door to ' + w[this.loc1].byname({article:DEFINITE})
-  }
-  
-  res.isAtLoc = function(loc, situation) {
-    if (typeof loc !== "string") loc = loc.name
-    if (situation !== world.PARSER && this.scenery) return false;
-    return (loc == this.loc1 || loc == this.loc2);
-  }
-
-  res.icon = () => '<img src="' + settings.imagesFolder + '/door12.png" />';
-
-  return res;
-}  
-
-
-
-
-const KEY = function() {
-  const res = $.extend({}, TAKEABLE_DICTIONARY);
-  res.key = true
-  res.icon = () => '<img src="' + settings.imagesFolder + '/key12.png" />';
-  return res;
-}  
-
-
-
 
 createItem("weapon_unarmed", WEAPON(), {
   loc:"me",
