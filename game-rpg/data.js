@@ -32,6 +32,8 @@ createItem("flail", WEAPON("2d10+4"), {
   image:"flail",
 });
 
+
+
 createItem("ice_amulet", WEARABLE(4, ['neck']), {
   loc:"me",
   modifyIncomingAttack:function(attack) {
@@ -146,7 +148,10 @@ createItem("boots", WEARABLE(2, ['feet']), {
   pronouns:lang.pronouns.plural,
 });
 
-
+createItem("shotgun", LIMITED_USE_WEAPON("2d10+4", 1), {
+  loc:"practice_room",
+  image:"flail",
+});
 
 
 

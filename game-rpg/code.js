@@ -75,6 +75,13 @@ class Skill {
   }
 }
 
+class MetaSkill extends Skill {
+  constructor(name, data) {
+    super(name, data)
+    this.meta = true
+  }
+}
+
 class Spell extends Skill {
   constructor(name, data) {
     super(name, data)
@@ -416,7 +423,7 @@ class Attack {
     if (!source || !source.activeEffects) return
     for (let el of source.activeEffects) {
       const effect = skills.findName(el)
-      if (effect.modifyOutgoingAttack) effect.modifyOutgoingAttack(this)
+      if (effect.modifyOutgoingAttack) effect.modifyOutgoingAttack(this, source)
     }
   }
 }
@@ -581,6 +588,14 @@ const RPG_NON_CORPOREAL_UNDEAD = function(female) {
 
 
 
+// The attack agenda item will have the monster wait until the player appears, then attack, fllowing if the player moves away
+agenda.attack = function(npc, arr) {
+
+  // do stuff
+  return false
+}
+
+
 
 
 
@@ -588,6 +603,7 @@ const EQUIPPABLE = function() {
   const res = $.extend({}, TAKEABLE_DICTIONARY);
   
   res.equippable = true;
+  res.activeEffects = [],
   
   res.getObstructing = function(char) {
     return scopeHeldBy(char).filter(el => el.equipped && this.match(el))
@@ -673,6 +689,42 @@ const WEAPON = function(damage) {
   return res;
 }  
 
+
+const LIMITED_USE_WEAPON = function(damage, ammo) {
+  const res = $.extend({}, WEAPON(damage))
+  res.ammo = ammo
+  res.activeEffects.push("Limited ammo")
+  return res;
+}  
+
+
+
+skills.add(new MetaSkill("Limited ammo", {
+  modifyOutgoingAttack:function(attack) {
+    if (attack.weapon.ammo === 0) {
+      attack.msg("Out of ammo!")
+      attack.abort = true
+    }
+    else {
+      attack.weapon.ammo--
+    }
+  },
+}))
+
+/*
+skills.add(new MetaSkill("Deteriorating", {
+  // really needs to be on success only
+  modifyOutgoingAttack:function(attack) {
+    if (attack.weapon.ammo === 0) {
+      attack.msg("Out of ammo!")
+      attack.abort = true
+    }
+    else {
+      attack.weapon.ammo--
+    }
+  },
+}))
+*/
 
 const SHIELD = function(bonus) {
   const res = $.extend({}, EQUIPPABLE())
