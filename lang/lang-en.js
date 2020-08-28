@@ -13,7 +13,11 @@ const lang = {
   
   // Meta commands
   MetaHelp:/^help$|^\?$/,
+  MetaHint:/^hints?$/,
   MetaCredits:/^about$|^credits?$/,
+  MetaDarkMode:/^(?:dark|dark mode|toggle dark|toggle dark mode)$/,
+  MetaWarnings:/^warn(?:ing|ings|)$/,
+  MetaSilent:/^(?:sh|silent)$/,
   MetaSpoken:/^spoken$/,
   MetaIntro:/^intro$/,
   MetaUnspoken:/^unspoken$/,
@@ -25,7 +29,7 @@ const lang = {
   MetaTranscriptOff:/^transcript off$|^script off$/,
   MetaTranscriptClear:/^transcript clear$|^script clear$|^transcript delete$|^script delete$/,
   MetaTranscriptShow:/^transcript show$|^script show$/,
-  MetaTranscriptShowWithOptions:/^(?:transcript$|^script) show (\w+)$/,
+  MetaTranscriptShowWithOptions:/^(?:transcript|script) show (\w+)$/,
   MetaPlayerComment:/^\*(.+)$/,
   MetaSave:/^save$/,
   MetaSaveGame:/^(?:save) (.+)$/,
@@ -617,6 +621,8 @@ const lang = {
   mode_brief:"Game mode is now 'brief'; no room descriptions (except with LOOK).",
   mode_terse:"Game mode is now 'terse'; room descriptions only shown on first entering and with LOOK.",
   mode_verbose:"Game mode is now 'verbose'; room descriptions shown every time you enter a room.",
+  mode_silent_on:"Game is now in silent mode.",
+  mode_silent_off:"Silent mode off.",
   transcript_already_on:"Transcript is already turned on.",
   transcript_already_off:"Transcript is already turned off.",
   undo_disabled:"Sorry, UNDO is not enabled in this game.",
@@ -632,8 +638,8 @@ const lang = {
       metamsg("{b:Other commands:} You can also LOOK, HELP or WAIT. Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
       metamsg("{b:Using items: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
       metamsg("{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..");
-      metamsg("{b:Meta-commands:} Type ABOUT to find out about the author, SCRIPT to learn about transcripts or SAVE to learn about saving games. You can also use BRIEF/TERSE/VERBOSE to control room descriptions.")
-      metamsg("You can often just type the first few characters of an item's name and Quest will guess what you mean.  If fact, if you are in a room with Brian, who is holding a ball, and a box, Quest should be able to work out that B,PUT B IN B mean you want Brian to put the ball in the box.")
+      metamsg("{b:Meta-commands:} Type ABOUT to find out about the author, SCRIPT to learn about transcripts or SAVE to learn about saving games. You can also use BRIEF/TERSE/VERBOSE to control room descriptions. Use WARNINGS to see any applicable sex, violence or trigger warnings, type DARK to toggle dark mode or SILENT to prevent sounds/music (if implemented).")
+      metamsg("{b:Shortcuts:}You can often just type the first few characters of an item's name and Quest will guess what you mean.  If fact, if you are in a room with Brian, who is holding a ball, and a box, Quest should be able to work out that B,PUT B IN B mean you want Brian to put the ball in the box.")
       metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
     }
     if (settings.panes !== "None") {
@@ -648,10 +654,24 @@ const lang = {
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
+  hintScript:function() {
+    metamsg("Sorry, no hints available.")
+    return world.SUCCESS_NO_TURNSCRIPTS;
+  },
+
   aboutScript:function() {
     metamsg("{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6.", {settings:settings});
     if (settings.thanks && settings.thanks.length > 0) {
       metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".");
+    }
+    return world.SUCCESS_NO_TURNSCRIPTS;
+  },
+
+  warningsScript:function() {
+    switch (typeof settings.warnings) {
+      case 'undefined' : metamsg('No warning have been set for this game.'); break;
+      case 'string' : metamsg(settings.warnings); break;
+      default: for (let el of settings.warnings) metamsg(el)
     }
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
@@ -668,6 +688,7 @@ const lang = {
     metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it. To empty the file, use SCRIPT CLEAR.");
     metamsg("You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.");
     metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.");
+    metamsg("You can add a comment to the transcript by starting your text with a *.")
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
