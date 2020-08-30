@@ -179,6 +179,13 @@ span.compassbutton {
 
 
 /* Various msg options */
+.tutorial {
+  color: blue;
+  font-style:italic;
+}
+.dark-body > div > div > .tutorial {
+  color: lightblue;
+}
 .meta {
   color: grey;
 }

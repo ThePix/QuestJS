@@ -417,7 +417,7 @@ test.tests = function() {
   test.assertCmd("push button", "You push the button, but nothing happens.");
   test.assertCmd("put torch in compartment", "The compartment is closed.");
   test.assertCmd("x compartment", "The compartment is just the right size for the torch. It is closed.");
-  test.assertCmd("open compartment", "You open the compartment.");
+  test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see nothing.");
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");
   test.assertCmd("x compartment", "The compartment is just the right size for the torch. It is open.");
   test.assertCmd("put torch in compartment", "Done.");
@@ -427,13 +427,13 @@ test.tests = function() {
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "You push the button. There is a brief hum of power, and a flash.");
   test.assertCmd("get torch", "You can't see anything you might call 'torch' here.");
-  test.assertCmd("open compartment", "You open the compartment.");
+  test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see a flashlight.");
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("open compartment", "It already is.");
   test.assertCmd("put knife in compartment", "Done.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "There is a loud bang, and the knife is destroyed.");
-  test.assertCmd("open compartment", "You open the compartment.");
+  test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see nothing.");
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");
   
 
