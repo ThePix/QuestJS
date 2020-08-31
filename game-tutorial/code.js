@@ -56,7 +56,7 @@ findCmd('MetaHint').script = function() {
       metamsg("See what happens if you try to GET CRATES.")
       break
     case 160:
-      metamsg("You cannot take the crates, but your might be able to MOVE CRATES.")
+      metamsg("You cannot take the crates, but you might be able to MOVE CRATES.")
       break
     case 170:
       metamsg("Head WEST.")
@@ -77,30 +77,63 @@ findCmd('MetaHint').script = function() {
       metamsg("ASK ROBOT ABOUT ZETA-PARTICLES.")
       break
     case 230:
-      metamsg("ASK ROBOT TO OPEN DOOR.")
+      metamsg("Go WEST to the lift.")
       break
     case 240:
-      metamsg("Head NORTH.")
+      metamsg("Try PRESS 3 to operate the lift.")
       break
     case 250:
-      metamsg("Use ROBOT,N to send the robot into the other room.")
+      metamsg("Go back to the laboratory, and ASK ROBOT ABOUT LIFT.")
       break
-
+    case 260:
+      metamsg("ASK THE ROBOT ABOUT THE ZETA_REACTOR.")
+      break
+    case 270:
+      metamsg("Ask the robot to open the door with ROBOT,OPEN DOOR, then head through it, N.")
+      break
+    case 280:
+      metamsg("Head NORTH.")
+      break
+    case 300:
+      metamsg("GET ROD.")
+      break
+    case 310:
+      metamsg("Go back SOUTH, tell the robot to go north (ROBOT,N), then go NORTH yourself and tell the robot to get the rod (ROBOT,GET ROD).")
+    case 320:
+      metamsg("Tell the robot to get the rod (ROBOT,GET ROD).")
+      break
+    case 330:
+      metamsg("Tell the robot to put the rod i the reactor (ROBOT,PUT ROD IN REACT).")
+      break
+    case 340:
+      metamsg("Tell the robot to get the rod (ROBOT,GET ROD).")
+      break
+    case 350:
+      metamsg("Tell the robot to put the rod in the reactor (ROBOT,PUT ROD IN REACTOR).")
+      break
+    case 370:
+      if (w.me.loc === 'reactor_room') {
+        metamsg("Head SOUTH, then WEST, then once in the lift, PRESS 3.")
+      }
+      else if (w.me.loc === 'laboratory' || w.me.loc === 'lounge') {
+        metamsg("Head WEST, then once in the lift, PRESS 3.")
+      }
+      else if (w.me.loc === 'lift') {
+        metamsg("PRESS 3.")
+      }
+      else {
+        metamsg("Head to either the lounge or the laboratory, then go WEST, then once in the lift, PRESS 3.")
+      }
+      break
+    case 380:
+      metamsg("GO EAST.")
+      break
     default:
       errormsg("No hint for: " + w.me.hints)
   }
   return world.SUCCESS_NO_TURNSCRIPTS;
 }
 
-
-findCmd('MetaSave').script = function() {
-  script:lang.saveLoadScript()
-  if (w.me.hints = 180) {
-    tmsg("So in Quest 6 SAVE just tells you how to save your game. You need to add a file name to actually save. Do that now!")
-    w.me.hints = 190
-  }
-  return world.SUCCESS_NO_TURNSCRIPTS;
-}
 
 
 // eat, purchase/sell, switch on/off, unlock, look behind/under/etc, push/pull
@@ -140,16 +173,38 @@ const walkthroughs = {
     "ask robot about the laboratory", "hint",
     "topics for robot",
     "ask robot about zeta-particles", "hint",
+    "w", "hint",
+    "press 3", "hint",
+    "e", "hint",
+    "ask robot about lift", "hint",
+    "ask robot about reactor", "hint",
     "ask robot to open door", "hint",
     "n", "hint",
-    "topic robot", "hint",
-    "ask robot about reactor", "hint",
+    "get rod", "hint",
+    "s", "hint",
     "robot,n", "hint",
-    "robot,x reactor", "hint",
+    "n", "hint",
+    "r,get r", "hint",
+    "r,put r in r", "hint",
+    "s", "hint",
+    "w", "hint",
+    "press 3", "hint",
+    "e", "hint",
+    "look out window", "hint",
+    "talk to prof",
    /*  */
   ]
 }
 
+
+findCmd('MetaSave').script = function() {
+  script:lang.saveLoadScript()
+  if (w.me.hints = 180) {
+    tmsg("So in Quest 6 SAVE just tells you how to save your game. You need to add a file name to actually save. Do that now!")
+    w.me.hints = 190
+  }
+  return world.SUCCESS_NO_TURNSCRIPTS;
+}
 
 
 
@@ -178,3 +233,18 @@ commands.unshift(new Cmd('Move', {
     return failedmsg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
   },
 }));
+
+
+
+commands.push(new Cmd('Tutorial', {
+  regex:/^tutorial$/,
+  objects:[
+  ],
+  script:function() {
+    $('body').toggleClass("hidden")
+    msg(lang.done_msg)
+    return world.SUCCESS_NO_TURNSCRIPTS
+  },
+}));
+
+

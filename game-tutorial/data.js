@@ -9,12 +9,15 @@ createItem("me", PLAYER(), {
 })
 
 createRoom("lounge", {
-  desc:"The lounge is pleasant, if rather bare. There is a{if:kitchen_door:locked: locked} door to the north",
+  desc:"The lounge is pleasant, if rather bare. There is a{if:kitchen_door:locked: locked} door to the north. A door to the west leads to the lift.",
   afterFirstEnter:function() {
-    tmsg("This is the first room, and the text is telling you about it. If there were things here, you would probably be told about, but we will come on to that later. You will also be told of any exits. This room has an exit north but it is currently locked.")
+    msg("The man you need to find is upstairs, but the lift does not work - it has no power. How can you get to him?") 
+    tmsg("This is the first room, and the text is telling you about it. If there were things here, you would probably be told about, but we will come on to that later. You will also be told of any exits. This room has an exit north, but it is currently locked.")
+    tmsg("We will get to the lift later.")
     tmsg("Before going any further, we should look at what is on the screen. Below this text, you should see a cursor. In this game it is a > sign, but other games might use different symbols or have a box. You type commands in there. Try it now by typing WAIT (I am going to put command for you to type in capitals; you do not need to).")
   },
   north:new Exit("kitchen"),
+  west:new Exit("lift", { isLocked:function() { return !w.reactor_room.reactorRunning }}),
   eventPeriod:1,
   eventActive:true,
   eventCount:0,
@@ -33,7 +36,7 @@ createRoom("lounge", {
       case 3:
         w.kitchen_door.locked = false
         tmsg("Time to move on. Something tells me that door to the north is not locked any more.")
-        tmsg("You might want to look at the room again before we going. Just type LOOK or just L. Hopefully it no longer says the door is locked.")
+        tmsg("You might want to look at the room again before we go. Just type LOOK or just L. Hopefully it no longer says the door is locked.")
         tmsg("Movement in adventure games is done following compass directions. To go north, type GO NORTH, or just NORTH or just N.")
         tmsg("You can also use the compass rose at the top left, or, in Quest 6, if your computer has a number pad, ensure \"Num Lock\" is on, and press the up key (i.e., 8).")
         tmsg("So I will see you in the next room...")
@@ -65,8 +68,6 @@ createItem("kitchen_door", LOCKED_DOOR([], "lounge", "kitchen"), {
 })
 
 
-w.kitchen_door.locked = false
-
 
 createRoom("basement", {
   desc:"A dank room, with a whole load of crates piled {ifNot:crates:moved:against the west wall}{if:crates:moved:up in the middle of the room. There is a door to the west}. Cobwebs hang from every beam.",
@@ -83,7 +84,7 @@ createRoom("basement", {
   },
   eventScript:function() {
     if (w.flashlight.switchedon && !this.flag1) {
-      tmsg("Great, at last we can see down here. And it turns out there there is a light switch, but we needed the torch to see the switch.")
+      tmsg("Great, at last we can see down here. And it turns out there is a light switch, but we needed the torch to see the switch.")
       tmsg("It is quite common for torch batteries to run out after so many turns, and then you have to re-charge it or find a battery. Hopefully that will not happen here, but it would be a good idea to save the battery just in case, so turn the light on, and turn off the torch.")
       this.flag1 = true
       w.me.hints = 140
@@ -206,7 +207,7 @@ createItem("hat", WEARABLE(), {
   afterWear:function() {
     if (!this.flag2) {
       tmsg("You look very fetching in that hat!")
-      tmsg("You can check what you are carrying at any time wth the INVENTORY command - or just type INV or I.")
+      tmsg("You can check what you are carrying at any time with the INVENTORY command - or just type INV or I.")
       tmsg("You don't need to pick something up to look at it, and there may be things hidden in the location description that can be examined (or even picked up). The description for this room mentioned the grass, what happens if you examine that?")
       w.me.hints = 60
     }
@@ -220,7 +221,7 @@ createItem("grass", {
     msg("The grass is green, and recently cut.")
     if (!this.flagged) {
       tmsg("To be honest, you will come across things mentioned in descriptions that the author has not implemented, and the game will just tell you it does not know what you are talking about (like the cobwebs in the basement!), but in an ideal world you will be able to examine everything.")
-      msg("A large wooden box falls from the sky! Miraculously, it sees to have survived in tact.")
+      msg("A large wooden box falls from the sky! Miraculously, it seems to have survived intact.")
       tmsg("The box is a container, which means you can put things inside it and maybe find things already in it. Perhaps we should start by looking at it.")
       w.box.loc = "garden"
       w.me.hints = 70
@@ -308,7 +309,13 @@ createItem("crowbar", TAKEABLE(), {
     this.flag1 = true
   },
   use:function(isMultiple, char) {
-    // !!!
+    if (char.loc === 'laboratory' && w.lab_door.locked) {
+      msg("The crowbar is not going to help open that door.")
+      tmsg("Nice try, but you have to get the robot to open this door, not the crowbar.")
+      return false
+    }
+    if (!char.loc === 'garden') return falsemsg("There is nothing to use the crowbar on here.")
+    return w.shed_door.crowbar()
   },
 })
 
@@ -318,7 +325,7 @@ createItem("shed_door", {
   locked:true,
   scenery:true,
   crowbar:function() {
-    if (!this.locked) return failedmsg("The padlock is already off the lock.")
+    if (!this.locked) return falsemsg("The padlock is already off the lock.")
     msg("You put the crowbar to the padlock, and give a pull. The padlock breaks.")
     this.locked = false
     return true
@@ -404,31 +411,15 @@ createRoom("laboratory", {
   },
   lab_door_locked:true,
   east:new Exit("secret_passage"),
-  west:new Exit("office"),
+  west:new Exit("lift"),
   north:new Exit("reactor_room", {use:function(char) {
     if (char === w.me && w.lab_door.closed) return falsemsg("The door is too heavy for you to move.")
-    if (char === w.me && w.reactor_room.reactorRunning) {
-      msg("You start walking through the door to the north, but the robot stops you. 'The zeta-reactor is currently running,' he says. 'It would be dangerous for an organic person to approach it.'")
-      if (w.me.hints < 250) {
-        tmsg("Bother! But wait... the robot is not organic. We can send him in there to turn off the reactor.")
-        tmsg("You might want to do TOPIC ROBOT at this point - you will see \"reactor\" is a new topic. You could also ASK ROBOT ABOUT REACTOR.")
-        w.me.hints = 250
-      }
-      return false
-    }
     if (char === w.robot) {
       if (w.lab_door.closed) {
         msg("The robot opens the heavy door with ease.")
         w.lab_door.closed = false
       }
       world.setRoom(w.robot, "reactor_room", "north")
-      if (w.me.hints < 260) {
-        msg("'I am now in the reactor room,' says the robot, his voice coming from a speaker on the wall.")
-        msg("'Oh, can you hear me? describe the room.'")
-        msg("'The reactor room,' says the robot. '" + w.reactor_room.desc() + "'")
-        tmsg("Okay, so the robot is in the other room and apparently we can communicate with him, so we can tell him what to do.")
-        w.me.hints = 260
-      }
       return true
     }
     world.setRoom(w.me, "reactor_room", "north")
@@ -447,8 +438,10 @@ createItem("lab_door", OPENABLE(false), {
     if (char.strong) {
       this.closed = false;
       this.openMsg(isMultiple, char)
-      tmsg("Great, the robot could do it no trouble. Now we are on our way again.")
-      w.me.hints = 240
+      if (w.me.hints < 280) {
+        tmsg("Great, the robot could do it no trouble. Now we are on our way again.")
+        w.me.hints = 280
+      }
       return true
     }
     else {
@@ -492,19 +485,120 @@ createItem("brand_badges", COMPONENT("instruments"), {
 
 createRoom("reactor_room", {
   desc:function() {
-    return "The reactor room is dominated by a huge zeta-reactor, extending from a sunken area some five foot below floor level, up to the ceiling. Pipes and cables of varying sizes are connected to it{if:reactor_room:reactorRunning:, and the reactor is humming with power}."
+    return "The reactor room is dominated by a huge zeta-reactor, extending from a sunken area some five foot below floor level, up to the ceiling. Pipes and cables of varying sizes are connected to it{if:reactor_room:reactorRunning:, and the reactor is humming with power}.{ifHere:vomit: There is vomit in the corner.}"
   },
-  reactorRunning:true,
+  reactorRunning:false,
   south:new Exit("laboratory"),
+  afterFirstEnter:function() {
+    tmsg("It is quite common for a game to have a \"timed\" challenge - you have to complete it within a set number of turns (or even within an actual time limit). As this is a tutorial, you are perfectly safe, though you will get messages saying death is getting more imminent each turn (and will be negative once the time limit expires).")
+    tmsg("Hey, maybe we'll get some superpower from all that zeta-exposure! No, but seriously kids, zeta-particles are very dangerous, and to be avoided.")
+    tmsg("In Quest 6, a turn will not pass if you try a command that is not recognised or for meta-commands like HINT; that may not be the case in every game system.")
+    tmsg("It is a good idea to save before doing a timed challenge, by the way (we saved recently, so no need for us to save now).")
+    tmsg("Now, get that control rod!")
+    w.me.hints = 300
+  },
+  eventPeriod:1,
+  eventIsActive:function() { return w.me.loc === "reactor_room" },
+  countdown:6,
+  eventScript:function() {
+    this.countdown--
+    msg("A recorded voice echoes round the room: 'Warning: Zeta-particle levels above recommended safe threshold. Death expected after approximately {reactor_room.countdown} minutes of exposure.'")
+    switch (this.countdown) {
+      case 4:
+        msg("You are feeling a little nauseous.")
+        break
+      case 3:
+        msg("You start to get a headache.")
+        break
+      case 2:
+        msg("You are feeling very nauseous.")
+        break
+      case 1:
+        msg("You throw up, feeling very weak.")
+        w.vomit.loc = this.name
+        break
+      case 0:
+        msg("You have died.")
+        tmsg("Don't worry, you are not really dead; this is just a tutorial. Unfortunately, that does mean the next warning will say you will die in minus one minute, as the countdown goes below zero.")
+        break
+    }
+    if (w.me.hints < 320 && w.robot.loc === this.name) {
+      tmsg("Great, now we can tell the robot to get the rod. By the way, Quest 6 is pretty good at guessing nouns, and often you only need to type a few letters, or even just one letter if there is nothing else here it might be confused with. Try R,Get R. Quest will realise the first R is a character, so will assume you mean robot, while the second R is something in the location that can be picked up.")
+      w.me.hints = 320
+    }
+  }  
 })
 
 
 
-createRoom("reactor", {
+createRoom("reactor", CONTAINER(false), {
   examine:function() {
-    return "The reactor is composed of a series of rings, hoops and cylinder arranged on a vertical axis. Some are shiny metal, other dull black, but you have no idea of the significant of any of them.{if:reactor_room:reactorRunning: An intense blue light spills ouyt from various points up it length.}"
+    return "The reactor is composed of a series of rings, hoops and cylinders arranged on a vertical axis. Some are shiny metal, other dull black, but you have no idea of the significant of any of them.{if:reactor_room:reactorRunning: An intense blue light spills out from various points up it length.}"
   },
   scenery:true,
+  loc:'reactor_room',
+  testRestrictions:function(object, char) {
+    if (object === w.control_rod) return true
+    msg("That cannot go in there!")
+    return false
+  },
+  putInResponse:function() {
+    if (w.control_rod.loc === this.name) {
+      msg("The reactor starts to glow with a blue light, and you can hear it is now buzzing.")
+      w.reactor_room.reactorRunning = true
+      if (w.me.hints < 370) {
+        tmsg("Now we are getting somewhere. At last the lift that we saw in the lounge right at the start is working, and we can use it to get to the top of the house.")
+        w.me.hints = 370
+      }
+      
+      
+    }
+  },
+})
+
+createRoom("vomit", {
+  examine:"You decide against looking too closely at the vomit, but it occurs to you that perhaps you should tell the robot about it.",
+  scenery:true,
+})
+
+createItem("control_rod", TAKEABLE(), {
+  examine:"The control rod is about two foot long, and a dull black colour.",
+  take:function(isMultiple, char) {
+    if (this.isAtLoc(char.name)) {
+      msg(prefix(this, isMultiple) + lang.already_have(char, this));
+      return false;
+    }
+    if (!char.canManipulate(this, "take")) return false;
+    
+    if (char === w.me) {
+      msg("As you go to grab the control rod, a recorded message says: 'Warning: Control rod is highly zeta-active. Handling will result in instant death.' You decide upon reflection that you do not want to pick it up that much.")
+      if (!this.flag1) {
+        tmsg("Well that's a bother! But there must be some way around. We need to use the lift, and to do that we need to get the reactor going. Given the author has gone to trouble to set this up, there must be some way to get the control rod.")
+        tmsg("We can get the robot to do it!")
+        tmsg("You will need top go back to the other room, get the robot to come here, then tell the robot to pick up the control rod.")
+        w.me.hints = 310
+      }
+      this.flag1 = true
+      return false 
+    }
+    let flag = (this.loc === "reactor")
+    msg(prefix(this, isMultiple) + lang.take_successful(char, this))
+    this.moveToFrom(char.name)
+    if (flag) {
+      msg("The blue light in the reactor winks out and the buzz dies.")
+      w.reactor_room.reactorRunning = false
+    }
+    if (w.me.hints < 350) {
+      tmsg("Now you need to tell the robot to put the rod in the reactor. Try R,PUT R IN R and see how it fares!")
+      w.me.hints = 350
+    }
+    return true
+  },
+  loc:'control_rod_repository',
+})
+
+createItem("control_rod_repository", SURFACE(), {
+  examine:"The control rod repository is a cross between a shelf and a cradle; it is attached to the wall like a shelf, but shaped like a cradle to hold the control rod.",
   loc:'reactor_room',
 })
 
@@ -512,22 +606,78 @@ createRoom("reactor", {
 
 
 
-
-
-
 createRoom("office", {
   desc:function() {
-    return "The office is a fair-size, dominated by a large desk, with an elderly computer sat on it. Sat behind the desk is Professor Kleinscope."
+    return "The office is a fair-size, dominated by a large desk, with an elderly computer sat on it. Sat behind the desk is Professor Kleinscope. Behind the desk is a large window."
   },
-  east:new Exit("laboratory"),
+  west:new Exit("lift"),
   afterFirstEnter:function() {
-    if (w.me.hints < 200) {
-      tmsg("Okay, so not bothering with saving...")
-    }
     tmsg("You could tell the robot to do something and, being a robot, it would just do it. Professor Kleinscope will not.")
-    tmsg("However, you can chat with him, just type TALK TO PROFESSOR KLEINSCOPE.")
-    tmsg("Actually, you only need to TALK TO PROF or even just TALK TO K; Quest 6 will guess what you are referring to the Professor, as he is the only thing here beginning with a K (and in fact Quest 6 will guess it is a person you want to talk to, so as long as he is the only person with a name starting with K you will be good.")
     w.me.hints = 210
   },
+})
+
+createItem("office_window", {
+  examine:"The control rod repository is a cross between a shelf and a cradle; it is attached to the wall like a shelf, but shaped like a cradle to hold the control rod.",
+  loc:'office',
+  scenery:true,
+  lookout:'Out of the window you can see the garden, full of happy memories of putting things in and out of boxes.',
+})
+
+
+
+
+
+createRoom("lift", TRANSIT("east"), {
+  desc:function() {
+    return "The lift is small; according the plaque it is limited to just three people."
+  },
+  alias:'elevator',
+  east:new Exit("laboratory"),
+  afterFirstEnter:function() {
+    tmsg("The lift (or elevator) is a special location in that it moves. You probably already knew that! To get it to go, just press one of the buttons.")
+    w.me.hints = 240
+  },
+  transitCheck:function() {
+    if (!w.reactor_room.reactorRunning) {
+      msg("The lift does not seem to be working.")
+      if (w.me.hints < 250) {
+        tmsg("Something is wrong... Perhaps we should ask the robot about it?")
+        w.me.hints = 250
+      }
+      return false
+    }
+    return true;
+  },
+  transitOnMove:function(transitDest, exitName) {
+    if (w.me.hints < 380 && transitDest === 'office') {
+      w.me.hints = 380
+      tmsg("Hopefully when we exit the lift we will be somewhere new...")
+    }
+  }
+})
+
+createItem("button_1", TRANSIT_BUTTON("lift"), {
+  alias:"Button: 1",
+  examine:"A button with the letter 1 on it.",
+  transitDest:"laboratory",
+  transitAlreadyHere:"You press the button; nothing happens.",
+  transitGoToDest:"You press the button; the door closes and the lift ascends.",
+})
+
+createItem("button_2", TRANSIT_BUTTON("lift"), {
+  alias:"Button: 2",
+  examine:"A button with the letter 2 on it.",
+  transitDest:"lounge",
+  transitAlreadyHere:"You press the button; nothing happens.",
+  transitGoToDest:"You press the button; the door closes and the lift moves.",
+})
+
+createItem("button_3", TRANSIT_BUTTON("lift"), {
+  alias:"Button: 3",
+  examine:"A button with the letter 3 on it.",
+  transitDest:"office",
+  transitAlreadyHere:"You press the button; nothing happens.",
+  transitGoToDest:"You press the button; the door closes and the lift descends.",
 })
 

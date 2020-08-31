@@ -5,7 +5,7 @@ createItem("robot", NPC(false), {
   examine:"The robot is approximately man-shaped, if a little squat. It looks a little... clunky, like might have been designed in the fifties.",
   strong:true,
 
-  eventActive:function() { w.me.loc === 'laboratory' },
+  eventIsActive:function() { w.me.loc === 'laboratory' },
   eventPeriod:1,
   eventScript:function() {
     if (w.me.hints < 250 && this.loc === 'reactor_room') {
@@ -53,7 +53,7 @@ createItem("robot", NPC(false), {
         msg("'What is a zeta-particle?' you ask the robot.")
         msg("'Zeta-particles were discovered in Atlantis over 300 years ago, but knowledge of them was lost when that great city disappeared. They offer unlimited power and a cure for all diseases,' says the robot.")
         if (w.me.hints < 230) {
-          tmsg("Great, you are having a conversation with someone. Now we know all about zeta-particles, let's see if we can get him to do something, like open the door to the north. You can try ASK ROBOT TO OPEN THE DOOR or ROBOT,OPEN DOOR.")
+          tmsg("Great, you are having a conversation with someone. But it is Professor Kleinscope we want to talk to, so let's take the lift up to him.")
           w.me.hints = 230
         }
       }
@@ -62,8 +62,29 @@ createItem("robot", NPC(false), {
       name:'reactor',
       test:function(p) { return p.text.match(/\b(reactor)\b/) && w.me.hints >= 250 },
       script:function() {
-        msg("'How do I turn off the reactor?' you ask the robot.")
-        msg("'The control rod must be removed from the core and placed in the repository,' says the robot.")
+        msg("'How do I turn on the reactor?' you ask the robot. 'And where is it, anyway?'")
+        msg("'The control rod must be placed in the reactor core,' says the robot. 'The reactor is through the door to the north.'")
+        if (w.me.hints < 270) {
+          tmsg("So we need to head north, but that door is too heavy to open yourself; you need to get the robot to do it. We can tell the robot to do something with TELL ROBOT TO. followed by the usual command, or just ROBOT, (note the comma). Once the door is open, head to the reactor.")
+          w.me.hints = 270
+        }
+      }
+    },
+    {
+      name:'lift',
+      test:function(p) { return p.text.match(/\b(lift|elevator)\b/) && w.lift.visited > 0 },
+      script:function() {
+        msg("'What's the deal with the lift?' you ask the robot.")
+        if (w.reactor_room.reactorRunning) {
+          msg("'The zeta-lift - or zeta-elevator - is operating normally,' says the robot.")
+        }
+        else {
+          msg("'The zeta-lift - or zeta-elevator - is powered by the zeta-reactor, which is currently not running,' says the robot.")
+        }
+        if (w.me.hints < 260) {
+          tmsg("We need to So we need the reactor to be running. Better ask the robot about that.")
+          w.me.hints = 260
+        }
       }
     },
     {
@@ -89,13 +110,46 @@ createItem("robot", NPC(false), {
       msg:"The robot has no interest in that.",
       failed:true,
     }
-  ]    
+  ],
+  tellOptions:[
+    {
+      name:'vomit',
+      test:function(p) {
+        return p.text.match(/\b(vomit|puke|sick)\b/) && w.vomit.loc === 'reactor_room'  
+      },
+      script:function() {
+        msg("'Er, so it looks like there might be some vomit over there,' you say, a little sheepishly.")
+        msg("'I suppose you expect me to clean it up?' he replies.")
+        msg("'Well, you are a robot...'")
+        msg("'And therefore subservient?'")
+        msg("'No, no... Er, and therefore you have no sense of smell.'")
+        msg("'Hmm. I will deal with the erstwhile contents of your stomach in a bit.'")
+      },
+      failed:true,
+    },
+    {
+      test:function(p) { return p.text.match(/fuck|shit|crap|wank|cunt|masturabat|tit|cock|pussy|dick/) },
+      script:function() {
+        msg("The robot certainly has no interest in {i:that}!")
+        if (!this.flag) {
+          tmsg("I'm not angry.")
+          tmsg("Just disappointed.")
+          this.flag = true
+        }
+      },
+      failed:true,
+    },
+    {
+      msg:"The robot has no interest in that.",
+      failed:true,
+    }
+  ],
 })
 
 
 
 createItem("Professor_Kleinscope", NPC(false), {
-  loc:"laboratory",
+  loc:"office",
   examine:"The Professor is a slim tall man, perhaps in his forties, dressed, inevitably in a lab coat. Curiously his hair is neither white nor wild.",
   talkto:function() {
     switch (this.talktoCount) {

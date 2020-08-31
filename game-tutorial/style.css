@@ -186,6 +186,16 @@ span.compassbutton {
 .dark-body > div > div > .tutorial {
   color: lightblue;
 }
+
+
+.hidden {}
+
+
+.hidden  > div > div > .tutorial {
+  display: none;
+}
+
+
 .meta {
   color: grey;
 }
