@@ -101,16 +101,30 @@ test.tests = function() {
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:67:yes:no}"));
   test.assertEqual("Simple text: ", processText("Simple text: {if:player:someOddAtt:50:yes}"));
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:67:yes}"));
-  test.assertEqual("Simple text: yes", processText("Simple text: {ifMoreThan:player:someOddAtt:50:yes:no}"));
-  test.assertEqual("Simple text: no", processText("Simple text: {ifLessThan:player:someOddAtt:50:yes:no}"));
-  test.assertEqual("Simple text: ", processText("Simple text: {ifLessThan:player:someOddAtt:50:yes}"));
+  
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifMoreThan:player:someOddAtt:66:yes:no}"));
+  test.assertEqual("Simple text: no", processText("Simple text: {ifMoreThan:player:someOddAtt:67:yes:no}"));
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifMoreThanOrEqual:player:someOddAtt:67:yes:no}"));
+  test.assertEqual("Simple text: no", processText("Simple text: {ifMoreThanOrEqual:player:someOddAtt:68:yes:no}"));
+
+
+  test.assertEqual("Simple text: no", processText("Simple text: {ifLessThan:player:someOddAtt:67:yes:no}"));
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifLessThan:player:someOddAtt:68:yes}"));
+  test.assertEqual("Simple text: no", processText("Simple text: {ifLessThanOrEqual:player:someOddAtt:66:yes:no}"));
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifLessThanOrEqual:player:someOddAtt:67:yes}"));
+
+
+  test.title("Text processor 3");
   game.player.someOddAtt = true;
   test.assertEqual("Simple text: true", processText("Simple text: {show:player:someOddAtt}"));
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: no", processText("Simple text: {ifNot:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: seen first time only", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
 
-  test.title("Text processor 3");
+
+
+
+  test.title("Text processor 4");
   test.assertEqual("Simple text: other times", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
   test.assertEqual("Simple text: other times", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
   test.assertEqual("Simple text: p2=red", processText("Simple text: p2={param:p2}", {p1:"yellow", p2:"red"}));
@@ -123,7 +137,7 @@ test.tests = function() {
 
 
 
-  test.title("Text processor 4");
+  test.title("Text processor 5");
   test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:'Kyle'}));
   test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:w.Kyle}));
   test.assertEqual("Kyle is your bear.", processText("{nv:Kyle:be} {pa:me} bear."));
@@ -136,7 +150,7 @@ test.tests = function() {
   test.assertEqual("It is Kyle's book.", processText("It is {nms:chr:the} book.", {chr:w.Kyle}));
 
   
-  test.title("Text processor 5");
+  test.title("Text processor 6");
   test.assertEqual("Kyle is a bear.", processText("{Kyle.alias} is a bear."));
   test.assertEqual("Kyle is a bear.", processText("{show:Kyle:alias} is a bear."));
   test.assertEqual("Kyle is a bear.", processText("{Kyle:alias} is a bear."));

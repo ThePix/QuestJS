@@ -35,7 +35,7 @@ settings.setup = function() {
 }
 
 
-settings.panes = 'None'
+//settings.panes = 'None'
 
 settings.roomTemplate = [
   "#{cap:{hereName}}",

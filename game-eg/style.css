@@ -158,10 +158,23 @@ span.compassbutton {
   display:none;
 }
 
+.popup-link {
+  cursor:pointer;
+  color:blue;
+}
 
 
-
-
+.popup {
+  position:fixed;
+  z-index:9999;
+  display:none;
+  cursor:pointer;
+  left:50px;
+  top:40%;
+  width:40%;
+  background-color:yellow;
+  border:2px solid;
+}
 
 
 // Used by showMenu
