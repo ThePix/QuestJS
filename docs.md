@@ -163,25 +163,25 @@ Converts the string to the standard direction name, so "down", "dn" and "d" will
 
 
 
-### Function: _arraySubtract_(a, b)
+### Function: _array.subtract_(a, b)
 
 Returns a new array, derived by subtracting each element in b from the array a. If b is not an array, then b itself will be removed. Unit tested.
 
 
 
-### Function: _arrayCompare_(a, b)
+### Function: _array.compare_(a, b)
 
 Returns true if the arrays a and b are equal. They are equal if both are arrays, they have the same length, and each element in order is the same. Assumes a is an array, but not b. Unit tested
 
 
 
-### Function: _arrayRemove_(ary, el)
+### Function: _array.remove_(ary, el)
 
-Removes the element el from the array, ary. Unlike arraySubtract, no new array is created; the original aray is modified, and nothing is returned.
+Removes the element el from the array, ary. Unlike array.subtract, no new array is created; the original aray is modified, and nothing is returned.
 
 
 
-### Function: _arrayFilterByAttribute_(ary, attName, value)
+### Function: _array.filterByAttribute_(ary, attName, value)
 
 Returns a new array based on ary, but including only those objects for which the attribute attName is equal to value. To filter for objects that do not have the attribute you can filter for the value undefined.
 

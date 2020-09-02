@@ -136,11 +136,11 @@ dungeon.decorateRoom = function(room, level, theme) {
     room.desc = random.fromArray(room.roomType.descs)
     
     if (exits.length === 1) {
-      room.desc += ' The only exit is ' +  arrayAtts(exits) + '.'
+      room.desc += ' The only exit is ' +  array.atts(exits) + '.'
     }
     else {
       room.desc += ' There are exits '
-      room.desc += formatList(arrayAtts(exits), {lastJoiner:" and "})
+      room.desc += formatList(array.atts(exits), {lastJoiner:" and "})
       room.desc += '.'
     }
   }

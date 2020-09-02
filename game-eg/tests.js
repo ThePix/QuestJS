@@ -59,21 +59,32 @@ test.tests = function() {
 
   
   
-  test.title("arrayCompare");
-  test.assertEqual(false, arrayCompare([1, 2, 4, 6, 7], [1, 2, 3]));
-  test.assertEqual(true, arrayCompare([1, 2, 4], [1, 2, 4]));
-  test.assertEqual(false, arrayCompare([w.coin, w.boots, w.ring], [w.boots, w.ring]));
-  test.assertEqual(true, arrayCompare([w.boots, w.ring], [w.boots, w.ring]));
+  test.title("array.compare");
+  test.assertEqual(false, array.compare([1, 2, 4, 6, 7], [1, 2, 3]));
+  test.assertEqual(true, array.compare([1, 2, 4], [1, 2, 4]));
+  test.assertEqual(false, array.compare([w.coin, w.boots, w.ring], [w.boots, w.ring]));
+  test.assertEqual(true, array.compare([w.boots, w.ring], [w.boots, w.ring]));
+
+
+  test.title("array.compareUnordered");
+  test.assertEqual(false, array.compareUnordered([1, 2, 4, 6, 7], [1, 2, 3]));
+  test.assertEqual(true, array.compareUnordered([1, 2, 4], [1, 2, 4]));
+  test.assertEqual(true, array.compareUnordered([4, 1, 2], [1, 2, 4]));
+  test.assertEqual(false, array.compareUnordered([4, 1, 2, 4], [1, 2, 4]));
+  test.assertEqual(false, array.compareUnordered([w.coin, w.boots, w.ring], [w.boots, w.ring]));
+  test.assertEqual(true, array.compareUnordered([w.boots, w.ring], [w.boots, w.ring]));
+  test.assertEqual(true, array.compareUnordered([w.ring, w.boots], [w.boots, w.ring]));
+
 
   
-  test.title("arraySubtract");
-  test.assertEqual([4, 6, 7], arraySubtract([1, 2, 4, 6, 7], [1, 2, 3]));
-  test.assertEqual(['4', '6', '7'], arraySubtract(['1', '2', '4', '6', '7'], ['1', '2', '3']));
-  test.assertEqual([w.coin, w.boots], arraySubtract([w.coin, w.boots, w.ring], [w.ring]));
+  test.title("array.subtract");
+  test.assertEqual([4, 6, 7], array.subtract([1, 2, 4, 6, 7], [1, 2, 3]));
+  test.assertEqual(['4', '6', '7'], array.subtract(['1', '2', '4', '6', '7'], ['1', '2', '3']));
+  test.assertEqual([w.coin, w.boots], array.subtract([w.coin, w.boots, w.ring], [w.ring]));
   
-  test.title("arrayAtts");
+  test.title("array.atts");
   const testAry = [w.boots, w.book, w.cardboard_box]
-  test.assertEqual(['boots', 'book', 'cardboard_box'], arrayAtts(testAry));
+  test.assertEqual(['boots', 'book', 'cardboard_box'], array.atts(testAry));
 
   test.title("Text processor 1");
   test.assertEqual("Simple text", processText("Simple text"));
@@ -404,7 +415,7 @@ test.tests = function() {
   test.assertCmd("get garage", "You take the garage key.");
   test.assertCmd("e", ["You head east.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock, Kyle (wearing a straw boater) and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("kyle,n", "Kyle tries the door to the garage, but it is locked.");
-  test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: Kyle can't take it.", "Camera: Kyle takes the camera.", "Big_kitchen_table: Kyle can't take it.", "Jug: Kyle takes the jug."]);
+  test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: Kyle can't take it.", "Camera: Kyle takes the camera.", "Big kitchen table: Kyle can't take it.", "Jug: Kyle takes the jug."]);
   test.assertCmd("kyle, drop picture box", "Kyle drops the camera.");
   test.assertCmd("kyle, open trapdoor", "Kyle opens the trapdoor.");
   test.assertCmd("kyle, down", "You watch Kyle disappear through the trapdoor.");
@@ -552,11 +563,11 @@ test.tests = function() {
   
   
   test.title("Transit");
-  test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can see a Button: G, a Button: 1 and a Button: 2 here.", "You can go east."]);
+  test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
   test.assertCmd("push button: g", ["You're already there mate!"]);
   test.assertCmd("push 1", ["You press the button; the door closes and the lift heads to the first floor. The door opens again."]);
   test.assertCmd("e", ["You head east.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
-  test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can see a Button: G, a Button: 1 and a Button: 2 here.", "You can go east."]);
+  test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
   w.lift.transitOnMove = function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); };
   test.assertCmd("push 1", ["You press the button; nothing happens."]);
   test.assertCmd("push 2", ["That does nothing, the button does not work."]);
@@ -568,7 +579,7 @@ test.tests = function() {
   };
   w.lift.transitAutoMove = true;
   w.lift.afterEnter = transitOfferMenu;
-  test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can see a Button: G, a Button: 1 and a Button: 2 here.", "You can go east.", "The lift is out of order", "The dining room", "An old-fashioned room.", "You can see a brick, a chair and a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) here.", "You can go east, up or west."]);
+  test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east.", "The lift is out of order", "The dining room", "An old-fashioned room.", "You can see a brick, a chair and a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) here.", "You can go east, up or west."]);
   
   
   test.title("Push");

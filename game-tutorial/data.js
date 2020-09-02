@@ -30,14 +30,14 @@ createRoom("lounge", {
         break
       case 2:
         tmsg("Some games have commands that tell you about the game or set it up differently to suit the player. In Quest 6 (but not necessarily other games) none of these count as a turn, so try a couple, and when you are done, do WAIT again.")
-        tmsg("Type DARK to toggle dark mode; some users find if easier to see light text on a dark background. Type SPOKEN to toggle hearing the text read out. Type SILENT to toggle the sounds and music.")
+        tmsg("Type DARK to toggle dark mode; some users find if easier to see light text on a dark background. Type SPOKEN to toggle hearing the text read out. Type SILENT to toggle the sounds and music (not that there are any in this game).")
         tmsg("You can also type HELP to see some general instructions (but you are doing the tutorial, so no point in this game. You can also do ABOUT or CREDITS. Less common is the HINT common; if implemented it will give you a clue of what to do next. In this game, as it is a tutorial, it will tell you exactly what to do.")
         break
       case 3:
         w.kitchen_door.locked = false
         tmsg("Time to move on. Something tells me that door to the north is not locked any more.")
         tmsg("You might want to look at the room again before we go. Just type LOOK or just L. Hopefully it no longer says the door is locked.")
-        tmsg("Movement in adventure games is done following compass directions. To go north, type GO NORTH, or just NORTH or just N.")
+        tmsg("Movement in adventure games is done following compass directions. To go north, type GO NORTH, or NORTH or just N.")
         tmsg("You can also use the compass rose at the top left, or, in Quest 6, if your computer has a number pad, ensure \"Num Lock\" is on, and press the up key (i.e., 8).")
         tmsg("So I will see you in the next room...")
         w.me.hints = 20
@@ -48,11 +48,11 @@ createRoom("lounge", {
 
 
 createRoom("kitchen", {
-  desc:"This is the second room.",
+  desc:"The litchen looks clean and well-equipped.",
   afterFirstEnter:function() {
     tmsg("Great, we can move around!")
-    tmsg("From here we can go back south to the lounge. General in you enter a room from one direction you will be able to go back that way, but not always.")
-    tmsg("As well as going north, south, east and west, you can also go along the diagonals, as well as up and down, and in and out. The room has a basement you can go DOWN to and a larder you can go IN. Try moving with the compass rose; note how the buttons change depending on the available exits.")
+    tmsg("From here we can go back south to the lounge. Generally when you enter a room from one direction you will be able to go back that way, but not always.")
+    tmsg("As well as going north, south, east and west, you can also go along the diagonals, as well as up and down, and in and out. This room has a basement you can go DOWN to and a larder you can go IN. Try moving with the compass rose; note how the buttons change depending on the available exits.")
     tmsg("The tutorial continues in the garden to the northeast (type NORTHEAST or just NE).")
     w.me.hints = 30
   },
@@ -91,10 +91,17 @@ createRoom("basement", {
     }
     if (!w.flashlight.switchedon && w.light_switch.switchedon && !this.flag2) {
       tmsg("So we have managed to turn on a light!")
-      tmsg("A lot of adventure games are like this in that you need to do A, but to do that you need to do B, but you cannot do B without doing C first, and so on. And often - as here - you do not know what A even is. So we turned a light on? So what? Where has that got us?")
-      tmsg("Well, we can now see those crates. Perhaps we should investigate them.")
+      tmsg("A lot of adventure games are like this in that you need to do A, but to do that you need to do B, but you cannot do B without doing C first, and so on. And often - as here - you do not know what A even is.")
+      tmsg("There are a few things down here that we might want to grab. Most adventure games understand the word ALL, so we can just do GET ALL to pick up the lot.")
       this.flag2 = true
       w.me.hints = 150
+    }
+    if (parser.currentCommand.all && w.me.hints < 160) {
+      tmsg("Great, you used ALL!")
+      tmsg("Note that ALL will not include items that are scenery, so not the cobwebs (which are actual objects, try TAKE COBWEBS), and there are some objected we could not pick up.")
+      tmsg("You also DROP ALL, WEAR ALL, etc. though some commands will not like it. You might also want to try eating the apple or reading the newspaper.")
+      tmsg("When you are done, on with the plot! So we cannot take the crates with us, but trying to do so was useful because the response gave us a clue as to what we can do - we can move them.")
+      w.me.hints = 160
     }
   }
 });
@@ -124,11 +131,6 @@ createItem("crates", {
   },
   take:function(isMultiple, char) {
     msg(prefix(this, isMultiple) + 'The crates are too heavy to pick... But you might be able to move them.')
-    if (!this.takeflag) {
-      tmsg("So we cannot take the crates with us, but trying to do so was useful because the response gave us a clue as to what we can do - we can move them.")
-      this.takeflag = true
-      w.me.hints = 160
-    }
     return false
   },    
 })
@@ -146,6 +148,17 @@ createItem("cobwebs", {
     return false
   },    
   scenery:true,
+});
+
+createItem("old_newspaper", TAKEABLE(), {
+  examine:'A newspaper from the eighties; yellow with age.',
+  read:'You spend a few minutes reading about what happens on the day 14th June 1987 (or perhaps the day before).',
+  loc:'basement',
+});
+
+createItem("apple", EDIBLE(), {
+  examine:'A rosy red apple.',
+  loc:'basement',
 });
 
 
@@ -182,12 +195,14 @@ createRoom("garden", {
       }
     },
   }),
-  smell:function() {
-    msg("You can smell the roses.")
-    tmsg("You can also smell specific items, so SMELL ROSES would have also worked.")
-    tmsg("Let's interact with something!")
-    tmsg("There is a hat here. You know that because the description tells you, and also it is listed in the panel at the left. To get the hat, type GET HAT or TAKE HAT.")
-    w.me.hints = 40
+  onSmell:function() {
+    msg("You can smell the roses; they smell lovely!")
+    if (w.me.hints < 40) {
+      tmsg("You can also smell specific items, so SMELL ROSES would have also worked.")
+      tmsg("Let's interact with something!")
+      tmsg("There is a hat here. You know that because the description tells you, and also it is listed in the panel at the left. To get the hat, type GET HAT or TAKE HAT.")
+      w.me.hints = 40
+    }
   },
 })
 
@@ -196,7 +211,7 @@ createItem("hat", WEARABLE(), {
   loc:"garden",
   onMove:function(toLoc) {
     if (!this.flag1 && toLoc === 'me') {
-      tmsg("You will be picking up things a lot in text adventures. You should see the hat listed as worn in the panel to the left now. Some games have limits, so be might only be able to pick up eight items, or whatever.")
+      tmsg("You will be picking up things a lot in text adventures. You should see the hat listed as held in the panel to the left now. Some games have limits on how much can be held, so be might only be able to pick up eight items, or whatever.")
       tmsg("It is always worthwhile examining an object as it might give you a clue about what it is for. You can examine the hat by typing EXAMINE HAT, LOOK AT HAT or just X HAT. Or click on it in the panel, and select \"Examine\" from the menu.")
       tmsg("Most commands in a text adventure will be of the form &lt;verb&gt; &lt;verb&gt;.")
       tmsg("Hats can be worn, so let's put it on! You can type WEAR HAT or DON HAT or PUT HAT ON or PUT ON HAT as you prefer.")
@@ -254,6 +269,7 @@ createItem("roses", {
   },
   loc:"garden",
   scenery:true,
+  pronouns:lang.pronouns.plural,
 })
 
 
@@ -346,7 +362,7 @@ createRoom("shed", {
     tmsg("Incidentally, you can call it a flashlight if you prefer.")
     w.me.hints = 120
   },
-  east:new Exit("garden", { alsoDir:['out']}),
+  west:new Exit("garden", { alsoDir:['out']}),
 })
 
 
@@ -385,7 +401,7 @@ createRoom("secret_passage", {
   desc:"The passage heads west.",
   afterFirstEnter:function() {
     tmsg("Not much in this room, so let's pause for a moment. It is a good idea to save occasionally whilst playing, just in case you die (not possible in this game) or lose the connection to the server (not an issue for Quest 6) or your PC crashes or you just have some else to do and want to return later. You really do not want to have to start from the beginning, so save your game.")
-    tmsg("Different systems have different ways to handle saving and loading 9and some games may not support it at all), but a good start is to type SAVE.")
+    tmsg("Different systems have different ways to handle saving and loading (and some games may not support it at all), but a good start is to type SAVE.")
     w.me.hints = 180
   },
   east:new Exit("basement"),
@@ -400,7 +416,7 @@ createRoom("secret_passage", {
 
 
 createRoom("laboratory", {
-  desc:"This is a laboratory of some sort. The room is full of screen and instruments, but you cannot tell what sort of science is being done here. There is a big steel door {ifNot:lab_door:locked:lying open }to the north{if:lab_door:locked:; you feel pretty sure it will be too heavy for you to open}.",
+  desc:"This is a laboratory of some sort. The room is full of screens and instruments, but you cannot tell what sort of science is being done here. There is a big steel door {ifNot:lab_door:locked:lying open }to the north{if:lab_door:locked:; you feel pretty sure it will be too heavy for you to open}.",
   afterFirstEnter:function() {
     if (w.me.hints < 200) {
       tmsg("Okay, so not bothering with saving...")
@@ -608,12 +624,12 @@ createItem("control_rod_repository", SURFACE(), {
 
 createRoom("office", {
   desc:function() {
-    return "The office is a fair-size, dominated by a large desk, with an elderly computer sat on it. Sat behind the desk is Professor Kleinscope. Behind the desk is a large window."
+    return "The office is a fair-size, dominated by a large desk, with an elderly computer sat on it. Sat behind the desk is Professor Kleinscope. Behind the desk is a large window, and on the wall to the right is an odd painting."
   },
   west:new Exit("lift"),
   afterFirstEnter:function() {
-    tmsg("You could tell the robot to do something and, being a robot, it would just do it. Professor Kleinscope will not.")
-    w.me.hints = 210
+    tmsg("You could tell the robot to do something and, being a robot, it would just do it. Professor Kleinscope will not. In fact, you cannot ASK or TELL him stuff either. To converse with the Professor, you need to TALK TO him.")
+    w.me.hints = 400
   },
 })
 
@@ -624,7 +640,42 @@ createItem("office_window", {
   lookout:'Out of the window you can see the garden, full of happy memories of putting things in and out of boxes.',
 })
 
+createItem("painting", {
+  examine:"The painting at first glance is abstract, but after staring at it for a few minutes, you realise is is actually a portrait of a woman in a blue dress with a bizarre hat.",
+  loc:'office',
+  scenery:true,
+  lookbehind:'You look behind the painting, but inexplicably there is no safe there.',
+})
 
+createItem("chair", FURNITURE({sit:true, stand:true}), {
+  examine:"The painting at first glance is abstract, but after staring at it for a few minutes, you realise is is actually a portrait of a woman in a blue dress with a bizarre hat.",
+  loc:'office',
+  scenery:true,
+  onsitting:function(char) {
+    if (w.Professor_Kleinscope.loc === 'office') {
+      msg("'Making yourself at home, I see...' notes Professor Kleinscope.")
+    }
+  },
+  onstanding:function(char) {
+    if (w.Professor_Kleinscope.loc === 'office') {
+      msg("'I'd rather you kept your feet {i:off} the furniture,' says Professor Kleinscope crossly.")
+    }
+  },
+  testForPosture:function(char, posture) {
+    if (w.Professor_Kleinscope.flag) return true
+    msg("You think about " + posture + " on the chair, but are unsure how Professor Kleinscope - given he is already sat on it.")
+    return false
+  },
+})
+
+
+
+createItem("computer", {
+  examine:"The computer is so old it is beige.",
+  loc:'office',
+  scenery:true,
+  use:'The computer is password protected.',
+})
 
 
 

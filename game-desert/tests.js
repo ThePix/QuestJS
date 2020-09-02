@@ -39,17 +39,17 @@ test.tests = function() {
   
   
   
-  test.title("arrayCompare");
-  test.assertEqual(false, arrayCompare([1, 2, 4, 6, 7], [1, 2, 3]));
-  test.assertEqual(true, arrayCompare([1, 2, 4], [1, 2, 4]));
-  test.assertEqual(false, arrayCompare([w.coin, w.boots, w.ring], [w.boots, w.ring]));
-  test.assertEqual(true, arrayCompare([w.boots, w.ring], [w.boots, w.ring]));
+  test.title("array.compare");
+  test.assertEqual(false, array.compare([1, 2, 4, 6, 7], [1, 2, 3]));
+  test.assertEqual(true, array.compare([1, 2, 4], [1, 2, 4]));
+  test.assertEqual(false, array.compare([w.coin, w.boots, w.ring], [w.boots, w.ring]));
+  test.assertEqual(true, array.compare([w.boots, w.ring], [w.boots, w.ring]));
 
   
-  test.title("arraySubtract");
-  test.assertEqual([4, 6, 7], arraySubtract([1, 2, 4, 6, 7], [1, 2, 3]));
-  test.assertEqual(['4', '6', '7'], arraySubtract(['1', '2', '4', '6', '7'], ['1', '2', '3']));
-  test.assertEqual([w.coin, w.boots], arraySubtract([w.coin, w.boots, w.ring], [w.ring]));
+  test.title("array.subtract");
+  test.assertEqual([4, 6, 7], array.subtract([1, 2, 4, 6, 7], [1, 2, 3]));
+  test.assertEqual(['4', '6', '7'], array.subtract(['1', '2', '4', '6', '7'], ['1', '2', '3']));
+  test.assertEqual([w.coin, w.boots], array.subtract([w.coin, w.boots, w.ring], [w.ring]));
   
 
   test.title("Text processor 1");

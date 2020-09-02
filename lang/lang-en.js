@@ -65,7 +65,8 @@ const lang = {
   Remove:/^(?:remove|doff|take off) (?:my |your |his |her |)(.+)$/,
   Remove2:/^take (?:my |your |his |her |)(.+) off$/,
   Read:/^(?:read) (.+)$/,
-  Eat:/^(?:eat) (.+)$/,
+  SmellItem:/^(?:smell|sniff) (.+)$/,
+  ListenToItem:/^(?:listen to|listen) (.+)$/,
   Purchase:/^(?:purchase|buy) (.+)$/,
   Sell:/^(?:sell) (.+)$/,
   Smash:/^(?:smash|break|destroy) (.+)$/,
@@ -318,6 +319,12 @@ const lang = {
     return lang.pronounVerb(item, "'be", true) + " not something you can lie on.";
   },
 
+  cannot_smell:function(char, item) {
+    return lang.pronounVerb(item, "have", true) + " no smell.";
+  },
+  cannot_listen:function(char, item) {
+    return lang.pronounVerb(item, "be", true) + " not making any noise.";
+  },
   cannot_eat:function(char, item) {
     return lang.pronounVerb(item, "'be", true) + " not something you can eat.";
   },

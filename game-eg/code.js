@@ -19,13 +19,13 @@ function firstTimeTesting() {
   });
   const a = ["one", "two", "three"]
   console.log(a)
-  arrayRemove(a, "two")
+  array.remove(a, "two")
   console.log(a)
-  arrayRemove(a, "three")
+  array.remove(a, "three")
   console.log(a)
-  arrayRemove(a, "three")
+  array.remove(a, "three")
   console.log(a)
-  arrayRemove(a, "one")
+  array.remove(a, "one")
   console.log(a)
 }
 

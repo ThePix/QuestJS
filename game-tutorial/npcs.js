@@ -150,13 +150,32 @@ createItem("robot", NPC(false), {
 
 createItem("Professor_Kleinscope", NPC(false), {
   loc:"office",
-  examine:"The Professor is a slim tall man, perhaps in his forties, dressed, inevitably in a lab coat. Curiously his hair is neither white nor wild.",
+  examine:"The Professor is a slim tall man, perhaps in his forties, dressed, inevitably in a lab coat. Curiously his hair is neither white nor wild.{ifNot:Professor_Kleinscope:flag: He",
   talkto:function() {
-    switch (this.talktoCount) {
-      case 0 : msg("You say 'Hello,' to Professor Kleinscope, and he replies in kind."); break;
-      case 1 : msg("You ask Mary how to get upstairs. 'You know,' she replies, 'I have no idea.'"); break;
-      case 2 : msg("'Where do you sleep?' you ask Mary."); msg("'What's \"sleep\"?'"); break;
-      default: msg("You wonder what you can talk to Mary about."); break;
+    if (!this.flag) {
+      msg("You say 'Hello,' to Professor Kleinscope.")
+      msg("He looks up, apparently seeing you for the first time. 'Hello,yes?'")
+      msg("'Your dinner is ready.'")
+      msg("'What? Already? Well, I better get downstairs then!' He gets to his feet.")
+      msg(" ")
+      msg("Congratulations, you have won!")
+      tmsg("So this is where we say good bye; you have completed the game. It would be usual at this point for the game to terminate, preventing further input, in this case you might want to continue to experiment. You might want to LOOK OUT the window or LOOK BEHIND the painting. You could also try SIT ON CHAIR or USE COMPUTER - just do not expect much from them!")
+      this.flag = true
+      w.me.hints = 500
+      this.agenda = [
+        "text:The Professor locks his computer.", 
+        "text:Professor Kleinscope heads to the lift.", 
+        "moveTo:lounge:Professor Kleinscope emerges from the lift, and glances round the room as though it is unfamiliar to him.",
+        "waitFor:player:'Now what was I doing?' says Professor Kleinscope to himself.",
+        "text:Professor Kleinscope heads to the kitchen.",
+        "moveTo:kitchen:Professor Kleinscope enters the kitchen.",
+        "waitFor:player:'Oh, you're here too,' says Professor Kleinscope.",
+        "text:'Now, where's my dinner?' says Professor Kleinscope. 'Are you sure you got the message right?'",
+      ]
+    }
+    else {
+      msg("'Professor?'");
+      msg("'Not now, my boy,' he says. He looks at you again. 'You are a boy, aren't you? Important appointment with my dinner!'");
     }
   },
 })

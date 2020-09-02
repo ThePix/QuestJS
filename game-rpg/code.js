@@ -132,7 +132,7 @@ const skills = {
   
 
   terminate:function(spell, item) {
-    arrayRemove(item.activeEffects, spell.name)
+    array.remove(item.activeEffects, spell.name)
     delete item['countdown_' + spell.name]
     let s = "The {i:" + spell.name + "} spell" + (item === game.player ? '' : " on " + item.byname({article:DEFINITE})) + " terminates."
     if (spell.terminatingScript) s += spell.terminatingScript(item)

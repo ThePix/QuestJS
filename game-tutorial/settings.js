@@ -1,7 +1,7 @@
 "use strict";
 
 // About your game
-settings.title = "How To Play Text Adventures";
+settings.title = "Professor Kleinscope";
 settings.author = "The Pixie"
 settings.version = "0.1";
 settings.thanks = [];
@@ -32,7 +32,7 @@ settings.afterLoad = function() {
 }
 
 settings.intro = [
-  "Welcome to... The Tutorial House. Can you find the odd mystery beneath this seemingly ordinary house?",
+  "You have an urgent message for Professor Kleinscope. His office is upstairs, but getting there will not be easy.",
 ]
 
 settings.setup = function() {

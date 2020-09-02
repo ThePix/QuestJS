@@ -47,13 +47,13 @@ findCmd('MetaHint').script = function() {
       metamsg("GET TORCH.")
       break
     case 130:
-      metamsg("TURN ON TORCH, then head to the basement (southwest, then down). If you are in the basement and it is dark, you will need to go back up, and then turn the torch on before coming back down.")
+      metamsg("TURN ON TORCH, then head to the basement (out, southwest, then down). If you are in the basement and it is dark, you will need to go back up, and then turn the torch on before coming back down.")
       break
     case 140:
       metamsg("SWITCH ON THE LIGHT, and then TURN OFF THE TORCH (in that order!).")
       break
     case 150:
-      metamsg("See what happens if you try to GET CRATES.")
+      metamsg("Try GET ALL to pick up everything.")
       break
     case 160:
       metamsg("You cannot take the crates, but you might be able to MOVE CRATES.")
@@ -128,6 +128,12 @@ findCmd('MetaHint').script = function() {
     case 380:
       metamsg("GO EAST.")
       break
+    case 400:
+      metamsg("TALK TO PROF.")
+      break
+    case 500:
+      metamsg("No hints, you have finished the game!")
+      break
     default:
       errormsg("No hint for: " + w.me.hints)
   }
@@ -164,7 +170,7 @@ const walkthroughs = {
     "down", "hint",
     "turn on light", "hint",
     "turn off torch", "hint",
-    "get crates", "hint",
+    "get all", "hint",
     "move crates", "hint",
     "w", "hint",
     "save", "hint",
@@ -190,6 +196,7 @@ const walkthroughs = {
     "w", "hint",
     "press 3", "hint",
     "e", "hint",
+    "sit on chair", "hint",
     "look out window", "hint",
     "talk to prof",
    /*  */
@@ -200,7 +207,7 @@ const walkthroughs = {
 findCmd('MetaSave').script = function() {
   script:lang.saveLoadScript()
   if (w.me.hints = 180) {
-    tmsg("So in Quest 6 SAVE just tells you how to save your game. You need to add a file name to actually save. Do that now!")
+    tmsg("So in Quest 6 SAVE just tells you how to save your game. You need to add a file name to actually save. Do that now! You can call it whatever you want; how about \"tutorial\"?")
     w.me.hints = 190
   }
   return world.SUCCESS_NO_TURNSCRIPTS;

@@ -1,0 +1,2 @@
+cls
+jruby TestQToQJS.rb
