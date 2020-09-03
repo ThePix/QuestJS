@@ -157,11 +157,9 @@ createItem("Professor_Kleinscope", NPC(false), {
       msg("He looks up, apparently seeing you for the first time. 'Hello,yes?'")
       msg("'Your dinner is ready.'")
       msg("'What? Already? Well, I better get downstairs then!' He gets to his feet.")
-      msg(" ")
-      msg("Congratulations, you have won!")
-      tmsg("So this is where we say good bye; you have completed the game. It would be usual at this point for the game to terminate, preventing further input, in this case you might want to continue to experiment. You might want to LOOK OUT the window or LOOK BEHIND the painting. You could also try SIT ON CHAIR or USE COMPUTER - just do not expect much from them!")
+      tmsg("Maybe now he is not sitting there we can use the computer.")
       this.flag = true
-      w.me.hints = 500
+      w.me.hints = 410
       this.agenda = [
         "text:The Professor locks his computer.", 
         "text:Professor Kleinscope heads to the lift.", 

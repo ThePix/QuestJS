@@ -6,7 +6,7 @@ settings.author = "The Pixie"
 settings.version = "0.1";
 settings.thanks = [];
 settings.warnings = 'No warning relevant for this game.'
-settings.files = ["code", "data", "npcs"];
+settings.files = ["data", "code", "npcs"];
 settings.debug = true
 settings.noTalkTo = false
 settings.noAskTell = false
@@ -32,7 +32,7 @@ settings.afterLoad = function() {
 }
 
 settings.intro = [
-  "You have an urgent message for Professor Kleinscope. His office is upstairs, but getting there will not be easy.",
+  "Your mission is to retrieve some files from the computer of Professor Kleinscope. His office is upstairs, but getting there will not be easy.",
 ]
 
 settings.setup = function() {

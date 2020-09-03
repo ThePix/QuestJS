@@ -449,6 +449,9 @@ const lang = {
     return sentenceCase(item.byname({article:DEFINITE})) + " is not a vessel.";
   },
 
+  cannot_drop:function(char, item) {
+    return lang.pronounVerb(char, "can't", true) + " drop " + item.pronouns.objective + ".";
+  },
   not_carrying:function(char, item) {
     return lang.pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
   },

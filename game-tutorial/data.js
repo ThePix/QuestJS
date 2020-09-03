@@ -8,6 +8,14 @@ createItem("me", PLAYER(), {
   hints:10,
 })
 
+createItem("usb_stick", {
+  alias:'USB stick',
+  examine:"a plain black USB stick; you can download the files on to this.",
+  loc:'me'
+})
+
+
+
 createRoom("lounge", {
   desc:"The lounge is pleasant, if rather bare. There is a{if:kitchen_door:locked: locked} door to the north. A door to the west leads to the lift.",
   afterFirstEnter:function() {
@@ -32,6 +40,7 @@ createRoom("lounge", {
         tmsg("Some games have commands that tell you about the game or set it up differently to suit the player. In Quest 6 (but not necessarily other games) none of these count as a turn, so try a couple, and when you are done, do WAIT again.")
         tmsg("Type DARK to toggle dark mode; some users find if easier to see light text on a dark background. Type SPOKEN to toggle hearing the text read out. Type SILENT to toggle the sounds and music (not that there are any in this game).")
         tmsg("You can also type HELP to see some general instructions (but you are doing the tutorial, so no point in this game. You can also do ABOUT or CREDITS. Less common is the HINT common; if implemented it will give you a clue of what to do next. In this game, as it is a tutorial, it will tell you exactly what to do.")
+        tmsg("For completeness, I will also mention TRANSCRIPT (or just SCRIPT), which will record your game session, and can be useful when testing someone's game. You can also use BRIEF, TERSE and VERBOSE to control how often room descriptions are shown, but I suggest we keep it VERBOSE for this tutorial.")
         break
       case 3:
         w.kitchen_door.locked = false
@@ -91,6 +100,7 @@ createRoom("basement", {
     }
     if (!w.flashlight.switchedon && w.light_switch.switchedon && !this.flag2) {
       tmsg("So we have managed to turn on a light!")
+      tmsg("A lot of adventure games are like this in that you need to do A, but to do that you need to do B, but you cannot do B without doing C first, and so on. And often - as here - you do not know what A even is.")
       tmsg("A lot of adventure games are like this in that you need to do A, but to do that you need to do B, but you cannot do B without doing C first, and so on. And often - as here - you do not know what A even is.")
       tmsg("There are a few things down here that we might want to grab. Most adventure games understand the word ALL, so we can just do GET ALL to pick up the lot.")
       this.flag2 = true
@@ -152,7 +162,12 @@ createItem("cobwebs", {
 
 createItem("old_newspaper", TAKEABLE(), {
   examine:'A newspaper from the eighties; yellow with age.',
-  read:'You spend a few minutes reading about what happens on the day 14th June 1987 (or perhaps the day before).',
+  read:'You spend a few minutes reading about what happens on the day 14th June 1987 (or perhaps the day before). A somewhat mocking article about an archaelogist, Dr Ruudhorn, and Atlantis catches your eye.',
+  loc:'basement',
+});
+
+createItem("rope", TAKEABLE(), {
+  examine:'About 25 foot long; it looks old, but serviceable.',
   loc:'basement',
 });
 
@@ -624,12 +639,15 @@ createItem("control_rod_repository", SURFACE(), {
 
 createRoom("office", {
   desc:function() {
-    return "The office is a fair-size, dominated by a large desk, with an elderly computer sat on it. Sat behind the desk is Professor Kleinscope. Behind the desk is a large window, and on the wall to the right is an odd painting."
+    return "The office is a fair-size, dominated by a large desk. {ifNot:Professor_Kleinscope:flag:Sat behind the desk is Professor Kleinscope. }There is an elderly computer sat on the desk {once:- this must be the computer with the files on it; getting the files will not be possible while the Professor is sat there, however}. Behind the desk is a large window, and on the wall to the right is an odd painting."
   },
-  west:new Exit("lift"),
+  west:new Exit("lift", { use:function() {
+    if (this.lift_exit_locked) return falsemsg("The lift door is closed. You suspect Professor Kleinscope is in he lift and on his way up right now.")
+      
+  }}),
   afterFirstEnter:function() {
-    tmsg("You could tell the robot to do something and, being a robot, it would just do it. Professor Kleinscope will not. In fact, you cannot ASK or TELL him stuff either. To converse with the Professor, you need to TALK TO him.")
-    w.me.hints = 400
+    tmsg("Great we must be nearly done! Just use the computer...")
+    w.me.hints = 390
   },
 })
 
@@ -644,8 +662,26 @@ createItem("painting", {
   examine:"The painting at first glance is abstract, but after staring at it for a few minutes, you realise is is actually a portrait of a woman in a blue dress with a bizarre hat.",
   loc:'office',
   scenery:true,
-  lookbehind:'You look behind the painting, but inexplicably there is no safe there.',
+  lookbehind:function() {
+    if (w.Professor_Kleinscope.loc === 'office') {
+      msg("'Please don't touch that,' says the Professor as you reach out, 'it's very expensive.'")
+    }
+    else {
+      msg('You look behind the painting, but inexplicably there is no safe there. But there is a post-it note stuck to the back of the picture.')
+    }
+  },
 })
+
+
+createItem("postit_note", TAKEABLE(), {
+  alias:'post-it note',
+  examine:"The sticky yellow note has something written on it; the number {show:computer:code}.",
+  read:"The post-it note just has six digits written on it: {show:computer:code}.",
+  loc:'office',
+  scenery:true,
+})
+
+
 
 createItem("chair", FURNITURE({sit:true, stand:true}), {
   examine:"The painting at first glance is abstract, but after staring at it for a few minutes, you realise is is actually a portrait of a woman in a blue dress with a bizarre hat.",
@@ -663,7 +699,7 @@ createItem("chair", FURNITURE({sit:true, stand:true}), {
   },
   testForPosture:function(char, posture) {
     if (w.Professor_Kleinscope.flag) return true
-    msg("You think about " + posture + " on the chair, but are unsure how Professor Kleinscope - given he is already sat on it.")
+    msg("You think about " + posture + " on the chair, but are unsure how Professor Kleinscope feel about it - given he is already sat on it.")
     return false
   },
 })
@@ -674,7 +710,45 @@ createItem("computer", {
   examine:"The computer is so old it is beige.",
   loc:'office',
   scenery:true,
-  use:'The computer is password protected.',
+  code:random.int(10000, 999999).toString(),
+  use:function() {
+    if (!w.Professor_Kleinscope.flag) {
+      msg("You cannot use the computer while Professor Kleinscope is sat there using it himself!")
+      if (w.me.hints < 400) {
+        tmsg("Bother! We need to shift the professor. You could tell the robot to do something and, being a robot, it would just do it. Professor Kleinscope will not. In fact, you cannot ASK or TELL him stuff either. To converse with the Professor, you need to TALK TO him. Let's see what happens...")
+        w.me.hints = 400
+      }
+    }
+    else if (w.Professor_Kleinscope.loc === 'office') {
+      msg("You reach a hand out to the keyboard. 'Hands off!' insists the Professor.{once: 'I have some very important files on there, and I don't want the likes of you messing with them.'}")
+      tmsg("I have a feeling if we just wait a few turns Kleinscope will head off and look for his dinner.")
+    }
+    else {
+      msg("You press a key on the keyboard, and a message appears on the screen: 'Please input your six digit PIN.'")
+      askQuestion("PIN?", function(result) {
+        if (result === w.computer.code) {
+          msg("You type \"" + result + "\", and unlock the computer. You put in your USB stick, and download the files... It takes nearly twenty minutes, this is one slow computer.")
+          if (w.me.hints < 420) {
+            tmsg("Cool, you found the number without any prompting from me.")
+          }
+          msg("As you remove the USB stick, an alarm sounds, and you hear a voice: 'Warning: Illegal access to USB port detected. Warning: Illegal access to USB port detected.'")
+          tmsg("Who knew such an old computer will be protected? The Professor will be here soon, coming up the lift. You need to find another way out."
+          w.me.hints = 420
+          w.office.lift_exit_locked = true
+        }
+        else {
+          msg("You type \"" + result + "\", but it fails to unlock the computer.")
+          if (w.me.hints < 420) {
+            tmsg("Oh heck!")
+            tmsg("Just occasionally a game will ask you for some specific text, which it will understand to be different to a command. In this case it is wanting a specific six-digit number (by the way, that number was randomly generated when you started the game, so you cannot cheat by asking someone on the internet what it is).")
+            tmsg("But worry not! This guy is a professor, therefore he necessarily must be absent-minded, therefore he will have the number written down somewhere. We just need to find it.")
+            tmsg("By he way, this is a small example of a \"Babel fish puzzle\". The name comes from the Hitch-Hiker's Guide to the Galaxy, and is when you have a seemingly simple task, but there is an obstacle; each time you resolve one obstacle a new one is apparent.")
+            w.me.hints = 420
+          }
+        }
+      })
+    }
+  },
 })
 
 

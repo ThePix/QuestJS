@@ -128,8 +128,17 @@ findCmd('MetaHint').script = function() {
     case 380:
       metamsg("GO EAST.")
       break
+    case 390:
+      metamsg("Try to USE THE COMPUTER.")
+      break
     case 400:
       metamsg("TALK TO PROF.")
+      break
+    case 410:
+      metamsg("Wait until the professor goes, then try to USE COMPUTER again.")
+      break
+    case 420:
+      metamsg("Look for the code for the computer. Try LOOK BEHIND PAINTING, then read what you find. Once you have the number, try to USE THE COMPUTER again.")
       break
     case 500:
       metamsg("No hints, you have finished the game!")
@@ -198,7 +207,16 @@ const walkthroughs = {
     "e", "hint",
     "sit on chair", "hint",
     "look out window", "hint",
-    "talk to prof",
+    "use computer", "hint",
+    "talk to prof", "hint",
+    "use computer",
+    "z",
+    "use computer",
+    "000000", "hint",
+    "look behind painting", "hint",
+    "x post-it", "hint",
+    "use computer",
+    w.computer.code, "hint",
    /*  */
   ]
 }
@@ -255,3 +273,24 @@ commands.push(new Cmd('Tutorial', {
 }));
 
 
+/*
+
+tie up prof
+Wait, what are you doing? I said talk to him! I hope you've thought this through.
+
+tie up robot
+tie robot to x etc
+
+wrap newspaper round fist
+
+throw out window
+
+kill/attack
+
+
+      msg(" ")
+      msg("Congratulations, you have won!")
+      tmsg("So this is where we say good bye; you have completed the game. It would be usual at this point for the game to terminate, preventing further input, in this case you might want to continue to experiment. You might want to LOOK OUT the window or LOOK BEHIND the painting. You could also try SIT ON CHAIR or USE COMPUTER - just do not expect much from them!")
+
+
+*/
