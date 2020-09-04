@@ -176,6 +176,10 @@ createItem("Professor_Kleinscope", NPC(false), {
       msg("'Not now, my boy,' he says. He looks at you again. 'You are a boy, aren't you? Important appointment with my dinner!'");
     }
   },
+ getAgreement:function() {
+    msg("'I'm far to busy to do that!' says Kleinscope indignantly.");
+    return false;
+  },
 })
 
 

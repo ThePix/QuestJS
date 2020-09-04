@@ -85,6 +85,15 @@ body {
   display: None;
 }
 
+
+.paneDivFinished {
+  display: none;
+  font-size: 3em;
+  text-align: center;
+}
+
+
+
 /* Compass */
 td.compassbutton {
     border: black solid 1px;

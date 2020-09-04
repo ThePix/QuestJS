@@ -10,8 +10,18 @@ createItem("me", PLAYER(), {
 
 createItem("usb_stick", {
   alias:'USB stick',
-  examine:"a plain black USB stick; you can download the files on to this.",
+  examine:"A plain black USB stick; you can download the files on to this.",
   loc:'me'
+})
+
+createItem("fist", {
+  alias:'fist',
+  regex:/fist|hand|arm/,
+  examine:"That funny shaped thing on the end of your arm.",
+  isAtLoc:function(loc, situation) {
+    if (typeof loc !== 'string') loc = loc.name
+    return situation === world.PARSER && loc === 'me'
+  }
 })
 
 
@@ -166,7 +176,7 @@ createItem("old_newspaper", TAKEABLE(), {
   loc:'basement',
 });
 
-createItem("rope", TAKEABLE(), {
+createItem("rope", ROPE(false), {
   examine:'About 25 foot long; it looks old, but serviceable.',
   loc:'basement',
 });
@@ -642,9 +652,26 @@ createRoom("office", {
     return "The office is a fair-size, dominated by a large desk. {ifNot:Professor_Kleinscope:flag:Sat behind the desk is Professor Kleinscope. }There is an elderly computer sat on the desk {once:- this must be the computer with the files on it; getting the files will not be possible while the Professor is sat there, however}. Behind the desk is a large window, and on the wall to the right is an odd painting."
   },
   west:new Exit("lift", { use:function() {
-    if (this.lift_exit_locked) return falsemsg("The lift door is closed. You suspect Professor Kleinscope is in he lift and on his way up right now.")
-      
+    if (w.office.lift_exit_locked) return falsemsg("The lift door is closed. You suspect Professor Kleinscope is in he lift and on his way up right now.")
+    msg("You walk back into the lift.")
+    world.setRoom(w.me, this.name, this.dir)
   }}),
+  out:new Exit("garden", {
+    use:function() {
+      if (!w.office.window_exit_unlocked) {
+        msg("You look out the window. If is a long way down to the ground, and there are no handholds. You need a way to climb down.")
+        return false
+        if (w.me.hints < 470) w.me.hints = 470
+      }
+      msg("You climb out the window, and down the rope, quickly reaching the ground. You jump in your SUV, and drive away. A job well done.")
+      msg(" ")
+      msg("Congratulations, you have won!")
+      msg(" ")
+      tmsg("So this is where we say good bye; you have completed the game, and hopefully now have a pretty good idea of how to play parser-based adventure games (and perhaps even write some too).")
+      io.finish()
+    },
+    isHidden:function() { return !w.office_window.smashed },
+  }),
   afterFirstEnter:function() {
     tmsg("Great we must be nearly done! Just use the computer...")
     w.me.hints = 390
@@ -655,7 +682,18 @@ createItem("office_window", {
   examine:"The control rod repository is a cross between a shelf and a cradle; it is attached to the wall like a shelf, but shaped like a cradle to hold the control rod.",
   loc:'office',
   scenery:true,
-  lookout:'Out of the window you can see the garden, full of happy memories of putting things in and out of boxes.',
+  lookout:'Out of the window you can see the street at the front of the house. Your black SUV is parked at the side on the road.',
+  smash:function() {
+    if (w.old_newspaper.fist_wrapped) {
+      msg("With your fist wrapped in the old newspaper, you punch it through the window, breaking the glass. You take a moment to knock away the remaining jagged shards in the frame.")
+      this.smashed = true
+      if (w.me.hints < 460) w.me.hints = 460
+    }
+    else {
+      msg("You are about to put your fist through the window when it occurs to you that your hand will get ripped to shreds by the glass fragments, and you really do not want to leave DNA evidence here. It is definitely not that you hate the sight of blood.")
+      if (w.me.hints < 440) w.me.hints = 440
+    }
+  },
 })
 
 createItem("painting", {
@@ -684,7 +722,7 @@ createItem("postit_note", TAKEABLE(), {
 
 
 createItem("chair", FURNITURE({sit:true, stand:true}), {
-  examine:"The painting at first glance is abstract, but after staring at it for a few minutes, you realise is is actually a portrait of a woman in a blue dress with a bizarre hat.",
+  examine:"This is an elegant, white office chair in good condition.",
   loc:'office',
   scenery:true,
   onsitting:function(char) {
@@ -702,6 +740,15 @@ createItem("chair", FURNITURE({sit:true, stand:true}), {
     msg("You think about " + posture + " on the chair, but are unsure how Professor Kleinscope feel about it - given he is already sat on it.")
     return false
   },
+})
+
+
+
+createItem("desk", {
+  examine:"The desk is artfully curved, and made of a pale wood.",
+  loc:'office',
+  scenery:true,
+  attachable:true,
 })
 
 
@@ -728,12 +775,27 @@ createItem("computer", {
       askQuestion("PIN?", function(result) {
         if (result === w.computer.code) {
           msg("You type \"" + result + "\", and unlock the computer. You put in your USB stick, and download the files... It takes nearly twenty minutes, this is one slow computer.")
-          if (w.me.hints < 420) {
+          if (w.me.hints < 430) {
             tmsg("Cool, you found the number without any prompting from me.")
           }
           msg("As you remove the USB stick, an alarm sounds, and you hear a voice: 'Warning: Illegal access to USB port detected. Warning: Illegal access to USB port detected.'")
-          tmsg("Who knew such an old computer will be protected? The Professor will be here soon, coming up the lift. You need to find another way out."
-          w.me.hints = 420
+          tmsg("Who knew such an old computer will be protected? The Professor will be here soon, coming up the lift. You need to find another way out. How about the window?")
+          tmsg("I've held you hand for long enough, let's see if you can do this on your own - but remember, you can use the HINT command if you are stuck.")
+          if (w.old_newspaper.loc !== 'me' && w.rope.loc !== 'me' && w.old_newspaper.loc !== 'office' && w.rope.loc !== 'office') {
+            tmsg("That said, I see you lost the newspaper and the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon them here for you, just on the off-chance they will be needed.")
+            w.old_newspaper.loc = 'office'
+            w.rope.loc = 'office'
+          }
+          else if (w.old_newspaper.loc !== 'me' && w.old_newspaper.loc !== 'office') {
+            tmsg("That said, I see you lost the newspaper somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon it here for you, just on the off-chance it will be needed.")
+            w.old_newspaper.loc = 'office'
+          }
+          else if (w.rope.loc !== 'me' && w.rope.loc !== 'office') {
+            tmsg("That said, I see you lost the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon it here for you, just on the off-chance it will be needed.")
+            w.rope.loc = 'office'
+          }
+          
+          w.me.hints = 430
           w.office.lift_exit_locked = true
         }
         else {

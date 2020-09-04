@@ -166,8 +166,7 @@ createItem('message', {
     else {
       msg ("The message in the dust says 'You have lost!'")
     }
-    this.finished = true
-    $('#input').hide()
+    io.finish()
   },
   read:function() { this.examine() },
   eventPeriod:1,

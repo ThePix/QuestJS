@@ -598,7 +598,7 @@ test.tests = function() {
   
   test.title("Push");
   test.assertCmd("e", ["You head east.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."]);
-  test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a crate here.", "You can go north or west."]);
+  test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair, a crate and a rope here.", "You can go north or west."]);
   test.assertCmd("push crate", "That's not going to do anything useful.");
   test.assertCmd("push chair s", "It's not something you can move around like that.");
   w.broken_chair.shift = function() { msg("You try to push chair, but it just breaks even more."); return false; }
@@ -629,11 +629,27 @@ test.tests = function() {
   test.assertCmd("i", ["You are carrying a flashlight, a garage key and a suit (worn)."]);
   
   
-  test.title("pre-shop");
+  test.title("rope");
   test.assertCmd("o", ["You head out.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."]);
-  test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair here.", "You can go north or west."]);
+  test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
+  
+  
+  test.assertCmd("get rope", ['You take the rope.'])
+  test.assertCmd("tie rope to chair", ["You tie the rope to the broken chair."])
+  test.assertCmd("tie rope to chair", ["It already is."])
+  test.assertCmd("untie rope from chair", ["You untie the rope from the broken chair."])
+  test.assertCmd("untie rope from chair", ["The rope is not tied to the broken chair."])
+  
+
   test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
+  test.assertCmd("tie rope to crate", ["That is not something you can tie the the rope to."])
+  test.assertCmd("untie rope from crate", ["The rope is not tied to the crate."])
+
+
+  
+  
+  test.title("pre-shop");
   
   test.assertCmd("w", ["You head west.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
   test.assertCmd("n", ["You head north.", "The shop", "A funny little shop.", "You can go south."]);

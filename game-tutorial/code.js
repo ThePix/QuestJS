@@ -140,6 +140,21 @@ findCmd('MetaHint').script = function() {
     case 420:
       metamsg("Look for the code for the computer. Try LOOK BEHIND PAINTING, then read what you find. Once you have the number, try to USE THE COMPUTER again.")
       break
+    case 430:
+      metamsg("You need to escape, and the only way out is through the window. What happens if you SMASH THE WINDOW?")
+      break
+    case 440:
+      metamsg("You need to escape, and the only way out is through the window, but you need to wrap your hand in something first. How about that old newspaper (WRAP FIST IN NEWSPAPER)?")
+      break
+    case 450:
+      metamsg("You need to escape, and the only way out is through the window. What happens if you SMASH THE WINDOW now your fist is wrapped in newspaper?")
+      break
+    case 460:
+      metamsg("You need to escape, and the only way out is through the broken window. What happens if you try OUT?")
+      break
+    case 470:
+      metamsg("You need to escape, and the only way out is through the broken window, but it is a long way down and you will need to use the rope. To do that, TIE ROPE TO DESK, then THROW ROPE OUT WINDOW.")
+      break
     case 500:
       metamsg("No hints, you have finished the game!")
       break
@@ -217,6 +232,15 @@ const walkthroughs = {
     "x post-it", "hint",
     "use computer",
     w.computer.code, "hint",
+    "smash window", "hint",
+    "wrap fist in newspaper",
+    "wrap newspaper round hand",
+    "hint",
+    "smash window", "hint",
+    "out", "hint",
+    "tie rope to desk", "hint",
+    "throw rope out window", "hint",
+    "out",
    /*  */
   ]
 }
@@ -273,6 +297,72 @@ commands.push(new Cmd('Tutorial', {
 }));
 
 
+const wrapScript = function(obj1, obj2) {
+  if (obj2 !== w.old_newspaper) return failedmsg("You cannot wrap that round anything.")
+  if (obj1 !== w.fist) return failedmsg("You don't think that will achieve anything.")
+  if (obj2.fist_wrapped) return failedmsg("It already is.")
+  obj2.fist_wrapped = true
+  msg("You carefully wrap the old newspaper around your fist.")
+  if (w.me.hints < 450) w.me.hints = 450
+  return world.SUCCESS
+}
+
+const unwrapScript = function(obj1, obj2) {
+  if (obj2 !== w.old_newspaper) return failedmsg("They are not wrapped together.")
+  if (obj1 !== w.fist) return failedmsg("They are not wrapped together.")
+  if (!obj2.fist_wrapped) return failedmsg("They are not wrapped together.")
+  obj2.fist_wrapped = false
+  msg("You carefully unwrap the old newspaper from around your fist.")
+  if (w.me.hints = 450) w.me.hints = 440
+  return world.SUCCESS
+}
+
+
+commands.unshift(new Cmd('Wrap1', {
+  // wrap fist in newspaper
+  regex:/^(?:wrap|cover) (.+) (?:with|in) (.+)$/,
+  objects:[
+    {scope:parser.isHeld},
+    {scope:parser.isHeld},
+  ],
+  script:function(objects) { wrapScript(objects[0][0], objects[1][0]) },
+}));
+
+commands.unshift(new Cmd('Wrap2', {
+  // wrap newspaper round fist
+  regex:/^(?:wrap) (.+) (?:round|around) (.+)$/,
+  objects:[
+    {scope:parser.isHeld},
+    {scope:parser.isHeld},
+  ],
+  script:function(objects) { wrapScript(objects[1][0], objects[0][0]) },
+}));
+
+commands.unshift(new Cmd('Unwrap1', {
+  // unwrap fist
+  regex:/^(?:unwrap|uncover) (.+)$/,
+  objects:[
+    {scope:parser.isHeld},
+    {scope:parser.isHeld},
+  ],
+  script:function(objects) { unwrapScript(objects[0][0], w.old_newspaper) },
+}));
+
+commands.unshift(new Cmd('Unwrap2', {
+  // take newspaper off fist
+  regex:/^(?:take|remove) (.+) (?:off|from) (.+)$/,
+  objects:[
+    {scope:parser.isHeld},
+    {scope:parser.isHeld},
+  ],
+  script:function(objects) { unwrapScript(objects[1][0], objects[0][0]) },
+}));
+
+
+
+
+
+
 /*
 
 tie up prof
@@ -288,9 +378,5 @@ throw out window
 kill/attack
 
 
-      msg(" ")
-      msg("Congratulations, you have won!")
-      tmsg("So this is where we say good bye; you have completed the game. It would be usual at this point for the game to terminate, preventing further input, in this case you might want to continue to experiment. You might want to LOOK OUT the window or LOOK BEHIND the painting. You could also try SIT ON CHAIR or USE COMPUTER - just do not expect much from them!")
-
-
+what if the player does not have rope or newspaper?
 */

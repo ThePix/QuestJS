@@ -58,6 +58,11 @@
 }
 
 
+.paneDivFinished {
+  display: none;
+  font-size: 3em;
+  text-align: center;
+}
 
 
 // Used by showMenu

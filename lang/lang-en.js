@@ -110,6 +110,18 @@ const lang = {
   GiveTo:/^(?:give) (.+) (?:to) (.+)$/,
   NpcGiveTo1:/^(.+), ?(?:give) (.+) (?:to) (.+)$/,
   NpcGiveTo2:/^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/,
+
+  TieTo:/^(?:tie|fasten|attach) (.+) (?:to) (.+)$/,
+  NpcTieTo1:/^(.+), ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/,
+  NpcTieTo2:/^tell (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/,
+  Untie:/^(?:untie|unfasten|detach) (.+)$/,
+  NpcUntie1:/^(.+), ?(?:untie|unfasten|detach) (.+)$/,
+  NpcUntie2:/^tell (.+) to ?(?:untie|unfasten|detach) (.+)$/,
+  UntieFrom:/^(?:untie|unfasten|detach) (.+) (?:from) (.+)$/,
+  NpcUntieFrom1:/^(.+), ?(?:untie|unfasten|detach) (.+) (?:frm) (.+)$/,
+  NpcUntieFrom2:/^tell (.+) to ?(?:untie|unfasten|detach) (.+) (?:from) (.+)$/,
+
+
   PushExit:/^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
   NpcPushExit1:/^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
   NpcPushExit2:/^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
@@ -706,6 +718,9 @@ const lang = {
     metamsg("Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
+  
+  
+  game_over_html:'<p>G<br/>A<br/>M<br/>E<br/>/<br/>O<br/>V<br/>E<br/>R</p>',
 
   //----------------------------------------------------------------------------------------------
   //                                   DATA
