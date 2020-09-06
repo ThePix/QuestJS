@@ -20,7 +20,6 @@ const lang = {
   MetaSilent:/^(?:sh|silent)$/,
   MetaSpoken:/^spoken$/,
   MetaIntro:/^intro$/,
-  MetaUnspoken:/^unspoken$/,
   MetaBrief:/^brief$/,
   MetaTerse:/^terse$/,
   MetaVerbose:/^verbose$/,

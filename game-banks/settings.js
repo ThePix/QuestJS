@@ -26,15 +26,15 @@ settings.status = [
   function() { return "<td colspan=\"2\" align=\"center\"> </td>"; },
   function() { return "<td><i>You:</i></td><td align=\"right\">" + game.player.status + "%</td>"; },
   function() { return "<td><i>Ship:</i></td><td align=\"right\">" + w.Xsansi.status + "%</td>"; },
-  function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + world.Status(w.Ha_yoon) + "</td>"; },
-  function() { return "<td><i>Kyle:</i></td><td align=\"right\">" + world.Status(w.Kyle) + "</td>"; },
-  function() { return "<td><i>Ostap:</i></td><td align=\"right\">" + world.Status(w.Ostap) + "</td>"; },
-  function() { return "<td><i>Aada:</i></td><td align=\"right\">" + world.Status(w.Aada) + "</td>"; },
+  function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + settings.statusReport(w.Ha_yoon) + "</td>"; },
+  function() { return "<td><i>Kyle:</i></td><td align=\"right\">" + settings.statusReport(w.Kyle) + "</td>"; },
+  function() { return "<td><i>Ostap:</i></td><td align=\"right\">" + settings.statusReport(w.Ostap) + "</td>"; },
+  function() { return "<td><i>Aada:</i></td><td align=\"right\">" + settings.statusReport(w.Aada) + "</td>"; },
 ];
 
 
 
-function world.Status(obj) {
+settings.statusReport = function(obj) {
   if (typeof obj.status === "string") return obj.status;
   return obj.status + "%";
 }
@@ -88,7 +88,7 @@ settings.setup = function() {
 
 
 
-settings.startingDialogDisabled = true
+settings.startingDialogEnabled = true
 const professions = [
   {name:"Engineer", bonus:"mech"},
   {name:"Scientist", bonus:"science"},
@@ -109,30 +109,55 @@ const backgrounds = [
 ];
 
 
+let s = ooc_intro;
+s += '<p>Name: <input id="namefield" type="text" value="Ariel" /></p>';
+s += '<p>Male: <input type="radio" id="male" name="sex" value="male">&nbsp;&nbsp;&nbsp;&nbsp;';
+s += 'Female<input type="radio" id="female" name="sex" value="female" checked></p>';
+s += '<p>Profession: <select id="job">'
+for (let i = 0; i < professions.length; i++) {
+  s += '<option value="' + professions[i].name + '">' + professions[i].name + '</option>';
+}
+s += '</select></p>';
+//s += '<p>Background: <select id="background">'
+//for (let i = 0; i < backgrounds.length; i++) {
+//  s += '<option value="' + backgrounds[i].name + '">' + backgrounds[i].name + '</option>';
+//}
+s += '</select></p>';
+
+
+settings.startingDialogTitle = "Who are you?"
+settings.startingDialogWidth = 560
+settings.startingDialogHeight = 550
+settings.startingDialogHtml = s
+settings.startingDialogOnClick = function() {
+  let p = game.player;
+  const jobName = $("#job").val();
+  const job = professions.find(function(el) { return el.name === jobName; });
+  w.me.job = job.name;
+  w.me.jobBonus = job.bonus;
+  //w.me.background = backgrounds.find(function(el) { return el.name === background; });
+  w.me.isFemale = $("#female").is(':checked');
+  w.me.fullname = $("#namefield").val();
+}
+settings.startingDialogInit = function() {
+  $('#namefield').focus();
+}
+settings.startingDialogAlt = function() {
+  w.me.job = professions[0].name;
+  w.me.jobBonus = professions[0].bonus;
+  w.me.isFemale = true;
+  w.me.fullname = "Shaala";
+}
+
+
+
+
 $(function() {
   if (settings.startingDialogDisabled) {
-    w.me.job = professions[0].name;
-    w.me.jobBonus = professions[0].bonus;
-    w.me.isFemale = true;
-    w.me.fullname = "Shaala";
     return; 
   }
   const diag = $("#dialog");
   diag.prop("title", "Who are you?");
-  let s = ooc_intro;
-  s += '<p>Name: <input id="namefield" type="text" value="Ariel" /></p>';
-  s += '<p>Male: <input type="radio" id="male" name="sex" value="male">&nbsp;&nbsp;&nbsp;&nbsp;';
-  s += 'Female<input type="radio" id="female" name="sex" value="female" checked></p>';
-  s += '<p>Profession: <select id="job">'
-  for (let i = 0; i < professions.length; i++) {
-    s += '<option value="' + professions[i].name + '">' + professions[i].name + '</option>';
-  }
-  s += '</select></p>';
-  //s += '<p>Background: <select id="background">'
-  //for (let i = 0; i < backgrounds.length; i++) {
-  //  s += '<option value="' + backgrounds[i].name + '">' + backgrounds[i].name + '</option>';
-  //}
-  s += '</select></p>';
   
   diag.html(s);
   diag.dialog({
@@ -145,14 +170,6 @@ $(function() {
         text: "OK",
         click: function() {
           $(this).dialog("close");
-          let p = game.player;
-          const jobName = $("#job").val();
-          const job = professions.find(function(el) { return el.name === jobName; });
-          w.me.job = job.name;
-          w.me.jobBonus = job.bonus;
-          //w.me.background = backgrounds.find(function(el) { return el.name === background; });
-          w.me.isFemale = $("#female").is(':checked');
-          w.me.fullname = $("#namefield").val();
           if (settings.textInput) { $('#textbox').focus(); }
         }
       }

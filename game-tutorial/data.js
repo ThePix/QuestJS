@@ -682,17 +682,47 @@ createItem("office_window", {
   examine:"The control rod repository is a cross between a shelf and a cradle; it is attached to the wall like a shelf, but shaped like a cradle to hold the control rod.",
   loc:'office',
   scenery:true,
-  lookout:'Out of the window you can see the street at the front of the house. Your black SUV is parked at the side on the road.',
+  outside:[],
+  lookout:function() {
+    let s = 'Out of the window you can see the street at the front of the house. Your black SUV is parked at the side on the road.'
+    if (this.outside.length > 0) s += ' On the street below the house you can see ' + formatList(this.outside, {article:DEFINITE, lastJoiner:' and '}) + '.'
+    msg(s)
+  },
   smash:function() {
-    if (w.old_newspaper.fist_wrapped) {
+    if (this.smashed) {
+      return falsemsg("The window is already smashed.")
+    }
+    else if (w.old_newspaper.fist_wrapped) {
       msg("With your fist wrapped in the old newspaper, you punch it through the window, breaking the glass. You take a moment to knock away the remaining jagged shards in the frame.")
       this.smashed = true
       if (w.me.hints < 460) w.me.hints = 460
+      return true
     }
     else {
       msg("You are about to put your fist through the window when it occurs to you that your hand will get ripped to shreds by the glass fragments, and you really do not want to leave DNA evidence here. It is definitely not that you hate the sight of blood.")
       if (w.me.hints < 440) w.me.hints = 440
+      return false
     }
+  },
+  isThrowThroughable:function(item) {
+    if (this.smashed) return true
+    return falsemsg("You can't throw anything out of the window, it is closed.")
+  },
+  throwThrough:function(item) {
+    if (item !== w.rope) {
+      msg("You lob {nm:item:the} out the window; it lands on the street below.")
+      delete item.loc
+      office_window.outside.push(item)
+      return
+    }
+    if (!item.tiedTo1 && !item.tiedTo2) {
+      msg("You are about to heave the rope out the window when it occurs to you that it might be useful to tie one end to something first.")
+      return
+    }
+    msg("You throw the end of the rope out the window.")
+  },
+  open:function() {
+    return falsemsg("The window does not open.")
   },
 })
 

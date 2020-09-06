@@ -86,6 +86,31 @@ test.tests = function() {
   const testAry = [w.boots, w.book, w.cardboard_box]
   test.assertEqual(['boots', 'book', 'cardboard_box'], array.atts(testAry));
 
+
+
+  test.title("array.next");
+  test.assertEqual(w.cardboard_box, array.next(testAry, w.book));
+  test.assertEqual(false, array.next(testAry, w.cardboard_box));
+  test.assertEqual(w.boots, array.next(testAry, w.cardboard_box, true));
+
+
+  test.title("array.nextFlagged");
+  test.assertEqual(w.cardboard_box, array.nextFlagged(testAry, w.book, "container"));
+  test.assertEqual(false, array.nextFlagged(testAry, w.book, "notcontainer"));
+  test.assertEqual(false, array.nextFlagged(testAry, w.book, "wearable"));
+  test.assertEqual(w.boots, array.nextFlagged(testAry, w.book, "wearable", true));
+  test.assertEqual(false, array.nextFlagged(testAry, w.book, "notwearable", true));
+
+  test.title("array.clone");
+  const testAry2 = ['boots', 'book', 'cardboard_box', 'boots']
+  test.assertEqual(['boots', 'book', 'cardboard_box', 'boots'], array.clone(testAry2));
+  test.assertEqual(['boots', 'cardboard_box', 'book', 'boots'], array.clone(testAry2, {reverse:true}));
+  test.assertEqual(['boots', 'book', 'cardboard_box'], array.clone(testAry2, {compress:true}));
+
+
+
+
+
   test.title("Text processor 1");
   test.assertEqual("Simple text", processText("Simple text"));
   test.assertEqual("Simple <i>text</i>", processText("Simple {i:text}"));

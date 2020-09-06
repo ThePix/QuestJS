@@ -1,1 +1,1 @@
-jruby QToQJS.rb
+jruby QToQJS.rb house

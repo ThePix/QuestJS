@@ -236,6 +236,11 @@ const walkthroughs = {
     "wrap fist in newspaper",
     "wrap newspaper round hand",
     "hint",
+    "open window", "hint",
+    "use apple to smash window",
+    "smash window with newspaper",
+    "smash computer with crowbar",
+    //"smash window with crowbar",
     "smash window", "hint",
     "out", "hint",
     "tie rope to desk", "hint",
@@ -360,23 +365,82 @@ commands.unshift(new Cmd('Unwrap2', {
 
 
 
+commands.unshift(new Cmd('ThrowThrough', {
+  // throw rope out window
+  regex:/^(?:throw|chuck|hurl|toss|pitch|lob|heave) (.+) (?:out of|out|through) (.+)$/,
+  objects:[
+    {scope:parser.isHeld},
+    {scope:parser.isHere, attName:'throwThrough'},
+  ],
+  script:function(objects) { 
+    const item = objects[0][0]
+    const dest = objects[1][0]
+    if (!dest.isThrowThroughable) return failedmsg("You can't chuck stuff through {nm:dest:the}.", {dest:dest})
+    if (!dest.isThrowThroughable(item)) return world.FAILED
+    if (!item.isAtLoc("me")) return failedmsg("You are not holding {nm:item:the}.", {item:item})
+    dest.throwThroughable(item)
+    return world.SUCCESS
+  },
+}));
 
+
+const smashWithScript = function(item, dest) {
+  if (dest !== w.office_window) return failedmsg("That's not something you can smash.")
+  if (!item.isAtLoc("me")) return failedmsg("You are not holding {nm:item:the}.", {item:item})
+  if (w.office_window.smashed) return falsemsg("The window is already smashed.")
+
+  if (item === w.crowbar) {
+    msg("You strke the window with the crowbar, breaking the glass. You take a moment to knock away the remaining jagged shards in the frame.")
+    w.office_window.smashed = true
+    if (w.me.hints < 460) w.me.hints = 460
+    return world.SUCCESS
+  }
+  else {
+    msg("You can't smash the window using {nm:item:the}.", {item:item})
+    return world.FAILED
+  }
+}
+
+
+commands.unshift(new Cmd('SmashWith', {
+  // throw rope out window
+  regex:/^(?:smash|break|destroy) (.+) (?:with|using) (.+)$/,
+  objects:[
+    {scope:parser.isHere, attName:'throwThrough'},
+    {scope:parser.isHeld},
+  ],
+  script:function(objects) { 
+    return smashWithScript(objects[1][0], objects[0][0])
+  },
+}));
+
+
+commands.unshift(new Cmd('UseToSmash', {
+  // throw rope out window
+  regex:/^(?:use|using) (.+?) (?:to |)(?:smash|break|destroy) (.+)$/,
+  objects:[
+    {scope:parser.isHeld},
+    {scope:parser.isHere, attName:'throwThrough'},
+  ],
+  script:function(objects) { 
+    return smashWithScript(objects[0][0], objects[1][0])
+  },
+}));
+
+
+
+// use cx to smash y
+// robot smash x
 
 
 /*
-
-tie up prof
-Wait, what are you doing? I said talk to him! I hope you've thought this through.
-
-tie up robot
-tie robot to x etc
-
-wrap newspaper round fist
-
-throw out window
-
-kill/attack
-
-
-what if the player does not have rope or newspaper?
+commands.unshift(new Cmd('ThrowAt', {
+  // throw computer at window
+  regex:/^(?:wrap|cover) (.+) (?:with|in) (.+)$/,
+  objects:[
+    {scope:parser.isHeld},
+    {scope:parser.isHeld},
+  ],
+  script:function(objects) { wrapScript(objects[0][0], objects[1][0]) },
+}));
 */
