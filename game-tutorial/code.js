@@ -227,7 +227,7 @@ const walkthroughs = {
     "use computer",
     "z",
     "use computer",
-    "000000", "hint",
+    "000000", "hint",//*
     "look behind painting", "hint",
     "x post-it", "hint",
     "use computer",
@@ -243,12 +243,23 @@ const walkthroughs = {
     //"smash window with crowbar",
     "smash window", "hint",
     "out", "hint",
-    "tie rope to desk", "hint",
+    "x rope",
     "throw rope out window", "hint",
-    "out",
+    "tie rope to computer", "hint",
+    "tie rope to desk", "hint",
+    "x rope",
+    "throw rope out window", "hint",
+    //"out",
    /*  */
   ]
 }
+
+
+
+  tp.addDirective("rope", function(arr, params) {
+    return '<span style="font-family:Montserrat">' + arr.join(":") + "</span>"; 
+  });
+
 
 
 findCmd('MetaSave').script = function() {
@@ -378,7 +389,7 @@ commands.unshift(new Cmd('ThrowThrough', {
     if (!dest.isThrowThroughable) return failedmsg("You can't chuck stuff through {nm:dest:the}.", {dest:dest})
     if (!dest.isThrowThroughable(item)) return world.FAILED
     if (!item.isAtLoc("me")) return failedmsg("You are not holding {nm:item:the}.", {item:item})
-    dest.throwThroughable(item)
+    dest.throwThrough(item)
     return world.SUCCESS
   },
 }));

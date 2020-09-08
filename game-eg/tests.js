@@ -82,11 +82,7 @@ test.tests = function() {
   test.assertEqual(['4', '6', '7'], array.subtract(['1', '2', '4', '6', '7'], ['1', '2', '3']));
   test.assertEqual([w.coin, w.boots], array.subtract([w.coin, w.boots, w.ring], [w.ring]));
   
-  test.title("array.atts");
   const testAry = [w.boots, w.book, w.cardboard_box]
-  test.assertEqual(['boots', 'book', 'cardboard_box'], array.atts(testAry));
-
-
 
   test.title("array.next");
   test.assertEqual(w.cardboard_box, array.next(testAry, w.book));
@@ -577,7 +573,7 @@ test.tests = function() {
   test.assertCmd("s", ["The kitchen", "A clean room. There is a sink in the corner.", /You can see/, "You can go down, north or west."]);
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv.", /^You can see/, "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", /You can see/, "You can go north or west."]);
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east.", "You can see Arthur here.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur here.", "You can go east or west."]);
   
   
   test.title("Agendas");
@@ -654,22 +650,64 @@ test.tests = function() {
   test.assertCmd("i", ["You are carrying a flashlight, a garage key and a suit (worn)."]);
   
   
-  test.title("rope");
+  test.title("pre-rope");
   test.assertCmd("o", ["You head out.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
   
-  
+  test.title("rope - room one");
+  test.assertEqual(['conservatory'], w.rope.locs)
   test.assertCmd("get rope", ['You take the rope.'])
+  test.assertEqual(['me'], w.rope.locs)
+  test.assertCmd("x rope", ['The rope is about 40\' long.'])
   test.assertCmd("tie rope to chair", ["You tie the rope to the broken chair."])
+  test.assertEqual(['conservatory', 'me'], w.rope.locs)
+  test.assertCmd("x rope", ["The rope is about 40' long. One end is tied to the broken chair. The other end is held by you."])
+  
   test.assertCmd("tie rope to chair", ["It already is."])
   test.assertCmd("untie rope from chair", ["You untie the rope from the broken chair."])
   test.assertCmd("untie rope from chair", ["The rope is not tied to the broken chair."])
-  
+  test.assertEqual(['me'], w.rope.locs)
+  test.assertCmd("tie rope to chair", ["You tie the rope to the broken chair."])
 
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
+  test.title("rope - room two");
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
   test.assertCmd("tie rope to crate", ["That is not something you can tie the the rope to."])
   test.assertCmd("untie rope from crate", ["The rope is not tied to the crate."])
+  test.assertEqual(['conservatory', 'me'], w.rope.locs)
+  test.assertCmd("tie rope to hook", ["You tie the rope to the hook."])
+  test.assertEqual(['conservatory', 'garden'], w.rope.locs)
+  test.assertCmd("x rope", ["The rope is about 40' long. One end heads into the conservatory. The other end is tied to the hook."], true)
+  test.assertCmd("get rope", ['It is tied up at both ends.'])
+
+  test.title("rope - room one again");
+  test.assertCmd("e", ["You head east.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
+  test.assertCmd("x rope", ["The rope is about 40' long. One end is tied to the broken chair. The other end heads into the garden."])
+  test.assertCmd("untie rope from chair", ["You untie the rope from the broken chair."])
+  test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
+  test.assertEqual(['me', 'conservatory', 'garden'], w.rope.locs)
+  
+  test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."])
+  
+  console.log(formatList(scopeHeldBy(w.me)))
+  console.log(formatList(scopeHeldBy(w.me, world.SIDE_PANE)))
+  console.log(formatList(scopeHeldBy(w.me, world.INVENTORY)))
+  console.log(formatList(scopeHeldBy(w.me, world.LOOK)))
+  test.assertCmd("i", [""])
+  test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the conservatory."])
+  test.assertEqual(['me', 'lounge', 'conservatory', 'garden'], w.rope.locs)
+  
+  test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
+  test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
+  test.assertEqual(['me', 'conservatory', 'garden'], w.rope.locs)
+  
+
+
+
+  
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
+  test.assertCmd("untie rope", ["You untie the rope from the hook."])
+  test.assertEqual(['conservatory', 'me'], w.rope.locs)
 
 
   
@@ -802,7 +840,7 @@ test.tests = function() {
   
   
   
-  
+  /*
   
   test.title("vessels and liquids");
   game.player.loc = "kitchen"

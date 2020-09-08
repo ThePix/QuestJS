@@ -609,17 +609,26 @@ createItem("broken_chair", {
 
 createItem("rope", ROPE(), { 
   loc:"conservatory", 
-  examine:"The rope is about 40' long.",
+  examine:function(isMultiple) {
+    msg(prefix(this, isMultiple) + "The rope is about 40' long." + this.getAttachedDesc())
+    return true
+  },
 })
 
 
 
 createRoom("garden", {
-  desc:"Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east.",
+  desc:"Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.",
   east:new Exit("conservatory"),
   west:new Exit("road"),
 });
 
+createItem("hook", { 
+  loc:"garden", 
+  scenery:true,
+  examine:"A rusty hook, on the wall of the house.",
+  attachable:true,
+})
 
 createRoom("far_away", {
   north:new Exit("lounge"),

@@ -67,7 +67,7 @@ createRoom("lounge", {
 
 
 createRoom("kitchen", {
-  desc:"The litchen looks clean and well-equipped.",
+  desc:"The kitchen looks clean and well-equipped.",
   afterFirstEnter:function() {
     tmsg("Great, we can move around!")
     tmsg("From here we can go back south to the lounge. Generally when you enter a room from one direction you will be able to go back that way, but not always.")
@@ -172,12 +172,15 @@ createItem("cobwebs", {
 
 createItem("old_newspaper", TAKEABLE(), {
   examine:'A newspaper from the eighties; yellow with age.',
-  read:'You spend a few minutes reading about what happens on the day 14th June 1987 (or perhaps the day before). A somewhat mocking article about an archaelogist, Dr Ruudhorn, and Atlantis catches your eye.',
+  read:'You spend a few minutes reading about what happens on the day 14th June 1987 (or perhaps the day before). A somewhat mocking article about an archaeologist, Dr Ruudhorn, and Atlantis catches your eye.',
   loc:'basement',
 });
 
 createItem("rope", ROPE(false), {
-  examine:'About 25 foot long; it looks old, but serviceable.',
+  examine:function(isMultiple) {
+    msg(prefix(this, isMultiple) + 'About 25 foot long; it looks old, but serviceable.' + this.getAttachedDesc())
+    return true
+  },
   loc:'basement',
 });
 
@@ -658,10 +661,11 @@ createRoom("office", {
   }}),
   out:new Exit("garden", {
     use:function() {
-      if (!w.office.window_exit_unlocked) {
+      if (!w.office_window.smashed) falsemsg("There is a pane of glass in the way.")
+      if (!w.rope.locs.includes('outside')) {
         msg("You look out the window. If is a long way down to the ground, and there are no handholds. You need a way to climb down.")
-        return false
         if (w.me.hints < 470) w.me.hints = 470
+        return false
       }
       msg("You climb out the window, and down the rope, quickly reaching the ground. You jump in your SUV, and drive away. A job well done.")
       msg(" ")
@@ -669,6 +673,7 @@ createRoom("office", {
       msg(" ")
       tmsg("So this is where we say good bye; you have completed the game, and hopefully now have a pretty good idea of how to play parser-based adventure games (and perhaps even write some too).")
       io.finish()
+      return true
     },
     isHidden:function() { return !w.office_window.smashed },
   }),
@@ -713,13 +718,18 @@ createItem("office_window", {
       msg("You lob {nm:item:the} out the window; it lands on the street below.")
       delete item.loc
       office_window.outside.push(item)
-      return
+      return true
     }
-    if (!item.tiedTo1 && !item.tiedTo2) {
-      msg("You are about to heave the rope out the window when it occurs to you that it might be useful to tie one end to something first.")
-      return
-    }
+    if (!item.tiedTo1 && !item.tiedTo2) return falsemsg("You are about to heave the rope out the window when it occurs to you that it might be useful to tie one end to something first.")
+    if (item.tiedTo1 && item.tiedTo2) falsedmsg("The rope is tied to both {nm:obj1:the} and {nm:obj2:the}; which end were you hoping to throw out?", {obj1:w[rope.tiedTo1], obj2:w[rope.tiedTo2]})
+
     msg("You throw the end of the rope out the window.")
+    if (item.tiedTo1) {
+      item.locs.push("outside")
+    }
+    else {
+      item.locs.unshift("outside")
+    }
   },
   open:function() {
     return falsemsg("The window does not open.")
@@ -811,18 +821,18 @@ createItem("computer", {
           msg("As you remove the USB stick, an alarm sounds, and you hear a voice: 'Warning: Illegal access to USB port detected. Warning: Illegal access to USB port detected.'")
           tmsg("Who knew such an old computer will be protected? The Professor will be here soon, coming up the lift. You need to find another way out. How about the window?")
           tmsg("I've held you hand for long enough, let's see if you can do this on your own - but remember, you can use the HINT command if you are stuck.")
-          if (w.old_newspaper.loc !== 'me' && w.rope.loc !== 'me' && w.old_newspaper.loc !== 'office' && w.rope.loc !== 'office') {
+          if (w.old_newspaper.loc !== 'me' && w.rope.isAtLoc('me') && w.old_newspaper.loc !== 'office' && !w.rope.isAtLoc('office')) {
             tmsg("That said, I see you lost the newspaper and the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon them here for you, just on the off-chance they will be needed.")
             w.old_newspaper.loc = 'office'
-            w.rope.loc = 'office'
+            w.rope.locs = ['office']
           }
           else if (w.old_newspaper.loc !== 'me' && w.old_newspaper.loc !== 'office') {
             tmsg("That said, I see you lost the newspaper somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon it here for you, just on the off-chance it will be needed.")
             w.old_newspaper.loc = 'office'
           }
-          else if (w.rope.loc !== 'me' && w.rope.loc !== 'office') {
+          else if (!w.rope.isAtLoc('me') && !w.rope.isAtLoc('office')) {
             tmsg("That said, I see you lost the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon it here for you, just on the off-chance it will be needed.")
-            w.rope.loc = 'office'
+            w.rope.locs = ['office']
           }
           
           w.me.hints = 430
