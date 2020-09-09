@@ -674,7 +674,8 @@ test.tests = function() {
   test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
   test.assertCmd("tie rope to crate", ["That is not something you can tie the the rope to."])
   test.assertCmd("untie rope from crate", ["The rope is not tied to the crate."])
-  test.assertEqual(['conservatory', 'me'], w.rope.locs)
+  test.assertEqual(['conservatory', 'garden', 'me'], w.rope.locs)
+  
   test.assertCmd("tie rope to hook", ["You tie the rope to the hook."])
   test.assertEqual(['conservatory', 'garden'], w.rope.locs)
   test.assertCmd("x rope", ["The rope is about 40' long. One end heads into the conservatory. The other end is tied to the hook."], true)
@@ -693,7 +694,7 @@ test.tests = function() {
   console.log(formatList(scopeHeldBy(w.me, world.SIDE_PANE)))
   console.log(formatList(scopeHeldBy(w.me, world.INVENTORY)))
   console.log(formatList(scopeHeldBy(w.me, world.LOOK)))
-  test.assertCmd("i", [""])
+  test.assertCmd("i", ["You are carrying a flashlight, a garage key, a rope and a suit (worn)."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the conservatory."])
   test.assertEqual(['me', 'lounge', 'conservatory', 'garden'], w.rope.locs)
   
@@ -705,9 +706,10 @@ test.tests = function() {
 
 
   
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate, Lara and a rope here.", "You can go east or west."]);
+  test.assertEqual(['me', 'garden'], w.rope.locs)
   test.assertCmd("untie rope", ["You untie the rope from the hook."])
-  test.assertEqual(['conservatory', 'me'], w.rope.locs)
+  test.assertEqual(['me'], w.rope.locs)
 
 
   
