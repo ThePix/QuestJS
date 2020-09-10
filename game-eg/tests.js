@@ -219,6 +219,9 @@ test.tests = function() {
 
   test.title("Look inside");
   test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box and an ornate doll.");
+  w.jewellery_box.closed = false
+  test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box (containing a ring) and an ornate doll.");
+  
   test.assertCmd("look inside box", "Inside the cardboard box you can see nothing.");
   test.assertCmd("look inside boots", "There's nothing to see inside.");
   test.assertCmd("look inside book", "The book has pages and pages of text, but you do not even recongise the text.");
@@ -238,9 +241,9 @@ test.tests = function() {
 
 
   test.title("Simple object commands (eat)");
-  test.assertCmd("eat knife", "It's not something you can eat.");
+  test.assertCmd("eat knife", "The knife's not something you can eat.");
   test.assertCmd("get sandwich", "You take the sandwich.");
-  test.assertCmd("drink sandwich", "It's not something you can drink.");
+  test.assertCmd("drink sandwich", "The sandwich's not something you can drink.");
   test.assertCmd("ingest sandwich", ["You eat the sandwich.", "That was Great!"]);
 
   
@@ -333,11 +336,11 @@ test.tests = function() {
   test.assertCmd("remove underwear", "You can't take off your underwear whilst wearing your jeans.");
   test.assertCmd("remove jeans", "You take the jeans off.");
   test.assertCmd("remove underwear", "You take the underwear off.");
-  test.assertCmd("wear jumpsuit", "You can't put a jumpsuit on over your shirt.");
+  test.assertCmd("wear jumpsuit", "You can't put the jumpsuit on over your shirt.");
   test.assertCmd("remove shirt", "You take the shirt off.");  
   test.assertCmd("wear jumpsuit", "You put on the jumpsuit.");
   test.assertCmd("wear coat", "You put on the coat.");
-  test.assertCmd("wear underwear", "You can't put underwear on over your jumpsuit.");
+  test.assertCmd("wear underwear", "You can't put the underwear on over your jumpsuit.");
   test.assertCmd("remove coat", "You take the coat off.");  
   test.assertCmd("drop all", ["Knife: You drop the knife.", "Underwear: You drop the underwear.", "Jeans: You drop the jeans.", "Shirt: You drop the shirt.", "Coat: You drop the coat.", "Jumpsuit: You're wearing it.", ]);
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
@@ -409,8 +412,8 @@ test.tests = function() {
   test.assertCmd("boots,get coin", "You can tell the boots to do what you like, but there is no way they'll do it.");
   test.assertCmd("kyle,get coin", "He tries to pick up the coin, but it just will not budge.");
   test.assertCmd("kyle,get knife", "You have it.");
-  test.assertCmd("kyle,get cabinet", "Kyle can't take it.");
-  test.assertCmd("kyle,get cover", "Kyle can't take it; it's part of the book.");
+  test.assertCmd("kyle,get cabinet", "He can't take it.");
+  test.assertCmd("kyle,get cover", "He can't take it; it's part of the book.");
 
 
   test.title("NPC commands (boots)");
@@ -421,7 +424,7 @@ test.tests = function() {
   test.assertCmd("kyle,give boots to box", "Realistically, the cardboard box is not interested in anything he might give it.");
   test.assertCmd("kyle, get boots", "Kyle has them.");
   test.assertCmd("kyle, wear boots", "Kyle puts on the boots.");
-  test.assertCmd("kyle, wear boots", "He's wearing them.");
+  test.assertCmd("kyle, wear boots", "Kyle's wearing them.");
   test.assertCmd("kyle, remove boots", "Kyle takes the boots off.");
   test.assertCmd("kyle, put boots in box", "Done.");
 
@@ -450,7 +453,7 @@ test.tests = function() {
   test.assertCmd("get garage", "You take the garage key.");
   test.assertCmd("e", ["You head east.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock, Kyle (wearing a straw boater) and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("kyle,n", "Kyle tries the door to the garage, but it is locked.");
-  test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: Kyle can't take it.", "Camera: Kyle takes the camera.", "Big kitchen table: Kyle can't take it.", "Jug: Kyle takes the jug."]);
+  test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: He can't take it.", "Camera: Kyle takes the camera.", "Big kitchen table: He can't take it.", "Jug: Kyle takes the jug."]);
   test.assertCmd("kyle, drop picture box", "Kyle drops the camera.");
   test.assertCmd("kyle, open trapdoor", "Kyle opens the trapdoor.");
   test.assertCmd("kyle, down", "You watch Kyle disappear through the trapdoor.");
@@ -643,7 +646,7 @@ test.tests = function() {
   test.assertCmd("wear trousers", ["You put on the suit trousers."]);
   test.assertCmd("i", ["You are carrying a flashlight, a garage key, a jacket, some suit trousers (worn) and a waistcoat."]);
   test.assertCmd("wear jacket", ["You put on the jacket."]);
-  test.assertCmd("wear waistcoat", ["You can't put a waistcoat on over your jacket."]);
+  test.assertCmd("wear waistcoat", ["You can't put the waistcoat on over your jacket."]);
   test.assertCmd("doff jacket", ["You take the jacket off."]);
   test.assertCmd("wear waistcoat", ["You put on the waistcoat."]);
   test.assertCmd("wear jacket", ["You put on the jacket."]);
@@ -669,31 +672,36 @@ test.tests = function() {
   test.assertCmd("untie rope from chair", ["The rope is not tied to the broken chair."])
   test.assertEqual(['me'], w.rope.locs)
   test.assertCmd("tie rope to chair", ["You tie the rope to the broken chair."])
+  test.assertEqual(['conservatory', 'me'], w.rope.locs)
 
   test.title("rope - room two");
   test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
+  test.assertEqual(['conservatory', 'garden', 'me'], w.rope.locs)
   test.assertCmd("tie rope to crate", ["That is not something you can tie the the rope to."])
   test.assertCmd("untie rope from crate", ["The rope is not tied to the crate."])
-  test.assertEqual(['conservatory', 'garden', 'me'], w.rope.locs)
   
   test.assertCmd("tie rope to hook", ["You tie the rope to the hook."])
   test.assertEqual(['conservatory', 'garden'], w.rope.locs)
   test.assertCmd("x rope", ["The rope is about 40' long. One end heads into the conservatory. The other end is tied to the hook."], true)
   test.assertCmd("get rope", ['It is tied up at both ends.'])
 
+
+
+
   test.title("rope - room one again");
   test.assertCmd("e", ["You head east.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
+  test.assertEqual(['conservatory', 'garden'], w.rope.locs)
   test.assertCmd("x rope", ["The rope is about 40' long. One end is tied to the broken chair. The other end heads into the garden."])
+  
+  
   test.assertCmd("untie rope from chair", ["You untie the rope from the broken chair."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
   test.assertEqual(['me', 'conservatory', 'garden'], w.rope.locs)
   
   test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."])
   
-  console.log(formatList(scopeHeldBy(w.me)))
-  console.log(formatList(scopeHeldBy(w.me, world.SIDE_PANE)))
-  console.log(formatList(scopeHeldBy(w.me, world.INVENTORY)))
-  console.log(formatList(scopeHeldBy(w.me, world.LOOK)))
+  test.assertCmd("e", ["The rope is not long enough, you cannot go any further."])
+  
   test.assertCmd("i", ["You are carrying a flashlight, a garage key, a rope and a suit (worn)."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the conservatory."])
   test.assertEqual(['me', 'lounge', 'conservatory', 'garden'], w.rope.locs)
@@ -711,6 +719,7 @@ test.tests = function() {
   test.assertCmd("untie rope", ["You untie the rope from the hook."])
   test.assertEqual(['me'], w.rope.locs)
 
+  test.assertCmd("drop rope", ["You drop the rope."])
 
   
   
@@ -718,6 +727,8 @@ test.tests = function() {
   
   test.assertCmd("w", ["You head west.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
   test.assertCmd("n", ["You head north.", "The shop", "A funny little shop.", "You can go south."]);
+  
+  
   
   w.me.money = 20
 

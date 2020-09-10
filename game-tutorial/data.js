@@ -177,11 +177,9 @@ createItem("old_newspaper", TAKEABLE(), {
 });
 
 createItem("rope", ROPE(false), {
-  examine:function(isMultiple) {
-    msg(prefix(this, isMultiple) + 'About 25 foot long; it looks old, but serviceable.' + this.getAttachedDesc())
-    return true
-  },
+  examine:'About 25 foot long; it looks old, but serviceable.',
   loc:'basement',
+  ropeLength:5,
 });
 
 createItem("apple", EDIBLE(), {
@@ -304,8 +302,10 @@ createItem("roses", {
 
 createItem("box", CONTAINER(true), LOCKED_WITH([]), {
   examine:function() {
+    const tpParams = {char:game.player, container:this}
+    tpParams.list = this.listContents(world.LOOK)
     msg("It is large, wooden box. It does not look very substantial, but it survived the fall nevertheless. There is a label on the {ifNot:box:closed:open }lid.")
-    if (!this.closed) msg(lang.look_inside(w.me, this))
+    if (!this.closed) msg(lang.look_inside, tpParams)
     if (!this.flag2) {
       tmsg("There is something written on the label, so we should try READ BOX (or READ LABEL; I think that will work in this game, but it can be worth trying alternatives when one noun fails).")
       w.me.hints = 80
@@ -476,12 +476,12 @@ createItem("lab_door", OPENABLE(false), {
   loc:'laboratory',
   open:function(isMultiple, char) {
     if (!this.closed) {
-      msg(prefix(this, isMultiple) + lang.already(this))
+      msg(prefix(this, isMultiple) + lang.already, {item:this})
       return false;
     }
     if (char.strong) {
       this.closed = false;
-      this.openMsg(isMultiple, char)
+      this.openMsg(isMultiple, {char:char, container:this})
       if (w.me.hints < 280) {
         tmsg("Great, the robot could do it no trouble. Now we are on our way again.")
         w.me.hints = 280
@@ -608,8 +608,9 @@ createRoom("vomit", {
 createItem("control_rod", TAKEABLE(), {
   examine:"The control rod is about two foot long, and a dull black colour.",
   take:function(isMultiple, char) {
+    const tpParams = {char:char, item:this}
     if (this.isAtLoc(char.name)) {
-      msg(prefix(this, isMultiple) + lang.already_have(char, this));
+      msg(prefix(this, isMultiple) + lang.already_have, tpParams);
       return false;
     }
     if (!char.canManipulate(this, "take")) return false;
@@ -626,7 +627,7 @@ createItem("control_rod", TAKEABLE(), {
       return false 
     }
     let flag = (this.loc === "reactor")
-    msg(prefix(this, isMultiple) + lang.take_successful(char, this))
+    msg(prefix(this, isMultiple) + lang.take_successful, tpParams)
     this.moveToFrom(char.name)
     if (flag) {
       msg("The blue light in the reactor winks out and the buzz dies.")
@@ -871,6 +872,14 @@ createRoom("lift", TRANSIT("east"), {
       if (w.me.hints < 250) {
         tmsg("Something is wrong... Perhaps we should ask the robot about it?")
         w.me.hints = 250
+      }
+      return false
+    }
+    if (w.rope.locs.includes("lift") && w.rope.locs.length > 2) {
+      msg("The lift door closes... gets stopped by the rope, and then opens again.")
+      if (!this.ropeFlag) {
+        tmsg("What have you done? I said nothing about tying the rope to something! I've got a bad feeling about this...")
+        this.ropeFlag
       }
       return false
     }

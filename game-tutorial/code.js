@@ -249,7 +249,7 @@ const walkthroughs = {
     "tie rope to desk", "hint",
     "x rope",
     "throw rope out window", "hint",
-    //"out",
+    "out",
    /*  */
   ]
 }

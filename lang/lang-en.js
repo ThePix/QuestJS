@@ -132,197 +132,149 @@ const lang = {
   DebugParserToggle:/^parser$/,
 
 
-
-  //----------------------------------------------------------------------------------------------
-  // SUCCESSFUL Messages
-
-  take_successful:function(char, item, count) {
-    return lang.nounVerb(char, "take", true) + " " + item.byname({article:DEFINITE, count:count}) + ".";
+  // This will be added to the start of the regex of a command to make an NPC command
+  // The saved capture group is the NPC's name
+  tell_to_prefixes:{
+    1:'(?:tell|ask) (.+) to ',   // TELL KYLE TO GET SPOON
+    2:'(.+), ?',                 // KYLE, GET SPOON
   },
-  drop_successful:function(char, item, count) {
-    return lang.nounVerb(char, "drop", true) + " " + item.byname({article:DEFINITE, count:count}) + ".";
-  },
-  wear_successful:function(char, item) {
-    return lang.nounVerb(char, "put", true) + " on " + item.byname({article:DEFINITE}) + ".";
-  },
-  remove_successful:function(char, item) {
-    return lang.nounVerb(char, "take", true) + " " + item.byname({article:DEFINITE}) + " off.";
-  },
-  open_successful:function(char, item) {
-    return lang.nounVerb(char, "open", true) + " " + item.byname({article:DEFINITE}) + ".";
-  },
-  close_successful:function(char, item) {
-    return lang.nounVerb(char, "close", true) + " " + item.byname({article:DEFINITE}) + ".";
-  },
-  lock_successful:function(char, item) {
-    return lang.nounVerb(char, "lock", true) + "k " + item.byname({article:DEFINITE}) + ".";
-  },
-  unlock_successful:function(char, item) {
-    return lang.nounVerb(char, "unlock", true) + " " + item.byname({article:DEFINITE}) + ".";
-  },
-  fill_successful:function(char, item) {
-    return lang.nounVerb(char, "fill", true) + " " + item.byname({article:DEFINITE}) + ".";
-  },
-  empty_successful:function(char, item) {
-    return lang.nounVerb(char, "empty", true) + " " + item.byname({article:DEFINITE}) + ".";
-  },
-  turn_on_successful:function(char, item) {
-    return lang.nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " on.";
-  },
-  turn_off_successful:function(char, item) {
-    return lang.nounVerb(char, "switch", true) + " " + item.byname({article:DEFINITE}) + " off.";
-  },
-  sit_on_successful:function(char, item) {
-    return lang.nounVerb(char, "sit", true) + " on " + item.byname({article:DEFINITE}) + ".";
-  },
-  stand_on_successful:function(char, item) {
-    return lang.nounVerb(char, "stand", true) + " on " + item.byname({article:DEFINITE}) + ".";
-  },
-  recline_on_successful:function(char, item) {
-    return lang.nounVerb(char, "lie", true) + " down on " + item.byname({article:DEFINITE}) + ".";
-  },
-  eat_successful:function(char, item) {
-    return lang.nounVerb(char, "eat", true) + " " + item.byname({article:DEFINITE}) + ".";
-  },
-  drink_successful:function(char, item) {
-    return lang.nounVerb(char, "drink", true) + " " + item.byname({article:DEFINITE}) + ".";
-  },
-  purchase_successful:function(char, item, amt) {
-    return lang.nounVerb(char, "buy", true) + " " + item.byname({article:DEFINITE}) + " for " + displayMoney(amt) + ".";
-  },
-  sell_successful:function(char, item, amt) {
-    return lang.nounVerb(char, "sell", true) + " " + item.byname({article:DEFINITE}) + " for " + displayMoney(amt) + ".";
-  },
-  push_exit_successful:function(char, item, dir, destRoom) {
-    return lang.nounVerb(char, "push", true) + " " + item.byname({article:DEFINITE}) + " " + dir + ".";
-  },
-
-  go_successful:function(char, dir) {
-    return lang.nounVerb(char, "head", true) + " " + dir + ".";
-  },
-
-
 
 
 
   //----------------------------------------------------------------------------------------------
-  // Cannot Messages
-
-  cannot_take:function(char, item) {
-    return lang.nounVerb(char, "can't", true) + " take " + item.pronouns.objective + ".";
-  },
-  cannot_wear:function(char, item) {
-    return lang.nounVerb(char, "can't", true) + " wear " + item.pronouns.objective + ".";
-  },
-  cannot_wear_ensemble:function(char, item) {
-    return "Individual parts of an ensemble must be worn and removed separately.";
-  },
-  cannot_switch_on:function(char, item) {
-    return lang.nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " on.";
-  },
-  cannot_switch_off:function(char, item) {
-    return lang.nounVerb(char, "can't", true) + " turn " + item.pronouns.objective + " off.";
-  },
-  cannot_open:function(char, item) {
-    return lang.nounVerb(item, "can't", true) + " be opened.";
-  },
-  cannot_close:function(char, item) {
-    return lang.nounVerb(item, "can't", true) + " be closed.";
-  },
-  cannot_lock:function(char, item) {
-    return lang.nounVerb(char, "can't", true) + "t lock " + item.pronouns.objective + ".";
-  },
-  cannot_unlock:function(char, item) {
-    return lang.nounVerb(char, "can't", true) + " unlock " + item.pronouns.objective + ".";
-  },
-  cannot_read:function(char, item) {
-    return "Nothing worth reading there.";
-  },
-
-  cannot_purchase:function(char, item) {
-    return lang.nounVerb(char, "can't", true) + " buy " + item.pronouns.objective + ".";
-  },
-  cannot_purchase_here:function(char, item) {
-    if (item.doNotClone && item.isAtLoc(char.name)) {
-      return lang.nounVerb(char, "can't", true) + " buy " + item.byname({article:DEFINITE}) + " here - probably because " + lang.nounVerb(char, "be") + " already holding " + item.pronouns.objective + ".";
-    }
-    else {
-      return lang.nounVerb(char, "can't", true) + " buy " + item.byname({article:DEFINITE}) + " here.";
-    }
-  },
-  cannot_afford:function(char, item, amt) {
-    return lang.nounVerb(char, "can't", true) + " afford " + item.byname({article:DEFINITE}) + " (need " + displayMoney(amt) + ").";
-  },
-  cannot_sell:function(char, item, amt) {
-    return lang.nounVerb(char, "can't", true) + " sell " + item.pronouns.objective + ".";
-  },
-  cannot_sell_here:function(char, item, amt) {
-    return lang.nounVerb(char, "can't", true) + " sell " + item.byname({article:DEFINITE}) + " here.";
-  },
-
-  cannot_use:function(char, item) {
-    return "No obvious way to use " + item.pronouns.objective + ".";
-  },
-  cannot_smash:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can break.";
-  },
-  cannot_fill:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can fill.";
-  },
-  cannot_mix:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can mix liquids in.";
-  },
-  cannot_empty:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can empty.";
-  },
-  cannot_look_out:function(char, item) {
-    lang.pronounVerb(char, "can't", true) + " look out of " + item.pronouns.objective + ".";
-  },
-  cannot_stand_on:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can stand on.";
-  },
-  cannot_sit_on:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can sit on.";
-  },
-  cannot_recline_on:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can lie on.";
-  },
-
-  cannot_smell:function(char, item) {
-    return lang.pronounVerb(item, "have", true) + " no smell.";
-  },
-  cannot_listen:function(char, item) {
-    return lang.pronounVerb(item, "be", true) + " not making any noise.";
-  },
-  cannot_eat:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can eat.";
-  },
-  cannot_drink:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can drink.";
-  },
-  cannot_ingest:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can ingest.";
-  },
-  cannot_push:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not something you can move around like that.";
-  },
-  cannot_push_up:function(char, item) {
-    return lang.pronounVerb(char, "'be", true) + " not getting " + item.byname({article:DEFINITE}) + " up there!";
-  },
-  cannot_ask_about:function(char, item, text) {
-    return "You can ask " + item.pronouns.objective + " about " + text + " all you like, but " + lang.pronounVerb(item, "'be") + " not about to reply.";
-  },
-  cannot_tell_about:function(char, item, text) {
-    return "You can tell " + item.pronouns.objective + " about " + text + " all you like, but " + lang.pronounVerb(item, "'be") + " not interested.";
-  },
-  cannot_talk_to:function(char, item) {
-    return "You chat to " + item.byname({article:DEFINITE}) + " for a few moments, before releasing that " + lang.pronounVerb(item, "'be") + " not about to reply.";
-  },
+  // Standard Responses
 
 
-  //----------------------------------------------------------------------------------------------
+
+  // TAKEABLE
+  take_successful:"{nv:char:take:true} {nm:item:the}.",
+  take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
+  drop_successful:"{nv:char:drop:true} {nm:item:the}.",
+  drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
+  cannot_take:"{pv:char:can't:true} take {ob:item}.",
+  cannot_drop:"{pv:char:can't:true} drop {ob:item}.",
+  not_carrying:"{pv:char:don't:true} have {ob:item}.",
+  already_have:"{pv:char:'ve:true} got {ob:item} already.",
+  cannot_take_component:"{pv:char:can't:true} take {ob:item}; {pv:item:'be} part of {nm:whole:the}.",
+
+
+  // EDIBLE
+  eat_successful:"{nv:char:eat:true} {nm:item:the}.",
+  drink_successful:"{nv:char:drink:true} {nm:item:the}.",
+  cannot_eat:"{nv:item:'be:true} not something you can eat.",
+  cannot_drink:"{nv:item:'be:true} not something you can drink.",
+  //cannot_ingest:"{nv:item:'be:true} not something you can ingest.",
+
+
+  // WEARABLE
+  wear_successful:"{nv:char:put:true} on {nm:garment:the}.",
+  remove_successful:"{nv:char:take:true} {nm:garment:the} off.",
+  cannot_wear:"{nv:char:can't:true} wear {ob:garment}.",
+  cannot_wear_ensemble:"Individual parts of an ensemble must be worn and removed separately.",
+  wearing:"{nv:char:'be:true} wearing {ob:garment}.",
+  not_wearing:"{nv:char:'be:true} not wearing {ob:garment}.",
+  cannot_wear_over:"{nv:char:can't:true} put {nm:garment:the} on over {pa:char} {nm:outer}.",
+  cannot_remove_under:"{nv:char:can't:true} take off {pa:char} {nm:garment} whilst wearing {pa:char} {nm:outer}.",
+  already_wearing:"{nv:char:'be:true} already wearing {ob:garment}.",
+
+
+  // CONTAINER, etc.
+  open_successful:"{nv:char:open:true} {nm:container:the}.",
+  close_successful:"{nv:char:close:true} {nm:container:the}.",
+  lock_successful:"{nv:char:lock:true} {nm:container:the}.",
+  unlock_successful:"{nv:char:unlock:true} {nm:container:the}.",
+  cannot_open:"{nv:container:can't:true} be opened.",
+  cannot_close:"{nv:container:can't:true} be closed.",
+  cannot_lock:"{nv:char:can't:true} lock {ob:container}.",
+  cannot_unlock:"{nv:char:can't:true} unlock {ob:container}.",
+  not_container:"{nv:container:is:true} not a container.",
+  container_recursion:"What? You want to put {nm:item:the} in {nm:containter:the} when {nm:containter:the} is already in {nm:item:the}? That's just too freaky for me.",
+  not_inside:"{nv:item:'be:true} not inside that.",
+  locked:"{nv:item:'be:true} locked.",
+  no_key:"{nv:char:do:true} have the right key.",
+  locked_exit:"That way is locked.",
+  open_and_enter:"{nv:char:open:true} the {param:doorName} and walk through.",
+  unlock_and_enter:"{nv:char:unlock:true} the {param:doorName}, open it and walk through.",
+  try_but_locked:"{nv:char:try:true} the {param:doorName}, but it is locked.",
+  container_closed:"{nv:container:be:true} closed.",
+  inside_container:"{nv:item:be:true} inside {nm:container:the}.",
+  look_inside:"Inside {nm:container:the} {nv:char:can} see {param:list}.",
+  
+  
+  // MECHANDISE
+  purchase_successful:"{nv:char:buy:true} {nm:item:the} for {money:money}.",
+  sell_successful:"{nv:char:sell:true} {nm:item:the} for {money:money}.",
+  cannot_purchase:"{nv:char:can't:true} buy {ob:item}.",
+  cannot_purchase_again:"{nv:char:can't:true} buy {nm:item:the} here - probably because {pv:char:be} already holding {ob:item}.",
+  cannot_purchase_here:"{nv:char:can't:true} buy {nm:item:the} here.",
+  cannot_afford:"{nv:char:can't:true} afford {nm:item:the} (need {money:money}).",
+  cannot_sell:"{nv:char:can't:true} sell {ob:item}.",
+  cannot_sell_here:"{nv:char:can't:true} sell {nm:item:the} here.",
+
+
+  // FURNITURE
+  sit_on_successful:"{nv:char:sit:true} on {nm:item:the}.",
+  stand_on_successful:"{nv:char:stand:true} on {nm:item:the}.",
+  recline_on_successful:"{nv:char:lie:true} down on {nm:item:the}.",
+  cannot_stand_on:"{nv:char:'be:true} not something you can stand on.",
+  cannot_sit_on:"{nv:char:'be:true} not something you can sit on.",
+  cannot_recline_on:"{nv:char:'be:true} not something you can lie on.",
+
+
+  // SWITCHABLE
+  turn_on_successful:"{nv:char:switch:true} {nm:item:the} on.",
+  turn_off_successful:"{nv:char:switch:true} {nm:item:the} off.",
+  cannot_switch_on:"{nv:char:can't:true} turn {ob:item} on.",
+  cannot_switch_off:"{nv:char:can't:true} turn {ob:item} off.",
+
+
+  // VESSEL
+  fill_successful:"{nv:char:fill:true} {nm:container:the}.",
+  empty_successful:"{nv:char:empty:true} {nm:container:the}.",
+  cannot_fill:"{nv:container:'be:true} not something you can fill.",
+  cannot_mix:"{nv:container:'be:true} not something you can mix liquids in.",
+  cannot_empty:"{nv:container:'be:true} not something you can empty.",
+  not_vessel:"{pv:container:be:true} is not a vessel.",
+
+
+  // NPC
+  not_npc:"{nv:char:can:true} tell {nm:item:the} to do what you like, but there is no way {pv:item:'ll} do it.",
+  not_npc_for_give:"Realistically, {nv:item:be} not interested in anything {sb:char} might give {ob:item}.",
+
+  cannot_ask_about:"You can ask {ob:item} about {param:text} all you like, but {pv:item:'be} not about to reply.",
+  cannot_tell_about:"You can tell {ob:item} about {param:text} all you like, but {pv:item:'be} not interested.",
+  topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
+  topics_none_found:"No suggestions for what to ask or tell {nm:item:the} available.",
+  topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {param:list}.",
+  topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {param:list}.",
+  cannot_talk_to:"You chat to {nm:item:the} for a few moments, before releasing that {pv:item:'be} not about to reply.",
+  no_topics:"{nv:char:have:true} nothing to talk to {nm:item:the} about.",
+  not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
+  npc_no_interest_in:"{nv:actor:have:true} no interest in that subject.",
+
+
+  // SHIFTABLE
+  push_exit_successful:"{nv:char:push:true} {nm:item:the} {param:dir}.",
+  cannot_push:"{pv:item:'be:true} not something you can move around like that.",
+  cannot_push_up:"{pv:char:'be:true} not getting {nm:item:the} up there!",
+  take_not_push:"Just pick the thing up already!",
+
+
+  // Movement
+  go_successful:"{nv:char:head:true} {param:dir}.",
+  not_that_way:"{nv:char:can't:true} go {param:dir}.",
+
+
+  // General cannot Messages
+  cannot_read:"Nothing worth reading there.",
+  cannot_use:"No obvious way to use {ob:item}.",
+  cannot_smash:"{nv:item:'be:true} not something you can break.",
+  cannot_look_out:"Not something you can look out of.",
+  cannot_smell:"{nv:item:have:true} no smell.",
+  cannot_listen:"{nv:item:be:true} not making any noise.",
+
+
   // General command messages
-
   not_known_msg:"I don't even know where to begin with that.",
   disambig_msg:"Which do you mean?",
   no_multiples_msg:"You cannot use multiple objects with that command.",
@@ -335,129 +287,25 @@ const lang = {
   inventoryPreamble:"You are carrying",
 
 
-
-
-  no_smell:function(char) {
-    return lang.nounVerb(char, "can't", true) + " smell anything here.";
-  },
-  no_listen:function(char) {
-    return lang.nounVerb(char, "can't", true) + " hear anything of note here.";
-  },
-  nothing_there:function(char) {
-    return lang.nounVerb(char, "be", true) + " sure there's nothing there.";
-  },
-  nothing_inside:function(char) {
-    return "There's nothing to see inside.";
-  },
-  not_that_way:function(char, dir) {
-    return lang.nounVerb(char, "can't", true) + " go " + dir + ".";
-  },
-  object_unknown_msg:function(name) {
-    return lang.nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "' here.";
-  },
-
-  not_here:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not here.";
-  },
-  char_has_it:function(char, item) {
-    return lang.nounVerb(char, "have", true) + " " + item.pronouns.objective + ".";
-  },
-  none_here:function(char, item) {
-    return "There's no " + item.pluralAlias + " here.";
-  },
-  none_held:function(char, item) {
-    return pronoun(char, "have", true) + " no " + item.pluralAlias + ".";
-  },
-  take_not_push:function(char, item) {
-    return "Just pick the thing up already!";
-  },
-
-  nothing_useful:function(char, item) {
-    return "That's not going to do anything useful.";
-  },
-  already:function(item) {
-    return sentenceCase(item.pronouns.subjective) + " already " + lang.conjugate (item, "be") + ".";
-  },
-  default_examine:function(char, item) {
-    return lang.pronounVerb(item, "be", true) + " just your typical, every day " + item.byname() + ".";
-  },
-  no_topics:function(char, target) {
-    return lang.nounVerb(char, "have", true) + " nothing to talk to " + target.byname({article:DEFINITE}) + " about.";
-  },
-  say_no_one_here:function(char, verb, text) {
-    return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one notices.";
-  },
-  say_no_response:function(char, verb, text) {
-    return "No one seemed interested in what you say.";
-  },
-  say_no_response_full:function(char, verb, text) {
-    return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one seemed interested in what you say.";
-  },
+  // General command fails
+  no_smell:"{pv:char:can't:true} smell anything here.",
+  no_listen:"{pv:char:can't:true} hear anything of note here.",
+  nothing_there:"nv:char:be:true} sure there's nothing there.",
+  nothing_inside:"There's nothing to see inside.",
+  not_here:"{pv:item:'be:true} not here.",
+  char_has_it:"{nv:holder:have:true} {ob:item}.",
+  none_here:"There's no {nm:item} here.",
+  none_held:"{nv:char:have:true} no {nm:item}.",
+  nothing_useful:"That's not going to do anything useful.",
+  already:"{sb:item:true} already {cj:item:be}.",
+  default_examine:"{pv:item:'be:true} just your typical, every day {nm:item}.",
   
-  container_recursion:function(char, container, item) {
-    return "What? You want to put " + item.byname({article:DEFINITE}) + " in " + container.byname({article:DEFINITE}) + " when " + container.byname({article:DEFINITE}) + " is already in " + item.byname({article:DEFINITE}) + "? That's just too freaky for me.";
-  },
 
 
   //----------------------------------------------------------------------------------------------
-  // Specific command messages
+  // Complex responses (requiring functions)
 
-  not_npc:function(item) {
-    return lang.nounVerb(game.player, "can", true) + " tell " + item.byname({article:DEFINITE}) + " to do what you like, but there is no way " + lang.pronounVerb(item, "'ll") + " do it.";
-  },
-  not_npc_for_give:function(char, item) {
-    return "Realistically, " + lang.nounVerb(item, "be") + " not interested in anything " + char.pronouns.subjective + " might give " + item.pronouns.objective + ".";
-  },
-  not_able_to_hear:function(char, item) {
-    return "Doubtful " + lang.nounVerb(item, "will") + " be interested in anything " + char.pronouns.subjective + " has to say.";
-  },
-  not_container:function(char, item) {
-    return sentenceCase(item.byname({article:DEFINITE})) + " is not a container.";
-  },
-  not_vessel:function(char, item) {
-    return sentenceCase(item.byname({article:DEFINITE})) + " is not a vessel.";
-  },
 
-  cannot_drop:function(char, item) {
-    return lang.pronounVerb(char, "can't", true) + " drop " + item.pronouns.objective + ".";
-  },
-  not_carrying:function(char, item) {
-    return lang.pronounVerb(char, "don't", true) + " have " + item.pronouns.objective + ".";
-  },
-  not_inside:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " not inside that.";
-  },
-  wearing:function(char, item) {
-    return lang.pronounVerb(char, "'be", true) + " wearing " + item.pronouns.objective + ".";
-  },
-  not_wearing:function(char, item) {
-    return lang.pronounVerb(char, "'be", true) + " not wearing " + item.pronouns.objective + ".";
-  },
-  cannot_wear_over:function(char, item, outer) {
-    return lang.pronounVerb(char, "can't", true) + " put " + item.byname({article:INDEFINITE}) + " on over " + char.pronouns.poss_adj + " " + outer.byname() + ".";
-  },
-  cannot_remove_under:function(char, item, outer) {
-    return lang.pronounVerb(char, "can't", true) + " take off " + char.pronouns.poss_adj + " " + item.byname() + " whilst wearing " + char.pronouns.poss_adj + " " + outer.byname() + ".";
-  },
-  already_have:function(char, item) {
-    return lang.pronounVerb(char, "'ve", true) + " got " + item.pronouns.objective + " already.";
-  },
-  already_wearing:function(char, item) {
-    return lang.pronounVerb(char, "'ve", true) + " already wearing " + item.pronouns.objective + ".";
-  },
-  cannot_take_component:function(char, item) {
-    return lang.nounVerb(char, "can't", true) + " take " + item.pronouns.objective + "; " + lang.pronounVerb(item, "'be") + " part of " + w[item.loc].byname({article:DEFINITE}) + ".";
-  },
-  container_closed:function(char, item) {
-    return lang.nounVerb(item, "be", true) + " closed.";
-  },
-  inside_container:function(char, item, cont) {
-    return lang.pronounVerb(item, "be", true) + " inside " + cont.byname({article:DEFINITE}) + ".";
-  },
-  look_inside:function(char, item) {
-    const l = formatList(item.getContents(world.LOOK), {article:INDEFINITE, lastJoiner:" and ", nothing:"nothing"});
-    return "Inside " + item.byname({article:DEFINITE}) + " " + lang.pronounVerb(char, "can") + " see " + l + ".";
-  },
   stop_posture:function(char) {
     if (!char.posture || char.posture === "standing") return "";
     let s;
@@ -472,20 +320,15 @@ const lang = {
     char.postureFurniture = undefined;
     return s;
   },
-  can_go:function() {
-    return "You think you can go {exits}."
+
+  say_no_one_here:function(char, verb, text) {
+    return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one notices.";
   },
-
-
-
-  //----------------------------------------------------------------------------------------------
-  // NPC messages
-
-  npc_nothing_to_say_about:function(char) {
-    return lang.nounVerb(char, "have", true) + " nothing to say on the subject.";
+  say_no_response:function(char, verb, text) {
+    return "No one seemed interested in what you say.";
   },
-  npc_no_interest_in:function(char) {
-    return lang.nounVerb(char, "have", true) + " no interest in that subject.";
+  say_no_response_full:function(char, verb, text) {
+    return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one seemed interested in what you say.";
   },
 
 
@@ -502,35 +345,12 @@ const lang = {
   ask_about_intro:function(char, text1, text2) {
     return "You ask " + char.byname({article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
-  // This will be added to the start of the regex of a command to make an NPC command
-  // The saved capture group is the NPC's name
-  tell_to_prefixes:{
-    1:'(?:tell|ask) (.+) to ',   // TELL KYLE TO GET SPOON
-    2:'(.+), ?',                 // KYLE, GET SPOON
-  },
+  
+  
+  
 
 
-  //----------------------------------------------------------------------------------------------
-  // Door and lock fails
 
-  locked:function(char, item) {
-    return lang.pronounVerb(item, "'be", true) + " locked.";
-  },
-  no_key:function(char, item) {
-    return lang.nounVerb(char, "do", true) + " have the right key.";
-  },
-  locked_exit:function(char, exit) {
-    return "That way is locked.";
-  },
-  open_and_enter:function(char, doorName) {
-    return lang.nounVerb(char, "open", true) + " the " + doorName + " and walk through.";
-  },
-  unlock_and_enter:function(char, doorName) {
-    return lang.nounVerb(char, "unlock", true) + " the " + doorName + ", open it and walk through.";
-  },
-  try_but_locked:function(char, doorName) {
-    return lang.nounVerb(char, "try", true) + " the " + doorName + ", but it is locked.";
-  },
 
 
   // Use when the NPC leaves a room; will give a message if the player can observe it
@@ -572,6 +392,14 @@ const lang = {
 
 
 
+  object_unknown_msg:function(name) {
+    return lang.nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "' here.";
+  },
+
+
+
+
+
   //----------------------------------------------------------------------------------------------
   // Save/load messages
 
@@ -583,17 +411,6 @@ const lang = {
 
   //----------------------------------------------------------------------------------------------
   // Meta-messages
-
-  topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
-  topics_none_found:function(char) {
-    return "No suggestions for what to ask or tell " + char.byname({article:DEFINITE}) + " available."
-  },
-  topics_ask_list:function(char, arr) {
-    return "Some suggestions for what to ask " + char.byname({article:DEFINITE}) + " about: " + arr.join("; ") + "."
-  },
-  topics_tell_list:function(char, arr) {
-    return "Some suggestions for what to tell " + char.byname({article:DEFINITE}) + " about: " + arr.join("; ") + "."
-  },
 
   spoken_on:"Game mode is now 'spoken'. Type INTRO to hear the introductory text.",
   spoken_off:"Game mode is now 'unspoken'.",

@@ -12,10 +12,9 @@ body {
 
 /* Style page content */
 #main {
-  margin-left: 160px; /* Same as the width of the sidebar */
+  margin-left: 200px; /* Same as the width of the sidebar */
   margin-right: 160px; /* Same as the width of the sidebar */
   padding: 0px 10px;
-  font-family: 'ZCOOL XiaoWei', serif;
 }
 
 
@@ -61,16 +60,14 @@ body {
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
-  background-color: #fdf;
-  background-image:url("../images/back.png");
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 5px;
   font-size: 9pt;
   font-family: 'Montserrat', sans-serif;;
 }
-.dark-body > #panes {
-  background-color:#606;
-  background-image:none;
+.paneDiv {
+  background-color:#fcf;
+  padding-bottom:5px;
 }
 .dark-body > div > .paneDiv {
   background-color:#606;

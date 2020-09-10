@@ -18,13 +18,10 @@ const cloakHere = function() {
 }
 
 
-lang.no_smell = function(char) {
-  return "It smells slightly musty.";
-}
+lang.no_smell = "It smells slightly musty."
 
-lang.no_listen = function(char) {
-  return "It is quiet as the grave...";
-}
+lang.no_listen = "It is quiet as the grave..."
+
 
 tp.addDirective("cloakHere", function(arr, params) {
   return cloakHere() ? arr[0] : arr[1]

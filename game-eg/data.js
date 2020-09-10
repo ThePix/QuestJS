@@ -154,7 +154,7 @@ createItem("cabinet_key", KEY(), {
 createItem("jewellery_box",
   TAKEABLE(),
   CONTAINER(true),
-  { loc:"glass_cabinet", alias:"jewellery box", examine:"A nice box.", closed:false }
+  { loc:"glass_cabinet", alias:"jewellery box", examine:"A nice box.", }
 );
 
 createItem("ring",
@@ -608,11 +608,9 @@ createItem("broken_chair", {
 })
 
 createItem("rope", ROPE(), { 
-  loc:"conservatory", 
-  examine:function(isMultiple) {
-    msg(prefix(this, isMultiple) + "The rope is about 40' long." + this.getAttachedDesc())
-    return true
-  },
+  loc:"conservatory",
+  ropeLength:3,
+  examine:"The rope is about 40' long.",
 })
 
 

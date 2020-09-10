@@ -400,8 +400,8 @@ dungeon.exitScript = function(char, dirName) {
   // up and down are different!!!
   const dest = w[dungeon.getRoomName(origin.x + dir.x, origin.y + dir.y, origin.level)]
     
-  msg(lang.stop_posture(char));
-  msg(lang.go_successful(char, dirName));
+  msg(lang.stop_posture(char))
+  msg(lang.go_successful, {char:char, dir:dirName})
   world.setRoom(char, dest)
   return true
 }

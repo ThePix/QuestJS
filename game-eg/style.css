@@ -26,10 +26,8 @@ body {
 
 
 h2 {
-  text-shadow: 2px 2px silver
+  text-shadow: 2px 2px silver;
 }
-
-
 
 /* The command bar  */
 #textbox {
