@@ -30,9 +30,9 @@ createRoom("lounge", {
   desc:"The lounge is pleasant, if rather bare. There is a{if:kitchen_door:locked: locked} door to the north. A door to the west leads to the lift.",
   afterFirstEnter:function() {
     msg("The man you need to find is upstairs, but the lift does not work - it has no power. How can you get to him?") 
-    tmsg("This is the first room, and the text is telling you about it. If there were things here, you would probably be told about, but we will come on to that later. You will also be told of any exits. This room has an exit north, but it is currently locked.")
+    tmsg("This is the first room, and the text is telling you about it. If there were things here, you would probably be told about them in the room description, but we will come on to that later. You will also usually be told of any exits. This room has an exit north, but it is currently locked.")
     tmsg("We will get to the lift later.")
-    tmsg("Before going any further, we should look at what is on the screen. Below this text, you should see a cursor. In this game it is a > sign, but other games might use different symbols or have a box. You type commands in there. Try it now by typing WAIT (I am going to put command for you to type in capitals; you do not need to).")
+    tmsg("Before going any further, we should look at what is on the screen. Below this text, you should see a cursor. In this game it is a > sign, but other games might use different symbols or have a box. You type commands in there. Try it now by typing WAIT (I am going to write commands for you to type in capitals to diffentiate them; you do not need to).")
   },
   north:new Exit("kitchen"),
   west:new Exit("lift", { isLocked:function() { return !w.reactor_room.reactorRunning }}),
@@ -49,13 +49,13 @@ createRoom("lounge", {
       case 2:
         tmsg("Some games have commands that tell you about the game or set it up differently to suit the player. In Quest 6 (but not necessarily other games) none of these count as a turn, so try a couple, and when you are done, do WAIT again.")
         tmsg("Type DARK to toggle dark mode; some users find if easier to see light text on a dark background. Type SPOKEN to toggle hearing the text read out. Type SILENT to toggle the sounds and music (not that there are any in this game).")
-        tmsg("You can also type HELP to see some general instructions (but you are doing the tutorial, so no point in this game. You can also do ABOUT or CREDITS. Less common is the HINT common; if implemented it will give you a clue of what to do next. In this game, as it is a tutorial, it will tell you exactly what to do.")
+        tmsg("You can also type HELP to see some general instructions. You can also do ABOUT or CREDITS. Less common is the HINT command; if implemented it will give you a clue of what to do next. In this game, as it is a tutorial, it will tell you exactly what to do.")
         tmsg("For completeness, I will also mention TRANSCRIPT (or just SCRIPT), which will record your game session, and can be useful when testing someone's game. You can also use BRIEF, TERSE and VERBOSE to control how often room descriptions are shown, but I suggest we keep it VERBOSE for this tutorial.")
         break
       case 3:
         w.kitchen_door.locked = false
         tmsg("Time to move on. Something tells me that door to the north is not locked any more.")
-        tmsg("You might want to look at the room again before we go. Just type LOOK or just L. Hopefully it no longer says the door is locked.")
+        tmsg("You might want to look at the room again before we go. Type LOOK or just L. Hopefully it no longer says the door is locked. By the way, in some games you can use the EXITS commands to see what exits are available.")
         tmsg("Movement in adventure games is done following compass directions. To go north, type GO NORTH, or NORTH or just N.")
         tmsg("You can also use the compass rose at the top left, or, in Quest 6, if your computer has a number pad, ensure \"Num Lock\" is on, and press the up key (i.e., 8).")
         tmsg("So I will see you in the next room...")
@@ -111,16 +111,16 @@ createRoom("basement", {
     if (!w.flashlight.switchedon && w.light_switch.switchedon && !this.flag2) {
       tmsg("So we have managed to turn on a light!")
       tmsg("A lot of adventure games are like this in that you need to do A, but to do that you need to do B, but you cannot do B without doing C first, and so on. And often - as here - you do not know what A even is.")
-      tmsg("A lot of adventure games are like this in that you need to do A, but to do that you need to do B, but you cannot do B without doing C first, and so on. And often - as here - you do not know what A even is.")
       tmsg("There are a few things down here that we might want to grab. Most adventure games understand the word ALL, so we can just do GET ALL to pick up the lot.")
       this.flag2 = true
       w.me.hints = 150
     }
     if (parser.currentCommand.all && w.me.hints < 160) {
       tmsg("Great, you used ALL!")
-      tmsg("Note that ALL will not include items that are scenery, so not the cobwebs (which are actual objects, try TAKE COBWEBS), and there are some objected we could not pick up.")
-      tmsg("You also DROP ALL, WEAR ALL, etc. though some commands will not like it. You might also want to try eating the apple or reading the newspaper.")
-      tmsg("When you are done, on with the plot! So we cannot take the crates with us, but trying to do so was useful because the response gave us a clue as to what we can do - we can move them.")
+      tmsg("Note that ALL will not include items that are scenery, so not the cobwebs (which are actual objects now, honest - try TAKE COBWEBS), and there are some objected we could not pick up.")
+      tmsg("You also DROP ALL, WEAR ALL, etc. though some commands will not like it. You could also try DROP ALL BUT ROPE.")
+      tmsg("You might also want to try eating the apple or reading the newspaper.")
+      tmsg("When you are done, on with the plot! We cannot take the crates with us, but trying to do so was useful because the response gave us a clue as to what we can do - we can move them.")
       w.me.hints = 160
     }
   }
@@ -201,11 +201,12 @@ createRoom("larder", {
 
 
 createRoom("garden", {
-  desc:"The garden is basically a few square feet of grass, but there are some roses in the corner.",
+  desc:"The garden is basically a few square feet of grass.",
   southwest:new Exit("kitchen"),
   afterFirstEnter:function() {
-    tmsg("Sometimes it is worth doing SMELL or LISTEN in a location. There are roses here, perhaps you can smell them.")
-    w.me.hints = 35
+    tmsg("Let's interact with something!")
+    tmsg("There is a hat here. You know that because the description tells you, and also it is listed in the panel at the left. To get the hat, type GET HAT or TAKE HAT.")
+    w.me.hints = 40
   },
   east:new Exit("shed", {
     alsoDir:['in'],
@@ -222,12 +223,13 @@ createRoom("garden", {
     },
   }),
   onSmell:function() {
-    msg("You can smell the roses; they smell lovely!")
-    if (w.me.hints < 40) {
-      tmsg("You can also smell specific items, so SMELL ROSES would have also worked.")
-      tmsg("Let's interact with something!")
-      tmsg("There is a hat here. You know that because the description tells you, and also it is listed in the panel at the left. To get the hat, type GET HAT or TAKE HAT.")
-      w.me.hints = 40
+    msg("You can smell the freshly-cut grass!")
+    if (w.me.hints < 70) {
+      tmsg("You can also smell specific items, so SMELL GRASS would have also worked.")
+      msg("A large wooden box falls from the sky! Miraculously, it seems to have survived intact.")
+      tmsg("The box is a container, which means you can put things inside it and maybe find things already in it. Perhaps we should start by looking at it.")
+      w.box.loc = "garden"
+      w.me.hints = 70
     }
   },
 })
@@ -262,41 +264,28 @@ createItem("grass", {
     msg("The grass is green, and recently cut.")
     if (!this.flagged) {
       tmsg("To be honest, you will come across things mentioned in descriptions that the author has not implemented, and the game will just tell you it does not know what you are talking about (like the cobwebs in the basement!), but in an ideal world you will be able to examine everything.")
+      tmsg("Sometimes you can SMELL or LISTEN. Can you smell the grass?")
+      w.me.hints = 65
+    }
+  },
+  loc:"garden",
+  scenery:true,
+  smell:function() {
+    msg("You can smell the grass; it has just been cut!")
+    if (w.me.hints < 70) {
+      tmsg("You can also smell the whole location, so just SMELL would have also worked.")
       msg("A large wooden box falls from the sky! Miraculously, it seems to have survived intact.")
       tmsg("The box is a container, which means you can put things inside it and maybe find things already in it. Perhaps we should start by looking at it.")
       w.box.loc = "garden"
       w.me.hints = 70
     }
   },
-  loc:"garden",
-  scenery:true,
 })
 
 
 
 
-createItem("roses", {
-  examine:function() {
-    msg("The roses are in full bloom - beautiful and red.")
-    if (!this.flagged) {
-      tmsg("To be honest, you will come across things mentioned in descriptions that the author has not implemented, and the game will just tell you it does not know what you are talking about (like the cobwebs in the basement!), but in an ideal world you will be able to examine everything.")
-      msg("A large wooden box falls from the sky! Miraculously, it sees to have survived in tact.")
-      tmsg("The box is a container, which means you can put things inside it and maybe find things already in it. Perhaps we should start by looking at it.")
-      w.box.loc = "garden"
-      w.me.hints = 70
-    }
-  },
-  smell:function() {
-    msg("The roses smell wonderful!")
-    tmsg("You can also try just SMELL on its own.")
-    tmsg("Let's interact with something!")
-    tmsg("There is a hat here. You know that because the description tells you, and also it is listed in the panel at the left. To get the hat, type GET HAT or TAKE HAT.")
-    w.me.hints = 40
-  },
-  loc:"garden",
-  scenery:true,
-  pronouns:lang.pronouns.plural,
-})
+
 
 
 
@@ -324,7 +313,7 @@ createItem("box", CONTAINER(true), LOCKED_WITH([]), {
       msg("You close the lid. 'Thank you for your custom!' says the box. It starts to shake violently then leaps into the air, rapidly disappearing from sight.")
       tmsg("Cool... Wait, does that mean you're now naked? Let's assume not! So we have a crowbar, we can get into the shed.")
       tmsg("Up to now we have been using commands that pretty much every game will understand, but games will usually have their own set of commands unique to them, as required by the plot. This game is no different.")
-      tmsg("One of the problems when playing - and when authoring - a text adventurer is deciding how a command should be phrased (a problem known as \"guess the verb\". Are we going to CROWBAR THE SHED or LEVER OPEN THE DOOR or what? Sometimes it takes some experimenting, though sometimes the text will give you a hint.")
+      tmsg("One of the problems when playing - and when authoring - a text adventurer is deciding how a command should be phrased (a problem known as \"guess the verb\"). Are we going to CROWBAR THE SHED or LEVER OPEN THE DOOR or what? Often it takes some experimenting, though sometimes the text will give you a hint - always worth trying any verb that is used in the text (at least you can be sure the author knows that word).")
       tmsg("Often the generic USE will work, so is worth a try.")
       w.me.hints = 110
       this.flag = true
@@ -411,8 +400,8 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
   },
   onMove:function(toLoc) {
     if (!this.flag1 && toLoc === 'me') {
-      tmsg("Now we have a torch, we could take a proper look in the basement.")
-      tmsg("The torch can  be turned on and off, with TURN ON TORCH or SWITCH FLASHLIGHT OFF or...")
+      tmsg("Now it is calling it a flashlight? So anyway, we have a torch, we can now take a proper look in the basement.")
+      tmsg("The torch can  be turned on and off, with TURN ON TORCH or SWITCH FLASHLIGHT OFF or whatever.")
       w.cobwebs.loc = 'basement'
       w.me.hints = 130
     }
@@ -444,7 +433,7 @@ createRoom("secret_passage", {
 
 
 createRoom("laboratory", {
-  desc:"This is a laboratory of some sort. The room is full of screens and instruments, but you cannot tell what sort of science is being done here. There is a big steel door {ifNot:lab_door:locked:lying open }to the north{if:lab_door:locked:; you feel pretty sure it will be too heavy for you to open}.",
+  desc:"This is a laboratory of some sort. The room is full of screens and instruments, but you cannot tell what sort of science is being done here. There is a big steel door {ifNot:lab_door:closed:lying open }to the north{if:lab_door:closed:; you feel pretty sure it will be too heavy for you to open}.",
   afterFirstEnter:function() {
     if (w.me.hints < 200) {
       tmsg("Okay, so not bothering with saving...")
@@ -453,6 +442,13 @@ createRoom("laboratory", {
     tmsg("There are two approaches to conversations. We will try TALK TO with another character. Here we will do ASK and TELL. Start by asking the robot about the laboratory.")
     w.me.hints = 210
   },
+  afterEnter:function() {
+    if (w.me.hints === 310) {
+      tmsg("You can tell the robot to do something by prefixing a normal command with either TELL ROBOT TO or just ROBOT and a comma. To have it go north, them, you could do TELL ROBOT TO GO NORTH or ROBOT,N.")
+      w.me.hints = 315
+    }
+  },
+  
   lab_door_locked:true,
   east:new Exit("secret_passage"),
   west:new Exit("lift"),
@@ -533,14 +529,6 @@ createRoom("reactor_room", {
   },
   reactorRunning:false,
   south:new Exit("laboratory"),
-  afterFirstEnter:function() {
-    tmsg("It is quite common for a game to have a \"timed\" challenge - you have to complete it within a set number of turns (or even within an actual time limit). As this is a tutorial, you are perfectly safe, though you will get messages saying death is getting more imminent each turn (and will be negative once the time limit expires).")
-    tmsg("Hey, maybe we'll get some superpower from all that zeta-exposure! No, but seriously kids, zeta-particles are very dangerous, and to be avoided.")
-    tmsg("In Quest 6, a turn will not pass if you try a command that is not recognised or for meta-commands like HINT; that may not be the case in every game system.")
-    tmsg("It is a good idea to save before doing a timed challenge, by the way (we saved recently, so no need for us to save now).")
-    tmsg("Now, get that control rod!")
-    w.me.hints = 300
-  },
   eventPeriod:1,
   eventIsActive:function() { return w.me.loc === "reactor_room" },
   countdown:6,
@@ -548,6 +536,14 @@ createRoom("reactor_room", {
     this.countdown--
     msg("A recorded voice echoes round the room: 'Warning: Zeta-particle levels above recommended safe threshold. Death expected after approximately {reactor_room.countdown} minutes of exposure.'")
     switch (this.countdown) {
+      case 5:
+        tmsg("It is quite common for a game to have a \"timed\" challenge - you have to complete it within a set number of turns (or even within an actual time limit). As this is a tutorial, you are perfectly safe, though you will get messages saying death is getting more imminent each turn (and will be negative once the time limit expires).")
+        tmsg("Hey, maybe we'll get some superpower from all that zeta-exposure! No, but seriously kids, zeta-particles are very dangerous, and to be avoided.")
+        tmsg("In Quest 6, a turn will not pass if you try a command that is not recognised or for meta-commands like HINT; that may not be the case in every game system.")
+        tmsg("It is a good idea to save before doing a timed challenge, by the way (we saved recently, so no need for us to save now).")
+        tmsg("Now, get that control rod!")
+        w.me.hints = 300
+        break
       case 4:
         msg("You are feeling a little nauseous.")
         break
@@ -567,7 +563,7 @@ createRoom("reactor_room", {
         break
     }
     if (w.me.hints < 320 && w.robot.loc === this.name) {
-      tmsg("Great, now we can tell the robot to get the rod. By the way, Quest 6 is pretty good at guessing nouns, and often you only need to type a few letters, or even just one letter if there is nothing else here it might be confused with. Try R,Get R. Quest will realise the first R is a character, so will assume you mean robot, while the second R is something in the location that can be picked up.")
+      tmsg("Great, now we can tell the robot to get the rod. By the way, Quest 6 is pretty good at guessing nouns, and often you only need to type a few letters, or even just one letter if there is nothing else here it might be confused with. Try R,GET R. Quest will realise the first R is a character, so will assume you mean robot, while the second R is something in the location that can be picked up.")
       w.me.hints = 320
     }
   }  
@@ -586,7 +582,7 @@ createRoom("reactor", CONTAINER(false), {
     msg("That cannot go in there!")
     return false
   },
-  putInResponse:function() {
+  itemDropped:function(item) {
     if (w.control_rod.loc === this.name) {
       msg("The reactor starts to glow with a blue light, and you can hear it is now buzzing.")
       w.reactor_room.reactorRunning = true
@@ -620,7 +616,7 @@ createItem("control_rod", TAKEABLE(), {
       if (!this.flag1) {
         tmsg("Well that's a bother! But there must be some way around. We need to use the lift, and to do that we need to get the reactor going. Given the author has gone to trouble to set this up, there must be some way to get the control rod.")
         tmsg("We can get the robot to do it!")
-        tmsg("You will need top go back to the other room, get the robot to come here, then tell the robot to pick up the control rod.")
+        tmsg("You will need to go back to the other room, get the robot to come here, then tell the robot to pick up the control rod.")
         w.me.hints = 310
       }
       this.flag1 = true
@@ -815,12 +811,12 @@ createItem("computer", {
       msg("You press a key on the keyboard, and a message appears on the screen: 'Please input your six digit PIN.'")
       askQuestion("PIN?", function(result) {
         if (result === w.computer.code) {
-          msg("You type \"" + result + "\", and unlock the computer. You put in your USB stick, and download the files... It takes nearly twenty minutes, this is one slow computer.")
+          msg("You type \"" + result + "\", and unlock the computer. You put in your USB stick, and download the files... It takes nearly twenty minutes; this is one slow computer.")
           if (w.me.hints < 430) {
             tmsg("Cool, you found the number without any prompting from me.")
           }
           msg("As you remove the USB stick, an alarm sounds, and you hear a voice: 'Warning: Illegal access to USB port detected. Warning: Illegal access to USB port detected.'")
-          tmsg("Who knew such an old computer will be protected? The Professor will be here soon, coming up the lift. You need to find another way out. How about the window?")
+          tmsg("Who knew such an old computer would be protected like that? The Professor will be here soon, coming up the lift. You need to find another way out. How about the window?")
           tmsg("I've held you hand for long enough, let's see if you can do this on your own - but remember, you can use the HINT command if you are stuck.")
           if (w.old_newspaper.loc !== 'me' && w.rope.isAtLoc('me') && w.old_newspaper.loc !== 'office' && !w.rope.isAtLoc('office')) {
             tmsg("That said, I see you lost the newspaper and the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon them here for you, just on the off-chance they will be needed.")
@@ -845,7 +841,7 @@ createItem("computer", {
             tmsg("Oh heck!")
             tmsg("Just occasionally a game will ask you for some specific text, which it will understand to be different to a command. In this case it is wanting a specific six-digit number (by the way, that number was randomly generated when you started the game, so you cannot cheat by asking someone on the internet what it is).")
             tmsg("But worry not! This guy is a professor, therefore he necessarily must be absent-minded, therefore he will have the number written down somewhere. We just need to find it.")
-            tmsg("By he way, this is a small example of a \"Babel fish puzzle\". The name comes from the Hitch-Hiker's Guide to the Galaxy, and is when you have a seemingly simple task, but there is an obstacle; each time you resolve one obstacle a new one is apparent.")
+            tmsg("By the way, this is a small example of a \"Babel fish puzzle\". The name comes from the Hitch-Hiker's Guide to the Galaxy, and is when you have a seemingly simple task, but there is an obstacle; each time you resolve one obstacle a new one is apparent.")
             w.me.hints = 420
           }
         }

@@ -16,9 +16,6 @@ findCmd('MetaHint').script = function() {
     case 30:
       metamsg("Type NORTHEAST to go into the garden.")
       break
-    case 35:
-      metamsg("Do SMELL or SMELL ROSES.")
-      break
     case 40:
       metamsg("Pick up the hat (GET HAT), and put it on (WEAR HAT).")
       break
@@ -27,6 +24,9 @@ findCmd('MetaHint').script = function() {
       break
     case 60:
       metamsg("Type LOOK AT GRASS to progress.")
+      break
+    case 65:
+      metamsg("Do SMELL or SMELL GRASS.")
       break
     case 70:
       metamsg("Look at the box (X BOX).")
@@ -41,7 +41,7 @@ findCmd('MetaHint').script = function() {
       metamsg("REMOVE THE HAT and then PUT IT IN THE BOX, then CLOSE BOX.")
       break
     case 110:
-      metamsg("CROWBAR THE SHED DOOR.")
+      metamsg("CROWBAR THE SHED DOOR and then GO EAST.")
       break
     case 120:
       metamsg("GET TORCH.")
@@ -98,7 +98,11 @@ findCmd('MetaHint').script = function() {
       metamsg("GET ROD.")
       break
     case 310:
-      metamsg("Go back SOUTH, tell the robot to go north (ROBOT,N), then go NORTH yourself and tell the robot to get the rod (ROBOT,GET ROD).")
+      metamsg("Go back SOUTH.")
+      break
+    case 315:
+      metamsg("Tell the robot to go north (ROBOT,N), then go NORTH yourself and tell the robot to get the rod (ROBOT,GET ROD).")
+      break
     case 320:
       metamsg("Tell the robot to get the rod (ROBOT,GET ROD).")
       break
@@ -178,6 +182,7 @@ const walkthroughs = {
     "get hat", "hint",
     "wear hat", "hint",
     "x grass", "hint",
+    "smell", "hint",
     "x box", "hint",
     "read label", "hint",
     "open box", "hint",
@@ -240,7 +245,7 @@ const walkthroughs = {
     "use apple to smash window",
     "smash window with newspaper",
     "smash computer with crowbar",
-    //"smash window with crowbar",
+    "smash window with crowbar",
     "smash window", "hint",
     "out", "hint",
     "x rope",
@@ -437,6 +442,30 @@ commands.unshift(new Cmd('UseToSmash', {
     return smashWithScript(objects[0][0], objects[1][0])
   },
 }));
+
+
+
+commands.unshift(new Cmd('Attack', {
+  // throw rope out window
+  regex:/^(?:attack|kick|punch|hit|strike|kill) (.+?)$/,
+  objects:[
+    {scope:parser.isHere},
+  ],
+  script:function(objects) {
+    if (objects[0][0].npc) {
+      msg("You just need to get the data, not beat anyone up!")
+      if (!w.me.killFlag) {
+        tmsg('You will find most games will not let you attack the characters, and those that do will probably have combat as a large part of the game. That said, it is a good idea to try these things, you never know quite what will happen.')
+        w.me.killFlag = true
+      }
+    }
+    else {
+      msg("That's not going to achieve anything.")
+    }
+    return world.FAILED
+  },
+}));
+
 
 
 

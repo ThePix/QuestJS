@@ -677,7 +677,7 @@ test.tests = function() {
   test.title("rope - room two");
   test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
   test.assertEqual(['conservatory', 'garden', 'me'], w.rope.locs)
-  test.assertCmd("tie rope to crate", ["That is not something you can tie the the rope to."])
+  test.assertCmd("tie rope to crate", ["That is not something you can tie the rope to."])
   test.assertCmd("untie rope from crate", ["The rope is not tied to the crate."])
   
   test.assertCmd("tie rope to hook", ["You tie the rope to the hook."])

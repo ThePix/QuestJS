@@ -9,7 +9,7 @@ const lang = {
 
 
   //----------------------------------------------------------------------------------------------
-  // Regular expressions for commands
+  // Regular Expressions for Commands
   
   // Meta commands
   MetaHelp:/^help$|^\?$/,
@@ -176,6 +176,8 @@ const lang = {
   cannot_wear_over:"{nv:char:can't:true} put {nm:garment:the} on over {pa:char} {nm:outer}.",
   cannot_remove_under:"{nv:char:can't:true} take off {pa:char} {nm:garment} whilst wearing {pa:char} {nm:outer}.",
   already_wearing:"{nv:char:'be:true} already wearing {ob:garment}.",
+  invWearingPrefix:"wearing",
+  invWornModifier:"worn",
 
 
   // CONTAINER, etc.
@@ -260,9 +262,24 @@ const lang = {
   take_not_push:"Just pick the thing up already!",
 
 
+  // ROPE
+  ropeExamineAddBothEnds:" It is {rope.attachedVerb} to both {nm:obj1:the} and {nm:obj2:the}.",
+  ropeExamineAddOneEnd:" It is {rope.attachedVerb} to {nm:obj1:the}.",
+  ropeAttachVerb:'tie',
+  ropeAttachedVerb:'tied',
+  ropeDetachVerb:'untie',
+  ropeOneEnd:'One end',
+  ropeOtherEnd:'The other end',
+  ropeExamineEndAttached:'is {rope.attachedVerb} to {nm:obj:the}.',
+  ropeExamineEndHeld:'is held by {nm:holder:the}.',
+  ropeExamineEndHeaded:'heads into {nm:loc:the}.',
+    
+
+
   // Movement
   go_successful:"{nv:char:head:true} {param:dir}.",
   not_that_way:"{nv:char:can't:true} go {param:dir}.",
+  can_go:"You think you can go {exits}.",
 
 
   // General cannot Messages
@@ -305,7 +322,13 @@ const lang = {
   //----------------------------------------------------------------------------------------------
   // Complex responses (requiring functions)
 
+  // Used deep in the parser, so prefer to use function, rather than string
+  object_unknown_msg:function(name) {
+    return lang.nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "' here.";
+  },
 
+
+  // For furniture
   stop_posture:function(char) {
     if (!char.posture || char.posture === "standing") return "";
     let s;
@@ -321,6 +344,9 @@ const lang = {
     return s;
   },
 
+
+
+  // use (or potentially use) different verbs in the responses, so not simple strings
   say_no_one_here:function(char, verb, text) {
     return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one notices.";
   },
@@ -330,8 +356,6 @@ const lang = {
   say_no_response_full:function(char, verb, text) {
     return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one seemed interested in what you say.";
   },
-
-
 
   // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
   speak_to_menu_title:function(char) {
@@ -346,13 +370,6 @@ const lang = {
     return "You ask " + char.byname({article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
   
-  
-  
-
-
-
-
-
   // Use when the NPC leaves a room; will give a message if the player can observe it
   npcLeavingMsg:function(npc, dest) {
     let s = "";
@@ -369,8 +386,6 @@ const lang = {
       msg(s);
     }
   },
-
-
 
   // the NPC has already been moved, so npc.loc is the destination
   npcEnteringMsg:function(npc, origin) {
@@ -392,15 +407,10 @@ const lang = {
 
 
 
-  object_unknown_msg:function(name) {
-    return lang.nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "' here.";
-  },
-
-
-
-
-
   //----------------------------------------------------------------------------------------------
+  // Meta-command responses
+
+
   // Save/load messages
 
   sl_dir_headings:"<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>",
@@ -409,8 +419,6 @@ const lang = {
 
 
 
-  //----------------------------------------------------------------------------------------------
-  // Meta-messages
 
   spoken_on:"Game mode is now 'spoken'. Type INTRO to hear the introductory text.",
   spoken_off:"Game mode is now 'unspoken'.",
@@ -496,8 +504,11 @@ const lang = {
   
   game_over_html:'<p>G<br/>A<br/>M<br/>E<br/>/<br/>O<br/>V<br/>E<br/>R</p>',
 
+
+
+
   //----------------------------------------------------------------------------------------------
-  //                                   DATA
+  //  Language Data
 
   // Misc
 
@@ -523,10 +534,8 @@ const lang = {
 
   yesNo:['Yes', 'No'],
 
-  contentsForData:{
-    surface:{prefix:'with ', suffix:' on it'},
-    container:{prefix:'containing ', suffix:''},
-  },
+
+
 
   //----------------------------------------------------------------------------------------------
   // Language constructs
@@ -645,6 +654,11 @@ const lang = {
       { name:"*z", value:"zes"},
       { name:"*", value:"s"},
     ],
+  },
+
+  contentsForData:{
+    surface:{prefix:'with ', suffix:' on it'},
+    container:{prefix:'containing ', suffix:''},
   },
 
 
@@ -778,7 +792,6 @@ const lang = {
 
 
 
-  //----------------------------------------------------------------------------------------------
   // Conjugating
 
 
@@ -864,12 +877,7 @@ const lang = {
     return capitalise ? sentenceCase(s) : s;
   },
 
-
-
-
-
-
-};
+}
 
 
 
