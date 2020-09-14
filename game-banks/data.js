@@ -23,7 +23,7 @@ createItem("me",
       let room2 = w[ex.name];
       if (typeof room2.vacuum === "string") room2 = w[room2.vacuum];
       if (room1.vacuum === room2.vacuum) return true;
-      msg("The door to " + room2.byname({article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + room1.byname({article:DEFINITE}) + " is not.");
+      msg("The door to " + lang.getName(room2, {article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + lang.getName(room1, {article:DEFINITE}) + " is not.");
       return false;
     }
   }
@@ -533,10 +533,10 @@ createItem("probe_prototype", COUNTABLE([]),
       const available = w.Xsansi[type + "Probes"];
 
       if (number === 1) {
-        msg("'Launch a " + type + "-probe,' you say to " + char.byname({article:DEFINITE}) + ".");
+        msg("'Launch a " + type + "-probe,' you say to " + lang.getName(char, {article:DEFINITE}) + ".");
       }
       else {
-        msg("'Launch " + number + " " + type + "-probes,' you say to " + char.byname({article:DEFINITE}) + ".");
+        msg("'Launch " + number + " " + type + "-probes,' you say to " + lang.getName(char, {article:DEFINITE}) + ".");
       }
       if (number > available) {
         msg("'We only have " + available + " and we should save some for the other planets on our itinerary.'");
@@ -550,7 +550,7 @@ createItem("probe_prototype", COUNTABLE([]),
       
       if (char.deployProbeAction === 0 || char.deployProbeAction ===4) {
         msg("'Okay captain.'");
-        char.agenda = ["walkTo:probes_aft:" + char.byname({article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number];
+        char.agenda = ["walkTo:probes_aft:" + lang.getName(char, {article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number];
         char.deployProbeAction = 0;
         char.deployProbeCount = 0;
       }

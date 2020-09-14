@@ -5,7 +5,7 @@
 test.tests = function() {
 
 
-  test.title("byname");
+  test.title("name");
   const region = new Region('my region', 'red', 7, '4,5 3,7 2,8 2,8 3,8 3,7 5,6')
   test.assertEqual(34, region.count);
   test.assertEqual(7, region.minX);

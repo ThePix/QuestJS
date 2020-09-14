@@ -148,9 +148,10 @@ const lang = {
 
   // TAKEABLE
   take_successful:"{nv:char:take:true} {nm:item:the}.",
-  take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
+  //take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
+  //take_successful_counted_plural:"{nv:char:take:true} {number:count} {nm:item}.",
   drop_successful:"{nv:char:drop:true} {nm:item:the}.",
-  drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
+  //drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
   cannot_take:"{pv:char:can't:true} take {ob:item}.",
   cannot_drop:"{pv:char:can't:true} drop {ob:item}.",
   not_carrying:"{pv:char:don't:true} have {ob:item}.",
@@ -178,6 +179,7 @@ const lang = {
   already_wearing:"{nv:char:'be:true} already wearing {ob:garment}.",
   invWearingPrefix:"wearing",
   invWornModifier:"worn",
+  invOpenModifer:"open",
 
 
   // CONTAINER, etc.
@@ -334,7 +336,7 @@ const lang = {
     let s;
     // You could split up sitting, standing and lying
     if (char.postureFurniture) {
-      s = lang.nounVerb(char, "get", true) + " off " + w[char.postureFurniture].byname({article:DEFINITE}) + ".";
+      s = lang.nounVerb(char, "get", true) + " off " + lang.getName(w[char.postureFurniture], {article:DEFINITE}) + ".";
     }
     else {
       s = lang.nounVerb(char, "stand", true) + " up.";
@@ -359,15 +361,15 @@ const lang = {
 
   // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
   speak_to_menu_title:function(char) {
-    return "Talk to " + char.byname({article:DEFINITE}) + " about:";
+    return "Talk to " + lang.getName(char, {article:DEFINITE}) + " about:";
   },
   // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
   tell_about_intro:function(char, text1, text2) {
-    return "You tell " + char.byname({article:DEFINITE}) + " " + text2 + " " + text1 + ".";
+    return "You tell " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
   // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
   ask_about_intro:function(char, text1, text2) {
-    return "You ask " + char.byname({article:DEFINITE}) + " " + text2 + " " + text1 + ".";
+    return "You ask " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
   
   // Use when the NPC leaves a room; will give a message if the player can observe it
@@ -379,7 +381,7 @@ const lang = {
       flag = true;
     }
     if (flag || npc.inSight()) {
-      s += lang.nounVerb(npc, "leave", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
+      s += lang.nounVerb(npc, "leave", !flag) + " " + lang.getName(w[npc.loc], {article:DEFINITE});
       const exit = w[npc.loc].findExit(dest);
       if (exit) s += ", heading " + exit.dir;
       s += ".";
@@ -397,7 +399,7 @@ const lang = {
       flag = true;
     }
     if (flag || npc.inSight()) {
-      s += lang.nounVerb(npc, "enter", !flag) + " " + w[npc.loc].byname({article:DEFINITE});
+      s += lang.nounVerb(npc, "enter", !flag) + " " + lang.getName(w[npc.loc], {article:DEFINITE});
       const exit = w[npc.loc].findExit(origin);
       if (exit) s += " from " + util.niceDirections(exit.dir);
       s += ".";
@@ -703,7 +705,47 @@ const lang = {
     return "a ";
   },
 
+  getName(item, options) {
+    if (!options) options = {}
+    let s = ''
+    let count = options[item.name + '_count'] ? options[item.name + '_count'] : false
+    if (!count && options.loc && item.countable) count = item.countAtLoc(options.loc)
 
+    if (item.pronouns === lang.pronouns.firstperson || item.pronouns === lang.pronouns.secondperson) {
+      s = options.possessive ? item.pronouns.poss_adj : item.pronouns.subjective;
+    }
+
+    else {    
+      if (count && count > 1) {
+        s += lang.toWords(count) + ' '
+      }
+      else if (options.article === DEFINITE) {
+        s += lang.addDefiniteArticle(item)
+      }
+      else if (options.article === INDEFINITE) {
+        s += lang.addIndefiniteArticle(item, count)
+      }
+      if (!count || count === 1) {
+        s += item.alias;
+      }
+      else if (item.pluralAlias) {
+        s += item.pluralAlias;
+      }
+      else {
+        s += item.alias + "s";
+      }
+      if (options.possessive) {
+        if (s.endsWith('s')) {
+          s += "'";
+        }
+        else { 
+          s += "'s";
+        }
+      }
+    }
+    if (item.getNameModifier && options.modified) s += item.getNameModifier(options)
+    return (options && options.capital ? sentenceCase(s) : s)
+  },
 
 
   //@DOC
@@ -863,7 +905,7 @@ const lang = {
     if (item === game.player) {
       return lang.pronounVerb(item, verb, capitalise);
     }
-    let s = item.byname({article:DEFINITE}) + " " + lang.conjugate (item, verb);
+    let s = lang.getName(item, {article:DEFINITE}) + " " + lang.conjugate (item, verb);
     s = s.replace(/ +\'/, "'");  // yes this is a hack!
     return capitalise ? sentenceCase(s) : s;
   },
@@ -872,7 +914,7 @@ const lang = {
     if (item === game.player) {
       return lang.pronounVerb(item, verb, capitalise);
     }
-    let s = lang.conjugate (item, verb) + " " + item.byname({article:DEFINITE});
+    let s = lang.conjugate (item, verb) + " " + lang.getName(item, {article:DEFINITE});
     s = s.replace(/ +\'/, "'");  // yes this is a hack!
     return capitalise ? sentenceCase(s) : s;
   },

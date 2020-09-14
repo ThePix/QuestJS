@@ -50,7 +50,7 @@ commands.unshift(new Cmd('Test input', {
         msg("You picked " + result + ".");
       }
       else {
-        msg("You picked " + result.byname({article:DEFINITE}) + ".");
+        msg("You picked " + lang.getName(result, {article:DEFINITE}) + ".");
       }
     })
 /*    askQuestion("What colour?", function(result) {
