@@ -7,26 +7,26 @@ settings.version = "1.0";
 settings.thanks = [];
 settings.warnings = 'No warning relevant for this game.'
 settings.files = ["data", "code", "npcs"];
-settings.debug = false
+settings.debug = true
 settings.noTalkTo = false
 settings.noAskTell = false
 settings.givePlayerAskTellMsg  = false
 settings.shortcutCommand = 'wt a'
 
 settings.afterSave = function(filename) {
-  if (w.me.hints = 190) {
+  if (hint.before('westRobot')) {
     if (filename === 'tutorial') {
       tmsg("Great, we have saved the game - and you even followed my advice for the name. Now let's continue west down this passage.")
     }
     else {
       tmsg("Great, we have saved the game - though I am, a bit disappointed that you didn't followed my advice for the name... Oh, well, I guess we better continue west down this passage.")
     }
-    w.me.hints = 200
+    hint.now('westRobot')
   }
 }
 
 settings.afterLoad = function() {
-  if (w.me.hints > 190) {
+  if (!hint.before('westRobot')) {
     tmsg("Great, you not only saved the game, you loaded it too! I suggest you use the HINT command to see what to do next, and then you can get going with the tutorial again.")
   }
 }
