@@ -477,7 +477,7 @@ function createTopics(npc) {
     regex:/(your |his |her )?(area|special.*|expert.*|job|role)/,
     test:function(p) { return p.text.match(this.regex); }, 
     response:function(npc) {
-      msg("'What is your area of expertise?' you ask " + npc.byname({article:DEFINITE}) + ".");
+      msg("'What is your area of expertise?' you ask " + lang.getName(npc, {article:DEFINITE}) + ".");
       npc.areaAskResponse();
     }
   });
@@ -486,7 +486,7 @@ function createTopics(npc) {
     regex:/^((his |her )?(background))|((him|her)self)$/,
     test:function(p) { return p.text.match(this.regex); }, 
     response:function(npc) {
-      msg("'Tell me about yourself,' you say to " + npc.byname({article:DEFINITE}) + ".");
+      msg("'Tell me about yourself,' you say to " + lang.getName(npc, {article:DEFINITE}) + ".");
       npc.backgroundAskResponse();
       trackRelationship(npc, 1, "background");
     }
@@ -494,12 +494,12 @@ function createTopics(npc) {
 }
  
 function howAreYouFeeling(npc) {
-  msg("'How are you feeling?' you ask " + npc.byname({article:DEFINITE}) + ".");
+  msg("'How are you feeling?' you ask " + lang.getName(npc, {article:DEFINITE}) + ".");
   msg(PLANETS[w.Xsansi.currentPlanet][npc.name + "_how_are_you"]);
 }
 
 function planetAnalysis(npc) {
-  msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].starName + PLANETS[w.Xsansi.currentPlanet].planet + "?' you ask " + npc.byname({article:DEFINITE}) + ".");
+  msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].starName + PLANETS[w.Xsansi.currentPlanet].planet + "?' you ask " + lang.getName(npc, {article:DEFINITE}) + ".");
   const arr = PLANET_DATA[npc.name + w.Xsansi.currentPlanet];
   if (Object.keys(arr).length === 0) {
     msg("You should talk to Aada or Ostap about that stuff.");
@@ -888,7 +888,7 @@ function handlePressurise(char, objects, pressurise) {
   }
   const mainRoom = (typeof baseRoom.vacuum === "string" ? w[baseRoom.vacuum] : baseRoom);
   if (mainRoom.vacuum !== pressurise) {
-    msg("'" + sentenceCase(mainRoom.byname({article:DEFINITE})) + " is already " + (pressurise ? 'pressurised' : 'depressurised') + ".");
+    msg("'" + sentenceCase(lang.getName(mainRoom, {article:DEFINITE})) + " is already " + (pressurise ? 'pressurised' : 'depressurised') + ".");
     return world.SUCCESS;
   }
   if (!w.Xsansi.pressureOverride && mainRoom.name !== "airlock" && !pressurise) {
@@ -896,16 +896,16 @@ function handlePressurise(char, objects, pressurise) {
     return world.SUCCESS;
   }
   if (!pressurise) {
-    msg("'Evacuating " + mainRoom.byname({article:DEFINITE}) + "... Room is now under vacuum.'");
+    msg("'Evacuating " + lang.getName(mainRoom, {article:DEFINITE}) + "... Room is now under vacuum.'");
     mainRoom.vacuum = true;
     return world.SUCCESS;
   }
   if (mainRoom.leaks) {
-    msg("'Pressurising " + mainRoom.byname({article:DEFINITE}) + "... Pressurisation failed.'");
+    msg("'Pressurising " + lang.getName(mainRoom, {article:DEFINITE}) + "... Pressurisation failed.'");
     return world.SUCCESS;
   }
 
-  msg("'Pressurising " + mainRoom.byname({article:DEFINITE}) + "... Room is now pressurised.'");
+  msg("'Pressurising " + lang.getName(mainRoom, {article:DEFINITE}) + "... Room is now pressurised.'");
   mainRoom.vacuum = false;
   return world.SUCCESS;
 }

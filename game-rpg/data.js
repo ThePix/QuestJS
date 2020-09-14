@@ -314,7 +314,7 @@ skills.add(new Spell("Commune with animal", {
     if (target.canTalkFlagIsTemporary) {
       target.canTalkFlag = false
       delete target.canTalkFlagIsTemporary
-      return "The {i:Commune with animal} spell on " + target.byname({article:DEFINITE}) + " expires."
+      return "The {i:Commune with animal} spell on " + lang.getName(target, {article:DEFINITE}) + " expires."
     }
     return ''
   },

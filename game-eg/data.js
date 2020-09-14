@@ -205,11 +205,8 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
   loc:"lounge",
   examine:"A small red torch.",
   regex:/^torch$/, 
-  byname:function(options) {
-    let res = this.alias;
-    if (options.article) { res = (options.article === DEFINITE ? "the" : "a") + " " + this.alias; }
-    if (this.switchedon && options.modified) { res += " (providing light)"; }
-    return res;
+  getNameModifier:function(options) {
+    return (this.switchedon ? " (providing light)" : '')
   },
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
@@ -350,7 +347,7 @@ createRoom("kitchen", {
     if (char === game.player) {
       msg("You go through the trapdoor, and down the ladder.");
     } else {
-      msg("You watch " + char.byname({article:DEFINITE}) + " disappear through the trapdoor.");
+      msg("You watch " + lang.getName(char, {article:DEFINITE}) + " disappear through the trapdoor.");
     }
   }}),
   north:new Exit("garage"),
@@ -376,10 +373,10 @@ createItem("camera",
   { loc:"kitchen", examine:"A cheap digital camera.", regex:/^picture box$/ }
 );
 
-createItem("big_kitchen_table",
-  SURFACE(),
-  { loc:"kitchen", examine: "A Formica table."  }
-);
+createItem("big_kitchen_table", SURFACE(), {
+  loc:"kitchen",
+  examine: "A Formica table.",
+})
 
 createItem("jug", VESSEL(4), TAKEABLE(), {
   loc:"big_kitchen_table",
@@ -473,20 +470,20 @@ createItem("charger",
 );
 
 
-createItem("charger_compartment",
-  COMPONENT("charger"),
-  CONTAINER(true),
-  { alias:"compartment", examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.", 
-    testRestrictions:function(item) {
-      const contents = w.charger_compartment.getContents(world.LOOK);
-      if (contents.length > 0) {
-        msg("The compartment is full.");
-        return false;
-      }
-      return true;
-    },
-  }
-);
+createItem("charger_compartment", COMPONENT("charger"), CONTAINER(true), {
+  alias:"compartment",
+  examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.",
+  testRestrictions:function(item) {
+    const contents = w.charger_compartment.getContents(world.LOOK)
+    if (contents.length > 0) {
+      msg("The compartment is full.")
+      return false
+    }
+    return true
+  },
+})
+
+
 
 createItem("charger_button",
   COMPONENT("charger"),

@@ -69,10 +69,6 @@ class Skill {
     this.targetText = "Targeting {nm:target:the}."
     for (let key in data) this[key] = data[key]
   }
-  
-  byname(options) {
-    return (options.article === DEFINITE ? 'the ' : '') + this.name
-  }
 }
 
 class MetaSkill extends Skill {
@@ -134,7 +130,7 @@ const skills = {
   terminate:function(spell, item) {
     array.remove(item.activeEffects, spell.name)
     delete item['countdown_' + spell.name]
-    let s = "The {i:" + spell.name + "} spell" + (item === game.player ? '' : " on " + item.byname({article:DEFINITE})) + " terminates."
+    let s = "The {i:" + spell.name + "} spell" + (item === game.player ? '' : " on " + lang.getName(item, {article:DEFINITE})) + " terminates."
     if (spell.terminatingScript) s += spell.terminatingScript(item)
     return s
   }
@@ -660,16 +656,8 @@ const EQUIPPABLE = function() {
   }
   
   res.byname = function(options) {
-    if (!options) options = {};
-    let s = "";
-    if (options.article === DEFINITE) {
-      s = lang.addDefiniteArticle(this);
-    }
-    if (options.article === INDEFINITE) {
-      s = lang.addIndefiniteArticle(this);
-    }
-    s += this.alias;
-    if (options && options.possessive) s += "'s";
+    if (!options) options = {}
+    let s = lang.getName(this, options)
     if (this.equipped && options.modified && (this.isAtLoc(game.player.name))) { s += " (equipped)"; }
     if (options && options.capital) s = sentenceCase(s);
     return s;
@@ -805,7 +793,7 @@ commands.push(new Cmd('Attack', {
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + "No point attacking " + item.byname({article:DEFINITE}) + ".");
+    msg(prefix(item, isMultiple) + "No point attacking " + lang.getName(item, {article:DEFINITE}) + ".");
     return false;
   },
 }));
@@ -868,7 +856,7 @@ commands.push(new Cmd('LearnSpell', {
     if (!source) return failedmsg("You do not have anything you can learn {i:" + spell.name + "} from.")
     
     game.player.skillsLearnt.push(spell.name)
-    msg("You learn {i:" + spell.name + "} from " + source.byname({article:DEFINITE}) + ".")
+    msg("You learn {i:" + spell.name + "} from " + lang.getName(source, {article:DEFINITE}) + ".")
     return world.SUCCESS
   },
 }));

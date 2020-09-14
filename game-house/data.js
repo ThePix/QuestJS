@@ -102,7 +102,7 @@ createItem("generic_window", {
           Print ("Mandy looked at the bricked up window. No way was she getting out that way.")
         }
         else {
-          Print ("Mandy looked at the bricked up window. No way was she getting out that way. Wait. The window she had smashed was in the " + LCase(this.roomsmashed.byname({})) + ". Why was this window bricked up too?")
+          Print ("Mandy looked at the bricked up window. No way was she getting out that way. Wait. The window she had smashed was in the " + LCase(this.lang.getName(roomsmashed, {})) + ". Why was this window bricked up too?")
           this.noted = true
         }
       }
@@ -222,18 +222,18 @@ createItem("pen", {
 createItem("shakespeare_book", {
   loc:"school_bag",
   examine:function() {
-          if (this.state === 0 && this.byname({}) = "\"Antony and Cleopatra\"") {
+          if (this.state === 0 && lang.getName(this, {}) = "\"Antony and Cleopatra\"") {
             Print ("Mandy glanced at her copy of Antony and Cleopatra. She really should get around to actually reading it some time, what with an exam on it in just a few weeks.")
           }
           else {
             if (this.state === 0) {
               this.state = 1
-              Print ("Mandy glanced at her copy of \"Antony and Cleopatra\". Wait, this was not the same book! This was " + this.byname({}) + ". What had happened to \"Antony and Cleopatra\"? Ms Coulter would be furious.")
+              Print ("Mandy glanced at her copy of \"Antony and Cleopatra\". Wait, this was not the same book! This was " + lang.getName(this, {}) + ". What had happened to \"Antony and Cleopatra\"? Ms Coulter would be furious.")
             }
             else {
-              Print ("Mandy looked at the book she now had. " + this.byname({}) + ". She wondered if it would be any less boring than \"Antony and Cleopatra\". Probably not worth risking finding out.")
+              Print ("Mandy looked at the book she now had. " + lang.getName(this, {}) + ". She wondered if it would be any less boring than \"Antony and Cleopatra\". Probably not worth risking finding out.")
             }
-            if (w.clockwork_thespian.state > 1 && this.byname({}) === "\"Hamlet\"") {
+            if (w.clockwork_thespian.state > 1 && lang.getName(this, {}) === "\"Hamlet\"") {
               Print ("Then she remembered the Clockwork Thespian. The soul of wit. Hamlet, act 2, scene 2. Quickly she thumbed through. Brevity! Brevity is the soul of wit.")
               this.state = 2
               w.clockwork_thespian.state = 101
@@ -771,10 +771,10 @@ createItem("boots", {
           break
         default:
           if (this.size > 0) {
-            s = ("The " + LCase(this.byname({})) + " was of gigantic proportions!")
+            s = ("The " + LCase(lang.getName(this, {})) + " was of gigantic proportions!")
             break
           else {
-            s = ("The " + LCase(this.byname({})) + " was too tiny to see properly.")
+            s = ("The " + LCase(lang.getName(this, {})) + " was too tiny to see properly.")
           }
         }
       }
@@ -812,7 +812,7 @@ createItem("victorian_ceiling", {
       Print ("The ceiling was white, with simple decorations along each side.")
     }
     else {
-      Print ("The ceiling turned out to be no more interesting from up here. Mandy wondered why she had bothered stabding on the " + w.player.stoodon.byname({}) + ".")
+      Print ("The ceiling turned out to be no more interesting from up here. Mandy wondered why she had bothered stabding on the " + w.player.lang.getName(stoodon, {}) + ".")
     }
   },
 })

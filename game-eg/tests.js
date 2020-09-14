@@ -19,12 +19,12 @@ test.tests = function() {
   test.title("sentenceCase");
   test.assertEqual("Simple text", sentenceCase("simple text"));
   
-  test.title("byname");
-  test.assertEqual("book", w.book.byname());
-  test.assertEqual("the book", w.book.byname({article:DEFINITE}));
-  test.assertEqual("A book", w.book.byname({article:INDEFINITE, capital:true}));
-  test.assertEqual("you", w.me.byname());
-  test.assertEqual("You", w.me.byname({article:INDEFINITE, capital:true}));
+  test.title("getName");
+  test.assertEqual("book", lang.getName(w.book));
+  test.assertEqual("the book", lang.getName(w.book, {article:DEFINITE}));
+  test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
+  test.assertEqual("you", lang.getName(w.me));
+  test.assertEqual("You", lang.getName(w.me, {article:INDEFINITE, capital:true}));
   
   
   test.title("random.fromArray");
@@ -220,7 +220,7 @@ test.tests = function() {
   test.title("Look inside");
   test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box and an ornate doll.");
   w.jewellery_box.closed = false
-  test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box (containing a ring) and an ornate doll.");
+  test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box (containing a ring) and an ornate doll.")
   
   test.assertCmd("look inside box", "Inside the cardboard box you can see nothing.");
   test.assertCmd("look inside boots", "There's nothing to see inside.");
@@ -272,6 +272,7 @@ test.tests = function() {
 
   test.title("Simple object commands (bricks)");
   test.assertCmd("get the bricks", "You take seven bricks.");
+  test.assertCmd("inv", "You are carrying seven bricks and a knife.");
   test.assertCmd("drop 3 bricks", "You drop three bricks.");
   test.assertCmd("inv", "You are carrying four bricks and a knife.");
   test.assertCmd("drop 4 bricks", "You drop four bricks.");
@@ -353,7 +354,6 @@ test.tests = function() {
   test.assertCmd("say hello", ["You say, 'Hello.'", "No one seemed interested in what you say."]);
   w.Kyle.loc = "dining_room"
   test.assertCmd("w", ["You head west.", "The dining room", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and Lara here.", "You can go east, up or west.",]);
-
   test.assertCmd("say hello", ["You say, 'Hello.'", "'Oh, hello there,' replies Lara.", "'Have you two met before?' asks Kyle."]);
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
@@ -465,6 +465,8 @@ test.tests = function() {
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is closed.");
   test.assertCmd("push button", "You push the button, but nothing happens.");
   test.assertCmd("put torch in compartment", "The compartment is closed.");
+  
+  
   test.assertCmd("x compartment", "The compartment is just the right size for the torch. It is closed.");
   test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see nothing.");
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");

@@ -355,17 +355,17 @@ createItem("Kyle",
     },
     revive:function(isMultiple, char) {
       if (char === game.player) {
-        msg("You wonder how to revive " + this.byname() + " - probably best to leave that to Xsansi.");
+        msg("You wonder how to revive " + lang.getName(this, ) + " - probably best to leave that to Xsansi.");
         return false;
       }
       if (char !== w.Xsansi) {
-        msg("'" + char.byname() + ", can you revive " + this.byname() + "?' you ask.");
+        msg("'" + lang.getName(char, ) + ", can you revive " + lang.getName(this, ) + "?' you ask.");
         msg("'Probably best to leave that to Xsansi.'");
         return false;
       }
       if (!this.inPod) {
-        msg("'Xsansi, please revive " + this.byname() + ",' you say.");
-        msg("'Crew member " + this.byname() + " is not currently in stasis.'");
+        msg("'Xsansi, please revive " + lang.getName(this, ) + ",' you say.");
+        msg("'Crew member " + lang.getName(this, ) + " is not currently in stasis.'");
         return false;
       }
       // check number revived TODO!!!
