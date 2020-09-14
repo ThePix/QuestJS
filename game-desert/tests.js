@@ -19,12 +19,12 @@ test.tests = function() {
   test.title("sentenceCase");
   test.assertEqual("Simple text", sentenceCase("simple text"));
   
-  test.title("byname");
-  test.assertEqual("book", w.lang.getName(book, ));
-  test.assertEqual("the book", w.lang.getName(book, {article:DEFINITE}));
-  test.assertEqual("A book", w.lang.getName(book, {article:INDEFINITE, capital:true}));
-  test.assertEqual("you", w.lang.getName(me, ));
-  test.assertEqual("You", w.lang.getName(me, {article:INDEFINITE, capital:true}));
+  test.title("lang.getName");
+  test.assertEqual("book", lang.getName(w.book));
+  test.assertEqual("the book", lang.getName(w.book, {article:DEFINITE}));
+  test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
+  test.assertEqual("you", lang.getName(w.me));
+  test.assertEqual("You", lang.getName(w.me, {article:INDEFINITE, capital:true}));
   
   
   test.title("random.fromArray");

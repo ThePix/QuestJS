@@ -326,11 +326,8 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
   scenery:true,
   examine:"A small red torch.",
   regex:/^torch$/, 
-  byname:function(options) {
-    let res = this.alias;
-    if (options.article) { res = (options.article === DEFINITE ? "the" : "a") + " " + this.alias; }
-    if (this.switchedon && options.modified) { res += " (providing light)"; }
-    return res;
+  getNameModifier:function(options) {
+    return this.switchedon ? " (providing light)" : ''
   },
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;

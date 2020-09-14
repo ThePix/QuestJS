@@ -350,7 +350,7 @@ createItem("Kyle",
     examine:"Kyle is the computer expert, but also a good cook, and has volunteered for the role of chef. An Australian, he is slim, and below average height, with very short blonde hair, and green eyes.",
     crewStatus:function() {
       let s = "Crew member Kyle's designation is: coms. His current status is: ";
-      s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
+      s += this.status + ". His current location is: " + lang.getName(w[this.loc], {article:DEFINITE}) + ".";
       return s;
     },
     revive:function(isMultiple, char) {
@@ -517,7 +517,7 @@ createItem("Ostap",
     specialisation:"biology",
     crewStatus:function() {
       let s = "Crew member Ostap's designation is: biologist. His current status is: ";
-      s += this.status + ". His current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
+      s += this.status + ". His current location is: " + lang.getName(w[this.loc], {article:DEFINITE}) + ".";
       return s;
     },
 
@@ -696,7 +696,7 @@ createItem("Aada",
     examine:"Aada is a Finnish woman with features so ideal you suspect genetic engineering. Tall, with a perfect figure, she keeps her blonde hair short.",
     crewStatus:function() {
       let s = "Crew member Aada's designation is: geologist. Her current status is: ";
-      s += this.status + ". Her current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
+      s += this.status + ". Her current location is: " + lang.getName(w[this.loc], {article:DEFINITE}) + ".";
       return s;
     },
     
@@ -847,7 +847,7 @@ createItem("Ha_yoon",
     examine:"Ha-yoon is a well-respected Korean engineer, making her possibly the most important member of the crew for ensuring the ship gets back to Earth. She is the shortest of the crew, but perhaps the loudest. She has long, raven=black hair, that falls to her waist, and dark eyes.",
     crewStatus:function() {
       let s = "Crew member Ha-yoon's designation is: engineer. Her current status is: ";
-      s += this.status + ". Her current location is: " + w[this.loc].byname({article:DEFINITE}) + ".";
+      s += this.status + ". Her current location is: " + lang.getName(w[this.loc], {article:DEFINITE}) + ".";
       return s;
     },
     
