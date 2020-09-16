@@ -450,7 +450,7 @@ const lang = {
     }
     if (settings.panes !== "None") {
       metamsg("{b:User Interface:} To interact with an object, click on its name in the side pane, and a set of possible actions will appear under it. Click on the appropriate action.");
-      if (settings.compass) {
+      if (settings.compassPane) {
         metamsg("You can also use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
       }
     }

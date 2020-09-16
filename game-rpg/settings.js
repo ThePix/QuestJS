@@ -31,7 +31,7 @@ settings.setup = function() {
   game.player.status = "You are feeling fine";
   game.player.skillsLearnt = ["Double attack", "Fireball"]
 
-  ioUpdateCustom()
+  settings.updateCustomUI()
   
 }
 
@@ -41,7 +41,7 @@ settings.setup = function() {
 
 
 
-const ioCreateCustom = function() {
+settings.customUI = function() {
   document.writeln('<div id="rightpanel" class="sidepanes sidepanesRight">');
   document.writeln('<div id="rightstatus">');
   document.writeln('<table align="center">');
@@ -83,7 +83,7 @@ const ioCreateCustom = function() {
 };  
 
 
-const ioUpdateCustom = function() {
+settings.updateCustomUI = function() {
   $('#weaponImage').attr('src', settings.imagesFolder + '/icon-' + game.player.getEquippedWeapon().image + '.png');
   $('#weapon-td').prop('title', "Weapon: " + game.player.getEquippedWeapon().alias);
   

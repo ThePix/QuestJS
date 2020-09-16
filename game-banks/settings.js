@@ -6,8 +6,6 @@ settings.version = "0.1"
 settings.thanks = ["Kyle", "Lara"]
 
 // UI options
-settings.divider = "div4.png"
-
 settings.customExits = 'exits'
 settings.files = ["code", "data", "npcs"]
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
@@ -23,7 +21,6 @@ settings.roomTemplate = [
 settings.status = [
   function() { return "<td colspan=\"2\" align=\"center\">" + getDateTime() + "</td>"; },
   function() { return "<td width=\"100px\"><b><i>Bonus:</i></b></td><td width=\"30px\" align=\"right\"><b>$" + game.player.bonus + "k</b></td>"; },
-  function() { return "<td colspan=\"2\" align=\"center\"> </td>"; },
   function() { return "<td><i>You:</i></td><td align=\"right\">" + game.player.status + "%</td>"; },
   function() { return "<td><i>Ship:</i></td><td align=\"right\">" + w.Xsansi.status + "%</td>"; },
   function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + settings.statusReport(w.Ha_yoon) + "</td>"; },
@@ -41,11 +38,7 @@ settings.statusReport = function(obj) {
 
 // Change the name values to alter how items are world.ed
 // You can add (or remove) inventories too
-settings.inventories = [
-//  {name:'Items Held', alt:'itemsHeld', test:util.isHeldNotWorn, getLoc:function() { return game.player.name; } },
-//  {name:'Items Here', alt:'itemsHere', test:util.isHere, getLoc:function() { return game.player.loc; } },
-];
-
+settings.inventoryPane = false
 
 
 
@@ -84,11 +77,6 @@ settings.setup = function() {
 
 
 
-
-
-
-
-settings.startingDialogEnabled = true
 const professions = [
   {name:"Engineer", bonus:"mech"},
   {name:"Scientist", bonus:"science"},
@@ -117,17 +105,18 @@ s += '<p>Profession: <select id="job">'
 for (let i = 0; i < professions.length; i++) {
   s += '<option value="' + professions[i].name + '">' + professions[i].name + '</option>';
 }
-s += '</select></p>';
-//s += '<p>Background: <select id="background">'
-//for (let i = 0; i < backgrounds.length; i++) {
-//  s += '<option value="' + backgrounds[i].name + '">' + backgrounds[i].name + '</option>';
-//}
+s += '</select></p>'
+s += '<p>Background: <select id="background">'
+for (let i = 0; i < backgrounds.length; i++) {
+  s += '<option value="' + backgrounds[i].name + '">' + backgrounds[i].name + '</option>';
+}
 s += '</select></p>';
 
 
-settings.startingDialogTitle = "Who are you?"
-settings.startingDialogWidth = 560
-settings.startingDialogHeight = 550
+//settings.startingDialogEnabled = true
+settings.startingDialogTitle = "To start with..."
+settings.startingDialogWidth = 550
+settings.startingDialogHeight = 580
 settings.startingDialogHtml = s
 settings.startingDialogOnClick = function() {
   let p = game.player;
@@ -148,36 +137,5 @@ settings.startingDialogAlt = function() {
   w.me.isFemale = true;
   w.me.fullname = "Shaala";
 }
-
-
-
-
-$(function() {
-  if (settings.startingDialogDisabled) {
-    return; 
-  }
-  const diag = $("#dialog");
-  diag.prop("title", "Who are you?");
-  
-  diag.html(s);
-  diag.dialog({
-    modal:true,
-    dialogClass: "no-close",
-    width: 560,
-    height: 550,
-    buttons: [
-      {
-        text: "OK",
-        click: function() {
-          $(this).dialog("close");
-          if (settings.textInput) { $('#textbox').focus(); }
-        }
-      }
-    ]
-  });
-  setTimeout(function() { 
-    $('#namefield').focus();
-  }, 10);
-});
 
 

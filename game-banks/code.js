@@ -72,11 +72,10 @@ const PLANETS = [
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 96);
       w.Kyle.status = Math.min(w.Kyle.status, 98);
       msg("{i:The \"Joseph Banks\" left Earth orbit in 2319, on a centuries-long mission to survey five relatively close star systems. The crew were put in stasis for the long journey between the stars.}");
-      wait(function() {
-        msg("&nbsp;");
-        msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at " + PLANETS[0].starName + ",' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.'");
-        world.enterRoom();
-      });
+      wait()
+      msg("&nbsp;");
+      msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at " + PLANETS[0].starName + ",' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.'");
+      //world.enterRoom();
     },
     Kyle_how_are_you:"'I'm good, mate. Why? Why shouldn't I be?'",
     Ostap_how_are_you:"'I am feeling good.'",
@@ -1031,7 +1030,7 @@ commands.unshift(new Cmd('Help', {
 
 commands.push(new Cmd('HelpGen', {
   regex:/^(?:\?|help) gen.*$/,
-  script:function() { helpScript(); },
+  script:function() { lang.helpScript(); },
 }));
 
 commands.push(new Cmd('HelpGame', {
@@ -1115,9 +1114,9 @@ commands.push(new Cmd('HelpSystem', {
   regex:/^(?:\?|help) system?$/,
   script:function() {
     metamsg("{b:The Game System:}")
-    metamsg("This game is written entirely in JavaScript, so it is running in your browser. Compared to Quest 5, which I am familiar with, this means that you do not need to download any software to run it, and there is no annoying lag while you wait for a server to respond. Compared to Inform... well, it allows authors to directly access a modern programming language (though the point of Inform 7, of course, is to keep the programming language at bay).");
-    metamsg("It is a complete system, implementing all the standards of a parser game, including the usual compass directions by default! Containers, surfaces, countables, wearables, openables, furniture, components and switchable are all built in, as well as NPCs, which hopefully are acting with some semblance of realism.")
-    metamsg("For more information, including a tutorial on how to create your own game, see <a href=\"https://github.com/ThePix/QuestJS/wiki\">here</a>. As yet there is no editor, but I hope there will be one day.");
+    metamsg("This game was written for Quest 6, which means it is running entirely in JavaScript in your browser. Compared to Quest 5 (which I am also familiar with) this means that you do not need to download any software to run it, and there is no annoying lag while you wait for a server to respond. Compared to Inform... well, it allows authors to directly access a modern programming language (though the point of Inform 7, of course, is to keep the programming language at bay).");
+    metamsg("Quest 6 is a complete system, implementing all the standards of a parser game, including the usual compass directions by default! Containers, surfaces, countables, wearables, openables, furniture, components and switchable are all built in, as well as NPCs, who hopefully are acting with some semblance of realism.")
+    metamsg("For more information, including a tutorial on how to create your own game, see {link:here:https://github.com/ThePix/QuestJS/wiki\}. As yet there is no editor, but I hope there will be one day.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 }));

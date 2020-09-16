@@ -3,10 +3,10 @@
 
 @keyframes offset {
   from {
-    background-position: 0 0;
+    background-position: 200px 0;
   }
   to {
-    background-position: 200px 0;
+    background-position: 0 0;
   }
 }
 
@@ -19,18 +19,29 @@ body {
 }
 
 
+.dark-body {
+  color: #eee;
+}
+
 
 /* Style page content */
 #main {
-  margin-left: 160px; /* Same as the width of the sidebar */
-  margin-right: 160px; /* Same as the width of the sidebar */
+  margin-left: 200px; /* Same as the width of the sidebar */
+  margin-right: 100px; /* Same as the width of the sidebar */
   margin-bottom: 160px; /* Same as the width of the sidebar */
   margin-top: 20px; /* Same as the width of the sidebar */
   padding: 15px;
   background-color: #d0d0d0;
-  border: #404040 solid 5px;
+  border: #004 solid 5px;
 }
-
+.defaultP {
+  text-align: justify;
+  text-justify: inter-word;
+  text-indent: 50px;
+}
+.dark-body > #main {
+  background-color: #111;
+}
 
 h2, h4 {
   font-family: 'Orbitron', serif;
@@ -51,11 +62,18 @@ h2, h4 {
   background-color: #d0d0d0;
   width:95%;
 }
+.dark-body > div > div > #textbox {
+  background-color: #111;
+  color: white;
+}
 
 
 .inputtext {
   font-style:italic;
   color:green;
+}
+.dark-body > div > div > .inputtext {
+  color:lightgreen;
 }
 
 
@@ -68,12 +86,22 @@ h2, h4 {
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 2; /* Stay on top */
   top: 0; /* Stay at the top */
-  background-color: #fdf;
-  background-image:url("../images/back4.png");
+  background-color: #555;
   overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 5px;
-  font-size: 10pt;
-  /*font-family: 'Orbitron';*/
+  padding: 5px;
+  font-size: 12pt;
+}
+.paneDiv {
+  background-color:#bbb;
+  padding-bottom:5px;
+  border: #004 solid 2px;
+  margin-bottom: 10px;
+}
+.paneDiv > h4 {
+  padding-left: 10px;
+}
+.dark-body > div > .paneDiv {
+  background-color:#333;
 }
 .sidepanesLeft {
   left: 0;
@@ -84,6 +112,15 @@ h2, h4 {
 .sidepanesNone {
   display: None;
 }
+
+
+
+.paneDivFinished {
+  display: none;
+  font-size: 3em;
+  text-align: center;
+}
+
 
 
 #bottom-panel {
@@ -100,7 +137,7 @@ h2, h4 {
   background-color: black;
   overflow: hidden;
   height: 100%;
-  border: #404040 solid 5px;
+  border: #444 solid 5px;
   background-image: url('../images/scanner.png');
   animation-name: offset;
   animation-duration: 30s;
@@ -171,49 +208,20 @@ td.compassbutton {
     padding: 2px;
     background-color: #d0d0d0;
     width: 20px;
-    height: 15px;
+    height: 20px;
 }  
 span.compassbutton {
     cursor: pointer;
     text-align: center;
     width: 18px;
     display: block;
-}  
+}
+.dark-body > div > div > table > tbody > tr > .compassbutton {
+  background-color:#444;
+}
 
 
-/* Items in inventories */
-#panes h4 {
-  padding-left: 6px;
-  margin-top: 4px;
-  margin-bottom: 4px;
-}
-.item {
-    cursor: pointer;
-    border: black solid 1px;
-    padding: 2px;
-    padding-bottom: 0px;
-    background-color: #d0d0d0;
-    width: 135px;
-    margin-left: 10px;
-    margin-bottom: 0px;
-}
-.subitem {
-    background-color: #a0a0ff;
-    width: 140px;
-    margin-top: 0px;
-}
-.itemaction {
-    cursor: pointer;
-    border: black solid 1px;
-    border-top: none;
-    padding: 2px;
-    background-color: SandyBrown;
-    width: 100px;
-    margin-left: 20px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    font-style:italic;
-}
+
 #status-pane {
   padding-left: 5pt;
 }
@@ -232,7 +240,7 @@ span.compassbutton {
 }
 .ui-dialog-titlebar {
   background-image: none;
-  background-color: #c0c0ff;
+  background-color: #ccc;
 }
 
 .scrolling {
@@ -244,9 +252,7 @@ span.compassbutton {
 
 
 th, td {
-  border-bottom: 1px solid #ddd;
   padding:4px;
-  text-align:center;
 }
 
 
