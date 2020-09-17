@@ -19,21 +19,30 @@ settings.roomTemplate = [
 ]
 
 settings.status = [
-  function() { return "<td colspan=\"2\" align=\"center\">" + getDateTime() + "</td>"; },
-  function() { return "<td width=\"100px\"><b><i>Bonus:</i></b></td><td width=\"30px\" align=\"right\"><b>$" + game.player.bonus + "k</b></td>"; },
-  function() { return "<td><i>You:</i></td><td align=\"right\">" + game.player.status + "%</td>"; },
-  function() { return "<td><i>Ship:</i></td><td align=\"right\">" + w.Xsansi.status + "%</td>"; },
-  function() { return "<td><i>Ha-yoon:</i></td><td align=\"right\">" + settings.statusReport(w.Ha_yoon) + "</td>"; },
-  function() { return "<td><i>Kyle:</i></td><td align=\"right\">" + settings.statusReport(w.Kyle) + "</td>"; },
-  function() { return "<td><i>Ostap:</i></td><td align=\"right\">" + settings.statusReport(w.Ostap) + "</td>"; },
-  function() { return "<td><i>Aada:</i></td><td align=\"right\">" + settings.statusReport(w.Aada) + "</td>"; },
+  function() { return "<td colspan=\"3\" style=\"border:black solid 1px;\" align=\"center\">" + getDateTime() + "</td>"; },
+  function() { return "<td width=\"100px\"><b><i>Bonus:</i></b></td><td width=\"30px\" align=\"right\"><b>$" + game.player.bonus + "k</b></td><td></td>"; },
+  function() { return settings.statusReport(game.player) },
+  function() { return settings.statusReport(w.Xsansi) },
+  function() { return settings.statusReport(w.Ha_yoon) },
+  function() { return settings.statusReport(w.Kyle) },
+  function() { return settings.statusReport(w.Ostap) },
+  function() { return settings.statusReport(w.Aada) },
 ];
 
 
-
+settings.colours = ['red', 'yellow', 'blue', 'lime', 'white']
 settings.statusReport = function(obj) {
-  if (typeof obj.status === "string") return obj.status;
-  return obj.status + "%";
+  let s, colour
+  if (typeof obj.status === "string") {
+    s = obj.status
+    colour = 'black'
+  }
+  else {
+    s = obj.status.toString() + '%'
+    colour = settings.colours[util.getByInterval([25,50,25,1, 100], obj.status)]
+    
+  }
+  return "<td><i>" + obj.alias + ":</i></td><td style=\"border:black solid 2px; background:" + colour + "\">&nbsp;</td><td align=\"right\">" + s + "</td>";
 }
 
 // Change the name values to alter how items are world.ed
@@ -102,13 +111,13 @@ s += '<p>Name: <input id="namefield" type="text" value="Ariel" /></p>';
 s += '<p>Male: <input type="radio" id="male" name="sex" value="male">&nbsp;&nbsp;&nbsp;&nbsp;';
 s += 'Female<input type="radio" id="female" name="sex" value="female" checked></p>';
 s += '<p>Profession: <select id="job">'
-for (let i = 0; i < professions.length; i++) {
-  s += '<option value="' + professions[i].name + '">' + professions[i].name + '</option>';
+for (let prof of professions) {
+  s += '<option value="' + prof.name + '">' + prof.name + '</option>';
 }
 s += '</select></p>'
 s += '<p>Background: <select id="background">'
-for (let i = 0; i < backgrounds.length; i++) {
-  s += '<option value="' + backgrounds[i].name + '">' + backgrounds[i].name + '</option>';
+for (let back of backgrounds) {
+  s += '<option value="' + back.name + '">' + back.name + '</option>';
 }
 s += '</select></p>';
 
@@ -126,7 +135,7 @@ settings.startingDialogOnClick = function() {
   w.me.jobBonus = job.bonus;
   //w.me.background = backgrounds.find(function(el) { return el.name === background; });
   w.me.isFemale = $("#female").is(':checked');
-  w.me.fullname = $("#namefield").val();
+  w.me.alias = $("#namefield").val();
 }
 settings.startingDialogInit = function() {
   $('#namefield').focus();
@@ -135,7 +144,7 @@ settings.startingDialogAlt = function() {
   w.me.job = professions[0].name;
   w.me.jobBonus = professions[0].bonus;
   w.me.isFemale = true;
-  w.me.fullname = "Shaala";
+  w.me.alias = "Shaala";
 }
 
 

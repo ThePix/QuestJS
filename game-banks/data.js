@@ -63,9 +63,9 @@ createRoom("stasis_bay", {
   desc:'There are six stasis pods here (despite only five crew members), four on one side and two on the other. {podStatus} Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant alive. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
   tpStatus:function() {
     const arr = [];
-    for (let i = 0; i < NPCS.length; i++) {
-      if (NPCS[i].status === "stasis") {
-        arr.push(NPCS[i]);
+    for (let npc of NPCS) {
+      if (npc.status === "stasis") {
+        arr.push(npc);
       }
     }
     switch (arr.length) {

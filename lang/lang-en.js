@@ -448,7 +448,7 @@ const lang = {
       metamsg("{b:Shortcuts:}You can often just type the first few characters of an item's name and Quest will guess what you mean.  If fact, if you are in a room with Brian, who is holding a ball, and a box, Quest should be able to work out that B,PUT B IN B mean you want Brian to put the ball in the box.")
       metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
     }
-    if (settings.panes !== "None") {
+    if (settings.panes !== "none") {
       metamsg("{b:User Interface:} To interact with an object, click on its name in the side pane, and a set of possible actions will appear under it. Click on the appropriate action.");
       if (settings.compassPane) {
         metamsg("You can also use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
@@ -490,11 +490,11 @@ const lang = {
   },
 
   transcriptScript:function() {
-    metamsg("The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output.");
-    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it. To empty the file, use SCRIPT CLEAR.");
+    metamsg("The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the player got there.");
+    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place inthe game). To empty the file, use SCRIPT CLEAR.");
     metamsg("You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.");
-    metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser, but should be saved when you save your game. You can only have one transcript dialog window open at a time.");
-    metamsg("You can add a comment to the transcript by starting your text with a *.")
+    metamsg("You can add a comment to the transcript by starting your text with an asterisk (*).")
+    metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser. The transcript is not saved when you save your game (but will not be lost when you load a game). If you complete the game the text input will disappear, however if you have a transcript a link will be available to access it.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 

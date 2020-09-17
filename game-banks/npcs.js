@@ -891,8 +891,8 @@ createItem("Ha_yoon",
 
 const NPCS = [w.Ostap, w.Aada, w.Kyle, w.Ha_yoon];
 
-for (let i = 0; i < NPCS.length; i++) {
-  createTopics(NPCS[i]);
-  NPCS[i].status = 100;
+for (let npc of NPCS) {
+  createTopics(npc);
+  npc.status = 100;
 }
   

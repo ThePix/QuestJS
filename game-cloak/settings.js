@@ -8,7 +8,7 @@ settings.thanks = [];
 
 settings.libraries = ["saveload", "text", "io", "command", "defaults", "templates", "world", "parser", "commands"],  // 
 
-settings.panes = 'None'
+settings.panes = 'none'
 settings.debug = false
 
 settings.roomTemplate = [

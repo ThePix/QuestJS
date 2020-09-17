@@ -19,7 +19,7 @@ body {
 }
 
 
-.cmdlink {
+.cmd-link {
   cursor: pointer;
   color:blue;
 }
@@ -44,18 +44,18 @@ body {
   ecolor: white;
 }
 
-.inputtext {
+.input-text {
   font-style:italic;
   color:green;
 }
-.dark-body > div > div > .inputtext {
+.dark-body > div > div > .input-text {
   color:lightgreen;
 }
 
 
 
 /* Side panes */
-.sidepanes {
+.side-panes {
   height: 100%; /* Full-height: remove this if you want "auto" height */
   width: 160px; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -75,28 +75,28 @@ body {
 .dark-body > div > .paneDiv {
   background-color:#606;
 }
-.sidepanesLeft {
+.side-panes-left {
   left: 0;
 }
-.sidepanesRight {
+.side-panes-right {
   right: 0px;
 }
-.sidepanesNone {
+.side-panes-none {
   display: None;
 }
 
 /* Compass */
-td.compassbutton {
+td.compass-button {
     border: black solid 1px;
     padding: 2px;
     background-color: #c0c0ff;
     width: 20px;
     height: 15px;
 }
-.dark-body > div > div > table > tbody > tr > .compassbutton {
+.dark-body > div > div > table > tbody > tr > .compass-button {
   background-color:#404;
 }
-span.compassbutton {
+span.compass-button {
     cursor: pointer;
     text-align: center;
     width: 18px;
@@ -125,15 +125,15 @@ span.compassbutton {
 .dark-body > div > div > div > .item {
   background-color:#404;
 }
-.subitem {
+.sub-item {
     background-color: #a0a0ff;
     width: 140px;
     margin-top: 0px;
 }
-.dark-body > div > div > div > .subitem {
+.dark-body > div > div > div > .sub-item {
   background-color:#305;
 }
-.itemaction {
+.item-action {
     cursor: pointer;
     border: black solid 1px;
     border-top: none;
@@ -145,7 +145,7 @@ span.compassbutton {
     margin-bottom: 0px;
     font-style:italic;
 }
-.dark-body > div > div > div > .itemaction {
+.dark-body > div > div > div > .item-action {
   background-color:#602;
 }
 #status-pane {
@@ -165,12 +165,12 @@ span.compassbutton {
 
 
 // Used by showMenu
-.menutitle {
+.menu-title {
   color: grey;
   font-style: italic;
   margin-left: 20px;
 }
-.menuoption {
+.menu-option {
   color:blue;
   cursor: pointer;
   font-style: italic;

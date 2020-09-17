@@ -104,6 +104,16 @@ test.tests = function() {
   test.assertEqual(['boots', 'book', 'cardboard_box'], array.clone(testAry2, {compress:true}));
 
 
+  test.title("util.getByInterval")
+  const intervals = [2, 14, 4]
+  test.assertEqual(0, util.getByInterval(intervals, 0))
+  test.assertEqual(0, util.getByInterval(intervals, 1))
+  test.assertEqual(1, util.getByInterval(intervals, 2))
+  test.assertEqual(1, util.getByInterval(intervals, 15))
+  test.assertEqual(2, util.getByInterval(intervals, 16))
+  test.assertEqual(2, util.getByInterval(intervals, 19))
+  test.assertEqual(false, util.getByInterval(intervals, 20))
+
 
 
 

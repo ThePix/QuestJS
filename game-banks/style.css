@@ -34,7 +34,7 @@ body {
   background-color: #d0d0d0;
   border: #004 solid 5px;
 }
-.defaultP {
+.default-p {
   text-align: justify;
   text-justify: inter-word;
   text-indent: 50px;
@@ -47,7 +47,7 @@ h2, h4 {
   font-family: 'Orbitron', serif;
 }
 
-.cmdlink {
+.cmd-link {
   cursor: pointer;
   color:blue;
 }
@@ -68,11 +68,11 @@ h2, h4 {
 }
 
 
-.inputtext {
+.input-text {
   font-style:italic;
   color:green;
 }
-.dark-body > div > div > .inputtext {
+.dark-body > div > div > .input-text {
   color:lightgreen;
 }
 
@@ -80,7 +80,7 @@ h2, h4 {
 
 
 /* Side panes */
-.sidepanes {
+.side-panes {
   height: 100%; /* Full-height: remove this if you want "auto" height */
   width: 160px; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -98,24 +98,25 @@ h2, h4 {
   margin-bottom: 10px;
 }
 .paneDiv > h4 {
-  padding-left: 10px;
+  text-align: center;
+  margin: 10px;
 }
 .dark-body > div > .paneDiv {
   background-color:#333;
 }
-.sidepanesLeft {
+.side-panes-left {
   left: 0;
 }
-.sidepanesRight {
+.side-panes-right {
   right: 0px;
 }
-.sidepanesNone {
+.side-panes-none {
   display: None;
 }
 
 
 
-.paneDivFinished {
+.pane-div-finished {
   display: none;
   font-size: 3em;
   text-align: center;
@@ -161,12 +162,12 @@ h2, h4 {
 
 
 // Used by showMenu
-.menutitle {
+.menu-title {
   color: grey;
   font-style: italic;
   margin-left: 20px;
 }
-.menuoption {
+.menu-option {
   color:blue;
   cursor: pointer;
   font-style: italic;
@@ -203,27 +204,28 @@ h2, h4 {
 
 
 /* Compass */
-td.compassbutton {
+td.compass-button {
     border: black solid 1px;
     padding: 2px;
     background-color: #d0d0d0;
     width: 20px;
     height: 20px;
 }  
-span.compassbutton {
+span.compass-button {
     cursor: pointer;
     text-align: center;
     width: 18px;
     display: block;
 }
-.dark-body > div > div > table > tbody > tr > .compassbutton {
+.dark-body > div > div > table > tbody > tr > .compass-button {
   background-color:#444;
 }
 
 
 
 #status-pane {
-  padding-left: 5pt;
+  padding-left: 3pt;
+  padding-right: 3pt;
 }
 #compass-table {
   padding-left: 5pt;

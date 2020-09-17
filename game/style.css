@@ -10,7 +10,7 @@
 }
 
 
-.cmdlink {
+.cmd-link {
   cursor: pointer;
   color:blue;
 }
@@ -26,7 +26,7 @@
 }
 
 
-.inputtext {
+.input-text {
   font-style:italic;
   color:green;
 }
@@ -34,56 +34,8 @@
 
 
 
-/* Side panes */
-.sidepanes {
-  height: 100%; /* Full-height: remove this if you want "auto" height */
-  width: 160px; /* Set the width of the sidebar */
-  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  z-index: 1; /* Stay on top */
-  top: 0; /* Stay at the top */
-  background-color: #fdf;
-  background-image:url("../images/back.png");
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 5px;
-  font-size: 9pt;
-}
-.sidepanesLeft {
-  left: 0;
-}
-.sidepanesRight {
-  right: 0px;
-}
-.sidepanesNone {
-  display: None;
-}
 
 
-.paneDivFinished {
-  display: none;
-  font-size: 3em;
-  text-align: center;
-}
-
-
-// Used by showMenu
-.menutitle {
-  color: grey;
-  font-style: italic;
-  margin-left: 20px;
-}
-.menuoption {
-  color:blue;
-  cursor: pointer;
-  font-style: italic;
-  margin-left: 20px;
-}
-
-.continue {
-  color:blue;
-  cursor: pointer;
-  font-style: italic;
-  margin-left: 20px;
-}
 
 .unscrambler {
   font-family: "Lucida Console", Monaco, monospace;
@@ -110,33 +62,6 @@
   font-size: 10pt;
   color: red;
 }
-.error21::before {
-  content: "QUEST CODE ERROR: ";
-  font-style: italic;
-}
-.error22::before {
-  content: "GAME CODE ERROR: ";
-  font-style: italic;
-}
-.error23::before {
-  content: "PARSER ERROR: ";
-  font-style: italic;
-}
-.error25::before {
-  content: "TEXT PROCESSOR ERROR: ";
-  font-style: italic;
-}
-.error26::before {
-  content: "SAVE/LOAD ERROR: ";
-  font-style: italic;
-}
-.error27::before {
-  content: "DEBUG COMMAND: ";
-  font-style: italic;
-}
-
-
-
 
 .debug {
   font-size: 10pt;
@@ -144,32 +69,71 @@
   font-family: monospace;
   /*display: none;*/
 }
+h2 {
+  padding-top: 15px;
+}
 
 
+/* Side panes */
+.side-panes {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 160px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  background-color: #fdf;
+  background-image:url("../images/back.png");
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 5px;
+  font-size: 9pt;
+}
+.side-panes-left {
+  left: 0;
+}
+.side-panes-right {
+  right: 0;
+}
+.side-panes-none {
+  display: None;
+}
+
+
+.pane-div-finished {
+  display: none;
+  font-size: 3em;
+  text-align: center;
+}
+
+#panes h4 {
+  padding-left: 6px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
 
 
 /* Compass */
-td.compassbutton {
+#compass-table {
+  padding-left: 5pt;
+}
+td.compass-button {
     border: black solid 1px;
     padding: 2px;
     background-color: #c0c0ff;
     width: 20px;
     height: 15px;
 }  
-span.compassbutton {
+span.compass-button {
     cursor: pointer;
     text-align: center;
     width: 18px;
     display: block;
 }  
 
+#status-pane {
+  padding-left: 5pt;
+}
 
 /* Items in inventories */
-#panes h4 {
-  padding-left: 6px;
-  margin-top: 4px;
-  margin-bottom: 4px;
-}
 .item {
     cursor: pointer;
     border: black solid 1px;
@@ -180,12 +144,12 @@ span.compassbutton {
     margin-left: 10px;
     margin-bottom: 0px;
 }
-.subitem {
+.sub-item {
     background-color: #a0a0ff;
     width: 140px;
     margin-top: 0px;
 }
-.itemaction {
+.item-action {
     cursor: pointer;
     border: black solid 1px;
     border-top: none;
@@ -197,19 +161,35 @@ span.compassbutton {
     margin-bottom: 0px;
     font-style:italic;
 }
-#status-pane {
-  padding-left: 5pt;
+
+
+
+// Used by showMenu
+.menu-title {
+  color: grey;
+  font-style: italic;
+  margin-left: 20px;
 }
-#compass-table {
-  padding-left: 5pt;
+.menu-option {
+  color:blue;
+  cursor: pointer;
+  font-style: italic;
+  margin-left: 20px;
 }
+
+.continue {
+  color:blue;
+  cursor: pointer;
+  font-style: italic;
+  margin-left: 20px;
+}
+
+
+/* For dialog panels */
 #dialog {
   display:none;
 }
 
-
-
-/* For dialog panels */
 .no-close .ui-dialog-titlebar-close {
   display: none;
 }
@@ -217,7 +197,6 @@ span.compassbutton {
   background-image: none;
   background-color: #c0c0ff;
 }
-
 .scrolling {
   cursor: pointer;
   color: blue;
@@ -231,6 +210,4 @@ th, td {
   text-align:center;
 }
 
-h2 {
-  padding-top: 15px;
-}
+

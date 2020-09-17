@@ -42,7 +42,7 @@ settings.setup = function() {
 
 
 settings.customUI = function() {
-  document.writeln('<div id="rightpanel" class="sidepanes sidepanesRight">');
+  document.writeln('<div id="rightpanel" class="side-panes side-panes-right">');
   document.writeln('<div id="rightstatus">');
   document.writeln('<table align="center">');
   document.writeln('<tr><td width="120"><b>Current weapon</b></td></tr>');

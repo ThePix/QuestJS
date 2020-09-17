@@ -16,7 +16,7 @@ body {
 }
 
 
-.cmdlink {
+.cmd-link {
   cursor: pointer;
   color:blue;
 }
@@ -32,7 +32,7 @@ body {
 }
 
 
-.inputtext {
+.input-text {
   font-style:italic;
   color:green;
 }
@@ -41,7 +41,7 @@ body {
 
 
 /* Side panes */
-.sidepanes {
+.side-panes {
   height: 100%; /* Full-height: remove this if you want "auto" height */
   width: 160px; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -54,13 +54,13 @@ body {
   font-size: 9pt;
   font-family: 'Montserrat', sans-serif;;
 }
-.sidepanesLeft {
+.side-panes-left {
   left: 0;
 }
-.sidepanesRight {
+.side-panes-right {
   right: 0px;
 }
-.sidepanesNone {
+.side-panes-none {
   display: None;
 }
 
@@ -77,12 +77,12 @@ body {
 
 
 // Used by showMenu
-.menutitle {
+.menu-title {
   color: grey;
   font-style: italic;
   margin-left: 20px;
 }
-.menuoption {
+.menu-option {
   color:blue;
   cursor: pointer;
   font-style: italic;
@@ -143,14 +143,14 @@ body {
 
 
 /* Compass */
-td.compassbutton {
+td.compass-button {
     border: black solid 1px;
     padding: 2px;
     background-color: #c0c0ff;
     width: 20px;
     height: 15px;
 }  
-span.compassbutton {
+span.compass-button {
     cursor: pointer;
     text-align: center;
     width: 18px;
@@ -174,12 +174,12 @@ span.compassbutton {
     margin-left: 10px;
     margin-bottom: 0px;
 }
-.subitem {
+.sub-item {
     background-color: #a0a0ff;
     width: 140px;
     margin-top: 0px;
 }
-.itemaction {
+.item-action {
     cursor: pointer;
     border: black solid 1px;
     border-top: none;

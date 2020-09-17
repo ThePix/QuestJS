@@ -550,8 +550,8 @@ function arrival() {
   w.Aada.deployProbeTotal = 0;
   w.Ostap.deployProbeTotal = 0;
   updateTopics(w.Xsansi, w.Xsansi.currentPlanet);
-  for (let i = 0; i < NPCS.length; i++) {
-    NPCS[i].state = w.Xsansi.currentPlanet * 100;
+  for (let npc of NPCS) {
+    npc.state = w.Xsansi.currentPlanet * 100;
   }
   w.Kyle.agenda = ["walkTo:probes_forward", "text:deploySatellite"];
   w.Kyle.deploySatelliteAction = 0;
@@ -561,9 +561,9 @@ function arrival() {
 // "name" will be changed to "name2". This means new topics get added to the TOPIC command
 // tested
 function updateTopics(npc, code) {
-  for (let i = 0; i < npc.askOptions.length; i++) {
-    if (npc.askOptions[i]["name" + code] !== undefined) {
-      npc.askOptions[i].name = npc.askOptions[i]["name" + code];
+  for (let opt of npc.askOptions) {
+    if (opt["name" + code] !== undefined) {
+      opt.name = opt["name" + code];
     }
   }
 }
@@ -984,13 +984,13 @@ commands.push(new Cmd('ProbeStatus', {
   script:function() {
     const arr = getProbes();
     metamsg("Found " + arr.length + " probes");
-    for (let i = 0; i < arr.length; i++) {
+    for (let probe of arr) {
       metamsg("------------------");
-      metamsg("Probe:" + arr[i].alias);
-      metamsg("Status:" + arr[i].status);
-      metamsg("launchCounter:" + arr[i].launchCounter);
-      metamsg("probeType:" + arr[i].probeType);
-      metamsg("planetNumber:" + arr[i].planetNumber);
+      metamsg("Probe:" + probe.alias);
+      metamsg("Status:" + probe.status);
+      metamsg("launchCounter:" + probe.launchCounter);
+      metamsg("probeType:" + probe.probeType);
+      metamsg("planetNumber:" + probe.planetNumber);
     }
     metamsg("------------------");
     metamsg("Geology:" + currentPlanet().geology);
