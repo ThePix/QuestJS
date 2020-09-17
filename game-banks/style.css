@@ -91,17 +91,17 @@ h2, h4 {
   padding: 5px;
   font-size: 12pt;
 }
-.paneDiv {
+.pane-div {
   background-color:#bbb;
   padding-bottom:5px;
   border: #004 solid 2px;
   margin-bottom: 10px;
 }
-.paneDiv > h4 {
+.pane-div > h4 {
   text-align: center;
   margin: 10px;
 }
-.dark-body > div > .paneDiv {
+.dark-body > div > .pane-div {
   background-color:#333;
 }
 .side-panes-left {

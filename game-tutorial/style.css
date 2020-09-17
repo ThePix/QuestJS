@@ -60,11 +60,11 @@ body {
   font-size: 9pt;
   font-family: 'Montserrat', sans-serif;;
 }
-.paneDiv {
+.pane-div {
   background-color:#fcf;
   padding-bottom:5px;
 }
-.dark-body > div > .paneDiv {
+.dark-body > div > .pane-div {
   background-color:#606;
 }
 .side-panes-left {
