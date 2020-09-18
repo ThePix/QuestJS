@@ -107,7 +107,7 @@ span.compass-button {
 
 
 /* Items in inventories */
-#panes h4 {
+.side-pane-heading {
   padding-left: 6px;
   margin-top: 4px;
   margin-bottom: 4px;

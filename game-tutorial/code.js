@@ -158,7 +158,7 @@ const walkthroughs = {
     "r,get r", "hint",
     "r,put r in r", "hint",
     "s", "hint",
-    "w", "hint",
+    "w", "hint",/*
     "press 3", "hint",
     "e", "hint",
     "sit on chair", "hint",
@@ -401,6 +401,53 @@ commands.unshift(new Cmd('Attack', {
   },
 }));
 
+
+
+
+commands.unshift(new Cmd('TieUp', {
+  // throw rope out window
+  regex:/^(?:tie up|tie|bind) (.+?)$/,
+  objects:[
+    {scope:parser.isHere},
+  ],
+  script:function(objects) {
+    const tpParams = {item:objects[0][0]}
+    if (!w.rope.isAtLoc(game.player)) {
+      return failedmsg("What were you thinking you could tie {ob:item} up with it exactly?", tpParams)
+    }
+    
+    if (objects[0][0] === w.robot) {
+      msg("'I am not into the kinky stuff,' says the robot. Despite its metallic face, you still feel it is looking at you with disapproval.")
+    }
+    else if (objects[0][0] === w.Professor_Kleinscope) {
+      msg("'I don;t have time for that sort of thing now,' says the Professor irritably. He looks at yoi thoughtfully. 'Though maybe later...'")
+    }
+    else {
+      msg("That's not going to achieve anything.")
+    }
+    return world.FAILED
+  },
+}));
+
+
+
+
+
+commands.push(new Cmd('RudeCommand', {
+  // throw rope out window
+  regex:/^(?:fuck|facefuck|face-fuck|face fuck|bugger|shag|suck|suck off|assfuck|ass-fuck|ass fuck|rape|ass-rape|ass rape) (.+?)$/,
+  objects:[
+    {scope:parser.isHere},
+  ],
+  script:function(objects) {
+    parsermsg(lang.not_known_msg)
+    if (!w.me.rudeCmdFlag) {
+      tmsg('You had to go there...')
+      tmsg('There are games that cater to... well, people like you, but this is NOT one of them.')
+    }
+    return world.FAILED
+  },
+}));
 
 
 

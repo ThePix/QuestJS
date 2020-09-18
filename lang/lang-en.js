@@ -179,7 +179,7 @@ const lang = {
   already_wearing:"{nv:char:'be:true} already wearing {ob:garment}.",
   invWearingPrefix:"wearing",
   invWornModifier:"worn",
-  invOpenModifer:"open",
+  invOpenModifier:"open",
 
 
   // CONTAINER, etc.
@@ -451,7 +451,12 @@ const lang = {
     if (settings.panes !== "none") {
       metamsg("{b:User Interface:} To interact with an object, click on its name in the side pane, and a set of possible actions will appear under it. Click on the appropriate action.");
       if (settings.compassPane) {
-        metamsg("You can also use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
+        if (settings.symbolsForCompass) {
+          metamsg("You can also use the compass rose at the top to move around. Click the eye symbol, &#128065;, to look at you current location, the pause symbol, &#9208;, to wait or &#128712; for help.");
+        }
+        else {
+          metamsg("You can also use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
+        }
       }
     }
     if (settings.additionalHelp !== undefined) {
@@ -576,23 +581,23 @@ const lang = {
   // Change the abbrev values to suit your game (or language)
   // You may want to do that in settings, which is loaded first
   exit_list:[
-    {name:'northwest', abbrev:'NW', niceDir:"the northwest", type:'compass', key:103, x:-1 ,y:1, z:0, opp:'southeast'}, 
-    {name:'north', abbrev:'N', niceDir:"the north", type:'compass', key:104, x:0 ,y:1, z:0, opp:'south'}, 
-    {name:'northeast', abbrev:'NE', niceDir:"the northeast", type:'compass', key:105, x:1 ,y:1, z:0, opp:'southwest'}, 
-    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside", type:'inout', opp:'out'}, 
-    {name:'up', abbrev:'U', niceDir:"above", type:'vertical', key:107, x:0 ,y:0, z:1, opp:'down'},
+    {name:'northwest', abbrev:'NW', niceDir:"the northwest", type:'compass', key:103, x:-1 ,y:1, z:0, opp:'southeast', symbol:'&#129132;'}, 
+    {name:'north', abbrev:'N', niceDir:"the north", type:'compass', key:104, x:0 ,y:1, z:0, opp:'south', symbol:'&#129129;'}, 
+    {name:'northeast', abbrev:'NE', niceDir:"the northeast", type:'compass', key:105, x:1 ,y:1, z:0, opp:'southwest', symbol:'&#129133;'}, 
+    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside", type:'inout', opp:'out', symbol:'&#8628;'}, 
+    {name:'up', abbrev:'U', niceDir:"above", type:'vertical', key:107, x:0 ,y:0, z:1, opp:'down', symbol:'&#8613;'},
     
-    {name:'west', abbrev:'W', niceDir:"the west", type:'compass', key:100, x:-1 ,y:0, z:0, opp:'east'}, 
-    {name:'Look', abbrev:'Lk', type:'nocmd', key:101}, 
-    {name:'east', abbrev:'E', niceDir:"the east", type:'compass', key:102, x:1 ,y:0, z:0, opp:'west'}, 
-    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside", type:'inout', opp:'in'}, 
-    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", type:'vertical', key:109, x:0 ,y:0, z:-1, opp:'up'}, 
+    {name:'west', abbrev:'W', niceDir:"the west", type:'compass', key:100, x:-1 ,y:0, z:0, opp:'east', symbol:'&#129128;'}, 
+    {name:'Look', abbrev:'Lk', type:'nocmd', key:101, symbol:'&#128065;'}, 
+    {name:'east', abbrev:'E', niceDir:"the east", type:'compass', key:102, x:1 ,y:0, z:0, opp:'west', symbol:'&#129130;'}, 
+    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside", type:'inout', opp:'in', symbol:'&#8625;'}, 
+    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", type:'vertical', key:109, x:0 ,y:0, z:-1, opp:'up', symbol:'&#8615;'}, 
 
-    {name:'southwest', abbrev:'SW', niceDir:"the southwest", type:'compass', key:97, x:-1 ,y:-1, z:0, opp:'northeast'}, 
-    {name:'south', abbrev:'S', niceDir:"the south", type:'compass', key:98, x:0 ,y:-1, z:0, opp:'north'}, 
-    {name:'southeast', abbrev:'SE', niceDir:"the southeast", type:'compass', key:99, x:1 ,y:-1, z:0, opp:'northwest'}, 
-    {name:'Wait', abbrev:'Z', type:'nocmd', key:110}, 
-    {name:'Help', abbrev:'?', type:'nocmd'}, 
+    {name:'southwest', abbrev:'SW', niceDir:"the southwest", type:'compass', key:97, x:-1 ,y:-1, z:0, opp:'northeast', symbol:'&#129135;'}, 
+    {name:'south', abbrev:'S', niceDir:"the south", type:'compass', key:98, x:0 ,y:-1, z:0, opp:'north', symbol:'&#129131;'}, 
+    {name:'southeast', abbrev:'SE', niceDir:"the southeast", type:'compass', key:99, x:1 ,y:-1, z:0, opp:'northwest', symbol:'&#129134;'}, 
+    {name:'Wait', abbrev:'Z', type:'nocmd', key:110, symbol:'&#9208;'}, 
+    {name:'Help', abbrev:'?', type:'nocmd', symbol:'&#128712;'}, 
   ],
 
   numberUnits:"zero;one;two;three;four;five;six;seven;eight;nine;ten;eleven;twelve;thirteen;fourteen;fifteen;sixteen;seventeen;eighteen;nineteen;twenty".split(";"),

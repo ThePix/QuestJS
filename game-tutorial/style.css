@@ -47,6 +47,12 @@ body {
 }
 
 
+.default-p, .tutorial {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+
 
 /* Side panes */
 .side-panes {
@@ -92,7 +98,7 @@ td.compass-button {
     padding: 2px;
     background-color: #c0c0ff;
     width: 20px;
-    height: 15px;
+    height: 20px;
 }
 .dark-body > div > div > table > tbody > tr > .compass-button {
   background-color:#404;
@@ -108,7 +114,7 @@ span.compass-button {
 
 
 /* Items in inventories */
-#panes h4 {
+.side-pane-heading {
   padding-left: 6px;
   margin-top: 4px;
   margin-bottom: 4px;

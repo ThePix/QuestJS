@@ -4,7 +4,7 @@ createItem("robot", NPC(false), {
   loc:"laboratory",
   examine:"The robot is approximately man-shaped, if a little squat. It looks a little... clunky, like might have been designed in the fifties.",
   strong:true,
-
+  attachable:true,
   eventIsActive:function() { w.me.loc === 'laboratory' },
   eventPeriod:1,
   eventScript:function() {
@@ -18,6 +18,19 @@ createItem("robot", NPC(false), {
   isAtLoc:function(loc, situation) {
     if (situation === world.PARSER && w.me.loc === 'laboratory') return true
     return (this.loc === loc)
+  },
+  
+  getAgreementGo:function(dir) {
+    msg("=========here=================")
+    if (w.rope.isAttachedTo(this)) {
+      msg("'I cannot move while tied to the rope.'");
+      if (!this.ropeMoveFlag) {
+        this.ropeMoveFlag = true
+        tmsg("Let's be honest here, ropes are tricky to code. Be thankful you can tie it to the robot and forget about him walking around dragging the rope behind him.")
+      }
+      return false;
+    }
+    return true;
   },
 
   askOptions:[

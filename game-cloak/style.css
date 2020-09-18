@@ -1,18 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rozha+One&display=swap');
 
 body {
   color: #bbb;
   background-color:#333;
-  font-family: 'Lora', serif;
+  font-family: 'Rozha One', serif;
   margin: 0;
   height: calc(100vh);
 }
 
 #main {
-  border-left: #bbb solid 1px;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-bottom: 50px;
+  margin-top: 50px;
   padding-left: 20px;
-  border-right: #bbb solid 1px;
   padding-right: 20px;
+}
+
+.default-p {
+  text-align: justify;
+  text-justify: inter-word;
+  text-indent: 50px;
 }
 
 #textbox {
@@ -20,6 +28,8 @@ body {
   background-color:#333;
   font-family: 'Lora', serif;
   font-size: 12pt;
+  border:none;
+  outline: none;
 }
 
 .input-text {

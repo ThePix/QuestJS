@@ -115,7 +115,7 @@ createItem("crates", {
   pronouns:lang.pronouns.plural,
   move:function() {
     if (!this.moved) {
-      msg("You move the crates... And find a door was hidden behind them.")
+      msg("You move the crates... And find a passage was hidden behind them.")
       hint.now("enterPassage")
       this.moved = true
       return true
@@ -715,6 +715,8 @@ createItem("computer", {
             tmsg("That said, I see you lost the newspaper and the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon them here for you, just on the off-chance they will be needed.")
             w.old_newspaper.loc = 'office'
             w.rope.locs = ['office']
+            delete w.rope.tiedTo1
+            delete w.rope.tiedTo2
           }
           else if (w.old_newspaper.loc !== 'me' && w.old_newspaper.loc !== 'office') {
             tmsg("That said, I see you lost the newspaper somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon it here for you, just on the off-chance it will be needed.")
@@ -723,6 +725,8 @@ createItem("computer", {
           else if (!w.rope.isAtLoc('me') && !w.rope.isAtLoc('office')) {
             tmsg("That said, I see you lost the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon it here for you, just on the off-chance it will be needed.")
             w.rope.locs = ['office']
+            delete w.rope.tiedTo1
+            delete w.rope.tiedTo2
           }
           
           hint.now('smashWindow')
@@ -769,10 +773,10 @@ createRoom("lift", TRANSIT("east"), {
   }
 })
 
-createItem("button_1", TRANSIT_BUTTON("lift"), {
-  alias:"Button: 1",
-  examine:"A button with the letter 1 on it.",
-  transitDest:"laboratory",
+createItem("button_3", TRANSIT_BUTTON("lift"), {
+  alias:"Button: 3",
+  examine:"A button with the letter 3 on it.",
+  transitDest:"office",
   transitAlreadyHere:"You press the button; nothing happens.",
   transitGoToDest:"You press the button; the door closes and the lift ascends.",
 })
@@ -785,10 +789,10 @@ createItem("button_2", TRANSIT_BUTTON("lift"), {
   transitGoToDest:"You press the button; the door closes and the lift moves.",
 })
 
-createItem("button_3", TRANSIT_BUTTON("lift"), {
-  alias:"Button: 3",
-  examine:"A button with the letter 3 on it.",
-  transitDest:"office",
+createItem("button_1", TRANSIT_BUTTON("lift"), {
+  alias:"Button: 1",
+  examine:"A button with the letter 1 on it.",
+  transitDest:"laboratory",
   transitAlreadyHere:"You press the button; nothing happens.",
   transitGoToDest:"You press the button; the door closes and the lift descends.",
 })
