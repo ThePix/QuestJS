@@ -13,6 +13,7 @@ settings.tests = true
 settings.textEffectDelay = 100
 
 settings.imagesFolder = 'images'
+settings.libraries.push('zone')
 
 settings.status = [
   "hitpoints",

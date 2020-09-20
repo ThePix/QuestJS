@@ -44,7 +44,7 @@ createRoom("lounge", {
     switch (this.eventCount) {
       case 1:
         tmsg("Typing WAIT made time pass in the game, while the player-character did nothing. You can also just type Z, which is a shortcut for WAIT.")
-        tmsg("Look to the left, and you will see a panel; you can perform a lot of actions here without typing anything at all. In some games it is on the right, and many do not have it at all, so we will mostly ignore it, but for now click the \"Z\" to again wait one turn.")
+        tmsg("Look to the left, and you will see a panel; you can perform a lot of actions here without typing anything at all. In some games it is on the right, and many do not have it at all, so we will mostly ignore it, but for now click the &#9208; to again wait one turn.")
         break
       case 2:
         tmsg("Some games have commands that tell you about the game or set it up differently to suit the player. In Quest 6 (but not necessarily other games) none of these count as a turn, so try a couple, and when you are done, do WAIT again.")
@@ -349,7 +349,13 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
 createRoom("secret_passage", {
   desc:"The passage heads west.",
   afterFirstEnter:function() {
-    hint.now('save')
+    if (w.me.alreadySaved) {
+      tmsg("I {i:was} going to go though saving and loading at this point, but you've done that already, so we'll just press on.")
+      hint.now('westRobot')
+    }
+    else {
+      hint.now('save')
+    }
   },
   east:new Exit("basement"),
   west:new Exit("laboratory"),

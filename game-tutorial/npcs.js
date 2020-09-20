@@ -21,7 +21,6 @@ createItem("robot", NPC(false), {
   },
   
   getAgreementGo:function(dir) {
-    msg("=========here=================")
     if (w.rope.isAttachedTo(this)) {
       msg("'I cannot move while tied to the rope.'");
       if (!this.ropeMoveFlag) {

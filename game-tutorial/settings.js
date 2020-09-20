@@ -4,7 +4,7 @@
 settings.title = "Professor Kleinscope";
 settings.author = "The Pixie"
 settings.version = "1.1";
-settings.thanks = [];
+settings.thanks = ['Pertex', 'R2T1'];
 settings.warnings = 'No warning relevant for this game.'
 settings.files = ["data", "code", "npcs"];
 settings.debug = true
@@ -16,7 +16,11 @@ settings.symbolsForCompass = true
 
 
 settings.afterSave = function(filename) {
-  if (hint.before('westRobot')) {
+  if (hint.before('save')) {
+    tmsg("Okay, we were not going to do saving until later, but whatever...")
+    w.me.alreadySaved = true
+  }
+  else if (hint.before('westRobot')) {
     if (filename.toLowerCase() === 'tutorial') {
       tmsg("Great, we have saved the game - and you even followed my advice for the name. Now let's continue west down this passage.")
     }

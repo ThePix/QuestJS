@@ -475,6 +475,9 @@ const lang = {
     if (settings.thanks && settings.thanks.length > 0) {
       metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".");
     }
+    if (settings.additionalAbout !== undefined) {
+      for (let s of settings.additionalHelp) metamsg(s)
+    }
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
