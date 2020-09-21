@@ -6,7 +6,7 @@ settings.version = "0.1"
 settings.thanks = ["Kyle", "Lara"]
 
 // UI options
-settings.customExits = 'exits'
+settings.customExits = 'shipwise'
 settings.files = ["code", "data", "npcs"]
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false
