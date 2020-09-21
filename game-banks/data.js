@@ -97,7 +97,7 @@ createItem("stasis_pod", {
 
 createItem("stasis_pod_drawer", CONTAINER(false), {
   alias:"drawer",
-  //scenery:true,
+  scenery:true,
   loc:"stasis_bay",
   closed:false,
   examine:"The drawer extends out from the foot of the pod; it is white and quite shallow, and almost the width of the pod.{ifHere:pile_of_vomit: Fortunately, it is well away from the vomit.}",

@@ -45,40 +45,11 @@ settings.statusReport = function(obj) {
   return "<td><i>" + obj.alias + ":</i></td><td style=\"border:black solid 2px; background:" + colour + "\">&nbsp;</td><td align=\"right\">" + s + "</td>";
 }
 
-// Change the name values to alter how items are world.ed
-// You can add (or remove) inventories too
 settings.inventoryPane = false
 
-
-
-const ooc_intro = "<p>You are on a mission to survey planets around five stars, the captain of a crew of five (including yourself). There is also a computer system, Xsansi (you can also use \"AI\" or \"computer\"), that you can talk to anywhere on the ship. </p><p>Your objective is to maximise your bonus. Collecting data will give a bonus, but geo-data about planets suitable for mining and bio-data about planets suitable for colonisation will give higher bonuses. Evidence of alien intelligence will be especially rewarding!</p><p>You have just arrived at your first destination after years in a \"stasis\" pod in suspended animation. ASK AI ABOUT MISSION or CREW might be a good place to start, once you have created your character. Later you want to try OSTAP, LAUNCH PROBE or ASK AADA ABOUT PLANET.";
-
-
-
-// This function will be called at the start of the game, so can be used
-// to introduce your game.
 settings.setup = function() {
-
-  //parser.parse("spoken");
-  //  parser.parse("l");
-   
-  //showStartDiag();
- 
-  //console.log(getDateTime());
-  
-  //for(let key in w) {
-  //  debugmsg(key);
-  //}
-  arrival();  
-  
+  arrival()
 }
-
-
-
-
-
-
-
 
 
 
@@ -94,19 +65,23 @@ const professions = [
   {name:"Computer specialist", bonus:"computers"},
   {name:"Dancer", bonus:"agility"},
   {name:"Advertising exec", bonus:"deceit"},
-  {name:"Urban poet", bonus:"deceit"},
+  {name:"Urban poet", bonus:"social"},
 ];
 
 const backgrounds = [
-  {name:"Bored dilettante", bonus:"mech"},
+  {name:"Bored dilettante", bonus:"social"},
   {name:"Wannabe explorer", bonus:"science"},
-  {name:"Fame-seeker", bonus:"medicine"},
-  {name:"Debtor", bonus:"combat"},
-  {name:"Criminal escaping justice", bonus:"computers"},
+  {name:"Fame-seeker", bonus:"none"},
+  {name:"Debtor", bonus:"none"},
+  {name:"Criminal escaping justice", bonus:"deceit"},
+  {name:"Anti-social loner", bonus:"none"},
+  {name:"Conspiracy crackpot", bonus:"none"},
+  {name:"Religious fanatic", bonus:"none"},
 ];
 
 
-let s = ooc_intro;
+let s = "<p>You are on a mission to survey planets around five stars, the captain of a crew of five (including yourself). There is also a computer system, Xsansi (you can also use \"AI\" or \"computer\"), that you can talk to anywhere on the ship. </p><p>Your objective is to maximise your bonus. Collecting data will give a bonus, but geo-data about planets suitable for mining and bio-data about planets suitable for colonisation will give higher bonuses. Evidence of alien intelligence will be especially rewarding!</p><p>You have just arrived at your first destination after years in a \"stasis\" pod in suspended animation. ASK AI ABOUT MISSION or CREW might be a good place to start, once you have created your character. Later you want to try OSTAP, LAUNCH PROBE or ASK AADA ABOUT PLANET. You can also use HELP if you want more details.";
+
 s += '<p>Name: <input id="namefield" type="text" value="Ariel" /></p>';
 s += '<p>Male: <input type="radio" id="male" name="sex" value="male">&nbsp;&nbsp;&nbsp;&nbsp;';
 s += 'Female<input type="radio" id="female" name="sex" value="female" checked></p>';
@@ -124,8 +99,8 @@ s += '</select></p>';
 
 //settings.startingDialogEnabled = true
 settings.startingDialogTitle = "To start with..."
-settings.startingDialogWidth = 550
-settings.startingDialogHeight = 580
+settings.startingDialogWidth = 555
+settings.startingDialogHeight = 565
 settings.startingDialogHtml = s
 settings.startingDialogOnClick = function() {
   let p = game.player;
@@ -133,7 +108,10 @@ settings.startingDialogOnClick = function() {
   const job = professions.find(function(el) { return el.name === jobName; });
   w.me.job = job.name;
   w.me.jobBonus = job.bonus;
-  //w.me.background = backgrounds.find(function(el) { return el.name === background; });
+  const backgroundName = $("#background").val()
+  const background = backgrounds.find(function(el) { return el.name === backgroundName; });
+  w.me.background = background.name;
+  w.me.backgroundBonus = background.bonus;
   w.me.isFemale = $("#female").is(':checked');
   w.me.alias = $("#namefield").val();
 }

@@ -38,6 +38,30 @@ Each awakening gets steadily worse, by the fourth you are throwing up.
 
 
 
+
+
+
+
+
+
+const walkthroughs = {
+  a:[
+    "out",
+  ]
+}
+
+
+
+
+  tp.addDirective("fancy", function(arr, params) {
+    return '<span style="font-family:Montserrat">' + arr.join(":") + "</span>"; 
+  });
+
+
+
+
+
+
 $("#panes").append("<img src=\"" + settings.imagesFolder + "/spaceship.png\" style=\"margin-left:10px;margin-top:15px;\"/>");
 
 const TURNS_TO_LANDING = 3;
@@ -72,7 +96,7 @@ const PLANETS = [
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 96);
       w.Kyle.status = Math.min(w.Kyle.status, 98);
       msg("{i:The \"Joseph Banks\" left Earth orbit in 2319, on a centuries-long mission to survey five relatively close star systems. The crew were put in stasis for the long journey between the stars.}");
-      wait()
+      //wait()
       msg("&nbsp;");
       msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at " + PLANETS[0].starName + ",' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.'");
       //world.enterRoom();
@@ -543,18 +567,19 @@ createPlanets();
 
 
 function arrival() {
-  w.Xsansi.currentPlanet++;
-  PLANETS[w.Xsansi.currentPlanet].onArrival();
-  game.elapsedTime = 0;
-  game.startTime = PLANETS[w.Xsansi.currentPlanet].arrivalTime;
-  w.Aada.deployProbeTotal = 0;
-  w.Ostap.deployProbeTotal = 0;
-  updateTopics(w.Xsansi, w.Xsansi.currentPlanet);
+  w.Xsansi.currentPlanet++
+  PLANETS[w.Xsansi.currentPlanet].onArrival()
+  game.elapsedTime = 0
+  game.startTime = PLANETS[w.Xsansi.currentPlanet].arrivalTime
+  w.Aada.deployProbeTotal = 0
+  w.Ostap.deployProbeTotal = 0
+  updateTopics(w.Xsansi, w.Xsansi.currentPlanet)
   for (let npc of NPCS) {
-    npc.state = w.Xsansi.currentPlanet * 100;
+    npc.state = w.Xsansi.currentPlanet * 100
   }
-  w.Kyle.agenda = ["walkTo:probes_forward", "text:deploySatellite"];
-  w.Kyle.deploySatelliteAction = 0;
+  w.Kyle.agenda = ["walkTo:probes_forward", "text:deploySatellite"]
+  w.Kyle.deploySatelliteAction = 0
+  io.updateStatus() 
 }
 
 // If a topic has an attribute "name2", then using code=2,
@@ -563,7 +588,7 @@ function arrival() {
 function updateTopics(npc, code) {
   for (let opt of npc.askOptions) {
     if (opt["name" + code] !== undefined) {
-      opt.name = opt["name" + code];
+      opt.name = opt["name" + code]
     }
   }
 }
@@ -571,10 +596,10 @@ function updateTopics(npc, code) {
 // Use this to increase the player's relationship with the NPC to ensure it only happens once
 // tested
 function trackRelationship(npc, inc, code) {
-  if (npc.relationshipTracker === undefined) npc.relationshipTracker = "~";
-  const regex = new RegExp("~" + code + "~");
+  if (npc.relationshipTracker === undefined) npc.relationshipTracker = "~"
+  const regex = new RegExp("~" + code + "~")
   if (!regex.test(npc.relationshipTracker)) {
-    npc.relationship += inc;
+    npc.relationship += inc
     npc.relationshipTracker += code + "~"
   }
 }

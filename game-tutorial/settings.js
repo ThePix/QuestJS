@@ -11,7 +11,6 @@ settings.debug = true
 settings.noTalkTo = false
 settings.noAskTell = false
 settings.givePlayerAskTellMsg  = false
-settings.shortcutCommand = 'wt a'
 settings.symbolsForCompass = true
 
 
