@@ -4,6 +4,7 @@ settings.title = "The Voyages of The Joseph Banks"
 settings.author = "The Pixie"
 settings.version = "0.1"
 settings.thanks = ["Kyle", "Lara"]
+settings.warnings = 'This game does have swearing (including the F-word); it is possible to romance crew mates of either gender, but nothing graphic.'
 
 // UI options
 settings.customExits = 'shipwise'
@@ -11,6 +12,11 @@ settings.files = ["code", "data", "npcs"]
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false
 settings.givePlayerAskTellMsg = false
+
+
+
+settings.tests = true
+settings.transcriptFromStart = true
 
 settings.dateTime.start = new Date('April 14, 2387 09:43:00')
 settings.roomTemplate = [
@@ -30,16 +36,18 @@ settings.status = [
 ];
 
 
-settings.colours = ['red', 'yellow', 'blue', 'lime', 'white']
+settings.colours = ['red', 'yellow', 'blue', 'lime']
+settings.intervals = [25,50,25,1, 100]
+settings.intervalDescs = ['worrying', 'fair', 'good', 'perfect']
 settings.statusReport = function(obj) {
   let s, colour
   if (typeof obj.status === "string") {
     s = obj.status
-    colour = 'black'
+    colour = s === 'stasis' ? 'grey' : 'black'
   }
   else {
     s = obj.status.toString() + '%'
-    colour = settings.colours[util.getByInterval([25,50,25,1, 100], obj.status)]
+    colour = settings.colours[util.getByInterval(settings.intervals, obj.status)]
     
   }
   return "<td><i>" + obj.alias + ":</i></td><td style=\"border:black solid 2px; background:" + colour + "\">&nbsp;</td><td align=\"right\">" + s + "</td>";
@@ -49,9 +57,24 @@ settings.inventoryPane = false
 
 settings.setup = function() {
   arrival()
+  const data = window.location.href.split('?')[1]
+  console.log(data.split('&'))
 }
 
 
+
+
+settings.customUI = function() {
+  let s = '<div class="pane-div" style="position: relative;height:290px;width140px" id="map">'
+  s += '<img src="' + settings.imagesFolder + '/spaceship.png" style="margin-left:10px;margin-top:15px;"/>'
+  s += '<div style="position:absolute; top:5px; left:52px">Forward</div>'
+  s += '<div style="position:absolute; top:278px; left:68px">Aft</div>'
+  s += '<div style="position:absolute; top:70px; left:5px; writing-mode:vertical-lr">Port</div>'
+  s += '<div style="position:absolute; top:70px; left:138px; writing-mode:vertical-lr">Starboard</div>'
+  
+  s += '</div>'
+  $("#panes").append(s)
+}
 
 
 

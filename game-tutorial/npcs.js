@@ -162,7 +162,7 @@ createItem("robot", NPC(false), {
 
 createItem("Professor_Kleinscope", NPC(false), {
   loc:"office",
-  examine:"The Professor is a slim tall man, perhaps in his forties, dressed, inevitably in a lab coat. Curiously his hair is neither white nor wild.{ifNot:Professor_Kleinscope:flag: He",
+  examine:"The Professor is a slim tall man, perhaps in his forties, dressed, inevitably in a lab coat. Curiously his hair is neither white nor wild.{ifNot:Professor_Kleinscope:flag: He is sat at he desk, engrossed in his work.}",
   talkto:function() {
     if (!this.flag) {
       msg("You say 'Hello,' to Professor Kleinscope.")

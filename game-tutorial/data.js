@@ -286,7 +286,7 @@ createItem("crowbar", TAKEABLE(), {
       tmsg("Nice try, but you have to get the robot to open this door, not the crowbar.")
       return false
     }
-    if (!char.loc === 'garden') return falsemsg("There is nothing to use the crowbar on here.")
+    if (char.loc !== 'garden') return falsemsg("There is nothing to use the crowbar on here.")
     return w.shed_door.crowbar()
   },
 })
@@ -583,7 +583,18 @@ createRoom("office", {
 })
 
 createItem("office_window", {
-  examine:"The control rod repository is a cross between a shelf and a cradle; it is attached to the wall like a shelf, but shaped like a cradle to hold the control rod.",
+  examine:function() {
+    if (this.smashed) {
+      msg("The window is tall and wide... and smashed.")
+    }
+    else {
+      msg("The window is tall and wide; it does not look like it will open.")
+    }
+    if (!this.lookedout) {
+      tmsg("You might want to try LOOK OUT WINDOW; may be more interesting than the window itself.")
+      this.lookedout = true
+    }
+  },
   loc:'office',
   scenery:true,
   outside:[],
@@ -750,10 +761,10 @@ createItem("computer", {
 
 
 createRoom("lift", TRANSIT("east"), {
+  regex:/elevator/,
   desc:function() {
-    return "The lift is small; according the plaque it is limited to just three people."
+    return "The lift is small; according the plaque it is limited to just three people. There are three buttons, labelled one to three."
   },
-  alias:'elevator',
   east:new Exit("laboratory"),
   afterFirstEnter:function() {
     hint.now("press3")

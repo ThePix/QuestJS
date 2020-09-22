@@ -46,23 +46,81 @@ Each awakening gets steadily worse, by the fourth you are throwing up.
 
 const walkthroughs = {
   a:[
-    "out",
+    "o",
+    "get jumpsuit",
+    "wear jumpsuit",
+    "a",
+    "u",
+    "f",
+    "ask ostap about probes",
+    "s",
+    "x chair",
+    "x table",
+    "ask ostap about bio-probes",
+    "ask ostap about his health",
+    "ostap, launch 19 probes",
+    "ostap, launch 2 bio-probe",
+    "z",
+    "p",
+    "d",
+    "d",
+    "a",
+    "z",
+    "ask ostap about lost probes",
+    "ask ostap about planet",
+    "ask ostap about lost probes",
+    "topics for ostap",
+    "z",
+    "z",
+    "z",
+    "z",
+    "z",
+    "z",
+    "ask ostap about lost probes",
+    "ask ostap about planet",
+    "topics ostap",
+    "ask ostap about himself",
+    "ask ostap about himself",
+    "ostap, go in stasis pod",/*
+    "f",
+    "u",
+    "s",
+    "ostap, stop",
+    "ostap, stop",
+    "z",
+    "z",
+    "l",
+    "ostap, go in stasis pod",
+    "z",
+    "x ostap",
+    "l",
+    "ask ai about crew",
+    /**/
   ]
 }
 
 
 
 
-  tp.addDirective("fancy", function(arr, params) {
-    return '<span style="font-family:Montserrat">' + arr.join(":") + "</span>"; 
-  });
+tp.addDirective("stasis_pod_status", function(arr, params) {
+  return w.stasis_bay.tpStatus()
+})
+
+tp.addDirective("status", function(arr, params) {
+  if (typeof params.actor.status === "string") {
+    console.log(params.actor.status)
+    console.log(params.actor.status === 'stasis' ? 'In stasis' : 'Deceased')
+    return params.actor.status === 'stasis' ? 'In stasis' : 'Deceased'
+  }
+  else {
+    return settings.intervalDescs[util.getByInterval(settings.intervals, params.actor.status)]
+  }
+})
 
 
 
 
 
-
-$("#panes").append("<img src=\"" + settings.imagesFolder + "/spaceship.png\" style=\"margin-left:10px;margin-top:15px;\"/>");
 
 const TURNS_TO_LANDING = 3;
 const TURNS_TO_DATA = 3;
@@ -110,8 +168,8 @@ const PLANETS = [
   { 
     starName:"HD 168746", 
     planet:"B", 
-    comment:"Planet 2 (hull breach): Lots of life, at about the Devonian Period, with purple planets. Good metals too. But need to sort out the hull breach first. Or accept some of the ship is inaccessible.",
-    atmosphere:"The atmosphere is 71% nitrogen, 15% oxygen, 3% carbon dioxide  and about 1% of various other gases including water and methane.",
+    comment:"Planet 2 (hull breach): Lots of life, at about the Devonian Period, with purple plants. Good metals too. But need to sort out the hull breach first. Or accept some of the ship is inaccessible.",
+    atmosphere:"The atmosphere is 71% nitrogen, 15% oxygen, 3% carbon dioxide and about 1% of various other gases including water and methane.",
     radio:"No radio signal detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 75% water. The land surfaces are predominantly purple. Cloud cover is about 40%.",
@@ -205,7 +263,7 @@ const PLANETS = [
     radio:"No radio signals have been detected.",
     lights:"There are no light sources on the night side of the planet.",
     planetDesc:"The planet surface is about 63% water. The land surfaces are predominantly grey and red. Cloud cover is about 25%. Several active volcanoes have been noted.",
-    starDesc:"HD 148427 is a 7th-magnitude K-type subgiant star approximately 193 light years away in the constellation Ophiuchus. Its mass is 45% greater than the Sun, and it is three times the size and six times more luminous, although its age is 2½ billion years.",
+    starDesc:"HD 148427 is a 7th-magnitude K-type sub-giant star approximately 193 light years away in the constellation Ophiuchus. Its mass is 45% greater than the Sun, and it is three times the size and six times more luminous, although its age is 2½ billion years.",
     probeLandingSuccess:"yyyyyynyyyyyyyyynynyyynnnyynyyyyyyyynynyyynynnynyyyyyyyynynyyy",
     geoProbeRanks:[
       [4, 9, 16],
@@ -246,18 +304,6 @@ const PLANETS = [
     },
   },
 
-  { 
-    starName:"Sol", 
-    planet:"Earth", 
-    comment:"Home!",
-    atmosphere:"Normal!",
-    radio:"There is a lot of radio signals, indicating a technological advanced race active.",
-    lights:"The night side of the planet is awash with light!",
-    planetDesc:"It is Earth!",
-    starDesc:"The Sun is a G2V yellow dwarf. It is located at a distance of 0.0 light years from the Sun. It's luminosity is 100% that of the Sun. The third planet is home to the human race.",
-    onArrival:function() {
-    },
-  },
 ];
 
 const PLANET_DATA = {
@@ -457,7 +503,7 @@ const PLANET_DATA = {
       msg("'I've identified a transmitter, and we're starting to analyse the data. It's very complex, and the computer's working hard to unscramble the data.'");
     },
     level2:function() {
-      msg("'I'm starting to get results from the signals being broadcast from that transmitter. Its strange - in some ways the signal is very complex - beyond anything I've seen before - , but, well, it seems to be in English!'");
+      msg("'I'm starting to get results from the signals being broadcast from that transmitter. Its strange - in some ways the signal is very complex - beyond anything I've seen before - but, well, it seems to be in English!'");
       msg("'How can that be?'");
       msg("'I don't know.'");
     },
@@ -476,67 +522,72 @@ const PLANET_DATA = {
 
 
 function createTopics(npc) {
-  npc.askOptions.unshift({
+  npc.askOptions.push({
     name:"health",
     regex:/(his |her )?(health|well\-?being)/,
     test:function(p) { return p.text.match(this.regex); }, 
-    response:howAreYouFeeling,
+    script:howAreYouFeeling,
   });
-  npc.askOptions.unshift({
+  npc.askOptions.push({
     name:"planet",
     regex:/(this |the |)?planet/,
-    response:planetAnalysis,
+    test:function(p) { return p.text.match(this.regex) }, 
+    script:planetAnalysis,
   });
-  npc.askOptions.unshift({
+  npc.askOptions.push({
     name:"probes",
     regex:/probes?/,
-    test:function(p) { return p.text.match(this.regex); }, 
-    response:function(npc) {
-      npc.probesAskResponse();
+    test:function(p) { return p.text.match(this.regex) }, 
+    script:function(response) {
+      response.actor.probesAskResponse();
     }
   });
-  npc.askOptions.unshift({
+  npc.askOptions.push({
     name:"expertise", 
     regex:/(your |his |her )?(area|special.*|expert.*|job|role)/,
     test:function(p) { return p.text.match(this.regex); }, 
-    response:function(npc) {
-      msg("'What is your area of expertise?' you ask " + lang.getName(npc, {article:DEFINITE}) + ".");
-      npc.areaAskResponse();
+    script:function(response) {
+      msg("'What is your area of expertise?' you ask " + lang.getName(response.actor, {article:DEFINITE}) + ".");
+      response.actor.areaAskResponse();
     }
   });
-  npc.askOptions.unshift({
+  npc.askOptions.push({
     name:"background", 
     regex:/^((his |her )?(background))|((him|her)self)$/,
     test:function(p) { return p.text.match(this.regex); }, 
-    response:function(npc) {
-      msg("'Tell me about yourself,' you say to " + lang.getName(npc, {article:DEFINITE}) + ".");
-      npc.backgroundAskResponse();
-      trackRelationship(npc, 1, "background");
+    script:function(response) {
+      msg("'Tell me about yourself,' you say to " + lang.getName(response.actor, {article:DEFINITE}) + ".");
+      response.actor.backgroundAskResponse();
+      trackRelationship(response.actor, 1, "background");
     }
   });
 }
  
-function howAreYouFeeling(npc) {
-  msg("'How are you feeling?' you ask " + lang.getName(npc, {article:DEFINITE}) + ".");
-  msg(PLANETS[w.Xsansi.currentPlanet][npc.name + "_how_are_you"]);
+function howAreYouFeeling(response) {
+  msg("'How are you feeling?' you ask " + lang.getName(response.actor, {article:DEFINITE}) + ".");
+  msg(PLANETS[w.Xsansi.currentPlanet][response.actor.name + "_how_are_you"]);
 }
 
-function planetAnalysis(npc) {
-  msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].starName + PLANETS[w.Xsansi.currentPlanet].planet + "?' you ask " + lang.getName(npc, {article:DEFINITE}) + ".");
-  const arr = PLANET_DATA[npc.name + w.Xsansi.currentPlanet];
+function planetAnalysis(response) {
+  msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].starName + PLANETS[w.Xsansi.currentPlanet].planet + "?' you ask " + lang.getName(response.actor, {article:DEFINITE}) + ".")
+  console.log(response.actor)
+  console.log(response.actor.name)
+  console.log(response.actor.name + w.Xsansi.currentPlanet)
+  const arr = PLANET_DATA[response.actor.name + w.Xsansi.currentPlanet]
+  console.log(arr)
   if (Object.keys(arr).length === 0) {
-    msg("You should talk to Aada or Ostap about that stuff.");
-    return false;
+    msg("You should talk to Aada or Ostap about that stuff.")
+    return false
   }
-  let level = w["planet" + w.Xsansi.currentPlanet][npc.specialisation];
+  let level = w["planet" + w.Xsansi.currentPlanet][response.actor.specialisation]
   if (level === undefined) {
-    msg("You should talk to Aada or Ostap about that stuff.");
-    return false;
+    msg("You should talk to Aada or Ostap about that stuff.")
+    return false
   }
   while (arr["level" + level] === undefined) {
-    level--;
+    level--
   }
-  arr["level" + level]();
+  arr["level" + level]()
 }
 
   
@@ -1031,27 +1082,23 @@ commands.push(new Cmd('ProbeStatus', {
 
 
 
-
-commands.unshift(new Cmd('Help', {
-  regex:/^help$|^\?$/,
-  script:function() { 
-    metamsg("Help is available on a number of topics...");
-    metamsg("{color:red:HELP GENERAL} or {color:red:HELP GEN}: How to play parser games");
-    metamsg("{b:Commands to help you play this game:}");
-    metamsg("{color:red:HELP GAME}: Suggestions on what to actually do");
-    metamsg("{color:red:HELP NPC}: Interacting with other characters");
-    metamsg("{color:red:HELP PROBE}: How to deploy and use probes");
-    metamsg("{color:red:HELP STASIS}: How to use stasis pods (and hence travel to the next planet)");
-    if (w.Xsansi.currentPlanet !== 0) metamsg("{color:red:HELP VACUUM}: How to handle the cold vacuum of space");
-    if (w.alienShip.status > 0) metamsg("{color:red:HELP DOCKING}: How to dock with another ship");
-    metamsg("{b:Commands that give meta-information about the game:}");
-    metamsg("{color:red:HELP UNIVERSE}: Notes about the universe the game is set in");
-    metamsg("{color:red:HELP SYSTEM}: About the game system");
-    metamsg("{color:red:HELP CREDITS}: Credits, obviously!");
-    metamsg("You can use {color:red:?} as a shorthand for {color:red:HELP}");
-    return world.SUCCESS_NO_TURNSCRIPTS;
-  },
-}));
+findCmd('MetaHelp').script = function() {
+  metamsg("Help is available on a number of topics...");
+  metamsg("{color:red:HELP GENERAL} or {color:red:HELP GEN}: How to play parser games");
+  metamsg("{b:Commands to help you play this game:}");
+  metamsg("{color:red:HELP GAME}: Suggestions on what to actually do");
+  metamsg("{color:red:HELP NPC}: Interacting with other characters");
+  metamsg("{color:red:HELP PROBE}: How to deploy and use probes");
+  metamsg("{color:red:HELP STASIS}: How to use stasis pods (and hence travel to the next planet)");
+  if (w.Xsansi.currentPlanet !== 0) metamsg("{color:red:HELP VACUUM}: How to handle the cold vacuum of space");
+  if (w.alienShip.status > 0) metamsg("{color:red:HELP DOCKING}: How to dock with another ship");
+  metamsg("{b:Commands that give meta-information about the game:}");
+  metamsg("{color:red:HELP UNIVERSE}: Notes about the universe the game is set in");
+  metamsg("{color:red:HELP SYSTEM}: About the game system");
+  metamsg("{color:red:HELP CREDITS}: Credits, obviously!");
+  metamsg("You can use {color:red:?} as a shorthand for {color:red:HELP}");
+  return world.SUCCESS_NO_TURNSCRIPTS;
+}
 
 commands.push(new Cmd('HelpGen', {
   regex:/^(?:\?|help) gen.*$/,
@@ -1141,12 +1188,12 @@ commands.push(new Cmd('HelpSystem', {
     metamsg("{b:The Game System:}")
     metamsg("This game was written for Quest 6, which means it is running entirely in JavaScript in your browser. Compared to Quest 5 (which I am also familiar with) this means that you do not need to download any software to run it, and there is no annoying lag while you wait for a server to respond. Compared to Inform... well, it allows authors to directly access a modern programming language (though the point of Inform 7, of course, is to keep the programming language at bay).");
     metamsg("Quest 6 is a complete system, implementing all the standards of a parser game, including the usual compass directions by default! Containers, surfaces, countables, wearables, openables, furniture, components and switchable are all built in, as well as NPCs, who hopefully are acting with some semblance of realism.")
-    metamsg("For more information, including a tutorial on how to create your own game, see {link:here:https://github.com/ThePix/QuestJS/wiki\}. As yet there is no editor, but I hope there will be one day.");
+    metamsg("For more information, including a tutorial on how to create your own game, see {link:here:https://github.com/ThePix/QuestJS/wiki}. As yet there is no editor, but I hope there will be one day.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 }));
 
-commands.unshift(new Cmd('HelpCredits', {
+commands.push(new Cmd('HelpCredits', {
   regex:/^(?:\? |help )?(?:credits?|about)$/,
   script:function() {
     metamsg("{b:Credits:}");

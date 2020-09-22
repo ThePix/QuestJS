@@ -33,7 +33,8 @@ test.tests = function() {
 
   test.title("Launching");
   test.assertCmd("z", ["You wait one turn.", "Ostap prepares the first probe."]);
-  test.assertCmd("ask ostap about lost probes", ["'Do we ever lose probes?' you ask Ostap.", /^'We are exploring the unknown, we have to expect /]);
+  console.log('----------------------------------')
+  test.assertCmd("ask ostap about lost probes", ["'Do we ever lose probes?' you ask Ostap.", /^'We are exploring the unknown, we have to expect /])
   test.assertCmd("ask ostap about planet", ["'What's your report on HD 154088D?' you ask Ostap.", "'So, this one does not look so interesting,' he replies. 'I think we see nothing more than bacteria here - maybe not even that.'"]);
   test.assertCmd("ask ostap about lost probes", ["'Do we ever lose probes?' you ask Ostap.", /^'We are exploring the unknown/]);
   test.assertCmd("topics for ostap", ["Some suggestions for what to ask Ostap about: background; expertise; health; planet; probes."]);
@@ -59,18 +60,24 @@ test.tests = function() {
   test.assertCmd("s", test.padArray([], 4));
   test.assertCmd("ostap, stop", ["'Ostap, forget what I said; don't get in your stasis pod yet.'", "'Oh, okay.'"]);
   test.assertCmd("ostap, stop", ["'Ostap, stop what you're doing.'", "'Not really doing anything.'"]);
+
+
+  test.title("Waiting 2");
   test.assertCmd("z", "You wait one turn.");
   test.assertCmd("z", "You wait one turn.");
   test.assertCmd("l", [/All pods are currently open/, "You can see Ostap here."]);
   test.assertCmd("ostap, go in stasis pod", ["'Ostap, you're work here is done; you can go get in your stasis pod.'", "'Right, okay then.'"]);
   test.assertCmd("z", ["You wait one turn.", "Just in his underwear, Ostap climbs into his stasis pod."]);
-  test.assertCmd("x ostap", ["Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail.He is in his underwear. He is lying in his stasis pod.", "'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field."]);
+  test.assertCmd("x ostap", ["Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail. He is in his underwear. He is lying in his stasis pod.", "'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field."]);
   test.assertCmd("l", /Ostap's stasis pod is closed/);
-  
+  test.assertCmd("ask ai about crew", [
+    "'Tell me about the crew, Xsansi,' you say.", "'Crew member Ostap's designation is: biology. His current status is: In stasis.'",
+    "'Crew member Aada's designation is: geology. Her current status is: perfect. Her current location is: the girls cabin.'",
+    "'Crew member Kyle's designation is: coms. His current status is: good. His current location is: the Forward probe hanger.'",
+    "'Crew member Ha-yoon's designation is: engineering. Her current status is: good. Her current location is: Engineering (starboard).'",
+  ])
 
 
-  //test.assertCmd("z", ["You wait one turn.", "Just in his underwear, Ostap climbs into his stasis pod."]);
-  //test.assertCmd("z", ["You wait one turn.", "'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field."]);
-  //test.assertCmd("z", "You wait one turn.");
-  
+
+  /* */
 };

@@ -3,8 +3,8 @@
 // About your game
 settings.title = "Professor Kleinscope";
 settings.author = "The Pixie"
-settings.version = "1.1";
-settings.thanks = ['Pertex', 'R2T1'];
+settings.version = "1.2";
+settings.additionalAbout = ['Thanks to Pertex and R2T1 for beta-testing.']
 settings.warnings = 'No warning relevant for this game.'
 settings.files = ["data", "code", "npcs"];
 settings.debug = true

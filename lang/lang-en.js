@@ -309,7 +309,7 @@ const lang = {
   // General command fails
   no_smell:"{pv:char:can't:true} smell anything here.",
   no_listen:"{pv:char:can't:true} hear anything of note here.",
-  nothing_there:"nv:char:be:true} sure there's nothing there.",
+  nothing_there:"{nv:char:be:true} sure there's nothing there.",
   nothing_inside:"There's nothing to see inside.",
   not_here:"{pv:item:'be:true} not here.",
   char_has_it:"{nv:holder:have:true} {ob:item}.",
@@ -476,7 +476,7 @@ const lang = {
       metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".");
     }
     if (settings.additionalAbout !== undefined) {
-      for (let s of settings.additionalHelp) metamsg(s)
+      for (let s of settings.additionalAbout) metamsg(s)
     }
     return world.SUCCESS_NO_TURNSCRIPTS;
   },

@@ -24,6 +24,7 @@ createItem("Xsansi",
     geoProbes:16,
     seederPods:6,
     satellites:6,
+    crewStatusTemplate:"'Crew member {nms:actor} designation is: {param:actor:specialisation}. {pa:actor:true} current status is: {status}.{ifNot:actor:loc:nowhere: {pa:actor:true} current location is@@@colon@@@ {nm:room:the}.}'",
     currentPlanet:-1,
     shipStatus:"All systems nominal.",
     pressureOverride:false,
@@ -33,7 +34,7 @@ createItem("Xsansi",
       {
         name:"mission",
         test:function(p) { return p.text.match(/mission/); }, 
-        response:function() {
+        script:function() {
           msg("'Remind me of the mission, Xsansi,' you say.");
           msg("'The ship's mission is to survey five planets orbiting stars in the Ophiuchus and Serpens constellations. At each planet, a satellite is to be launched to collect data from the surface. At your discretion, bio-probes and geo-probes can be dropped to the surface to collect data. Note that there is no capability for probes to return to the ship or for the ship to land on a planet.'");
           msg("'Your bonus,' she continues, 'depends on the value of the data you collect. Bio-data from planets with advanced life is highly valued, as is geo-data from metal rich planets. Evidence of intelligent life offers further bonuses.'");
@@ -44,25 +45,22 @@ createItem("Xsansi",
       {
         name:"crew",
         test:function(p) { return p.text.match(/crew|team/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me about the crew, Xsansi,' you say.");
-          msg("'" + w.Ostap.crewStatus());
-          msg("'" + w.Aada.crewStatus());
-          msg("'" + w.Ha_yoon.crewStatus());
-          msg("'" + w.Kyle.crewStatus() + "'");
+          for (let npc of NPCS) msg(processText(w.Xsansi.crewStatusTemplate, {actor:npc, room:w[npc.loc]}))
         },
       },
       
       {
         name:"kyle",
         test:function(p) { return p.text.match(/kyle/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me about Kyle, Xsansi,' you say.");
           if (w.Xsansi.currentPlanet < 3) {
-            msg("'" + w.Kyle.crewStatus() + "'");
+            msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Kyle, room:w[w.Kyle.loc]}))
           }
           else {
-            msg("'Kyle... Kyle... Of the lot of you, he is the only one who really understands me. He is the only one I care enough about to get this miserable tin can back to Earth.'");
+            msg("'Kyle... Kyle... Of the lot of you, he is the only one who really understands me. He is the only one I {i:care} enough about to get this miserable tin can back to Earth.'");
           }
         },
       },
@@ -70,10 +68,10 @@ createItem("Xsansi",
       {
         name:"aada",
         test:function(p) { return p.text.match(/house/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me about Aada, Xsansi,' you say.");
           if (w.Xsansi.currentPlanet < 3) {
-            msg("'" + w.Kyle.crewStatus() + "'");
+            msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Aada, room:w[w.Aada.loc]}))
           }
           else {
             msg("'The Scandinavian skank? Who care? Oh, that's right. She's human, so everyone cares about her.'");
@@ -84,10 +82,10 @@ createItem("Xsansi",
       {
         name:"ha_yoon",
         test:function(p) { return p.text.match(/ha-yoon|ha yoon|ha|yoon/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me about Ha-yoon, Xsansi,' you say.");
           if (w.Xsansi.currentPlanet < 3) {
-            msg("'" + w.Ha_yoon.crewStatus() + "'");
+            msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ha_yoon, room:w[w.Ha_yoon.loc]}))
           }
           else {
             msg("'She's dead.'");
@@ -100,10 +98,10 @@ createItem("Xsansi",
       {
         name:"ostap",
         test:function(p) { return p.text.match(/ostap/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me about Ostap, Xsansi,' you say.");
           if (w.Xsansi.currentPlanet < 3) {
-            msg("'" + w.Ostap.crewStatus() + "'");
+            msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ostap, room:w[w.Ostap.loc]}))
           }
           else {
             msg("'Oh, I expect the oaf's fine. He's just had a nice sleep.'");
@@ -114,7 +112,7 @@ createItem("Xsansi",
       {
         name:"xsansi",
         test:function(p) { return p.text.match(/^(ai|xsan|computer)$/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me about yourself, Xsansi,' you say.");
           if (w.Xsansi.currentPlanet < 3) {
             msg("'The ship's AI is operating within normal tolerances.'");
@@ -128,7 +126,7 @@ createItem("Xsansi",
       {
         name:"ship",
         test:function(p) { return p.text.match(/status|ship/); }, 
-        response:function() {
+        script:function() {
           msg("'What is the ship's status, Xsansi?' you ask.");
           if (w.Xsansi.currentPlanet < 3) {
             msg("'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: " + w.Xsansi.bioProbes + " bio-probes; " + w.Xsansi.geoProbes + " geo-probes; " + w.Xsansi.seederPods + " seeder pods; and " + w.Xsansi.satellites + " satellites ready to be deployed.'");
@@ -142,7 +140,7 @@ createItem("Xsansi",
       {
         name:"vacuum",
         test:function(p) { return p.text.match(/vacuum|pressur/); }, 
-        response:function() {
+        script:function() {
           msg("'What areas of the ship are not pressurised, Xsansi?' you ask.");
           if (w.Xsansi.currentPlanet < 3) {
             const list = [];
@@ -170,7 +168,7 @@ createItem("Xsansi",
       {
         name:"satellite",
         test:function(p) { return p.text.match(/satellite/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me about the satellite, Xsansi.'");
           if (w.Xsansi.currentPlanet > 2) {
             w.Xsansi.multiMsg([
@@ -195,8 +193,8 @@ createItem("Xsansi",
       
       {
         name:"stasis",
-        test:function(p) { return p.text.match(/status/); }, 
-        response:function() {
+        test:function(p) { return p.text.match(/statis/); }, 
+        script:function() {
           msg("'Tell me about the stasis system, Xsansi.'");
           if (w.Xsansi.currentPlanet < 3) {
             msg("'The stasis pods allow their human occupants to survive the extreme journey times of the mission. The stasus effect is achieved via an inverted chrono-field, allowing time to proceed externally approximately 728,320,000 times faster than within the pod.'");
@@ -210,7 +208,7 @@ createItem("Xsansi",
       {
         name:"Joseph Banks",
         test:function(p) { return p.text.match(/joseph|banks/); }, 
-        response:function() {
+        script:function() {
           msg("'Who was this Joseph Banks guy the ship is named after, Xsansi?'");
           msg("'Sir Joseph Banks, 1st Baronet, GCB, PRS was born on 24 February 1743 in London, UK, and died 19 June 1820 in London, UK. He was a naturalist, botanist, and patron of the natural sciences, who played a major role in the colonisation of Australia by Europeans, and is credited with discovering approximately 1,400 species of plants, some 80 of which bear his name.'");
           msg("'Some old scientist guy. Got it.'");
@@ -220,7 +218,7 @@ createItem("Xsansi",
       {
         name:"itinerary",
         test:function(p) { return p.text.match(/itinerary|stars|planets|route|destinations/); }, 
-        response:function() {
+        script:function() {
           msg("'Remind me of the itinerary, Xsansi,' you say.");
           if (w.Xsansi.currentPlanet < 3) {
             for (let i = w.Xsansi.currentPlanet; i < PLANETS.length; i++) {
@@ -238,7 +236,7 @@ createItem("Xsansi",
       {
         name:"radioSignals",
         test:function(p) { return p.text.match(/radio|signal/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me of the radio signals, Xsansi,' you say.");
           if (w.Xsansi.currentPlanet < 2) {
             msg("'No radio signals have been detected.'");
@@ -259,7 +257,7 @@ createItem("Xsansi",
       {
         name:"planet",
         test:function(p) { return p.text.match(/this planet|this star|planet|star|the planet|the star/); }, 
-        response:function() {
+        script:function() {
           msg("'Tell me about this planet, Xsansi,' you say.");
           if (w.Xsansi.currentPlanet < 3) {
             const planet = PLANETS[w.Xsansi.currentPlanet];
@@ -277,7 +275,7 @@ createItem("Xsansi",
       {
         name:"meteors",
         test:function(p) { return p.text.match(/meteor|incident/); }, 
-        response:function() {
+        script:function() {
           if (w.Xsansi.currentPlanet === 0) {
             msg("'Is there any risk of being hit by something, like a meteor shower, Xsansi?' you ask.")
             msg("'There is a probability of 0.23 of significant damage from a meteor shower during the mission. The probability of that occuring while the crew is not in stasis is less than 0.0002.'");
@@ -300,7 +298,7 @@ createItem("Xsansi",
       {
         name:"damage", regex:/damage/,
         test:function(p) { return p.text.match(/damage/); }, 
-        response:function() {
+        script:function() {
           if (w.Xsansi.currentPlanet === 0) {
             msg("'Is the ship damaged at all, Xsansi?' you ask.")
             msg("'There is currently no damage to the ship.'");
@@ -316,7 +314,7 @@ createItem("Xsansi",
       {
         name:"repairs", regex:/repairs/, 
         test:function(p) { return p.text.match(/repairs/); }, 
-        response:function() {
+        script:function() {
           if (w.Xsansi.currentPlanet === 0) {
             msg("'How do we do repairs, Xsansi?' you ask.")
             msg("'In the event of a loss of hull integrity, kits for repairing the hull from inside the ship can be found in the cargo bay. The captain and one nominated crew member should don spacesuits, whilst other crew members go in their respective stasis pods. The ship's air will then be evacuated while repairs are made.'");
@@ -326,7 +324,25 @@ createItem("Xsansi",
             if (!w.Xsansi,damageAskedAbout) {
               msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.")
             }
-            msg("'Repairs may be possible using an EVA suit to access the exterior of the ship. One EVA suit is stored in this section for such a continguency. If repairs cannot be effected, the damaged parts of the ship can be sealed off. As damage was confined to non-croitical areas of the ship, the mission can proceed in either case.");
+            msg("'Repairs may be possible using an EVA suit to access the exterior of the ship. One EVA suit is stored in this section for such a contingency. If repairs cannot be effected, the damaged parts of the ship can be sealed off. As damage was confined to non-critical areas of the ship, the mission can proceed in either case.'");
+          }
+        },
+      },
+      
+      {
+        name:"escape pods", regex:/repairs/, 
+        test:function(p) { return p.text.match(/escape pod/); }, 
+        script:function() {
+          msg("'Where are the escape pods, Xsansi?' you ask.")
+          if (w.Xsansi.currentPlanet < 3) {
+            msg("'There are no escape pods. The mission is to stars never before visited. Therefore the probability of another vessel in the vicinity with the time period where rescue is possible is vanishingly small.'")
+            msg("'We could try to make planet-fall.'")
+            msg("'The probability of a planet that supports habitation for long term survival is less than one percent. Therefore the probability of another vessel in the vicinity with the time period where rescue is possible is vanishingly small.'")
+            msg("'Surely habitable planets are not that rare.'")
+            msg("'Human nutritional requirements are very exact, requiring amino acids and sugars of a specific chirality, plus numerous specific compounds, such as ascorbic acid, retinol, thiamin and riboflavin, the absence of which would lead to death within six months.'")
+          }
+          else {
+            msg("'There are no escape pods. Cry me a fucking river.'")
           }
         },
       },
@@ -348,11 +364,6 @@ createItem("Kyle",
     relationship:0,
     specialisation:"coms",
     examine:"Kyle is the computer expert, but also a good cook, and has volunteered for the role of chef. An Australian, he is slim, and below average height, with very short blonde hair, and green eyes.",
-    crewStatus:function() {
-      let s = "Crew member Kyle's designation is: coms. His current status is: ";
-      s += this.status + ". His current location is: " + lang.getName(w[this.loc], {article:DEFINITE}) + ".";
-      return s;
-    },
     revive:function(isMultiple, char) {
       if (char === game.player) {
         msg("You wonder how to revive " + lang.getName(this, ) + " - probably best to leave that to Xsansi.");
@@ -405,7 +416,7 @@ createItem("Kyle",
     askOptions:[
       {
         test:function(p) { return p.text.match(/newcastle/); }, 
-        response:function() {
+        script:function() {
           msg("'What's Newcastle like?' you ask Kyle.");
           msg("'It's... okay. But no better than that. I guess it's too close to Sydney, and anything interesting goes there, so its kinda dull.'");
           trackRelationship(w.Kyle, 1, "background2");
@@ -423,7 +434,7 @@ createItem("Kyle",
         name:"radioSignals", 
         test:function(p) { return p.text.match(this.regex); }, 
         regex:/radio|signal/, 
-        response:function() {
+        script:function() {
           msg("'Talk to me about the radio signal,' you say.");
           if (w.Xsansi.currentPlanet === 2) {
             if (w.alienShip.status === 0) {
@@ -459,7 +470,7 @@ createItem("Kyle",
       {
         regex:/virus|program/,
         test:function(p) { return p.text.match(this.regex); }, 
-        response:function() {
+        script:function() {
           msg("'You say the signal could be a virus,' you say to Kyle. 'Is it dangerous?'");
           msg("'No way, mate. It's completely isolated, and anyway couldf only be dangerous if we're using the same computer architecture. Hey, you got any alien chips in you, Xsansi?'");
           if (w.Xsansi.currentPlanet < 3) {
@@ -515,11 +526,6 @@ createItem("Ostap",
     relationship:0,
     properName:true,
     specialisation:"biology",
-    crewStatus:function() {
-      let s = "Crew member Ostap's designation is: biologist. His current status is: ";
-      s += this.status + ". His current location is: " + lang.getName(w[this.loc], {article:DEFINITE}) + ".";
-      return s;
-    },
 
     stasis:function() {
       msg("'Ostap, you're work here is done; you can go get in your stasis pod.'");
@@ -538,9 +544,9 @@ createItem("Ostap",
     examine:function(isMultiple) {
       let s;
       switch (this.clothing) {
-        case 0: s = "He is naked."; break;
-        case 1: s = "He is in his underwear."; break;
-        case 2: s = "He is wearing a dark grey jumpsuit."; break;
+        case 0: s = " He is naked."; break;
+        case 1: s = " He is in his underwear."; break;
+        case 2: s = " He is wearing a dark grey jumpsuit."; break;
       }
       if (this.posture === "reclining" && this.loc === "stasis_bay") {
         s += " He is lying in his stasis pod.";
@@ -548,7 +554,7 @@ createItem("Ostap",
       else if (this.posture) {
         s += " He is " + this.posture + ".";
       }
-      msg(prefix(item, isMultiple) + "Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail." + s);
+      msg(prefix(this, isMultiple) + "Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail." + s);
     },
 
     // Agenda
@@ -618,7 +624,7 @@ createItem("Ostap",
       {
         nameLost:"lost probe",
         test:function(p) { return p.text.match(/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/); }, 
-        response:function() {
+        script:function() {
           if (w.Ostap.lostProbe) {
             msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Ostap.");
           }
@@ -631,7 +637,7 @@ createItem("Ostap",
       {
         regex:/babusya/,
         test:function(p) { return p.text.match(/babusya/); }, 
-        response:function() {
+        script:function() {
           msg("'What does babusya?' you ask Ostap.");
           msg("'Is Ukrainian for grandmother. Professor Oliynyk was my father's mother. I think she was disappointed when he became a software engineer, and he felt bad, so encouraged us to follow in her footsteps.'");
           trackRelationship(w.Ostap, 1, "background2");
@@ -649,15 +655,15 @@ createItem("Ostap",
       const count = parseInt(arr[0]);
       switch (this.deployProbeAction) {
         case 0:
-        this.msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " to deploy...' mutters Ostap as he types at the console.");
+        this.msg("'Okay, " + lang.toWords(count) + " probe" + (count === 1 ? "" : "s") + " to deploy...' mutters Ostap as he types at the console.");
         this.deployProbeAction++;
         break;
         case 1:
-        this.msg("Ostap prepares the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.msg("Ostap prepares the " + lang.toOrdinal(this.deployProbeCount + 1) + " probe.");
         this.deployProbeAction++;
         break;
         case 2:
-        this.msg("Ostap launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.msg("Ostap launches the " + lang.toOrdinal(this.deployProbeCount + 1) + " probe.");
         deployProbe(this, "bio", this.deployProbeTotal);
         this.deployProbeCount++;
         this.deployProbeTotal++;
@@ -669,7 +675,7 @@ createItem("Ostap",
         }
         break;
         case 3:
-        this.msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " launched,' says Ostap as he stands up.");
+        this.msg("'Okay, " + lang.toWords(count) + " probe" + (count === 1 ? "" : "s") + " launched,' says Ostap as he stands up.");
         this.deployProbeAction++;
         break;
       }
@@ -694,11 +700,6 @@ createItem("Aada",
     geologyFlag1:false,
     geologyFlag2:false,
     examine:"Aada is a Finnish woman with features so ideal you suspect genetic engineering. Tall, with a perfect figure, she keeps her blonde hair short.",
-    crewStatus:function() {
-      let s = "Crew member Aada's designation is: geologist. Her current status is: ";
-      s += this.status + ". Her current location is: " + lang.getName(w[this.loc], {article:DEFINITE}) + ".";
-      return s;
-    },
     
     // Reactions
     reactionToUndress:0,
@@ -747,7 +748,7 @@ createItem("Aada",
       {
         name:"lost probe",
         test:function(p) { return p.text.match(/(lost|destroyed) (bio|geo|bio-|geo-)?(probe|contact)/); }, 
-        response:function() {
+        script:function() {
           if (w.Ostap.lostProbe) {
             msg("'What does Xsansi mean by \"contact lost\" with that probe?' you ask Aada.");
             msg("'The probe was destroyed, I guess. Or too damaged to transmit anyway.'");
@@ -763,7 +764,7 @@ createItem("Aada",
 
       {
         test:function(p) { return p.text.match(/lack of*|inability/); }, 
-        response:function() {
+        script:function() {
           msg("'You don't seem that... well up on geology,' you suggest to Aada.");
           msg("'What's that supposed to mean?'");
           if (w.Aada.geologyFlag1 && w.Aada.geologyFlag2) {
@@ -778,7 +779,7 @@ createItem("Aada",
     tellOptions:[
       {
         test:function(p) { return p.text.match(/.* hot/); }, 
-        response:function() {
+        script:function() {
           msg("'You look hot!' you say Aada.");
           msg("'If you're trying to get in my knickers, forget it.'");
         },
@@ -794,19 +795,19 @@ createItem("Aada",
       switch (this.deployProbeAction) {
         case 0:
         if (w.Xsansi.currentPlanet === 0 && this.deployProbeTotal === 0) {
-          this.msg("'Okay, " + toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada, looking blankly at the console for a moment. 'How hard can it be?' She starts tapping at the key board.");
+          this.msg("'Okay, " + lang.toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada, looking blankly at the console for a moment. 'How hard can it be?' She starts tapping at the key board.");
         }
         else {
-          this.msg("'Another " + toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada. 'Easy enough.'");
+          this.msg("'Another " + lang.toWords(count) + " probe" + (count === 1 ? "" : "s") + "...' says Aada. 'Easy enough.'");
         }
         this.deployProbeAction++;
         break;
         case 1:
-        this.msg("Aada prepares the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.msg("Aada prepares the " + lang.toOrdinal(this.deployProbeCount + 1) + " probe.");
         this.deployProbeAction++;
         break;
         case 2:
-        this.msg("Aada launches the " + toOrdinal(this.deployProbeCount + 1) + " probe.");
+        this.msg("Aada launches the " + lang.toOrdinal(this.deployProbeCount + 1) + " probe.");
         deployProbe(this, "geo", this.deployProbeTotal);
         this.deployProbeCount++;
         this.deployProbeTotal++;
@@ -819,10 +820,10 @@ createItem("Aada",
         break;
         case 3:
         if (w.Xsansi.currentPlanet === 0 && this.deployProbeTotal === count) {
-          this.msg("'There!' says Aada, triumphantly. '" + toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed. I knew it couldn't be {i:that} tricky.'");
+          this.msg("'There!' says Aada, triumphantly. '" + lang.toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed. I knew it couldn't be {i:that} tricky.'");
         }
         else {
-          this.msg("'That's another " + toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed,' says Aada.");
+          this.msg("'That's another " + lang.toWords(count) + " probe" + (count === 1 ? "" : "s") + " deployed,' says Aada.");
         }
         this.deployProbeAction++;
         break;
@@ -845,11 +846,6 @@ createItem("Ha_yoon",
     properName:true,
     specialisation:"engineering",
     examine:"Ha-yoon is a well-respected Korean engineer, making her possibly the most important member of the crew for ensuring the ship gets back to Earth. She is the shortest of the crew, but perhaps the loudest. She has long, raven=black hair, that falls to her waist, and dark eyes.",
-    crewStatus:function() {
-      let s = "Crew member Ha-yoon's designation is: engineer. Her current status is: ";
-      s += this.status + ". Her current location is: " + lang.getName(w[this.loc], {article:DEFINITE}) + ".";
-      return s;
-    },
     
     // Reactions
     reactionToUndress:0,

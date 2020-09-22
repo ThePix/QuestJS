@@ -71,7 +71,7 @@ createRoom("stasis_bay", {
     switch (arr.length) {
       case 0: return "All pods are currently open.";
       case 4: return "Currently only your pod and the spare pod are open.";
-      case 1: return lang.getName(arr[0], {possessive:true}) + "'s stasis pod is closed.";
+      case 1: return lang.getName(arr[0], {possessive:true}) + " stasis pod is closed.";
       default: return "The stasis pods of " + formatList(arr) + " are closed.";
     }
   },
@@ -92,7 +92,7 @@ createItem("stasis_pod", {
   regex:/^(stasis )?pods?$/,
   scenery:true,
   loc:"stasis_bay",
-  examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
+  examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
 });
 
 createItem("stasis_pod_drawer", CONTAINER(false), {
@@ -190,7 +190,7 @@ createItem("stasis_pod_interior",
 
 
 createRoom("cargo_bay", {
-  desc:"The cargo bay is a large,open area, with numerous [crates:crate], several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
+  desc:"The cargo bay is a large, open area, with numerous [crates:crate], several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
   vacuum:false,
   forward:new Exit("stasis_bay"),
   port:new Exit("top_deck_aft", {

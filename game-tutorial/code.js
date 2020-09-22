@@ -20,7 +20,7 @@ hint.data = [
   { name:'hatInBox', hint:'REMOVE THE HAT and then PUT IT IN THE BOX, then CLOSE BOX.', tutorial:"I am guessing the Hat and Crowbar Company are expecting a hat back now, better put the hat in the box. Can you guess how?|The clue was in the question: PUT THE HAT IN THE BOX.|You will need to REMOVE the hat first. And once the hat is in there, close the box. Quest will understand IT to the last thing you referred to, so you could say REMOVE HAT and then PUT IT IN THE BOX.|You might want to see if anything happens if you close the box while it is empty first..."},
   { name:'crowbar', hint:'CROWBAR THE SHED DOOR and then GO EAST.', tutorial:"Cool... Wait, does that mean you're now naked? Let's assume not! So we have a crowbar, we can get into the shed.|Up to now we have been using commands that pretty much every game will understand, but games will usually have their own set of commands unique to them, as required by the plot. This game is no different.|One of the problems when playing - and when authoring - a text adventure is deciding how a command should be phrased (a problem known as \"guess the verb\"). Are we going to CROWBAR THE SHED or LEVER OPEN THE DOOR or what? Often it takes some experimenting, though sometimes the text will give you a hint - always worth trying any verb that is used in the text (at least you can be sure the author knows that word).|Often the generic USE will work, so is worth a try."},
   { name:'getTorch', hint:'GET TORCH.', tutorial:"This room has a torch, but it is described in the room description as part of the scenery, so not as obvious as the hat. But you can still pick it up just the same. And if you then drop it again, you will see it is just an ordinary item (though that may not be the case in all games).|Incidentally, you can call it a flashlight if you prefer."},
-  { name:'torchOn', hint:'TURN ON TORCH, then head to the basement (out, southwest, then down). If you are in the basement and it is dark, you will need to go back up, and then turn the torch on before coming back down.', tutorial:"Now it is calling it a flashlight? So anyway, we have a torch, we can now take a proper look in the basement.|The torch can  be turned on and off, with TURN ON TORCH or SWITCH FLASHLIGHT OFF or whatever."},
+  { name:'torchOn', hint:'TURN ON TORCH, then head to the basement (out, southwest, then down). If you are in the basement and it is dark, you will need to go back up, and then turn the torch on before coming back down.', tutorial:"Now it is calling it a flashlight? So anyway, we have a torch, we can now take a proper look in the basement (go down from the kitchen).|The torch can  be turned on and off, with TURN ON TORCH or SWITCH FLASHLIGHT OFF or whatever."},
   { name:'turnOnLight', hint:'SWITCH ON THE LIGHT, and then TURN OFF THE TORCH (in that order!).', tutorial:"Great, at last we can see down here. And it turns out there is a light switch, but we needed the torch to see the switch.|It is quite common for torch batteries to run out after so many turns, and then you have to re-charge it or find a battery. Hopefully that will not happen here, but it would be a good idea to save the battery just in case, so turn the light on, and turn off the torch."},
   { name:'getAll', hint:'Try GET ALL to pick up everything.', tutorial:"So we have managed to turn on a light!|A lot of adventure games are like this in that you need to do A, but to do that you need to do B, but you cannot do B without doing C first, and so on. And often - as here - you do not know what A even is.|There are a few things down here that we might want to grab. Most adventure games understand the word ALL, so we can just do GET ALL to pick up the lot."},
   { name:'moveCrates', hint:'You cannot take the crates, but you might be able to MOVE CRATES.', tutorial:"Great, you used ALL!|Note that ALL will not include items that are scenery, so not the cobwebs (which are actual objects now, honest - try TAKE COBWEBS), and there are some objected we could not pick up.|You also DROP ALL, WEAR ALL, etc. though some commands will not like it. You could also try DROP ALL BUT ROPE.|You might also want to try eating the apple or reading the newspaper.|When you are done, on with the plot! We cannot take the crates with us, but trying to do so was useful because the response gave us a clue as to what we can do - we can move them."},
@@ -123,11 +123,11 @@ const walkthroughs = {
     "read label", "hint",
     "open box", "hint",
     "get crowbar", "hint",
-    "remove hat", "hint",
-    "put it in box", "hint",
-    "close lid", "hint",
+    //"remove hat", "hint",
+    //"put it in box", "hint",
+    //"close lid", "hint",
     "crowbar shed", "hint",
-    "east", "hint",
+    "east", "hint",/*
     "get torch", "hint",
     "out", "hint",
     "sw", "hint",
@@ -342,7 +342,8 @@ const smashWithScript = function(item, dest) {
   if (w.office_window.smashed) return falsemsg("The window is already smashed.")
 
   if (item === w.crowbar) {
-    msg("You strke the window with the crowbar, breaking the glass. You take a moment to knock away the remaining jagged shards in the frame.")
+    msg("You strike the window with the crowbar, breaking the glass. You take a moment to knock away the remaining jagged shards in the frame.")
+    if (w.Professor_Kleinscope.isHere()) msg("Strangely, Professor Kleinscope does not seem to notice.")
     w.office_window.smashed = true
     hint.now('out')
     return world.SUCCESS
