@@ -35,7 +35,16 @@ test.tests = function() {
   test.assertCmd("z", ["You wait one turn.", "Ostap prepares the first probe."]);
   console.log('----------------------------------')
   test.assertCmd("ask ostap about lost probes", ["'Do we ever lose probes?' you ask Ostap.", /^'We are exploring the unknown, we have to expect /])
-  test.assertCmd("ask ostap about planet", ["'What's your report on HD 154088D?' you ask Ostap.", "'So, this one does not look so interesting,' he replies. 'I think we see nothing more than bacteria here - maybe not even that.'"]);
+  
+  test.assertCmd("z", []);/*
+  
+  
+  
+  test.assertCmd("ask ostap about planet", ["'What's your report on HD 154088D?' you ask Ostap.", "'So, this one does not look so interesting,' he replies. 'I think we see nothing more than bacteria here - maybe not even that.'"]);/*
+  
+  
+  
+  
   test.assertCmd("ask ostap about lost probes", ["'Do we ever lose probes?' you ask Ostap.", /^'We are exploring the unknown/]);
   test.assertCmd("topics for ostap", ["Some suggestions for what to ask Ostap about: background; expertise; health; planet; probes."]);
   test.assertCmd("z", ["You wait one turn.", "Ostap launches the first probe."]);

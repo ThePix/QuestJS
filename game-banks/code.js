@@ -329,24 +329,21 @@ function howAreYouFeeling(response) {
 
 function planetAnalysis(response) {
   msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].starName + PLANETS[w.Xsansi.currentPlanet].planet + "?' you ask " + lang.getName(response.actor, {article:DEFINITE}) + ".")
-  //console.log(response.actor)
-  //console.log(response.actor.name)
-  //console.log(response.actor.name + w.Xsansi.currentPlanet)
+  console.log(response.actor)
+  console.log(response.actor.name)
+  console.log(response.actor.data[w.Xsansi.currentPlanet])
   const arr = response.actor.data[w.Xsansi.currentPlanet]
   console.log(arr)
-  if (Object.keys(arr).length === 0) {
-    msg("You should talk to Aada or Ostap about that stuff.")
-    return false
-  }
+  if (Object.keys(arr).length === 0) return falsemsg("You should talk to Aada or Ostap about that stuff.")
+
   let level = w["planet" + w.Xsansi.currentPlanet][response.actor.specialisation]
-  if (level === undefined) {
-    msg("You should talk to Aada or Ostap about that stuff.")
-    return false
-  }
-  while (arr["level" + level] === undefined) {
-    level--
-  }
-  arr["level" + level]()
+  if (level === undefined) return falsemsg("You should talk to Aada or Ostap about that stuff.")
+  console.log(level)
+  
+  //while (arr["level" + level] === undefined) {
+  //  level--
+  //}
+  //arr["level" + level]()
 }
 
   
@@ -474,14 +471,5 @@ function isRoomPressured(room) {
   if (typeof room.vacuum === "string") room = w[room.vacuum];
   return !room.vaccum;
 }
-
-/*
-io.clickToContinueLink = function() {
-  msg('<a class="continue" onclick="io.waitContinue()">Click...</a>');
-  io.continuePrintId = io.nextid - 1;
-}
-*/
-
-
 
 

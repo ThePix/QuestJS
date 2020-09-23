@@ -481,28 +481,28 @@ createItem("Kyle", CREW(false), {
   data:[
     [
       // planet 0
-      {rank:0, value:"'I've launched the satellite, but not picking anything up.'"},
-      {rank:2, value:"'There's nothing here. No radio signals, and the images are pretty dull too.'"},
+      "'I've launched the satellite, but not picking anything up.'",
+      "'There's nothing here. No radio signals, and the images are pretty dull too.'",
     ],
     [
       // planet 1
-      {rank:0, value:"'The satellite's away, but not picking anything up again.'"},
-      {rank:2, value:"'There's nothing here for me to study; no radio signals. The images are cool, all those huge purple ferns, lots different biomes. Ostap must love it.'"},
+      "'The satellite's away, but not picking anything up again.'",
+      "'There's nothing here for me to study; no radio signals. The images are cool, all those huge purple ferns, lots different biomes. Ostap must love it.'",
     ],
     [
       // planet 2: Kyle should come and see you about this; then this message should change
-      {rank:0, value:"'The satellite's away, and it might just be noise, but there could be a signal.'"},
-      {rank:2, value:"'There's nothing on the planet producing radio signals, but there is something in orbit. I can't tell what it is, but all the analysers say it is artificial. And I've never heard of a natural radio signal from something that small. I... I think we should take a look.'"},
+      "'The satellite's away, and it might just be noise, but there could be a signal.'",
+      "'There's nothing on the planet producing radio signals, but there is something in orbit. I can't tell what it is, but all the analysers say it is artificial. And I've never heard of a natural radio signal from something that small. I... I think we should take a look.'",
     ],
     [
       // planet 3
-      {rank:0, value:"'The satellite's away, but looks like another dead one.'"},
-      {rank:2, value:"'No radio signals, nothing interesting in the images.'"},
+      "'The satellite's away, but looks like another dead one.'",
+      "'No radio signals, nothing interesting in the images.'",
     ],
     [
       // planet 4
-      {rank:0, value:"'This is really exciting,' enthuses Kyle. 'I'm picking up all sorts of radio signals. The satellite's away, so hopefully it can focus in just one for analysis.'"},
-      {rank:2, value:"'I'm starting to get results from the signals being broadcast from that transmitter. Its strange - in some ways the signal is very complex - beyond anything I've seen before - but, well, it seems to be in English!'|'How can that be?'|'I don't know.'"},
+      "'This is really exciting,' enthuses Kyle. 'I'm picking up all sorts of radio signals. The satellite's away, so hopefully it can focus in just one for analysis.'",
+      "'I'm starting to get results from the signals being broadcast from that transmitter. Its strange - in some ways the signal is very complex - beyond anything I've seen before - but, well, it seems to be in English!'|'How can that be?'|'I don't know.'",
     ],
   ],
 })
