@@ -60,7 +60,7 @@ createItem("your_underwear", WEARABLE(1, ["body"]), {
 
 createRoom("stasis_bay", {
   alias:"stasis bay",
-  desc:'There are six stasis pods here (despite only five crew members), four on one side and two on the other. {podStatus} Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant alive. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
+  desc:'There are six stasis pods here (despite only five crew members), four on one side and two on the other. {stasis_pod_status} Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant alive. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
   tpStatus:function() {
     const arr = [];
     for (let npc of NPCS) {
@@ -166,7 +166,7 @@ createItem("stasis_pod_interior",
     closed:false,
     examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
     close:function(isMultiple, char) {
-      if (w.Kyle.deploySatelliteAction < 5) {
+      if (w.Kyle.deployProbeAction < 5) {
         msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'closing the lid of a stasis pod will put you back in stasis. That is not permitted until the satellite is deployed, and not advised until probes have been deployed and data collected.' The lid rises to its fully open position.");
         return false;
       }
@@ -439,7 +439,7 @@ createRoom("top_deck_aft", {
 
 
 createRoom("canteen", {
-  desc:"The canteen, like everything else of the ship, is pretty small. There is a table, with one short side against the wall, and five plastic [chairs:chair] around it.{tableDesc} At the back is the food preparation area; a work surface across the width of the room, with a sink on the right and a hob on the left.",
+  desc:"The canteen, like everything else of the ship, is pretty small. There is a table, with one short side against the wall, and five plastic [chairs:chair] around it.{table_desc} At the back is the food preparation area; a work surface across the width of the room, with a sink on the right and a hob on the left.",
   vacuum:false,
   port:new Exit('top_deck_forward'),
 });
@@ -451,8 +451,8 @@ createItem("canteen_table",
     alias:"table",
     loc:"canteen",
     scenery:true,
-    tpDesc:" The table is bare.",
-    examine:"The table is plastic, attached to the wall at one end, and held up by a single leg at the other end.{tableDesc}",
+    tpDesc:function() { return " The table is bare." },
+    examine:"The table is plastic, attached to the wall at one end, and held up by a single leg at the other end.{table_desc}",
   }
 );
 
@@ -466,12 +466,14 @@ createRoom("your_cabin", {
 
 createRoom("guys_cabin", {
   desc:"",
+  alias:"guys' cabin",
   vacuum:false,
   starboard:new Exit("top_deck_aft"),
 });
 
 createRoom("girls_cabin", {
   desc:"",
+  alias:"girls' cabin",
   vacuum:false,
   forward:new Exit("top_deck_aft"),
 });
@@ -508,43 +510,59 @@ createItem("alienShip", {
 
 
 
+createItem("ship", {
+  regex:/^ship|alien vessel|ship|vessel$/,
+  desc:"",
+  isShip:true,
+  oxygen:2000,
+  status:0,
+  eventIsActive:function() { return true },
+  eventPeriod:1,
+  eventScript:function() {
+    this.oxygen--  // player using it
+    for (let npc of NPCS) {
+      if (npc.usingOxygen()) this.oxygen--
+    }
+  },
+});
+
+
+
+
 //-----------------------------------------------------
 // SPECIAL ITEMS
 
+
+// Probes are cloned from this
+//
 createItem("probe_prototype", COUNTABLE([]),
   { 
-    alias:"Probe X",
-    regex:/^(\d+ )?(bio-|geo-|bio|geo)?probes?$/,
+    alias:"probe",
+    regex:/^(\d+ )?(bio-|geo-|bio|geo)?(probe|satellite|satelite)s?$/,
     launch:function(isMultiple, char) {
-      let type;
-      if (char === w.Aada) {
-        type = "geo";
-      }
-      else if (char === w.Ostap) {
-        type = "bio";
-      }
-      else {
-        msg("To launch a probe, see either Aada or Ostap.");
-        return false;
-      }
+      if (!char.probeType) return falsemsg("To launch a probe, see either Aada or Ostap. For a satellite see Kyle.")
       
       let number = this.extractNumber();
-      if (!number) number = 1;
-      const available = w.Xsansi[type + "Probes"];
+      if (!number) number = 1
 
       if (number === 1) {
-        msg("'Launch a " + type + "-probe,' you say to " + lang.getName(char, {article:DEFINITE}) + ".");
+        msg("'Launch a " + char.probeType + ",' you say to " + lang.getName(char, {article:DEFINITE}) + ".")
       }
       else {
-        msg("'Launch " + number + " " + type + "-probes,' you say to " + lang.getName(char, {article:DEFINITE}) + ".");
+        msg("'Launch " + number + " " + char.probeType + "s,' you say to " + lang.getName(char, {article:DEFINITE}) + ".")
       }
-      if (number > available) {
-        msg("'We only have " + available + " and we should save some for the other planets on our itinerary.'");
-        return false;
+      if (number > char.probesRemaining) {
+        return falsemsg("'We only have " + char.probesRemaining + " and we should save some for the other planets on our itinerary.'")
       }
       
-      if (number > (5 - char.deployProbeTotal)) {
-        msg("'Are you sure? Protocol says we should deploy no more than five on a single planets.'");
+      if (char.probeType === 'satellite') {
+        if (number > (2 - char.deployProbeTotal)) {
+          msg("'Are you sure? Protocol says we should deploy no more than two around a single planet.'");
+          msg("'Hey, I'm the captain. It's my bonus on the line here. Get those satellites deployed.'");
+        }
+      }
+      else if (number > (5 - char.deployProbeTotal)) {
+        msg("'Are you sure? Protocol says we should deploy no more than five on a single planet.'");
         msg("'Hey, I'm the captain. It's my bonus on the line here. Get those probes deployed.'");
       }
       
@@ -564,38 +582,51 @@ createItem("probe_prototype", COUNTABLE([]),
       }
       return true;
     },
-    launched:false,
     launchCounter:0,
-    status:"Unused",
+    status:"In flight",
     countAtLoc:function(loc) { return 0; },
-    eventIsActive:function() { return this.launched; },
-    eventScript:function() {
-      this.launchCounter++;
-      if (this.launchCounter < TURNS_TO_LANDING) {
-        this.status = "In flight";
-      }
-      if (this.launchCounter === TURNS_TO_LANDING) {
-        if (probeLandsOkay()) {
-          this.status = "Landing";
-          shipAlert(this.alias + " has successfully landed on the planet.");
-        }
-        else {
-          shipAlert("Contact with " + this.alias + " has been lost as it attempted to land on the planet.");
-          this.launched = false;
-          this.status = "Destroyed";
-        }
-      }
-      if (this.launchCounter === TURNS_TO_LANDING + 1) {
-        this.status = "Exploring";
-      }
-      const arr = PLANETS[this.planetNumber][this.probeType + "ProbeRanks"][this.probeNumber];
-      
-      if (arr !== undefined && arr.includes(this.launchCounter - TURNS_TO_LANDING)) {
-        w["planet" + this.planetNumber][this.probeType + "logy"]++;
-        game.player.bonus += PLANETS[this.planetNumber][this.probeType + "ProbeBonusPerRank"];
-      }
-    },
+    eventIsActive:function() { return this.clonePrototype },
   }
-);
+)
 
+
+const probeEventScript = function() {
+  this.launchCounter++
+  if (this.launchCounter === TURNS_TO_LANDING) {
+    if (probeLandsOkay()) {
+      this.status = "Landing";
+      shipAlert(this.alias + " has successfully landed on the planet.");
+    }
+    else {
+      shipAlert("Contact with " + this.alias + " has been lost as it attempted to land on the planet.");
+      this.launched = false;
+      this.status = "Destroyed";
+    }
+  }
+  if (this.launchCounter === TURNS_TO_LANDING + 1) {
+    this.status = "Exploring";
+  }
+  const arr = PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeRanks"][this.probeNumber];
+  
+  if (arr !== undefined && arr.includes(this.launchCounter - TURNS_TO_LANDING)) {
+    w["planet" + this.planetNumber][this.probeType.substring(0, 3) + "logy"]++;
+    game.player.bonus += PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeBonusPerRank"];
+  }
+}
+
+
+const satelliteEventScript = function() {
+  this.launchCounter++
+  if (this.launchCounter === TURNS_TO_ORBIT) {
+    this.status = "In orbit";
+    shipAlert(this.alias + " has successfully entered orbit around the planet.");
+  }
+  if (this.launchCounter === TURNS_TO_ORBIT + 1) {
+    this.status = "Scanning";
+  }
+  if (this.launchCounter > TURNS_TO_ORBIT + 1 && this.launchCounter % 4 === 0) {
+    game.player.bonus += 1
+    w[this.owner].rank++
+  }
+}
 

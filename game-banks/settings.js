@@ -1,5 +1,8 @@
 "use strict";
 
+
+
+
 settings.title = "The Voyages of The Joseph Banks"
 settings.author = "The Pixie"
 settings.version = "0.1"
@@ -8,7 +11,7 @@ settings.warnings = 'This game does have swearing (including the F-word); it is 
 
 // UI options
 settings.customExits = 'shipwise'
-settings.files = ["code", "data", "npcs"]
+settings.files = ["const", "code", "commands", "text", "data", "npcs"]
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false
 settings.givePlayerAskTellMsg = false
@@ -33,11 +36,12 @@ settings.status = [
   function() { return settings.statusReport(w.Kyle) },
   function() { return settings.statusReport(w.Ostap) },
   function() { return settings.statusReport(w.Aada) },
+  //function() { return settings.oxygenReport() },
 ];
 
 
-settings.colours = ['red', 'yellow', 'blue', 'lime']
-settings.intervals = [25,50,25,1, 100]
+settings.colours = ['red', 'yellow', 'blue', 'lime', 'lime']
+settings.intervals = [25,50,25,1, 1000]
 settings.intervalDescs = ['worrying', 'fair', 'good', 'perfect']
 settings.statusReport = function(obj) {
   let s, colour
@@ -48,18 +52,23 @@ settings.statusReport = function(obj) {
   else {
     s = obj.status.toString() + '%'
     colour = settings.colours[util.getByInterval(settings.intervals, obj.status)]
-    
   }
   return "<td><i>" + obj.alias + ":</i></td><td style=\"border:black solid 2px; background:" + colour + "\">&nbsp;</td><td align=\"right\">" + s + "</td>";
+}
+settings.oxygenReport = function(obj) {
+  console.log(w.ship.oxygen)
+  console.log(util.getByInterval(settings.intervals, w.ship.oxygen / 10))
+  const colour = settings.colours[util.getByInterval(settings.intervals, w.ship.oxygen / 10)]
+  return "<td><i>Oxygen:</i></td><td style=\"border:black solid 2px; background:" + colour + "\">&nbsp;</td><td align=\"right\">" + w.ship.oxygen + "</td>";
 }
 
 settings.inventoryPane = false
 
 settings.setup = function() {
   arrival()
-  const data = window.location.href.split('?')[1]
-  console.log(data.split('&'))
 }
+
+
 
 
 

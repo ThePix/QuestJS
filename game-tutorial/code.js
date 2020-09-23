@@ -127,7 +127,7 @@ const walkthroughs = {
     //"put it in box", "hint",
     //"close lid", "hint",
     "crowbar shed", "hint",
-    "east", "hint",/*
+    "east", "hint",
     "get torch", "hint",
     "out", "hint",
     "sw", "hint",
@@ -155,7 +155,7 @@ const walkthroughs = {
     "get rod", "hint",
     "s", "hint",
     "robot,n", "hint",
-    "n", "hint",
+    "n", "hint",/*
     "r,get r", "hint",
     "r,put r in r", "hint",
     "s", "hint",

@@ -42,7 +42,7 @@ test.tests = function() {
   test.assertCmd("z", ["You wait one turn.", "Ostap prepares the second probe."]);
   test.assertCmd("z", ["You wait one turn.", "Ostap launches the second probe."]);
   test.assertCmd("z", ["You wait one turn.", "'Okay, two probes launched,' says Ostap as he stands up.", "'Bio-probe I has successfully landed on the planet.' announces Xsansi."]);
-  
+  /*
   test.title("Waiting");
   test.assertCmd("z", ["You wait one turn."]);
   test.assertCmd("z", ["You wait one turn.", "'Contact with Bio-probe II has been lost as it attempted to land on the planet.' announces Xsansi."]);
@@ -68,11 +68,11 @@ test.tests = function() {
   test.assertCmd("l", [/All pods are currently open/, "You can see Ostap here."]);
   test.assertCmd("ostap, go in stasis pod", ["'Ostap, you're work here is done; you can go get in your stasis pod.'", "'Right, okay then.'"]);
   test.assertCmd("z", ["You wait one turn.", "Just in his underwear, Ostap climbs into his stasis pod."]);
-  test.assertCmd("x ostap", ["Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail. He is in his underwear. He is lying in his stasis pod.", "'Close the pod, Xsansi,' says Ostap. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field."]);
+  test.assertCmd("x ostap", ["Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail. He is in his underwear. He is lying in his stasis pod.", "'Close the pod, Xsansi,' Ostap says. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field."]);
   test.assertCmd("l", /Ostap's stasis pod is closed/);
   test.assertCmd("ask ai about crew", [
     "'Tell me about the crew, Xsansi,' you say.", "'Crew member Ostap's designation is: biology. His current status is: In stasis.'",
-    "'Crew member Aada's designation is: geology. Her current status is: perfect. Her current location is: the girls cabin.'",
+    "'Crew member Aada's designation is: geology. Her current status is: perfect. Her current location is: the girls' cabin.'",
     "'Crew member Kyle's designation is: coms. His current status is: good. His current location is: the Forward probe hanger.'",
     "'Crew member Ha-yoon's designation is: engineering. Her current status is: good. Her current location is: Engineering (starboard).'",
   ])
