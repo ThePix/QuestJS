@@ -18,3 +18,11 @@ tp.addDirective("table_desc", function(arr, params) {
 })
 
 
+tp.addDirective("planet", function(arr, params) {
+  return PLANETS[w.Xsansi.currentPlanet].starName + PLANETS[w.Xsansi.currentPlanet].planet
+})
+
+tp.addDirective("star", function(arr, params) {
+  return PLANETS[w.Xsansi.currentPlanet].starName
+})
+

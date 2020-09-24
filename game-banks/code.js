@@ -86,7 +86,7 @@ const CREW = function(isFemale) {
       msg("'You don't think I should deploy a probe first?'", tpParams);
       msg("'I'm the captain,' you remind {ob:actor}.", tpParams);
     }
-    msg("'{param:actor:okay}'", tpParams);
+    msg(this.okay);
     this.agenda.push("walkTo:stasis_bay");
     this.agenda.push("text:stasisPod");
     this.stasisPodCount = 0;
@@ -162,15 +162,7 @@ const CREW = function(isFemale) {
       this.deployProbeAction--;
     }
 
-    // clone the probe
-    const probe = cloneObject(w.probe_prototype);
-    probe.alias = sentenceCase(this.probeType) + " " + toRoman(this.deployProbeOverallTotal);
-    probe.probeType = this.probeType;
-    probe.planetNumber = w.Xsansi.currentPlanet;
-    probe.probeNumber = this.deployProbeTotal
-    probe.owner = this.name;
-    probe.parsePriority  = -100
-    probe.eventScript = (this.probeType === 'satellite' ? satelliteEventScript : probeEventScript)
+    w.probe_prototype.cloneMe(this)
   }
   
   return res 
@@ -291,7 +283,11 @@ function createTopics(npc) {
     name:"planet",
     regex:/(this |the |)?planet/,
     test:function(p) { return p.text.match(this.regex) }, 
-    script:planetAnalysis,
+    script:function(response) {
+      const tpParams = {actor:response.actor}
+      msg("'What's your report on {planet}?' you ask {nm:actor:the}.", tpParams)
+      msg(planetAnalysis(response), tpParams)
+    },
   });
   npc.askOptions.push({
     name:"probes",
@@ -320,6 +316,10 @@ function createTopics(npc) {
       trackRelationship(response.actor, 1, "background");
     }
   });
+  npc.askOptions.push({
+    msg:"{nv:actor:have:true} no interest in that.",
+    failed:true,
+  })
 }
  
 function howAreYouFeeling(response) {
@@ -328,22 +328,14 @@ function howAreYouFeeling(response) {
 }
 
 function planetAnalysis(response) {
-  msg("'What's your report on " + PLANETS[w.Xsansi.currentPlanet].starName + PLANETS[w.Xsansi.currentPlanet].planet + "?' you ask " + lang.getName(response.actor, {article:DEFINITE}) + ".")
-  console.log(response.actor)
-  console.log(response.actor.name)
-  console.log(response.actor.data[w.Xsansi.currentPlanet])
   const arr = response.actor.data[w.Xsansi.currentPlanet]
-  console.log(arr)
   if (Object.keys(arr).length === 0) return falsemsg("You should talk to Aada or Ostap about that stuff.")
 
-  let level = w["planet" + w.Xsansi.currentPlanet][response.actor.specialisation]
-  if (level === undefined) return falsemsg("You should talk to Aada or Ostap about that stuff.")
-  console.log(level)
-  
-  //while (arr["level" + level] === undefined) {
-  //  level--
-  //}
-  //arr["level" + level]()
+  let rank = response.actor["rank" + w.Xsansi.currentPlanet]
+  if (rank === undefined) return falsemsg("You should talk to Aada or Ostap about that stuff.")
+  rank >>= 1
+  if (rank >= arr.length) rank = arr.length - 1
+  return arr[rank]
 }
 
   
@@ -384,7 +376,7 @@ function arrival() {
   for (let npc of NPCS) {
     npc.state = w.Xsansi.currentPlanet * 100
   }
-  w.Kyle.agenda = ["walkTo:probes_forward", "text:deployProbe"]
+  w.Kyle.agenda = ["walkTo:probes_forward", "text:deployProbe:1"]
   io.updateStatus() 
 }
 

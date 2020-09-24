@@ -535,98 +535,107 @@ createItem("ship", {
 
 // Probes are cloned from this
 //
-createItem("probe_prototype", COUNTABLE([]),
-  { 
-    alias:"probe",
-    regex:/^(\d+ )?(bio-|geo-|bio|geo)?(probe|satellite|satelite)s?$/,
-    launch:function(isMultiple, char) {
-      if (!char.probeType) return falsemsg("To launch a probe, see either Aada or Ostap. For a satellite see Kyle.")
-      
-      let number = this.extractNumber();
-      if (!number) number = 1
+createItem("probe_prototype", COUNTABLE([]), { 
+  alias:"probe",
+  regex:/^(\d+ )?(bio-|geo-|bio|geo)?(probe|satellite|satelite)s?$/,
+  launch:function(isMultiple, char) {
+    if (!char.probeType) return falsemsg("To launch a probe, see either Aada or Ostap. For a satellite see Kyle.")
+    
+    let number = this.extractNumber();
+    if (!number) number = 1
 
-      if (number === 1) {
-        msg("'Launch a " + char.probeType + ",' you say to " + lang.getName(char, {article:DEFINITE}) + ".")
-      }
-      else {
-        msg("'Launch " + number + " " + char.probeType + "s,' you say to " + lang.getName(char, {article:DEFINITE}) + ".")
-      }
-      if (number > char.probesRemaining) {
-        return falsemsg("'We only have " + char.probesRemaining + " and we should save some for the other planets on our itinerary.'")
-      }
-      
-      if (char.probeType === 'satellite') {
-        if (number > (2 - char.deployProbeTotal)) {
-          msg("'Are you sure? Protocol says we should deploy no more than two around a single planet.'");
-          msg("'Hey, I'm the captain. It's my bonus on the line here. Get those satellites deployed.'");
-        }
-      }
-      else if (number > (5 - char.deployProbeTotal)) {
-        msg("'Are you sure? Protocol says we should deploy no more than five on a single planet.'");
-        msg("'Hey, I'm the captain. It's my bonus on the line here. Get those probes deployed.'");
-      }
-      
-      if (char.deployProbeAction === 0 || char.deployProbeAction ===4) {
-        msg("'Okay captain.'");
-        char.agenda = ["walkTo:probes_aft:" + lang.getName(char, {article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number];
-        char.deployProbeAction = 0;
-        char.deployProbeCount = 0;
-      }
-      else {
-        // already part way through launching
-        // skip walking there, skip first deploy action
-        // the old number should be replaced
-        msg("'Okay captain.'");
-        char.agenda = ["text:deployProbe:" + number];
-        char.deployProbeAction = 1;
-      }
-      return true;
-    },
-    launchCounter:0,
-    status:"In flight",
-    countAtLoc:function(loc) { return 0; },
-    eventIsActive:function() { return this.clonePrototype },
-  }
-)
-
-
-const probeEventScript = function() {
-  this.launchCounter++
-  if (this.launchCounter === TURNS_TO_LANDING) {
-    if (probeLandsOkay()) {
-      this.status = "Landing";
-      shipAlert(this.alias + " has successfully landed on the planet.");
+    if (number === 1) {
+      msg("'Launch a " + char.probeType + ",' you say to " + lang.getName(char, {article:DEFINITE}) + ".")
     }
     else {
-      shipAlert("Contact with " + this.alias + " has been lost as it attempted to land on the planet.");
-      this.launched = false;
-      this.status = "Destroyed";
+      msg("'Launch " + number + " " + char.probeType + "s,' you say to " + lang.getName(char, {article:DEFINITE}) + ".")
     }
-  }
-  if (this.launchCounter === TURNS_TO_LANDING + 1) {
-    this.status = "Exploring";
-  }
-  const arr = PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeRanks"][this.probeNumber];
+    if (number > char.probesRemaining) {
+      return falsemsg("'We only have " + char.probesRemaining + " and we should save some for the other planets on our itinerary.'")
+    }
+    
+    if (char.probeType === 'satellite') {
+      if (number > (2 - char.deployProbeTotal)) {
+        msg("'Are you sure? Protocol says we should deploy no more than two around a single planet.'");
+        msg("'Hey, I'm the captain. It's my bonus on the line here. Get those satellites deployed.'");
+      }
+    }
+    else if (number > (5 - char.deployProbeTotal)) {
+      msg("'Are you sure? Protocol says we should deploy no more than five on a single planet.'");
+      msg("'Hey, I'm the captain. It's my bonus on the line here. Get those probes deployed.'");
+    }
+    
+    if (char.deployProbeAction === 0 || char.deployProbeAction ===4) {
+      msg("'Okay captain.'");
+      char.agenda = ["walkTo:probes_aft:" + lang.getName(char, {article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number];
+      char.deployProbeAction = 0;
+      char.deployProbeCount = 0;
+    }
+    else {
+      // already part way through launching
+      // skip walking there, skip first deploy action
+      // the old number should be replaced
+      msg("'Okay captain.'");
+      char.agenda = ["text:deployProbe:" + number];
+      char.deployProbeAction = 1;
+    }
+    return true;
+  },
+  launchCounter:0,
+  status:"In flight",
+  countAtLoc:function(loc) { return 0; },
+  eventIsActive:function() { return this.clonePrototype },
+  cloneMe:function(owner) {
+    const probe = cloneObject(this)
+    probe.alias = sentenceCase(owner.probeType) + " " + toRoman(owner.deployProbeOverallTotal)
+    probe.probeType = owner.probeType
+    probe.planetNumber = w.Xsansi.currentPlanet
+    probe.probeNumber = owner.deployProbeTotal
+    probe.owner = owner.name
+    probe.parsePriority  = -100
+    probe.eventScript = (owner.probeType === 'satellite' ? this.satelliteEventScript : this.probeEventScript)
+    return probe
+  },
   
-  if (arr !== undefined && arr.includes(this.launchCounter - TURNS_TO_LANDING)) {
-    w["planet" + this.planetNumber][this.probeType.substring(0, 3) + "logy"]++;
-    game.player.bonus += PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeBonusPerRank"];
-  }
-}
+  probeEventScript:function() {
+    this.launchCounter++
+    if (this.launchCounter === TURNS_TO_LANDING) {
+      if (probeLandsOkay()) {
+        this.status = "Landing";
+        shipAlert(this.alias + " has successfully landed on the planet.");
+      }
+      else {
+        shipAlert("Contact with " + this.alias + " has been lost as it attempted to land on the planet.");
+        this.launched = false;
+        this.status = "Destroyed";
+      }
+    }
+    if (this.launchCounter === TURNS_TO_LANDING + 1) {
+      this.status = "Exploring";
+    }
+    const arr = PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeRanks"][this.probeNumber - 1]
+    if (arr !== undefined && arr.includes(this.launchCounter - TURNS_TO_LANDING)) {
+      w[this.owner]["rank" + this.planetNumber]++
+      game.player.bonus += PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeBonusPerRank"]
+    }
+  },
+
+  satelliteEventScript:function() {
+    this.launchCounter++
+    if (this.launchCounter === TURNS_TO_ORBIT) {
+      this.status = "In orbit";
+      shipAlert(this.alias + " has successfully entered orbit around the planet.");
+    }
+    if (this.launchCounter === TURNS_TO_ORBIT + 1) {
+      this.status = "Scanning";
+    }
+    if (this.launchCounter > TURNS_TO_ORBIT + 1 && this.launchCounter % 4 === 0) {
+      game.player.bonus += 1
+      w[this.owner].rank++
+    }
+  },
+  
+})
 
 
-const satelliteEventScript = function() {
-  this.launchCounter++
-  if (this.launchCounter === TURNS_TO_ORBIT) {
-    this.status = "In orbit";
-    shipAlert(this.alias + " has successfully entered orbit around the planet.");
-  }
-  if (this.launchCounter === TURNS_TO_ORBIT + 1) {
-    this.status = "Scanning";
-  }
-  if (this.launchCounter > TURNS_TO_ORBIT + 1 && this.launchCounter % 4 === 0) {
-    game.player.bonus += 1
-    w[this.owner].rank++
-  }
-}
 

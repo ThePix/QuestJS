@@ -3,10 +3,11 @@
 
 
 const TURNS_TO_LANDING = 3
-const TURNS_TO_ORBIT = 1
+const TURNS_TO_ORBIT = 2
 const TURNS_TO_DATA = 3
 const PLANETS = [
   {
+    // star 0
     starName:"HD 154088",
     planet:"D",
     comment:"Planet 1: A lifeless planet, with no water, not much minerals either; an easy one to start with",
@@ -34,10 +35,10 @@ const PLANETS = [
     onArrival:function() {
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 96);
       w.Kyle.status = Math.min(w.Kyle.status, 98);
-      msg("{i:The \"Joseph Banks\" left Earth orbit in 2319, on a centuries-long mission to survey five relatively close star systems. The crew were put in stasis for the long journey between the stars.}");
+      msg("{i:The \"Joseph Banks\" left Earth orbit in 2319, on a centuries-long mission to survey five relatively close star systems. The crew were put in stasis for the long journey between the stars. As the captain, it is up to you to decide what probes to send to the surface to maximise your bonus - and to keep the crew happy.}");
       //wait()
       msg("&nbsp;");
-      msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at " + PLANETS[0].starName + ",' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.'");
+      msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at {star},' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice. Following standard procedure, Crewman Kyle will soon launch a satellite, which will give us basic data about the planet, allowing you to decide how many probes to send to the surface.'");
       //world.enterRoom();
     },
     Kyle_how_are_you:"'I'm good, mate. Why? Why shouldn't I be?'",
@@ -47,6 +48,7 @@ const PLANETS = [
   },
     
   { 
+    // star 1
     starName:"HD 168746", 
     planet:"B", 
     comment:"Planet 2 (hull breach): Lots of life, at about the Devonian Period, with purple plants. Good metals too. But need to sort out the hull breach first. Or accept some of the ship is inaccessible.",
@@ -97,6 +99,7 @@ const PLANETS = [
   },
   
   { 
+    // star 2
     starName:"HD 168443", 
     planet:"C", 
     comment:"Planet 3 (intelligent life): A dead planet, following some unknown event; previously had intelligent life. An artefact orbits the planet. Player can pilot ship to the artefact, in a spacesuit if the flightdeck is not pressurised.",
@@ -116,7 +119,7 @@ const PLANETS = [
     geoProbeBonusPerRank:4,
     bioProbeRanks:[
       [4, 7, 11],
-      [4, 7],
+      [4, 8],
       [3, 7],
       [3],
     ],
@@ -137,6 +140,7 @@ const PLANETS = [
   },
   
   { 
+    // star 3
     starName:"HD 148427", 
     planet:"D", 
     comment:"Planet 4 (fight the AI): A lifeless planet, but it has water, so suitable for seeding. By this time the AI is doolally. A young, fourth generation planet, good for mining.",
@@ -171,6 +175,7 @@ const PLANETS = [
   },  
   
   { 
+    // star 4
     starName:"Gliese 1214", 
     planet:"A", 
     comment:"Planet 5 (already colonised): This planet got colonised nearly a century ago, FTL having been invented not long after the Joseph Banks set off. Any probes will be shot down!",

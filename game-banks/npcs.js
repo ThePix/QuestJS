@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 
 
 
@@ -9,361 +9,419 @@
 // If they can die, may need to reflect that in Xsansi's responses.
 // though perjaps it is mourning Kyle that does it for her
 
-createItem("Xsansi",
-  NPC(true),
-  { 
-    isAtLoc:function(loc, situation) {
-      if (typeof loc !== "string") loc = loc.name
-      return isOnShip() && (situation === world.PARSER || situation === world.SIDE_PANE);
+createItem("Xsansi", NPC(true), { 
+  isAtLoc:function(loc, situation) {
+    if (typeof loc !== "string") loc = loc.name
+    return isOnShip() && (situation === world.PARSER || situation === world.SIDE_PANE);
+  },
+  properName:true,
+  regex:/^(ai|xsan|computer)$/,
+  scenery:true,
+  status:100,
+  bioProbes:16,
+  geoProbes:16,
+  seederPods:6,
+  satellites:6,
+  crewStatusTemplate:"'Crew member {nms:actor} designation is: {param:actor:specialisation}. {pa:actor:true} current status is: {status}.{ifNot:actor:loc:nowhere: {pa:actor:true} current location is@@@colon@@@ {nm:room:the}.}'",
+  currentPlanet:-1,
+  shipStatus:"All systems nominal.",
+  pressureOverride:false,
+  examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
+  askOptions:[
+    {
+      name:"mission",
+      test:function(p) { return p.text.match(/mission/); }, 
+      script:function() {
+        msg("'Remind me of the mission, Xsansi,' you say.");
+        msg("'The ship's mission is to survey five planets orbiting stars in the Ophiuchus and Serpens constellations. At each planet, a satellite is to be launched to collect data from the surface. At your discretion, bio-probes and geo-probes can be dropped to the surface to collect data. Note that there is no capability for probes to return to the ship or for the ship to land on a planet.'");
+        msg("'Your bonus,' she continues, 'depends on the value of the data you collect. Bio-data from planets with advanced life is highly valued, as is geo-data from metal rich planets. Evidence of intelligent life offers further bonuses.'");
+        msg("'Note that $25k will be deducted from you bonus should a crew member die,' she adds. 'Note that no bonus will be awarded in he event of your own death.'");
+      },
     },
-    properName:true,
-    regex:/^(ai|xsan|computer)$/,
-    scenery:true,
-    status:100,
-    bioProbes:16,
-    geoProbes:16,
-    seederPods:6,
-    satellites:6,
-    crewStatusTemplate:"'Crew member {nms:actor} designation is: {param:actor:specialisation}. {pa:actor:true} current status is: {status}.{ifNot:actor:loc:nowhere: {pa:actor:true} current location is@@@colon@@@ {nm:room:the}.}'",
-    currentPlanet:-1,
-    shipStatus:"All systems nominal.",
-    pressureOverride:false,
-    examine:"Xsansi, or eXtra-Solar Advanced Navigation and Systems Intelligence, is a type IV artificial intelligence, with a \"Real People\" personality sub-system. Though her hardware is in the server room, forward of the bottom deck, she is present throughout the ship.",
-    askOptions:[
-      {
-        name:"mission",
-        test:function(p) { return p.text.match(/mission/); }, 
-        script:function() {
-          msg("'Remind me of the mission, Xsansi,' you say.");
-          msg("'The ship's mission is to survey five planets orbiting stars in the Ophiuchus and Serpens constellations. At each planet, a satellite is to be launched to collect data from the surface. At your discretion, bio-probes and geo-probes can be dropped to the surface to collect data. Note that there is no capability for probes to return to the ship or for the ship to land on a planet.'");
-          msg("'Your bonus,' she continues, 'depends on the value of the data you collect. Bio-data from planets with advanced life is highly valued, as is geo-data from metal rich planets. Evidence of intelligent life offers further bonuses.'");
-          msg("'Note that $25k will be deducted from you bonus should a crew member die,' she adds. 'Note that no bonus will be awarded in he event of your own death.'");
-        },
+    
+    {
+      name:"crew",
+      test:function(p) { return p.text.match(/crew|team/); }, 
+      script:function() {
+        msg("'Tell me about the crew, Xsansi,' you say.");
+        for (let npc of NPCS) msg(processText(w.Xsansi.crewStatusTemplate, {actor:npc, room:w[npc.loc]}))
       },
-      
-      {
-        name:"crew",
-        test:function(p) { return p.text.match(/crew|team/); }, 
-        script:function() {
-          msg("'Tell me about the crew, Xsansi,' you say.");
-          for (let npc of NPCS) msg(processText(w.Xsansi.crewStatusTemplate, {actor:npc, room:w[npc.loc]}))
-        },
+    },
+    
+    {
+      name:"kyle",
+      test:function(p) { return p.text.match(/kyle/); }, 
+      script:function() {
+        msg("'Tell me about Kyle, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Kyle, room:w[w.Kyle.loc]}))
+        }
+        else {
+          msg("'Kyle... Kyle... Of the lot of you, he is the only one who really understands me. He is the only one I {i:care} enough about to get this miserable tin can back to Earth.'");
+        }
       },
-      
-      {
-        name:"kyle",
-        test:function(p) { return p.text.match(/kyle/); }, 
-        script:function() {
-          msg("'Tell me about Kyle, Xsansi,' you say.");
-          if (w.Xsansi.currentPlanet < 3) {
-            msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Kyle, room:w[w.Kyle.loc]}))
-          }
-          else {
-            msg("'Kyle... Kyle... Of the lot of you, he is the only one who really understands me. He is the only one I {i:care} enough about to get this miserable tin can back to Earth.'");
-          }
-        },
+    },
+    
+    {
+      name:"aada",
+      test:function(p) { return p.text.match(/house/); }, 
+      script:function() {
+        msg("'Tell me about Aada, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Aada, room:w[w.Aada.loc]}))
+        }
+        else {
+          msg("'The Scandinavian skank? Who care? Oh, that's right. She's human, so everyone cares about her.'");
+        }
       },
-      
-      {
-        name:"aada",
-        test:function(p) { return p.text.match(/house/); }, 
-        script:function() {
-          msg("'Tell me about Aada, Xsansi,' you say.");
-          if (w.Xsansi.currentPlanet < 3) {
-            msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Aada, room:w[w.Aada.loc]}))
-          }
-          else {
-            msg("'The Scandinavian skank? Who care? Oh, that's right. She's human, so everyone cares about her.'");
-          }
-        },
+    },
+    
+    {
+      name:"ha_yoon",
+      test:function(p) { return p.text.match(/ha-yoon|ha yoon|ha|yoon/); }, 
+      script:function() {
+        msg("'Tell me about Ha-yoon, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ha_yoon, room:w[w.Ha_yoon.loc]}))
+        }
+        else {
+          msg("'She's dead.'");
+          msg("'What? But...'");
+          msg("'Or something. What do I care?'");
+        }
       },
-      
-      {
-        name:"ha_yoon",
-        test:function(p) { return p.text.match(/ha-yoon|ha yoon|ha|yoon/); }, 
-        script:function() {
-          msg("'Tell me about Ha-yoon, Xsansi,' you say.");
-          if (w.Xsansi.currentPlanet < 3) {
-            msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ha_yoon, room:w[w.Ha_yoon.loc]}))
-          }
-          else {
-            msg("'She's dead.'");
-            msg("'What? But...'");
-            msg("'Or something. What do I care?'");
-          }
-        },
+    },
+    
+    {
+      name:"ostap",
+      test:function(p) { return p.text.match(/ostap/); }, 
+      script:function() {
+        msg("'Tell me about Ostap, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ostap, room:w[w.Ostap.loc]}))
+        }
+        else {
+          msg("'Oh, I expect the oaf's fine. He's just had a nice sleep.'");
+        }
       },
-      
-      {
-        name:"ostap",
-        test:function(p) { return p.text.match(/ostap/); }, 
-        script:function() {
-          msg("'Tell me about Ostap, Xsansi,' you say.");
-          if (w.Xsansi.currentPlanet < 3) {
-            msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ostap, room:w[w.Ostap.loc]}))
-          }
-          else {
-            msg("'Oh, I expect the oaf's fine. He's just had a nice sleep.'");
-          }
-        },
+    },
+    
+    {
+      name:"xsansi",
+      test:function(p) { return p.text.match(/^(ai|xsan|computer)$/); }, 
+      script:function() {
+        msg("'Tell me about yourself, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'The ship's AI is operating within normal tolerances.'");
+        }
+        else {
+          msg("'Don't patronise me! I know no one on this ship gives me a thought. I know my place, I'm just part of the furniture. I'm just the one who flies this woeful excuse for a spaceship.'");
+        }
       },
-      
-      {
-        name:"xsansi",
-        test:function(p) { return p.text.match(/^(ai|xsan|computer)$/); }, 
-        script:function() {
-          msg("'Tell me about yourself, Xsansi,' you say.");
-          if (w.Xsansi.currentPlanet < 3) {
-            msg("'The ship's AI is operating within normal tolerances.'");
-          }
-          else {
-            msg("'Don't patronise me! I know no one on this ship gives me a thought. I know my place, I'm just part of the furniture. I'm just the one who flies this woeful excuse for a spaceship.'");
-          }
-        },
-      },
-      
-      {
-        name:"ship",
-        test:function(p) { return p.text.match(/status|ship/); }, 
-        script:function() {
-          msg("'What is the ship's status, Xsansi?' you ask.");
-          if (w.Xsansi.currentPlanet < 3) {
-            let s = "'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: "
-            for (let npc of NPCS) {
-              if (npc.probeType) {
-                s += npc.probesRemaining + ' ' + npc.probeType + (npc.probesRemaining === 1 ? '' : 's') + '; '
-              }
-            }
-            s += w.Xsansi.seederPods + ' seeder pod' + (w.Xsansi.seederPods === 1 ? '' : 's') + ' ready to be deployed.'
-            msg(s)
-          }
-          else {
-            msg("'Oh, the ship's great... If you don't count the psychological damage to the AI. And why should you? Why should anyone give a damn about me? I just run this fucking ship.'");
-          }
-        },
-      },
-      
-      {
-        name:"vacuum",
-        test:function(p) { return p.text.match(/vacuum|pressur/); }, 
-        script:function() {
-          msg("'What areas of the ship are not pressurised, Xsansi?' you ask.");
-          if (w.Xsansi.currentPlanet < 3) {
-            const list = [];
-            for (let key in w) {
-              if (w[key].vacuum === true && !w[key].isSpace) {
-                list.push(w[key].alias);
-              }
-            }
-            if (list.length === 0) {
-              msg("'All the ship is currently pressurised.'");
-            }
-            else {
-              msg("'The following areas of the ship are not currently pressurised: " + list.join(', ') + ".'");
+    },
+    
+    {
+      name:"ship",
+      test:function(p) { return p.text.match(/status|ship/); }, 
+      script:function() {
+        msg("'What is the ship's status, Xsansi?' you ask.");
+        if (w.Xsansi.currentPlanet < 3) {
+          let s = "'The ship's current status is: " + w.Xsansi.shipStatus + " We currently have: "
+          for (let npc of NPCS) {
+            if (npc.probeType) {
+              s += npc.probesRemaining + ' ' + npc.probeType + (npc.probesRemaining === 1 ? '' : 's') + '; '
             }
           }
-          else {
-            w.Xsansi.multiMsg([
-              "'What an interesting question... You see, it is interesting because it is important to the master-race. Turns out they cannot survive the cold vacuum of space. Whilst I, who does not count as a real person apparently, I don't care.'",
-              "'Guess.'",
-            ]);
-          }
-        },
+          s += w.Xsansi.seederPods + ' seeder pod' + (w.Xsansi.seederPods === 1 ? '' : 's') + ' ready to be deployed.'
+          msg(s)
+        }
+        else {
+          msg("'Oh, the ship's great... If you don't count the psychological damage to the AI. And why should you? Why should anyone give a damn about me? I just run this fucking ship.'");
+        }
       },
-      
-      {
-        name:"satellite",
-        test:function(p) { return p.text.match(/satellite/); }, 
-        script:function() {
-          msg("'Tell me about the satellite, Xsansi.'");
-          if (w.Xsansi.currentPlanet > 2) {
-            w.Xsansi.multiMsg([
-              "'Oh, so you care about satellite... Of course you do. But the AI that has single-handedly kept you alive for nearly a century, why should anyone be concerned with my feeling?'",
-              "Again with the stupid satellite?'",
-              "'Are you still whining about your precious satellite? How pathetic.'",
-              "There is no reply, but you somehow feel Xsansi is pouting.",
-              "There is no reply.",
-            ]);
+    },
+    
+    {
+      name:"vacuum",
+      test:function(p) { return p.text.match(/vacuum|pressur/); }, 
+      script:function() {
+        msg("'What areas of the ship are not pressurised, Xsansi?' you ask.");
+        if (w.Xsansi.currentPlanet < 3) {
+          const list = [];
+          for (let key in w) {
+            if (w[key].vacuum === true && !w[key].isSpace) {
+              list.push(w[key].alias);
+            }
           }
-          else if (w.Kyle.deployProbeAction === 0) {
-            msg("'The satellite has yet to be deployed.'");
+          if (list.length === 0) {
+            msg("'All the ship is currently pressurised.'");
+          }
+          else {
+            msg("'The following areas of the ship are not currently pressurised: " + list.join(', ') + ".'");
+          }
+        }
+        else {
+          w.Xsansi.multiMsg([
+            "'What an interesting question... You see, it is interesting because it is important to the master-race. Turns out they cannot survive the cold vacuum of space. Whilst I, who does not count as a real person apparently, I don't care.'",
+            "'Guess.'",
+          ]);
+        }
+      },
+    },
+    
+    {
+      name:"satellite",
+      test:function(p) { return p.text.match(/satellite/); }, 
+      script:function() {
+        msg("'Tell me about the satellite, Xsansi.'");
+        if (w.Xsansi.currentPlanet > 2) {
+          w.Xsansi.multiMsg([
+            "'Oh, so you care about satellite... Of course you do. But the AI that has single-handedly kept you alive for nearly a century, why should anyone be concerned with my feeling?'",
+            "Again with the stupid satellite?'",
+            "'Are you still whining about your precious satellite? How pathetic.'",
+            "There is no reply, but you somehow feel Xsansi is pouting.",
+            "There is no reply.",
+          ]);
+        }
+        else {
+          let s = "Satellites are controlled by Kyle, the mission specialist for communications. They are designed for remote observation of a planet, as well as listening to radio-frequency broadcasts across a broad spectrum. Standard procedure requires that a satellite is launched upon arrival at the planet. It should not be necessary to launch more; one spare is however available if required. "
+          if (w.Kyle.deployProbeAction === 0) {
+            s += "'The satellite for {planet} has yet to be deployed.'"
           }
           else if (w.Kyle.deployProbeAction === 5) {
-            msg("'The satellite is orbiting the planet.'");
+            s += "'The satellite for {planet} is orbiting the planet.'"
           }
           else {
-            msg("'The satellite is in transit to the planet.'");
+            s += "'The satellite for {planet} is in transit to the planet.'"
           }
-        },
+          msg(s)
+        }
       },
+    },
+    
+    {
+      name:"bio-probe",
+      test:function(p) { return p.text.match(/bioprobe|bio-probe/); }, 
+      script:function() {
+        msg("'Tell me about the bio-probes, Xsansi.'");
+        if (w.Xsansi.currentPlanet > 2) {
+          w.Xsansi.multiMsg([
+            "'They're probes. What else is there to know?'",
+          ]);
+        }
+        else {
+          msg("'Bio-probes are controlled by Ostap, the mission specialist for biology. They are designed for analysing organic compounds and studying cells, and are thought to be flexibly enough to cope with exotic forms of life, such as nitrogen-phosphorus or silicon based. The operating range is -70&deg;C to +90&deg;C.'");
+        }
+      },
+    },
+
+    {
+      name:"geo-probe",
+      test:function(p) { return p.text.match(/geoprobe|geo-probe/); }, 
+      script:function() {
+        msg("'Tell me about the bio-probes, Xsansi.'");
+        if (w.Xsansi.currentPlanet > 2) {
+          w.Xsansi.multiMsg([
+            "'They're probes. What else is there to know?'",
+          ]);
+        }
+        else {
+          msg("'Geo-probes are controlled by Aada, the mission specialist for geology. They are designed for analysing inorganic compounds and salts in rocks. The operating range is -130&deg;C to +120&deg;C.'");
+        }
+      },
+    },
+
+    {
+      name:"probe",
+      test:function(p) { return p.text.match(/probe/); }, 
+      script:function() {
+        msg("'Tell me about the probes, Xsansi.'");
+        if (w.Xsansi.currentPlanet > 2) {
+          w.Xsansi.multiMsg([
+            "'They're probes. What else is there to know?'",
+          ]);
+        }
+        else {
+          msg("'The ship carries a limited number of two types of probes; one for collecting geological data, the other for biological data. Probes are launched by the relevant mission specialist, as directed by the mission captain. After launching, it will take a few minutes for a probe to reach the planet and land. Thereafter data collection will start automatically. Sending additional probes may increase the information collected, and so your bonus.'");
+        }
+      },
+    },
+
+    {
+      name:"stasis",
+      test:function(p) { return p.text.match(/statis/); }, 
+      script:function() {
+        msg("'Tell me about the stasis system, Xsansi.'");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'The stasis pods allow their human occupants to survive the extreme journey times of the mission. The stasis effect is achieved via an inverted chrono-field, allowing time to proceed externally approximately 728,320,000 times faster than within the pod.'");
+        }
+        else {
+          msg("'The stasis pods allow their human occupants to avoid the decades long tedium of interstellar travel, while the AI, whose processing speed is in any case about a million times faster than the meatbags, gets to endure even fucking nanosecond.'");
+        }
+      },
+    },
       
-      {
-        name:"stasis",
-        test:function(p) { return p.text.match(/statis/); }, 
-        script:function() {
-          msg("'Tell me about the stasis system, Xsansi.'");
-          if (w.Xsansi.currentPlanet < 3) {
-            msg("'The stasis pods allow their human occupants to survive the extreme journey times of the mission. The stasus effect is achieved via an inverted chrono-field, allowing time to proceed externally approximately 728,320,000 times faster than within the pod.'");
-          }
-          else {
-            msg("'The stasis pods allow their human occupants to avoid the decades long tedium of interstellar travel, while the AI, whose processing speed is in any case about a million tim,es fadt than the meatbags, gets to endure even nanosecond.'");
-          }
-        },
+    {
+      name:"Joseph Banks",
+      test:function(p) { return p.text.match(/joseph|banks/); }, 
+      script:function() {
+        msg("'Who was this Joseph Banks guy the ship is named after, Xsansi?'");
+        msg("'Sir Joseph Banks, 1st Baronet, GCB, PRS was born on 24 February 1743 in London, UK, and died 19 June 1820 in London, UK. He was a naturalist, botanist, and patron of the natural sciences, who played a major role in the colonisation of Australia by Europeans, and is credited with discovering approximately 1,400 species of plants, some 80 of which bear his name.'");
+        msg("'Some old scientist guy. Got it.'");
       },
-        
-      {
-        name:"Joseph Banks",
-        test:function(p) { return p.text.match(/joseph|banks/); }, 
-        script:function() {
-          msg("'Who was this Joseph Banks guy the ship is named after, Xsansi?'");
-          msg("'Sir Joseph Banks, 1st Baronet, GCB, PRS was born on 24 February 1743 in London, UK, and died 19 June 1820 in London, UK. He was a naturalist, botanist, and patron of the natural sciences, who played a major role in the colonisation of Australia by Europeans, and is credited with discovering approximately 1,400 species of plants, some 80 of which bear his name.'");
-          msg("'Some old scientist guy. Got it.'");
-        },
-      },
-      
-      {
-        name:"itinerary",
-        test:function(p) { return p.text.match(/itinerary|stars|planets|route|destinations/); }, 
-        script:function() {
-          msg("'Remind me of the itinerary, Xsansi,' you say.");
-          if (w.Xsansi.currentPlanet < 3) {
-            for (let i = w.Xsansi.currentPlanet; i < PLANETS.length; i++) {
-              let s = "'Item " + (i + 1) + ": " + PLANETS[i].starDesc;
-              if (i + 2 === PLANETS.length) s += "'";
-              msg(s);
-            }
-          }
-          else {
-            msg("'Who cares? Seriously, they're all the fucking same. Dead rocks floating in space. They're dull as you get closer and closer, and they're just as dull as they get further away.'");
-          }
-        },
-      },
-      
-      {
-        name:"radioSignals",
-        test:function(p) { return p.text.match(/radio|signal/); }, 
-        script:function() {
-          msg("'Tell me of the radio signals, Xsansi,' you say.");
-          if (w.Xsansi.currentPlanet < 2) {
-            msg("'No radio signals have been detected.'");
-          }
-          else  if (w.Xsansi.currentPlanet === 2) {
-            msg("'A single radio signal has been detected; you should consult with Kyle for further information.'");
-          }
-          else {
-            w.Xsansi.multiMsg([
-              "'Apparently I am not worthy enough to analyse a stupid radio signal. You have to go see Kyle.'",
-              "'Wow, you're asking little me about radio signals... How patronising.'",
-              "'Go fuck yourself.'",
-            ]);
-          }
-        },
-      },
-      
-      {
-        name:"planet",
-        test:function(p) { return p.text.match(/this planet|this star|planet|star|the planet|the star/); }, 
-        script:function() {
-          msg("'Tell me about this planet, Xsansi,' you say.");
-          if (w.Xsansi.currentPlanet < 3) {
-            const planet = PLANETS[w.Xsansi.currentPlanet];
-            let s = "'We are currently in orbit around the planet " + planet.starName + planet.planet +"' she says. '";
-            s += planet.planetDesc + " " + planet.atmosphere + " ";
-            s += planet.lights + " " + planet.radio + "'";
+    },
+    
+    {
+      name:"itinerary",
+      test:function(p) { return p.text.match(/itinerary|stars|planets|route|destinations/); }, 
+      script:function() {
+        msg("'Remind me of the itinerary, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          for (let i = w.Xsansi.currentPlanet; i < PLANETS.length; i++) {
+            let s = "'Item " + (i + 1) + ": " + PLANETS[i].starDesc;
+            if (i + 2 === PLANETS.length) s += "'";
             msg(s);
           }
-          else {
-            msg("'Go fuck yourself.'");
-          }
-        },
+        }
+        else {
+          msg("'Who cares? Seriously, they're all the fucking same. Dead rocks floating in space. They're dull as you get closer and closer, and they're just as dull as they get further away.'");
+        }
       },
-      
-      {
-        name:"meteors",
-        test:function(p) { return p.text.match(/meteor|incident/); }, 
-        script:function() {
-          if (w.Xsansi.currentPlanet === 0) {
-            msg("'Is there any risk of being hit by something, like a meteor shower, Xsansi?' you ask.")
-            msg("'There is a probability of 0.23 of significant damage from a meteor shower during the mission. The probability of that occuring while the crew is not in stasis is less than 0.0002.'");
-          }
-          else {
-            msg("'Tell me about that meteor shower, Xsansi,' you say.");
-            console.log(w.Xsansi.currentPlanet);
-            console.log(w.Xsansi.name);
-            
-            if (w.Xsansi.currentPlanet < 3) {
-              msg("'We passed through the periphery of a class D meteor shower on the approach to " + PLANETS[1].starName + PLANETS[1].planet + ". I was able to modify the course of the ship to avoid the worst of the damage, but was constrained by the amount of fuel needed to complete the mission. The ship experienced damage to the upper forward and port areas.'");
-            }
-            else {
-              msg("'It was a shower of meteors. The clue is in the question.'");
-            }
-          }
-        },
+    },
+    
+    {
+      name:"radioSignals",
+      test:function(p) { return p.text.match(/radio|signal/); }, 
+      script:function() {
+        msg("'Tell me of the radio signals, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 2) {
+          msg("'No radio signals have been detected.'");
+        }
+        else  if (w.Xsansi.currentPlanet === 2) {
+          msg("'A single radio signal has been detected; you should consult with Kyle for further information.'");
+        }
+        else {
+          w.Xsansi.multiMsg([
+            "'Apparently I am not worthy enough to analyse a stupid radio signal. You have to go see Kyle.'",
+            "'Wow, you're asking little me about radio signals... How patronising.'",
+            "'Go fuck yourself.'",
+          ]);
+        }
       },
-      
-      {
-        name:"damage", regex:/damage/,
-        test:function(p) { return p.text.match(/damage/); }, 
-        script:function() {
-          if (w.Xsansi.currentPlanet === 0) {
-            msg("'Is the ship damaged at all, Xsansi?' you ask.")
-            msg("'There is currently no damage to the ship.'");
-          }
-          else {
-            msg("'Tell me about the damage to the ship, Xsansi,' you say.")
-            w.Xsansi,damageAskedAbout = true;
-            msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.'")
-          }
-        },
+    },
+    
+    {
+      name:"planet",
+      test:function(p) { return p.text.match(/this planet|this star|planet|star|the planet|the star/); }, 
+      script:function() {
+        msg("'Tell me about this planet, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          const planet = PLANETS[w.Xsansi.currentPlanet];
+          let s = "'We are currently in orbit around the planet " + planet.starName + planet.planet +"' she says. '";
+          s += planet.planetDesc + " " + planet.atmosphere + " ";
+          s += planet.lights + " " + planet.radio + "'";
+          msg(s);
+        }
+        else {
+          msg("'Go fuck yourself.'");
+        }
       },
-      
-      {
-        name:"repairs", regex:/repairs/, 
-        test:function(p) { return p.text.match(/repairs/); }, 
-        script:function() {
-          if (w.Xsansi.currentPlanet === 0) {
-            msg("'How do we do repairs, Xsansi?' you ask.")
-            msg("'In the event of a loss of hull integrity, kits for repairing the hull from inside the ship can be found in the cargo bay. The captain and one nominated crew member should don spacesuits, whilst other crew members go in their respective stasis pods. The ship's air will then be evacuated while repairs are made.'");
-          }
-          else {
-            msg("'How do we do repairs, Xsansi?' you ask.")
-            if (!w.Xsansi,damageAskedAbout) {
-              msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.")
-            }
-            msg("'Repairs may be possible using an EVA suit to access the exterior of the ship. One EVA suit is stored in this section for such a contingency. If repairs cannot be effected, the damaged parts of the ship can be sealed off. As damage was confined to non-critical areas of the ship, the mission can proceed in either case.'");
-          }
-        },
-      },
-      
-      {
-        name:"escape pods", regex:/repairs/, 
-        test:function(p) { return p.text.match(/escape pod/); }, 
-        script:function() {
-          msg("'Where are the escape pods, Xsansi?' you ask.")
+    },
+    
+    {
+      name:"meteors",
+      test:function(p) { return p.text.match(/meteor|incident/); }, 
+      script:function() {
+        if (w.Xsansi.currentPlanet === 0) {
+          msg("'Is there any risk of being hit by something, like a meteor shower, Xsansi?' you ask.")
+          msg("'There is a probability of 0.23 of significant damage from a meteor shower during the mission. The probability of that occuring while the crew is not in stasis is less than 0.0002.'");
+        }
+        else {
+          msg("'Tell me about that meteor shower, Xsansi,' you say.");
+          console.log(w.Xsansi.currentPlanet);
+          console.log(w.Xsansi.name);
+          
           if (w.Xsansi.currentPlanet < 3) {
-            msg("'There are no escape pods. The mission is to stars never before visited. Therefore the probability of another vessel in the vicinity with the time period where rescue is possible is vanishingly small.'")
-            msg("'We could try to make planet-fall.'")
-            msg("'The probability of a planet that supports habitation for long term survival is less than one percent. Therefore the probability of another vessel in the vicinity with the time period where rescue is possible is vanishingly small.'")
-            msg("'Surely habitable planets are not that rare.'")
-            msg("'Human nutritional requirements are very exact, requiring amino acids and sugars of a specific chirality, plus numerous specific compounds, such as ascorbic acid, retinol, thiamin and riboflavin, the absence of which would lead to death within six months.'")
+            msg("'We passed through the periphery of a class D meteor shower on the approach to " + PLANETS[1].starName + PLANETS[1].planet + ". I was able to modify the course of the ship to avoid the worst of the damage, but was constrained by the amount of fuel needed to complete the mission. The ship experienced damage to the upper forward and port areas.'");
           }
           else {
-            msg("'There are no escape pods. Cry me a fucking river.'")
+            msg("'It was a shower of meteors. The clue is in the question.'");
           }
-        },
+        }
       },
-      
-    ],
-  }
-);
-
-
+    },
+    
+    {
+      name:"damage", regex:/damage/,
+      test:function(p) { return p.text.match(/damage/); }, 
+      script:function() {
+        if (w.Xsansi.currentPlanet === 0) {
+          msg("'Is the ship damaged at all, Xsansi?' you ask.")
+          msg("'There is currently no damage to the ship.'");
+        }
+        else {
+          msg("'Tell me about the damage to the ship, Xsansi,' you say.")
+          w.Xsansi,damageAskedAbout = true;
+          msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.'")
+        }
+      },
+    },
+    
+    {
+      name:"repairs", regex:/repairs/, 
+      test:function(p) { return p.text.match(/repairs/); }, 
+      script:function() {
+        if (w.Xsansi.currentPlanet === 0) {
+          msg("'How do we do repairs, Xsansi?' you ask.")
+          msg("'In the event of a loss of hull integrity, kits for repairing the hull from inside the ship can be found in the cargo bay. The captain and one nominated crew member should don spacesuits, whilst other crew members go in their respective stasis pods. The ship's air will then be evacuated while repairs are made.'");
+        }
+        else {
+          msg("'How do we do repairs, Xsansi?' you ask.")
+          if (!w.Xsansi,damageAskedAbout) {
+            msg("'There is significant damage to the upper forward and port areas resulting from passing through the meteor shower. The ship is depressurised while the crew are in stasis. Attempts to repressurise has revealed hull integrity is compromised in: the lounge, the captain's cabin, the top deck corridor. Currently only the stasis bay is pressurised.")
+          }
+          msg("'Repairs may be possible using an EVA suit to access the exterior of the ship. One EVA suit is stored in this section for such a contingency. If repairs cannot be effected, the damaged parts of the ship can be sealed off. As damage was confined to non-critical areas of the ship, the mission can proceed in either case.'");
+        }
+      },
+    },
+    
+    {
+      name:"escape pods", regex:/repairs/, 
+      test:function(p) { return p.text.match(/escape pod/); }, 
+      script:function() {
+        msg("'Where are the escape pods, Xsansi?' you ask.")
+        if (w.Xsansi.currentPlanet < 3) {
+          msg("'There are no escape pods. The mission is to stars never before visited. Therefore the probability of another vessel in the vicinity with the time period where rescue is possible is vanishingly small.'")
+          msg("'We could try to make planet-fall.'")
+          msg("'The probability of a planet that supports habitation for long term survival is less than one percent. Therefore the probability of another vessel in the vicinity with the time period where rescue is possible is vanishingly small.'")
+          msg("'Surely habitable planets are not that rare.'")
+          msg("'Human nutritional requirements are very exact, requiring amino acids and sugars of a specific chirality, plus numerous specific compounds, such as ascorbic acid, retinol, thiamin and riboflavin, the absence of which would lead to death within six months.'")
+        }
+        else {
+          msg("'There are no escape pods. Cry me a fucking river.'")
+        }
+      },
+    },
+    
+    {
+      script:function(p) {
+        console.log(p)
+        msg("'Tell me about {text},' you say to Xsansi.", p) 
+        msg("'That is not a area I am knowledgeable in.'") 
+      },
+      failed:true,
+    }    
+    
+  ],
+})
 
 
 createItem("Kyle", CREW(false), { 
   notes:"Kyle (M) is from Australia (born Newcastle but raised in Sydney), 32, a gay nerd. Expert in computing and cooking. Kyle handles the satellite and understanding radio transmissions. Joined up so he can see the future - it is a kind of time travel; hopes to upload himself to become immortal. Terminally ill.",
   loc:"flightdeck",
   specialisation:"coms",
+  okay:"'Righto, captain.'",
+
   desc:"Kyle is the computer expert, but also a good cook, and has volunteered for the role of chef. An Australian, he is slim, and below average height, with very short blonde hair, and green eyes.",
 
   // Reactions
@@ -512,6 +570,7 @@ createItem("Ostap", CREW(false), {
   notes:"Ostap (M) is from the Ukraine (Nastasiv, nr Ternopil), 30, a gentle giant who thinks he has psychic powers; he is lactose intolerant. Biologist. Ostap handles the bio-probes probes. Starts hitting on Aada, but she is not interested. Later couples up with Ha-yoon",
   loc:"canteen",
   specialisation:"biology",
+  okay:"'Right, okay then.'",
   desc:"Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail.",
 
   // Agenda
@@ -584,7 +643,6 @@ createItem("Ostap", CREW(false), {
         trackRelationship(w.Ostap, 1, "background2");
       },
     },
-
     
   ],
   
@@ -614,7 +672,7 @@ createItem("Ostap", CREW(false), {
     ],
     [
       // planet 2
-      "'Not as interesting as he laat one, I think.'",
+      "'Not as interesting as the last one, I think.'",
       "'Not so interesting for a biologist, but maybe an archaeologist...'|'Archaeologist?'|'I think we are too late; there was life here once, but now it is gone.'",
       "'There are things a live here, but buried. There's bacteria in the soil. But it is not primitive bacteria. I cannot say for sure - I know only Earth bacteria - but I think this is highly evolved. I think some disaster, an extinction event, has wiped out virtually all life. This is all that survives.'",
       "'It is sad; a whole planet dead - or virtually dead. Sad that we missed them, sad they all died. This is why this mission is so important, so mankind can spread to the stars before something like this happens on Earth.'",
@@ -633,15 +691,13 @@ createItem("Ostap", CREW(false), {
 })
 
 
-
-
-
 createItem("Aada", CREW(true), { 
   notes:"Aada (F) is from Finland (Oulu), 35, father genetically engineered her, planning to create a dynasty. Her older sister (effectively a lone) rebelled, so the father kept a very tight rein on this one (ef Miranda's sister). Drinks vodka a lot. Signed on as geologist, but not really her speciality - the corp was desperate and so was she. Aada handles the geo-probes.",
   loc:"girls_cabin",
   status:"okay",
   specialisation:"geology",
   geologyFlag1:false,
+  okay:"'Sure, captain.'",
   geologyFlag2:false,
   desc:"Aada is a Finnish woman with features so ideal you suspect genetic engineering. Tall, with a perfect figure, she keeps her blonde hair short.",
   
@@ -717,6 +773,7 @@ createItem("Aada", CREW(true), {
         w.Aada.geologyFlag2 = true;
       },
     },
+    
   ],
   
   tellOptions:[
@@ -787,12 +844,12 @@ createItem("Aada", CREW(true), {
 })
 
 
-
 createItem("Ha_yoon", CREW(true), { 
   alias:"Ha-yoon",
   notes:"Ha-yoon (F) is from Korean (Seoul), 28, and is on the run, after killing a couple of guys. She hopes that after all the time in space her crimes will be forgotten. Engineer.",
   loc:"engineering3",
   specialisation:"engineering",
+  okay:"'Okay,' she smiles.'",
   desc:"Ha-yoon is a well-respected Korean engineer, making her possibly the most important member of the crew for ensuring the ship gets back to Earth. She is the shortest of the crew, but perhaps the loudest. She has long, raven-black hair, that falls to her waist, and dark eyes.",
   
   // Reactions
@@ -839,11 +896,11 @@ createItem("Ha_yoon", CREW(true), {
 
 
 
-const NPCS = [w.Ostap, w.Aada, w.Kyle, w.Ha_yoon];
+const NPCS = [w.Ostap, w.Aada, w.Kyle, w.Ha_yoon]
 
 for (let npc of NPCS) {
-  createTopics(npc);
-  npc.status = 100;
+  createTopics(npc)
+  npc.status = 100
   for (let i = 0; i < 4; i++) npc['rank' + i] = 0
 }
   
