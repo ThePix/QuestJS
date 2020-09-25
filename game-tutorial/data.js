@@ -286,6 +286,10 @@ createItem("crowbar", TAKEABLE(), {
       tmsg("Nice try, but you have to get the robot to open this door, not the crowbar.")
       return false
     }
+    if (char.loc === 'office' && w.lab_door.locked) {
+      msg("Use it on what?")
+      return false
+    }
     if (char.loc !== 'garden') return falsemsg("There is nothing to use the crowbar on here.")
     return w.shed_door.crowbar()
   },
