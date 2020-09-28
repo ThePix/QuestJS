@@ -9,6 +9,7 @@ settings.noTalkTo = false
 settings.noAskTell = false
 
 settings.tests = true
+settings.playMode = 'dev'
 
 settings.textEffectDelay = 100
 

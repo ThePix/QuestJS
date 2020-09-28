@@ -19,7 +19,6 @@ settings.givePlayerAskTellMsg = false
 
 
 settings.tests = true
-settings.transcriptFromStart = true
 
 settings.dateTime.start = new Date('April 14, 2387 09:43:00')
 settings.roomTemplate = [

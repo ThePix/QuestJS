@@ -506,6 +506,7 @@ const lang = {
     metamsg("You can add a comment to the transcript by starting your text with an asterisk (*).")
     metamsg("You can do TRANSCRIPT WALKTHROUGH or just SCRIPT W to copy the transcript to the clipboard formatted for a walk-through. You can then paste it straight into the code.")
     metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser. The transcript is not saved when you save your game (but will not be lost when you load a game). If you complete the game the text input will disappear, however if you have a transcript a link will be available to access it.");
+    metamsg("Transcript is currently: " + (io.transcript ? 'on' : 'off'))
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
