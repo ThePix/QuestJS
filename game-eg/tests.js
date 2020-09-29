@@ -355,8 +355,20 @@ test.tests = function() {
   test.assertCmd("remove coat", "You take the coat off.");  
   test.assertCmd("drop all", ["Knife: You drop the knife.", "Underwear: You drop the underwear.", "Jeans: You drop the jeans.", "Shirt: You drop the shirt.", "Coat: You drop the coat.", "Jumpsuit: You're wearing it.", ]);
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
-  test.assertCmd("drop jumpsuit", "You drop the jumpsuit.");  
   test.assertCmd("get knife", "You take the knife.");
+  
+  test.title("use")
+  test.assertCmd("use jumpsuit", "You put on the jumpsuit.");
+  test.assertCmd("use knife", "No obvious way to use it.");
+  test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
+  test.assertCmd("drop jumpsuit", "You drop the jumpsuit.");  
+
+  test.assertCmd("use bed", "You lie down on the bed.");
+  test.assertCmd("use bed", "You already are.");
+  test.assertCmd("stand", "You get off the bed.");
+  
+  test.title("use with")
+  
   test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, some boots, seven bricks, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), a small key and a waterskin here.", "You can go east, south, up or west.",]);  
 
   

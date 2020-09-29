@@ -516,18 +516,20 @@ createRoom("bedroom", {
   in:new Exit("wardrobe"),
   west:new Exit('lift'),
   hint:"The bedroom has a variety of garments that can be put on - in the right order.",
-});
+})
 
-createItem("wardrobe", 
-  DEFAULT_ROOM,
-  {
-    out:new Exit("bedroom"),
-    loc:"bedroom",
-    examine:"It is so big you could probably get inside it.",
-    desc:"Oddly empty of fantasy worlds.",
-  }
-);
+createItem("wardrobe", DEFAULT_ROOM, {
+  out:new Exit("bedroom"),
+  loc:"bedroom",
+  examine:"It is so big you could probably get inside it.",
+  desc:"Oddly empty of fantasy worlds.",
+})
 
+createItem("bed", FURNITURE({sit:true, recline:true}), {
+  loc:"bedroom",
+  scenery:true,
+  examine:"What would a bedroom be without a bed?",
+})
 
 
 createItem("underwear", 

@@ -515,6 +515,11 @@ const lang = {
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
   
+  betaTestIntro:function() {
+    metamsg("This version is for beta-testing (" + settings.version + "). A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab; it can then be copy-and-pasted into an e-mail.")
+    if (settings.textInput) metamsg("You can add your own comments to the transcript by starting a command with *.")
+    io.scriptStart()
+  },
   
   game_over_html:'<p>G<br/>A<br/>M<br/>E<br/>/<br/>O<br/>V<br/>E<br/>R</p>',
 
