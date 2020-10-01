@@ -31,7 +31,7 @@ However, you do not need a dedicated editor to create games, and the Wiki includ
 Originally the answer was a definite no, however during developmenmt of the editor it became apparent that an XML file would be good to support blockly, so I have changed my position somewhat. The editor will now convert most things, but not ASL code currently.
 
 
-### What does it look like?
+### What does Quest 6 code look like?
 
 This is what the code for Quest 6 looks like. It creates a player, two rooms and a hat.
 
