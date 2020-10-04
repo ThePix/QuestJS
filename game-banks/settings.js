@@ -17,12 +17,14 @@ settings.noAskTell = false
 settings.givePlayerAskTellMsg = false
 
 
-
+settings.playMode = 'dev'
 settings.tests = true
 
 settings.dateTime.start = new Date('April 14, 2387 09:43:00')
+
 settings.roomTemplate = [
-  "{hereDesc}",
+  "#{cap:{hereName}}",
+  "{terse:{hereDesc}}",
   "{objectsHere:You can see {objects} here.}",
 ]
 
@@ -65,6 +67,12 @@ settings.inventoryPane = false
 
 settings.setup = function() {
   arrival()
+  updateMap()
+  console.log($('#map'))
+  console.log($('#map').css('display'))
+  console.log($('#bottom-panel'))
+  console.log($('#bottom-panel').css('display'))
+  $('#map').insertAfter("#panes")
 }
 
 
@@ -73,15 +81,18 @@ settings.setup = function() {
 
 
 settings.customUI = function() {
-  let s = '<div class="pane-div" style="position: relative;height:290px;width140px" id="map">'
-  s += '<img src="' + settings.imagesFolder + '/spaceship.png" style="margin-left:10px;margin-top:15px;"/>'
-  s += '<div style="position:absolute; top:5px; left:52px">Forward</div>'
-  s += '<div style="position:absolute; top:278px; left:68px">Aft</div>'
-  s += '<div style="position:absolute; top:70px; left:5px; writing-mode:vertical-lr">Port</div>'
-  s += '<div style="position:absolute; top:70px; left:138px; writing-mode:vertical-lr">Starboard</div>'
+  //let s = '<div class="pane-div" style="position: relative;height:300px;width140px" id="map">'
+  //s += '<img src="' + settings.imagesFolder + '/joseph_banks.svg"/>'
   
-  s += '</div>'
-  $("#panes").append(s)
+  //s += '<object type="image/svg+xml" data="' + settings.imagesFolder + '/joseph_banks.svg" class="logo">Map</object>'
+  //s += '</div>'
+  
+  console.log($('#map'))
+  console.log($('#map').css('display'))
+  console.log($('#bottom-panel'))
+  console.log($('#bottom-panel').css('display'))
+  $('#map').insertAfter("#panes")
+  //$("#panes").append($('#map'))
 }
 
 

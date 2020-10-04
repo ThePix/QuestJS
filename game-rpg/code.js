@@ -655,13 +655,11 @@ const EQUIPPABLE = function() {
     return true;
   }
   
-  res.byname = function(options) {
+  res.getNameModifier = function(options) {
     if (!options) options = {}
     let s = lang.getName(this, options)
-    if (this.equipped && options.modified && (this.isAtLoc(game.player.name))) { s += " (equipped)"; }
-    if (options && options.capital) s = sentenceCase(s);
-    return s;
-  };
+    return (this.equipped && options.modified && (this.isAtLoc(game.player.name))) ? " (equipped)": ""
+  }
 
   return res;
 }  

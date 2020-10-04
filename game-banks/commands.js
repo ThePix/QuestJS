@@ -333,6 +333,20 @@ commands.push(new Cmd('ProbeStatus', {
 
 
 
+commands.unshift(new Cmd('MapUpdate', {
+  regex:/^map?$/,
+  script:function() {
+    updateMap()
+    metamsg("Done")
+    return world.SUCCESS_NO_TURNSCRIPTS
+  },
+}));
+
+
+
+
+
+
 findCmd('MetaHelp').script = function() {
   metamsg("Help is available on a number of topics...");
   metamsg("{color:red:HELP GENERAL} or {color:red:HELP GEN}: How to play parser games");

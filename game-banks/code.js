@@ -453,9 +453,23 @@ function probeLandsOkay() {
   
 
 
+function updateMap() {
+  $('#layer1').css('display', 'none')
+  $('#layer3').css('display', 'none')
+  $('#layer4').css('display', 'none')
+  console.log($('#layer4').css('display'))
+  $('#layer1').hide()
+  $('#layer3').hide()
+  $('#layer4').hide()
+  document.getElementById("layer3").style.display = "none"
+  document.getElementById("layer4").style.display = "none"
+  document.getElementById("layer1").style.display = "none"
+  const currentDeck = w[game.player.loc].deckName
+  if (!currentDeck) return errormsg("No deckName for " + game.player.loc)
+  $('#' + currentDeck).css('display', 'inline')
+    
 
-
-
+}
 
 
 

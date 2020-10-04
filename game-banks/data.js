@@ -59,6 +59,8 @@ createItem("your_underwear", WEARABLE(1, ["body"]), {
 // STARBOARD POD
 
 createRoom("stasis_bay", {
+  deckName:'layer1',
+  svgId:'rect2756',
   alias:"stasis bay",
   desc:'There are six stasis pods here (despite only five crew members), four on one side and two on the other. {stasis_pod_status} Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant alive. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
   tpStatus:function() {
@@ -140,6 +142,7 @@ createItem("other_spacesuit", {
 
 
 createRoom("stasis_pod_room", {
+  deckName:'layer1',
   alias:"stasis pod",
   desc:'The stasis pod is shaped uncomfortably like a coffin, and is a pale grey colour. The lid is in the raised position.',
   vacuum:"stasis_bay",
@@ -190,6 +193,8 @@ createItem("stasis_pod_interior",
 
 
 createRoom("cargo_bay", {
+  deckName:'layer1',
+  svgId:'rect2758',
   desc:"The cargo bay is a large, open area, with numerous [crates:crate], several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
   vacuum:false,
   forward:new Exit("stasis_bay"),
@@ -202,6 +207,8 @@ createRoom("cargo_bay", {
 });
 
 createRoom("airlock", {
+  deckName:'layer1',
+  svgId:'rect2770',
   desc:"The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the [controls].",
   vacuum:false,
   port:new Exit("cargo_bay"),
@@ -219,10 +226,12 @@ createRoom("airlock", {
 
 
 createRoom("hallway", {
+  deckName:'layer1',
+  svgId:'rect2768',
   desc:"This is, in a sense, the central nexus of the ship. The flight-deck is forward, the stasis bay to starboard, the labs to port. A ladder goes up to the living quarters and down to the probe hangers.",
   vacuum:false,
   starboard:new Exit("stasis_bay"),
-  port:new Exit("lab2"),
+  port:new Exit("biolab"),
   up:new Exit("top_deck_forward"),
   down:new Exit("probes_forward"),
   forward:new Exit("flightdeck"),
@@ -233,6 +242,8 @@ createRoom("hallway", {
 
 
 createRoom("service_passage", {
+  deckName:'layer1',
+  svgId:'rect16',
   desc:"",
   vacuum:false,
   forward:new Exit("hallway", {
@@ -247,6 +258,8 @@ createRoom("service_passage", {
 
 
 createRoom("flightdeck", {
+  deckName:'layer1',
+  svgId:'path841',
   alias:"flight-deck",
   desc:"The flight deck is semi-circular, with windows looking out in all directions. In the centre is the command chair, and there are four other chairs at the various workstations. The flight-deck can be used as an escape capsule, and can be landed on a suitable planet (but cannot be used to get back to space). The only exit is aft.",
   vacuum:false,
@@ -263,38 +276,27 @@ createRoom("flightdeck", {
 //-----------------------------------------------------
 // LABS
 
-createRoom("lab1", {
-  desc:"",
-  vacuum:false,
-  starboard:new Exit("lab2"),
-  aft:new Exit("lab3"),
-});
 
-
-createRoom("lab2", {
+createRoom("biolab", {
+  deckName:'layer1',
+  svgId:'rect2752',
   alias:"Bio-lab",
   desc:"",
   vacuum:false,
   starboard:new Exit("hallway"),
-  port:new Exit("lab1"),
-  aft:new Exit("lab4"),
+  aft:new Exit("geolab"),
 });
 
 
-createRoom("lab3", {
-  desc:"",
-  vacuum:false,
-  forward:new Exit("lab1"),
-  starboard:new Exit("lab4"),
-});
 
 
-createRoom("lab4", {
+createRoom("geolab", {
+  deckName:'layer1',
+  svgId:'rect2754',
   alias:"Geo-lab",
   desc:"",
   vacuum:false,
-  forward:new Exit("lab2"),
-  port:new Exit("lab3"),
+  forward:new Exit("biolab"),
   starboard:new Exit("probes_aft", {
     msg:"You walk down the narrow stair way to the bottom deck.",
     alsoDir:["down"],
@@ -312,16 +314,20 @@ createRoom("lab4", {
 
 
 createRoom("engineering1", {
+  deckName:'layer1',
+  svgId:'path2760',
   desc:"",
   alias:"Engineering (port)",
   properName:true,
   vacuum:"engineering2",
   starboard:new Exit("engineering2"),
-  forward:new Exit("lab4"),
+  forward:new Exit("geolab"),
 });
 
 
 createRoom("engineering2", {
+  deckName:'layer1',
+  svgId:'path4106',
   desc:"",
   alias:"Engineering",
   properName:true,
@@ -335,6 +341,8 @@ createRoom("engineering2", {
 
 
 createRoom("engineering3", {
+  deckName:'layer1',
+  svgId:'path4108',
   desc:"",
   properName:true,
   alias:"Engineering (starboard)",
@@ -351,6 +359,8 @@ createRoom("engineering3", {
 // LOWER DECK
 
 createRoom("probes_forward", {
+  deckName:'layer3',
+  svgId:'rect3634',
   alias:"Forward probe hanger",
   desc:"The forward probe hanger is where the satellites are stored ready for deployment. The six satellites are kept in a dust-free environment on the starboard side of the hanger, each on a cradle. A robot arm is available to pick them up and eject them through a hatch in the floor.|On the port side, the seeder pods are stored. Each pod contains a variety of simple lifeforms, such as algae, which, it is hoped, will kick-start life on a suitable planet. It is a long term plan. There are six pods, three to be deployed at distant locations on a planet.| There is a control console to handle it all, though it can also be done remotely.",
   vacuum:false,
@@ -360,10 +370,12 @@ createRoom("probes_forward", {
 });
 
 createRoom("probes_aft", {
+  deckName:'layer3',
+  svgId:'rect3638',
   alias:"Aft probe hanger",
   desc:"The aft probe hanger has the scientific probes. Each probe is contained in a crate, and needs unpacking before deployment. On the port side there is a delivery system into which a probe can be placed, to be sent to the planet. Various types of probes are available.",
   vacuum:false,
-  port:new Exit("lab4", {
+  port:new Exit("geolab", {
     msg:"You walk up the narrow stair way to the middle deck.",
     alsoDir:["up"],
   }),
@@ -371,6 +383,8 @@ createRoom("probes_aft", {
 });
 
 createRoom("server_room", {
+  deckName:'layer3',
+  svgId:'path3619',
   desc:"The heart of the IT systems, including Xsansi, This room holds three racks of processors, each rack having four shelves and each shelf having eight units. The room is kept cool and smells slightly of ozone.",
   vacuum:false,
   aft:new Exit("probes_forward"),
@@ -385,6 +399,8 @@ createRoom("server_room", {
 
 
 createRoom("lounge", {
+  deckName:'layer4',
+  svgId:'path3973',
   desc:"",
   vacuum:false,
   aft:new Exit("top_deck_forward"),
@@ -394,6 +410,8 @@ createRoom("lounge", {
 
 
 createRoom("top_deck_forward", {
+  deckName:'layer4',
+  svgId:'rect4090',
   desc:function() {
     if (!w.top_deck_aft.meFirst) {
       this.meFirst = true;
@@ -414,6 +432,8 @@ createRoom("top_deck_forward", {
 
 
 createRoom("top_deck_aft", {
+  deckName:'layer4',
+  svgId:'rect3976',
   descStart:"The top deck is where the living quarters - such as they are - are accessed. ",
   descFinish:" The corridor is very utilitarian, with a metal floor and ceiling. The sides are mostly covered in white plastic panels, as a small concession to aesthetics.",
   desc:function() {
@@ -439,32 +459,35 @@ createRoom("top_deck_aft", {
 
 
 createRoom("canteen", {
+  deckName:'layer4',
+  svgId:'rect3979',
   desc:"The canteen, like everything else of the ship, is pretty small. There is a table, with one short side against the wall, and five plastic [chairs:chair] around it.{table_desc} At the back is the food preparation area; a work surface across the width of the room, with a sink on the right and a hob on the left.",
   vacuum:false,
   port:new Exit('top_deck_forward'),
 });
 
 
-createItem("canteen_table",
-  SURFACE(),
-  {
-    alias:"table",
-    loc:"canteen",
-    scenery:true,
-    tpDesc:function() { return " The table is bare." },
-    examine:"The table is plastic, attached to the wall at one end, and held up by a single leg at the other end.{table_desc}",
-  }
-);
+createItem("canteen_table", SURFACE(), {
+  alias:"table",
+  loc:"canteen",
+  scenery:true,
+  tpDesc:function() { return " The table is bare." },
+  examine:"The table is plastic, attached to the wall at one end, and held up by a single leg at the other end.{table_desc}",
+})
 
 
 
 createRoom("your_cabin", {
+  deckName:'layer4',
+  svgId:'rect3981',
   desc:"",
   vacuum:false,
   starboard:new Exit("top_deck_forward"),
 });
 
 createRoom("guys_cabin", {
+  deckName:'layer4',
+  svgId:'rect3983',
   desc:"",
   alias:"guys' cabin",
   vacuum:false,
@@ -472,6 +495,8 @@ createRoom("guys_cabin", {
 });
 
 createRoom("girls_cabin", {
+  deckName:'layer4',
+  svgId:'rect3985',
   desc:"",
   alias:"girls' cabin",
   vacuum:false,

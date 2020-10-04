@@ -196,7 +196,7 @@ const lang = {
   not_container:"{nv:container:is:true} not a container.",
   container_recursion:"What? You want to put {nm:item:the} in {nm:containter:the} when {nm:containter:the} is already in {nm:item:the}? That's just too freaky for me.",
   not_inside:"{nv:item:'be:true} not inside that.",
-  locked:"{nv:item:'be:true} locked.",
+  locked:"{nv:container: be:true} locked.",
   no_key:"{nv:char:do:true} have the right key.",
   locked_exit:"That way is locked.",
   open_and_enter:"{nv:char:open:true} the {param:doorName} and walk through.",
