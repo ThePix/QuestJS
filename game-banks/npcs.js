@@ -21,6 +21,7 @@ createItem("Xsansi", NPC(true), {
   bioProbes:16,
   geoProbes:16,
   seederPods:6,
+  locate:'Ostap',
   satellites:6,
   crewStatusTemplate:"'Crew member {nms:actor} designation is: {param:actor:specialisation}. {pa:actor:true} current status is: {status}.{ifNot:actor:loc:nowhere: {pa:actor:true} current location is@@@colon@@@ {nm:room:the}.}'",
   currentPlanet:-1,
@@ -55,6 +56,7 @@ createItem("Xsansi", NPC(true), {
         msg("'Tell me about Kyle, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
           msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Kyle, room:w[w.Kyle.loc]}))
+          w.Xsansi.locate = 'Kyle'
         }
         else {
           msg("'Kyle... Kyle... Of the lot of you, he is the only one who really understands me. He is the only one I {i:care} enough about to get this miserable tin can back to Earth.'");
@@ -69,6 +71,7 @@ createItem("Xsansi", NPC(true), {
         msg("'Tell me about Aada, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
           msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Aada, room:w[w.Aada.loc]}))
+          w.Xsansi.locate = 'Aada'
         }
         else {
           msg("'The Scandinavian skank? Who care? Oh, that's right. She's human, so everyone cares about her.'");
@@ -83,6 +86,7 @@ createItem("Xsansi", NPC(true), {
         msg("'Tell me about Ha-yoon, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
           msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ha_yoon, room:w[w.Ha_yoon.loc]}))
+          w.Xsansi.locate = 'Ha_yoon'
         }
         else {
           msg("'She's dead.'");
@@ -99,6 +103,7 @@ createItem("Xsansi", NPC(true), {
         msg("'Tell me about Ostap, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
           msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ostap, room:w[w.Ostap.loc]}))
+          w.Xsansi.locate = 'Ostap'
         }
         else {
           msg("'Oh, I expect the oaf's fine. He's just had a nice sleep.'");
@@ -395,7 +400,7 @@ createItem("Xsansi", NPC(true), {
           msg("'We could try to make planet-fall.'")
           msg("'The probability of a planet that supports habitation for long term survival is less than one percent. Therefore the probability of another vessel in the vicinity with the time period where rescue is possible is vanishingly small.'")
           msg("'Surely habitable planets are not that rare.'")
-          msg("'Human nutritional requirements are very exact, requiring amino acids and sugars of a specific chirality, plus numerous specific compounds, such as ascorbic acid, retinol, thiamin and riboflavin, the absence of which would lead to death within six months.'")
+          msg("'Human nutritional requirements are very exact, requiring amino acids and sugars of a specific chirality, plus numerous specific compounds, such as ascorbic acid, retinol, thiamin and riboflavin, the absence of which would lead to death within six months or less.'")
         }
         else {
           msg("'There are no escape pods. Cry me a fucking river.'")

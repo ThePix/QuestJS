@@ -143,6 +143,7 @@ createItem("other_spacesuit", {
 
 createRoom("stasis_pod_room", {
   deckName:'layer1',
+  svgId:'rect2756',
   alias:"stasis pod",
   desc:'The stasis pod is shaped uncomfortably like a coffin, and is a pale grey colour. The lid is in the raised position.',
   vacuum:"stasis_bay",

@@ -376,7 +376,7 @@ commands.push(new Cmd('HelpGame', {
     metamsg("At each planet, you need to assess how many bio-probes and how many geo-probes to launch. Do {color:red:HELP PROBES} for details on that. You can {color:red:ASK AI ABOUT SHIP} to find how many of each probe is left.");
     metamsg("You have five planets to visit, before returning to Earth. Return to the stasis pod to go back into stasis. Xsansi will then navigate the ship to the next destination.");
     metamsg("As the captain, the welfare of the crew is important, so {color:red:ASK KYLE ABOUT HIS HEALTH}, etc.");
-    metamsg("You can talk to Xsansi anywhere on the ship (and can just call her \"ai\"). Do {color:red:ASK AI ABOUT CREW} to find out where the crew are.");
+    metamsg("You can talk to Xsansi anywhere on the ship (and can just call her \"ai\"). Do {color:red:ASK AI ABOUT CREW} to find out where the crew are. Do {color:red:ASK AI ABOUT KYLE}, for example, for more specific information; the last crew mate yoiu asked about will appear in blue on the map, helping you find him or her (until you meet, where the room will turn green for one turn).");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -387,7 +387,7 @@ commands.push(new Cmd('HelpNPCs', {
     metamsg("{b:Interacting with NPCs:}");
     metamsg("You can ask an NPC to do something by using the same command you would use to have yourself do something, but prefixed with {color:red:[name],} (note the comma) or {color:red:TELL [name] TO}.");
     metamsg(settings.noTalkTo);
-    metamsg("Use the TOPICS command for some suggested topics. There are rather more for ASK than TELL, as you might expect.");
+    metamsg("Use the {color:red:TOPICS} command for some suggested topics. There are rather more for ASK than TELL, as you might expect.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -396,11 +396,11 @@ commands.push(new Cmd('HelpProbes', {
   regex:/^(?:\?|help) probes?$/,
   script:function() {
   metamsg("{b:Using probes:}");
-    metamsg("Kyle will automatically deploy a satellite on arrival at a new planet, but you need to tell your crew to deploy probes. Wait for Xsansi to announce that the satellite is in orbit, then {color:red:ASK XSANSI ABOUT PLANET}. You can then assess what probes you want to deploy.");
+    metamsg("Kyle will automatically deploy a satellite on arrival at a new planet, but you need to tell your crew to deploy probes for the surface. Wait for Xsansi to announce that the satellite is in orbit, then {color:red:ASK XSANSI ABOUT PLANET}. You can then assess what probes you want to deploy.");
     metamsg("For a bio-probe, talk to Ostap, for a geo-probe, talk to Aada. They will then walk to the probe hanger, and launch the probe. You can tell them to launch several at once (eg {color:red:OSTAP, LAUNCH 3 PROBES}), but remember, you only have sixteen of each for all five planets.");
     metamsg("Once a probe has been launched, it is on its own; you cannot control it.");
-    metamsg("After a probe has landed, it will send data back to the ship, for your crew to analyse. If the data has value, your bonus will automatically increase. The first probe on a planet might get you two or three bonuses, but the third may not get you any and by the tenth, it is not going to find anything new. Ask the crew about the planet once the probes have explored it.")
-    metamsg("After thirty turns a probe will have got everything it can - and usually much sooner. Get to know your crew while you wait.");
+    metamsg("After a probe has landed, it will send data back to the ship, for your crew to analyse. If the data has value, your bonus will automatically increase. The first probe on a planet might get you two or three bonuses, but the third may not get you any and by the tenth, it is not going to find anything new. Ask the crew about the planet once the probes have explored it. You may decide you want to launch more.")
+    metamsg("After thirty turns a probe will have got everything it can - and usually much sooner. Why not get to know your crew while you wait?");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -411,7 +411,7 @@ commands.push(new Cmd('HelpStasis', {
     metamsg("{b:Stasis:}");
     metamsg("Once you are in stasis, years will pass whilst the ship navigates to the next star system, so this is how to move the story forward to the next planet to survey.");
     metamsg("To go into stasis, climb into your pod, and close the lid.");
-    metamsg("You can tell a crew member to go to stasis at any time (eg {color:red:AADA, GET IN STASIS POD} or just {color:red:HA, IN POD}). Once in stasis they cannot be revived until the ship arrives at the next destination, so make sure they have done everything they need to first. Crew members will go into stasis anyway once you do.");
+    metamsg("You can tell a crew member to go to stasis at any time (eg {color:red:AADA, GET IN STASIS POD} or just {color:red:HA, IN POD}). Once in stasis they cannot be revived until the ship arrives at the next destination, so make sure they have done everything they need to first. Crew members will automatically go into stasis anyway once you do.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -430,8 +430,8 @@ commands.push(new Cmd('HelpDock', {
   regex:/^(?:\?|help) (?:dock|docking)$/,
   script:function() {
     metamsg("{b:Docking:}");
-    metamsg("From the flight-0deck, you can get closer to another ship, either to get a better look or to dock with it; {color:red:XSANSI, APPROACH SHUTTLE} or {color:red:AI, APPROACH SHIP}. Obviously there must be an vessel around.");
-    metamsg("Once adjacent, you can scan ot or dock with it; {color:red:XSANSI, DOCK WITH SHUTTLE} or {color:red:AI, SCAN SHIP}.");
+    metamsg("From the flight-deck, you can get closer to another ship, either to get a better look or to dock with it; {color:red:XSANSI, APPROACH SHUTTLE} or {color:red:AI, APPROACH SHIP}. Obviously there must be an vessel around.");
+    metamsg("Once adjacent, you can scan it or dock with it; {color:red:XSANSI, DOCK WITH SHUTTLE} or {color:red:AI, SCAN SHIP}.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 }));
@@ -440,9 +440,9 @@ commands.push(new Cmd('HelpUniverse', {
   regex:/^(?:\?|help) universe$/,
   script:function() {
     metamsg("{b:The game world:}");
-    metamsg("I have, to some degree, tried to go hard science fiction; I would like to think this is not {i:too} much a flight of fantasy, and these are real stars the ship visits! I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
+    metamsg("I originally {i:tried} to go hard science fiction; these are real stars the ship visits! However, I have assumed artificial gravity, which is required to orientate the game (once you have down, you have port, up and starboard).");
     metamsg("I am also assuming people can be held in stasis, and presumably this is like freezing time (cf Niven's stasis field, in his \"Known Space\" series). I need that to preserve the food so the crew have something to eat 80 years after leaving Earth.");
-    metamsg("Also, probes are {i:fast}! It just takes a few turns to travel from orbit to the planet surface, which has to be at least 100 miles, and likely considerably more. They work fast on the planet too. It is a game; we need stuff to happened quickly to keep players interested.");
+    metamsg("Also, probes are {i:fast}! It just takes a few turns to travel from orbit to the planet surface, which has to be at least 100 miles, and likely considerably more. They work fast on the planet too. It is a game; we need stuff to happened quickly to keep players interested. So maybe not so hard science fiction afterall.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 }));

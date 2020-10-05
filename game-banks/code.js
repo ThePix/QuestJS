@@ -454,22 +454,35 @@ function probeLandsOkay() {
 
 
 function updateMap() {
-  $('#layer1').css('display', 'none')
-  $('#layer3').css('display', 'none')
-  $('#layer4').css('display', 'none')
-  console.log($('#layer4').css('display'))
   $('#layer1').hide()
   $('#layer3').hide()
   $('#layer4').hide()
-  document.getElementById("layer3").style.display = "none"
-  document.getElementById("layer4").style.display = "none"
-  document.getElementById("layer1").style.display = "none"
   const currentDeck = w[game.player.loc].deckName
   if (!currentDeck) return errormsg("No deckName for " + game.player.loc)
-  $('#' + currentDeck).css('display', 'inline')
-    
+  $('#' + currentDeck).show()
+  for (let key in w) {
+    if (w[key].svgId) $('#' + w[key].svgId).css('fill', isRoomPressured(w[key]) ? '#777' : '#222')
+  }
+  const mySvgId = w[game.player.loc].svgId
+  let otherSvgId
+  if (w.Xsansi.locate) otherSvgId = w[w[w.Xsansi.locate].loc].svgId
 
+  if (!mySvgId && !otherSvgId) return
+  if (mySvgId === otherSvgId) {
+    $('#' + mySvgId).css('fill', 'green')
+    delete w.Xsansi.locate
+  }
+  else {
+    if (mySvgId) $('#' + mySvgId).css('fill', 'yellow')
+    if (otherSvgId) $('#' + otherSvgId).css('fill', 'blue')
+  }
+  $('#rect10').css('fill', settings.darkModeActive ? '#333' : '#bbb')
+  for (let id of [3334, 2800, 2788, 3330]) {
+    $('#text' + id).css('fill', settings.darkModeActive ? 'white' : 'black')
+    $('#text' + id).css('font-family', 'Orbitron, sans-serif')
+  }
 }
+
 
 
 

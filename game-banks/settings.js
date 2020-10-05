@@ -67,21 +67,19 @@ settings.inventoryPane = false
 
 settings.setup = function() {
   arrival()
+  $('#map').appendTo("#panes")
   updateMap()
-  console.log($('#map'))
-  console.log($('#map').css('display'))
-  console.log($('#bottom-panel'))
-  console.log($('#bottom-panel').css('display'))
-  $('#map').insertAfter("#panes")
 }
 
 
 
-
+settings.updateCustomUI = function() {
+  updateMap()
+}
 
 
 settings.customUI = function() {
-  //let s = '<div class="pane-div" style="position: relative;height:300px;width140px" id="map">'
+/*  //let s = '<div class="pane-div" style="position: relative;height:300px;width140px" id="map">'
   //s += '<img src="' + settings.imagesFolder + '/joseph_banks.svg"/>'
   
   //s += '<object type="image/svg+xml" data="' + settings.imagesFolder + '/joseph_banks.svg" class="logo">Map</object>'
@@ -92,11 +90,13 @@ settings.customUI = function() {
   console.log($('#bottom-panel'))
   console.log($('#bottom-panel').css('display'))
   $('#map').insertAfter("#panes")
-  //$("#panes").append($('#map'))
+  //$("#panes").append($('#map'))*/
 }
 
 
-
+settings.onDarkToggle = function() {
+  updateMap()
+}
 
 
 const professions = [
