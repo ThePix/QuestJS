@@ -14,6 +14,11 @@ createItem("me",
     regex:/^(me|myself|player)$/, 
     status:100, 
     bonus:0, 
+    baseOxygeUse:6,
+    oxygenUseModifier:1,
+    oxygenUse:function() {
+      return this.baseOxygeUse * this.oxygenUseModifier
+    },
     examine:function(isMultiple) {
       msg(prefix(this, isMultiple) + "You feel fine...");
     },
@@ -86,7 +91,7 @@ createRoom("stasis_bay", {
 createItem("pile_of_vomit", {
   scenery:true,
   regex:/vomit|sick/,
-  examine:"A large splat of vomit, it stinks. You decide not to look too closely. You do know what you ate last, so what is the point?",
+  examine:"A large splat of vomit, it stinks. You decide not to look too closely. You already know what you ate last, so what is the point?",
 });
 
 createItem("stasis_pod", {
@@ -540,14 +545,14 @@ createItem("ship", {
   regex:/^ship|alien vessel|ship|vessel$/,
   desc:"",
   isShip:true,
-  oxygen:2000,
+  oxygen:9546,
   status:0,
   eventIsActive:function() { return true },
   eventPeriod:1,
   eventScript:function() {
-    this.oxygen--  // player using it
+    this.oxygen -= game.player.oxygenUse()  // player using it
     for (let npc of NPCS) {
-      if (npc.usingOxygen()) this.oxygen--
+      this.oxygen -= npc.oxygenUse()
     }
   },
 });

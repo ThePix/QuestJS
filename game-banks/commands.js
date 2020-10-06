@@ -2,7 +2,7 @@
 
 
 
-
+/*
 commands.push(new Cmd('Kick', {
   npcCmd:true,
   rules:[cmdRules.isHere],
@@ -17,11 +17,6 @@ commands.push(new Cmd('Kick', {
   },
 }));
 
-
-
-
-
-
 commands.push(new Cmd('Move', {
   npcCmd:true,
   rules:[cmdRules.isHere],
@@ -35,7 +30,7 @@ commands.push(new Cmd('Move', {
     return false;
   },
 }));
-
+*/
 
 
 // kyle, in stasis
@@ -121,7 +116,7 @@ commands.push(new Cmd('Depressurise', {
   },
 }));
 
-commands.push(new Cmd('NpcPressurise1', {
+/*commands.push(new Cmd('NpcPressurise1', {
   regex:/^(.+), ?pressuri[sz]e (.+)$/,
   objects:[
     {scope:parser.isHere, attName:"npc"},
@@ -190,7 +185,7 @@ commands.push(new Cmd('NpcDepressurise2', {
     objects.shift();
     return handlePressurise(npc, objects, false);
   },
-}));
+}));*/
 
 
 function handlePressurise(char, objects, pressurise) {

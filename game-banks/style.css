@@ -139,6 +139,7 @@ h2, h4 {
   overflow: hidden;
   height: 100%;
   border: #444 solid 5px;
+  margin-left: 20px;
   background-image: url('../images/scanner.png');
   animation-name: offset;
   animation-duration: 30s;

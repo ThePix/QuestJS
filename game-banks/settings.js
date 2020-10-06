@@ -15,6 +15,7 @@ settings.files = ["const", "code", "commands", "text", "data", "npcs"]
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false
 settings.givePlayerAskTellMsg = false
+settings.symbolsForCompass  = true
 
 
 settings.playMode = 'dev'
@@ -29,39 +30,59 @@ settings.roomTemplate = [
 ]
 
 settings.status = [
-  function() { return "<td colspan=\"3\" style=\"border:black solid 1px;\" align=\"center\">" + getDateTime() + "</td>"; },
-  function() { return "<td width=\"100px\"><b><i>Bonus:</i></b></td><td width=\"30px\" align=\"right\"><b>$" + game.player.bonus + "k</b></td><td></td>"; },
+  function() { return '<td width="55px" title="You receive a bonus for collecting good data"><b>Bonus:</b></td><td width="20px"></td><td align="right"><b>$' + game.player.bonus + 'k</b></td>' },
   function() { return settings.statusReport(game.player) },
   function() { return settings.statusReport(w.Xsansi) },
   function() { return settings.statusReport(w.Ha_yoon) },
   function() { return settings.statusReport(w.Kyle) },
   function() { return settings.statusReport(w.Ostap) },
   function() { return settings.statusReport(w.Aada) },
-  //function() { return settings.oxygenReport() },
+  function() { return settings.oxygenReport() },
+  function() { return '<td colspan="3" style="border:black solid 1px" align="center" title="The current date and time (adjusted for relativistic effects)">' + getDateTime() + '</td>' },
 ];
 
 
-settings.colours = ['red', 'yellow', 'blue', 'lime', 'lime']
+settings.colours = ['red', 'yellow', 'blue', 'lime', 'lime', 'grey', 'black']
+settings.colourNotes = ['Red indicates something is seriously wrong; action should be taken to avoid death', 'Yellow indicates cause for concern', 'Blue indicates less than excellent, but probably no cause for concern', 'Green indicates excellent', 'lime', 'Grey indicates the crewman is in stasis', 'Black indicates the crewman is dead']
 settings.intervals = [25,50,25,1, 1000]
 settings.intervalDescs = ['worrying', 'fair', 'good', 'perfect']
 settings.statusReport = function(obj) {
-  let s, colour
+  let s, colourCode, tooltip
+  tooltip = obj.alias + ' is '
+  if (!obj.crewman) tooltip += obj.player ? 'the captain of the ship (i.e., you)' : 'the ship AI'
   if (typeof obj.status === "string") {
     s = obj.status
-    colour = s === 'stasis' ? 'grey' : 'black'
+    colourCode = s === 'stasis' ? 5 : 6
+    if (obj.crewman) tooltip += (s === 'stasis' ? 'in stasis' : 'dead')
   }
   else {
     s = obj.status.toString() + '%'
-    colour = settings.colours[util.getByInterval(settings.intervals, obj.status)]
+    colourCode = util.getByInterval(settings.intervals, obj.status)
+    if (obj.crewman) tooltip += 'in ' + w[obj.loc].alias
   }
-  return "<td><i>" + obj.alias + ":</i></td><td style=\"border:black solid 2px; background:" + colour + "\">&nbsp;</td><td align=\"right\">" + s + "</td>";
+  return '<td title="' + tooltip + '"><i>' + obj.alias + ':</i></td>' + settings.warningLight(colourCode) + '<td align="right">' + s + '</td>'
 }
 settings.oxygenReport = function(obj) {
+  // 0.84 kg O2  per day
+  // https://ntrs.nasa.gov/citations/20040012725
+  // so 0.58 g/m
   console.log(w.ship.oxygen)
-  console.log(util.getByInterval(settings.intervals, w.ship.oxygen / 10))
-  const colour = settings.colours[util.getByInterval(settings.intervals, w.ship.oxygen / 10)]
-  return "<td><i>Oxygen:</i></td><td style=\"border:black solid 2px; background:" + colour + "\">&nbsp;</td><td align=\"right\">" + w.ship.oxygen + "</td>";
+  console.log(util.getByInterval(settings.intervals, w.ship.oxygen / 50))
+  const colourCode = util.getByInterval(settings.intervals, w.ship.oxygen / 10)
+  return '<td title="The ship has a limited amount of oxygen; an adult uses about 6 g every minute, but none while in stasis"><b>Oxygen:</b></td>' + settings.warningLight(colourCode) + '<td align="right"><span style="font-size:0.8em">' + (Math.round(w.ship.oxygen) / 1000).toFixed(3) + ' kg</span></td>'
 }
+
+settings.warningLight = function(colourCode) {
+  //return "<td style=\"margin:3px;border:black solid 2px; background:" + colour + "\">&nbsp;</td>"
+  
+  let s = '<td title="' + settings.colourNotes[colourCode] + '">'
+  s += '<svg height="25" width="20">'
+  s += '<circle cx="10" cy="12" r="10" stroke="black" stroke-width="1" fill="' + settings.colours[colourCode] + '" />'
+  s += '</svg>'
+  s += '</td>'
+  return s
+}
+
 
 settings.inventoryPane = false
 

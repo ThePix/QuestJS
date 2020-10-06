@@ -37,11 +37,14 @@ const CREW = function(isFemale) {
   const res = NPC(isFemale)
   res.status = "okay"
   res.properName = true
+  res.crewman = true
   res.relationship = 0
   res.clothing = 2
   res.reactionToUndress = 0
-  res.usingOxygen = function() {
-    return typeof this.status === 'number'
+  res.oxygenUseModifier = 1
+  res.oxygenUse = function() {
+    if (typeof this.status !== 'number') return 0
+    return this.baseOxygeUse * this.oxygenUseModifier
   }
   res.revive = function(isMultiple, char) {
     const tpParams = {actor:this, char:char}
@@ -451,13 +454,14 @@ function probeLandsOkay() {
 }
   
   
-
+settings.deckNames = {layer1:'Deck 2', layer3:'Deck 1', layer4:'Deck 3'}
 
 function updateMap() {
   $('#layer1').hide()
   $('#layer3').hide()
   $('#layer4').hide()
   const currentDeck = w[game.player.loc].deckName
+  $('#map').attr('title', 'The Joseph Banks, ' + settings.deckNames[currentDeck]);
   if (!currentDeck) return errormsg("No deckName for " + game.player.loc)
   $('#' + currentDeck).show()
   for (let key in w) {

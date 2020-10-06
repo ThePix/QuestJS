@@ -426,6 +426,7 @@ createItem("Kyle", CREW(false), {
   loc:"flightdeck",
   specialisation:"coms",
   okay:"'Righto, captain.'",
+  baseOxygeUse:6,
 
   desc:"Kyle is the computer expert, but also a good cook, and has volunteered for the role of chef. An Australian, he is slim, and below average height, with very short blonde hair, and green eyes.",
 
@@ -577,6 +578,7 @@ createItem("Ostap", CREW(false), {
   specialisation:"biology",
   okay:"'Right, okay then.'",
   desc:"Ostap is a big guy; not fat, but broad and tall. He keeps his dark hair in a short ponytail.",
+  baseOxygeUse:9,
 
   // Agenda
   eventIsActive:function() { return this.status = "okay"; },
@@ -705,6 +707,7 @@ createItem("Aada", CREW(true), {
   okay:"'Sure, captain.'",
   geologyFlag2:false,
   desc:"Aada is a Finnish woman with features so ideal you suspect genetic engineering. Tall, with a perfect figure, she keeps her blonde hair short.",
+  baseOxygeUse:6,
   
   // Reactions
   reactions:function() {
@@ -856,6 +859,7 @@ createItem("Ha_yoon", CREW(true), {
   specialisation:"engineering",
   okay:"'Okay,' she smiles.'",
   desc:"Ha-yoon is a well-respected Korean engineer, making her possibly the most important member of the crew for ensuring the ship gets back to Earth. She is the shortest of the crew, but perhaps the loudest. She has long, raven-black hair, that falls to her waist, and dark eyes.",
+  baseOxygeUse:4,
   
   // Reactions
   reactions:function() {
