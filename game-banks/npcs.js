@@ -254,7 +254,7 @@ createItem("Xsansi", NPC(true), {
 
     {
       name:"stasis",
-      test:function(p) { return p.text.match(/statis/); }, 
+      test:function(p) { return p.text.match(/stasis/); }, 
       script:function() {
         msg("'Tell me about the stasis system, Xsansi.'");
         if (w.Xsansi.currentPlanet < 3) {

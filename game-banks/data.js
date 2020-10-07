@@ -250,7 +250,7 @@ createRoom("hallway", {
 createRoom("service_passage", {
   deckName:'layer1',
   svgId:'rect16',
-  desc:"",
+  desc:"A narrow passage running along the spine of the ship, the walls are covered in piping, conduits and cabling.",
   vacuum:false,
   forward:new Exit("hallway", {
     isHidden:function() { return true; },
@@ -287,7 +287,7 @@ createRoom("biolab", {
   deckName:'layer1',
   svgId:'rect2752',
   alias:"Bio-lab",
-  desc:"",
+  desc:"The bio-lab is really just a large office, with two chairs, a desk and lots of compuer screens.",
   vacuum:false,
   starboard:new Exit("hallway"),
   aft:new Exit("geolab"),
@@ -300,7 +300,7 @@ createRoom("geolab", {
   deckName:'layer1',
   svgId:'rect2754',
   alias:"Geo-lab",
-  desc:"",
+  desc:"The geo-lab is really just a large office, with two chairs, a desk and lots of compuer screens.",
   vacuum:false,
   forward:new Exit("biolab"),
   starboard:new Exit("probes_aft", {
@@ -322,7 +322,7 @@ createRoom("geolab", {
 createRoom("engineering1", {
   deckName:'layer1',
   svgId:'path2760',
-  desc:"",
+  desc:"This is where the fusion micro-reactor stands, a vaguely cylindrical device about a meter across, and stretching from floor to ceiling. Cables run to a small console nearby.",
   alias:"Engineering (port)",
   properName:true,
   vacuum:"engineering2",
@@ -334,8 +334,8 @@ createRoom("engineering1", {
 createRoom("engineering2", {
   deckName:'layer1',
   svgId:'path4106',
-  desc:"",
-  alias:"Engineering",
+  desc:"The main engineers are here, five huge light-drives that project out the rear of the ship.",
+  alias:"Engineering (aft)",
   properName:true,
   vacuum:false,
   starboard:new Exit("engineering3"),
@@ -349,7 +349,7 @@ createRoom("engineering2", {
 createRoom("engineering3", {
   deckName:'layer1',
   svgId:'path4108',
-  desc:"",
+  desc:"The various life-support machinery is housed on this side of engineering, including the CO2 scrubbers and water recycler.",
   properName:true,
   alias:"Engineering (starboard)",
   vacuum:"engineering2",
@@ -407,7 +407,7 @@ createRoom("server_room", {
 createRoom("lounge", {
   deckName:'layer4',
   svgId:'path3973',
-  desc:"",
+  desc:"The lounge has five well-padded seats, all facing the large windows that curve round the front of the ship, and over the ceiling too.",
   vacuum:false,
   aft:new Exit("top_deck_forward"),
 });
@@ -486,7 +486,7 @@ createItem("canteen_table", SURFACE(), {
 createRoom("your_cabin", {
   deckName:'layer4',
   svgId:'rect3981',
-  desc:"",
+  desc:"This is you cabin, not much more than a bed and a locker.",
   vacuum:false,
   starboard:new Exit("top_deck_forward"),
 });
@@ -494,8 +494,8 @@ createRoom("your_cabin", {
 createRoom("guys_cabin", {
   deckName:'layer4',
   svgId:'rect3983',
-  desc:"",
-  alias:"guys' cabin",
+  desc:"Two bunk beds and two lockers pretty much sums up this room.",
+  alias:"Men's cabin",
   vacuum:false,
   starboard:new Exit("top_deck_aft"),
 });
@@ -503,8 +503,8 @@ createRoom("guys_cabin", {
 createRoom("girls_cabin", {
   deckName:'layer4',
   svgId:'rect3985',
-  desc:"",
-  alias:"girls' cabin",
+  desc:"Two bunk beds and two lockers pretty much sums up this room.",
+  alias:"Women's cabin",
   vacuum:false,
   forward:new Exit("top_deck_aft"),
 });

@@ -6,6 +6,8 @@ tmp.*
 *.txt
 *.zip
 game-x*/
+game-banks-demo/
+page-*-demo.html
 libx/
 page-x*.html
 images/Joseph Banks.svg
