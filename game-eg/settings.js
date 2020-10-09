@@ -15,6 +15,7 @@ settings.textEffectDelay = 100
 
 settings.imagesFolder = 'images'
 settings.libraries.push('zone')
+settings.libraries.push('map')
 
 settings.status = [
   "hitpoints",
@@ -34,3 +35,7 @@ settings.setup = function() {
   game.player.status = "You are feeling fine";
   io.updateStatus()
 }
+
+
+
+settings.mapStyle = {right:'0', top:'200px', width:'300px', height:'300px', 'background-color':'beige' }

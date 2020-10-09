@@ -13,7 +13,7 @@ body {
 /* Style page content */
 #main {
   margin-left: 160px; /* Same as the width of the sidebar */
-  margin-right: 160px; /* Same as the width of the sidebar */
+  margin-right: 320px; /* Same as the width of the sidebar */
   padding: 0px 10px;
   font-family: 'ZCOOL XiaoWei', serif;
 }
@@ -165,6 +165,9 @@ span.compass-button {
   padding-left: 5pt;
 }
 #dialog {
+  display:none;
+}
+#quest-map {
   display:none;
 }
 
