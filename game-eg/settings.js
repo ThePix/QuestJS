@@ -38,4 +38,4 @@ settings.setup = function() {
 
 
 
-settings.mapStyle = {right:'0', top:'200px', width:'300px', height:'300px', 'background-color':'beige' }
+settings.mapStyle = {right:'0', top:'200px', width:'300px', height:'300px', 'background-color':'yellow' }

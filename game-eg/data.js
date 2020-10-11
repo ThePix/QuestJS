@@ -39,6 +39,7 @@ createItem("knife",
 
 createRoom("lounge", {
   desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
+  mapColour:'silver',
   east:new Exit('kitchen'),
   west:new Exit("dining_room"),
   south:new Exit("conservatory"),
@@ -616,6 +617,7 @@ createItem("rope", ROPE(), {
 
 createRoom("garden", {
   desc:"Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.",
+  mapColour:'green',
   east:new Exit("conservatory"),
   west:new Exit("road"),
 });
