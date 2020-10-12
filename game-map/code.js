@@ -12,3 +12,16 @@ map.getStartingLocations = function() {
     start2.mapZ = 0
     return [start1, start2]
 }
+
+map.marker = function(x, y) {
+  let s = '<line x1="'
+  s += (x - 15)
+  s += '" y1="'
+  s += (y - 40)
+  s += '" x2="'
+  s += (x - 5)
+  s += '" y2="'
+  s += (y - 15)
+  s += '" stroke="#000" stroke-width="5" marker-end="url(#arrow)" />'
+  return s
+}
