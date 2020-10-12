@@ -39,4 +39,4 @@ settings.setup = function() {
 
 
 settings.mapStyle = {right:'0', top:'200px', width:'300px', height:'300px', 'background-color':'yellow' }
-settings.mapTextStyle = {'font-size':'8pt', 'font-weight':'bold', color:'blue'}
+settings.mapLabelStyle = {'font-size':'8pt', 'font-weight':'bold', color:'blue'}

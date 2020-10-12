@@ -156,19 +156,54 @@ commands.unshift(new Cmd('EgMove', {
   },
 }));
 
+findCmd('MetaHint').script = function() {
+  console.log('here')
+  if (w[game.player.loc].hint) {
+    metamsg(w[game.player.loc].hint);
+  }
+  else {
+    return lang.hintScript()
+  }
+}
+  
 
-commands.unshift(  new Cmd('EgHint', {
-    regex:/^hint$|^hints$/,
-    script:function() {
-      if (w[game.player.loc].hint) {
-        metamsg(w[game.player.loc].hint);
+
+const clues = [
+  {
+    question:'How do I get the hat?',
+    clues: [
+      'What is the lamp for?',
+      'What happens if you rub the lamp?',
+      'Rub the lamp, and ask the genie.',
+    ],
+  },
+  {
+    question:'Where is the bear?',
+    clues: [
+      'In the lounge, where you started.',
+    ],
+  },
+]
+
+
+// How to save???
+findCmd('MetaHint').script = function() {
+  for (let clue of clues) {
+    if (clue.count === undefined) clue.count = 0
+    metamsg(clue.question)
+    for (let i = 0; i < clue.clues.length; i++) {
+      if (i < clue.count) {
+        metamsg(clue.clues[i])
       }
       else {
-        metamsg("Sorry, no hints here.");
+        // hidden!!!
+        metamsg(clue.clues[i])
       }
-    },
-  }));
-  
+    }
+  }
+}
+ 
+
 
 
 
