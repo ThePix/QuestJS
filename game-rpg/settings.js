@@ -84,7 +84,7 @@ settings.customUI = function() {
 
 
 settings.updateCustomUI = function() {
-  $('#weaponImage').attr('src', settings.imagesFolder + '/icon-' + game.player.getEquippedWeapon().image + '.png');
+  $('#weaponImage').attr('src', settings.imagesFolder + 'icon-' + game.player.getEquippedWeapon().image + '.png');
   $('#weapon-td').prop('title', "Weapon: " + game.player.getEquippedWeapon().alias);
   
   $('#hits-indicator').css('padding-right', 120 * game.player.health / game.player.maxHealth);
@@ -127,8 +127,8 @@ const skillUI = {
     if (!skill.icon) skill.icon = skill.name.toLowerCase()
     const cell = $('#cell' + skillUI.skills.length)
     let s = '<div class="skill-container" title="' + skill.tooltip + '" >'
-    s += '<img class="skill-image" src="' + settings.imagesFolder + '/icon-' + skill.icon + '.png"/>'
-    if (skill.spell) s += '<img class="skill-image" src="' + settings.imagesFolder + '/flag-spell.png"/>'
+    s += '<img class="skill-image" src="' + settings.imagesFolder + 'icon-' + skill.icon + '.png"/>'
+    if (skill.spell) s += '<img class="skill-image" src="' + settings.imagesFolder + 'flag-spell.png"/>'
     s += '</div>'
     cell.html(s)
     cell.click(skillUI.buttonClickHandler)

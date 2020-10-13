@@ -12,7 +12,7 @@ settings.tests = true
 
 settings.textEffectDelay = 100
 
-settings.imagesFolder = 'images'
+settings.imagesFolder = 'images/'
 settings.files = ["code", "data", "npcs"]
 
 settings.panes = 'left'

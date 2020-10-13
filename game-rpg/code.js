@@ -671,7 +671,7 @@ const WEAPON = function(damage) {
   res.weapon = true
   res.damage = damage
   res.match = function(item) { return item.weapon }
-  res.icon = () => '<img src="' + settings.imagesFolder + '/weapon12.png" />'
+  res.icon = () => '<img src="' + settings.imagesFolder + 'weapon12.png" />'
   return res;
 }  
 
@@ -721,7 +721,7 @@ const SHIELD = function(bonus) {
     if (!this.equipped) return
     attack.offensiveBonus -= this.shieldBonus
   }
-  res.icon = () => '<img src="' + settings.imagesFolder + '/shield12.png" />'
+  res.icon = () => '<img src="' + settings.imagesFolder + 'shield12.png" />'
   return res;
 }  
 
@@ -734,7 +734,7 @@ const SPELLBOOK = function(list) {
   res.examine = function() {
     msg(this.examineX + ' It contains the spells ' + formatList(this.spellsAvailableToLearn.map(el => '<i>' + el + '</i>'), {lastJoiner:' and '}) + '.')
   }
-  res.icon = () => '<img src="' + settings.imagesFolder + '/spell12.png" />'
+  res.icon = () => '<img src="' + settings.imagesFolder + 'spell12.png" />'
   return res 
 }
 

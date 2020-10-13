@@ -99,20 +99,6 @@ settings.updateCustomUI = function() {
 }
 
 
-settings.customUI = function() {
-/*  //let s = '<div class="pane-div" style="position: relative;height:300px;width140px" id="map">'
-  //s += '<img src="' + settings.imagesFolder + '/joseph_banks.svg"/>'
-  
-  //s += '<object type="image/svg+xml" data="' + settings.imagesFolder + '/joseph_banks.svg" class="logo">Map</object>'
-  //s += '</div>'
-  
-  console.log($('#map'))
-  console.log($('#map').css('display'))
-  console.log($('#bottom-panel'))
-  console.log($('#bottom-panel').css('display'))
-  $('#map').insertAfter("#panes")
-  //$("#panes").append($('#map'))*/
-}
 
 
 settings.onDarkToggle = function() {

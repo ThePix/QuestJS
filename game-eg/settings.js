@@ -13,7 +13,7 @@ settings.playMode = 'dev'
 
 settings.textEffectDelay = 100
 
-settings.imagesFolder = 'images'
+settings.imagesFolder = 'images/'
 settings.libraries.push('zone')
 settings.libraries.push('map')
 

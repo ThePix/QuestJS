@@ -13,7 +13,7 @@ settings.noAskTell = false
 
 settings.textEffectDelay = 100
 
-settings.imagesFolder = 'images'
+settings.imagesFolder = 'images/'
 
 settings.status = [
   "hitpoints",

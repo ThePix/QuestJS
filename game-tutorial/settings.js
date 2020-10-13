@@ -13,6 +13,9 @@ settings.noAskTell = false
 settings.givePlayerAskTellMsg  = false
 settings.symbolsForCompass = true
 
+settings.soundsFolder = 'sounds/'
+settings.soundFiles = ['Bells4', 'Coins3', 'SynthChime6', 'Laser-Shot-1', 'Cold-Moon_Looping', 'Dark-techno-City_Looping', 'Light-Years_V001_Looping', 'Theyre-Here_Looping']
+
 
 settings.afterSave = function(filename) {
   if (hint.before('save')) {
