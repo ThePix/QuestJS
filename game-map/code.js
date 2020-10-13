@@ -22,6 +22,7 @@ map.marker = function(x, y) {
   s += (x - 5)
   s += '" y2="'
   s += (y - 15)
-  s += '" stroke="#000" stroke-width="5" marker-end="url(#arrow)" />'
+  s += '" stroke="#000" stroke-width="5" marker-end="url(#arrowbig)" />'
+  console.log(s)
   return s
 }

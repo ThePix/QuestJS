@@ -24,6 +24,11 @@ createRoom("kitchen", {
 createRoom("dining_room", {
   desc:"The lounge is boring, the author really needs to put stuff in it.",
   east:new Exit('lounge'),
+  west:new Exit('garden_east', {mapOffsetY:-1,  mapDraw:function(fromRoom, toRoom) {
+    return map.quadratic([[fromRoom.mapX - 15, fromRoom.mapY], [-35, 0], [-35, 25]], 'stroke="#444" marker-end="url(#arrowsmall)" ')
+    //return map.polyline([[fromRoom.mapX - 15, fromRoom.mapY], [toRoom.mapX, toRoom.mapY - 15]], 'stroke="#00f" stroke-width="5"')
+  }}),
+  //west:new Exit('garden_east', {mapCustom:true, mapOffsetX:-1, mapOffsetY:-1, mapOffsetZ:0}),
   south:new Exit('kitchen'),
   mapLabel:'D-Room',
 })
@@ -42,6 +47,7 @@ createRoom("garden_east", {
   desc:"The east end of the garden is boring, the author really needs to put stuff in it.",
   east:new Exit('kitchen'),
   west:new Exit('garden_west'),
+  north:new Exit('dining_room', {mapIgnore:true}),
   mapDrawBase:function(o) {
     let s = '<rect x="'
     s += this.mapX - 25
