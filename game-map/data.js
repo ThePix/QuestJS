@@ -25,8 +25,10 @@ createRoom("dining_room", {
   desc:"The lounge is boring, the author really needs to put stuff in it.",
   east:new Exit('lounge'),
   west:new Exit('garden_east', {mapOffsetY:-1,  mapDraw:function(fromRoom, toRoom) {
-    return map.quadratic([[fromRoom.mapX - 15, fromRoom.mapY], [-35, 0], [-35, 25]], 'stroke="#444" marker-end="url(#arrowsmall)" ')
-    //return map.polyline([[fromRoom.mapX - 15, fromRoom.mapY], [toRoom.mapX, toRoom.mapY - 15]], 'stroke="#00f" stroke-width="5"')
+    let s = map.quadratic([[fromRoom.mapX - 15, fromRoom.mapY], [-35, 0], [-35, 25]], 'fill:none')
+    s += map.polyline([[toRoom.mapX, toRoom.mapY - 20], [toRoom.mapX-5, toRoom.mapY - 30], [toRoom.mapX+5, toRoom.mapY - 30]], 'stroke:none')
+    console.log(s)
+    return s
   }}),
   //west:new Exit('garden_east', {mapCustom:true, mapOffsetX:-1, mapOffsetY:-1, mapOffsetZ:0}),
   south:new Exit('kitchen'),
@@ -59,7 +61,7 @@ createRoom("garden_east", {
       [this.mapX + 16, this.mapY - 16],
       [this.mapX + 16, this.mapY + 16],
       [this.mapX - 25, this.mapY + 16],
-    ], 'stroke="black"')
+    ], 'stroke:black;fill:none')
     console.log(s)
     return s
   },
@@ -79,7 +81,7 @@ createRoom("garden_west", {
       [this.mapX - 16, this.mapY - 16],
       [this.mapX - 16, this.mapY + 16],
       [this.mapX + 25, this.mapY + 16],
-    ], 'stroke="black"')
+    ], 'stroke:black;fill:none')
     return s
   },
 })
