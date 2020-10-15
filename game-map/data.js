@@ -28,7 +28,7 @@ createRoom("dining_room", {
   east:new Exit('lounge'),
   west:new Exit('garden_east', {mapOffsetY:-1,  mapDraw:function(fromRoom, toRoom) {
     return map.bezier(fromRoom, [[-15, 0], [-35, 0], [-35, 25]], 'fill:none')
-      + map.polyline(toRoom, [[0, -20], [-5, -30], [5, -30]], 'stroke:none')
+      + map.polygon(toRoom, [[0, -20], [-5, -30], [5, -30]], 'stroke:none')
     return s
   }}),
   south:new Exit('kitchen'),
@@ -62,17 +62,20 @@ createItem("Lara", NPC(true), {
   loc:'shed',
   properNoun:true,
   agenda:['walkRandom'],
+  mapDraw:function() { return map.rectangle(w[this.loc], [[-5,-5], [10, 10]], 'fill:red;stroke:black') }
 })
 
 createItem("Kyle", NPC(false), {
   loc:'shed',
   properNoun:true,
   agenda:['walkRandom'],
+  mapDraw:function() { return map.rectangle(w[this.loc], [[0,0], [10, 10]], 'fill:blue;stroke:black') }
 })
 
 createItem("Robot", NPC(false), {
   loc:'street_north',
   agenda:['patrol:street_middle:street_south:street_middle:street_north'],
+  mapDraw:function() { return map.rectangle(w[this.loc], [[-10,-10], [10, 10]], 'fill:silver;stroke:black') }
 })
 
 

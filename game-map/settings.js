@@ -6,9 +6,10 @@ settings.version = "0.1"
 settings.thanks = []
 settings.warnings = "No warnings applicable to this game."
 settings.playMode = "dev"
+settings.reportAllSvg = true
 
 settings.libraries.push('map')
-settings.mapShowNotVisited = true
+//settings.mapShowNotVisited = true
 settings.mapCellSize = 32
 settings.mapScale = 50
 settings.mapDrawLabels = true
@@ -16,7 +17,7 @@ settings.mapLabelStyle = {'font-size':'8pt', 'font-weight':'bold'}
 settings.mapLabelColour = 'blue'
 settings.mapLabelRotate = -20
 settings.mapLabelOffset = -5
-settings.mapStyle = {right:'0', top:'200px', width:'400px', height:'400px', 'background-color':'#ddd' }
+settings.mapStyle = {right:'0', top:'200px', width:'400px', height:'400px', 'background-color':'#ddd', border:'3px black solid' }
 settings.mapClick = function(name) {
   console.log("Map clicked: " + name)
 }
@@ -27,9 +28,22 @@ settings.mapMarker = function(loc) {
   ], 'stroke:none;fill:black;pointer-events:none;opacity:0.3')
 }
 settings.mapExtras = function() {
-  return [
-    map.rectangle(w[w.Robot.loc], [[-10,-10], [10, 10]], 'fill:silver;stroke:black'),
-    map.rectangle(w[w.Kyle.loc], [[-5,-5], [10, 10]], 'fill:blue;stroke:black'),
-    map.rectangle(w[w.Lara.loc], [[0,0], [10, 10]], 'fill:red;stroke:black'),
-  ]
+  const result = []
+  const room = w[game.player.loc]
+  for (let o of [w.Robot, w.Lara, w.Kyle]) {
+    if (w[o.loc].mapZ !== room.mapZ || w[o.loc].mapRegion !== room.mapRegion) continue
+    result.push(o.mapDraw())
+  }
+  result.push(map.polygon(room, [
+    [150, 100],
+    [147, 117],
+    [130, 120],
+    [147, 123],
+    [150, 160],
+    [153, 123],
+    [170, 120],
+    [153, 117],
+  ], 'stroke:black;fill:yellow;'))
+  result.push(map.text(room, 'N', [150, 100], 'fill:black;font-size:14pt'))
+  return result
 }
