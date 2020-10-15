@@ -10,6 +10,7 @@ settings.noAskTell = false
 
 settings.tests = true
 settings.playMode = 'dev'
+settings.reportAllSvg = true
 
 settings.textEffectDelay = 100
 

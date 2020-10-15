@@ -53,8 +53,8 @@ createRoom("lounge", {
 
 createRoom("dining_room_on_stool", {
   desc:'Stood on a stool, in an old-fashioned room.',
-  east:new Exit('lounge'),
-  down:new Exit("dining_room"),
+  east:new Exit('lounge', {mapIgnore:true}),
+  down:new Exit("dining_room", {mapIgnore:true}),
   alias:"dining room (on a stool)",
   //loc:"dining_room",
 });
@@ -252,7 +252,7 @@ createRoom("dining_room", {
   west:new Exit('lift'),
   canViewLocs:["garden"],
   canViewPrefix:"Through the window you can see ",
-  up:new Exit("dining_room_on_stool"),
+  up:new Exit("dining_room_on_stool", {mapIgnore:true}),
   alias:"dining room",
   hint:"This room features an NPC who will sometimes do as you ask. Compliment her, and she will go to another room, and with then pick things up and drop them (but not bricks). Also not that the glass cabinet is in this room as well as the lounge.",
 });
