@@ -1,8 +1,11 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat|ZCOOL+XiaoWei');
-@import url('https://fonts.googleapis.com/css?family=Krona+One|Trade+Winds&display=swap');
+
+html {
+    overflow-y:scroll;
+}
+
 body {
   color: black;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
 }
 
 .dark-body {
@@ -64,7 +67,7 @@ body {
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 5px;
   font-size: 9pt;
-  font-family: 'Montserrat', sans-serif;;
+  font-family: sans-serif;;
 }
 .pane-div {
   background-color:#fcf;
@@ -216,31 +219,6 @@ span.compass-button {
   font-size: 10pt;
   color: red;
 }
-.error21::before {
-  content: "QUEST CODE ERROR: ";
-  font-style: italic;
-}
-.error22::before {
-  content: "GAME CODE ERROR: ";
-  font-style: italic;
-}
-.error23::before {
-  content: "PARSER ERROR: ";
-  font-style: italic;
-}
-.error25::before {
-  content: "TEXT PROCESSOR ERROR: ";
-  font-style: italic;
-}
-.error26::before {
-  content: "SAVE/LOAD ERROR: ";
-  font-style: italic;
-}
-.error27::before {
-  content: "DEBUG COMMAND: ";
-  font-style: italic;
-}
-
 
 
 

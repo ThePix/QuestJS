@@ -9,7 +9,7 @@ settings.playMode = "dev"
 settings.reportAllSvg = true
 
 settings.libraries.push('map')
-//settings.mapShowNotVisited = true
+settings.mapShowNotVisited = true
 settings.mapCellSize = 32
 settings.mapScale = 50
 settings.mapDrawLabels = true
@@ -19,7 +19,7 @@ settings.mapLabelRotate = -20
 settings.mapLabelOffset = -5
 settings.mapStyle = {right:'0', top:'200px', width:'400px', height:'400px', 'background-color':'#ddd', border:'3px black solid' }
 settings.mapClick = function(name) {
-  console.log("Map clicked: " + name)
+  metamsg("You clicked on " + w[name].alias)
 }
 settings.mapAutomapFrom = ['lounge', 'glade']
 settings.mapMarker = function(loc) {

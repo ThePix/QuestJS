@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat|ZCOOL+XiaoWei');
 @import url('https://fonts.googleapis.com/css?family=Krona+One|Trade+Winds&display=swap');
+
+html {
+    overflow-y:scroll;
+}
+
 body {
   color: black;
   font-family: 'Montserrat', sans-serif;
