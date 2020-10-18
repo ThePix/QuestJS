@@ -403,7 +403,7 @@ const lang = {
     if (flag || npc.inSight()) {
       s += lang.nounVerb(npc, "enter", !flag) + " " + lang.getName(w[npc.loc], {article:DEFINITE});
       const exit = w[npc.loc].findExit(origin);
-      if (exit) s += " from " + util.niceDirections(exit.dir);
+      if (exit) s += " from " + util.niceDirection(exit.dir);
       s += ".";
       msg(s);
     }

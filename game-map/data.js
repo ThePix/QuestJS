@@ -158,6 +158,7 @@ createRoom("street_south", {
 createRoom("glade", {
   desc:"The glade is boring, the author really needs to put stuff in it. There is a portal you go go in.",
   east:new Exit('forest'),
+  north:new Exit('bus'),
   in:new Exit('bedroom'),
 })
 
@@ -169,7 +170,7 @@ createRoom("forest", {
 
 
 
-createRoom("bus", {
+createRoom("bus", TRANSIT("south"), {
   desc:"The bus is boring, the author really needs to put stuff in it. There is a portal you go go in.",
   south:new Exit('street_north'),
   mapDrawBase:function() {

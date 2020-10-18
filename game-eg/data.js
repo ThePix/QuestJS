@@ -1039,14 +1039,13 @@ createRoom("desert", ZONE(), {
   mapCells:[
     '<rect x="0" y="162" width="336" height="16" stroke="none" fill="#999"/>'
   ],
-
-});
+})
 
 
 
 createItem("silver_coin", TAKEABLE(), ZONE_ITEM('desert', 1, 1), {
   examine:"A curious silver coin; you do not recognise it. It says it is worth two dollars.",
-});
+})
 
 
 
@@ -1060,7 +1059,7 @@ createRoom("bridge", {
     game.player.positionX = 5
     game.player.positionY = 0
   },
-});
+})
 
 createRoom("inside_tower", {
   desc:"A tower, looking out over the desert. To the south is the road, heading east back to your house. To the north is a magic portal, going who knows where.",
@@ -1072,5 +1071,5 @@ createRoom("inside_tower", {
     game.player.positionX = -1
     game.player.positionY = 3
   },
-});
+})
 

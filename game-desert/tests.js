@@ -538,7 +538,7 @@ test.tests = function() {
     return false;
   };
   w.lift.transitAutoMove = true;
-  w.lift.afterEnter = transitOfferMenu;
+  w.lift.afterEnter = w.lift.transitOfferMenu;
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can see a Button: G, a Button: 1 and a Button: 2 here.", "You can go east.", "The lift is out of order", "The dining room", "An old-fashioned room.", "You can see a brick, a chair and a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) here.", "You can go east, up or west."]);
   
   

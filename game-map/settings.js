@@ -6,7 +6,7 @@ settings.version = "0.1"
 settings.thanks = []
 settings.warnings = "No warnings applicable to this game."
 settings.playMode = "dev"
-settings.reportAllSvg = true
+//settings.reportAllSvg = true
 
 settings.libraries.push('map')
 settings.mapShowNotVisited = true
@@ -17,7 +17,7 @@ settings.mapLabelStyle = {'font-size':'8pt', 'font-weight':'bold'}
 settings.mapLabelColour = 'blue'
 settings.mapLabelRotate = -20
 settings.mapLabelOffset = -5
-settings.mapStyle = {right:'0', top:'200px', width:'400px', height:'400px', 'background-color':'#ddd', border:'3px black solid' }
+settings.mapStyle = {right:'0', top:'200px', width:'400px', height:'400px', 'background-color':'#ddd', border:'3px black solid', 'background-image':'url(game-map/paper.jpg)' }
 settings.mapClick = function(name) {
   metamsg("You clicked on " + w[name].alias)
 }

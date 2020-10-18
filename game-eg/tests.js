@@ -116,6 +116,12 @@ test.tests = function() {
 
 
 
+  test.title("util.reverseDirection")
+  test.assertEqual('north', util.reverseDirection('south'))
+  test.assertEqual('up', util.reverseDirection('down'))
+  test.assertEqual('north', util.reverseDirectionObj('south').name)
+
+
 
   test.title("Text processor 1");
   test.assertEqual("Simple text", processText("Simple text"));
@@ -640,7 +646,7 @@ test.tests = function() {
     return false;
   };
   w.lift.transitAutoMove = true;
-  w.lift.afterEnter = transitOfferMenu;
+  w.lift.afterEnter = w.lift.transitOfferMenu;
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east.", "The lift is out of order", "The dining room", "An old-fashioned room.", "You can see a brick, a chair and a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) here.", "You can go east, up or west."]);
   
   

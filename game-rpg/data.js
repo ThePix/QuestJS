@@ -285,7 +285,7 @@ skills.add(new SpellSelf("Unlock", {
     let flag = false
     for (let el of util.exitList(attack.attacker)) {
       if (room[el].locked) {
-        attack.msg("The door to " + util.niceDirections(el) + " unlocks.", 1)
+        attack.msg("The door to " + util.niceDirection(el) + " unlocks.", 1)
         room[el].locked = false
         flag = true
       }
