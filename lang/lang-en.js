@@ -321,7 +321,7 @@ const lang = {
   already:"{sb:item:true} already {cj:item:be}.",
   default_examine:"{pv:item:'be:true} just your typical, every day {nm:item}.",
   
-
+  error:"Oh dear, I seem to have hit an error trying to handle that (F12 for more details).",
 
   //----------------------------------------------------------------------------------------------
   // Complex responses (requiring functions)

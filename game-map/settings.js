@@ -21,7 +21,7 @@ settings.mapStyle = {right:'0', top:'200px', width:'400px', height:'400px', 'bac
 settings.mapClick = function(name) {
   metamsg("You clicked on " + w[name].alias)
 }
-settings.mapAutomapFrom = ['lounge', 'glade']
+settings.mapAutomapFrom = ['street_middle', 'glade']
 settings.mapMarker = function(loc) {
   return map.polygon(loc, [
     [0,0], [-5,-25], [-7, -20], [-18, -45], [-20, -40], [-25, -42], [-10, -18], [-15, -20]
@@ -30,10 +30,10 @@ settings.mapMarker = function(loc) {
 settings.mapExtras = function() {
   const result = []
   const room = w[game.player.loc]
-  for (let o of [w.Robot, w.Lara, w.Kyle]) {
+  /*for (let o of [w.Robot, w.Lara, w.Kyle]) {
     if (w[o.loc].mapZ !== room.mapZ || w[o.loc].mapRegion !== room.mapRegion) continue
     result.push(o.mapDraw())
-  }
+  }*/
   result.push(map.polygon(room, [
     [150, 100],
     [147, 117],
@@ -47,3 +47,4 @@ settings.mapExtras = function() {
   result.push(map.text(room, 'N', [150, 100], 'fill:black;font-size:14pt'))
   return result
 }
+
