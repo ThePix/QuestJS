@@ -6,7 +6,7 @@ settings.version = "0.1"
 settings.thanks = []
 settings.warnings = "No warnings applicable to this game."
 settings.playMode = "dev"
-//settings.reportAllSvg = true
+settings.reportAllSvg = true
 
 settings.libraries.push('map')
 settings.mapShowNotVisited = true
@@ -32,7 +32,7 @@ settings.mapExtras = function() {
   const room = w[game.player.loc]
   /*for (let o of [w.Robot, w.Lara, w.Kyle]) {
     if (w[o.loc].mapZ !== room.mapZ || w[o.loc].mapRegion !== room.mapRegion) continue
-    result.push(o.mapDraw())
+    result.push(o.mapDrawBase())
   }*/
   result.push(map.polygon(room, [
     [150, 100],
