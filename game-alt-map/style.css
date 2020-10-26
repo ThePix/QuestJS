@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@500&display=swap');
+
+
+html {
+    overflow-y:scroll;
+}
+
+body {
+  color: black;
+  font-family: 'Grenze Gotisch', cursive;
+}
+
+.dark-body {
+  background-color: #111;
+  color: #eee;
+}
+
+/* Style page content */
+#main {
+  margin-left: 200px; /* Same as the width of the sidebar */
+  margin-right: 160px; /* Same as the width of the sidebar */
+  padding: 0px 10px;
+}
+
+
+.cmd-link {
+  cursor: pointer;
+  color:blue;
+}
+  
+
+
+
+/* The command bar  */
+#textbox {
+  border:none;
+  outline: none;
+  width:95%;
+}
+.dark-body > div > div > #textbox {
+  background-color: #111;
+  color: white;
+}
+
+
+.input-text {
+  font-style:italic;
+  color:green;
+}
+.dark-body > div > div > .input-text {
+  color:lightgreen;
+}
+
+
+.default-p, .tutorial {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+
+
+/* Side panes */
+.side-panes {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 160px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 5px;
+  font-size: 10pt;
+}
+.pane-div {
+  background-color:wheat;
+  padding-bottom:5px;
+}
+.dark-body > div > .pane-div {
+  background-color:maroon;
+}
+.side-panes-left {
+  left: 0;
+}
+.side-panes-right {
+  right: 0px;
+}
+.side-panes-none {
+  display: None;
+}
+
+
+.pane-div-finished {
+  display: none;
+  font-size: 3em;
+  text-align: center;
+}
+
+
+
+/* Compass */
+td.compass-button {
+    border: black solid 1px;
+    padding: 2px;
+    background-color: burlywood;
+    width: 20px;
+    height: 20px;
+}
+.dark-body > div > div > table > tbody > tr > .compass-button {
+  background-color:sienna;
+}
+span.compass-button {
+    cursor: pointer;
+    text-align: center;
+    width: 18px;
+    display: block;
+}  
+
+
+
+
+/* Items in inventories */
+.side-pane-heading {
+  padding-left: 6px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.item {
+    cursor: pointer;
+    border: black solid 1px;
+    padding: 2px;
+    padding-bottom: 0px;
+    background-color: burlywood;
+    width: 135px;
+    margin-left: 10px;
+    margin-bottom: 0px;
+}
+.dark-body > div > div > div > .item {
+  background-color:sienna;
+}
+.sub-item {
+    background-color: khaki;
+    width: 140px;
+    margin-top: 0px;
+}
+.dark-body > div > div > div > .sub-item {
+  background-color:orangered;
+}
+.item-action {
+    cursor: pointer;
+    border: black solid 1px;
+    border-top: none;
+    padding: 2px;
+    background-color: peachpuff;
+    width: 100px;
+    margin-left: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-style:italic;
+}
+.dark-body > div > div > div > .item-action {
+  background-color:coral;
+}
+#status-pane {
+  padding-left: 5pt;
+}
+#compass-table {
+  padding-left: 5pt;
+}
+#dialog {
+  display:none;
+}
+
+
+
+
+
+
+
+// Used by showMenu
+.menu-title {
+  color: grey;
+  font-style: italic;
+  margin-left: 20px;
+}
+.menu-option {
+  color:blue;
+  cursor: pointer;
+  font-style: italic;
+  margin-left: 20px;
+}
+
+
+/* Various msg options */
+.tutorial {
+  color: blue;
+  font-style:italic;
+}
+.dark-body > div > div > .tutorial {
+  color: lightblue;
+}
+
+
+.hidden {}
+
+
+.hidden  > div > div > .tutorial {
+  display: none;
+}
+
+
+.meta {
+  color: grey;
+}
+.parser {
+  font-weight: bold;
+  font-size: 10pt;
+  color: grey;
+}
+.error {
+  font-weight: bold;
+  font-size: 10pt;
+  color: red;
+}
+
+
+
+.debug {
+  font-size: 10pt;
+  color: grey;
+  font-family: monospace;
+  /*display: none;*/
+}
+
+
+
+
+
+/* For dialog panels */
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+.ui-dialog-titlebar {
+  background-image: none;
+  background-color: #c0c0ff;
+}
+
+.scrolling {
+  cursor: pointer;
+  color: blue;
+  background-color: silver;
+}
+
+
+
+
+th, td {
+  padding:4px;
+  text-align:center;
+}
+
+
+
+.typewriter {
+/*  font-weight: bold;
+  font-size: larger;*/
+  color:grey;
+}
