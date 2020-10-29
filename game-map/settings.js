@@ -8,7 +8,7 @@ settings.warnings = "No warnings applicable to this game."
 settings.playMode = "dev"
 settings.reportAllSvg = true
 
-settings.libraries.push('map')
+settings.libraries.push('node-map')
 settings.mapShowNotVisited = true
 settings.mapCellSize = 32
 settings.mapScale = 50
