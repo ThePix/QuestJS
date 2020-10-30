@@ -17,6 +17,7 @@ const lang = {
   MetaCredits:/^about$|^credits?$/,
   MetaDarkMode:/^(?:dark|dark mode|toggle dark|toggle dark mode)$/,
   MetaWarnings:/^warn(?:ing|ings|)$/,
+  MetaImages:/^images$/,
   MetaSilent:/^(?:sh|silent)$/,
   MetaSpoken:/^spoken$/,
   MetaIntro:/^intro$/,
@@ -447,7 +448,10 @@ const lang = {
       metamsg("{b:Using items: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
       metamsg("{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..");
       metamsg("{b:Meta-commands:} Type ABOUT to find out about the author, SCRIPT to learn about transcripts or SAVE to learn about saving games. Use WARNINGS to see any applicable sex, violence or trigger warnings.")
-      metamsg("You can also use BRIEF/TERSE/VERBOSE to control room descriptions. Type DARK to toggle dark mode or SILENT to toggle sounds and music (if implemented)." + (typeof map !== "undefined" ? " Use MAP to toggle/show the map." : ''))
+      let s = "You can also use BRIEF/TERSE/VERBOSE to control room descriptions. Type DARK to toggle dark mode or SILENT to toggle sounds and music (if implemented)."
+      if (typeof map !== "undefined") s += " Use MAP to toggle/show the map."
+      if (typeof imagePane !== "undefined") s += " Use IMAGES to toggle/show the iage pane."
+      metamsg(s)
       metamsg("{b:Shortcuts:}You can often just type the first few characters of an item's name and Quest will guess what you mean.  If fact, if you are in a room with Brian, who is holding a ball, and a box, Quest should be able to work out that B,PUT B IN B mean you want Brian to put the ball in the box.")
       metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
     }

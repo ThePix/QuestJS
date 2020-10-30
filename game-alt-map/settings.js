@@ -29,7 +29,7 @@ settings.mapImages = [
 settings.mapScrollSpeed = 1
 settings.mapStyle = {
   right:'0',
-  top:'200px',
+  top:'0',
   width:'400px',
   height:'400px',
   'background-color':'#ddd', 
@@ -56,3 +56,26 @@ settings.mapPointsOfInterest = [
   {mapX:200, mapY:200, fill:'red', text:'Here is another thing'},
   {mapX:300, mapY:300, fill:'blue', text:'Here is something else', isActive:function() {return true }},
 ]
+
+
+settings.libraries.push('image-pane')
+
+
+settings.imageStyle = {
+  right:'0',
+  top:'400px',
+  width:'400px',
+  height:'400px',
+  'background-color':'#ddd', 
+  border:'3px black solid',
+}
+
+
+
+settings.setup = function() {
+  msg("Welcome to the Citadel of Culinary Horrors!")
+  wait(5)
+  msg("Do you dare venture within?")
+  image('city6.png')
+  wait(5)
+}
