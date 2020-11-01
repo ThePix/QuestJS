@@ -20,7 +20,7 @@ settings.mapImages = [
   },
   {
     name:'Small scale',
-    file:'game-alt-map/map.png',
+    file:'game-alt-map/small_scale.png',
     width:1000,
     height:1000,
   },
@@ -58,24 +58,3 @@ settings.mapPointsOfInterest = [
 ]
 
 
-settings.libraries.push('image-pane')
-
-
-settings.imageStyle = {
-  right:'0',
-  top:'400px',
-  width:'400px',
-  height:'400px',
-  'background-color':'#ddd', 
-  border:'3px black solid',
-}
-
-
-
-settings.setup = function() {
-  msg("Welcome to the Citadel of Culinary Horrors!")
-  wait(5)
-  msg("Do you dare venture within?")
-  image('city6.png')
-  wait(5)
-}
