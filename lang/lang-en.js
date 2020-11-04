@@ -181,8 +181,10 @@ const lang = {
   cannot_remove_under:"{nv:char:can't:true} take off {pa:char} {nm:garment} whilst wearing {pa:char} {nm:outer}.",
   already_wearing:"{nv:char:'be:true} already wearing {ob:garment}.",
   invWearingPrefix:"wearing",
+  invHoldingPrefix:"holding",
   invWornModifier:"worn",
   invOpenModifier:"open",
+  invEquippedModifier:"equipped",
 
 
   // CONTAINER, etc.
@@ -197,7 +199,7 @@ const lang = {
   not_container:"{nv:container:is:true} not a container.",
   container_recursion:"What? You want to put {nm:item:the} in {nm:containter:the} when {nm:containter:the} is already in {nm:item:the}? That's just too freaky for me.",
   not_inside:"{nv:item:'be:true} not inside that.",
-  locked:"{nv:container: be:true} locked.",
+  locked:"{nv:container:be:true} locked.",
   no_key:"{nv:char:do:true} have the right key.",
   locked_exit:"That way is locked.",
   open_and_enter:"{nv:char:open:true} the {param:doorName} and walk through.",
@@ -442,9 +444,9 @@ const lang = {
 
   helpScript:function() {
     if (settings.textInput) {
-      metamsg("Type commands in the command bar to interact with the world.");      
-      metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, and + and - for UP and DOWN.");
-      metamsg("{b:Other commands:} You can also LOOK (or just L), HELP (or ?) or WAIT (or Z). Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
+      metamsg("Type commands in the command bar to interact with the world. Using the arrow keys you can scroll up and down though your previous commands.");      
+      metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, - and + for UP and DOWN, / and * for IN and OUT.");
+      metamsg("{b:Other commands:} You can also LOOK (or just L or 5 on the number pad), HELP (or ?) or WAIT (or Z or the dot on the number pad). Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
       metamsg("{b:Using items: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
       metamsg("{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..");
       metamsg("{b:Meta-commands:} Type ABOUT to find out about the author, SCRIPT to learn about transcripts or SAVE to learn about saving games. Use WARNINGS to see any applicable sex, violence or trigger warnings.")
@@ -592,6 +594,9 @@ const lang = {
     eat:"Eat",
     drink:"Drink",
     read:"Read",
+    equip:"Equip",
+    unequip:"Equip",
+    attack:"Attack",
   },
 
 
@@ -601,14 +606,14 @@ const lang = {
     {name:'northwest', abbrev:'NW', niceDir:"the northwest", type:'compass', key:103, x:-1 ,y:1, z:0, opp:'southeast', symbol:'&#129132;'}, 
     {name:'north', abbrev:'N', niceDir:"the north", type:'compass', key:104, x:0 ,y:1, z:0, opp:'south', symbol:'&#129129;'}, 
     {name:'northeast', abbrev:'NE', niceDir:"the northeast", type:'compass', key:105, x:1 ,y:1, z:0, opp:'southwest', symbol:'&#129133;'}, 
-    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside", type:'inout', opp:'out', symbol:'&#8628;'}, 
-    {name:'up', abbrev:'U', niceDir:"above", type:'vertical', key:107, x:0 ,y:0, z:1, opp:'down', symbol:'&#8613;'},
+    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside", type:'inout', key:111, opp:'out', symbol:'&#8628;'}, 
+    {name:'up', abbrev:'U', niceDir:"above", type:'vertical', key:109, x:0 ,y:0, z:1, opp:'down', symbol:'&#8613;'},
     
     {name:'west', abbrev:'W', niceDir:"the west", type:'compass', key:100, x:-1 ,y:0, z:0, opp:'east', symbol:'&#129128;'}, 
     {name:'Look', abbrev:'Lk', type:'nocmd', key:101, symbol:'&#128065;'}, 
     {name:'east', abbrev:'E', niceDir:"the east", type:'compass', key:102, x:1 ,y:0, z:0, opp:'west', symbol:'&#129130;'}, 
-    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside", type:'inout', opp:'in', symbol:'&#8625;'}, 
-    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", type:'vertical', key:109, x:0 ,y:0, z:-1, opp:'up', symbol:'&#8615;'}, 
+    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside", type:'inout', key:106,opp:'in', symbol:'&#8625;'}, 
+    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", type:'vertical', key:107, x:0 ,y:0, z:-1, opp:'up', symbol:'&#8615;'}, 
 
     {name:'southwest', abbrev:'SW', niceDir:"the southwest", type:'compass', key:97, x:-1 ,y:-1, z:0, opp:'northeast', symbol:'&#129135;'}, 
     {name:'south', abbrev:'S', niceDir:"the south", type:'compass', key:98, x:0 ,y:-1, z:0, opp:'north', symbol:'&#129131;'}, 
@@ -729,6 +734,7 @@ const lang = {
 
   getName(item, options) {
     if (!options) options = {}
+    if (!item.alias) item.alias = item.name
     let s = ''
     let count = options[item.name + '_count'] ? options[item.name + '_count'] : false
     if (!count && options.loc && item.countable) count = item.countAtLoc(options.loc)
@@ -765,7 +771,12 @@ const lang = {
         }
       }
     }
-    if (item.getNameModifier && options.modified) s += item.getNameModifier(options)
+    if (options.modified) {
+      const list = []
+      for (let f of item.nameModifierFunctions) f(item, list)
+      if (list.length > 0) s += ' (' + list.join('; ') + ')'
+    }
+
     return (options && options.capital ? sentenceCase(s) : s)
   },
 

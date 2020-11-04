@@ -414,15 +414,15 @@ test.tests = function() {
   
 
   test.title("Clone");
-  const count = Object.keys(w).length;
-  const clone = cloneObject(w.book);
-  test.assertEqual(count + 1, Object.keys(w).length);
-  test.assertEqual(w.book, clone.clonePrototype);
-  test.assertEqual(w.book.examine, clone.examine);
-  const clone2 = cloneObject(clone);
-  test.assertEqual(count + 2, Object.keys(w).length);
-  test.assertEqual(w.book, clone2.clonePrototype);
-  test.assertEqual(w.book.examine, clone2.examine);
+  const count = Object.keys(w).length
+  const clone = cloneObject(w.book)
+  test.assertEqual(count + 1, Object.keys(w).length)
+  test.assertEqual(w.book, clone.clonePrototype)
+  test.assertEqual(w.book.examine, clone.examine)
+  const clone2 = cloneObject(clone)
+  test.assertEqual(count + 2, Object.keys(w).length)
+  test.assertEqual(w.book, clone2.clonePrototype)
+  test.assertEqual(w.book.examine, clone2.examine)
 
   
   test.title("Save/Load 1");

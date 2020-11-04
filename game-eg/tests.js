@@ -260,7 +260,7 @@ test.tests = function() {
   test.assertCmd("eat knife", "The knife's not something you can eat.");
   test.assertCmd("get sandwich", "You take the sandwich.");
   test.assertCmd("drink sandwich", "The sandwich's not something you can drink.");
-  test.assertCmd("ingest sandwich", ["You eat the sandwich.", "That was Great!"]);
+  test.assertCmd("ingest sandwich", ["You eat the sandwich.", "That was great!"]);
 
   
   test.title("Simple object commands (boots)");
@@ -522,6 +522,10 @@ test.tests = function() {
   test.assertEqual(count + 1, Object.keys(w).length);
   test.assertEqual(w.book, clone.clonePrototype);
   test.assertEqual(w.book.examine, clone.examine);
+  test.assertEqual(["Examine", "Take"], clone.getVerbs())
+  clone.loc = game.player.name
+  test.assertEqual(["Examine", "Drop", "Read"], clone.getVerbs())
+  clone.loc = 'lounge'
   const clone2 = cloneObject(clone);
   test.assertEqual(count + 2, Object.keys(w).length);
   test.assertEqual(w.book, clone2.clonePrototype);

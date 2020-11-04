@@ -5,8 +5,11 @@ settings.author = "The Pixie"
 settings.version = "1.1";
 settings.thanks = ["Kyle", "Lara"];
 
+settings.libraries.push('rpg')
+
 settings.statusPane = false;
 settings.tests = true
+settings.playMode = 'dev'
 settings.attackOutputLevel = 2
 settings.armourScaling = 10
 settings.noTalkTo = false

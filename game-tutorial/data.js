@@ -153,6 +153,7 @@ createItem("old_newspaper", TAKEABLE(), {
   examine:'A newspaper from the eighties; yellow with age.',
   read:'You spend a few minutes reading about what happens on the day 14th June 1987 (or perhaps the day before). A somewhat mocking article about an archaeologist, Dr Ruudhorn, and Atlantis catches your eye.',
   loc:'basement',
+  heldVerbsX:["Read"], 
 });
 
 createItem("rope", ROPE(false), {
@@ -263,6 +264,7 @@ createItem("box", CONTAINER(true), LOCKED_WITH([]), {
     hint.now('openBox')
     this.locked = false
   },
+  hereVerbsX:["Read"], 
   closeMsg:function() {
     if (this.loc && w.hat.loc === 'box' && w.crowbar.loc !== 'box') {
       msg("You close the lid. 'Thank you for your custom!' says the box. It starts to shake violently then leaps into the air, rapidly disappearing from sight.")
@@ -328,14 +330,11 @@ createRoom("shed", {
 
 
 
-createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
+createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
   loc:"shed",
   scenery:true,
   examine:"A small red torch.",
   regex:/^torch$/, 
-  getNameModifier:function(options) {
-    return this.switchedon ? " (providing light)" : ''
-  },
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
@@ -673,6 +672,8 @@ createItem("postit_note", TAKEABLE(), {
   examine:"The sticky yellow note has something written on it; the number {show:computer:code}.",
   read:"The post-it note just has six digits written on it: {show:computer:code}.",
   loc:'office',
+  heldVerbsX:["Read"], 
+  hereVerbsX:["Read"], 
   scenery:true,
 })
 

@@ -68,33 +68,30 @@ createRoom("hole", {
 
 
 
-createItem("book", 
-  TAKEABLE(),
-  { 
-    loc:"lounge",
-    examine:"A leather-bound book.",
-    heldVerbsX:["Read"], 
-    read:function(isMultiple, char) {
-      if (cmdRules.isHeld(null, char, this, isMultiple)) {
-        if (char === w.Lara) {
-          msg ("'Okay.' Lara spends a few minutes reading the book.");
-          msg ("'I meant, read it to me.'");
-          msg ("'All of it?'");
-          msg ("'Quick summary.'");
-          msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
-        }
-        else {
-          msg (prefix(this, isMultiple) + "It is not in a language " + lang.pronounVerb(char, "understand") + ".");
-        }
-        return true;
-      }          
-      else {
-        return false;
+createItem("book", TAKEABLE(), { 
+  loc:"lounge",
+  examine:"A leather-bound book.",
+  heldVerbsX:["Read"], 
+  read:function(isMultiple, char) {
+    if (cmdRules.isHeld(null, char, this, isMultiple)) {
+      if (char === w.Lara) {
+        msg ("'Okay.' Lara spends a few minutes reading the book.");
+        msg ("'I meant, read it to me.'");
+        msg ("'All of it?'");
+        msg ("'Quick summary.'");
+        msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
       }
-    },
-    lookinside:"The book has pages and pages of text, but you do not even recongise the text.",
-  }
-);
+      else {
+        msg (prefix(this, isMultiple) + "It is not in a language " + lang.pronounVerb(char, "understand") + ".");
+      }
+      return true;
+    }          
+    else {
+      return false;
+    }
+  },
+  lookinside:"The book has pages and pages of text, but you do not even recongise the text.",
+})
 
 
 
@@ -173,7 +170,7 @@ createItem("cardboard_box", TAKEABLE(), CONTAINER(true), {
 
 createItem("sandwich",
   EDIBLE(false),
-  { loc:"lounge", examine:"A tasty looking thing.", onIngesting:function() { msg("That was Great!"); }, }
+  { loc:"lounge", examine:"A tasty looking thing.", onIngesting:function() { msg("That was great!"); }, }
 );
 
 
@@ -202,13 +199,10 @@ createItem("small_key", KEY(), {
 });
 
 
-createItem("flashlight", TAKEABLE(), SWITCHABLE(false), {
+createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
   loc:"lounge",
   examine:"A small red torch.",
   regex:/^torch$/, 
-  getNameModifier:function(options) {
-    return (this.switchedon ? " (providing light)" : '')
-  },
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
