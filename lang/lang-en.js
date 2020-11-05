@@ -182,9 +182,6 @@ const lang = {
   already_wearing:"{nv:char:'be:true} already wearing {ob:garment}.",
   invWearingPrefix:"wearing",
   invHoldingPrefix:"holding",
-  invWornModifier:"worn",
-  invOpenModifier:"open",
-  invEquippedModifier:"equipped",
 
 
   // CONTAINER, etc.
@@ -595,8 +592,16 @@ const lang = {
     drink:"Drink",
     read:"Read",
     equip:"Equip",
-    unequip:"Equip",
+    unequip:"Unequip",
     attack:"Attack",
+  },
+  
+  // Flag the state of an item in a list
+  invModifiers:{
+    worn:"worn",
+    open:"open",
+    equipped:"equipped",
+    dead:"dead",
   },
 
 
@@ -771,11 +776,7 @@ const lang = {
         }
       }
     }
-    if (options.modified) {
-      const list = []
-      for (let f of item.nameModifierFunctions) f(item, list)
-      if (list.length > 0) s += ' (' + list.join('; ') + ')'
-    }
+    s += util.getNameModifiers(item, options)
 
     return (options && options.capital ? sentenceCase(s) : s)
   },

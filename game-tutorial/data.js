@@ -264,7 +264,7 @@ createItem("box", CONTAINER(true), LOCKED_WITH([]), {
     hint.now('openBox')
     this.locked = false
   },
-  hereVerbsX:["Read"], 
+  hereVerbs:["Read"], 
   closeMsg:function() {
     if (this.loc && w.hat.loc === 'box' && w.crowbar.loc !== 'box') {
       msg("You close the lid. 'Thank you for your custom!' says the box. It starts to shake violently then leaps into the air, rapidly disappearing from sight.")
@@ -672,8 +672,8 @@ createItem("postit_note", TAKEABLE(), {
   examine:"The sticky yellow note has something written on it; the number {show:computer:code}.",
   read:"The post-it note just has six digits written on it: {show:computer:code}.",
   loc:'office',
-  heldVerbsX:["Read"], 
-  hereVerbsX:["Read"], 
+  heldVerbs:["Read"], 
+  hereVerbs:["Read"], 
   scenery:true,
 })
 

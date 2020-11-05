@@ -10,7 +10,6 @@ createItem("all_tool",
   { 
     loc:"me",
     alias:"AllTool",
-    getVerbs:function() { return ["Examine", "Use"]; },
     examine: "Your AllTool is a high-spec version of the device. You can use it to access numerous databases and IT systems, as well as controlling certain drones and make cyber attacks. For reasons that I am sure are obvious, you would need to go to a terminal to read your e-mails.|[Do USE ALLTOOL to look things up on it.]",
     getTopics:npc_utilities.getTopics,
     use:npc_utilities.talkto,
