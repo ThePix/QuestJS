@@ -38,7 +38,7 @@ settings.status = [
   function() { return settings.statusReport(w.Ostap) },
   function() { return settings.statusReport(w.Aada) },
   function() { return settings.oxygenReport() },
-  function() { return '<td colspan="3" style="border:black solid 1px" align="center" title="The current date and time (adjusted for relativistic effects)">' + getDateTime() + '</td>' },
+  function() { return '<td colspan="3" style="border:black solid 1px" align="center" title="The current date and time (adjusted for relativistic effects)">' + util.getDateTime() + '</td>' },
 ];
 
 

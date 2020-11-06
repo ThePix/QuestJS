@@ -27,6 +27,48 @@ settings.output = function(report) {
 }
 
 
+
+
+settings.dateTime = {
+  startTime:1000000,
+  data:[
+    { name:'seconds', number:60 },
+    { name:'minutes', number:60, f:function(n) { return n < 10 ? '0' + n : '' + n }, f2:function(n, time) {
+      time = time % 24
+      console.log(time)
+      if (n === 0 && time === 0) return 'midnight'
+      if (n === 0 && time === 12) return 'noon'
+      return time < 12 ? 'am' : 'pm' } 
+    },
+    { name:'hours', number:24, f:function(n) { return n < 13 ? n : (n - 12) }, },
+    { name:'days', number:370, f:function(n) { return settings.dateTime.dateString(n) }, },
+    { name:'years', number:999999 },
+  ],
+  format:'%days%, %years%, %hours%:%minutes% %minutes2%',
+  months:[
+    { name:'January', n:31},
+    { name:'February', n:28},
+    { name:'March', n:31},
+    { name:'April', n:30},
+    { name:'May', n:31},
+    { name:'June', n:30},
+    { name:'July', n:31},
+    { name:'August', n:31},
+    { name:'September', n:30},
+    { name:'October', n:31},
+    { name:'November', n:30},
+    { name:'December', n:31},
+  ],
+  dateString:function(day) {
+    for (let el of settings.dateTime.months) {
+      if (el.n > day) return (day + 1) + ' ' + el.name
+      day -= el.n
+    }
+  },
+}
+
+
+
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
