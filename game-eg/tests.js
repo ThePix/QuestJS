@@ -3,9 +3,9 @@
 test.tests = function() {
   
   test.title("parser.scoreObjectMatch");
-  test.assertEqual(60, parser.scoreObjectMatch("me", w.me, ""));
-  test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.me, ""));
-  test.assertEqual(-1, parser.scoreObjectMatch("xme", w.me, ""));
+  test.assertEqual(55, parser.scoreObjectMatch("me", w.Buddy, ""));
+  test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.Buddy, ""));
+  test.assertEqual(-1, parser.scoreObjectMatch("xme", w.Buddy, ""));
   test.assertEqual(60, parser.scoreObjectMatch("flashlight", w.flashlight, ""));
   test.assertEqual(16, parser.scoreObjectMatch("f", w.flashlight, ""));
   test.assertEqual(18, parser.scoreObjectMatch("fla", w.flashlight, ""));
@@ -23,8 +23,8 @@ test.tests = function() {
   test.assertEqual("book", lang.getName(w.book));
   test.assertEqual("the book", lang.getName(w.book, {article:DEFINITE}));
   test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
-  test.assertEqual("you", lang.getName(w.me));
-  test.assertEqual("You", lang.getName(w.me, {article:INDEFINITE, capital:true}));
+  test.assertEqual("you", lang.getName(w.Buddy));
+  test.assertEqual("You", lang.getName(w.Buddy, {article:INDEFINITE, capital:true}));
   
   
   test.title("random.fromArray");
@@ -177,7 +177,7 @@ test.tests = function() {
   test.title("Text processor 5");
   test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:'Kyle'}));
   test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:w.Kyle}));
-  test.assertEqual("Kyle is your bear.", processText("{nv:Kyle:be} {pa:me} bear."));
+  test.assertEqual("Kyle is your bear.", processText("{nv:Kyle:be} {pa:Buddy} bear."));
   test.assertEqual("Kyle is her bear.", processText("{nv:Kyle:be} {pa:Lara} bear."));
   test.assertEqual("There is Kyle.", processText("There is {nm:chr:a}.", {chr:w.Kyle}));
   test.assertEqual("There is a book.", processText("There is {nm:chr:a}.", {chr:w.book}));
@@ -191,9 +191,9 @@ test.tests = function() {
   test.assertEqual("Kyle is a bear.", processText("{Kyle.alias} is a bear."));
   test.assertEqual("Kyle is a bear.", processText("{show:Kyle:alias} is a bear."));
   test.assertEqual("Kyle is a bear.", processText("{Kyle:alias} is a bear."));
-  test.assertEqual("You have $10.", processText("You have ${show:me:money}."));
+  test.assertEqual("You have $10.", processText("You have ${show:Buddy:money}."));
   test.assertEqual("You have $10.", processText("You have ${player.money}."));
-  test.assertEqual("You have $10.", processText("You have ${me.money}."));
+  test.assertEqual("You have $10.", processText("You have ${Buddy.money}."));
   test.assertEqual("You have $10.", processText("You have ${player.money}."));
 
 
@@ -298,6 +298,7 @@ test.tests = function() {
   test.assertCmd("put 2 bricks on to the table", "Done.");
   test.assertCmd("inv", "You are carrying five bricks and a knife.");
   test.assertCmd("look", ["The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with two bricks and a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
+  
   test.assertCmd("get the bricks", "You take two bricks.");
   test.assertCmd("get clock", "You take the clock.");
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
@@ -328,7 +329,9 @@ test.tests = function() {
   test.assertCmd("get bricks from box", "Done.");
   test.assertCmd("drop three bricks in box", "Done.");
   test.assertCmd("drop bricks", "You drop four bricks.");
+  
   test.assertCmd("get bricks", "You take four bricks.");
+  
   test.assertCmd("get bricks", "You take three bricks.");
   test.assertCmd("drop box", "You drop the cardboard box.");
   
@@ -695,22 +698,22 @@ test.tests = function() {
   test.title("rope - room one");
   test.assertEqual(['conservatory'], w.rope.locs)
   test.assertCmd("get rope", ['You take the rope.'])
-  test.assertEqual(['me'], w.rope.locs)
+  test.assertEqual(['Buddy'], w.rope.locs)
   test.assertCmd("x rope", ['The rope is about 40\' long.'])
   test.assertCmd("tie rope to chair", ["You tie the rope to the broken chair."])
-  test.assertEqual(['conservatory', 'me'], w.rope.locs)
+  test.assertEqual(['conservatory', 'Buddy'], w.rope.locs)
   test.assertCmd("x rope", ["The rope is about 40' long. One end is tied to the broken chair. The other end is held by you."])
   
   test.assertCmd("tie rope to chair", ["It already is."])
   test.assertCmd("untie rope from chair", ["You untie the rope from the broken chair."])
   test.assertCmd("untie rope from chair", ["The rope is not tied to the broken chair."])
-  test.assertEqual(['me'], w.rope.locs)
+  test.assertEqual(['Buddy'], w.rope.locs)
   test.assertCmd("tie rope to chair", ["You tie the rope to the broken chair."])
-  test.assertEqual(['conservatory', 'me'], w.rope.locs)
+  test.assertEqual(['conservatory', 'Buddy'], w.rope.locs)
 
   test.title("rope - room two");
   test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
-  test.assertEqual(['conservatory', 'garden', 'me'], w.rope.locs)
+  test.assertEqual(['conservatory', 'garden', 'Buddy'], w.rope.locs)
   test.assertCmd("tie rope to crate", ["That is not something you can tie the rope to."])
   test.assertCmd("untie rope from crate", ["The rope is not tied to the crate."])
   
@@ -730,7 +733,7 @@ test.tests = function() {
   
   test.assertCmd("untie rope from chair", ["You untie the rope from the broken chair."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
-  test.assertEqual(['me', 'conservatory', 'garden'], w.rope.locs)
+  test.assertEqual(['Buddy', 'conservatory', 'garden'], w.rope.locs)
   
   test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."])
   
@@ -738,20 +741,20 @@ test.tests = function() {
   
   test.assertCmd("i", ["You are carrying a flashlight, a garage key, a rope and a suit (worn)."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the conservatory."])
-  test.assertEqual(['me', 'lounge', 'conservatory', 'garden'], w.rope.locs)
+  test.assertEqual(['Buddy', 'lounge', 'conservatory', 'garden'], w.rope.locs)
   
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
-  test.assertEqual(['me', 'conservatory', 'garden'], w.rope.locs)
+  test.assertEqual(['Buddy', 'conservatory', 'garden'], w.rope.locs)
   
 
 
 
   
   test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate, Lara and a rope here.", "You can go east or west."]);
-  test.assertEqual(['me', 'garden'], w.rope.locs)
+  test.assertEqual(['Buddy', 'garden'], w.rope.locs)
   test.assertCmd("untie rope", ["You untie the rope from the hook."])
-  test.assertEqual(['me'], w.rope.locs)
+  test.assertEqual(['Buddy'], w.rope.locs)
 
   test.assertCmd("drop rope", ["You drop the rope."])
 
@@ -764,7 +767,7 @@ test.tests = function() {
   
   
   
-  w.me.money = 20
+  w.Buddy.money = 20
 
   test.title("shop - text processor");
   test.assertEqual("The carrot is $0,02", processText("The carrot is {money:carrot}"))
@@ -782,40 +785,40 @@ test.tests = function() {
   test.assertEqual(false, parser.isForSale(w.carrot0))
   test.assertEqual(false, w.carrot0.isForSale(game.player.loc))
   test.assertCmd("buy carrot", ["You buy the carrot for $0,02."]);
-  test.assertEqual(16, w.me.money)
+  test.assertEqual(16, w.Buddy.money)
   test.assertCmd("buy flashlight", ["You can't buy it."]);
   test.assertCmd("buy trophy", ["You buy the trophy for $0,15."]);
-  test.assertEqual(1, w.me.money)
+  test.assertEqual(1, w.Buddy.money)
   test.assertEqual(true, parser.isForSale(w.carrot))
   //console.log("----------------------");
   test.assertEqual(false, parser.isForSale(w.trophy))
   test.assertCmd("buy trophy", ["You can't buy the trophy here - probably because you are already holding it."]);
   test.assertCmd("buy carrot", ["You can't afford the carrot (need $0,02)."]);
-  test.assertEqual(1, w.me.money)
+  test.assertEqual(1, w.Buddy.money)
   
   delete w.carrot0.loc
   
   test.title("shop - sell");
   test.assertCmd("sell carrot", ["You can't sell the carrot here."]);
-  test.assertEqual(1, w.me.money)
+  test.assertEqual(1, w.Buddy.money)
   test.assertCmd("sell trophy", ["You sell the trophy for $0,08."]);
-  test.assertEqual(9, w.me.money)
+  test.assertEqual(9, w.Buddy.money)
 
   test.assertCmd("sell trophy", ["You don't have it."]);
-  test.assertEqual(9, w.me.money)
-  w.me.money = 20
+  test.assertEqual(9, w.Buddy.money)
+  w.Buddy.money = 20
   w.shop.sellingDiscount = 20
-  test.assertEqual(12, w.trophy.getBuyingPrice(w.me))
+  test.assertEqual(12, w.trophy.getBuyingPrice(w.Buddy))
   
   test.assertCmd("buy trophy", ["You buy the trophy for $0,12."]);
-  test.assertEqual(8, w.me.money)
+  test.assertEqual(8, w.Buddy.money)
   w.shop.buyingValue = 80
   test.assertCmd("sell trophy", ["You sell the trophy for $0,12."]);
-  test.assertEqual(20, w.me.money)
+  test.assertEqual(20, w.Buddy.money)
   
   test.title("the zone - visible barrier and simple exit");
   test.assertCmd("s", ["You head south.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
-  test.assertCmd("w", ["You head west.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can see a Piggy-suu here.", "You can go east or west."]);
   // Takes us to 5,0
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
     // Takes us to 4,0  
@@ -832,7 +835,7 @@ test.tests = function() {
   test.assertCmd("n", ["You head north.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
   // Takes us to 5,0
   test.assertCmd("e", ["You head east.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
-  test.assertCmd("e", ["You start across the bridge.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."]);
+  test.assertCmd("e", ["You start across the bridge.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can see a Piggy-suu here.", "You can go east or west."]);
   // Takes us to 5,0
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
   
@@ -877,13 +880,30 @@ test.tests = function() {
   
   test.assertCmd("n", ["You head north.", "The shop", "A funny little shop.", "You can go south."]);
   test.assertCmd("s", ["You head south.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
-  test.assertCmd("w", ["You head west.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can see a Piggy-suu here.", "You can go east or west."]);
   // Takes us to 5,0
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
   
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."]);
   
-  test.assertCmd("get carrot", ["You take the carrot."]);
+  test.assertCmd("get carrot", ["You take the carrot."])
+
+
+  test.title("changing POV prep")
+  test.assertCmd("e", ["You head east.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
+  test.assertCmd("e", ["You start across the bridge.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can see a Piggy-suu here.", "You can go east or west."]);
+  test.assertCmd("e", ["You head east.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
+  test.assertCmd("drop carrot", ["You drop the carrot."])
+  
+  test.title("changing POV")
+  util.changePOV(w.piggy_suu)
+  test.assertCmd("l", ["The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."])
+  test.assertCmd("e", ["You head east.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can see Buddy (holding a flashlight and a garage key; wearing a suit) and a carrot here.", "You can go east, north or west."]);
+  //test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."])  
+  //test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."])
+  
+  
+  
   
   
   

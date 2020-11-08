@@ -3,19 +3,19 @@
 
 
   
-createItem("me", PLAYER(), { 
+createItem("Buddy", NPC(false), { 
   loc:"lounge",
-  regex:/^(me|myself|player)$/,
   money:10,
-  examine:function(isMultiple) {
-    msg(prefix(this, isMultiple) + "A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
-  },
-});
+  properName:true,
+  examine:'An orangutan!',
+})
+
+
 
 
 createItem("knife",
   TAKEABLE(),
-  { loc:"me", sharp:false,
+  { loc:"Buddy", sharp:false,
     examine:function(isMultiple) {
       if (this.sharp) {
         msg(prefix(this, isMultiple) + "A really sharp knife.");
@@ -30,7 +30,7 @@ createItem("knife",
       return false;
     },
   }
-);
+)
 
 
 
@@ -48,6 +48,7 @@ createRoom("lounge", {
 });
 
 
+  util.changePOV(w.Buddy)
 
 
 
@@ -1066,4 +1067,15 @@ createRoom("inside_tower", {
     game.player.positionY = 3
   },
 })
+
+
+
+createItem("piggy_suu", NPC(true), { 
+  loc:"bridge",
+  alias:'Piggy-suu',
+  money:10,
+  examine:'Piggy-suu is a pig.',
+})
+
+
 
