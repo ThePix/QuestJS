@@ -14,7 +14,7 @@ const lang = {
   // Meta commands
   MetaHelp:/^help$|^\?$/,
   MetaHint:/^(?:hint|clue)s?$/,
-  MetaCredits:/^about$|^credits?$/,
+  MetaCredits:/^about$|^credits?$|^version$/,
   MetaDarkMode:/^(?:dark|dark mode|toggle dark|toggle dark mode)$/,
   MetaWarnings:/^warn(?:ing|ings|)$/,
   MetaImages:/^images$/,
@@ -477,7 +477,7 @@ const lang = {
   },
 
   aboutScript:function() {
-    metamsg("{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6.", {settings:settings});
+    metamsg("{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6 AKA Quest JS version {param:settings:questVersion}.", {settings:settings});
     if (settings.thanks && settings.thanks.length > 0) {
       metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".");
     }
