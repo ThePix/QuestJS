@@ -48,7 +48,7 @@ createRoom("lounge", {
 });
 
 
-  util.changePOV(w.Buddy)
+util.changePOV(w.Buddy)
 
 
 

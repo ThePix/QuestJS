@@ -30,21 +30,14 @@ settings.output = function(report) {
 
 
 settings.dateTime = {
-  startTime:1000000,
+  startTime:1000000000,
   data:[
-    { name:'seconds', number:60 },
-    { name:'minutes', number:60, f:function(n) { return n < 10 ? '0' + n : '' + n }, f2:function(n, time) {
-      time = time % 24
-      console.log(time)
-      if (n === 0 && time === 0) return 'midnight'
-      if (n === 0 && time === 12) return 'noon'
-      return time < 12 ? 'am' : 'pm' } 
-    },
-    { name:'hours', number:24, f:function(n) { return n < 13 ? n : (n - 12) }, },
-    { name:'days', number:370, f:function(n) { return settings.dateTime.dateString(n) }, },
-    { name:'years', number:999999 },
+    { name:'second', number:60 },
+    { name:'minute', number:60 },
+    { name:'hour', number:24 },
+    { name:'day', number:365 },
+    { name:'year', number:999999 },
   ],
-  format:'%days%, %years%, %hours%:%minutes% %minutes2%',
   months:[
     { name:'January', n:31},
     { name:'February', n:28},
@@ -59,11 +52,31 @@ settings.dateTime = {
     { name:'November', n:30},
     { name:'December', n:31},
   ],
-  dateString:function(day) {
-    for (let el of settings.dateTime.months) {
-      if (el.n > day) return (day + 1) + ' ' + el.name
-      day -= el.n
-    }
+  days:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+  formats:{
+    def:'%dayOfWeek% %dayOfYear%, %year%, %hour%:%minute% %ampm%',
+    time:'%hour%:%minute% %ampm%',
+  },
+  functions:{
+    dayOfWeek:function(dict) { 
+      return settings.dateTime.days[(dict.day + 365 * dict.year) % settings.dateTime.days.length] 
+    },
+    dayOfYear:function(dict) {
+      let day = dict.day
+      for (let el of settings.dateTime.months) {
+        if (el.n > day) return (day + 1) + ' ' + el.name
+        day -= el.n
+      }
+      return 'failed'
+    },
+    year:function(dict) { return 'AD ' + (dict.year + 1000) },
+    hour:function(dict) { return dict.hour < 13 ? dict.hour : (dict.hour - 12) },
+    minute:function(dict) { return dict.minute < 10 ? '0' + dict.minute : dict.minute },
+    ampm:function(dict) {
+      if (dict.minute === 0 && dict.hour === 0) return 'midnight'
+      if (dict.minute === 0 && dict.hour === 12) return 'noon'
+      return dict.hour < 12 ? 'am' : 'pm'
+    },
   },
 }
 
