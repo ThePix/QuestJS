@@ -32,17 +32,7 @@ settings.mapStyle = {
   top:'0',
   width:'400px',
   height:'400px',
-  'background-color':'#ddd', 
   border:'3px black solid',
-}
-settings.mapArrowsStyle = {
-  fill:'red', 
-  stroke:'#000000', 
-  'stroke-width':'0.264583px',
-  'stroke-linecap':'butt',
-  'stroke-linejoin':'miter', 
-  'stroke-opacity':0.5, 
-  opacity:0.5
 }
 settings.mapMarker = function(loc) {
   return map.polygon(loc, [
