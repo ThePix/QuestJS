@@ -10,6 +10,7 @@ settings.playMode = "dev"
 settings.symbolsForCompass = true
 
 settings.libraries.push('image-map')
+settings.libraries.push('quest')
 
 settings.mapImages = [
   {
