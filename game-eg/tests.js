@@ -231,6 +231,17 @@ test.tests = function() {
   test.assertEqual("down", getDir("dn"));
   test.assertEqual("out", getDir("exit"));
   test.assertEqual(false, getDir("bo"));
+  
+  
+  test.title("date time")
+  test.assertEqual("14 Feb 2019, 09:43", util.getDateTime())
+  const dateTimeDict = util.getDateTimeDict()
+  test.assertEqual("February", dateTimeDict.month)
+  test.assertEqual(9, dateTimeDict.hour)
+  test.assertEqual("It is 14 Feb 2019, 09:43", processText("It is {dateTime}"));
+  test.assertEqual("-Two-Three-", processText("{hour:3:8:One}-{hour:5:10:Two}-{hour:9:10:Three}-{hour:10:99:Four}"));
+
+
 
 
   test.title("Look inside");

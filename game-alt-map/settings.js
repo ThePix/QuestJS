@@ -12,6 +12,19 @@ settings.symbolsForCompass = true
 settings.libraries.push('image-map')
 settings.libraries.push('quest')
 
+settings.status = [
+  function() { return '<td>Health points:</td><td>' + game.player.hitpoints + '</td>' },
+  function() { return '<td colspan="2">' + util.getDateTime() + '</td>' },
+]
+
+settings.roomTemplate = [
+  "#{cap:{hereName}}",
+  "{hereDesc}",
+  "{npcStatus}",
+  "{objectsHere:You can see {objects} here.}",
+]
+
+
 settings.mapImages = [
   {
     name:'Halmuth',
@@ -49,3 +62,52 @@ settings.mapPointsOfInterest = [
 ]
 
 
+
+
+settings.dateTime = {
+  startTime:1000000000,
+  data:[
+    { name:'second', number:60 },
+    { name:'minute', number:60 },
+    { name:'hour', number:24 },
+    { name:'day', number:235 },
+    { name:'year', number:999999 },
+  ],
+  months:[
+    { name:'Jansi', n:25},
+    { name:'Febsi', n:24},
+    { name:'Marisi', n:27},
+    { name:'Apris', n:23},
+    { name:'Mays', n:25},
+    { name:'Junsi', n:24},
+    { name:'Julesi', n:20},
+    { name:'Augustes', n:23},
+    { name:'Setvensi', n:24},
+  ],
+  days:['Day of the Moon', 'Day of the Song', 'Day of the Mother', 'Day of the Hearth', 'Day of the Fish', 'Day of the Father', 'Day of the Sun'],
+  formats:{
+    def:'%dayOfYear%, %year%, %hour%:%minute% %ampm%',
+    time:'%hour%:%minute% %ampm%',
+  },
+  functions:{
+    dayOfWeek:function(dict) { 
+      return settings.dateTime.days[(dict.day + 365 * dict.year) % settings.dateTime.days.length] 
+    },
+    dayOfYear:function(dict) {
+      let day = dict.day
+      for (let el of settings.dateTime.months) {
+        if (el.n > day) return (day + 1) + ' ' + el.name
+        day -= el.n
+      }
+      return 'failed'
+    },
+    year:function(dict) { return dict.year + 1325 },
+    hour:function(dict) { return dict.hour < 13 ? dict.hour : (dict.hour - 12) },
+    minute:function(dict) { return dict.minute < 10 ? '0' + dict.minute : dict.minute },
+    ampm:function(dict) {
+      if (dict.minute === 0 && dict.hour === 0) return 'midnight'
+      if (dict.minute === 0 && dict.hour === 12) return 'noon'
+      return dict.hour < 12 ? 'am' : 'pm'
+    },
+  },
+}
