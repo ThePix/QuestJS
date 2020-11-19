@@ -240,6 +240,10 @@ test.tests = function() {
   test.assertEqual(9, dateTimeDict.hour)
   test.assertEqual("It is 14 Feb 2019, 09:43", processText("It is {dateTime}"));
   test.assertEqual("-Two-Three-", processText("{hour:3:8:One}-{hour:5:10:Two}-{hour:9:10:Three}-{hour:10:99:Four}"));
+  test.assertEqual(9, util.seconds(9))
+  test.assertEqual(127, util.seconds(7, 2))
+  test.assertEqual(127 + 3 * 3600, util.seconds(7, 2, 3))
+  test.assertEqual(127 + 3 * 3600 + 2 * 24 * 3600, util.seconds(7, 2, 3, 2))
 
 
 
