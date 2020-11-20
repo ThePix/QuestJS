@@ -245,6 +245,10 @@ test.tests = function() {
   test.assertEqual(127 + 3 * 3600, util.seconds(7, 2, 3))
   test.assertEqual(127 + 3 * 3600 + 2 * 24 * 3600, util.seconds(7, 2, 3, 2))
 
+  test.assertEqual(true, util.isAfter('February 14, 2019 09:42:00'))
+  test.assertEqual(false, util.isAfter('February 14, 2019 09:43:00'))
+  test.assertEqual(false, util.isAfter('0943'))
+  test.assertEqual(true, util.isAfter('0942'))
 
 
 
@@ -913,9 +917,13 @@ test.tests = function() {
   test.title("changing POV")
   util.changePOV(w.piggy_suu)
   test.assertCmd("l", ["The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."])
-  test.assertCmd("e", ["You head east.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can see Buddy (holding a flashlight and a garage key; wearing a suit) and a carrot here.", "You can go east, north or west."]);
-  //test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."])  
-  //test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can see a carrot here.", "You can go east, north, northeast, northwest, south, southwest or west."])
+  test.assertCmd("e", ["You head east.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can see Buddy (holding a flashlight and a garage key; wearing a suit) and a carrot here.", "You can go east, north or west."])
+
+  test.title("quests")
+  test.assertCmd("talk to buddy", ["'Hey, Buddy,' you say.", "'Hey yourself! Say, could you get me a carrot?'","Quest started: <i>A carrot for Buddy</i>", "Go find a carrot."])
+  let res = quest.getState('A carrot for Buddy', w.Buddy)
+  test.assertEqual(0, res.progress)
+  test.assertEqual(quest.ACTIVE, res.state)
   
   
   

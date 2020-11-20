@@ -16,7 +16,7 @@ settings.textEffectDelay = 100
 
 settings.imagesFolder = 'images/'
 settings.libraries.push('zone')
-//settings.libraries.push('node-map')
+settings.libraries.push('quest')
 
 settings.status = [
   "hitpoints",

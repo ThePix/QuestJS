@@ -5,7 +5,10 @@
 
 
 
-
+quest.create('A carrot for Buddy', [
+  {text:'Go find a carrot.'},
+  {text:'Give the carrot to Buddy.'},
+])
 
 
 

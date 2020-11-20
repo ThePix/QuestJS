@@ -8,6 +8,19 @@ createItem("Buddy", NPC(false), {
   money:10,
   properName:true,
   examine:'An orangutan!',
+  talkto:function() {
+    const res = quest.getState('A carrot for Buddy', this)
+    console.log(res)
+    if (!res.status) {
+      msg("'Hey, Buddy,' you say.")
+      msg("'Hey yourself! Say, could you get me a carrot?'")
+      quest.start('A carrot for Buddy')
+    }
+    else {
+      msg("'Hey, Buddy,' you say.")
+      msg("'Hey yourself! Where is that carrot?'")
+    }
+  },
 })
 
 
