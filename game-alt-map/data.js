@@ -52,14 +52,28 @@ createItem("street_preacher", NPC(false), {
 
 
 createRoom("wheat_road", {
-  desc:"The east side of Halmuth is the poorer side of the city. The tenement blocks on either are run down. Many have small shops or workshops on the ground floor, offering cheap goods of variable quality. Thandros' Arms and Armpour to the northwest and Madame Rel's Little Shop of Wonders to the south catch your eye; the brothel to the southeast certainly does not! The upper floors are fronted by balconies, that are often bedecked with flowers or banners. To the northeast, on the corner of Tuppenny Lane, you see the gates of the Aether and Flux Company; towering over the wall are the condensers, focal towers and retorts.",
+  desc:"The east side of Halmuth is the poorer side of the city. The tenement blocks on either are run down. Many have small shops or workshops on the ground floor, offering cheap goods of variable quality. Thandros' Arms and Armour to the northwest and Madame Rel's Little Shop of Wonders to the south catch your eye; the brothel to the southeast certainly does not! The upper floors are fronted by balconies, that are often bedecked with flowers or banners. To the northeast, on the corner of Tuppenny Lane, you see the gates of the Aether and Flux Company; towering over the wall are the condensers, focal towers and retorts.",
   west:new Exit('market_square'),
   south:new Exit('quayside_east'),
   east:new Exit('granite_bridge'),
+  northwest:new Exit('madame_rels', {isUnlocked:util.openingTimes}),
   mapX:666,
   mapY:532,
   mapRegion:'Halmuth',
 })
+
+createRoom("madame_rels", {
+  alias:"Madame Rel's Little Shop of Wonders",
+  properName:true,
+  desc:".",
+  southeast:new Exit('wheat_road'),
+  mapX:666,
+  mapY:532,
+  mapRegion:'Halmuth',
+})
+
+
+
 
 
 createRoom("merchants_street", {

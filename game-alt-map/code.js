@@ -12,6 +12,15 @@ quest.create('Charm for Tary', [
 
 
 
+util.openingTimes = function () {
+  if (util.isAfter('1700')) return falsemsg('The business is now closed.')
+  if (!util.isAfter('0800')) return falsemsg('The business closed until eight.')
+  return true
+}
+    
+
+
+
 tp.addDirective("timeOfDayComment", function(arr, params) {
   const time = util.getCustomDateTimeDict({})
   const location = w[game.player.loc]
@@ -25,7 +34,6 @@ tp.addDirective("timeOfDayComment", function(arr, params) {
 })
   
 tp.addDirective("npcStatus", function(arr, params) {
-  console.log("npcStatus")
   const result = []
   for (let el of scopeAllNpcHere()) {
     console.log(el.name)
@@ -37,9 +45,3 @@ tp.addDirective("npcStatus", function(arr, params) {
   return result.join('|')
 })
   
-tp.addDirective("hour", function(arr, params) {
-  const hour = util.getCustomDateTimeDict({}).time
-  if (hour < arr[0]) return ''
-  if (hour > arr[1]) return ''
-  return arr[2]
-})

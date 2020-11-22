@@ -11,6 +11,7 @@ settings.symbolsForCompass = true
 
 settings.libraries.push('image-map')
 settings.libraries.push('quest')
+settings.tests = true
 
 settings.status = [
   function() { return '<td>Health points:</td><td>' + game.player.hitpoints + '</td>' },
@@ -66,6 +67,7 @@ settings.mapPointsOfInterest = [
 
 settings.dateTime = {
   startTime:1000000000,
+  secondsPerTurn:60,
   data:[
     { name:'second', number:60 },
     { name:'minute', number:60 },
