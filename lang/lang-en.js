@@ -758,21 +758,24 @@ const lang = {
       else if (options.article === INDEFINITE) {
         s += lang.addIndefiniteArticle(item, count)
       }
+      if (item.getAdjective) {
+        s += item.getAdjective()
+      }
       if (!count || count === 1) {
-        s += item.alias;
+        s += item.alias
       }
       else if (item.pluralAlias) {
-        s += item.pluralAlias;
+        s += item.pluralAlias
       }
       else {
-        s += item.alias + "s";
+        s += item.alias + "s"
       }
       if (options.possessive) {
         if (s.endsWith('s')) {
-          s += "'";
+          s += "'"
         }
         else { 
-          s += "'s";
+          s += "'s"
         }
       }
     }
