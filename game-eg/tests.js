@@ -297,6 +297,8 @@ test.tests = function() {
   
   test.title("Simple object commands (book)");
   test.assertCmd("get the book", "You take the book.");
+  test.assertCmd("wear book", "You can't wear it.");
+  test.assertCmd("remove book", "You're not wearing it.");
   test.assertCmd("read the book", "It is not in a language you understand.");
   test.assertCmd("give it to kyle", "Done.");
   test.assertCmd("kyle, read the book", "It is not in a language he understands.");
@@ -919,6 +921,8 @@ test.tests = function() {
   test.assertCmd("l", ["The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."])
   test.assertCmd("e", ["You head east.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can see Buddy (holding a flashlight and a garage key; wearing a suit) and a carrot here.", "You can go east, north or west."])
 
+
+/*
   test.title("quests")
   test.assertCmd("talk to buddy", ["'Hey, Buddy,' you say.", "'Hey yourself! Say, could you get me a carrot?'","Quest started: <i>A carrot for Buddy</i>", "Go find a carrot."])
   let res = quest.getState('A carrot for Buddy', w.Buddy)

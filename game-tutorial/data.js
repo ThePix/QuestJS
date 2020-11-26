@@ -149,11 +149,10 @@ createItem("cobwebs", {
   scenery:true,
 });
 
-createItem("old_newspaper", TAKEABLE(), {
+createItem("old_newspaper", TAKEABLE(), READABLE(), {
   examine:'A newspaper from the eighties; yellow with age.',
   read:'You spend a few minutes reading about what happens on the day 14th June 1987 (or perhaps the day before). A somewhat mocking article about an archaeologist, Dr Ruudhorn, and Atlantis catches your eye.',
   loc:'basement',
-  heldVerbsX:["Read"], 
 });
 
 createItem("rope", ROPE(false), {
@@ -250,7 +249,7 @@ createItem("grass", {
 
 
 
-createItem("box", CONTAINER(true), LOCKED_WITH([]), {
+createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
   examine:function() {
     const tpParams = {char:game.player, container:this}
     tpParams.list = this.listContents(world.LOOK)
@@ -264,7 +263,6 @@ createItem("box", CONTAINER(true), LOCKED_WITH([]), {
     hint.now('openBox')
     this.locked = false
   },
-  hereVerbs:["Read"], 
   closeMsg:function() {
     if (this.loc && w.hat.loc === 'box' && w.crowbar.loc !== 'box') {
       msg("You close the lid. 'Thank you for your custom!' says the box. It starts to shake violently then leaps into the air, rapidly disappearing from sight.")
@@ -334,7 +332,7 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
   loc:"shed",
   scenery:true,
   examine:"A small red torch.",
-  regex:/^torch$/, 
+  parserAltNames:['torch'],
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
@@ -667,13 +665,11 @@ createItem("painting", {
 })
 
 
-createItem("postit_note", TAKEABLE(), {
+createItem("postit_note", TAKEABLE(), READABLE(), {
   alias:'post-it note',
   examine:"The sticky yellow note has something written on it; the number {show:computer:code}.",
   read:"The post-it note just has six digits written on it: {show:computer:code}.",
   loc:'office',
-  heldVerbs:["Read"], 
-  hereVerbs:["Read"], 
   scenery:true,
 })
 

@@ -186,7 +186,7 @@ const walkthroughs = {
     "smash window", "hint",
     "out", "hint",
     "x rope",
-    "throw rope out window", "hint",
+    "throw rope out window", "hint",/*
     "tie rope to computer", "hint",
     "tie rope to desk", "hint",
     "x rope",
