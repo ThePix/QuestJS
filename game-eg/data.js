@@ -82,10 +82,9 @@ createRoom("hole", {
 
 
 
-createItem("book", TAKEABLE(), { 
+createItem("book", TAKEABLE(), READABLE(true), { 
   loc:"lounge",
   examine:"A leather-bound book.",
-  heldVerbs:["Read"], 
   read:function(isMultiple, char) {
     if (cmdRules.isHeld(null, char, this, isMultiple)) {
       if (char === w.Lara) {

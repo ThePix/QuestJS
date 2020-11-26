@@ -252,7 +252,7 @@ skills.add(new Spell("Cursed armour", {
   icon:'unarmour',
   tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
   modifyOutgoingAttack:function(attack) {
-    attack.armourModifier = (attack.armourModifier> 2 ? attack.armourModifier - 2 : 0)
+    attack.armourModifier = (attack.armourModifier > 2 ? attack.armourModifier - 2 : 0)
   },
 }))
 
