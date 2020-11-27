@@ -32,6 +32,11 @@ createItem("flail", WEAPON("2d10+4"), {
   image:"flail",
 });
 
+createItem("flaming_sword", WEAPON("3d6+2"), {
+  loc:"me",
+  image:"sword",
+  activeEffects:["Flaming weapon"],
+});
 
 
 createItem("ice_amulet", WEARABLE(4, ['neck']), {
@@ -164,10 +169,22 @@ skills.add(new Skill("Double attack", {
   },
 }))
 
+skills.add(new Effect("Flaming weapon", {
+  modifyOutgoingAttack:function(attack) {
+    attack.element = 'fire'
+  },
+}))
+
+skills.add(new Effect("Frost vulnerability", {
+  modifyIncomingAttack:function(attack) {
+    if (attack.element) attack.damageMultiplier *= 2
+  },
+}))
+
 skills.add(new Skill("Sweeping attack", {
   icon:"sword3", 
   tooltip:"Attack one foe for normal damage, and any other for 4 damage; at -3 to the attack roll for reach", 
-  getPrimaryTargets:getFoes,
+  getPrimaryTargets:rpg.getFoes,
   modifyOutgoingAttack:function(attack) {
     if (options.secondary) {
       attack.damageNumber = 0;
@@ -199,7 +216,7 @@ skills.add(new Spell("Fireball", {
   tooltip:"A fireball that fills the room (but does not affect you!)",
   primarySuccess:"{nv:target:reel:true} from the explosion.",
   primaryFailure:"{nv:target:ignore:true} it.",
-  getPrimaryTargets:getAll,
+  getPrimaryTargets:rpg.getAll,
   modifyOutgoingAttack:function(attack) {
     attack.element = "fire";
     attack.msg("The room is momentarily filled with fire.", 1)
@@ -236,7 +253,7 @@ skills.add(new Spell("Lightning bolt", {
   secondarySuccess:"A smaller bolt jumps {nms:attacker:the} target to {nm:target:the}!",
   primaryFailure:"A lightning bolt jumps from {nms:attacker:the} out-reached hand to {nm:target:the}, fizzling out before it can actually do anything.",
   secondaryFailure:"A smaller bolt jumps {nms:attacker:the} target, but entirely misses {nm:target:the}!",
-  getSecondaryTargets:getFoesBut,
+  getSecondaryTargets:rpg.getFoesBut,
   modifyOutgoingAttack:function(attack) {
     attack.element = "storm";
   },

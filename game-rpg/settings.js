@@ -10,7 +10,7 @@ settings.libraries.push('rpg')
 settings.statusPane = false;
 settings.tests = true
 settings.playMode = 'dev'
-settings.attackOutputLevel = 2
+settings.attackOutputLevel = 10
 settings.armourScaling = 10
 settings.noTalkTo = false
 settings.output = function(report) {
@@ -90,6 +90,9 @@ settings.setup = function() {
   game.player.skillsLearnt = ["Double attack", "Fireball"]
 
   settings.updateCustomUI()
+  
+  console.log(skills.findName("Flaming weapon"))
+  console.log(skills.findName("Fireball"))
   
 }
 
