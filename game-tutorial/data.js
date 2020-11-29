@@ -604,7 +604,7 @@ createItem("office_window", {
   outside:[],
   lookout:function() {
     let s = 'Out of the window you can see the street at the front of the house. Your black SUV is parked at the side on the road.'
-    if (this.outside.length > 0) s += ' On the street below the house you can see ' + formatList(this.outside, {article:DEFINITE, lastJoiner:' and '}) + '.'
+    if (this.outside.length > 0) s += ' On the street below the house you can see ' + formatList(this.outside, {article:DEFINITE, lastJoiner:lang.list_and}) + '.'
     msg(s)
   },
   smash:function() {

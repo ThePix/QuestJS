@@ -140,7 +140,7 @@ dungeon.decorateRoom = function(room, level, theme) {
     }
     else {
       room.desc += ' There are exits '
-      room.desc += formatList(exits.map(el => el.name), {lastJoiner:" and "})
+      room.desc += formatList(exits.map(el => el.name), {lastJoiner:lang.list_and})
       room.desc += '.'
     }
   }

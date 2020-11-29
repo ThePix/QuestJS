@@ -535,9 +535,9 @@ const lang = {
 
   // Misc
 
-  list_and:" and ",
+  list_and:"and",
   list_nothing:"nothing",
-  list_or:" or ",
+  list_or:"or",
   list_nowhere:"nowhere",
   never_mind:"Never mind.",
   default_description:"It's just scenery.",

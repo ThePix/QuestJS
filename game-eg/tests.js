@@ -123,6 +123,23 @@ test.tests = function() {
 
 
 
+
+  test.title("formatList")
+  test.assertEqual('', formatList([]))
+  test.assertEqual('nothing', formatList([], {nothing:'nothing'}))
+  test.assertEqual('one', formatList(['one']))
+  test.assertEqual('one, two', formatList(['one', 'two']))
+  test.assertEqual('one and two', formatList(['one', 'two'], {lastJoiner:'and'}))
+  test.assertEqual('one, three, two', formatList(['one', 'two', 'three']))
+  test.assertEqual('one, three and two', formatList(['one', 'two', 'three'], {lastJoiner:'and'}))
+  settings.oxfordComma = true
+  test.assertEqual('one', formatList(['one']))
+  test.assertEqual('one and two', formatList(['one', 'two'], {lastJoiner:'and'}))
+  test.assertEqual('one, three, and two', formatList(['one', 'two', 'three'], {lastJoiner:'and'}))
+  settings.oxfordComma = false
+
+
+
   test.title("Text processor 1");
   test.assertEqual("Simple text", processText("Simple text"));
   test.assertEqual("Simple <i>text</i>", processText("Simple {i:text}"));
