@@ -160,7 +160,7 @@ const walkthroughs = {
     "r,put r in r", "hint",
     "s", "hint",
     "w", "hint",
-    "press 3", "hint",
+    "press 3", "hint",/*
     "e", "hint",
     "sit on chair", "hint",
     "look out window", "hint",

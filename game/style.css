@@ -50,7 +50,7 @@ body {
 }
 
 
-.default-p, .tutorial {
+.default-p, .tutorial, .meta {
   text-align: justify;
   text-justify: inter-word;
 }

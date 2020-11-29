@@ -160,7 +160,6 @@ commands.unshift(new Cmd('EgMove', {
 }));
 
 findCmd('MetaHint').script = function() {
-  console.log('here')
   if (w[game.player.loc].hint) {
     metamsg(w[game.player.loc].hint);
   }

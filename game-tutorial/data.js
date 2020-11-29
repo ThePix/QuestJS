@@ -767,7 +767,7 @@ createItem("computer", {
 createRoom("lift", TRANSIT("east"), {
   regex:/elevator/,
   desc:function() {
-    return "The lift is small; according the plaque it is limited to just three people. There are three buttons, labelled one to three."
+    return "The lift is small; according the plaque it is limited to just three people. There are three buttons, labelled one to three. A label above indicates the lift is at \"{transitDest}\"."
   },
   east:new Exit("laboratory"),
   afterFirstEnter:function() {
@@ -798,6 +798,7 @@ createItem("button_3", TRANSIT_BUTTON("lift"), {
   alias:"Button: 3",
   examine:"A button with the letter 3 on it.",
   transitDest:"office",
+  title:'Level 3: Office',
   transitAlreadyHere:"You press the button; nothing happens.",
   transitGoToDest:"You press the button; the door closes and the lift ascends.",
 })
@@ -805,6 +806,7 @@ createItem("button_3", TRANSIT_BUTTON("lift"), {
 createItem("button_2", TRANSIT_BUTTON("lift"), {
   alias:"Button: 2",
   examine:"A button with the letter 2 on it.",
+  title:'Level 2: Lounge',
   transitDest:"lounge",
   transitAlreadyHere:"You press the button; nothing happens.",
   transitGoToDest:"You press the button; the door closes and the lift moves.",
@@ -813,6 +815,7 @@ createItem("button_2", TRANSIT_BUTTON("lift"), {
 createItem("button_1", TRANSIT_BUTTON("lift"), {
   alias:"Button: 1",
   examine:"A button with the letter 1 on it.",
+  title:'Level 1: Laboratory',
   transitDest:"laboratory",
   transitAlreadyHere:"You press the button; nothing happens.",
   transitGoToDest:"You press the button; the door closes and the lift descends.",

@@ -67,9 +67,6 @@ createRoom("madame_rels", {
   properName:true,
   desc:".",
   southeast:new Exit('wheat_road'),
-  mapX:666,
-  mapY:532,
-  mapRegion:'Halmuth',
 })
 
 

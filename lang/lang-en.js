@@ -7,133 +7,133 @@
 
 const lang = {
 
+    regex:{
+    //----------------------------------------------------------------------------------------------
+    // Regular Expressions for Commands
+    
+    // Meta commands
+    MetaHelp:/^help$|^\?$/,
+    MetaHint:/^(?:hint|clue)s?$/,
+    MetaCredits:/^about$|^credits?$|^version$/,
+    MetaDarkMode:/^(?:dark|dark mode|toggle dark|toggle dark mode)$/,
+    MetaWarnings:/^warn(?:ing|ings|)$/,
+    MetaImages:/^images$/,
+    MetaSilent:/^(?:sh|silent)$/,
+    MetaSpoken:/^spoken$/,
+    MetaIntro:/^intro$/,
+    MetaBrief:/^brief$/,
+    MetaTerse:/^terse$/,
+    MetaVerbose:/^verbose$/,
+    MetaTranscript:/^transcript$|^script$/,
+    MetaTranscriptOn:/^transcript on$|^script on$/,
+    MetaTranscriptOff:/^transcript off$|^script off$/,
+    MetaTranscriptClear:/^transcript clear$|^script clear$|^transcript delete$|^script delete$/,
+    MetaTranscriptShow:/^transcript show$|^script show$/,
+    MetaTranscriptShowWithOptions:/^(?:transcript|script) show (\w+)$/,
+    MetaTranscriptToWalkthrough:/^(?:transcript|script) (?:w|wt|walk|walkthrough)$/,
+    MetaPlayerComment:/^\*(.+)$/,
+    MetaSave:/^save$/,
+    MetaSaveGame:/^(?:save) (.+)$/,
+    MetaLoad:/^reload$|^load$/,
+    MetaLoadGame:/^(?:load|reload) (.+)$/,
+    MetaDir:/^dir$|^directory$/,
+    MetaDeleteGame:/^(?:delete|del) (.+)$/,
+    
+    // Misc
+    Undo:/^undo$/,
+    Look:/^l$|^look$/,
+    Exits:/^exits$/,
+    Wait:/^wait$|^z$/,
+    TopicsNote:/^topics?$/,
+    Inv:/^inventory$|^inv$|^i$/,
+    Map:/^map$/,
+    Smell:/^smell$|^sniff$/,
+    Listen:/^listen$/,
+    PurchaseFromList:/^buy$|^purchase$/,
+    
+    // Use item
+    Examine:/^(?:examine|exam|ex|x) (.+)$/,
+    LookAt:/^(?:look at|look|l) (.+)$/,
+    LookOut:/^(?:look out of|look out) (.+)$/,
+    LookBehind:/^(?:look behind|check behind) (.+)$/,
+    LookUnder:/^(?:look under|check under) (.+)$/,
+    LookInside:/^(?:look inside) (.+)$/,
+    Search:/^(?:search) (.+)$/,
+    Take:/^(?:take|get|pick up|t) (.+)$/,
+    Drop:/^(?:drop|d) (.+)$/,
+    Wear2:/^put (?:my |your |his |her |)(.+) on$/,
+    Wear:/^(?:wear|don|put on) (?:my |your |his |her |)(.+)$/,
+    Remove:/^(?:remove|doff|take off) (?:my |your |his |her |)(.+)$/,
+    Remove2:/^take (?:my |your |his |her |)(.+) off$/,
+    Read:/^(?:read|r) (.+)$/,
+    SmellItem:/^(?:smell|sniff) (.+)$/,
+    ListenToItem:/^(?:listen to|listen) (.+)$/,
+    Purchase:/^(?:purchase|buy) (.+)$/,
+    Sell:/^(?:sell) (.+)$/,
+    Smash:/^(?:smash|break|destroy) (.+)$/,
+    SwitchOn:/^(?:turn on|switch on) (.+)$/,
+    SwitchOn2:/^(?:turn|switch) (.+) on$/,
+    SwitchOff2:/^(?:turn|switch) (.+) off$/,
+    SwitchOff:/^(?:turn off|switch off) (.+)$/,
+    Open:/^(?:open) (.+)$/,
+    Close:/^(?:close) (.+)$/,
+    Lock:/^(?:lock) (.+)$/,
+    Unlock:/^(?:unlock) (.+)$/,
+    Push:/^(?:push|press) (.+)$/,
+    Pull:/^(?:pull) (.+)$/,
+    Fill:/^(?:fill) (.+)$/,
+    Empty:/^(?:empty) (.+)$/,
+    Eat:/^(eat|feed on|feed|partake of|partake|dine on|dine) (.+)$/,
+    Drink:/^(drink|imbibe|quaff|guzzle|knock back|swig|swill|sip|down|chug) (.+)$/,
+    Ingest:/^(consume|swallow|ingest) (.+)$/,
+    SitOn:/^(?:sit on|sit upon|sit) (.+)$/,
+    StandOn:/^(?:stand on|stand upon|stand) (.+)$/,
+    ReclineOn:/^(?:recline on|recline upon|recline|lie on|lie upon|lie) (.+)$/,
+    GetOff:/^(?:get off|off) (.+)$/,
+    Use:/^(?:use) (.+)$/,
+    TalkTo:/^(?:talk to|talk|speak to|speak|converse with|converse) (.+)$/,
+    Topics:/^topics? (?:for )?(.+)$/,
+    
+    // Misc again
+    Say:/^(say|shout|whisper) (.+)$/,
+    Stand:/^stand$|^stand up$|^get up$/,
+    NpcStand:[/^(.+), ?(?:stand|stand up|get up)$/, /^tell (.+) to (?:stand|stand up|get up)$/],
+    FillWith:/^(?:fill) (.+) (?:with) (.+)$/,
+    NpcFillWith:[/^(.+), ?(?:fill) (.+) (?:with) (.+)$/, /^tell (.+) to (?:fill) (.+) (?:with) (.+)$/],
+    PutIn:/^(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/,
+    NpcPutIn:[/^(.+), ?(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/, /^tell (.+) to (?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/],
+    TakeOut:/^(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/,
+    NpcTakeOut:[/^(.+), ?(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/, /^tell (.+) to (?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/],
+    GiveTo:/^(?:give) (.+) (?:to) (.+)$/,
+    NpcGiveTo:[/^(.+), ?(?:give) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/],
 
-  //----------------------------------------------------------------------------------------------
-  // Regular Expressions for Commands
-  
-  // Meta commands
-  MetaHelp:/^help$|^\?$/,
-  MetaHint:/^(?:hint|clue)s?$/,
-  MetaCredits:/^about$|^credits?$|^version$/,
-  MetaDarkMode:/^(?:dark|dark mode|toggle dark|toggle dark mode)$/,
-  MetaWarnings:/^warn(?:ing|ings|)$/,
-  MetaImages:/^images$/,
-  MetaSilent:/^(?:sh|silent)$/,
-  MetaSpoken:/^spoken$/,
-  MetaIntro:/^intro$/,
-  MetaBrief:/^brief$/,
-  MetaTerse:/^terse$/,
-  MetaVerbose:/^verbose$/,
-  MetaTranscript:/^transcript$|^script$/,
-  MetaTranscriptOn:/^transcript on$|^script on$/,
-  MetaTranscriptOff:/^transcript off$|^script off$/,
-  MetaTranscriptClear:/^transcript clear$|^script clear$|^transcript delete$|^script delete$/,
-  MetaTranscriptShow:/^transcript show$|^script show$/,
-  MetaTranscriptShowWithOptions:/^(?:transcript|script) show (\w+)$/,
-  MetaTranscriptToWalkthrough:/^(?:transcript|script) (?:w|wt|walk|walkthrough)$/,
-  MetaPlayerComment:/^\*(.+)$/,
-  MetaSave:/^save$/,
-  MetaSaveGame:/^(?:save) (.+)$/,
-  MetaLoad:/^reload$|^load$/,
-  MetaLoadGame:/^(?:load|reload) (.+)$/,
-  MetaDir:/^dir$|^directory$/,
-  MetaDeleteGame:/^(?:delete|del) (.+)$/,
-  
-  // Misc
-  Undo:/^undo$/,
-  Look:/^l$|^look$/,
-  Exits:/^exits$/,
-  Wait:/^wait$|^z$/,
-  TopicsNote:/^topics?$/,
-  Inv:/^inventory$|^inv$|^i$/,
-  Map:/^map$/,
-  Smell:/^smell$|^sniff$/,
-  Listen:/^listen$/,
-  PurchaseFromList:/^buy$|^purchase$/,
-  
-  // Use item
-  Examine:/^(?:examine|exam|ex|x) (.+)$/,
-  LookAt:/^(?:look at|look|l) (.+)$/,
-  LookOut:/^(?:look out of|look out) (.+)$/,
-  LookBehind:/^(?:look behind|check behind) (.+)$/,
-  LookUnder:/^(?:look under|check under) (.+)$/,
-  LookInside:/^(?:look inside) (.+)$/,
-  Search:/^(?:search) (.+)$/,
-  Take:/^(?:take|get|pick up|t) (.+)$/,
-  Drop:/^(?:drop|d) (.+)$/,
-  Wear2:/^put (?:my |your |his |her |)(.+) on$/,
-  Wear:/^(?:wear|don|put on) (?:my |your |his |her |)(.+)$/,
-  Remove:/^(?:remove|doff|take off) (?:my |your |his |her |)(.+)$/,
-  Remove2:/^take (?:my |your |his |her |)(.+) off$/,
-  Read:/^(?:read|r) (.+)$/,
-  SmellItem:/^(?:smell|sniff) (.+)$/,
-  ListenToItem:/^(?:listen to|listen) (.+)$/,
-  Purchase:/^(?:purchase|buy) (.+)$/,
-  Sell:/^(?:sell) (.+)$/,
-  Smash:/^(?:smash|break|destroy) (.+)$/,
-  SwitchOn:/^(?:turn on|switch on) (.+)$/,
-  SwitchOn2:/^(?:turn|switch) (.+) on$/,
-  SwitchOff2:/^(?:turn|switch) (.+) off$/,
-  SwitchOff:/^(?:turn off|switch off) (.+)$/,
-  Open:/^(?:open) (.+)$/,
-  Close:/^(?:close) (.+)$/,
-  Lock:/^(?:lock) (.+)$/,
-  Unlock:/^(?:unlock) (.+)$/,
-  Push:/^(?:push|press) (.+)$/,
-  Pull:/^(?:pull) (.+)$/,
-  Fill:/^(?:fill) (.+)$/,
-  Empty:/^(?:empty) (.+)$/,
-  Eat:/^(eat|feed on|feed|partake of|partake|dine on|dine) (.+)$/,
-  Drink:/^(drink|imbibe|quaff|guzzle|knock back|swig|swill|sip|down|chug) (.+)$/,
-  Ingest:/^(consume|swallow|ingest) (.+)$/,
-  SitOn:/^(?:sit on|sit upon|sit) (.+)$/,
-  StandOn:/^(?:stand on|stand upon|stand) (.+)$/,
-  ReclineOn:/^(?:recline on|recline upon|recline|lie on|lie upon|lie) (.+)$/,
-  GetOff:/^(?:get off|off) (.+)$/,
-  Use:/^(?:use) (.+)$/,
-  TalkTo:/^(?:talk to|talk|speak to|speak|converse with|converse) (.+)$/,
-  Topics:/^topics? (?:for )?(.+)$/,
-  
-  // Misc again
-  Say:/^(say|shout|whisper) (.+)$/,
-  Stand:/^stand$|^stand up$|^get up$/,
-  NpcStand:[/^(.+), ?(?:stand|stand up|get up)$/, /^tell (.+) to (?:stand|stand up|get up)$/],
-  FillWith:/^(?:fill) (.+) (?:with) (.+)$/,
-  NpcFillWith:[/^(.+), ?(?:fill) (.+) (?:with) (.+)$/, /^tell (.+) to (?:fill) (.+) (?:with) (.+)$/],
-  PutIn:/^(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/,
-  NpcPutIn:[/^(.+), ?(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/, /^tell (.+) to (?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/],
-  TakeOut:/^(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/,
-  NpcTakeOut:[/^(.+), ?(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/, /^tell (.+) to (?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/],
-  GiveTo:/^(?:give) (.+) (?:to) (.+)$/,
-  NpcGiveTo:[/^(.+), ?(?:give) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/],
-
-  TieTo:/^(?:tie|fasten|attach) (.+) (?:to) (.+)$/,
-  NpcTieTo:[/^(.+), ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/],
-  Untie:/^(?:untie|unfasten|detach) (.+)$/,
-  NpcUntie:[/^(.+), ?(?:untie|unfasten|detach) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+)$/],
-  UntieFrom:/^(?:untie|unfasten|detach) (.+) (?:from) (.+)$/,
-  NpcUntieFrom:[/^(.+), ?(?:untie|unfasten|detach) (.+) (?:frm) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+) (?:from) (.+)$/],
-  UseWith:/^(?:use) (.+) (?:with|on) (.+)$/,
+    TieTo:/^(?:tie|fasten|attach) (.+) (?:to) (.+)$/,
+    NpcTieTo:[/^(.+), ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/],
+    Untie:/^(?:untie|unfasten|detach) (.+)$/,
+    NpcUntie:[/^(.+), ?(?:untie|unfasten|detach) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+)$/],
+    UntieFrom:/^(?:untie|unfasten|detach) (.+) (?:from) (.+)$/,
+    NpcUntieFrom:[/^(.+), ?(?:untie|unfasten|detach) (.+) (?:frm) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+) (?:from) (.+)$/],
+    UseWith:/^(?:use) (.+) (?:with|on) (.+)$/,
 
 
-  PushExit:/^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-  NpcPushExit:[
-    /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-    /^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-  ],
-  AskAbout:/^(?:ask) (.+) (about|what|who|how|why|where|when) (.+)$/,
-  TellAbout:/^(?:tell) (.+) (about|what|who|how|why|where|when) (.+)$/,
-  
-  //Debug
-  DebugWalkThrough:/^wt (.+)$/,
-  DebugInspect:/^inspect (.+)$/,
-  DebugInspectByName:/^inspect2 (.+)$/,
-  DebugTest:/^test$/,
-  DebugInspectCommand:/^(?:cmd) (.+)$/,
-  DebugListCommands:/^cmds$/,
-  DebugListCommands2:/^cmds2$/,
-  DebugParserToggle:/^parser$/,
-
+    PushExit:/^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+    NpcPushExit:[
+      /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+      /^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+    ],
+    AskAbout:/^(?:ask) (.+) (about|what|who|how|why|where|when) (.+)$/,
+    TellAbout:/^(?:tell) (.+) (about|what|who|how|why|where|when) (.+)$/,
+    
+    //Debug
+    DebugWalkThrough:/^wt (.+)$/,
+    DebugInspect:/^inspect (.+)$/,
+    DebugInspectByName:/^inspect2 (.+)$/,
+    DebugTest:/^test$/,
+    DebugInspectCommand:/^(?:cmd) (.+)$/,
+    DebugListCommands:/^cmds$/,
+    DebugListCommands2:/^cmds2$/,
+    DebugParserToggle:/^parser$/,
+  },
 
   // This will be added to the start of the regex of a command to make an NPC command
   // The saved capture group is the NPC's name
@@ -409,7 +409,7 @@ const lang = {
     }
   },
 
-
+  follow:'{nv:follower:follow:true} {ob:char}.',
 
   //----------------------------------------------------------------------------------------------
   // Meta-command responses
@@ -442,7 +442,7 @@ const lang = {
   helpScript:function() {
     if (settings.textInput) {
       metamsg("Type commands in the command bar to interact with the world. Using the arrow keys you can scroll up and down though your previous commands.");      
-      metamsg("{b:Movement:} To move, use the eight compass directions (or just 'n', 'ne', etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, - and + for UP and DOWN, / and * for IN and OUT.");
+      metamsg("{b:Movement:} To move, use the eight compass directions (or just N, NE, etc.). Up/down and in/out may be options too. When \"Num Lock\" is on, you can use the number pad for all eight compass directions, - and + for UP and DOWN, / and * for IN and OUT.");
       metamsg("{b:Other commands:} You can also LOOK (or just L or 5 on the number pad), HELP (or ?) or WAIT (or Z or the dot on the number pad). Other commands are generally of the form GET HAT or PUT THE BLUE TEAPOT IN THE ANCIENT CHEST. Experiment and see what you can do!");
       metamsg("{b:Using items: }You can use ALL and ALL BUT with some commands, for example TAKE ALL, and PUT ALL BUT SWORD IN SACK. You can also use pronouns, so LOOK AT MARY, then TALK TO HER. The pronoun will refer to the last subject in the last successful command, so after PUT HAT AND FUNNY STICK IN THE DRAWER, 'IT' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
       metamsg("{b:Characters: }If you come across another character, you can ask him or her to do something. Try things like MARY,PUT THE HAT INTHE BOX, or TELL MARY TO GET ALL BUT THE KNIFE. Depending on the game you may be able to TALK TO a character, to ASK or TELL a character ABOUT a topic, or just SAY something and they will respond..");
@@ -591,6 +591,7 @@ const lang = {
     eat:"Eat",
     drink:"Drink",
     read:"Read",
+    push:"Push",
     equip:"Equip",
     unequip:"Unequip",
     attack:"Attack",
@@ -939,7 +940,7 @@ const lang = {
   // would return the pronoun "you go".
   // The first letter is capitalised if 'capitalise' is true.
   nounVerb:function(item, verb, capitalise) {
-    if (item === game.player) {
+    if (item === game.player && !game.player.useProperName) {
       return lang.pronounVerb(item, verb, capitalise);
     }
     let s = lang.getName(item, {article:DEFINITE}) + " " + lang.conjugate (item, verb);
