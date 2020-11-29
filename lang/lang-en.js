@@ -38,9 +38,10 @@ const lang = {
     MetaLoadGame:/^(?:load|reload) (.+)$/,
     MetaDir:/^dir$|^directory$/,
     MetaDeleteGame:/^(?:delete|del) (.+)$/,
+    MetaAgain:/^(?:again|g)$/,
+    MetaUndo:/^undo$/,
     
     // Misc
-    Undo:/^undo$/,
     Look:/^l$|^look$/,
     Exits:/^exits$/,
     Wait:/^wait$|^z$/,
@@ -409,8 +410,6 @@ const lang = {
     }
   },
 
-  follow:'{nv:follower:follow:true} {ob:char}.',
-
   //----------------------------------------------------------------------------------------------
   // Meta-command responses
 
@@ -436,6 +435,7 @@ const lang = {
   undo_disabled:"Sorry, UNDO is not enabled in this game.",
   undo_not_available:"There are no saved game-states to UNDO back to.",
   undo_done:"Undoing...",
+  again_not_available:"There are no previous commands to repeat.",
 
 
 
