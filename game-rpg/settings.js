@@ -93,6 +93,7 @@ settings.setup = function() {
   
   console.log(skills.findName("Flaming weapon"))
   console.log(skills.findName("Fireball"))
+  w.rabbit.setLeader(game.player)
   
 }
 
@@ -334,7 +335,6 @@ $(function() {
     ]
   });
 });
-
 
 
 /*

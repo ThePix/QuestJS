@@ -38,8 +38,9 @@ const lang = {
     MetaLoadGame:/^(?:load|reload) (.+)$/,
     MetaDir:/^dir$|^directory$/,
     MetaDeleteGame:/^(?:delete|del) (.+)$/,
-    MetaAgain:/^(?:again|g)$/,
     MetaUndo:/^undo$/,
+    MetaAgain:/^(?:again|g)$/,
+    MetaOops:/^oops$/,
     
     // Misc
     Look:/^l$|^look$/,
@@ -452,7 +453,7 @@ const lang = {
       if (typeof imagePane !== "undefined") s += " Use IMAGES to toggle/show the iage pane."
       metamsg(s)
       metamsg("{b:Shortcuts:}You can often just type the first few characters of an item's name and Quest will guess what you mean.  If fact, if you are in a room with Brian, who is holding a ball, and a box, Quest should be able to work out that B,PUT B IN B mean you want Brian to put the ball in the box.")
-      metamsg("You can use the up and down arrows to scroll back though your previous commands - especially useful if you realise you spelled something wrong.")
+      metamsg("You can use the up and down arrows to scroll back though your previous typed commands - especially useful if you realise you spelled something wrong. If you do not have arrow keys, use OOPS to retrieve the last typed command so you can edit it. Use AGAIN or just G to repeat the last typed command.")
     }
     if (settings.panes !== "none") {
       metamsg("{b:User Interface:} To interact with an object, click on its name in the side pane, and a set of possible actions will appear under it. Click on the appropriate action.");
