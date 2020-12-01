@@ -213,6 +213,12 @@ test.tests = function() {
   test.assertEqual("You have $10.", processText("You have ${Buddy.money}."));
   test.assertEqual("You have $10.", processText("You have ${player.money}."));
 
+  test.title("Text processor 6");
+  w.Kyle.colours = ['red', 'green', 'blue']
+  w.Kyle.colour = 1
+  test.assertEqual("Kyle is green.", processText("Kyle is {select:Kyle:colours:colour}."));
+  w.Kyle.colour = 0
+  test.assertEqual("Kyle is red.", processText("Kyle is {select:Kyle:colours:colour}."));
 
 
   test.title("Numbers");
