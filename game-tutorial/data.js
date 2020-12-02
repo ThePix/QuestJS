@@ -217,7 +217,7 @@ createItem("hat", WEARABLE(), {
   onMove:function(toLoc) {
     if (!this.flag1 && toLoc === 'me') hint.now('wearHat')
   },
-  afterWear:function() {
+  onWear:function() {
     if (!this.flag2) hint.now('xGrass')
   },
 })
@@ -679,12 +679,12 @@ createItem("chair", FURNITURE({sit:true, stand:true}), {
   examine:"This is an elegant, white office chair in good condition.",
   loc:'office',
   scenery:true,
-  onsitting:function(char) {
+  onSit:function(char) {
     if (w.Professor_Kleinscope.loc === 'office') {
       msg("'Making yourself at home, I see...' notes Professor Kleinscope.")
     }
   },
-  onstanding:function(char) {
+  onStand:function(char) {
     if (w.Professor_Kleinscope.loc === 'office') {
       msg("'I'd rather you kept your feet {i:off} the furniture,' says Professor Kleinscope crossly.")
     }
@@ -789,7 +789,7 @@ createRoom("lift", TRANSIT("east"), {
     }
     return true;
   },
-  transitOnMove:function(transitDest, exitName) {
+  onTransitMove:function(transitDest, exitName) {
     if (transitDest === 'office') hint.now("eastOffice")
   }
 })

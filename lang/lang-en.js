@@ -261,6 +261,9 @@ const lang = {
   npc_no_interest_in:"{nv:actor:have:true} no interest in that subject.",
 
 
+  // BUTTON
+  push_button_successful:"{nv:char:push:true} {nm:item:the}.",
+
   // SHIFTABLE
   push_exit_successful:"{nv:char:push:true} {nm:item:the} {param:dir}.",
   cannot_push:"{pv:item:'be:true} not something you can move around like that.",
@@ -596,6 +599,10 @@ const lang = {
     equip:"Equip",
     unequip:"Unequip",
     attack:"Attack",
+    sitOn:"Sit on",
+    standOn:"Stand on",
+    reclineOn:"Lie on",
+    getOff:"Get off",
   },
   
   // Flag the state of an item in a list

@@ -269,7 +269,7 @@ createItem("chair",
   FURNITURE({sit:true}),
   {
     loc:"dining_room", examine:"A wooden chair.",
-    onsitting:function(char) {
+    onSit:function(char) {
       msg("The chair makes a strange noise when " + lang.nounVerb(char, "sit") + " on it.");
     },
   }
@@ -285,7 +285,7 @@ createRoom("lift",
     transitMenuPrompt:'Where do you want to go?',
     //afterEnter:transitOfferMenu,
     //transitAutoMove:true,
-    //transitOnMove:function(toLoc, fromLoc) { debugmsg("MOVING to " + toLoc + " from " + fromLoc); },
+    //onTransitMove:function(toLoc, fromLoc) { debugmsg("MOVING to " + toLoc + " from " + fromLoc); },
     //transitCheck:function() {
     //  msg("The lift is out of order");
     //  return false;
@@ -469,13 +469,14 @@ createItem("garage_key", KEY(), {
 });
 
 
-createItem("charger",
-  { loc:"garage", examine: "A device bigger than a washing machine to charge a torch? It has a compartment and a button. {charger_state}.", mended:false,
-    use:function() {
-      metamsg("To use the charge, you need to put the torch in the compartment and press the button.");
-    }
+createItem("charger", {
+  loc:"garage", 
+  examine: "A device bigger than a washing machine to charge a torch? It has a compartment and a button. {charger_state}.", 
+  mended:false,
+  use:function() {
+    metamsg("To use the charge, you need to put the torch in the compartment and press the button.");
   }
-);
+})
 
 
 createItem("charger_compartment", COMPONENT("charger"), CONTAINER(true), {
@@ -493,25 +494,24 @@ createItem("charger_compartment", COMPONENT("charger"), CONTAINER(true), {
 
 
 
-createItem("charger_button",
-  COMPONENT("charger"),
-  { examine:"A big red button.", alias:"button",
-    push:function(isMultiple, participant) {
-      const contents = w.charger_compartment.getContents(world.ALL)[0];
-      if (!w.charger_compartment.closed || !contents) {
-        msg(lang.pronounVerb(participant, "push", true) + " the button, but nothing happens.");
-        return false;
-      }
-      else if (!contents.chargeResponse) {
-        msg(lang.pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, but nothing happens.");
-        return false;
-      }
-      else {
-        return contents.chargeResponse(participant);
-      }
+createItem("charger_button", COMPONENT("charger"), BUTTON(), {
+  examine:"A big red button.",
+  alias:"button",
+  push:function(isMultiple, char) {
+    const contents = w.charger_compartment.getContents(world.ALL)[0]
+    if (!w.charger_compartment.closed || !contents) {
+      msg(lang.pronounVerb(char, "push", true) + " the button, but nothing happens.");
+      return false
+    }
+    else if (!contents.chargeResponse) {
+      msg(lang.pronounVerb(char, "push", true) + " the button. There is a brief hum of power, but nothing happens.")
+      return false
+    }
+    else {
+      return contents.chargeResponse(char)
     }
   }
-);
+})
 
 
 
