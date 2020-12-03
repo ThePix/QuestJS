@@ -275,6 +275,10 @@ test.tests = function() {
 
 
 
+
+
+
+
   test.title("Look inside");
   test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box and an ornate doll.");
   w.jewellery_box.closed = false
@@ -300,35 +304,52 @@ test.tests = function() {
 
   test.title("Simple object commands (eat)");
   test.assertCmd("eat knife", "The knife's not something you can eat.");
+  test.assertEqual(["Examine", "Take"], w.sandwich.getVerbs())
   test.assertCmd("get sandwich", "You take the sandwich.");
+  test.assertEqual(["Examine", "Drop", "Eat"], w.sandwich.getVerbs())
   test.assertCmd("drink sandwich", "The sandwich's not something you can drink.");
   test.assertCmd("ingest sandwich", ["You eat the sandwich.", "That was great!"]);
 
   
   test.title("Simple object commands (boots)");
+  test.assertEqual(["Examine", "Take"], w.boots.getVerbs())
   test.assertCmd("wear boots", "You don't have them.");
   test.assertCmd("remove boots", "You don't have them.");
   test.assertCmd("get boots", "You take the boots.");
+  test.assertEqual(["Examine", "Drop", "Wear"], w.boots.getVerbs())
   test.assertCmd("inv", "You are carrying some boots and a knife.");
   test.assertCmd("get boots", "You have them.");
   test.assertCmd("wear boots", "You put on the boots.");
+  test.assertEqual(["Examine", "Remove"], w.boots.getVerbs())
   test.assertCmd("inventory", "You are carrying some boots (worn) and a knife.");
   test.assertCmd("wear boots", "You're wearing them.");
   test.assertCmd("remove boots", "You take the boots off.");
+  test.assertEqual(["Examine", "Drop", "Wear"], w.boots.getVerbs())
   test.assertCmd("drop boots", "You drop the boots.");
+  test.assertEqual(["Examine", "Take"], w.boots.getVerbs())
   
   
   test.title("Simple object commands (book)");
+  test.assertEqual(["Examine", "Take"], w.book.getVerbs())
   test.assertCmd("get the book", "You take the book.");
+  test.assertEqual(["Examine", "Drop", "Read"], w.book.getVerbs())
   test.assertCmd("wear book", "You can't wear it.");
   test.assertCmd("remove book", "You're not wearing it.");
   test.assertCmd("read the book", "It is not in a language you understand.");
   test.assertCmd("give it to kyle", "Done.");
   test.assertCmd("kyle, read the book", "It is not in a language he understands.");
   test.assertCmd("kyle, drop book", "Kyle drops the book.");
-  test.assertCmd("n", "You can't go north.");
-  test.assertCmd("d", "You can't go down.");
+  test.assertEqual(["Examine", "Take"], w.book.getVerbs())
 
+  test.title("Simple object commands (container)");
+  test.assertEqual(["Examine", "Open"], w.glass_cabinet.getVerbs())
+  test.assertEqual(["Examine", "Take", "Close"], w.cardboard_box.getVerbs())
+  test.assertCmd("open box", "It already is.");
+  test.assertCmd("close box", "You close the cardboard box.");
+  test.assertEqual(["Examine", "Take", "Open"], w.cardboard_box.getVerbs())
+  test.assertCmd("close box", "It already is.");
+  test.assertCmd("open box", "You open the cardboard box. It is empty.");
+  test.assertEqual(["Examine", "Take", "Close"], w.cardboard_box.getVerbs())
 
   test.title("Simple object commands (bricks)");
   test.assertCmd("get the bricks", "You take seven bricks.");
@@ -382,6 +403,7 @@ test.tests = function() {
 
 
   test.title("Restricting");
+  test.assertEqual(["Look at", "Talk to"], w.Kyle.getVerbs())
   game.player.canTalk = function() { msg("You are gagged."); return false; }
   test.assertCmd("talk to kyle", "You are gagged.");
   game.player.canTalk = function() { return true; }
@@ -416,9 +438,12 @@ test.tests = function() {
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
   test.assertCmd("drop jumpsuit", "You drop the jumpsuit.");  
 
+  test.assertEqual(["Examine", "Sit on", "Lie on"], w.bed.getVerbs())
   test.assertCmd("use bed", "You lie down on the bed.");
+  test.assertEqual(["Examine", "Get off"], w.bed.getVerbs())
   test.assertCmd("use bed", "You already are.");
   test.assertCmd("stand", "You get off the bed.");
+  test.assertEqual(["Examine", "Sit on", "Lie on"], w.bed.getVerbs())
   
   test.title("use with")
   
@@ -543,7 +568,7 @@ test.tests = function() {
   
   
   test.assertCmd("x compartment", "The compartment is just the right size for the torch. It is closed.");
-  test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see nothing.");
+  test.assertCmd("open compartment", "You open the compartment. It is empty.");
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");
   test.assertCmd("x compartment", "The compartment is just the right size for the torch. It is open.");
   test.assertCmd("put torch in compartment", "Done.");
@@ -559,7 +584,7 @@ test.tests = function() {
   test.assertCmd("put knife in compartment", "Done.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "There is a loud bang, and the knife is destroyed.");
-  test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see nothing.");
+  test.assertCmd("open compartment", "You open the compartment. It is empty.");
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");
   
 
