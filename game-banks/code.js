@@ -379,7 +379,7 @@ function arrival() {
   for (let npc of NPCS) {
     npc.state = w.Xsansi.currentPlanet * 100
   }
-  w.Kyle.agenda = ["walkTo:probes_forward", "text:deployProbe:1"]
+  w.Kyle.setAgenda(["walkTo:probes_forward", "text:deployProbe:1"])
   io.updateStatus() 
 }
 

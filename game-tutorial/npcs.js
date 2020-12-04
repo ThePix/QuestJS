@@ -172,7 +172,7 @@ createItem("Professor_Kleinscope", NPC(false), {
       tmsg("Maybe now he is not sitting there we can use the computer.")
       this.flag = true
       w.me.hints = 410
-      this.agenda = [
+      this.setAgenda([
         "text:The Professor locks his computer.", 
         "text:Professor Kleinscope heads to the lift.", 
         "moveTo:lounge:Professor Kleinscope emerges from the lift, and glances round the room as though it is unfamiliar to him.",
@@ -181,7 +181,7 @@ createItem("Professor_Kleinscope", NPC(false), {
         "moveTo:kitchen:Professor Kleinscope enters the kitchen.",
         "waitFor:player:'Oh, you're here too,' says Professor Kleinscope.",
         "text:'Now, where's my dinner?' says Professor Kleinscope. 'Are you sure you got the message right?'",
-      ]
+      ])
     }
     else {
       msg("'Professor?'");

@@ -1091,3 +1091,12 @@ createItem("piggy_suu", NPC(true), {
 
 
 
+
+createItem("timetable", AGENDA_FOLLOWER(), {
+  counter:0,
+  script:function(n) {
+    this.counter += (n[0] ? parseInt(n[0]) : 1) 
+  },
+  check:function() { return this.flag },
+})
+

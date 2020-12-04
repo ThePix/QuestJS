@@ -598,7 +598,7 @@ createItem("probe_prototype", COUNTABLE([]), {
     
     if (char.deployProbeAction === 0 || char.deployProbeAction ===4) {
       msg("'Okay captain.'");
-      char.agenda = ["walkTo:probes_aft:" + lang.getName(char, {article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number];
+      char.setAgenda(["walkTo:probes_aft:" + lang.getName(char, {article:DEFINITE}) + " goes to the probe deployment console.", "text:deployProbe:" + number])
       char.deployProbeAction = 0;
       char.deployProbeCount = 0;
     }
@@ -607,7 +607,7 @@ createItem("probe_prototype", COUNTABLE([]), {
       // skip walking there, skip first deploy action
       // the old number should be replaced
       msg("'Okay captain.'");
-      char.agenda = ["text:deployProbe:" + number];
+      char.setAgenda(["text:deployProbe:" + number])
       char.deployProbeAction = 1;
     }
     return true;

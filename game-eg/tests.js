@@ -970,6 +970,38 @@ test.tests = function() {
   test.assertCmd("e", ["You head east.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can see Buddy (holding a flashlight and a garage key; wearing a suit) and a carrot here.", "You can go east, north or west."])
 
 
+  test.title("agenda follower")
+  w.timetable.setAgenda(['wait', 'run:script','wait:2', 'run:script:2', 'waitFor:check', 'run:script:3', 'waitFor:check:script:5'])
+  test.assertEqual(0, w.timetable.counter)
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertEqual(0, w.timetable.counter)
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertEqual(1, w.timetable.counter)
+
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertEqual(1, w.timetable.counter)
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertEqual(3, w.timetable.counter)
+
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertEqual(3, w.timetable.counter)
+  w.timetable.flag = true
+  test.assertCmd("wait", "You wait one turn.")
+  w.timetable.flag = false
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertEqual(6, w.timetable.counter)
+
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertEqual(6, w.timetable.counter)
+  w.timetable.flag = true
+  test.assertCmd("wait", "You wait one turn.")
+  test.assertEqual(11, w.timetable.counter)
+
+
+
 /*
   test.title("quests")
   test.assertCmd("talk to buddy", ["'Hey, Buddy,' you say.", "'Hey yourself! Say, could you get me a carrot?'","Quest started: <i>A carrot for Buddy</i>", "Go find a carrot."])
