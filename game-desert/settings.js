@@ -24,3 +24,5 @@ settings.roomTemplate = [
 ]
 
 settings.intro = "You wake up, and realise the bus has stopped."
+
+settings.libraries.push('zone')
