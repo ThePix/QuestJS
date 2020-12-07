@@ -288,6 +288,12 @@ test.tests = function() {
   test.assertCmd("look inside boots", "There's nothing to see inside.");
   test.assertCmd("look inside book", "The book has pages and pages of text, but you do not even recongise the text.");
   
+  
+  test.title("Drop all");
+  test.assertCmd("drop all", "Knife: You drop the knife.");
+  test.assertCmd("drop all", "Nothing there to do that with.");
+  test.assertCmd("get knife", "You take the knife.");
+  
 
   test.title("Simple object commands");
   test.assertCmd("i", "You are carrying a knife.");
@@ -829,9 +835,10 @@ test.tests = function() {
 
   
   
-  test.title("pre-shop");
   
+  test.title("Get all (nothing)");
   test.assertCmd("w", ["You head west.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
+  test.assertCmd("get all", "Nothing there to do that with.");
   test.assertCmd("n", ["You head north.", "The shop", "A funny little shop.", "You can go south."]);
   
   
