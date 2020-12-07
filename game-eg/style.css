@@ -68,7 +68,7 @@ h2 {
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 5px;
   font-size: 9pt;
-  font-family: 'Montserrat', sans-serif;;
+  font-family: 'Montserrat', sans-serif;
 }
 .dark-body > #panes {
   background-color:#606;
@@ -154,6 +154,7 @@ span.compass-button {
     margin-top: 0px;
     margin-bottom: 0px;
     font-style:italic;
+    display: none;
 }
 .dark-body > div > div > div > .item-action {
   background-color:#602;
@@ -286,4 +287,30 @@ th, td {
 /*  font-weight: bold;
   font-size: larger;*/
   color:grey;
+}
+
+#sidepane-menu {
+  font-size: 9pt;
+  font-family: 'Montserrat', sans-serif;
+  position: absolute;
+  top: 320px;
+  left: 40px;
+  z-index:50;
+  padding:2px;
+  width:240px;
+  background-color: #eef;
+  border:solid black 1px;
+}
+
+
+.sidepane-menu-title {
+  font-style:italic;
+  color:green;
+}
+
+.sidepane-menu-option {
+  background-color: #faf;
+  border:solid black 1px;
+  cursor: pointer;
+  padding:5px;
 }

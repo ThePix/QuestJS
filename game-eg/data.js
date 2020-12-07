@@ -1,6 +1,39 @@
 "use strict";
 
 
+npc_utilities.talkto = function() {
+  if (!game.player.canTalk(this)) return false
+  const topics = this.getTopics(this)
+  if (topics.length === 0) return failedmsg(lang.no_topics, {char:game.player, item:this})
+  topics.push(lang.never_mind)
+
+  showSidePaneOptions(this, topics, function(result) {
+    $('#sidepane-menu').remove()
+    if (result !== lang.never_mind) {
+      result.runscript()
+    }
+  })
+  
+  return world.SUCCESS_NO_TURNSCRIPTS;
+}
+  
+
+
+
+function showSidePaneOptions(item, options, fn) {
+  const opts = {article:DEFINITE, capital:true}
+  io.input('', options, fn, function(options) {
+    let s = '<div id="sidepane-menu"><p class="sidepane-menu-title">Talk to ' + lang.getName(item, {article:DEFINITE}) + ':</p>'
+    for (let i = 0; i < options.length; i++) {
+      s += '<p value="' + i + '" onclick="io.menuResponse(' + i + ')" class="sidepane-menu-option">';
+      s += (typeof options[i] === 'string' ? options[i] : lang.getName(options[i], opts))
+      s += '</p>';
+    }
+    s += '</div>'
+    $('body').append(s)
+  })
+}
+
 
   
 createItem("Buddy", NPC(false), { 
@@ -830,76 +863,77 @@ createItem("Kyle_The_Weather",
 
 
 
-createItem("Lara",
-  NPC(true),
-  { loc:"dining_room", examine:"A normal-sized bunny.", properName:true, happy:false,
-    giveReaction:function(item, multiple, char) {
-      if (item === w.ring) {
-        msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.");
-        w.ring.loc = "Lara";
-        w.ring.worn = true;
-        w.garage_key.loc = char.name;
-      }
-      if (item === w.book) {
-        msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'");
-        w.book.loc = "Lara";
-      }
-      else {
-        msg("'Why would I want {i:that}?'");
-      }
-    },
-    getAgreementTake:function(item) {
-      if (item === w.brick) {
-        msg("'I'm not picking up any bricks,' says Lara indignantly.");
-        return false;
-      }
-      return true;
-    },
-    getAgreementGo:function(dir) {
-      if (!this.happy) {
-        msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like that room.'");
-        return false;
-      }
-      return true;
-    },
-    getAgreementDrop:function() {
-      return true;
-    },
-    getAgreementStand:function() {
-      return true;
-    },
-    getAgreementRead:function() {
-      return true;
-    },
-    getAgreementPosture:function() {
-      if (!this.happy) {
-        msg("'I don't think so!' says Lara indignantly.");
-        return false;
-      }
-      return true;
-    },
-    getAgreement() {
-      msg("'I'm not doing that!' says Lara indignantly.");
-      return false;
-    },
-    canTalkPlayer:function() { return true; },
-    
-    sayPriority:3,
-    sayResponses:[
-      {
-        regex:/^(hi|hello)$/,
-        id:"hello",
-        response:function() {
-          msg("'Oh, hello there,' replies Lara.");
-          if (w.Kyle.isHere()) {
-            msg("'Have you two met before?' asks Kyle.");
-            w.Kyle.askQuestion("kyle_question");
-          }
-        },
-      }
-    ],
-  }
-);
+createItem("Lara", NPC(true), {
+  loc:"dining_room", 
+  examine:"A normal-sized bunny.", 
+  properName:true, 
+  happy:false,
+  giveReaction:function(item, multiple, char) {
+    if (item === w.ring) {
+      msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
+      w.ring.loc = "Lara"
+      w.ring.worn = true
+      w.garage_key.loc = char.name
+    }
+    if (item === w.book) {
+      msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'")
+      w.book.loc = "Lara"
+    }
+    else {
+      msg("'Why would I want {i:that}?'")
+    }
+  },
+  getAgreementTake:function(item) {
+    if (item === w.brick) {
+      msg("'I'm not picking up any bricks,' says Lara indignantly.")
+      return false
+    }
+    return true
+  },
+  getAgreementGo:function(dir) {
+    if (!this.happy) {
+      msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like that room.'")
+      return false
+    }
+    return true
+  },
+  getAgreementDrop:function() {
+    return true
+  },
+  getAgreementStand:function() {
+    return true
+  },
+  getAgreementRead:function() {
+    return true
+  },
+  getAgreementPosture:function() {
+    if (!this.happy) {
+      msg("'I don't think so!' says Lara indignantly.")
+      return false
+    }
+    return true
+  },
+  getAgreement() {
+    msg("'I'm not doing that!' says Lara indignantly.")
+    return false
+  },
+  canTalkPlayer:function() { return true; },
+  
+  sayPriority:3,
+  sayResponses:[
+    {
+      regex:/^(hi|hello)$/,
+      id:"hello",
+      response:function() {
+        msg("'Oh, hello there,' replies Lara.")
+        if (w.Kyle.isHere()) {
+          msg("'Have you two met before?' asks Kyle.")
+          w.Kyle.askQuestion("kyle_question")
+        }
+      },
+    }
+  ],
+})
 
 createItem("Lara_garage_key",
   TOPIC(true),
@@ -916,6 +950,16 @@ createItem("Lara_very_attractive",
   { loc:"Lara", alias:"You're very attractive",
     script:function() {
       msg("You tell Lara she looks very attractive. 'Why thank you!' she replies, smiling at last.");
+      w.Lara.happy = true;
+    },
+  }
+);
+
+createItem("Lara_carrots",
+  TOPIC(true),
+  { loc:"Lara", alias:"I hear you like carrots",
+    script:function() {
+      msg("'Need carrots!' she says with feeling. 'Fading away bunny!' She looks mournfully at her ample tummy.");
       w.Lara.happy = true;
     },
   }

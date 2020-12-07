@@ -486,9 +486,9 @@ test.tests = function() {
   test.assertCmd("lara,get brick", "'I'm not picking up any bricks,' says Lara indignantly.");
   test.assertCmd("lara,e", "'I'm not going east,' says Lara indignantly. 'I don't like that room.'");
   test.menuResponseNumber = 1;
-  test.assertEqual(2, w.Lara.getTopics().length);
+  test.assertEqual(3, w.Lara.getTopics().length);
   test.assertCmd("speak to lara", "You tell Lara she looks very attractive. 'Why thank you!' she replies, smiling at last.");
-  test.assertEqual(1, w.Lara.getTopics().length);
+  test.assertEqual(2, w.Lara.getTopics().length);
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
   test.assertCmd("lara,stand up", "Lara gets off the chair.");
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);

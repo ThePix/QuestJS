@@ -14,7 +14,7 @@ const lang = {
     // Meta commands
     MetaHelp:/^help$|^\?$/,
     MetaHint:/^(?:hint|clue)s?$/,
-    MetaCredits:/^about$|^credits?$|^version$/,
+    MetaCredits:/^(?:about|credits|version|info)$/,
     MetaDarkMode:/^(?:dark|dark mode|toggle dark|toggle dark mode)$/,
     MetaWarnings:/^warn(?:ing|ings|)$/,
     MetaImages:/^images$/,
@@ -40,7 +40,10 @@ const lang = {
     MetaDeleteGame:/^(?:delete|del) (.+)$/,
     MetaUndo:/^undo$/,
     MetaAgain:/^(?:again|g)$/,
-    MetaOops:/^oops$/,
+    MetaOops:/^(?:oops)$/,
+    MetaRestart:/^restart$/,
+    MetaScore:/^score$/,
+    MetaPronouns:/^pronouns$/,
     
     // Misc
     Look:/^l$|^look$/,
@@ -441,6 +444,11 @@ const lang = {
   undo_not_available:"There are no saved game-states to UNDO back to.",
   undo_done:"Undoing...",
   again_not_available:"There are no previous commands to repeat.",
+  scores_not_implemented:'Scores are not a part of this game.',
+  restart_are_you_sure:'Do you really want to restart the game? {b:[Y/N]}',
+  restart_no:'Restart cancelled',
+  yes_regex:/^(y|yes)$/i,
+  
 
 
 
@@ -555,7 +563,7 @@ const lang = {
 
 
   article_filter_regex:/^(?:the |an |a )?(.+)$/,
-  joiner_regex:/\,|\band\b/,
+  joiner_regex:/\band\b|\, ?and\b|\,/,
   all_regex:/^(all|everything)$/,
   all_exclude_regex:/^((all|everything) (but|bar|except)\b)/,
   go_pre_regex:"go to |goto |go |head |",
