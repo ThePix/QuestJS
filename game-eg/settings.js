@@ -18,6 +18,8 @@ settings.imagesFolder = 'images/'
 settings.libraries.push('zone')
 settings.libraries.push('quest')
 
+settings.symbolsForCompass = true
+
 settings.status = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },
