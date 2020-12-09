@@ -490,14 +490,15 @@ const lang = {
   },
 
   aboutScript:function() {
-    metamsg("{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6 AKA Quest JS version {param:settings:questVersion}.", {settings:settings});
+    metamsg("{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6 AKA Quest JS version {param:settings:questVersion}.", {settings:settings})
+    if (settings.ifdb) metamsg("IFDB number: " + settings.ifdb)
     if (settings.thanks && settings.thanks.length > 0) {
-      metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".");
+      metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".")
     }
     if (settings.additionalAbout !== undefined) {
       for (let s of settings.additionalAbout) metamsg(s)
     }
-    return world.SUCCESS_NO_TURNSCRIPTS;
+    return world.SUCCESS_NO_TURNSCRIPTS
   },
 
   warningsScript:function() {
