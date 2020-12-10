@@ -284,6 +284,7 @@ th, td {
   background-color: #f9f9f9;
   text-decoration: none;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .toolbar .status {

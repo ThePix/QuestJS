@@ -311,6 +311,7 @@ th, td {
   padding-left: 5px;
   padding-right: 5px;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .toolbar a.link:hover {

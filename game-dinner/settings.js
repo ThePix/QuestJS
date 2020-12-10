@@ -19,8 +19,9 @@ settings.toolbar = {
   content:function() { return `Hitpoints : 100` },
   roomdisplay: true,
   buttons:[
+    { title: "About", icon: "fa-info", cmd: "about" },
     { id: "about", title: "About", icon: "fa-info", cmd: "about", href: "#" },
-    { id: "save", title: "Save", icon: "fa-save", onclick: "saveGame()", href: "#" },
+    { id: "save", title: "Save", icon: "fa-save", cmd: "save saved_game", href: "#" },
     { id: "print", title: "Print", icon: "fa-print", onclick: "#", href: "#" },
   ],
-};
+}
