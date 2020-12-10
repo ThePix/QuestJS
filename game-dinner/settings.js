@@ -14,3 +14,13 @@ settings.setup = function() {
   console.log(w.dinner_timetable.steps.length)
   util.verifyResponses(w.dinner_timetable.steps)
 }
+
+settings.toolbar = {
+  content:function() { return `Hitpoints : 100` },
+  roomdisplay: true,
+  buttons:[
+    { id: "about", title: "About", icon: "fa-info", cmd: "about", href: "#" },
+    { id: "save", title: "Save", icon: "fa-save", onclick: "saveGame()", href: "#" },
+    { id: "print", title: "Print", icon: "fa-print", onclick: "#", href: "#" },
+  ],
+};
