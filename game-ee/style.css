@@ -153,6 +153,7 @@ td.compass-button {
 span.compass-button {
     cursor: pointer;
     text-align: center;
+    margin: auto;
     width: 18px;
     display: block;
 }  

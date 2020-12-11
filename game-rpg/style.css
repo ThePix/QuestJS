@@ -94,6 +94,9 @@ body {
   font-style: italic;
   margin-left: 20px;
 }
+.dark-body .menu-option, .dark-body a {
+  color:#aaf;
+}
 
 
 /* Various msg options */
@@ -133,9 +136,10 @@ td.compass-button {
 span.compass-button {
     cursor: pointer;
     text-align: center;
+    margin: auto;
     width: 18px;
     display: block;
-}  
+} 
 
 
 /* Items in inventories */

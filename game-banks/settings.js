@@ -10,7 +10,7 @@ settings.thanks = ["Kyle", "Lara"]
 settings.warnings = 'This game does have swearing (including the F-word); it is possible to romance crew mates of either gender, but nothing graphic.'
 
 // UI options
-settings.customExits = 'shipwise'
+settings.libraries.push('shipwise')
 settings.files = ["const", "code", "commands", "text", "data", "npcs"]
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false

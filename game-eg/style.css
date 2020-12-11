@@ -35,7 +35,7 @@ h2 {
   outline: none;
   width:95%;
 }
-.dark-body > div > div > #textbox {
+.dark-body #textbox {
   background-color: #111;
   color: white;
 }
@@ -50,7 +50,7 @@ h2 {
   font-style:italic;
   color:green;
 }
-.dark-body > div > div > .input-text {
+.dark-body .input-text {
   color:lightgreen;
 }
 
@@ -70,11 +70,11 @@ h2 {
   font-size: 9pt;
   font-family: 'Montserrat', sans-serif;
 }
-.dark-body > #panes {
+.dark-body #panes {
   background-color:#606;
   background-image:none;
 }
-.dark-body > div > .pane-div {
+.dark-body .pane-div {
   background-color:#606;
 }
 .side-panes-left {
@@ -103,7 +103,7 @@ td.compass-button {
     width: 20px;
     height: 20px;
 }
-.dark-body > div > div > table > tbody > tr > .compass-button {
+.dark-body .compass-button {
   background-color:#404;
 }
 span.compass-button {
@@ -133,7 +133,7 @@ span.compass-button {
     margin-left: 10px;
     margin-bottom: 0px;
 }
-.dark-body > div > div > div > .item {
+.dark-body .item {
   background-color:#404;
 }
 .sub-item {
@@ -141,7 +141,7 @@ span.compass-button {
     width: 140px;
     margin-top: 0px;
 }
-.dark-body > div > div > div > .sub-item {
+.dark-body .sub-item {
   background-color:#305;
 }
 .item-action {
@@ -157,7 +157,7 @@ span.compass-button {
     font-style:italic;
     display: none;
 }
-.dark-body > div > div > div > .item-action {
+.dark-body .item-action {
   background-color:#602;
 }
 #status-pane {
@@ -203,6 +203,9 @@ span.compass-button {
   cursor: pointer;
   font-style: italic;
   margin-left: 20px;
+}
+.dark-body .menu-option, .dark-body a {
+  color:#aaf;
 }
 
 

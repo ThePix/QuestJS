@@ -24,4 +24,5 @@ settings.toolbar = {
     { id: "save", title: "Save", icon: "fa-save", cmd: "save saved_game", href: "#" },
     { id: "print", title: "Print", icon: "fa-print", onclick: "#", href: "#" },
   ],
-}
+};
+
