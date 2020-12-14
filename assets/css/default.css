@@ -97,11 +97,9 @@ ol, ul {
 }
 
 /* Style page content */
-#main {
-  margin-left: 170px; /* Same as the width of the sidebar */
-  margin-right: 160px; /* Same as the width of the sidebar */
-  /*padding: 10px;
-  border: #ccc 1px solid;*/
+#inner {
+  max-width: 600px;
+  margin:0 auto;
 }
 
 #input input {
