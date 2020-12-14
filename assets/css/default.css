@@ -1,0 +1,683 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat|ZCOOL+XiaoWei');
+@import url('https://fonts.googleapis.com/css?family=Orbitron|Ubuntu+Condensed');
+@import url('https://fonts.googleapis.com/css?family=Coda&display=swap');
+
+/***
+* Reset 
+***/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+/***
+* Global
+***/
+html {
+  overflow-y:scroll;
+}
+
+body {
+  line-height: 1;
+  color: black;
+  font-family: 'Ubuntu Condensed', sans-serif;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+#cursor {
+  margin-left: 5px;
+}
+
+/***
+* Heading
+***/
+.default-h2 {
+  font-weight: bold;
+  font-family: 'ZCOOL XiaoWei', serif;
+  margin: 20px 0px 20px 0px;
+  text-align: center;
+}
+
+.default-h3 {
+  font-weight: bold;
+  font-family: 'ZCOOL XiaoWei', serif;
+  margin: 20px 0px 20px 0px;
+  text-align: center;
+}
+
+.default-h4 {
+  /*font-family: 'Orbitron', serif;*/
+  padding: 5px;
+} 
+
+/***
+* Font / Text
+***/
+#output p.default-p {
+  padding: 5px;
+}
+
+.default-p, .tutorial, .meta {
+  text-align: justify;
+  text-justify: inter-word;
+  margin: 5px 0px 5px 0px;
+}
+
+.default-p strong {
+  margin-bottom: 10px;
+}
+
+.dark-body {
+  background-color: #111;
+  color: #eee;
+}
+
+/* Style page content */
+#main {
+  margin-left: 170px; /* Same as the width of the sidebar */
+  margin-right: 160px; /* Same as the width of the sidebar */
+  /*padding: 10px;
+  border: #ccc 1px solid;*/
+}
+
+#input input {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.cmd-link {
+  cursor: pointer;
+  color:blue;
+}
+
+.dark-body .cmd-link {
+  color:#aaf;
+}
+
+.dark-body a {
+  color:#aaf;
+}
+
+.about-footer {
+  float: left;
+  padding: .5em 1em;
+}
+
+/***
+* Buttons
+***/
+.qbtn {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  border: #ccc 1px solid;
+  border-radius: 4px;
+  padding: 3px;
+  margin-left: 3px;
+  background-color: #f9f9f9;
+  text-decoration: none;
+}
+
+.qbtn i {
+  vertical-align: middle;
+  margin: auto;
+}
+
+.qbtn i:hover {
+  color: #FF0000;
+}
+
+/***
+* Dialog
+***/
+#dialog p {
+  padding: 10px 0px 10px 0px;
+  text-align: justify;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+  padding: 0px !important;
+}
+
+.ui-widget {
+  font-family: Verdana,Arial,sans-serif;
+  font-size: 0.95em;
+}
+
+.ui-widget .ui-widget {
+  font-size: 0.75em;
+}
+
+/* The command bar  */
+#textbox {
+  border:none;
+  outline: none;
+  width:95%;
+}
+
+.dark-body   #textbox {
+  background-color: #111;
+  color: white;
+}
+
+.input-text {
+  font-style:italic;
+  color:green;
+  margin-left: 5px;
+}
+
+.dark-body   .input-text {
+  color:lightgreen;
+}
+
+/***
+* Side Panes
+***/
+.side-panes {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 170px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 5px;
+  padding-left: 5px;
+  font-size: 10pt;
+  /*font-family: sans-serif;*/
+}
+.pane-div {
+  background-color: #f9f9f9;
+  border: #ccc 1px solid;
+  padding: 0px;
+  margin-bottom: 5px;
+}
+
+.pane-content {
+  padding: 5px 10px 5px 10px;
+}
+
+.dark-body  .pane-div {
+  background-color:#606;
+}
+
+.side-panes-left {
+  left: 0;
+}
+
+.side-panes-right {
+  right: 0px;
+}
+
+.side-panes-none {
+  display: None;
+}
+
+.pane-div-finished {
+  display: none;
+  font-size: 3em;
+  text-align: center;
+}
+
+/***
+* Compass 
+***/
+#compass-table {
+  padding: 5px;
+  margin: auto;
+}
+
+#compass-table td {
+  padding: 1px;
+}
+
+td.compass-button {
+  cursor: pointer;
+  border: #ccc solid 1px;
+  border-radius: 4px;
+  padding: 2px;
+  background-color: #f5f5f5;
+  min-width: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+td.compass-button:hover {
+  color:blue;
+}
+
+.dark-body .compass-button {
+  background-color:#404;
+}
+
+span.compass-button {
+  padding: 3px;
+  cursor: pointer;
+  text-align: center;
+  margin: auto;
+  width: 18px;
+  display: block;
+}  
+
+/***
+* Inventory
+***/
+.side-pane-heading {
+  border-bottom: #ccc 1px solid;
+  padding: 7px;
+  margin-top: 0px;
+  margin-bottom: -1px;
+  margin-left: 0px;
+}
+
+#itemsHeld,
+#itemsWorn,
+#itemsHere {
+  margin-bottom: 10px;
+}
+
+.item {
+  cursor: pointer;
+  border: black solid 1px;
+  border-radius: 4px;
+  padding: 2px;
+  background-color: #e1ebf2;
+  width: auto;
+  max-width: 130px;
+  margin-left: 10px;
+  margin-bottom: 0px;
+}
+
+.item:first-child {
+  margin-top: 10px;
+}
+
+.dark-body  div  .item {
+  background-color:#404;
+}
+
+.sub-item {
+  background-color: #a0a0ff;
+  width: 140px;
+  margin-top: 0px;
+}
+
+.dark-body  div  .sub-item {
+  background-color:#305;
+}
+
+.item-action {
+  cursor: pointer;
+  border: black solid 1px;
+  border-top: none;
+  padding: 2px;
+  background-color: #e0e0ff;
+  width: 100px;
+  margin-left: 20px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-style:italic;
+}
+
+.dark-body  div  .item-action {
+  background-color:#602;
+}
+
+#status-pane {
+  padding-left: 5pt;
+}
+
+#dialog {
+  display:none;
+}
+
+.toggle {
+  text-align: right;
+}
+
+/***
+* Show Menu
+***/
+.menu-title {
+  color: grey;
+  font-style: italic;
+  margin-left: 20px;
+}
+
+.menu-option {
+  color:blue;
+  cursor: pointer;
+  font-style: italic;
+  margin-left: 20px;
+}
+
+
+/* Various msg options */
+.tutorial {
+  color: blue;
+  font-style:italic;
+}
+
+.dark-body   .tutorial {
+  color: lightblue;
+}
+
+.hidden {}
+
+.hidden    .tutorial {
+  display: none;
+}
+
+.metapanel {
+  background-color: #f9f9f9;
+  border: #ccc 1px solid;
+  padding: 10px;
+}
+
+.meta {
+  color: grey;
+  background-color: #f9f9f9;
+  border: #ccc 1px solid;
+  padding: 10px;
+}
+
+.dark-body .meta {
+  background-color: #070707;
+  border: #333 1px solid;
+}
+
+.parser {
+  font-weight: bold;
+  font-size: 10pt;
+  color: grey;
+}
+
+.error {
+  font-weight: bold;
+  font-size: 10pt;
+  color: red;
+}
+
+.debug {
+  font-size: 10pt;
+  color: grey;
+  font-family: monospace;
+  /*display: none;*/
+}
+
+/* For dialog panels */
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+
+.ui-dialog-titlebar {
+  background-image: none;
+  background-color: #f9f9f9;
+}
+
+.scrolling {
+  cursor: pointer;
+  color: blue;
+  background-color: silver;
+}
+
+th, td {
+  padding:4px;
+  text-align:center;
+}
+
+/***
+* Miscelaneous 
+***/
+.typewriter {
+/*  font-weight: bold;
+  font-size: larger;*/
+  color:grey;
+}
+
+.meta i.fas {
+  color: blue;
+  font-weight: bold;
+}
+
+.compass-button i:hover {
+	color: blue;
+}
+
+/***
+* Panel 
+***/
+#panel {
+  width: 101%;
+  border: #ccc solid 1px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#panel .head {
+  height: 20px;
+  border-bottom: #ccc solid 1px;
+  padding: 5px 5px 5px 10px;
+}
+
+#panel .content {
+  padding: 10px 5px 10px 5px;
+  margin-bottom: 10px;
+}
+
+#panel .footer {
+  clear: both;
+  height: 20px;
+  border-top: #ccc solid 1px;
+  padding: 5px 5px 5px 10px;
+}
+
+#panel .title {
+  float: left;
+  text-align: left;
+  font-weight: bold;
+}
+
+#panel .toggle {
+  float: right;
+  text-align: right;
+  padding-right: 5px;
+}
+
+#panel p {
+  padding: 10px;
+  margin-bottom: 0px;
+}
+
+#panel ul li {
+  list-style-type: circle;
+}
+
+#panel a {
+  color: #000000;
+  text-decoration: none;
+}
+
+#panel a:hover {
+  color:blue;
+}
+
+#panel .sidepane {
+  float: left;
+  width: 25%;
+  margin-bottom: 4px;
+  padding: 10px;
+}
+
+#panel .show {
+  display: block;
+}
+
+#panel .hide {
+  display: none;
+}
+
+#panel .sidepane ul {
+  /*margin-left: 15px;*/
+  counter-reset: section;
+}
+
+#panel .sidepane li::before {
+  counter-increment: section;
+  content: counters(section, ".") ". ";
+  font-weight: bold;
+}
+
+#panel .sidepane li {
+  list-style-type: none;
+  margin-bottom: 7px;
+}
+
+/***
+* Rules 
+***/
+.rules {
+  float: right;
+  width: 70%;
+  margin-bottom: 10px;
+  counter-reset: section;
+}
+
+.rules div {
+
+}
+
+.rules p::before {
+  counter-increment: section;
+  content: counters(section, ".") ". ";
+  font-weight: bold;
+}
+
+.rules p {
+  text-align: justify;
+  margin-bottom: 15px;
+}
+
+.rules .fragment {
+  background-color: #ECD5D8;
+  color: #9C2A4D;
+  margin-left: -2px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.rules .fragment a {
+  color: #9C2A4D;
+}
+
+/***
+* Toolbar 
+***/
+.toolbar {
+  display: inline-flex;
+  width: 100%;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.toolbar.button {
+  height: 20px;
+  border: #ccc 1px solid;
+  border-radius: 4px;
+  padding: 4px;
+  background-color: #f9f9f9;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.toolbar .status {
+  float: left;
+  text-align: left;
+  padding-left: 5px;
+}
+
+.toolbar .room {
+  text-align: center;
+  margin: auto;
+}
+
+.toolbar .links {
+  float: right;
+  text-align: right;
+}
+
+.toolbar a.link {
+  cursor: pointer;
+  color: #000000;
+  vertical-align: middle;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-decoration: none;
+}
+
+.toolbar a.link:hover {
+  color: blue;
+}
+
+/***
+* Context Menu 
+***/
+#context-menu {
+  position: fixed;
+  z-index: 10000;
+  width: 150px;
+  background-color: #f9f9f9;
+  transform: scale(0);
+  transform-origin: top left;
+}
+
+#context-menu.acive {
+  transform: scale(1);
+  transition: transform 200ms ease-in-out;
+}
+
+#context-menu .item {
+  padding: 8px 10px;
+  font-size: 15px;
+  color: #000;
+}
+
+#context-menu .item:hover {
+  color: #a0a0ff;
+}
+
+#context-menu .item i {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+#context-menu hr {
+  margin: 2px 0px;
+  border-color: #CCC;
+}

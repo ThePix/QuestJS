@@ -17,6 +17,8 @@ settings.textEffectDelay = 100
 settings.imagesFolder = 'images/'
 settings.libraries.push('zone')
 settings.libraries.push('quest')
+settings.styleFile = 'style'
+
 
 settings.symbolsForCompass = true
 
@@ -37,7 +39,8 @@ settings.setup = function() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
   io.updateStatus()
-  createPaneBox(2, "Extra options", '<button onclick="alert(\'Here!\')" />')
+  createPaneBox(2, "Extra options", '<button onclick="alert(\'Here!\')">Alert</button>')
+  
 }
 
 
