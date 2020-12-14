@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron|Ubuntu+Condensed');
+
+
+@keyframes offset {
+  from {
+    background-position: 200px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+
+body {
+  color: black;
+  font-family: 'Ubuntu Condensed', sans-serif;
+  background-color: #202020;
+  font-size: 16px;
+}
+
+
+.dark-body {
+  color: #eee;
+}
+
+
+/* Style page content */
+#main {
+  margin-left: 200px; /* Same as the width of the sidebar */
+  margin-right: 100px; /* Same as the width of the sidebar */
+  margin-bottom: 160px; /* Same as the width of the sidebar */
+  margin-top: 20px; /* Same as the width of the sidebar */
+  padding: 15px;
+  background-color: #d0d0d0;
+  border: #004 solid 5px;
+}
+.default-p {
+  text-align: justify;
+  text-justify: inter-word;
+  text-indent: 50px;
+}
+.dark-body #main {
+  background-color: #111;
+}
+
+h2, h4 {
+  font-family: 'Orbitron', serif;
+}
+
+.cmd-link {
+  cursor: pointer;
+  color:blue;
+}
+  
+
+
+
+/* The command bar  */
+#textbox {
+  border:none;
+  outline: none;
+  background-color: #d0d0d0;
+  width:95%;
+}
+.dark-body   #textbox {
+  background-color: #111;
+  color: white;
+}
+
+
+.input-text {
+  font-style:italic;
+  color:green;
+}
+.dark-body   .input-text {
+  color:lightgreen;
+}
+
+
+
+
+/* Side panes */
+.side-panes {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 160px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 2; /* Stay on top */
+  top: 0; /* Stay at the top */
+  background-color: #555;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding: 5px;
+  font-size: 12pt;
+}
+.pane-div {
+  background-color:#bbb;
+  padding-bottom:5px;
+  border: #004 solid 2px;
+  margin-bottom: 10px;
+}
+.pane- h4 {
+  text-align: center;
+  margin: 10px;
+}
+.dark-body  .pane-div {
+  background-color:#333;
+}
+.side-panes-left {
+  left: 0;
+}
+.side-panes-right {
+  right: 0px;
+}
+.side-panes-none {
+  display: None;
+}
+
+
+
+.pane-div-finished {
+  display: none;
+  font-size: 3em;
+  text-align: center;
+}
+
+
+
+#bottom-panel {
+  bottom: 0;
+  height: 60px;
+  width: 80%;
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  padding: 20px 160px 20px 160px;
+}
+
+
+#scanner {
+  background-color: black;
+  overflow: hidden;
+  height: 100%;
+  border: #444 solid 5px;
+  margin-left: 20px;
+  background-image: url('../images/scanner.png');
+  animation-name: offset;
+  animation-duration: 30s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+
+#dialog {
+  font-size: 16px; 
+  //font-family: 'Orbitron';
+  font-family: 'Ubuntu Condensed', sans-serif;
+}
+
+.ui-dialog-title{
+  font-family: 'Orbitron';
+    font-size: 110% !important;
+    color: black !important;
+}
+
+
+
+// Used by showMenu
+.menu-title {
+  color: grey;
+  font-style: italic;
+  margin-left: 20px;
+}
+.menu-option {
+  color:blue;
+  cursor: pointer;
+  font-style: italic;
+  margin-left: 20px;
+}
+.dark-body .menu-option, .dark-body a {
+  color:#aaf;
+}
+
+
+/* Various msg options */
+.meta {
+  color: grey;
+}
+.parser {
+  font-weight: bold;
+  font-size: 10pt;
+  color: grey;
+}
+.error {
+  font-weight: bold;
+  font-size: 10pt;
+  color: red;
+}
+
+
+
+
+.debug {
+  font-size: 10pt;
+  color: grey;
+  font-family: monospace;
+  /*display: none;*/
+}
+
+
+
+
+/* Compass */
+td.compass-button {
+    border: black solid 1px;
+    padding: 2px;
+    background-color: #d0d0d0;
+    width: 20px;
+    height: 20px;
+}  
+span.compass-button {
+    cursor: pointer;
+    text-align: center;
+    margin: auto;
+    width: 18px;
+    display: block;
+}
+.dark-body .compass-button {
+  background-color:#444;
+}
+
+
+
+#status-pane {
+  padding-left: 3pt;
+  padding-right: 3pt;
+}
+#compass-table {
+  padding-left: 5pt;
+}
+#dialog {
+  display:none;
+}
+
+
+
+/* For dialog panels */
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+.ui-dialog-titlebar {
+  background-image: none;
+  background-color: #ccc;
+}
+
+.scrolling {
+  cursor: pointer;
+  color: blue;
+  background-color: silver;
+}
+
+
+
+th, td {
+  padding:4px;
+}
+
+
+
+.typewriter {
+  font-weight: bold;
+  font-size: larger;
+}
+
+
+
+/* The container must be positioned relative: */
+.custom-select {
+  font-family: 'Ubuntu Condensed', sans-serif;
+  border-image:none;
+}
+
+
+
+.continue {
+  text-decoration: underline;
+  color:blue;
+  cursor: pointer;
+}
+  

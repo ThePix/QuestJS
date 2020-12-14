@@ -12,6 +12,7 @@ settings.warnings = 'This game does have swearing (including the F-word); it is 
 // UI options
 settings.libraries.push('shipwise')
 settings.files = ["const", "code", "commands", "text", "data", "npcs"]
+settings.styleFile = 'style'
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false
 settings.givePlayerAskTellMsg = false
@@ -37,8 +38,8 @@ settings.status = [
   function() { return settings.statusReport(w.Kyle) },
   function() { return settings.statusReport(w.Ostap) },
   function() { return settings.statusReport(w.Aada) },
-  function() { return settings.oxygenReport() },
   function() { return '<td colspan="3" style="border:black solid 1px" align="center" title="The current date and time (adjusted for relativistic effects)">' + util.getDateTime() + '</td>' },
+  function() { return settings.oxygenReport() },
 ];
 
 
@@ -76,8 +77,8 @@ settings.warningLight = function(colourCode) {
   //return "<td style=\"margin:3px;border:black solid 2px; background:" + colour + "\">&nbsp;</td>"
   
   let s = '<td title="' + settings.colourNotes[colourCode] + '">'
-  s += '<svg height="25" width="20">'
-  s += '<circle cx="10" cy="12" r="10" stroke="black" stroke-width="1" fill="' + settings.colours[colourCode] + '" />'
+  s += '<svg height="12" width="10">'
+  s += '<circle cx="5" cy="5" r="5" stroke="black" stroke-width="1" fill="' + settings.colours[colourCode] + '" />'
   s += '</svg>'
   s += '</td>'
   return s

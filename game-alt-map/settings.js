@@ -25,6 +25,7 @@ settings.roomTemplate = [
   "{objectsHere:You can see {objects} here.}",
 ]
 
+settings.mapAndImageCollapseAt = 1000
 
 settings.mapImages = [
   {

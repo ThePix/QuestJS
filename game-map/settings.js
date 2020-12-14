@@ -9,6 +9,7 @@ settings.playMode = "dev"
 settings.reportAllSvg = true
 
 settings.libraries.push('node-map')
+settings.mapAndImageCollapseAt = 1000
 settings.mapShowNotVisited = true
 settings.mapCellSize = 32
 settings.mapScale = 50
