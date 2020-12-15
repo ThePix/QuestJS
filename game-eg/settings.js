@@ -19,7 +19,7 @@ settings.libraries.push('zone')
 settings.libraries.push('quest')
 settings.styleFile = 'style'
 
-settings.textEffectDelay = 500
+settings.textEffectDelay = 100
 
 settings.symbolsForCompass = true
 
