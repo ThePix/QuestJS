@@ -69,7 +69,7 @@ createItem("hat", WEARABLE(), {
 
 Here are some examples:
 
-* There is a tutorial on how to play parser games [here](http://textadventures.co.uk/submit/gamedetails/q16v8_fowu6twsvfduz4vg).
+* There is a tutorial on how to play parser games [here](http://textadventures.co.uk/games/view/q16v8_fowu6twsvfduz4vg/a-tutorial-for-playing-parser-based-games).
 * There is a "Cloak of Darkness" sample game, more about that [here](https://github.com/ThePix/QuestJS/wiki/The-Cloak-of-Darkness).
 * There is an example game where I test most of the features [here](http://textadventures.co.uk/games/view/48pkf40on0soigganjtatq/first-steps).
 
