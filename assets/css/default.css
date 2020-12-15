@@ -77,14 +77,14 @@ ol, ul {
 /***
 * Font / Text
 ***/
-#output p.default-p {
+#output p {
   padding: 5px;
+  margin: 5px 0px 5px 0px;
 }
 
 .default-p, .tutorial, .meta {
   text-align: justify;
   text-justify: inter-word;
-  margin: 5px 0px 5px 0px;
 }
 
 .default-p strong {
@@ -105,7 +105,6 @@ ol, ul {
 #input input {
   font-family: 'Courier New', Courier, monospace !important;
   font-size: 16px;
-  margin-left: 5px;
 }
 
 .cmd-link {
@@ -186,7 +185,6 @@ ol, ul {
 .input-text {
   font-style:italic;
   color:green;
-  margin-left: 5px;
 }
 
 .dark-body   .input-text {
@@ -339,6 +337,7 @@ span.compass-button {
   margin-top: 0px;
   margin-bottom: 0px;
   font-style:italic;
+  display:none;
 }
 
 .dark-body  div  .item-action {
@@ -363,7 +362,6 @@ span.compass-button {
 .menu-title {
   color: grey;
   font-style: italic;
-  margin-left: 20px;
 }
 
 .menu-option {
@@ -452,9 +450,13 @@ th, td {
 * Miscelaneous 
 ***/
 .typewriter {
-/*  font-weight: bold;
-  font-size: larger;*/
+  padding: 5px;
+  margin: 5px 0 5px 0;
   color:grey;
+}
+.typewriter-active {
+  font-weight: bold;
+  font-size: larger;
 }
 
 .meta i.fas {
@@ -464,6 +466,11 @@ th, td {
 
 .compass-button i:hover {
 	color: blue;
+}
+
+.continue {
+	color: blue;
+  cursor: pointer;
 }
 
 /***

@@ -64,3 +64,16 @@ createItem("dinner_timetable", AGENDA_FOLLOWER(), {
     }      
   ],
 })
+
+
+
+
+  
+commands.unshift(  new Cmd('Audio', {
+  regex:/^q$/,
+  script:function() {
+    showMenuWithNumbers('What is your favourite color?', ['Blue', 'Red', 'Yellow', 'Pink'], function(result) {
+      msg("You picked " + result + ".");
+    });
+  },
+}));

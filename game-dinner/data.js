@@ -28,6 +28,11 @@ createItem("soup_can", TAKEABLE(), {
   },
 })
 
+createItem("beer_can", TAKEABLE(), {
+  loc:"lounge",
+  examine: "A large can of beer,",
+})
+
 createItem("bowls", TAKEABLE(), {
   loc:"lounge",
   state:0,
@@ -48,3 +53,5 @@ createItem("bowls", TAKEABLE(), {
     this.state = 0
   },
 })
+
+

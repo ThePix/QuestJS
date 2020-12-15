@@ -22,7 +22,7 @@ npc_utilities.talkto = function() {
 
 function showSidePaneOptions(item, options, fn) {
   const opts = {article:DEFINITE, capital:true}
-  io.input('', options, fn, function(options) {
+  io.input('', options, false, fn, function(options) {
     let s = '<div id="sidepane-menu"><p class="sidepane-menu-title">Talk to ' + lang.getName(item, {article:DEFINITE}) + ':</p>'
     for (let i = 0; i < options.length; i++) {
       s += '<p value="' + i + '" onclick="io.menuResponse(' + i + ')" class="sidepane-menu-option">';
