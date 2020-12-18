@@ -199,7 +199,7 @@ const lang = {
   cannot_lock:"{nv:char:can't:true} lock {ob:container}.",
   cannot_unlock:"{nv:char:can't:true} unlock {ob:container}.",
   not_container:"{nv:container:is:true} not a container.",
-  container_recursion:"What? You want to put {nm:item:the} in {nm:containter:the} when {nm:containter:the} is already in {nm:item:the}? That's just too freaky for me.",
+  container_recursion:"What? You want to put {nm:item:the} in {nm:container:the} when {nm:container:the} is already in {nm:item:the}? That's just too freaky for me.",
   not_inside:"{nv:item:'be:true} not inside that.",
   locked:"{nv:container:be:true} locked.",
   no_key:"{nv:char:do:true} have the right key.",
