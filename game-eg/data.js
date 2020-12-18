@@ -179,7 +179,7 @@ createItem("waterskin",
 
 
 
-createItem("glass_cabinet", CONTAINER(true), LOCKED_WITH("cabinet_key"), {
+createItem("glass_cabinet", CONTAINER(true), LOCKED_WITH(["cabinet_key", "small_key"]), {
   examine:"A cabinet with a glass front.",
   transparent:true,
   isAtLoc:function(loc) {

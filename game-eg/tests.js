@@ -294,6 +294,11 @@ test.tests = function() {
   test.assertCmd("drop all", "Nothing there to do that with.");
   test.assertCmd("get knife", "You take the knife.");
   
+  const knifeDrop = w.knife.drop
+  delete w.knife.drop
+  test.assertCmd("drop knife", "You can't drop it.");
+  w.knife.drop = knifeDrop
+  
 
   test.title("Simple object commands");
   test.assertCmd("i", "You are carrying a knife.");
@@ -302,7 +307,7 @@ test.tests = function() {
   test.assertCmd("get cabinet", "You can't take it.");
   test.assertCmd("get the cabinet", "You can't take it.");
   test.assertCmd("get a cabinet", "You can't take it.");
-  test.assertCmd("get knife", "You have it.");
+  test.assertCmd("get knife", "You've got it already.");
   test.assertCmd("x tv", "It's just scenery.");
   test.assertCmd("get tv", "You can't take it.");
   test.assertCmd("give knife to boots", "Realistically, the boots are not interested in anything you might give them.");
@@ -324,11 +329,11 @@ test.tests = function() {
   test.assertCmd("get boots", "You take the boots.");
   test.assertEqual(["Examine", "Drop", "Wear"], w.boots.getVerbs())
   test.assertCmd("inv", "You are carrying some boots and a knife.");
-  test.assertCmd("get boots", "You have them.");
+  test.assertCmd("get boots", "You've got them already.");
   test.assertCmd("wear boots", "You put on the boots.");
   test.assertEqual(["Examine", "Remove"], w.boots.getVerbs())
   test.assertCmd("inventory", "You are carrying some boots (worn) and a knife.");
-  test.assertCmd("wear boots", "You're wearing them.");
+  test.assertCmd("wear boots", "You're already wearing them.");
   test.assertCmd("remove boots", "You take the boots off.");
   test.assertEqual(["Examine", "Drop", "Wear"], w.boots.getVerbs())
   test.assertCmd("drop boots", "You drop the boots.");
@@ -407,6 +412,46 @@ test.tests = function() {
   test.assertCmd("drop box", "You drop the cardboard box.");
   
 
+  test.title("Simple object commands (cabinet and key)")
+  test.assertCmd("open small key", "The small key can't be opened.")
+  test.assertCmd("close small key", "The small key can't be closed.")
+  test.assertCmd("unlock small key", "You can't unlock it.")
+  test.assertCmd("lock small key", "You can't lock it.")
+
+  test.assertCmd("open cabinet", "The glass cabinet is locked.")
+  test.assertCmd("get small key", "You take the small key.")
+  test.assertEqual(true, w.glass_cabinet.locked)
+  test.assertEqual(true, w.glass_cabinet.closed)
+  test.assertCmd("open cabinet", ["You unlock the glass cabinet.", "You open the glass cabinet. Inside the glass cabinet you can see a jewellery box (containing a ring) and an ornate doll."])
+  test.assertEqual(false, w.glass_cabinet.locked)
+  test.assertEqual(false, w.glass_cabinet.closed)
+  test.assertCmd("open cabinet", "It already is.")
+  test.assertCmd("unlock cabinet", "It already is.")
+  test.assertCmd("lock cabinet", ["You close the glass cabinet and lock it."])
+  test.assertCmd("unlock cabinet", "You unlock the glass cabinet.")
+  test.assertCmd("put cabinet in small key", "The small key is not a container.")
+  
+
+
+  test.title("Simple object commands (cabinet and box)")
+  test.assertCmd("open cabinet", ["You open the glass cabinet. Inside the glass cabinet you can see a jewellery box (containing a ring) and an ornate doll."])
+
+  test.assertCmd("pick up cardboard box", "You take the cardboard box.")
+  test.assertCmd("pick up jewellery box", "You take the jewellery box.")
+
+
+  test.assertCmd("put cardboard box in jewellery box", "Done.")
+  test.assertCmd("put jewellery box in cardboard box", "What? You want to put the jewellery box in the cardboard box when the cardboard box is already in the jewellery box? That's just too freaky for me.")
+  test.assertCmd("take cardboard box box from jewellery box", "Done.")
+
+
+  test.assertCmd("put jewellery box in cabinet", "Done.")
+  test.assertCmd("close cabinet", "You close the glass cabinet.")
+  test.assertCmd("lock cabinet", "You lock the glass cabinet.")
+  test.assertCmd("drop small key", "You drop the small key.")
+  test.assertCmd("drop box", "You drop the cardboard box.")
+
+
 
   test.title("Restricting");
   test.assertEqual(["Look at", "Talk to"], w.Kyle.getVerbs())
@@ -434,9 +479,19 @@ test.tests = function() {
   test.assertCmd("wear coat", "You put on the coat.");
   test.assertCmd("wear underwear", "You can't put the underwear on over your jumpsuit.");
   test.assertCmd("remove coat", "You take the coat off.");  
-  test.assertCmd("drop all", ["Knife: You drop the knife.", "Underwear: You drop the underwear.", "Jeans: You drop the jeans.", "Shirt: You drop the shirt.", "Coat: You drop the coat.", "Jumpsuit: You're wearing it.", ]);
+  test.assertCmd("drop all", ["Knife: You drop the knife.", "Underwear: You drop the underwear.", "Jeans: You drop the jeans.", "Shirt: You drop the shirt.", "Coat: You drop the coat.", "Jumpsuit: You're already wearing it.", ]);
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
   test.assertCmd("get knife", "You take the knife.");
+  
+  
+  test.title("Postures")
+  test.assertCmd("lie on bed", "You lie down on the bed.");
+  test.assertCmd("get off bed", "You lie down on the bed.");
+  test.assertCmd("sit on bed", "You lie down on the bed.");
+  test.assertCmd("get off bed", "You lie down on the bed.");
+  test.assertCmd("stand on bed", "You lie down on the bed.");
+  test.assertCmd("lie on wardrobe", "You lie down on the bed.");
+  
   
   test.title("use")
   test.assertCmd("use jumpsuit", "You put on the jumpsuit.");
@@ -517,7 +572,7 @@ test.tests = function() {
   test.title("NPC commands 2");
   test.assertCmd("boots,get coin", "You can tell the boots to do what you like, but there is no way they'll do it.");
   test.assertCmd("kyle,get coin", "He tries to pick up the coin, but it just will not budge.");
-  test.assertCmd("kyle,get knife", "You have it.");
+  test.assertCmd("kyle,get knife", "You've got it already.");
   test.assertCmd("kyle,get cabinet", "He can't take it.");
   test.assertCmd("kyle,get cover", "He can't take it; it's part of the book.");
 
@@ -530,7 +585,7 @@ test.tests = function() {
   test.assertCmd("kyle,give boots to box", "Realistically, the cardboard box is not interested in anything he might give it.");
   test.assertCmd("kyle, get boots", "Kyle has them.");
   test.assertCmd("kyle, wear boots", "Kyle puts on the boots.");
-  test.assertCmd("kyle, wear boots", "Kyle's wearing them.");
+  test.assertCmd("kyle, wear boots", "Kyle's already wearing them.");
   test.assertCmd("kyle, remove boots", "Kyle takes the boots off.");
   test.assertCmd("kyle, put boots in box", "Done.");
 
@@ -1039,4 +1094,56 @@ test.tests = function() {
   
   
   /* */
+  this.check_lang = true
+  if (this.check_lang) {
+    const langSkips = [
+      /regex/,
+      /prefix/i,
+      /script/i,
+      /betaTestIntro/,
+      /game_over_html/,
+      /list_and/,
+      /list_nothing/,
+      /list_or/,
+      /list_nowhere/,
+      /never_mind/,
+      /click_to_continue/,
+      /buy/,
+      /buy_headings/,
+      /current_money/,
+      /yesNo/,
+      /pronouns/,
+      /verbs/,
+      /invModifiers/,
+      /exit_list/,
+      /numberUnits/,
+      /numberTens/,
+      /ordinalReplacements/,
+      /conjugations/,
+      /contentsForData/,
+      /addDefiniteArticle/,
+      /addIndefiniteArticle/,
+      /getName/,
+      /toWords/,
+      /toOrdinal/,
+      /convertNumbers/,
+      /conjugate/,
+      /pronounVerb/,
+      /pronounVerbForGroup/,
+      /verbPronoun/,
+      /nounVerb/,
+      /verbNoun/,
+    ]
+    let count = 0
+    console.log(tp.usedStrings.length)
+    for (let el in lang) {
+      if (typeof el !== 'string') continue
+      if (langSkips.find(e => el.match(e))) continue
+      if (tp.usedStrings.includes(lang[el])) continue
+      console.log(el)
+      count++
+    }
+    console.log(count)
+  }
+  
 };
