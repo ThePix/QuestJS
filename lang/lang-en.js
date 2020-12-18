@@ -228,9 +228,9 @@ const lang = {
   sit_on_successful:"{nv:char:sit:true} on {nm:item:the}.",
   stand_on_successful:"{nv:char:stand:true} on {nm:item:the}.",
   recline_on_successful:"{nv:char:lie:true} down on {nm:item:the}.",
-  cannot_stand_on:"{nv:char:'be:true} not something you can stand on.",
-  cannot_sit_on:"{nv:char:'be:true} not something you can sit on.",
-  cannot_recline_on:"{nv:char:'be:true} not something you can lie on.",
+  cannot_stand_on:"{nv:item:'be:true} not something you can stand on.",
+  cannot_sit_on:"{nv:item:'be:true} not something you can sit on.",
+  cannot_recline_on:"{nv:item:'be:true} not something you can lie on.",
 
 
   // SWITCHABLE
@@ -239,7 +239,7 @@ const lang = {
   cannot_switch_on:"{nv:char:can't:true} turn {ob:item} on.",
   cannot_switch_off:"{nv:char:can't:true} turn {ob:item} off.",
 
-
+/*
   // VESSEL
   fill_successful:"{nv:char:fill:true} {nm:container:the}.",
   empty_successful:"{nv:char:empty:true} {nm:container:the}.",
@@ -247,7 +247,7 @@ const lang = {
   cannot_mix:"{nv:container:'be:true} not something you can mix liquids in.",
   cannot_empty:"{nv:container:'be:true} not something you can empty.",
   not_vessel:"{pv:container:be:true} is not a vessel.",
-
+*/
 
   // NPC
   not_npc:"{nv:char:can:true} tell {nm:item:the} to do what you like, but there is no way {pv:item:'ll} do it.",
@@ -276,16 +276,16 @@ const lang = {
 
 
   // ROPE
-  ropeExamineAddBothEnds:" It is {rope.attachedVerb} to both {nm:obj1:the} and {nm:obj2:the}.",
-  ropeExamineAddOneEnd:" It is {rope.attachedVerb} to {nm:obj1:the}.",
-  ropeAttachVerb:'tie',
-  ropeAttachedVerb:'tied',
-  ropeDetachVerb:'untie',
-  ropeOneEnd:'One end',
-  ropeOtherEnd:'The other end',
-  ropeExamineEndAttached:'is {rope.attachedVerb} to {nm:obj:the}.',
-  ropeExamineEndHeld:'is held by {nm:holder:the}.',
-  ropeExamineEndHeaded:'heads into {nm:loc:the}.',
+  rope_examine_attached_both_ends:" It is {rope.attachedVerb} to both {nm:obj1:the} and {nm:obj2:the}.",
+  rope_examine_attached_one_end:" It is {rope.attachedVerb} to {nm:obj1:the}.",
+  rope_attach_verb:'tie',
+  rope_attached_verb:'tied',
+  rope_detach_verb:'untie',
+  rope_one_end:'One end',
+  rope_other_end:'The other end',
+  rope_examine_end_attached:'is {rope.attachedVerb} to {nm:obj:the}.',
+  rope_examine_end_held:'is held by {nm:holder:the}.',
+  rope_examine_end_headed:'heads into {nm:loc:the}.',
     
 
 
@@ -314,7 +314,7 @@ const lang = {
   nothing_for_sale:"Nothing for sale here.",
   wait_msg:"You wait one turn.",
   no_map:"Sorry, no map available.",
-  inventoryPreamble:"You are carrying",
+  inventory_prefix:"You are carrying",
 
 
   // General command fails
@@ -385,7 +385,7 @@ const lang = {
   },
   
   // Use when the NPC leaves a room; will give a message if the player can observe it
-  npcLeavingMsg:function(npc, dest) {
+  npc_leaving_msg:function(npc, dest) {
     let s = "";
     let flag = false;
     if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
@@ -402,7 +402,7 @@ const lang = {
   },
 
   // the NPC has already been moved, so npc.loc is the destination
-  npcEnteringMsg:function(npc, origin) {
+  npc_entering_msg:function(npc, origin) {
     let s = "";
     let flag = false;
     if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {

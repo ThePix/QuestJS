@@ -279,14 +279,25 @@ test.tests = function() {
 
 
 
-  test.title("Look inside");
-  test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box and an ornate doll.");
+  test.title("Look inside")
+  test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box and an ornate doll.")
   w.jewellery_box.closed = false
   test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box (containing a ring) and an ornate doll.")
   
-  test.assertCmd("look inside box", "Inside the cardboard box you can see nothing.");
-  test.assertCmd("look inside boots", "There's nothing to see inside.");
-  test.assertCmd("look inside book", "The book has pages and pages of text, but you do not even recongise the text.");
+  test.assertCmd("look inside box", "Inside the cardboard box you can see nothing.")
+  test.assertCmd("look inside boots", "There's nothing to see inside.")
+  test.assertCmd("look inside book", "The book has pages and pages of text, but you do not even recongise the text.")
+
+  test.assertCmd("smell", "You can't smell anything here.")
+  test.assertCmd("listen", "You can't hear anything of note here.")
+  test.assertCmd("smell knife", "The knife has no smell.")
+  test.assertCmd("listen to knife", "The knife is not making any noise.")
+  test.assertCmd("read knife", "Nothing worth reading there.")
+  test.assertCmd("smash knife", "The knife's not something you can break.")
+  test.assertCmd("look out knife", "Not something you can look out of.")
+  test.assertCmd("switch on knife", "You can't turn it on.")
+  test.assertCmd("switch off knife", "You can't turn it off.")
+  test.assertCmd("exits", "You think you can go east, south, up or west.")
   
   
   test.title("Drop all");
@@ -419,6 +430,7 @@ test.tests = function() {
   test.assertCmd("lock small key", "You can't lock it.")
 
   test.assertCmd("open cabinet", "The glass cabinet is locked.")
+  test.assertCmd("unlock cabinet", "You do have the right key.")
   test.assertCmd("get small key", "You take the small key.")
   test.assertEqual(true, w.glass_cabinet.locked)
   test.assertEqual(true, w.glass_cabinet.closed)
@@ -485,12 +497,13 @@ test.tests = function() {
   
   
   test.title("Postures")
-  test.assertCmd("lie on bed", "You lie down on the bed.");
-  test.assertCmd("get off bed", "You lie down on the bed.");
-  test.assertCmd("sit on bed", "You lie down on the bed.");
-  test.assertCmd("get off bed", "You lie down on the bed.");
-  test.assertCmd("stand on bed", "You lie down on the bed.");
-  test.assertCmd("lie on wardrobe", "You lie down on the bed.");
+  test.assertCmd("lie on bed", "You lie down on the bed.")
+  test.assertCmd("get off bed", "You get off the bed.")
+  test.assertCmd("sit on bed", "You sit on the bed.")
+  test.assertCmd("get off bed", "You get off the bed.")
+  test.assertCmd("stand on bed", "The bed's not something you can stand on.")
+  test.assertCmd("lie on wardrobe", "The wardrobe's not something you can lie on.")
+  test.assertCmd("sit on wardrobe", "The wardrobe's not something you can sit on.")
   
   
   test.title("use")
@@ -505,10 +518,8 @@ test.tests = function() {
   test.assertCmd("use bed", "You already are.");
   test.assertCmd("stand", "You get off the bed.");
   test.assertEqual(["Examine", "Sit on", "Lie on"], w.bed.getVerbs())
-  
-  test.title("use with")
-  
-  test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, some boots, seven bricks, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), a small key and a waterskin here.", "You can go east, south, up or west.",]);  
+  test.assertCmd("use bed", "You lie down on the bed.");
+  test.assertCmd("d", ["You get off the bed.", "You head down.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, some boots, seven bricks, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), a small key and a waterskin here.", "You can go east, south, up or west.",]);  
 
   
   test.title("say");
@@ -521,7 +532,6 @@ test.tests = function() {
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
   test.assertCmd("say yes", ["You say, 'Yes.'", "'Oh, cool,' says Kyle."]);
   test.assertCmd("say hello", ["You say, 'Hello.'", "No one seemed interested in what you say."]);
-
 
 
   test.title("ask");
@@ -537,6 +547,9 @@ test.tests = function() {
   test.assertCmd("topics kyle", ["Some suggestions for what to ask Kyle about: Fountain; Garden; House; Park."])
   test.assertCmd("ask kyle about park", ["You ask Kyle about park.", "'Going to the park sounds like fun,' Kyle says with a grin. 'We can go on the swings!'"]);
   test.assertCmd("topics kyle", ["Some suggestions for what to ask Kyle about: Fountain; Garden; House; Park; Swings."])
+
+  test.assertCmd("ask chair about hats", 'You can ask it about hats all you like, but it\'s not about to reply.')
+  test.assertCmd("talk to chair", 'You chat to the chair for a few moments, before releasing that it\'s not about to reply.')
 
 
   
@@ -1100,6 +1113,23 @@ test.tests = function() {
       /regex/,
       /prefix/i,
       /script/i,
+      /sl_dir_headings/,
+      /sl_dir_msg/,
+      /sl_no_filename/,
+      /spoken_on/,
+      /spoken_off/,
+      /mode_brief/,
+      /mode_terse/,
+      /mode_verbose/,
+      /mode_silent_on/,
+      /mode_silent_off/,
+      /undo_disabled/,
+      /undo_not_available/,
+      /undo_done/,
+      /again_not_available/,
+      /scores_not_implemented/,
+      /restart_no/,
+      /restart_are_you_sure/,
       /betaTestIntro/,
       /game_over_html/,
       /list_and/,
@@ -1134,16 +1164,22 @@ test.tests = function() {
       /nounVerb/,
       /verbNoun/,
     ]
-    let count = 0
+    let countOutstanding = 0
+    let countDone = 0
     console.log(tp.usedStrings.length)
     for (let el in lang) {
       if (typeof el !== 'string') continue
       if (langSkips.find(e => el.match(e))) continue
-      if (tp.usedStrings.includes(lang[el])) continue
+      if (tp.usedStrings.includes(lang[el])) {
+        countDone++
+        continue
+      }
       console.log(el)
-      count++
+      countOutstanding++
     }
-    console.log(count)
+    console.log(countOutstanding + '/' + (countOutstanding+countDone))
   }
   
-};
+  
+  
+}
