@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Condensed');
+
+
+body {
+  font-family: 'Ubuntu Condensed', sans-serif;
+}
+
+.default-h2 {
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.default-h3 {
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.default-h4 {
+  font-family: 'ZCOOL XiaoWei', serif;
+} 

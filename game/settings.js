@@ -8,3 +8,4 @@ settings.warnings = "No warnings have been set for this game."
 settings.playMode = "play"
 
 settings.symbolsForCompass = true
+settings.themes = ['sans-serif']

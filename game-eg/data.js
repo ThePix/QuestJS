@@ -214,35 +214,34 @@ createItem("cardboard_box", TAKEABLE(), CONTAINER(true), {
   closed:false,
 });
 
-createItem("sandwich",
-  EDIBLE(false),
-  { loc:"lounge", examine:"A tasty looking thing.", onIngesting:function() { msg("That was great!"); }, }
-);
+createItem("sandwich", EDIBLE(false), {
+  loc:"lounge",
+  onIngesting:function() { msg("That was great!"); },
+})
 
 
-createItem("ornate_doll",
-  TAKEABLE(),
-  { loc:"glass_cabinet", alias:"ornate doll", examine:"A fancy doll, eighteenth century." }
-);
+createItem("ornate_doll", TAKEABLE(), {
+  loc:"glass_cabinet", 
+  alias:"ornate doll", 
+  examine:"A fancy doll, eighteenth century.",
+})
 
 
 
 
-createItem("coin",
-  TAKEABLE(),
-  {
-    loc:"lounge", examine: "A gold coin.",
-    take:function(isMultiple, participant) {
-      msg(prefix(this, isMultiple) + lang.pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
-      return false;
-    },
-  }
-);
+createItem("coin", TAKEABLE(), {
+  loc:"lounge",
+  examine: "A gold coin.",
+  take:function(isMultiple, participant) {
+    msg(prefix(this, isMultiple) + lang.pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
+    return false;
+  },
+})
 
 
 createItem("small_key", KEY(), { 
   loc:"lounge", examine: "A small key.", alias: "small key",
-});
+})
 
 
 createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
@@ -865,7 +864,7 @@ createItem("Kyle_The_Weather",
 
 createItem("Lara", NPC(true), {
   loc:"dining_room", 
-  examine:"A normal-sized bunny.", 
+  examine:"A normal-sized bunny.",
   properName:true, 
   happy:false,
   giveReaction:function(item, multiple, char) {

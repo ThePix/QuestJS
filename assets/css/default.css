@@ -1,7 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat|ZCOOL+XiaoWei');
-@import url('https://fonts.googleapis.com/css?family=Orbitron|Ubuntu+Condensed');
-@import url('https://fonts.googleapis.com/css?family=Coda&display=swap');
-
 /***
 * Reset 
 ***/
@@ -39,7 +35,7 @@ html {
 body {
   line-height: 1;
   color: black;
-  font-family: 'Ubuntu Condensed', sans-serif;
+  font-family: sans-serif;
   width: 100%;
   margin-bottom: 20px;
 }
@@ -57,20 +53,17 @@ ol, ul {
 ***/
 .default-h2 {
   font-weight: bold;
-  font-family: 'ZCOOL XiaoWei', serif;
   margin: 20px 0px 20px 0px;
   text-align: center;
 }
 
 .default-h3 {
   font-weight: bold;
-  font-family: 'ZCOOL XiaoWei', serif;
   margin: 20px 0px 20px 0px;
   text-align: center;
 }
 
 .default-h4 {
-  /*font-family: 'Orbitron', serif;*/
   padding: 5px;
 } 
 

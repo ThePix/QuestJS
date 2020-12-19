@@ -276,6 +276,9 @@ test.tests = function() {
 
 
 
+  test.title("errors")
+  test.assertCmd("get sdjfghfg", "You can't see anything you might call 'sdjfghfg' here.")
+  test.assertCmd("map", "Sorry, no map available.")
 
 
 
@@ -328,9 +331,17 @@ test.tests = function() {
   test.assertCmd("eat knife", "The knife's not something you can eat.");
   test.assertEqual(["Examine", "Take"], w.sandwich.getVerbs())
   test.assertCmd("get sandwich", "You take the sandwich.");
+  test.assertCmd("x sandwich", "It's just your typical, every day sandwich.")
   test.assertEqual(["Examine", "Drop", "Eat"], w.sandwich.getVerbs())
   test.assertCmd("drink sandwich", "The sandwich's not something you can drink.");
   test.assertCmd("ingest sandwich", ["You eat the sandwich.", "That was great!"]);
+  
+  test.title("Simple object commands (drink the sandwich?)")
+  w.sandwich.loc = game.player.name
+  w.sandwich.isLiquid = true
+  test.assertEqual(["Examine", "Drop", "Drink"], w.sandwich.getVerbs())
+  test.assertCmd("drink sandwich", ["You drink the sandwich.", "That was great!"]);
+
 
   
   test.title("Simple object commands (boots)");
@@ -907,13 +918,16 @@ test.tests = function() {
   test.title("Get all (nothing)");
   test.assertCmd("w", ["You head west.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can go east, north or west."]);
   test.assertCmd("get all", "Nothing there to do that with.");
-  test.assertCmd("n", ["You head north.", "The shop", "A funny little shop.", "You can go south."]);
   
   
   
   w.Buddy.money = 20
 
   test.title("shop - text processor");
+  test.assertCmd("buy", ["Nothing for sale here."]);
+
+
+  test.assertCmd("n", ["You head north.", "The shop", "A funny little shop.", "You can go south."]);
   test.assertEqual("The carrot is $0,02", processText("The carrot is {money:carrot}"))
   test.assertEqual("The carrot is $0,02", processText("The carrot is {$:carrot}"))
   test.assertEqual("You see $0,12", processText("You see {$:12}"))
@@ -930,7 +944,7 @@ test.tests = function() {
   test.assertEqual(false, w.carrot0.isForSale(game.player.loc))
   test.assertCmd("buy carrot", ["You buy the carrot for $0,02."]);
   test.assertEqual(16, w.Buddy.money)
-  test.assertCmd("buy flashlight", ["You can't buy it."]);
+  test.assertCmd("buy flashlight", ["You can't buy the flashlight here."]);
   test.assertCmd("buy trophy", ["You buy the trophy for $0,15."]);
   test.assertEqual(1, w.Buddy.money)
   test.assertEqual(true, parser.isForSale(w.carrot))
@@ -1113,6 +1127,7 @@ test.tests = function() {
       /regex/,
       /prefix/i,
       /script/i,
+      /rope_/,   // rope ones are combined so this system does not find them anyway
       /sl_dir_headings/,
       /sl_dir_msg/,
       /sl_no_filename/,

@@ -216,11 +216,9 @@ const lang = {
   // MECHANDISE
   purchase_successful:"{nv:char:buy:true} {nm:item:the} for {money:money}.",
   sell_successful:"{nv:char:sell:true} {nm:item:the} for {money:money}.",
-  cannot_purchase:"{nv:char:can't:true} buy {ob:item}.",
   cannot_purchase_again:"{nv:char:can't:true} buy {nm:item:the} here - probably because {pv:char:be} already holding {ob:item}.",
   cannot_purchase_here:"{nv:char:can't:true} buy {nm:item:the} here.",
   cannot_afford:"{nv:char:can't:true} afford {nm:item:the} (need {money:money}).",
-  cannot_sell:"{nv:char:can't:true} sell {ob:item}.",
   cannot_sell_here:"{nv:char:can't:true} sell {nm:item:the} here.",
 
 
