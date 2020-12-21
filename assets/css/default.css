@@ -466,6 +466,27 @@ th, td {
   cursor: pointer;
 }
 
+.popup-link {
+  cursor:pointer;
+  color:blue;
+}
+
+.popup {
+  position:fixed;
+  z-index:9999;
+  display:none;
+  cursor:pointer;
+  left:50%;
+  top:40%;
+  width:400px;
+  margin-left: -200px;
+  background-color:yellow;
+  border:2px solid;
+  padding:5px;
+}
+
+
+
 /***
 * Panel 
 ***/
