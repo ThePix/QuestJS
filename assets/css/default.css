@@ -705,40 +705,65 @@ th, td {
 /***
 * Item links
 ***/
+.exit-link:not(.disabled), .object-link:not(.disabled){
+	cursor: pointer;
+}
 .droplink{
-	color:blue;
+  color:blue;
+  font-size: inherit;
 }
 .droplink:not(.disabled) {
-  cursor: pointer;
+    /*background-color: #3498DB;
+    color: blue;
+    padding: 16px;
+    font-size: 16px;
+    border: none;*/
+    cursor: pointer;
+    text-decoration: underline;
+    font-size:inherit;
 }
 
 .droplink:hover:not(.disabled), .droplink:focus:not(.disabled), .exit-link:hover:not(.disabled) {
-  color: blue;
+    color: blue;
 }
 
 .dropdown {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  overflow: auto;
-  border: 1px solid black;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    overflow: auto;
+	border: 1px solid black;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
 }
 
 .dropdown-content span {
-  color: black;
-  padding: 6px;
-  text-decoration: none;
-  display: block;
-  cursor: pointer;
+    color: black;
+    padding: 2px;
+    text-decoration: none;
+    display: block;
+    border: 1px solid black;
 }
 
-.dropdown a:hover {background-color: #ddd}
+.dropdown  a:hover {
+	background-color: #ddd;
+}
 
-.show {display:block;}
+.list-link-verb:hover {
+	background-color: #ddd;
+}
+
+.show {
+  display:block;
+}
+.list-link-verb {
+	white-space:nowrap;
+}
+.exit-link:not(.disabled) {
+	text-decoration:underline;
+}

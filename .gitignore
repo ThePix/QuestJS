@@ -4,16 +4,11 @@ tmp.*
 *.yml
 *.rb
 *.txt
-*.zip
 game-x*/
 game-banks-demo/
 page-*-demo.html
 libx/
 page-x*.html
-images/Joseph Banks.svg
+images/
 misc/
 sounds/
-images/medieval_houses_isometric_map_elements_by_darthasparagus_d6hhk05-fullview.png
-QuestJS-0-2.zip
-QuestJS-0-2.zip
-QuestJS-0-2.zip

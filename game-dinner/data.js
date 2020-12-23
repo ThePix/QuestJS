@@ -1,5 +1,9 @@
 "use strict"
 
+
+log("loading")
+
+
 createItem("me", PLAYER(), {
   loc:"lounge",
   regex:/^(me|myself|player)$/,

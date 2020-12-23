@@ -558,7 +558,9 @@ const lang = {
   buy:"Buy", // used in the command link in the purchase table
   buy_headings:["Item", "Cost", ""],
   current_money:"Current money",
-
+  inside:"inside",
+  on_top:"on top",
+  carrying:"carrying",
 
 
 
