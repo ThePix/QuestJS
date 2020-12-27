@@ -1,6 +1,6 @@
 "use strict";
 
-
+/*
 npc_utilities.talkto = function() {
   if (!game.player.canTalk(this)) return false
   const topics = this.getTopics(this)
@@ -34,7 +34,7 @@ function showSidePaneOptions(item, options, fn) {
   })
 }
 
-
+*/
   
 createItem("Buddy", NPC(false), { 
   loc:"lounge",
