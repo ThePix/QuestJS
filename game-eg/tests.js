@@ -2,6 +2,8 @@
 
 test.tests = function() {
   
+  test.printTitles = true
+  
   test.title("parser.scoreObjectMatch");
   test.assertEqual(55, parser.scoreObjectMatch("me", w.Buddy, ""));
   test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.Buddy, ""));
@@ -25,7 +27,6 @@ test.tests = function() {
   test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
   test.assertEqual("you", lang.getName(w.Buddy));
   test.assertEqual("You", lang.getName(w.Buddy, {article:INDEFINITE, capital:true}));
-  
   
   test.title("random.fromArray");
   const ary = ["one", "two", "three"];

@@ -44,7 +44,7 @@ settings.setup = function() {
   
 }
 
-settings.libraries.push('item_links')
+//settings.libraries.push('item_links')
 
 
 settings.mapStyle = {right:'0', top:'200px', width:'300px', height:'300px', 'background-color':'yellow' }
