@@ -312,7 +312,7 @@ const lang = {
   nothing_for_sale:"Nothing for sale here.",
   wait_msg:"You wait one turn.",
   no_map:"Sorry, no map available.",
-  inventory_prefix:"You are carrying",
+  inventory_prefix:"{nv:char:be:true} carrying",
 
 
   // General command fails

@@ -1,0 +1,33 @@
+This is a translator to convert Quest 5 games to Quest 6. However, please understand that this is no magic bullet. You will still need to go though every script and check it yourself. It will likely improve, but I am doubtful it will ever be perfect. How it fares on your game will depend on many scripts you have and how complex they are.
+
+The convertor is written in Ruby, so the first step is to install that (or I actually use JRuby).
+
+You will need to set up the files before use. Create a folder called "misc" inside the QuestJS folder, and put your Quest 5 game in there. Create a second folder called "game-[file]", where [file] is the Quest 5 game filename (without .aslx).
+
+To do the conversion, open a command prompt and navigate to the QuestJS/convert folder, then type (or `jruby` instead of `ruby` if using that version:
+
+```
+ruby QToQJS.rb [file]
+```
+
+If all goes well this will create three new files, data.js, code.js and commands.js.
+
+Make a copy game.js, and in it edit line 21:
+
+```
+const FOLDER = "game";
+```
+
+Change `game` to the new game folder.
+
+```
+const FOLDER = "game-[file]";
+```
+
+Now copy settings.js from the "game" folder to your new game folder. There are several changes you might want to do in the copy of settings.js, such as setting the name and author, but the important one is to add this line so the new files are all used.
+
+```
+settings.files = ["code", "data", "commands"];
+```
+
+Now cross your fingers and see how well it did.

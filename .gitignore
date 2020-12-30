@@ -5,10 +5,12 @@ tmp.*
 *.rb
 *.txt
 game-x*/
-game-banks-demo/
-page-*-demo.html
+game-y*/
+game-z*/
 libx/
 page-x*.html
+page-y*.html
+page-z*.html
 images/
 misc/
 sounds/
