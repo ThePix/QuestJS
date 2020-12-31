@@ -778,18 +778,18 @@ test.tests = function() {
   test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur.", "'Stop it!'"]);
   test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur.", "'Stop it!'"]);
   test.assertEqual(0, w.Arthur.followers.length);
-  test.assertCmd("z", ["You wait one turn.", "Arthur stands up and stretches."]);
+  test.assertCmd("z", ["Time passes...", "Arthur stands up and stretches."]);
   test.assertCmd("e", ["You head east.", "The conservatory", "A light airy room.", /You can see/, "You can go north or west."]);
   test.assertEqual(0, w.Arthur.followers.length);
-  test.assertCmd("z", ["You wait one turn.", "Arthur enters the conservatory from the west."]);
+  test.assertCmd("z", ["Time passes...", "Arthur enters the conservatory from the west."]);
   test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv.", /^You can see/, "You can go east, south, up or west.", "Arthur enters the lounge from the south."]);
   test.assertCmd("w", ["You head west.", "The dining room", "An old-fashioned room.", /^You can see/, "You can go east, up or west.", "Arthur enters the dining room from the east.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
   test.assertEqual(0, w.Arthur.followers.length);
-  test.assertCmd("z", ["You wait one turn.", "'Sure,' says Lara."]);
+  test.assertCmd("z", ["Time passes...", "'Sure,' says Lara."]);
   test.assertEqual(1, w.Arthur.followers.length);
-  test.assertCmd("z", ["You wait one turn.", "Arthur and Lara leave the dining room, heading east."]);
-  test.assertCmd("z", ["You wait one turn."]);
-  test.assertCmd("z", ["You wait one turn.", "Through the window you can see Arthur and Lara enter the garden from the east.", "Through the window you see Arthur say something to Lara."]);
+  test.assertCmd("z", ["Time passes...", "Arthur and Lara leave the dining room, heading east."]);
+  test.assertCmd("z", ["Time passes..."]);
+  test.assertCmd("z", ["Time passes...", "Through the window you can see Arthur and Lara enter the garden from the east.", "Through the window you see Arthur say something to Lara."]);
   
   
   test.title("Transit");
@@ -1063,31 +1063,31 @@ test.tests = function() {
   test.title("agenda follower")
   w.timetable.setAgenda(['wait', 'run:script','wait:2', 'run:script:2', 'waitFor:check', 'run:script:3', 'waitFor:check:script:5'])
   test.assertEqual(0, w.timetable.counter)
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
   test.assertEqual(0, w.timetable.counter)
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
   test.assertEqual(1, w.timetable.counter)
 
-  test.assertCmd("wait", "You wait one turn.")
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
+  test.assertCmd("wait", "Time passes...")
   test.assertEqual(1, w.timetable.counter)
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
   test.assertEqual(3, w.timetable.counter)
 
-  test.assertCmd("wait", "You wait one turn.")
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
+  test.assertCmd("wait", "Time passes...")
   test.assertEqual(3, w.timetable.counter)
   w.timetable.flag = true
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
   w.timetable.flag = false
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
   test.assertEqual(6, w.timetable.counter)
 
-  test.assertCmd("wait", "You wait one turn.")
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
+  test.assertCmd("wait", "Time passes...")
   test.assertEqual(6, w.timetable.counter)
   w.timetable.flag = true
-  test.assertCmd("wait", "You wait one turn.")
+  test.assertCmd("wait", "Time passes...")
   test.assertEqual(11, w.timetable.counter)
 
 

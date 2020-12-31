@@ -310,7 +310,7 @@ const lang = {
   general_obj_error:"So I kind of get what you want to do, but not what you want to do it with.",
   done_msg:"Done.",
   nothing_for_sale:"Nothing for sale here.",
-  wait_msg:"You wait one turn.",
+  wait_msg:"Time passes...",
   no_map:"Sorry, no map available.",
   inventory_prefix:"{nv:char:be:true} carrying",
 
