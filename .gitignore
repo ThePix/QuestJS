@@ -11,6 +11,6 @@ libx/
 page-x*.html
 page-y*.html
 page-z*.html
-assets/images/
+assets/images/*.*
 assets/sounds/
 misc/
