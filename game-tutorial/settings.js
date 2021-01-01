@@ -3,7 +3,7 @@
 // About your game
 settings.title = "Professor Kleinscope";
 settings.author = "The Pixie"
-settings.version = "1.3";
+settings.version = "1.4";
 settings.additionalAbout = ['Thanks to Pertex and R2T1 for beta-testing.']
 settings.warnings = 'No warning relevant for this game.'
 settings.files = ["data", "code", "npcs"];
@@ -12,10 +12,7 @@ settings.noTalkTo = false
 settings.noAskTell = false
 settings.givePlayerAskTellMsg  = false
 settings.symbolsForCompass = true
-
-settings.soundsFolder = 'sounds/'
-settings.soundFiles = ['Bells4', 'Coins3', 'SynthChime6', 'Laser-Shot-1', 'Cold-Moon_Looping', 'Dark-techno-City_Looping', 'Light-Years_V001_Looping', 'Theyre-Here_Looping']
-
+settings.ifid = '3749B11B-0AAA-494B-B2C7-19E0A8E6EBCE'
 
 settings.afterSave = function(filename) {
   if (hint.before('save')) {
