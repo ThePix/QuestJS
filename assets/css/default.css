@@ -44,6 +44,12 @@ body {
 ol, ul {
 	list-style: none;
 }
+.default-ol {
+	list-style: decimal inside;
+}
+.default-ul {
+	list-style: square inside;
+}
 
 #cursor {
   margin-left: 5px;
