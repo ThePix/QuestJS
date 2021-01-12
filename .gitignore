@@ -2,7 +2,6 @@ tmp.*
 *.xml
 *.aslx
 *.yml
-*.rb
 *.txt
 game-x*/
 game-y*/
