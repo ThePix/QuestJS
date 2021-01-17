@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
+
+body {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.default-h2, .default-h3, .default-h4 {
+  font-family: 'Stalinist One', cursive;
+} 
+
+
+.pane-div {
+  background-color: #bbb;
+}  
+
+.item-action {
+  background-color: #ccc;
+}  
+
+td {
+  text-align: left;
+}
+
+#sidepane-menu {
+  position: fixed;
+  top: 400px;
+  left: 40px;
+  z-index:50;
+  padding:5px;
+  width:240px;
+  background-color: #ffd0e0;
+  border: black solid 1px;
+  border-radius: 4px;
+}
+
+.sidepane-menu-title {
+  font-style:italic;
+  padding:5px;
+}
+
+.sidepane-menu-option {
+  background-color: #faf;
+  border:solid black 1px;
+  cursor: pointer;
+  padding:5px;
+  border: black solid 1px;
+  border-radius: 4px;
+  background: #e1ebf2;
+  margin-top: 10px;
+}
+
+  
+.lookUp, .lookUpRestricted, .news {
+  font-family: monospace;
+  color:darkblue;
+  background-color: #ddd;
+  padding: 5px;
+}
+.lookUpRestricted {
+  background-color: #ffb;
+}
+.news {
+  background-color: #fbf;
+}
+.dark-body .lookUp {
+  background-color: #222;
+  color: #bbf;
+}
+.dark-body .lookUpRestricted {
+  background-color: #220;
+  color: #bbf;
+}
+.dark-body .news {
+  background-color: #202;
+  color: #bbf;
+}

@@ -340,8 +340,10 @@ class Obj
     
     @values = {}
     
-    q5 = ["look", "description", "beforefirstenter", "beforeenter", "enter", "firstenter", "onexit", "implementation_notes", "max", "follow", "nomovement", "nomanipulation", "novision", "nosound", "novoice", "healedmsg", "overrides", "health", "takemsg"]
-    q6 = ["examine", "desc", "beforeFirstEnter", "beforeEnter", "afterEnter", "afterFirstEnter", "onExit", "notes", "max", "follow", "nomovement", "nomanipulation", "novision", "nosound", "novoice", "healedmsg", "overrides", "health", "takemsg"]
+    q5 = ["alias", "look", "description", "beforefirstenter", "beforeenter", "enter", "firstenter", "onexit", "implementation_notes", "max", "follow", "nomovement", "nomanipulation", "novision", "nosound", "novoice", "healedmsg", "overrides", "health", "takemsg",
+    ]
+    q6 = ["alias", "examine", "desc", "beforeFirstEnter", "beforeEnter", "afterEnter", "afterFirstEnter", "onExit", "notes", "max", "follow", "nomovement", "nomanipulation", "novision", "nosound", "novoice", "healedmsg", "overrides", "health", "takemsg",
+    ]
     
     for i in 0..q5.count
       el = obj.elements[q5[i]]
