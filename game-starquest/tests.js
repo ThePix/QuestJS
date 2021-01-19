@@ -10,6 +10,8 @@ test.tests = function() {
   w.ship.helm = 'sharraaa'
   w.ship.science = 'sharraaa'
   w.ship.engineering = 'farrington_moss'
+  w.sharraaa.loc = 'room'
+  w.farrington_moss.loc = 'room'
   test.assertEqual("The Helmsman is Sharraaa.", processText("The Helmsman is {role:helm:alias}."))
   test.assertEqual("The Helmsman is the Salis.", processText("The Helmsman is {role:helm:altName}."))
   test.assertEqual("The Salis is the Helmsman.", processText("{role:helm:altName:true} is the Helmsman."))
@@ -20,6 +22,10 @@ test.tests = function() {
   test.assertEqual("Stardate 854.64.5", processText("{time}"))
   w.ship.dateTime += 2
   test.assertEqual("Stardate 854.64.7", processText("{time}"))
+
+  test.assertEqual("Stardate 854.63.5", processText("{time:0}"))
+  test.assertEqual("Stardate 854.63.6", processText("{time:1}"))
+  test.assertEqual("Stardate 854.64.5", processText("{time:24}"))
 
 
   test.title("Roster")
@@ -37,11 +43,32 @@ test.tests = function() {
   test.assertEqual(1, w.sharraaa.getTopics().length)
 
 
-  w.helmsman_go_to_7iota.script()
+  test.title("Stars 1")
+  test.assertEqual('Stardock 83', stars.getLocation().alias)
+  test.assertEqual('Sol', stars.getSystem().alias)
+  test.assertEqual('Starbase 142', stars.getLocation('starbase').alias)
+  test.assertEqual('Cyrennis Minima', stars.getSystem('starbase').alias)
+
+  test.title("Missions 1")
+  test.assertEqual('Asteroid heading for Chloris V', missions.getMission('asteroid').alias)
+  test.assertEqual(false, missions.isActive('asteroid'))
+  test.assertEqual(undefined, missions.getState('asteroid'))
+
+  stars.arriveAtSector()
   test.assertEqual('Ship officer roster:|Helm: Sharraaa|Chief Engineer: Farrington Moss|Science Officer: Sharraaa|Armsman: no assignment', roster.getRoster())
 
   test.assertEqual('Starbase 142', stars.getLocation().alias)
 
+  test.title("Stars 2")
+  test.assertEqual('Starbase 142', stars.getLocation().alias)
+  test.assertEqual('Cyrennis Minima', stars.getSystem().alias)
+
+  test.title("Missions 2")
+  test.assertEqual(true, missions.isActive('asteroid'))
+  test.assertEqual(1, missions.getState('asteroid'))
+  test.assertEqual('Get to Chloris', missions.getStatus('asteroid'))
+
+  io.updateUIItems()
 
   /**/
 }

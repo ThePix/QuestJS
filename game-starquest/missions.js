@@ -7,14 +7,9 @@
 const missions = {
   getMission(name) { return this.data.find(el => el.name === name) },
   getState(name) { return game.player['mission_' + name] },
-  isActive(name) { return getState(name) !== undefined },
-  getStatus(name) { return isActive(name) ? getMission(name).steps[getState(name)].alias : 'n/a' },
-  init() {
-    for (let el of this.data) {
-      if (el.start) game.player['mission_' + name] = 1
-    }
-  },
-  getMissions:function() {
+  isActive(name) { return this.getState(name) !== undefined },
+  getStatus(name) { return this.isActive(name) ? this.getMission(name).steps[this.getState(name) - 1].alias : 'n/a' },
+  getList:function() {
     let s = 'Missions:'
     for (let el of this.data) {
       if (this.isActive(el.name)) {
@@ -30,13 +25,50 @@ const missions = {
     if (data.stars) {
       for (let star of data.stars) stars.add(star)
     }
+    if (data.encyc) {
+      for (let el of data.encyc) {
+        pageData.push({name:el.alias, t:el.t, type:'lookUp'})
+        if (el.add === 'start') w.PAGE.add(e.alias, 'lookUp')
+      }
+    }
   },
 
+  start:function(name) {
+    const mission = this.getMission(name)
+    game.player['mission_' + name] = 1
+    game.player['missionStart_' + name] = w.ship.dateTime
+    if (mission.star) {
+      w.PAGE.add(mission.star.alias, 'star')
+      for (let el of mission.star.locations) w.PAGE.add(el.alias, 'star')
+    }
+    if (mission.stars) {
+      for (let star of mission.stars) {
+        w.PAGE.add(star.alias, 'star')
+        for (let el of star.locations) w.PAGE.add(el.alias, 'star')
+      }
+    }
+  },
 
   data:[],
 }
 
+/*
+A mission's attributes:
 
+name           string              required  Single word identifier
+alias          string              required  Title
+start          Boolean             optional  If true, this mission is there from arrival
+brief          string              required  A description of what is required
+steps          array of steps      required  Details each step of the mission (in progress)
+events         array of events     required  Details each step of the mission (in progress)
+star           star                optional  A single star to be added to support this mission
+stars          array of stars      optional  A set of stars to be added to support this mission
+encyc          array of entries    optional  A set of entries to be added to support this mission
+
+
+
+
+*/
 
 
 missions.add({
@@ -47,9 +79,11 @@ missions.add({
   brief:'An asteroid has been detecting heading for Chloris V. It will impact in ten standard days. The planet supports a small agricultural community (population 243) and a science facility (population 9). Neither have the facilities to get off-planet, let alone deflect the asteroid.|Your mission is, ideally, to deflect the asteroid, and if that proves impossible to evacuate the planet. Evacuees should be brought here to Star Base 142.|Chloris is three days from the main cluster at warp 6.',
   steps:[
     {
-      name:'Get to Chloris',
+      alias:'Get to Chloris',
       state:2,
     },
+  ],
+  events:[
   ],
   star:{
     name:'chloris',
@@ -62,6 +96,13 @@ missions.add({
       }
     ],
   },
+  encyc:[
+    {
+      alias:'Asteroid',
+      t:'Asteroids are basically rocks in space. Occasionally they fall into the gravity well of a planet. Smaller ones just burn up in the atmosphere, larger ones are catestophic - for example the asteroid that wiped out the dinosaurs 66 million years ago.',
+      add:'mission',
+    },  
+  ]
 })
 
 

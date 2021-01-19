@@ -11,7 +11,7 @@ body {
 
 
 .pane-div {
-  background-color: #bbb;
+  background-color: #eee;
 }  
 
 .item-action {
@@ -56,6 +56,8 @@ td {
   color:darkblue;
   background-color: #ddd;
   padding: 5px;
+  margin-top:0px !important;
+  margin-bottom:0px !important;
 }
 .lookUpRestricted {
   background-color: #ffb;
