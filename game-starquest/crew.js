@@ -23,9 +23,8 @@ createItem("nagoshima_missions", TOPIC(true), {
   loc:"nagoshima",
   alias:"Mission?",
   runscript:function() {
-    msg("'I imagine you have some specific you need us for?' you say to the commander.");
-    msg("'Indeed! Quite a few in fact; as I say, we have been sorely lacking in available ships. I'm sending the details to your PAGe now.'");
-    missions.init()
+    msg("'I imagine you have some specific missions you need us for?' you say to the commander.");
+    msg("'Indeed! Quite a few in fact; as I say, we have been sorely lacking in available ships. You should already have them on your PAGE.'");
   },
 })
 
@@ -138,7 +137,7 @@ createItem("sharraaa", CANDIDATE(false), {
   dissent:"Sharraaa raises two  pseudopods, indicating his disapproval.",
   alreadyHere:"Sharraaa slumps a little in his bucket. For a moment, you wonder what is wrong, they realise you are already here.",
   going:"Sharraaa morphs over the controls, rapidly setting the destination, and a moment later the ship starts to move. There is that stomach-clenching lurch as it hits warp speed...",
-  firstFlight:"{role:helm:altName:true} punches in the coordinates. 'Ready to go, Sir.'|'Engage!'|The SS Star Quest gently eases out of star-dock, into open space, then, then, with a stomach-turning lurch, accelerates to warp speed. The stars on the viewscreen become thin red lines as the ship heads to its destination and speeds hard to properly understand unless you are a navigator.",
+  firstFlight:"{role:helm:altName:true} punches in the coordinates.|'Engage!'|The SS Star Quest gently eases out of star-dock, into open space, then, with a stomach-churning lurch, accelerates to warp speed. The stars on the viewscreen become thin red lines as the ship heads to its destination at speeds hard to properly understand unless you are a navigator.",
   thoughtful:"Sharraaa quivers in thought.",
   scared:"Sharraaa goes perfectly still.",
   incredulous:"Sharraaa slumps in surprise.",
@@ -384,9 +383,7 @@ createItem("restrel_juazz", CANDIDATE(true), {
 
 
 createItem("helmsman_go_to_7iota", TOPIC(true), {
-  isAtLoc:function(loc) {
-    log(loc)
-    log(w.ship.helm)
+  belongsTo:function(loc) {
     return loc === w.ship.helm 
   },
   nowShow:['helmsman_go_to'],
@@ -395,23 +392,17 @@ createItem("helmsman_go_to_7iota", TOPIC(true), {
     msg("'Lay in a course for sector 7 Iota,' you say to {role:helm:formalName}, 'warp factor 4.'")
     msg("{role:helm:ayeaye} " + roster.getOfficer('helm').firstFlight)
     hr()
-    msg("Nine days later you arrive at Star Base 142. Yoeman Rand walks on to the bridge. 'Sir, we have a communication from the star Base.'")
+    msg("Nine days later you arrive at Star Base 142. Yeoman Rand walks on to the bridge. 'Sir, we have a communication from the Star Base.'")
     msg("'Main screen, yeoman.'")
     msg("'Yes Sir.'")
     msg("A woman's face appears on the screen, Commander Nagoshima you assume, noting the rank of her uniform. 'Welcome to the ass-end of the galaxy, Captain' she says with a smile. 'It's good to have a ship around that can actually do something. I've sent over the mission briefs; they should be on your PAGE.'")
-    w.ship.arrivedAtSector = true
-    // set current location
-    // add enc entries
-    w.ship.datetime += 9 * 24 + 3 - roster.getOfficer('helm').navigation
-    w.ship.currentLocation = 'starbase'
-    // nagoshima present
-
+    stars.arriveAtSector()
   }
 })
 
 
 createItem("helmsman_go_to", TOPIC(false), {
-  isAtLoc:function(loc) { 
+  belongsTo:function(loc) { 
     //log(loc)
     //log(w.ship.helm)
     return loc === w.ship.helm 

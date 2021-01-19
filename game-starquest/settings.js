@@ -15,25 +15,41 @@ settings.files = ["code", "commands", "crew", "page", "data", "stars", "missions
 settings.tests = true
 settings.noTalkTo = false
 
+settings.onView = function(item) { return w.ship.onView === item.name }
+settings.inventoryPane = [
+  {name:'Items Held', alt:'itemsHeld', test:settings.isHeldNotWorn, getLoc:function() { return game.player.name; } },
+  {name:'People Here', alt:'itemsHere', test:settings.isHere, getLoc:function() { return game.player.loc; } },
+  {name:'On Viewscreen', alt:'itemsView', test:settings.onView },
+]
+
+
+
+
 settings.status = [
   function() { return "<td>Stardate:</td><td>" + w.ship.getDateTime() + "</td>"; },
   function() { return "<td>Alert:</td><td>" + w.ship.getAlert() + "</td>"; },
   function() { return "<td>System:</td><td>" + stars.getSystem().alias + "</td>"; },
   function() { return "<td>Location:</td><td>" + stars.getLocation().alias + "</td>"; },
   function() { return "<td>Hull:</td><td>" + w.ship.hullIntegrity + "%</td>"; },
-  function() { return "<td>Shields:</td><td>" + w.ship.shields + "</td>"; },
+  function() { return "<td>Shields:</td><td>" + w.ship.getShields() + "</td>"; },
 ]
 
 settings.setup = function() {
-  msg("As the newly appointed captain of the Star Quest, it is up to you to keep the peace in the troubled space of  Sector 7 Iota.")
-  hr()
-  msg("As captain, your job is to tell others what to do - you are too value to the ship to risk on away missions.")
-  msg("Assemble your crew by assigning candidates to posts on the bridge using your PAGE. Then ask the helmsman to lay in a course for sector 7 Iota. You will need a helmsman, but other posts can be left empty if you wish. You can assign officers to multiple roles, but will be less effective in both roles. Some candidates are better suited to a post than others, but it is up to you; if you want to appoint people to posts that will be poor at, go for it! Note that once you set off for Sector 7 Iota you cannot change assignments.")
-  msg('The crew will call you "Sir". If you prefer "Ma\'am", tell the yeoman.')
-  msg("Once you arrive at Sector 7 Iota, you will get a list of missions. You will need to prioritize. In most cases it takes about a day to travel between locations in the sector, but some locations are further out and will take longer; this will be noted in the mission. Obviously it will take a similar time to get back to a location in the central cluster.")
-  hr()
-  msg("Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental.")
-  log(getCandidates())
+  msg("You step on to the bridge. 'Welcome aboard, sir,' says a blonde woman in a red uniform, handing you a PAGE. 'I'm Yeoman Rand, I've been designated as your aide. The ship is all set, sir. We just need to to appoint the bridge officers. I believe Command has prepared a short list on your PAGE.'")
+  msg("'Thank you, yeoman.'")
+  msg("'Can I ask what our mission is, sir?'")
+  msg("'We're being sent to Sector 7 Iota.'")
+  msg("'That's a long way out, sir. What do they want us to do there? Anything to do with the Brakk?'")
+  msg("'I was just told to report to the Starbase. Beyond that... you know as much as I do, yeoman. Hopefully we'll not be close enough to the border to encounter any Brakk ships.'")
+  if (settings.playMode !== 'dev') wait()
+  
+  metamsg("Assemble your crew by assigning candidates to posts on the bridge using your PAGE. Then ask the helmsman to lay in a course for sector 7 Iota. You will need a helmsman, but other posts can be left empty if you wish. You can assign officers to multiple roles, but will be less effective in both roles. Some candidates are better suited to a post than others, but it is up to you; if you want to appoint people to posts that will be poor at, go for it! Note that once you set off for Sector 7 Iota you cannot change assignments.")
+  metamsg('The crew will call you "Sir". If you prefer "Ma\'am", tell the yeoman.')
+  metamsg("Once you arrive at Sector 7 Iota, you will get a list of missions. You will need to prioritize. In most cases it takes about a day to travel between locations in the sector, but some locations are further out and will take longer; this will be noted in the mission. Obviously it will take a similar time to get back to a location in the central cluster.")
+  metamsg("As captain, your job is to tell others what to do - you are too value to the ship to risk on away missions.")
+  metamsg("If your screen is wide enough, you will see a star man on the right, but you do not need it to play the game.")
+  metamsg("Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental. Honest.")
+  if (settings.playMode !== 'dev') wait()
 }
 
 
@@ -57,11 +73,9 @@ settings.startingDialogOnClick = function() {
     if (assignedNpc && assignedNpc !== npc) continue
     if ($("#diag-" + role.name).is(':checked')) {
       w.ship[role.name] = npc.name
-      log('Setting ' + role.name + ' to ' + npc.name)
     }
     else {
       delete w.ship[role.name]
-      log('Unsetting ' + role.name)
     }
   }
   const roles = roster.getRoles(npc)
@@ -73,16 +87,13 @@ settings.startingDialogOnClick = function() {
   }
   if (roles.length === 0 && npc.loc) {
     delete npc.loc
-    log(npc)
     msg(npc.leaving, {char:npc})
     io.updateUIItems()
   }
   if (roles.length !== 0 && !npc.loc) {
     npc.loc = 'room'
-    log(npc)
     msg(npc.entering, {char:npc})
     io.updateUIItems()
   }
-  log(w.ship)
 }        
 
