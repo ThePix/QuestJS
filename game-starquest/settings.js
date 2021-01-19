@@ -24,6 +24,17 @@ settings.status = [
   function() { return "<td>Shields:</td><td>" + w.ship.shields + "</td>"; },
 ]
 
+settings.libraries.push('image-pane')
+settings.imageStyle = {
+  right:'0',
+  top:'200px',
+  width:'400px',
+  height:'400px',
+  'background-color':'#111', 
+  border:'3px black solid',
+}
+
+
 settings.setup = function() {
   msg("As the newly appointed captain of the Star Quest, it is up to you to keep the peace in the troubled space of  Sector 7 Iota.")
   hr()
@@ -34,6 +45,14 @@ settings.setup = function() {
   hr()
   msg("Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental.")
   log(getCandidates())
+  let svg = []
+  svg.push('<circle cx="200" cy="200" r="8" fill="yellow" stroke="none"/>')
+  svg.push('<ellipse cx="200" cy="200" rx="80" ry="40" fill="none" stroke="silver"/>')
+  svg.push('<ellipse cx="200" cy="200" rx="180" ry="90" fill="none" stroke="silver"/>')
+  svg.push('<text class="map-text" x="0" y="12" fill="silver">Solar system</text>')
+  svg.push('<text class="map-text" x="0" y="398" fill="silver">Quicksilver Starmaps</text>')
+  svg.push('<text class="map-text" x="313" y="398" fill="silver">Not to scale</text>')
+  draw(400, 400, svg, {destination:'quest-image'})
 }
 
 
