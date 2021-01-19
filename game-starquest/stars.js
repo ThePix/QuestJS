@@ -46,19 +46,67 @@ const stars = {
     missions.start('protect_ship')
     missions.start('piracy')
   },
+  draw:function(name) {
+    const system = this.getSystem(name)
+    let svg = []
+    log(system)
+    svg.push('<circle cx="200" cy="200" r="' + system.size + '" fill="' + system.colour + '" stroke="white"/>')
+    for (let el of system.locations) {
+      svg.push('<ellipse cx="200" cy="200" rx="' + el.radius + '" ry="' + (el.radius/2) + '" fill="none" stroke="silver"/>')
+      log(el.angle)
+      log(el.radius)
+      const x = 200 + Math.sin(el.angle * Math.PI / 180) * el.radius
+      log(x)
+      const y = 200 + Math.cos(el.angle * Math.PI / 180) * el.radius / 2
+      svg.push('<circle cx="' + x + '" cy="' + y + '" r="3" fill="grey" stroke="white"/>')
+      
+      svg.push('<text class="map-text" x="' + (x-3) + '" y="' + (y-5) + '" fill="white">' + el.alias + '</text>')
+    }
+    svg.push('<text class="map-text" x="0" y="12" fill="silver">' + (system.system ? system.system : system.alias + ' system') + '</text>')
+    svg.push('<text class="map-text" x="0" y="398" fill="silver">Quicksilver Starmaps</text>')
+    svg.push('<text class="map-text" x="313" y="398" fill="silver">Not to scale</text>')
+    draw(400, 400, svg, {destination:'quest-image'})
+  },
+
 }
 
 stars.add({
   name:'sol',
   alias:'Sol',
+  system:'Solar system',
   start:true,
+  colour:'yellow',
+  size:8,
   locations:[
     {
       name:'stardock',
       alias:'Stardock 83',
       desc:'One of numerous star docks in the solar system, 83 is in Earth orbit at L4.',
-    }
-  ]
+      radius:180,
+      angle:200,
+    },
+    {
+      name:'earth',
+      alias:'Earth',
+      desc:'The cradle of mankind.',
+      radius:180,
+      angle:130,
+    },
+    {
+      name:'venus',
+      alias:'Venus',
+      desc:'Terraforming has turned Venus into a tropical paradise.',
+      radius:90,
+      angle:0,
+    },
+    {
+      name:'mars',
+      alias:'Mars',
+      desc:'Limited terraforming to support an industrial planet.',
+      radius:280,
+      angle:20,
+    },
+  ],
 })
 
 stars.add({

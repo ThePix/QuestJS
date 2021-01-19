@@ -61,14 +61,7 @@ settings.setup = function() {
   metamsg("If your screen is wide enough, you will see a star man on the right, but you do not need it to play the game.")
   metamsg("Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental. Honest.")
   if (settings.playMode !== 'dev') wait()
-  let svg = []
-  svg.push('<circle cx="200" cy="200" r="8" fill="yellow" stroke="none"/>')
-  svg.push('<ellipse cx="200" cy="200" rx="80" ry="40" fill="none" stroke="silver"/>')
-  svg.push('<ellipse cx="200" cy="200" rx="180" ry="90" fill="none" stroke="silver"/>')
-  svg.push('<text class="map-text" x="0" y="12" fill="silver">Solar system</text>')
-  svg.push('<text class="map-text" x="0" y="398" fill="silver">Quicksilver Starmaps</text>')
-  svg.push('<text class="map-text" x="313" y="398" fill="silver">Not to scale</text>')
-  draw(400, 400, svg, {destination:'quest-image'})
+  stars.draw('stardock')
 }
 
 
