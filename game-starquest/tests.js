@@ -68,7 +68,6 @@ test.tests = function() {
   test.assertEqual(1, missions.getState('asteroid'))
   test.assertEqual('Get to Chloris', missions.getStatus('asteroid'))
 
-  io.updateUIItems()
 
   /**/
 }

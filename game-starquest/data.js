@@ -9,6 +9,7 @@ createRoom("room", {
 
 
 createItem("ship", {
+  showStarMap:false,
   dateTime:0,
   getDateTime:function(add) { 
     let n = (854 * 360 + 63) * 24 + 5

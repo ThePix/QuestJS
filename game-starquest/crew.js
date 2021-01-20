@@ -387,7 +387,7 @@ createItem("helmsman_go_to_7iota", TOPIC(true), {
     return loc === w.ship.helm 
   },
   nowShow:['helmsman_go_to'],
-  alias:"Lay in a course for...",
+  alias:"Lay in a course for 7 Iota",
   script:function() {
     msg("'Lay in a course for sector 7 Iota,' you say to {role:helm:formalName}, 'warp factor 4.'")
     msg("{role:helm:ayeaye} " + roster.getOfficer('helm').firstFlight)

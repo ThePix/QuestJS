@@ -88,6 +88,11 @@ missions.add({
   star:{
     name:'chloris',
     alias:'Chloris',
+    colour:'orange',
+    size:6,
+    x:80,
+    y:40,
+    sector:'7 Iota',
     locations:[
       {
         name:'chloris5',
@@ -124,6 +129,11 @@ missions.add({
   star:{
     name:'alphastego',
     alias:'alpha-Stego',
+    colour:'white',
+    size:6,
+    x:190,
+    y:340,
+    sector:'7 Iota',
     locations:[
       {
         name:'calufrax',
@@ -147,6 +157,22 @@ missions.add({
       state:2,
     },
   ],
+  star:{
+    name:'proxima',
+    alias:'Proxima Major',
+    colour:'red',
+    size:9,
+    x:240,
+    y:130,
+    sector:'7 Iota',
+    locations:[
+      {
+        name:'astoid326',
+        alias:'Aastoid 326',
+        desc:'',
+      }
+    ]
+  },
 })
 
     
@@ -165,6 +191,11 @@ missions.add({
   star:{
     name:'metabelis',
     alias:'Metabelis',
+    colour:'white',
+    size:3,
+    x:140,
+    y:180,
+    sector:'7 Iota',
     locations:[
       {
         name:'metabelis3',
@@ -177,7 +208,7 @@ missions.add({
 
     
 missions.add({
-  // Obviously pirates will attack. When they flee, do you follow to get to their base? A good science officer might be able to work out where the basis is anyway.
+  // Obviously pirates will attack. When they flee, do you follow to get to their base? A good science officer might be able to work out where the base is is anyway.
   name:'protect_ship',
   alias:'Protect the Dogged Plodder',
   start:true,

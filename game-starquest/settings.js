@@ -58,7 +58,7 @@ settings.setup = function() {
   metamsg('The crew will call you "Sir". If you prefer "Ma\'am", tell the yeoman.')
   metamsg("Once you arrive at Sector 7 Iota, you will get a list of missions. You will need to prioritize. In most cases it takes about a day to travel between locations in the sector, but some locations are further out and will take longer; this will be noted in the mission. Obviously it will take a similar time to get back to a location in the central cluster.")
   metamsg("As captain, your job is to tell others what to do - you are too value to the ship to risk on away missions.")
-  metamsg("If your screen is wide enough, you will see a star man on the right, but you do not need it to play the game.")
+  metamsg("If your screen is wide enough, you will see a star man on the right, but you do not need it to play the game. When you arrive in sector 7 Iota you will be able to toggle between  map of the stars in the sector and the star system you are currently at.")
   metamsg("Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental. Honest.")
   if (settings.playMode !== 'dev') wait()
   stars.draw('stardock')
