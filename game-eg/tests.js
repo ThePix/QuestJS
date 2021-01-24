@@ -701,7 +701,7 @@ test.tests = function() {
   test.assertEqual(sl2[2], sl3[2])
 
   test.assertEqual("tst:number:14;", saveLoad.encode("tst", 14))
-  test.assertEqual("", saveLoad.encode("tst", false))
+  test.assertEqual("tst:boolean:false;", saveLoad.encode("tst", false))
   test.assertEqual("tst:boolean:true;", saveLoad.encode("tst", true))
   test.assertEqual("tst:string:14;", saveLoad.encode("tst", '14'))
   test.assertEqual("tst:qobject:book;", saveLoad.encode("tst", w.book))
@@ -745,6 +745,8 @@ test.tests = function() {
   const clone3 = cloneObject(clone);  // should not be there later
   w.far_away.north.locked = true
   saveLoad.loadTheWorld(s, 4);
+  
+  
   test.assertEqual(count + 2, Object.keys(w).length);
   test.assertEqual(17, w.boots.counter);
   test.assertEqual([4, 5, 8], w.boots.sizes);
@@ -757,6 +759,15 @@ test.tests = function() {
   test.assertEqual(false, w.far_away.north.locked);
   test.assertEqual(false, w.far_away.north.hidden);
   
+  
+  test.title("Save/Load 3")
+  tp.usedStrings = ['One', 'Two']
+  const tps = tp.getSaveString()
+  tp.usedStrings = ['three']
+  tp.setLoadString("tpUsedStrings=" + tps)
+  test.assertEqual(['One', 'Two'], tp.usedStrings)
+ 
+
   
   test.title("Path finding");
   test.assertEqual("lounge", formatList(agenda.findPath(w.dining_room, w.lounge)));
