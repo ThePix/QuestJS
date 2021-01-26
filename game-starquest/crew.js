@@ -120,7 +120,7 @@ const CANDIDATE = function(female) {
 
 const getCrew = function() { }
 
-const getCandidates = function() { return getObjs(o => o.candidate) }
+const getCandidates = function() { return scopeBy(o => o.candidate) }
 
 
 

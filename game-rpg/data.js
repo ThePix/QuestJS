@@ -300,10 +300,10 @@ skills.add(new SpellSelf("Unlock", {
   targetEffect:function(attack) {
     const room = w[attack.attacker.loc]
     let flag = false
-    for (let el of util.exitList(attack.attacker)) {
-      if (room[el].locked) {
-        attack.msg("The door to " + util.niceDirection(el) + " unlocks.", 1)
-        room[el].locked = false
+    for (let el of room.getExits()) {
+      if (el.isLocked()) {
+        attack.msg("The door to " + el.nice() + " unlocks.", 1)
+        el.setLock(false)
         flag = true
       }
     }

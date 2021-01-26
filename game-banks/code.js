@@ -474,7 +474,7 @@ function updateMap() {
   if (!mySvgId && !otherSvgId) return
   if (mySvgId === otherSvgId) {
     $('#' + mySvgId).css('fill', 'green')
-    delete w.Xsansi.locate
+    w.Xsansi.locate = false
   }
   else {
     if (mySvgId) $('#' + mySvgId).css('fill', 'yellow')

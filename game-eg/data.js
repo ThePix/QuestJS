@@ -71,9 +71,9 @@ createItem("knife",
       }
     },
     chargeResponse:function(participant) {
-      msg("There is a loud bang, and the knife is destroyed.");
-      delete this.loc;
-      return false;
+      msg("There is a loud bang, and the knife is destroyed.")
+      this.loc = false
+      return false
     },
   }
 )

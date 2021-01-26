@@ -118,11 +118,12 @@ test.tests = function() {
 
 
   test.title("util.reverseDirection")
-  test.assertEqual('north', util.reverseDirection('south'))
-  test.assertEqual('up', util.reverseDirection('down'))
-  test.assertEqual('north', util.reverseDirectionObj('south').name)
-
-
+  const ex1 = w.lounge.east
+  const ex2 = w.lounge.up
+  test.assertEqual('west', ex1.reverse())
+  test.assertEqual('the east', ex1.nice())
+  test.assertEqual('down', ex2.reverse())
+  test.assertEqual('above', ex2.nice())
 
 
   test.title("formatList")
@@ -991,6 +992,9 @@ test.tests = function() {
   test.assertCmd("w", ["You head west.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can see a Piggy-suu here.", "You can go east or west."]);
   // Takes us to 5,0
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
+  
+  
+  
     // Takes us to 4,0  
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, south, southwest or west."]);
   
@@ -1133,7 +1137,7 @@ test.tests = function() {
   
   
   /* */
-  this.check_lang = true
+  //this.check_lang = true
   if (this.check_lang) {
     const langSkips = [
       /regex/,

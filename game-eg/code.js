@@ -14,24 +14,6 @@ quest.create('A carrot for Buddy', [
 
 
 
-function firstTimeTesting() {
-  firsttime(232646, function() {
-    msg(spaces(5)+ "{font:trade winds:Te first time 10{sup:2} CH{sub:4} Er {smallcaps:This is small caps}.}")
-  }, function() {
-    msg("Every {huge:other} {big:time} betweeb {small:is} {tiny:very small} notmasl.")
-  });
-  const a = ["one", "two", "three"]
-  console.log(a)
-  array.remove(a, "two")
-  console.log(a)
-  array.remove(a, "three")
-  console.log(a)
-  array.remove(a, "three")
-  console.log(a)
-  array.remove(a, "one")
-  console.log(a)
-}
-
 
 
 
