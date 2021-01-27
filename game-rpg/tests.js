@@ -12,7 +12,7 @@ test.tests = function() {
   //game.player.skillsLearnt = ["Double attack", "Fireball",  "Commune with animal", "Unlock", "Stoneskin", "Steelskin", "Lightning bolt", "Ice shard", "Psi-blast"]
   //ioUpdateCustom()
 
-
+  settings.attackOutputLevel = 2
 
   test.title("Elements");
   test.assertEqual("fire", elements.opposed('frost'))
@@ -370,12 +370,12 @@ test.tests = function() {
   game.player.countdown_Steelskin = 3
   w.spell_handler.eventScript()
   test.assertEqual(2, game.player.countdown_Steelskin)
-  test.assertCmd('z', ['You wait one turn.'])
+  test.assertCmd('z', ['Time passes...'])
   test.assertEqual(1, game.player.countdown_Steelskin)
-  test.assertCmd('z', ['You wait one turn.', 'The <i>Steelskin</i> spell terminates.'])
-  test.assertEqual(undefined, game.player.countdown_Steelskin)
+  test.assertCmd('z', ['Time passes...', 'The <i>Steelskin</i> spell terminates.'])
+  test.assertEqual(false, game.player.countdown_Steelskin)
   test.assertEqual([], game.player.activeEffects)
-  test.assertCmd('z', ['You wait one turn.'])
+  test.assertCmd('z', ['Time passes...'])
   
 
 

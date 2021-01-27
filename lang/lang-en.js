@@ -34,9 +34,10 @@ const lang = {
     MetaPlayerComment:/^\*(.+)$/,
     MetaSave:/^save$/,
     MetaSaveGame:/^(?:save) (.+)$/,
+    MetaSaveOverwriteGame:/^(?:save) (.+) (?:overwrite|ow)$/,
     MetaLoad:/^reload$|^load$/,
     MetaLoadGame:/^(?:load|reload) (.+)$/,
-    MetaDir:/^dir$|^directory$/,
+    MetaDir:/^dir$|^directory$|^ls$|^save ls$|^save dir$/,
     MetaDeleteGame:/^(?:delete|del) (.+)$/,
     MetaUndo:/^undo$/,
     MetaAgain:/^(?:again|g)$/,
@@ -423,7 +424,7 @@ const lang = {
 
   // Save/load messages
 
-  sl_dir_headings:"<tr><th>Filename</th><th>Ver</th><th>Timestamp</th><th>Comment</th></tr>",
+  sl_dir_headings:['Filename', 'Game', 'Ver', 'Timestamp', 'Comment'],
   sl_dir_msg:"Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.",
   sl_no_filename:"Trying to save with no filename",
 
@@ -510,15 +511,16 @@ const lang = {
   },
 
   saveLoadScript:function() {
-    metamsg("To save your progress, type SAVE followed by the name to save with.");
-    metamsg("To load your game, refresh/reload this page in your browser, then type LOAD followed by the name you saved with.");
-    metamsg("To see a list of save games, type DIR.");
+    metamsg("To save your progress, type SAVE [filename]. By default, if you have already saved the game, you will not be permitted to save with the same filename, to prevent you accidentally saving when you meant to load. However, you can overwrite a file with the same name by using SAVE [filename] OVERWRITE or just SAVE [filename] OV.");
+    metamsg("To load your game, refresh/reload this page in your browser, then type LOAD [filename].");
+    metamsg("To see a list of all your QuestJS save games, type DIR or LS. You can delete a saved file with DELETE [filename] or DEL [filename].");
+    metamsg("Games are saved on your computer in a special area for the browser called \"localStorage\".");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
   transcriptScript:function() {
     metamsg("The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the player got there.");
-    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place inthe game). To empty the file, use SCRIPT CLEAR.");
+    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place in the game). To empty the file, use SCRIPT CLEAR.");
     metamsg("You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.");
     metamsg("You can add a comment to the transcript by starting your text with an asterisk (*).")
     metamsg("You can do TRANSCRIPT WALKTHROUGH or just SCRIPT W to copy the transcript to the clipboard formatted for a walk-through. You can then paste it straight into the code.")

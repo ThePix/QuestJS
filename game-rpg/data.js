@@ -33,7 +33,7 @@ createItem("flail", WEAPON("2d10+4"), {
 });
 
 createItem("flaming_sword", WEAPON("3d6+2"), {
-  loc:"me",
+  //loc:"me",
   image:"sword",
   activeEffects:["Flaming weapon"],
 });
@@ -57,9 +57,9 @@ createRoom("practice_room", {
   desc:'A large room with straw scattered across the floor. The only exit is west',
   west:new Exit('great_hall'),
   south:new Exit('cupboard', {
-    locked:true,
     lockedmsg:"It seems to be locked."
   }),
+  exit_locked_south:true,
 });
 
 
