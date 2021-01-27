@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 ***/
 html {
   overflow-y:scroll;
+  scroll-behavior: smooth;
 }
 
 body {

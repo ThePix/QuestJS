@@ -297,33 +297,20 @@ createRoom("dining_room", {
 });
 
 
-createItem("chair",
-  FURNITURE({sit:true}),
-  {
-    loc:"dining_room", examine:"A wooden chair.",
-    onSit:function(char) {
-      msg("The chair makes a strange noise when " + lang.nounVerb(char, "sit") + " on it.");
-    },
-  }
-);
+createItem("chair", FURNITURE({sit:true}), {
+  loc:"dining_room", examine:"A wooden chair.",
+  onSit:function(char) {
+    msg("The chair makes a strange noise when " + lang.nounVerb(char, "sit") + " on it.")
+  },
+})
 
 
 
-createRoom("lift",
-  TRANSIT("east"),
-  {
-    desc:'A curious lift.',
-    east:new Exit('dining_room'),
-    transitMenuPrompt:'Where do you want to go?',
-    //afterEnter:transitOfferMenu,
-    //transitAutoMove:true,
-    //onTransitMove:function(toLoc, fromLoc) { debugmsg("MOVING to " + toLoc + " from " + fromLoc); },
-    //transitCheck:function() {
-    //  msg("The lift is out of order");
-    //  return false;
-    //},
-  }
-);
+createRoom("lift", TRANSIT("east"), {
+  desc:'A curious lift.',
+  east:new Exit('dining_room'),
+  transitMenuPrompt:'Where do you want to go?',
+})
 
 
 // calling it button_0 make it appear before button_1 in lists

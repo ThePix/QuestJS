@@ -343,7 +343,8 @@ const lang = {
 
   // For furniture
   stop_posture:function(char) {
-    if (!char.posture || char.posture === "standing") return "";
+    if (!char.posture) return "";
+    if (!char.postureFurniture && char.posture === "standing") return "";
     let s;
     // You could split up sitting, standing and lying
     if (char.postureFurniture) {
