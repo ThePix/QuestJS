@@ -264,7 +264,7 @@ createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
     if (this.loc && w.hat.loc === 'box' && w.crowbar.loc !== 'box') {
       msg("You close the lid. 'Thank you for your custom!' says the box. It starts to shake violently then leaps into the air, rapidly disappearing from sight.")
       hint.now("hatInBox")
-      delete this.loc
+      this.loc = false
     }
     else {
       msg("'Hey!' exclaims a voice from the box, 'where's my hat?' The lid flips back open.")
@@ -627,7 +627,7 @@ createItem("office_window", {
   throwThrough:function(item) {
     if (item !== w.rope) {
       msg("You lob {nm:item:the} out the window; it lands on the street below.")
-      delete item.loc
+      item.loc = false
       office_window.outside.push(item)
       return true
     }
@@ -733,8 +733,8 @@ createItem("computer", {
             tmsg("That said, I see you lost the newspaper and the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon them here for you, just on the off-chance they will be needed.")
             w.old_newspaper.loc = 'office'
             w.rope.locs = ['office']
-            delete w.rope.tiedTo1
-            delete w.rope.tiedTo2
+            w.rope.tiedTo1 = false
+            w.rope.tiedTo2 = false
           }
           else if (w.old_newspaper.loc !== 'me' && w.old_newspaper.loc !== 'office') {
             tmsg("That said, I see you lost the newspaper somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon it here for you, just on the off-chance it will be needed.")
@@ -743,8 +743,8 @@ createItem("computer", {
           else if (!w.rope.isAtLoc('me') && !w.rope.isAtLoc('office')) {
             tmsg("That said, I see you lost the rope somewhere. First rule of playing adventure games; never leave anything behind unless you have to. Through the magical power of Tutorial-Guy, I will summon it here for you, just on the off-chance it will be needed.")
             w.rope.locs = ['office']
-            delete w.rope.tiedTo1
-            delete w.rope.tiedTo2
+            w.rope.tiedTo1 = false
+            w.rope.tiedTo2 = false
           }
           
           hint.now('smashWindow')

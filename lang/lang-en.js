@@ -343,19 +343,19 @@ const lang = {
 
   // For furniture
   stop_posture:function(char) {
-    if (!char.posture) return "";
-    if (!char.postureFurniture && char.posture === "standing") return "";
-    let s;
+    if (!char.posture) return ""
+    if (!char.postureFurniture && char.posture === "standing") return ""
+    let s
     // You could split up sitting, standing and lying
     if (char.postureFurniture) {
-      s = lang.nounVerb(char, "get", true) + " off " + lang.getName(w[char.postureFurniture], {article:DEFINITE}) + ".";
+      s = lang.nounVerb(char, "get", true) + " off " + lang.getName(w[char.postureFurniture], {article:DEFINITE}) + "."
     }
     else {
-      s = lang.nounVerb(char, "stand", true) + " up.";
+      s = lang.nounVerb(char, "stand", true) + " up."
     }
-    char.posture = undefined;
-    char.postureFurniture = undefined;
-    return s;
+    char.posture = false
+    char.postureFurniture = false
+    return s
   },
 
 

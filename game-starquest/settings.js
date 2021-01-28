@@ -87,7 +87,7 @@ settings.startingDialogOnClick = function() {
       w.ship[role.name] = npc.name
     }
     else {
-      delete w.ship[role.name]
+      w.ship[role.name] = false
     }
   }
   const roles = roster.getRoles(npc)
@@ -98,7 +98,7 @@ settings.startingDialogOnClick = function() {
     msg("You assign " + formatList(roles) + " " + npc.alias + ".")
   }
   if (roles.length === 0 && npc.loc) {
-    delete npc.loc
+    npc.loc = false
     msg(npc.leaving, {char:npc})
     io.updateUIItems()
   }

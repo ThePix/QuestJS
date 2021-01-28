@@ -313,7 +313,7 @@ test.tests = function() {
   test.assertCmd("get knife", "You take the knife.");
   
   const knifeDrop = w.knife.drop
-  delete w.knife.drop
+  w.knife.drop = false
   test.assertCmd("drop knife", "You can't drop it.");
   w.knife.drop = knifeDrop
   
@@ -969,7 +969,7 @@ test.tests = function() {
   test.assertCmd("buy carrot", ["You can't afford the carrot (need $0,02)."]);
   test.assertEqual(1, w.Buddy.money)
   
-  delete w.carrot0.loc
+  w.carrot0.loc = false
   
   test.title("shop - sell");
   test.assertCmd("sell carrot", ["You can't sell the carrot here."]);

@@ -128,7 +128,7 @@ test.tests = function() {
   w.goblin.health = 40
   
   game.player.modifyOutgoingAttack = oldProcessAttack
-  delete w.flail.equipped
+  w.flail.equipped = false
 
 
 
@@ -194,7 +194,7 @@ test.tests = function() {
   //attack3.output(40)
   
     
-  delete w.goblin.fireModifier
+  w.goblin.fireModifier = false
   w.goblin.health = 40
   skillUI.getSkillFromButtons = oldgetSkillFromButtons
   
@@ -212,7 +212,7 @@ test.tests = function() {
   test.assertEqual(25, w.goblin.health)
 
   w.goblin.health = 40
-  delete w.flail.equipped
+  w.flail.equipped = false
 
 
 
@@ -223,7 +223,7 @@ test.tests = function() {
   test.assertCmd('attack goblin', ['You attack the goblin.', /A miss/])
   test.assertEqual(40, w.goblin.health)
 
-  delete w.flail.equipped
+  w.flail.equipped = false
 
 
 
@@ -343,7 +343,7 @@ test.tests = function() {
   test.assertEqual("A shard of ice jumps from the goblin's finger to you, but the ice amulet protects you, and you take no damage.", attack2d.report[5].t)
   
   w.me.health = 100
-  delete w.goblin.spellCasting
+  w.goblin.spellCasting = false
   
 
 
