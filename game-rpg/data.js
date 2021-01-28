@@ -24,23 +24,27 @@ createItem("me", RPG_PLAYER(), {
 createItem("knife", WEAPON("d4+2"), {
   loc:"me",
   image:"knife",
+  examine:"An example of a poor weapon.",
   offensiveBonus:-2,
 });
 
 createItem("flail", WEAPON("2d10+4"), {
   loc:"me",
   image:"flail",
+  examine:"An example of a good weapon.",
 });
 
 createItem("flaming_sword", WEAPON("3d6+2"), {
   //loc:"me",
   image:"sword",
+  examine:"An example of a magic weapon.",
   activeEffects:["Flaming weapon"],
 });
 
 
 createItem("ice_amulet", WEARABLE(4, ['neck']), {
   loc:"me",
+  examine:"An example of a wearable magic item; it stops ice/frost damage.",
   modifyIncomingAttack:function(attack) {
     if (this.worn && attack.element === 'frost') {
       attack.damageMultiplier = 0
@@ -91,12 +95,14 @@ createItem("goblin", RPG_NPC(false), {
   loc:"practice_room",
   damage:"d8",
   health:40,
+  examine:"An example of a simple monster.",
 });
 
 createItem("orc", RPG_NPC(false), {
   loc:"practice_room",
   damage:"2d10+4",
   health:60,
+  examine:"An example of a simple monster.",
 });
 
 createItem("huge_shield", SHIELD(10), {
@@ -107,12 +113,14 @@ createItem("snotling", RPG_NPC(false), {
   loc:"practice_room",
   damage:"2d4",
   health:20,
+  examine:"An example of a simple monster.",
 });
 
 createItem("rabbit", RPG_NPC(false), {
   loc:"practice_room",
   damage:"2d4",
   health:20,
+  examine:"An example of a monster you can talk to after casting the right spell, and is generally not hostile.",
   canTalkFlag:false,
   isHostile:function() { return false; },
   talkto:function() {
@@ -135,16 +143,19 @@ createItem("chest", CONTAINER(true), {
 });
 
 createItem("spellbook", SPELLBOOK(["Fireball", "Stoneskin", "Steelskin", "Lightning bolt", "Ice shard"]), {
+  examine:"An example of a spell book, obviously.",
   loc:"practice_room",
 });
 
 createItem("helmet", WEARABLE(2, ['head']), {
   loc:"practice_room",
+  examine:"An example of armour; it will add +{armour} to your armour rating.",
   armour:10,
 });
 
 createItem("chestplate", WEARABLE(2, ['chest']), {
   loc:"practice_room",
+  examine:"An example of armour; it will add +{armour} to your armour rating.",
   armour:20,
 });
 
@@ -155,6 +166,8 @@ createItem("boots", WEARABLE(2, ['feet']), {
 
 createItem("shotgun", LIMITED_USE_WEAPON("2d10+4", 1), {
   loc:"practice_room",
+  ammo:1,
+  examine:"An example of a limited use weapon.",
   image:"flail",
 });
 
@@ -170,12 +183,22 @@ skills.add(new Skill("Double attack", {
 }))
 
 skills.add(new Effect("Flaming weapon", {
-  modifyOutgoingAttack:function(attack) {
+  modifyOutgoingAttack:function(attack, source) {
+    if (!source.equipped) return
     attack.element = 'fire'
   },
 }))
 
 skills.add(new Effect("Frost vulnerability", {
+  modifyIncomingAttack:function(attack) {
+    if (attack.element) attack.damageMultiplier *= 2
+  },
+}))
+
+skills.add(new Effect("Report for testing", {
+  modifyOutgoingAttack:function(attack) {
+    attack.element = 'fire'
+  },
   modifyIncomingAttack:function(attack) {
     if (attack.element) attack.damageMultiplier *= 2
   },
@@ -330,7 +353,7 @@ skills.add(new Spell("Commune with animal", {
   terminatingScript:function(target) {
     if (target.canTalkFlagIsTemporary) {
       target.canTalkFlag = false
-      delete target.canTalkFlagIsTemporary
+      target.canTalkFlagIsTemporary = false
       return "The {i:Commune with animal} spell on " + lang.getName(target, {article:DEFINITE}) + " expires."
     }
     return ''

@@ -1,5 +1,6 @@
 "use strict";
 
+test.resetOnCompletion = false
 
 
 test.tests = function() {
@@ -151,7 +152,7 @@ test.tests = function() {
   test.assertCmd("get shotgun", "You take the shotgun.");
   test.assertCmd("equip shotgun", "You draw the shotgun.");
   random.prime(2)
-  test.assertCmd("attack goblin", ["You attack the goblin.", "A miss!"]);
+  test.assertCmd("attack goblin", ["You attack the goblin.", "A miss!"]);/*
   test.assertCmd("attack goblin", ["You attack the goblin.", "Out of ammo!"]);
   test.assertCmd("drop shotgun", "You drop the shotgun.");
 
