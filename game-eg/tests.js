@@ -1,8 +1,10 @@
-"use strict";
+"use strict"
+
+test.printTitles = true
+test.resetOnCompletion = false
 
 test.tests = function() {
   
-  test.printTitles = true
   
   test.title("parser.scoreObjectMatch");
   test.assertEqual(55, parser.scoreObjectMatch("me", w.Buddy, ""));
@@ -117,7 +119,7 @@ test.tests = function() {
 
 
 
-  test.title("util.reverseDirection")
+  test.title("exit.reverse")
   const ex1 = w.lounge.east
   const ex2 = w.lounge.up
   test.assertEqual('west', ex1.reverse())
