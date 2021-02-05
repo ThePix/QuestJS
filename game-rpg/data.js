@@ -286,34 +286,44 @@ skills.add(new Spell("Lightning bolt", {
 }))
 
 skills.add(new Spell("Cursed armour", {
-  targetEffect:function(attack) {
+  targetEffect:function(attack, target) {
     attack.msg("{nms:target:the:true} armour is reduced.", 1)
+    target.activeEffects.push("Cursed armour effect")
   },
+  incompatible:[/skin effect$/],
   icon:'unarmour',
-  tooltip:"A lightning bolt jumps from your out-reached hand to you foe!", 
+}))
+
+
+skills.add(new Effect("Cursed armour effect", {
   modifyOutgoingAttack:function(attack) {
     attack.armourModifier = (attack.armourModifier > 2 ? attack.armourModifier - 2 : 0)
   },
 }))
 
 skills.add(new SpellSelf("Stoneskin", {
-  targetEffect:function(attack) {
+  targetEffect:function(attack, target) {
     attack.msg("Your skin becomes as hard as stone - and yet still just as flexible.", 1)
+    target.activeEffects.push("Stoneskin effect")
   },
-  ongoing:true,
-  incompatible:[/skin$/],
+  incompatible:[/skin effect$/],
+}))
+
+skills.add(new Effect("Stoneskin effect", {
   modifyIncomingAttack:function(attack) {
     attack.armourModifier += 2
   },
 }))
 
 skills.add(new SpellSelf("Steelskin", {
-  targetEffect:function(attack) {
+  targetEffect:function(attack, target) {
     attack.msg("Your skin becomes as hard as steel - and yet still just as flexible.", 1)
+    skills.limitDuration(target, "Steelskin effect", 3)
   },
-  ongoing:true,
-  duration:3,
-  incompatible:[/skin$/],
+  incompatible:[/skin effect$/],
+}))
+  
+skills.add(new Effect("Steelskin effect", {
   modifyIncomingAttack:function(attack) {
     attack.armourModifier += 4
   },
@@ -347,7 +357,6 @@ skills.add(new Spell("Commune with animal", {
     }
   },
   regex:/commune/,
-  ongoing:true,
   duration:5,
   automaticSuccess:true,
   terminatingScript:function(target) {

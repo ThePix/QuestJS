@@ -149,12 +149,12 @@ test.tests = function() {
 
 
 
-  test.assertCmd("get shotgun", "You take the shotgun.");
-  test.assertCmd("equip shotgun", "You draw the shotgun.");
+  test.assertCmd("get shotgun", "You take the shotgun.")
+  test.assertCmd("equip shotgun", "You draw the shotgun.")
   random.prime(2)
-  test.assertCmd("attack goblin", ["You attack the goblin.", "A miss!"]);/*
-  test.assertCmd("attack goblin", ["You attack the goblin.", "Out of ammo!"]);
-  test.assertCmd("drop shotgun", "You drop the shotgun.");
+  test.assertCmd("attack goblin", ["You attack the goblin.", "A miss!"])
+  test.assertCmd("attack goblin", ["You attack the goblin.", "Out of ammo!"])
+  test.assertCmd("drop shotgun", "You drop the shotgun.")
 
 
 
@@ -357,9 +357,9 @@ test.tests = function() {
   test.assertEqual([], game.player.activeEffects)
   test.assertCmd('cast stoneskin', ['You cast the <i>Stoneskin</i> spell.', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
 
-  test.assertEqual(['Stoneskin'], game.player.activeEffects)
-  test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> spell terminates.'])
-  test.assertEqual(['Steelskin'], game.player.activeEffects)
+  test.assertEqual(['Stoneskin effect'], game.player.activeEffects)
+  test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin effect</i> terminates.'])
+  test.assertEqual(['Steelskin effect'], game.player.activeEffects)
 
 
 
@@ -368,13 +368,13 @@ test.tests = function() {
 
 
   test.title("ongoing spells expire")
-  game.player.countdown_Steelskin = 3
+  game.player['countdown_Steelskin effect'] = 3
   w.spell_handler.eventScript()
-  test.assertEqual(2, game.player.countdown_Steelskin)
+  test.assertEqual(2, game.player['countdown_Steelskin effect'])
   test.assertCmd('z', ['Time passes...'])
-  test.assertEqual(1, game.player.countdown_Steelskin)
-  test.assertCmd('z', ['Time passes...', 'The <i>Steelskin</i> spell terminates.'])
-  test.assertEqual(false, game.player.countdown_Steelskin)
+  test.assertEqual(1, game.player['countdown_Steelskin effect'])
+  test.assertCmd('z', ['Time passes...', 'The <i>Steelskin effect</i> terminates.'])
+  test.assertEqual(false, game.player['countdown_Steelskin effect'])
   test.assertEqual([], game.player.activeEffects)
   test.assertCmd('z', ['Time passes...'])
   
