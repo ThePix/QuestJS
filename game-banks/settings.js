@@ -148,10 +148,10 @@ for (let back of backgrounds) {
 s += '</select></td></tr></table>'
 
 
-settings.startingDialogEnabled = true
+//settings.startingDialogEnabled = true
 settings.startingDialogTitle = "To start with..."
-settings.startingDialogWidth = 555
-settings.startingDialogHeight = 565
+settings.startingDialogWidth = 530
+settings.startingDialogHeight = 500
 settings.startingDialogHtml = s
 settings.startingDialogOnClick = function() {
   let p = game.player;
