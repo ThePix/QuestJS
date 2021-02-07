@@ -1045,11 +1045,11 @@ createItem("canyon", ZONE_BORDER('desert'), {
 
 
 createRoom("desert", ZONE(), {
-  exits:[
+  zoneExits:[
     {x:-1, y:3, dir:'in', dest:'inside_tower', msg:'You step inside the tower, and climb the step, spiral staircase to the top.'},
     {x:5, y:0, dir:'east', dest:'bridge', msg:'You start across the bridge.'},
   ],
-  descs:[
+  zoneDescs:[
     {
       x:5, y:0,
       desc: 'You are stood on a road heading west through a desert, and east over a bridge.'

@@ -693,7 +693,7 @@ test.tests = function() {
   test.assertEqual(w.book.examine, clone2.examine);
 
   
-  test.title("Save/Load 1");
+  test.title("Save/Load 0");
 
   const sl1 = "Some long string, with ~ all | sorts {} of! = stuff. In it^&*\""
   test.assertEqual(sl1, saveLoad.decodeString(saveLoad.encodeString(sl1)))
@@ -710,6 +710,8 @@ test.tests = function() {
   test.assertEqual("tst:qobject:book;", saveLoad.encode("tst", w.book))
   test.assertEqual("tst:array:14~12;", saveLoad.encode("tst", ['14', '12']))
   test.assertEqual("tst:numberarray:14~12;", saveLoad.encode("tst", [14, 12]))
+  test.assertEqual("tst:emptyarray;", saveLoad.encode("tst", []))
+  test.assertEqual("tst:emptystring;", saveLoad.encode("tst", ''))
 
   saveLoad.decode(w.far_away, "one:number:14")
   test.assertEqual(14, w.far_away.one)
@@ -726,7 +728,16 @@ test.tests = function() {
   test.assertEqual(true, w.far_away.north.hidden)
   saveLoad.decode(w.far_away, "six:numberarray:4~67~9")
   test.assertEqual([4, 67, 9], w.far_away.six)
+  saveLoad.decode(w.far_away, "six:emptyarray")
+  test.assertEqual([], w.far_away.six)
+  saveLoad.decode(w.far_away, "seven:string:")
+  test.assertEqual('', w.far_away.seven)
 
+
+  test.title("Save/Load 1")
+  const bootsSaveString = w.boots.getSaveString().replace('Object=', '')
+  saveLoad.setFromArray(w.boots, bootsSaveString.split(";"))
+  
   test.title("Save/Load 2");
   // Set up some changes to be saved
   w.boots.counter = 17;
@@ -747,20 +758,20 @@ test.tests = function() {
   w.boots.examine = "This will not remain";
   const clone3 = cloneObject(clone);  // should not be there later
   w.far_away.north.locked = true
-  saveLoad.loadTheWorld(s, 4);
+  saveLoad.loadTheWorld(s, 4)
   
   
-  test.assertEqual(count + 2, Object.keys(w).length);
-  test.assertEqual(17, w.boots.counter);
-  test.assertEqual([4, 5, 8], w.boots.sizes);
-  test.assertEqual("Some interesting text", w.boots.unusualString);
-  test.assertEqual(true, w.boots.notableFlag);
-  test.assertEqual("This will get saved", w.boots.examine);
-  test.assertEqual(agendaCount, w.Arthur.agenda.length);
-  test.assertEqual(0, w.Arthur.followers.length);
-  test.assertEqual(29, w[clone.name].cloneCounter);
-  test.assertEqual(false, w.far_away.north.locked);
-  test.assertEqual(false, w.far_away.north.hidden);
+  test.assertEqual(count + 2, Object.keys(w).length)
+  test.assertEqual(17, w.boots.counter)
+  test.assertEqual([4, 5, 8], w.boots.sizes)
+  test.assertEqual("Some interesting text", w.boots.unusualString)
+  test.assertEqual(true, w.boots.notableFlag)
+  test.assertEqual("This will get saved", w.boots.examine)
+  test.assertEqual(agendaCount, w.Arthur.agenda.length)
+  test.assertEqual(0, w.Arthur.followers.length)
+  test.assertEqual(29, w[clone.name].cloneCounter)
+  test.assertEqual(false, w.far_away.north.locked)
+  test.assertEqual(false, w.far_away.north.hidden)
   
   
   test.title("Save/Load 3")
@@ -779,6 +790,7 @@ test.tests = function() {
   test.assertEqual("conservatory, dining room, lounge", formatList(agenda.findPath(w.garden, w.dining_room)));
   test.assertEqual(null, w.dining_room.findExit(w.far_away));
   test.assertEqual("east", w.dining_room.findExit(w.lounge).dir);
+  
   test.assertCmd("s", ["The kitchen", "A clean room. There is a sink in the corner.", /You can see/, "You can go down, north or west."]);
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv.", /^You can see/, "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", /You can see/, "You can go north or west."]);
@@ -848,7 +860,7 @@ test.tests = function() {
   test.assertCmd("i", ["You are carrying a flashlight, a garage key and a suit."]);
   test.assertCmd("drop suit", ["You drop the suit."]);
   test.assertCmd("get suit", ["You take the suit."]);
-  test.assertCmd("wear xyz", ["Individual parts of an ensemble must be worn and removed separately."]);
+  test.assertCmd("wear suit", ["Individual parts of an ensemble must be worn and removed separately."]);
   test.assertCmd("wear trousers", ["You put on the suit trousers."]);
   test.assertCmd("i", ["You are carrying a flashlight, a garage key, a jacket, some suit trousers (worn) and a waistcoat."]);
   test.assertCmd("wear jacket", ["You put on the jacket."]);
@@ -994,8 +1006,7 @@ test.tests = function() {
   test.assertCmd("w", ["You head west.", "The bridge", "From the bridge you can just how deep the canyon is.", "You can see a Piggy-suu here.", "You can go east or west."]);
   // Takes us to 5,0
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road heading west through a desert, and east over a bridge. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, southwest or west."]);
-  
-  
+   
   
     // Takes us to 4,0  
   test.assertCmd("w", ["You head west.", "The desert", "You are stood on a road running east to west through a desert. There is a deep canyon southeast of you, running from the southwest to the northeast.", "You can go east, north, northeast, northwest, south, southwest or west."]);

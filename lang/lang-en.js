@@ -785,7 +785,7 @@ const lang = {
         s += item.getAdjective()
       }
       if (!count || count === 1) {
-        s += item.alias
+        s += (options.enhanced && item.enhancedAlias ? item.enhancedAlias : item.alias)
       }
       else if (item.pluralAlias) {
         s += item.pluralAlias
