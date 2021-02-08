@@ -723,9 +723,6 @@ test.tests = function() {
   test.assertEqual(w.book, w.far_away.four)
   saveLoad.decode(w.far_away, "five:array:14~12")
   test.assertEqual('14', w.far_away.five[0])
-  //console.log(w.far_away.north)
-  saveLoad.decode(w.far_away, "north:exit:lounge:l:h")
-  test.assertEqual(true, w.far_away.north.hidden)
   saveLoad.decode(w.far_away, "six:numberarray:4~67~9")
   test.assertEqual([4, 67, 9], w.far_away.six)
   saveLoad.decode(w.far_away, "six:emptyarray")
@@ -735,8 +732,16 @@ test.tests = function() {
 
 
   test.title("Save/Load 1")
+  w.boots.special_att_1 = 'one'
   const bootsSaveString = w.boots.getSaveString().replace('Object=', '')
+  w.boots.special_att_2 = 'two'
+  delete w.boots.special_att_3
   saveLoad.setFromArray(w.boots, bootsSaveString.split(";"))
+  test.assertEqual('one', w.boots.special_att_1)
+  test.assertEqual(undefined, w.boots.special_att_2)
+  test.assertEqual('three', w.boots.special_att_3)
+  
+  
   
   test.title("Save/Load 2");
   // Set up some changes to be saved
@@ -770,8 +775,6 @@ test.tests = function() {
   test.assertEqual(agendaCount, w.Arthur.agenda.length)
   test.assertEqual(0, w.Arthur.followers.length)
   test.assertEqual(29, w[clone.name].cloneCounter)
-  test.assertEqual(false, w.far_away.north.locked)
-  test.assertEqual(false, w.far_away.north.hidden)
   
   
   test.title("Save/Load 3")

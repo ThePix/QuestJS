@@ -147,33 +147,34 @@ createItem("book_cover", COMPONENT("book"), {
 });
 
 
-createItem("boots", 
-  WEARABLE(),
-  { loc:"lounge", pronouns:lang.pronouns.plural, examine:"Some old boots.", }
-);
+createItem("boots", WEARABLE(), {
+  loc:"lounge", 
+  pronouns:lang.pronouns.plural, 
+  examine:"Some old boots.",
+  special_att_3:'three',
+})
 
 
 
-createItem("waterskin",
-  TAKEABLE(),
-  { 
-    examine:function(isMultiple) { msg(prefix(this, isMultiple) + "The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full."); },
-    capacity:10,
-    full:3,
-    loc:"lounge",
-    fill:function(isMultiple) {
-      if (game.player.loc != "garage") {
-        msg(prefix(this, isMultiple) + "There is nothing to charge the torch with here.");
-        return false;
-      }
-      else {
-        msg(prefix(this, isMultiple) + "You charge the torch - it should last for hours now.");
-        this.power = 20;;
-        return true;
-      }
-    },
-  }
-);
+createItem("waterskin", TAKEABLE(), { 
+  examine:function(isMultiple) { 
+    msg(prefix(this, isMultiple) + "The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full.")
+  },
+  capacity:10,
+  full:3,
+  loc:"lounge",
+  fill:function(isMultiple) {
+    if (game.player.loc != "garage") {
+      msg(prefix(this, isMultiple) + "There is nothing to charge the torch with here.")
+      return false
+    }
+    else {
+      msg(prefix(this, isMultiple) + "You charge the torch - it should last for hours now.")
+      this.power = 20
+      return true
+    }
+  },
+})
 
 
 
