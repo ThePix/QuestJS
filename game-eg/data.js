@@ -250,36 +250,36 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
   examine:"A small red torch.",
   regex:/^torch$/, 
   lightSource:function() {
-    return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
+    return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE
   },
   eventPeriod:1,
   eventIsActive:function() {
-    return this.switchedon;
+    return this.switchedon
   },
   eventScript:function() {
     this.power--;
     if (this.power === 2) {
-      msg("The torch flickers.");
+      msg("The torch flickers.")
     }
     if (this.power < 0) {
       msg("The torch flickers and dies.{once: Perhaps there is a charger in the garage?}");
-      this.doSwitchoff();
+      this.doSwitchoff()
     }
   },
   checkCanSwitchOn () {
     if (this.power < 0) {
-      msg("The torch is dead.");
-      return false;
+      msg("The torch is dead.")
+      return false
     }
-    return true;
+    return true
   },
   power:2,
   chargeResponse:function(participant) {
-    msg(lang.pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.");
-    w.flashlight.power = 20;
-    return true;
+    msg(lang.pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.")
+    w.flashlight.power = 20
+    return true
   },
-});
+})
 
 
 
@@ -371,35 +371,40 @@ createRoom("attic", {
 createRoom("kitchen", {
   desc:'A clean room{if:clock:scenery:, a clock hanging on the wall}. There is a sink in the corner.',
   west:new Exit("lounge"),
-  down:new Exit('basement', {isHidden:function() { return w.trapdoor.closed; }, msg:function(isMultiple, char) {
-    if (char === game.player) {
-      msg("You go through the trapdoor, and down the ladder.");
-    } else {
-      msg("You watch " + lang.getName(char, {article:DEFINITE}) + " disappear through the trapdoor.");
-    }
-  }}),
+  down:new Exit('basement', {
+    isHidden:function() { return w.trapdoor.closed; },
+    msg:function(isMultiple, char) {
+      if (char === game.player) {
+        msg("You go through the trapdoor, and down the ladder.");
+      } else {
+        msg("You watch " + lang.getName(char, {article:DEFINITE}) + " disappear through the trapdoor.");
+      }
+    },
+  }),
   north:new Exit("garage"),
   afterFirstEnter:function() {
     msg("A fresh smell here!");
   },
   hint:"This room features two doors that open and close. The garage door needs a key.",
   source:"water",
-});
+})
 
-createItem("clock",
-  TAKEABLE(),
-  { loc:"kitchen", scenery:true, examine:"A white clock.", }
-);
+createItem("clock", TAKEABLE(), {
+  loc:"kitchen", 
+  scenery:true, 
+  examine:"A white clock.",
+})
 
-createItem("trapdoor",
-  OPENABLE(false),
-  { loc:"kitchen", examine:"A small trapdoor in the floor.", }
-);
+createItem("trapdoor", OPENABLE(false), {
+  loc:"kitchen",
+  examine:"A small trapdoor in the floor.",
+})
 
-createItem("camera",
-  TAKEABLE(),
-  { loc:"kitchen", examine:"A cheap digital camera.", regex:/^picture box$/ }
-);
+createItem("camera", TAKEABLE(), {
+  loc:"kitchen", 
+  examine:"A cheap digital camera.",
+  regex:/^picture box$/,
+})
 
 createItem("big_kitchen_table", SURFACE(), {
   loc:"kitchen",
@@ -409,23 +414,23 @@ createItem("big_kitchen_table", SURFACE(), {
 createItem("jug", VESSEL(4), TAKEABLE(), {
   loc:"big_kitchen_table",
   examine:"A small jug, stripped blue and white.",
-});
+})
 
 createItem("kitchen_sink", {
   loc:"kitchen",
   scenery:true, 
   examine:"A dirty sink.",
   isSourceOf:function(subst) { return subst === "water" || subst === "lemonade"; }
-});
+})
 
 createItem("water", LIQUID(), {
-});
+})
 
 createItem("honey", LIQUID(), {
-});
+})
 
 createItem("lemonade", LIQUID(), {
-});
+})
 
 
 
@@ -441,22 +446,22 @@ createRoom("basement", {
     return w.light_switch.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
   hint:"The basement illustrates light and dark. There is a torch in the lounge that may be useful.",
-});
+})
 
-createItem("light_switch",
-  SWITCHABLE(false),
-  { loc:"basement", examine:"A switch, presumably for the light.", alias:"light switch",
-    checkCanSwitchOn:function() {
-      if (!w.crates.moved) {
-        msg("You cannot reach the light switch, without first moving the crates.");
-        return false;
-      }
-      else {
-        return true;
-      }
+createItem("light_switch", SWITCHABLE(false), {
+  loc:"basement", 
+  examine:"A switch, presumably for the light.", 
+  alias:"light switch",
+  checkCanSwitchOn:function() {
+    if (!w.crates.moved) {
+      msg("You cannot reach the light switch, without first moving the crates.");
+      return false;
+    }
+    else {
+      return true;
     }
   }
-);
+})
 
 
 createItem("crates", 

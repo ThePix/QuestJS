@@ -60,8 +60,8 @@ test.tests = function() {
   test.testing = false;
   test.assertEqual("'Bio-probe I has successfully landed on the planet.' announces Xsansi.", test.testOutput[0])
   
-
-  test.title("Planet one");
+  test.start("Planet one")
+  
   test.assertCmd("ask ai about crew", test.padArray(["'Tell me about the crew, Xsansi,' you say."], 4));
   test.assertCmd("o", ["You climb out of the stasis pod.", "The stasis bay", /^There are six/, "A drawer under the pod slides open to reveal your jumpsuit."]);
   test.assertCmd("get jumpsuit", ["You take your jumpsuit.", "The stasis pod drawer slides shut."]);

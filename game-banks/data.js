@@ -1,5 +1,4 @@
-"use strict";
-
+"use strict"
 
 
 createRoom("nowhere", {
@@ -7,32 +6,29 @@ createRoom("nowhere", {
 
 
   
-createItem("me",
-  PLAYER(),
-  { 
-    loc:"stasis_pod_room", 
-    regex:/^(me|myself|player)$/, 
-    status:100, 
-    bonus:0, 
-    baseOxygeUse:6,
-    oxygenUseModifier:1,
-    oxygenUse:function() {
-      return this.baseOxygeUse * this.oxygenUseModifier
-    },
-    examine:function(isMultiple) {
-      msg(prefix(this, isMultiple) + "You feel fine...");
-    },
-    canMove:function(ex) {
-      let room1 = w[this.loc];
-      if (typeof room1.vacuum === "string") room1 = w[room1.vacuum];
-      let room2 = w[ex.name];
-      if (typeof room2.vacuum === "string") room2 = w[room2.vacuum];
-      if (room1.vacuum === room2.vacuum) return true;
-      msg("The door to " + lang.getName(room2, {article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + lang.getName(room1, {article:DEFINITE}) + " is not.");
-      return false;
-    }
-  }
-);
+createItem("me", PLAYER(), { 
+  loc:"stasis_pod_room", 
+  regex:/^(me|myself|player)$/, 
+  status:100, 
+  bonus:0, 
+  baseOxygeUse:6,
+  oxygenUseModifier:1,
+  oxygenUse:function() {
+    return this.baseOxygeUse * this.oxygenUseModifier
+  },
+  examine:function(isMultiple) {
+    msg(prefix(this, isMultiple) + "You feel fine...")
+  },
+  canMove:function(ex) {
+    let room1 = w[this.loc]
+    if (typeof room1.vacuum === "string") room1 = w[room1.vacuum]
+    let room2 = w[ex.name]
+    if (typeof room2.vacuum === "string") room2 = w[room2.vacuum]
+    if (room1.vacuum === room2.vacuum) return true
+    msg("The door to " + lang.getName(room2, {article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + lang.getName(room1, {article:DEFINITE}) + " is not.")
+    return false
+  },
+})
 
 
 
@@ -67,6 +63,7 @@ createRoom("stasis_bay", {
   deckName:'layer1',
   svgId:'rect2756',
   alias:"stasis bay",
+  pressure:true, // give priority to press/depress
   desc:'There are six stasis pods here (despite only five crew members), four on one side and two on the other. {stasis_pod_status} Above each pod is a diagnostics screen, and behind them the various pipes that keep the occupant alive. Besides the pods, there is also a large locker at the back of the room. {ifHere:pile_of_vomit:There is some vomit on the floor by your stasis pod. }The exits are to port and aft.',
   tpStatus:function() {
     const arr = [];
@@ -163,6 +160,9 @@ createRoom("stasis_pod_room", {
       return true;
     }      
   }),
+  itemDropped:function(item) {
+    item.loc = "stasis_bay"
+  }
 });
 
 createItem("stasis_pod_interior",
@@ -186,10 +186,11 @@ createItem("stasis_pod_interior",
       
       w.your_jumpsuit.loc = "stasis_pod_drawer";
       w.stasis_pod_drawer.scenery = true;
-      msg("You give pod lid a pull, and it starts to descend, sealing you in. You feel a sharp pain in your shoulder, and almost immediately you start to feel sleepy... so sleepy you cannot keep your eyes open.");
-      arrival();
+      msg("You give pod lid a pull, and it starts to descend, sealing you in. You feel a sharp pain in your shoulder, and almost immediately you start to feel sleepy... so sleepy you cannot keep your eyes open.")
+      hr()
+      arrival()
       // MORE STUFF HERE ???
-      return true;
+      return true
     },
   }
 );
@@ -381,9 +382,9 @@ createRoom("probes_aft", {
   alias:"Aft probe hanger",
   desc:"The aft probe hanger has the scientific probes. Each probe is contained in a crate, and needs unpacking before deployment. On the port side there is a delivery system into which a probe can be placed, to be sent to the planet. Various types of probes are available.",
   vacuum:false,
-  port:new Exit("geolab", {
+  up:new Exit("geolab", {
     msg:"You walk up the narrow stair way to the middle deck.",
-    alsoDir:["up"],
+    alsoDir:["port"],
   }),
   forward:new Exit("probes_forward"),
 });
@@ -654,11 +655,12 @@ createItem("probe_prototype", COUNTABLE([]), {
   satelliteEventScript:function() {
     this.launchCounter++
     if (this.launchCounter === TURNS_TO_ORBIT) {
-      this.status = "In orbit";
-      shipAlert(this.alias + " has successfully entered orbit around the planet.");
+      this.status = "In orbit"
+      shipAlert(this.alias + " has successfully entered orbit around the planet.")
     }
     if (this.launchCounter === TURNS_TO_ORBIT + 1) {
-      this.status = "Scanning";
+      this.status = "Scanning"
+      w[this.owner].deployProbeAction++
     }
     if (this.launchCounter > TURNS_TO_ORBIT + 1 && this.launchCounter % 4 === 0) {
       game.player.bonus += 1

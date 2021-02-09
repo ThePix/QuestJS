@@ -892,6 +892,14 @@ createItem("Ha_yoon", CREW(true), {
     msg("'No, no family.'");
   },
   askOptions:[
+    {
+      name:"ship",
+      test:function(p) { return p.text.match(/ship/); }, 
+      script:function() {
+        msg("'How is the ship,' you ask Ha-yoon.")
+        msg("'Good.'") // !!! more here!
+      },
+    },
   ],
   data:[
     ["'You should talk to the other about that.'"],

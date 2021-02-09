@@ -36,7 +36,7 @@ commands.push(new Cmd('Move', {
 // kyle, in stasis
 
 commands.push(new Cmd('Get in pod1', {
-  regex:/^(.+), (?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
+  regex:/^(.+), ?(?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
   npcCmd:true,
   attName:"stasis",
   objects:[
@@ -95,32 +95,37 @@ commands.push(new Cmd('Revive', {
 }));
 
 commands.push(new Cmd('Pressurise', {
-  regex:/^pressuri[sz]e (.+)$/,
-  npcCmd:true,
+  regex:/^(?:pressuri[sz]e|pres) (.+)$/,
+  attName:'pressure',
   objects:[
-    {scope:'isRoom'},
+    {scope:isRoomScope},
   ],
   script:function(objects) {
     return handlePressurise(game.player, objects, true);
   },
+  default:function(item) {
+    return failedmsg('Not something you can pressurise.', {char:game.player, item:item});
+  },
 }));
 commands.push(new Cmd('Depressurise', {
-  regex:/^(depressuri[sz]e|evacuate) (.+)$/,
-  npcCmd:true,
+  regex:/^(?:depressuri[sz]e|evacuate|depres) (.+)$/,
+  attName:'pressure',
   objects:[
-    {ignore:true},
-    {scope:'isRoom'},
+    {scope:isRoomScope},
   ],
   script:function(objects) {
     return handlePressurise(game.player, objects, false);
   },
+  default:function(item) {
+    return failedmsg('Not something you can evacuate.', {char:game.player, item:item});
+  },
 }));
-
-/*commands.push(new Cmd('NpcPressurise1', {
-  regex:/^(.+), ?pressuri[sz]e (.+)$/,
+commands.push(new Cmd('NpcPressurise1', {
+  regex:/^(.+), ?(?:pressuri[sz]e|pres) (.+)$/,
+  attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {scope:'isRoom'},
+    {scope:isRoomScope},
   ],
   script:function(objects) {
     var npc = objects[0][0];
@@ -134,10 +139,11 @@ commands.push(new Cmd('Depressurise', {
   },
 }));
 commands.push(new Cmd('NpcPressurise2', {
-  regex:/^tell (.+) to pressuri[sz]e (.+)$/,
+  regex:/^tell (.+) to (?:pressuri[sz]e|pres) (.+)$/,
+  attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {scope:'isRoom'},
+    {scope:isRoomScope},
   ],
   script:function(objects) {
     var npc = objects[0][0];
@@ -151,41 +157,41 @@ commands.push(new Cmd('NpcPressurise2', {
   },
 }));
 commands.push(new Cmd('NpcDepressurise1', {
-  regex:/^(.+), ?(depressuri[sz]e|evacuate) (.+)$/,
+  regex:/^(.+), ?(?:depressuri[sz]e|evacuate|depres) (.+)$/,
+  attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {ignore:true},
-    {scope:'isRoom'},
+    {scope:isRoomScope},
   ],
   script:function(objects) {
-    var npc = objects[0][0];
-    npc.actedThisTurn = true;
+    var npc = objects[0][0]
+    npc.actedThisTurn = true
     if (!npc.npc) {
-      msg(CMD_not_npc(npc));
-      return world.FAILED; 
+      msg(CMD_not_npc(npc))
+      return world.FAILED
     }
-    objects.shift();
-    return handlePressurise(npc, objects, false);
+    objects.shift()
+    return handlePressurise(npc, objects, false)
   },
-}));
+}))
 commands.push(new Cmd('NpcDepressurise2', {
-  regex:/^tell (.+) to (depressuri[sz]e|evacuate) (.+)$/,
+  regex:/^tell (.+) to (?:depressuri[sz]e|evacuate|depres) (.+)$/,
+  attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {ignore:true},
-    {scope:'isRoom'},
+    {scope:isRoomScope},
   ],
   script:function(objects) {
-    var npc = objects[0][0];
-    npc.actedThisTurn = true;
+    var npc = objects[0][0]
+    npc.actedThisTurn = true
     if (!npc.npc) {
-      msg(CMD_not_npc(npc));
-      return world.FAILED; 
+      msg(CMD_not_npc(npc))
+      return world.FAILED;
     }
-    objects.shift();
-    return handlePressurise(npc, objects, false);
+    objects.shift()
+    return handlePressurise(npc, objects, false)
   },
-}));*/
+}))
 
 
 function handlePressurise(char, objects, pressurise) {
@@ -415,7 +421,7 @@ commands.push(new Cmd('HelpVacuum', {
   regex:/^(?:\?|help) (?:vacuum|d?e?pressur.+)$/,
   script:function() {
     metamsg("{b:Vacuum:}");
-    metamsg("Each section of the ship can be pressurised or depressurised by Xsansi, just ask {color:red:XSANSI, PRESSURIZE THE CARGO BAY} or {color:red:AI, DEPRESSURISE ENGINEERING}. Note that safety overrides may prevent Xsansi from complying.");
+    metamsg("Each section of the ship can be pressurised or depressurised by Xsansi, just ask {color:red:XSANSI, PRESSURIZE THE CARGO BAY} or {color:red:AI, DEPRESSURISE ENGINEERING}. You can use {color:red:PRES} and {color:red:DEPRES} as shortcuts too. Note that safety overrides may prevent Xsansi from complying.");
     metamsg("To find out what areas are pressurised, {color:red: ASK XSANSI ABOUT WHERE IS PRESSURISED} or {color:red:ASK AI ABOUT VACUUM}.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },

@@ -469,25 +469,27 @@ const lang = {
       metamsg("You can use the up and down arrows to scroll back though your previous typed commands - especially useful if you realise you spelled something wrong. If you do not have arrow keys, use OOPS to retrieve the last typed command so you can edit it. Use AGAIN or just G to repeat the last typed command.")
     }
     if (settings.panes !== "none") {
-      metamsg("{b:User Interface:} To interact with an object, click on its name in the side pane, and a set of possible actions will appear under it. Click on the appropriate action.");
+      if (settings.inventoryPane) {
+        metamsg("{b:User Interface:} To interact with an object, click on its name in the side pane, and a set of possible actions will appear under it. Click on the appropriate action.")
+      }
       if (settings.compassPane) {
         if (settings.symbolsForCompass) {
-          metamsg("You can also use the compass rose at the top to move around. Click the eye symbol, &#128065;, to look at you current location, the pause symbol, &#9208;, to wait or &#128712; for help.");
+          metamsg("You can also use the compass rose at the top to move around. Click the eye symbol, &#128065;, to look at you current location, the pause symbol, &#9208;, to wait or &#128712; for help.")
         }
         else {
-          metamsg("You can also use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.");
+          metamsg("You can also use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.")
         }
       }
     }
     if (settings.additionalHelp !== undefined) {
       for (let s of settings.additionalHelp) metamsg(s)
     }
-    return world.SUCCESS_NO_TURNSCRIPTS;
+    return world.SUCCESS_NO_TURNSCRIPTS
   },
 
   hintScript:function() {
     metamsg("Sorry, no hints available.")
-    return world.SUCCESS_NO_TURNSCRIPTS;
+    return world.SUCCESS_NO_TURNSCRIPTS
   },
 
   aboutScript:function() {

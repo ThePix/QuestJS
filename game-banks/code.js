@@ -186,8 +186,8 @@ const walkthroughs = {
     "a",
     "u",
     "f",
-    "ask ostap about probes",
     "s",
+    "ask ostap about probes",
     "x chair",
     "x table",
     "ask ostap about bio-probes",
@@ -244,11 +244,31 @@ const walkthroughs = {
     "z",
     "z",
     "z",
+    "z",
     "ask aada about planet",
     "topics aada",
     "ask aada about himself",
     "ask aada about herself",
     "aada, go in stasis pod",
+
+    "up",
+    "forward",
+    "starboard",
+    "starboard",
+    "in",
+    "remove jumpsuit",
+    "drop jumpsuit",
+    "close lid",
+
+    "out",
+    "open locker",
+    "get suit",
+    "get sp",
+    "wear sp",
+    "ai,depres stasis",
+
+
+
     /**/
   ],
   c:[
@@ -269,7 +289,7 @@ const walkthroughs = {
 
 
 
-
+function isRoomScope(obj) { return obj.room }
 
 
 
@@ -480,7 +500,7 @@ function updateMap() {
     if (mySvgId) $('#' + mySvgId).css('fill', 'yellow')
     if (otherSvgId) $('#' + otherSvgId).css('fill', 'blue')
   }
-  $('#rect10').css('fill', settings.darkModeActive ? '#333' : '#bbb')
+  $('#rect10').css('fill', settings.darkModeActive ? '#606' : '#bbb')
   for (let id of [3334, 2800, 2788, 3330]) {
     $('#text' + id).css('fill', settings.darkModeActive ? 'white' : 'black')
     $('#text' + id).css('font-family', 'Orbitron, sans-serif')

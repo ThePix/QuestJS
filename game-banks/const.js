@@ -75,7 +75,7 @@ const PLANETS = [
     bioProbeBonusPerRank:5,
     arrivalTime:new Date('March 3, 2340 11:05:30'),
     onArrival:function() {
-      msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod again. 'We have arrived at " + this.starName + ",' the voice continues, 'our second destination, after a lengthy journey, with a single incident. On the nineteenth of September, 2338 at 2104, ship time, the ship passed through a meteor shower, resulting in a loss of integrity in: the lounge, the captain's cabin, the top deck corridor.");
+      msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before again realising you are in a stasis pod. 'We have arrived at " + this.starName + ",' the voice continues, 'our second destination, after a lengthy journey, with a single incident. On the nineteenth of September, 2338 at 2104, ship time, the ship passed through a meteor shower, resulting in a loss of integrity in: the lounge, the captain's cabin, the top deck corridor.");
       msg("'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.' You sit up, and for a moment you do feel dizzy, but it soon passes.");
       game.player.status = Math.min(game.player.status, 95);
       w.Kyle.status = Math.min(w.Kyle.status, 93);

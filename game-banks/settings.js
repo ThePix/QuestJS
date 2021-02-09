@@ -11,7 +11,7 @@ settings.warnings = 'This game does have swearing (including the F-word); it is 
 
 // UI options
 settings.libraries.push('shipwise')
-settings.files = ["const", "code", "commands", "text", "data", "npcs"]
+settings.files = ["const", "code", "commands", "text", "data", "npcs", "map"]
 settings.styleFile = 'style'
 settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] ABOUT [topic]} or {color:red:TELL [name] ABOUT [topic]}."
 settings.noAskTell = false
@@ -21,7 +21,6 @@ settings.symbolsForCompass  = true
 
 settings.playMode = 'dev'
 settings.tests = true
-
 settings.dateTime.start = new Date('April 14, 2387 09:43:00')
 
 settings.roomTemplate = [
@@ -29,6 +28,14 @@ settings.roomTemplate = [
   "{terse:{hereDesc}}",
   "{objectsHere:You can see {objects} here.}",
 ]
+
+
+settings.saveLoadExcludedAtts.push("data")
+
+
+
+
+
 
 settings.status = [
   function() { return '<td width="55px" title="You receive a bonus for collecting good data"><b>Bonus:</b></td><td width="20px"></td><td align="right"><b>$' + game.player.bonus + 'k</b></td>' },
@@ -67,15 +74,13 @@ settings.oxygenReport = function(obj) {
   // 0.84 kg O2  per day
   // https://ntrs.nasa.gov/citations/20040012725
   // so 0.58 g/m
-  console.log(w.ship.oxygen)
-  console.log(util.getByInterval(settings.intervals, w.ship.oxygen / 50))
+  //console.log(w.ship.oxygen)
+  //console.log(util.getByInterval(settings.intervals, w.ship.oxygen / 50))
   const colourCode = util.getByInterval(settings.intervals, w.ship.oxygen / 10)
   return '<td title="The ship has a limited amount of oxygen; an adult uses about 6 g every minute, but none while in stasis"><b>Oxygen:</b></td>' + settings.warningLight(colourCode) + '<td align="right"><span style="font-size:0.8em">' + (Math.round(w.ship.oxygen) / 1000).toFixed(3) + ' kg</span></td>'
 }
 
 settings.warningLight = function(colourCode) {
-  //return "<td style=\"margin:3px;border:black solid 2px; background:" + colour + "\">&nbsp;</td>"
-  
   let s = '<td title="' + settings.colourNotes[colourCode] + '">'
   s += '<svg height="12" width="10">'
   s += '<circle cx="5" cy="5" r="5" stroke="black" stroke-width="1" fill="' + settings.colours[colourCode] + '" />'
@@ -89,18 +94,13 @@ settings.inventoryPane = false
 
 settings.setup = function() {
   arrival()
-  $('#map').appendTo("#panes")
+  $('#panes').append('<div id="map" class="pane-div" style="text-align:center;">' + mapSVG + '</div>')
   updateMap()
 }
-
-
 
 settings.updateCustomUI = function() {
   updateMap()
 }
-
-
-
 
 settings.onDarkToggle = function() {
   updateMap()
@@ -113,7 +113,7 @@ const professions = [
   {name:"Medical officer", bonus:"medicine"},
   {name:"Soldier", bonus:"combat"},
   {name:"Computer specialist", bonus:"computers"},
-  {name:"Dancer", bonus:"agility"},
+  {name:"Exotic dancer", bonus:"agility"},
   {name:"Advertising exec", bonus:"deceit"},
   {name:"Urban poet", bonus:"social"},
 ];
@@ -130,7 +130,7 @@ const backgrounds = [
 ];
 
 
-let s = "<p>You are on a mission to survey planets around five stars, the captain of a crew of five (including yourself). There is also a computer system, Xsansi (you can also use \"AI\" or \"computer\"), that you can talk to anywhere on the ship. </p><p>Your objective is to maximise your bonus. Collecting data will give a bonus, but geo-data about planets suitable for mining and bio-data about planets suitable for colonisation will give higher bonuses. Evidence of alien intelligence will be especially rewarding!</p><p>You have just arrived at your first destination after years in a \"stasis\" pod in suspended animation. ASK AI ABOUT MISSION or CREW might be a good place to start, once you have created your character. Later you want to try OSTAP, LAUNCH PROBE or ASK AADA ABOUT PLANET. You can also use HELP if you want more details.</p>"
+let s = "<p>You are on a mission to survey planets around five stars; the captain of a crew of five, including yourself. There is also a computer system, Xsansi, that you can talk to anywhere on the ship. </p><p>Your objective is to maximise your bonus. Collecting data will give a bonus, but geo-data about planets suitable for mining and bio-data about planets suitable for colonisation will give higher bonuses. Evidence of alien intelligence will be especially rewarding!</p><p>You have just arrived at your first destination after years in a \"stasis\" pod in suspended animation. Once you have created your character, ASK AI ABOUT MISSION or CREW might be a good place to start. Later you may want to try commands like OSTAP, LAUNCH PROBE or ASK AADA ABOUT PLANET. Also see what happens when you hover the mouse over a name in the status pane. You can also use HELP if you want more details.</p>"
 
 s += '<table>'
 s += '<tr><td>Name:</td><td><input id="namefield" type="text" value="Ariel" style="width:300px" /></td></tr>'
