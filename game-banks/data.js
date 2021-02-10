@@ -128,12 +128,21 @@ createItem("your_spacesuit", WEARABLE(2, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility.",
-});
+  spray:'You spray it.',
+})
 
 createItem("other_spacesuit", {
   alias:"spare spacesuit",
   loc:"stasis_locker",
   examine:"The other spacesuit is identical to your own.",
+});
+
+createItem("spray_sealant", TAKEABLE(), {
+  alias:"sealant spray",
+  loc:"stasis_locker",
+  uses:5,
+  examine:"A spray can; the label says \"No-Leak Sealant\" and there is some other writing on it.",
+  read:"You read the label on the can: \"No-Leak Sealant is a high performance foam sealant suitable for emergency use in space. It can be used to seal holes up to 30 mm side and 200 mm long, and is designed to maintain integrity for up to 24 hours. Typically one can is sufficient for five holes. WARNING: Highly flammable. Do not ingest. Do not breath fumes.\"",
 });
 
 

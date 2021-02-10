@@ -35,7 +35,7 @@ const PLANETS = [
     onArrival:function() {
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 96);
       w.Kyle.status = Math.min(w.Kyle.status, 98);
-      msg("{i:The \"Joseph Banks\" left Earth orbit in 2319, on a centuries-long mission to survey five relatively close star systems. The crew were put in stasis for the long journey between the stars. As the captain, it is up to you to decide what probes to send to the surface to maximise your bonus - and to keep the crew happy.}");
+      msg("{i:The \"Joseph Banks\" left Earth orbit in 2319, on a centuries-long mission to survey five relatively close star systems. The crew were put in stasis for the long journey between the stars. As the captain, it is up to you to decide what probes to send to the surface to maximise your bonus - and to keep the crew happy and safe.}");
       //wait()
       msg("&nbsp;");
       msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before realising you are in a stasis pod. You sit up. 'We have arrived at {star},' the voice continues, 'our first destination, without incident.' It is Xsansi, the ship AI, who has been piloting the ship for the last twenty years or whatever. 'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice. Following standard procedure, Crewman Kyle will soon launch a satellite, which will give us basic data about the planet, allowing you to decide how many probes to send to the surface.'");
