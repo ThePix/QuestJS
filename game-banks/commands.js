@@ -98,9 +98,14 @@ commands.push(new Cmd('Spray', {
   regex:/^(?:spray) (.+)$/,
   rules:[
     function(cmd, char, item, isMultiple) {
-      log('test')
-      if (w.spray_sealant.loc === char.name) return true
-      return falsemsg(prefix(item, isMultiple) + "{nv:char:do:true} not have the sealant spray.", {char:char})
+      if (w.spray_sealant.loc !== char.name) {
+        return falsemsg(prefix(item, isMultiple) + "{nv:char:do:true} not have the sealant spray.", {char:char})
+      }
+      if (w.spray.uses <= 0) {
+        return falsemsg(prefix(item, isMultiple) + "{nv:char:aim:true} the spray can at {nm:item}, but it is empty.", {char:char, item:item})
+      }
+      w.spray.uses--
+      return true
     }
   ],
   //npcCmd:true, // ???
@@ -173,7 +178,7 @@ commands.push(new Cmd('NpcPressurise2', {
   },
 }));
 commands.push(new Cmd('NpcDepressurise1', {
-  regex:/^(.+), ?(?:depressuri[sz]e|evacuate|depres) (.+)$/,
+  regex:/^(.+), ?(?:depressuri[sz]e|evacuate|depres|evac) (.+)$/,
   attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},

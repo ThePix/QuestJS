@@ -22,11 +22,15 @@ createItem("me", PLAYER(), {
   canMove:function(ex) {
     let room1 = w[this.loc]
     if (typeof room1.vacuum === "string") room1 = w[room1.vacuum]
+    if (ex.name === '_') return true
     let room2 = w[ex.name]
     if (typeof room2.vacuum === "string") room2 = w[room2.vacuum]
     if (room1.vacuum === room2.vacuum) return true
     msg("The door to " + lang.getName(room2, {article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + lang.getName(room1, {article:DEFINITE}) + " is not.")
     return false
+  },
+  spray:function(isMultiple, char) {
+    msg("You spray sealant on yourself.")
   },
 })
 
@@ -44,6 +48,10 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
       msg("The stasis pod drawer slides shut.");
     }
   },
+  sprayCount:2,
+  spray:function(isMultiple, char) {
+    msg("")
+  },
 });
 
 createItem("your_underwear", WEARABLE(1, ["body"]), {
@@ -53,6 +61,9 @@ createItem("your_underwear", WEARABLE(1, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your underwear is standard issue; white and functional.",
+  spray:function(isMultiple, char) {
+    msg("")
+  },
 });
 
 
@@ -89,6 +100,9 @@ createItem("pile_of_vomit", {
   scenery:true,
   regex:/vomit|sick/,
   examine:"A large splat of vomit, it stinks. You decide not to look too closely. You already know what you ate last, so what is the point?",
+  spray:function(isMultiple, char) {
+    msg("")
+  },
 });
 
 createItem("stasis_pod", {
@@ -97,6 +111,9 @@ createItem("stasis_pod", {
   scenery:true,
   loc:"stasis_bay",
   examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
+  spray:function(isMultiple, char) {
+    msg("")
+  },
 });
 
 createItem("stasis_pod_drawer", CONTAINER(false), {
@@ -119,6 +136,9 @@ createItem("stasis_locker", CONTAINER(true), {
       msg(prefix(this, isMultiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(world.LOOK), {lastJoiner:lang.list_and, article:INDEFINITE}) + ".");
     }
   },
+  spray:function(isMultiple, char) {
+    msg("")
+  },
 });
 
 
@@ -127,14 +147,26 @@ createItem("your_spacesuit", WEARABLE(2, ["body"]), {
   loc:"stasis_locker",
   defArticle:"your",
   indefArticle:"your",
-  examine:"Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility.",
-  spray:'You spray it.',
+  examine:"Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility. It says \"{nm:player}\" on the back.",
+  spray:function(isMultiple, char) {
+    msg("")
+  },
+  canWearRemove:function(char, wear) {
+    if (wear) return true
+    if (isRoomPressured(w[char.loc])) return true
+    msg("{nv:char:start:true} to unseal {pa:char} spacesuit... There is a hissing sound, and suddenly {nv:char:be} struggling for breath. Quickly, {nv:char:seal:true} it up again. Perhaps taking a spacesuit off in a vacuum is not such a good idea?")
+    return false
+  }
 })
 
-createItem("other_spacesuit", {
+createItem("other_spacesuit", WEARABLE(2, ["body"]), {
   alias:"spare spacesuit",
   loc:"stasis_locker",
-  examine:"The other spacesuit is identical to your own.",
+  parsePriority:-10,
+  examine:"The other spacesuit is identical to your own, except it does not have your name on the back.",
+  spray:function(isMultiple, char) {
+    msg("")
+  },
 });
 
 createItem("spray_sealant", TAKEABLE(), {
@@ -143,6 +175,11 @@ createItem("spray_sealant", TAKEABLE(), {
   uses:5,
   examine:"A spray can; the label says \"No-Leak Sealant\" and there is some other writing on it.",
   read:"You read the label on the can: \"No-Leak Sealant is a high performance foam sealant suitable for emergency use in space. It can be used to seal holes up to 30 mm side and 200 mm long, and is designed to maintain integrity for up to 24 hours. Typically one can is sufficient for five holes. WARNING: Highly flammable. Do not ingest. Do not breath fumes.\"",
+  spray:function(isMultiple, char) {
+    metamsg("Spray the spray with the spray? Not going to happen.")
+    this.uses++
+    return world.FAILED
+  },
 });
 
 
@@ -218,18 +255,20 @@ createRoom("cargo_bay", {
     msg:"You walk up the narrow stair way to the top deck.",
     alsoDir:["up"],
   }),
-  starboard:new Exit("airlock"),
+  starboard:new Exit("airlock", {alsoDir:["up"]}),
   aft:new Exit("engineering3"),
 });
 
-createRoom("airlock", {
+createRoom("airlock", TRANSIT("starboard"), {
   deckName:'layer1',
   svgId:'rect2770',
   desc:"The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the [controls].",
   vacuum:false,
   port:new Exit("cargo_bay"),
-  starboard:new Exit("space", { locked:true, }),
+  starboard:new Exit("space", { locked:true, alsoDir:["out"]}),
 });
+
+
 
 
 
@@ -527,12 +566,36 @@ createRoom("girls_cabin", {
 
 
 createRoom("space", {
-  desc:"",
+  desc:"You are floating in space, holding on to a handle on the side of the {i:Joseph Banks}. {once:You are very conscious of the fact that heading further out into space would be a {i:very bad idea}, as there would be no way to get back to the ship.} The view takes your breath away; the planet looming over head, and billions of stars. It is amazing to think that each is vastly bigger than the planet, and so far away your mind cannot really comprehend the distance.",
   vacuum:true,
-  isSpace:true,
-  port:new Exit("airlock"),
+  deckName:'space',
   notOnShip:true,
+  properName:true,
+  port:new Exit("airlock", {alsoDir:["in"]}),
+  starboard:new Exit("_", {alsoDir:["out"], use:function() {
+    msg("You feel a sudden urge to be free, and push away from the ship... No! That would be a bad idea! You would drift forever. You cling desperately to the handle. What were you thinking?")
+    return false
+  }}),
 });
+
+
+createItem("alien_ship_interior", {
+  regex:/^alien ship|alien vessel|ship|vessel$/,
+  desc:"",
+  isShip:true,
+  status:0,
+});
+
+
+
+
+createItem("_button_alien_ship", TRANSIT_BUTTON("airlock"), {
+  transitDest:"alien_ship_interior",
+})
+
+createItem("_button_space", TRANSIT_BUTTON("airlock"), {
+  transitDest:"space",
+})
 
 
 
@@ -548,6 +611,9 @@ createItem("alienShip", {
   isShip:true,
   status:0,
 });
+
+
+
 
 
 

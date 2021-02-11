@@ -60,6 +60,25 @@ test.tests = function() {
   test.testing = false;
   test.assertEqual("'Bio-probe I has successfully landed on the planet.' announces Xsansi.", test.testOutput[0])
   
+  
+  test.start("Spacesuit")
+  test.assertCmd("o", ["You climb out of the stasis pod.", "The stasis bay", /^There are six/, "A drawer under the pod slides open to reveal your jumpsuit."]);
+  test.assertCmd("get jumpsuit", ["You take your jumpsuit.", "The stasis pod drawer slides shut."]);
+  test.assertCmd("wear jumpsuit", ["You put on your jumpsuit."]);
+
+  test.assertCmd("open locker", ["You open the locker. Inside the locker you can see a spare spacesuit, a sealant spray and your spacesuit.",])
+  test.assertCmd("get spa", ["You take your spacesuit.",])
+  test.assertCmd("wear spa", ["You can't put your spacesuit on over your jumpsuit.",])
+  test.assertCmd("remove j", ["You take your jumpsuit off.",])
+  test.assertCmd("wear s", ["You put on your spacesuit.","'Satellite I has successfully entered orbit around the planet.' announces Xsansi.",])
+  test.assertCmd("s", ["You can't go starboard.",])
+  test.assertCmd("a", ["You head aft.","The cargo bay","The cargo bay is a large, open area, with numerous crates, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",])
+  test.assertCmd("starboard", ["You head starboard.","The airlock","The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the controls.",])
+  test.assertCmd("ai, evac airlock", ["'Evacuating the airlock... Room is now under vacuum.'",])
+  test.assertCmd("port", "The door to the cargo bay will not open while it is pressurised and the airlock is not.")
+
+/*  
+  
   test.start("Planet one")
   
   test.assertCmd("ask ai about crew", test.padArray(["'Tell me about the crew, Xsansi,' you say."], 4));

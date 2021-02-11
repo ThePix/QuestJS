@@ -250,7 +250,7 @@ const skillUI = {
     for (let o in w) {
       if (w[o].isAtLoc(game.player, world.SCOPING) && w[o].weapon) {
         console.log(o);
-        weapons.push('<option value="'+ o +'">' + w[o].listalias + '</option>');
+        weapons.push('<option value="'+ o +'">' + w[o].listAlias + '</option>');
       }
     }
     const s = weapons.join('');
