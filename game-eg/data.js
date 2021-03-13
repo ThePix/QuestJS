@@ -925,6 +925,13 @@ createItem("Lara", NPC(true), {
       },
     }
   ],
+  greeting: function() {
+    if (this.talktoCount === 1) {
+      msg("'Hello,' says Lara.");
+    } else {
+      msg("'You again?' says Lara.");
+    }
+  }  
 })
 
 createItem("Lara_garage_key",
