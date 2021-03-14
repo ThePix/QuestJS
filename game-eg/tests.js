@@ -195,7 +195,7 @@ test.tests = function() {
 
 
 
-  test.title("Text processor 5");
+  test.title("Text processor 5: nm, nv, etc.");
   test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:'Kyle'}));
   test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:w.Kyle}));
   test.assertEqual("Kyle is your bear.", processText("{nv:Kyle:be} {pa:Buddy} bear."));
@@ -208,7 +208,7 @@ test.tests = function() {
   test.assertEqual("It is Kyle's book.", processText("It is {nms:chr:the} book.", {chr:w.Kyle}));
 
   
-  test.title("Text processor 6");
+  test.title("Text processor 6: show");
   test.assertEqual("Kyle is a bear.", processText("{Kyle.alias} is a bear."));
   test.assertEqual("Kyle is a bear.", processText("{show:Kyle:alias} is a bear."));
   test.assertEqual("Kyle is a bear.", processText("{Kyle:alias} is a bear."));
@@ -217,12 +217,22 @@ test.tests = function() {
   test.assertEqual("You have $10.", processText("You have ${Buddy.money}."));
   test.assertEqual("You have $10.", processText("You have ${player.money}."));
 
-  test.title("Text processor 6");
+  test.title("Text processor 7: select");
   w.Kyle.colours = ['red', 'green', 'blue']
   w.Kyle.colour = 1
   test.assertEqual("Kyle is green.", processText("Kyle is {select:Kyle:colours:colour}."));
   w.Kyle.colour = 0
   test.assertEqual("Kyle is red.", processText("Kyle is {select:Kyle:colours:colour}."));
+
+
+  test.title("Text processor 8: dialogue");
+  w.Kyle.dialogueStyle = 'color:magenta'
+  test.assertEqual("Kyle says; <span style=\"color:magenta\">'Hello!'</span>", processText("Kyle says; {dialogue:char:Hello!}", {char:w.Kyle}))
+  test.assertEqual("Kyle says; <span style=\"color:cyan\">'Hello!'</span>", processText("Kyle says; {dialogue::cyan:Hello!}"))
+  test.assertEqual("Kyle says; <span style=\"text-decoration:underline;color:cyan\">'Hello!'</span>", processText("Kyle says; {dialogue:u:cyan:Hello!}"))
+  test.assertEqual("Kyle says; <span style=\"font-style:italic;font-weight:bold;color:cyan\">'Hello!'</span>", processText("Kyle says; {dialogue:ib:cyan:Hello!}"))
+  test.assertEqual("Kyle says; <span class=\"nonsense\">'Hello!'</span>", processText("Kyle says; {dialogue:.nonsense:Hello!}", {char:w.Kyle}))
+
 
 
   test.title("Numbers");
