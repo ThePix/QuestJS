@@ -224,7 +224,7 @@ createItem("sandwich", EDIBLE(false), {
 createItem("ornate_doll", TAKEABLE(), {
   loc:"glass_cabinet", 
   alias:"ornate doll", 
-  examine:"A fancy doll, eighteenth century.",
+  examine:"A fancy doll, eigthteenth century.",
 })
 
 
