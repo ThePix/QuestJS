@@ -203,3 +203,21 @@ tp.addDirective("charger_state", function(){
   }
   return "The compartment contains " + formatList(contents, {article:INDEFINITE});
 });
+
+
+
+
+commands.unshift(new Cmd('SliceCarrot', {
+  rules:[cmdRules.isHeld],
+  regexes:[/^use (.+) to slice (.+)$/, /^use (.+) slice (.+)$/, {regex:/slice (.+) with (.+)/, mod:{reverse:true}}],
+  objects:[
+    {scope:parser.isPresent},
+    {scope:parser.isPresent},
+  ],
+  script:function(objects) {
+    msg("You slice {nm:ob1:the} with {nm:ob2:the}.", {ob1:objects[1][0], ob2:objects[0][0]})
+  },
+  default:function(item, isMultiple, char) {
+    return failedmsg(prefix(this, isMultiple) + "Not going to happen.");
+  },
+}));

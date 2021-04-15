@@ -1132,6 +1132,14 @@ test.tests = function() {
   test.assertEqual(11, w.timetable.counter)
 
 
+  test.title("reverse order commands")
+  w.knife.loc = game.player.name
+  w.carrot1.loc = game.player.name
+  test.assertCmd("slice carrot with knife", "You slice the carrot with the knife.")
+  test.assertCmd("use knife slice carrot", "You slice the carrot with the knife.")
+  test.assertCmd("use knife to slice carrot", "You slice the carrot with the knife.")
+
+
 
 /*
   test.title("quests")
