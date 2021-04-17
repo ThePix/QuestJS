@@ -728,9 +728,6 @@ createItem("Kyle", NPC(false),
   loc:"lounge",
   //alias:'Bobby',
   examine:"A grizzly bear. But cute.", 
-  properName:true,
-  //agenda:["text:Hello", "wait:2:ending", "text:goodbye"],
-  //agenda:["patrol:dining_room:lounge:kitchen:lounge"],
   askOptions:[
     {
       name:'House',
