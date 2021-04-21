@@ -651,7 +651,7 @@ const lang = {
     {name:'southwest', abbrev:'SW', niceDir:"the southwest", type:'compass', key:97, x:-1 ,y:-1, z:0, opp:'northeast', symbol:'fa-arrow-down', rotate:45}, 
     {name:'south', abbrev:'S', niceDir:"the south", type:'compass', key:98, x:0 ,y:-1, z:0, opp:'north', symbol:'fa-arrow-down'}, 
     {name:'southeast', abbrev:'SE', niceDir:"the southeast", type:'compass', key:99, x:1 ,y:-1, z:0, opp:'northwest', symbol:'fa-arrow-right', rotate:45}, 
-    {name:'Wait', abbrev:'Z', type:'nocmd', key:110, symbol:'fa-pause'}, 
+    {name:'Wait', abbrev:'Z', type:'nocmd', key:110, symbol:'fa-clock'}, 
     {name:'Help', abbrev:'?', type:'nocmd', symbol:'fa-info'}, 
   ],
 
