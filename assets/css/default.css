@@ -41,6 +41,13 @@ body {
   width: 100%;
   margin-bottom: 20px;
 }
+.dark-body {
+  background-color: #111;
+  color: #eee;
+}
+.plain-font-body, .plain-font-body .default-h, .plain-font-body .pane-div {
+  font-family: sans-serif ! important;
+}
 
 ol, ul {
 	list-style: none;
@@ -55,6 +62,9 @@ ol, ul {
 #cursor {
   margin-left: 5px;
 }
+
+
+
 
 /***
 * Heading
@@ -73,29 +83,37 @@ ol, ul {
 
 .default-h4 {
   padding: 5px;
-} 
+}
+
+/* All heading should have this. It does nothing by default! */
+.default-h {
+}
+
+
+
 
 /***
-* Font / Text
+* Paragraph text
 ***/
+
+/* Any paragraphs in the main (output) div */
 #output p {
   padding: 5px;
   margin: 5px 0px 5px 0px;
 }
 
+/* Specific paragraph styles */
 .default-p, .tutorial, .meta {
   text-align: justify;
   text-justify: inter-word;
 }
 
+/* Is this used? */
 .default-p strong {
   margin-bottom: 10px;
 }
 
-.dark-body {
-  background-color: #111;
-  color: #eee;
-}
+
 
 /* Style page content */
 #inner {
@@ -112,11 +130,9 @@ ol, ul {
   cursor: pointer;
   color:blue;
 }
-
 .dark-body .cmd-link {
   color:#aaf;
 }
-
 .dark-body a {
   color:#aaf;
 }
@@ -124,6 +140,15 @@ ol, ul {
 .about-footer {
   float: left;
   padding: .5em 1em;
+}
+
+
+/* Used in help text */
+.help-eg {
+  color:purple;
+}
+.dark-body .help-eg {
+  color:#e8e;
 }
 
 /***
@@ -205,7 +230,6 @@ ol, ul {
   padding-top: 5px;
   padding-left: 5px;
   font-size: 10pt;
-  /*font-family: sans-serif;*/
 }
 .pane-div {
   background-color: #f9f9f9;

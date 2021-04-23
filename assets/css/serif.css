@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Orelega+One&display=swap');
+
+body {
+  font-family: 'DM Serif Display', serif;
+}
+
+.default-h {
+  font-family: 'Orelega One', cursive;
+}
+
+.pane-div {
+  font-family: 'DM Serif Display', serif;
+}

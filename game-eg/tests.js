@@ -288,6 +288,40 @@ test.tests = function() {
   test.assertEqual(true, util.isAfter('0942'))
 
 
+  test.title("msg function")
+  test.assertOut(["Kyle is red."], false, function() {
+    msg("Kyle is {select:Kyle:colours:colour}.")
+  })
+  test.assertOut(["Kyle is here.", "Lara is not"], false, function() {
+    msg("Kyle is here.|Lara is not")
+  })
+  test.assertOut(["Kyle is here.|Lara is not"], false, function() {
+    msg("Kyle is here.@@@vert@@@Lara is not")
+  })
+  
+
+
+
+  test.title("msg function 2")
+  test.fullOutputData = true
+  let res
+  res = test.function(function() { msg("Kyle is {select:Kyle:colours:colour}.") })
+  test.assertEqual("default-p", res[0].cssClass)
+  test.assertEqual("p", res[0].tag)
+  test.assertEqual("Kyle is red.", res[0].text)
+  
+  res = test.function(function() { msg("#Kyle is {select:Kyle:colours:colour}.") })
+  test.assertEqual("default-h default-h4", res[0].cssClass)
+  test.assertEqual("h4", res[0].tag)
+  test.assertEqual("Kyle is red.", res[0].text)
+
+  res = test.function(function() { msg("#Kyle is {select:Kyle:colours:colour}.", {}, 'test') })
+  test.assertEqual("test", res[0].cssClass)
+  test.assertEqual("p", res[0].tag)
+  test.assertEqual("#Kyle is red.", res[0].text)
+
+  test.fullOutputData = false
+
 
 
   test.title("errors")
