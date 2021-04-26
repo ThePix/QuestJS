@@ -46,14 +46,16 @@ const lang = {
     MetaRestart:/^restart$/,
     MetaScore:/^score$/,
     MetaPronouns:/^pronouns$/,
-    
-    // Misc
+    MetaTopicsNote:/^topics?$/,
+
+    // Kind of meta    
     Look:/^l$|^look$/,
     Exits:/^exits$/,
-    Wait:/^wait$|^z$/,
-    TopicsNote:/^topics?$/,
-    Inv:/^inventory$|^inv$|^i$/,
     Map:/^map$/,
+    Inv:/^inventory$|^inv$|^i$/,
+
+    // Misc
+    Wait:/^wait$|^z$/,
     Smell:/^smell$|^sniff$/,
     Listen:/^listen$/,
     PurchaseFromList:/^buy$|^purchase$/,

@@ -747,6 +747,12 @@ th, td {
 }
 
 
+#loading {
+  text-align: center;
+  padding: 20px;
+}
+
+
 /***
 * Item links
 ***/

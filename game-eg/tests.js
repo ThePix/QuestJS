@@ -52,10 +52,8 @@ test.tests = function() {
     test.assertEqual(false, random.chance(0));
   }
   
-  test.title("Random primed");
-  random.prime(4)
+  test.title("Random primed")
   random.prime(19)
-  test.assertEqual(4, random.int())
   test.assertEqual(19, random.int())
   random.prime([3, 8])
   test.assertEqual(11, random.dice('2d6'))
@@ -289,13 +287,13 @@ test.tests = function() {
 
 
   test.title("msg function")
-  test.assertOut(["Kyle is red."], false, function() {
+  test.assertOut(["Kyle is red."], function() {
     msg("Kyle is {select:Kyle:colours:colour}.")
   })
-  test.assertOut(["Kyle is here.", "Lara is not"], false, function() {
+  test.assertOut(["Kyle is here.", "Lara is not"], function() {
     msg("Kyle is here.|Lara is not")
   })
-  test.assertOut(["Kyle is here.|Lara is not"], false, function() {
+  test.assertOut(["Kyle is here.|Lara is not"], function() {
     msg("Kyle is here.@@@vert@@@Lara is not")
   })
   
