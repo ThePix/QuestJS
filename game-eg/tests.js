@@ -521,6 +521,14 @@ test.tests = function() {
   test.assertCmd("drop box", "You drop the cardboard box.")
 
 
+  test.title("Dynamic conversations")
+  test.menuResponseNumber = 0
+  test.assertCmd("talk to kyle", "You ask Kyle about the garden, but he's not talking.");
+  test.menuResponseNumber = 0
+  test.assertCmd("talk to kyle", "You ask Kyle about the garden, but he's STILL not talking.");
+  test.menuResponseNumber = 0
+  test.assertCmd("talk to kyle", "You talk to Kyle about the weather.");
+  
 
   test.title("Restricting");
   test.assertEqual(["Look at", "Talk to"], w.Kyle.getVerbs())

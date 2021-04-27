@@ -779,7 +779,7 @@ createItem("Kyle", NPC(false),
     },
   ],
   needsWorkCount:0,
-  talkto:function() {
+  talkto2:function() {
     switch (this.talktoCount) {
       case 0 : msg("You say 'Hello,' to Kyle, and he replies in kind."); break;
       case 1 : msg("You ask Kyle how to get upstairs. 'You know,' he replies, 'I have no idea.'"); break;
@@ -789,6 +789,32 @@ createItem("Kyle", NPC(false),
     this.pause();
     return true;
   },
+  
+  convTopics:[
+    {
+      showTopic:true,
+      alias:"What's the deal with the garden?",
+      nowShow:["Seriously, what's the deal with the garden?"],
+      script:function() {
+        msg("You ask Kyle about the garden, but he's not talking.")
+      },
+    },
+    {
+      alias:"Seriously, what's the deal with the garden?",
+      script:function() {
+        msg("You ask Kyle about the garden, but he's STILL not talking.")
+      },
+    },
+    {
+      showTopic:true,
+      alias:"The weather",
+      script:function() {
+        msg("You talk to Kyle about the weather.")
+      },
+    },
+  ],
+
+  
 });
 
 
@@ -821,32 +847,7 @@ createItem("straw_boater",
   { loc:"Kyle", examine: "A straw boater.", worn:true }
 );
 
-createItem("Kyle_The_Garden",
-  TOPIC(true),
-  { loc:"Kyle", alias:"What's the deal with the garden?", nowShow:["Mary_The_Garden_Again"],
-    script:function() {
-      msg("You ask Kyle about the garden, but he's not talking.");
-    },
-  }
-);
 
-createItem("Kyle_The_Garden_Again",
-  TOPIC(false),
-  { loc:"Kyle", alias:"Seriously, what's the deal with the garden?",
-    script:function() {
-      msg("You ask Kyle about the garden, but he's STILL not talking.");
-    },
-  }
-);
-
-createItem("Kyle_The_Weather",
-  TOPIC(true),
-  { loc:"Kyle", alias:"The weather",
-    script:function() {
-      msg("You talk to Kyle about the weather.");
-    },
-  }
-);
 
 
 
