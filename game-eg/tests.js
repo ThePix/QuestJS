@@ -275,7 +275,7 @@ test.tests = function() {
   test.assertEqual(" Lara is not.", processText("{nothere Kyle:He is here.} Lara is not."));
 
 
-/*
+
   
   test.title("Numbers");
   test.assertEqual("fourteen", lang.toWords(14));
