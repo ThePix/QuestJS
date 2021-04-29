@@ -65,7 +65,7 @@ test.tests = function() {
 
 
 
-  test.title("Attack.createAttack  (unarmed) misses");
+  test.title("Attack.createAttack (unarmed) misses");
   const attack0 = Attack.createAttack(game.player, w.goblin)
   test.assertEqual('me', attack0.attacker.name)
   test.assertEqual([w.goblin], attack0.primaryTargets)
@@ -81,21 +81,19 @@ test.tests = function() {
 
 
 
-  test.title("Attack.createAttack  (unarmed)");
+  test.title("Attack.createAttack (unarmed)");
   const attack1 = Attack.createAttack(game.player, w.goblin)
   test.assertEqual('me', attack1.attacker.name)
   test.assertEqual([w.goblin], attack1.primaryTargets)
   test.assertEqual('d4', attack1.damage)
   test.assertEqual(1, attack1.offensiveBonus)
 
-  random.prime(19)
-  random.prime(4)
+  random.prime([19, 4])
   attack1.resolve(w.goblin, true, 0)
   test.assertEqual(36, w.goblin.health)
 
   w.goblin.armour = 2
-  random.prime(19)
-  random.prime(4)
+  random.prime([19, 4])
   attack1.resolve(w.goblin, true, 0)
   test.assertEqual(34, w.goblin.health)
   w.goblin.armour = 0
@@ -103,7 +101,7 @@ test.tests = function() {
   
 
 
-  test.title("Attack.createAttack  (flail)");
+  test.title("Attack.createAttack flail)");
   const oldProcessAttack = game.player.modifyOutgoingAttack
   game.player.modifyOutgoingAttack = function(attack) { attack.offensiveBonus += 2 }
   w.flail.equipped = true
@@ -113,16 +111,12 @@ test.tests = function() {
   test.assertEqual('2d10+4', attack2.damage)
   test.assertEqual(2, attack2.offensiveBonus)
 
-  random.prime(19)
-  random.prime(4)
-  random.prime(7)
+  random.prime([19, 4, 7])
   attack2.resolve(w.goblin, true, 0)
   test.assertEqual(25, w.goblin.health)
 
   w.goblin.armour = 2
-  random.prime(19)
-  random.prime(4)
-  random.prime(7)
+  random.prime([19, 4, 7])
   attack2.resolve(w.goblin, true, 0)
   test.assertEqual(14, w.goblin.health)
   w.goblin.armour = 0
@@ -134,14 +128,13 @@ test.tests = function() {
 
 
 
-  test.title("Attack.createAttack  (goblin)");
+  test.title("Attack.createAttack (goblin)");
   const attack2a = Attack.createAttack(w.goblin, game.player)
   test.assertEqual('goblin', attack2a.attacker.name)
   test.assertEqual([w.me], attack2a.primaryTargets)
   test.assertEqual('d8', attack2a.damage)
   test.assertEqual(0, attack2a.offensiveBonus)
-  random.prime(19)
-  random.prime(5)
+  random.prime([19, 5])
   attack2a.resolve(w.me, true, 0)
   test.assertEqual(98, w.me.health)
   w.me.health = 100
@@ -159,7 +152,7 @@ test.tests = function() {
 
 
 
-  test.title("Attack.createAttack  (fireball)");
+  test.title("Attack.createAttack (fireball)");
   const oldgetSkillFromButtons = skillUI.getSkillFromButtons
   skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
   
@@ -175,9 +168,7 @@ test.tests = function() {
   test.assertEqual(5, attack3.offensiveBonus)
   test.assertEqual('fire', attack3.element)
 
-  random.prime(19)
-  random.prime(4)
-  random.prime(3)
+  random.prime([19, 4, 3])
   attack3.resolve(w.goblin, true, 0)
   test.assertEqual(33, w.goblin.health)
 
@@ -187,9 +178,7 @@ test.tests = function() {
   test.assertEqual(33, w.goblin.health)
   
   w.goblin.element = 'frost'
-  random.prime(19)
-  random.prime(4)
-  random.prime(3)
+  random.prime([19, 4, 3])
   attack3.resolve(w.goblin, true, 0)
   test.assertEqual(19, w.goblin.health)
   //attack3.output(40)
@@ -204,9 +193,7 @@ test.tests = function() {
 
 
   test.title("attack command, success");
-  random.prime(19)
-  random.prime(4)
-  random.prime(7)
+  random.prime([19, 4, 7])
   w.flail.equipped = true
 
   test.assertCmd('attack goblin', ['You attack the goblin.', /A hit/, 'Damage: 15', 'Health now: 25'])
@@ -240,17 +227,7 @@ test.tests = function() {
   test.assertEqual(["Double attack", "Fireball"], game.player.skillsLearnt) 
   //goblin, orc, snotling, rabbit
 
-  random.prime(19)
-  random.prime(4)
-  random.prime(4)
-
-  random.prime(19)
-  random.prime(2)
-  random.prime(2)
-
-  random.prime(4)
-
-  random.prime(4)
+  random.prime([19, 4, 4, 19, 2, 2, 4, 4])
   test.assertCmd('cast fireball', ['You cast <i>Fireball</i>.', 'The room is momentarily filled with fire.', 'The goblin reels from the explosion.', 'Damage: 16', 'Health now: 24', 'The orc reels from the explosion.', 'Damage: 4', 'Health now: 56', 'The snotling ignores it.', 'The rabbit ignores it.'])
   w.goblin.health = 40
   w.orc.health = 60
@@ -265,17 +242,11 @@ test.tests = function() {
   test.assertCmd('cast ice shard', ['You need a target for the spell <i>Ice shard</i>.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
   skillUI.getSkillFromButtons = function() { return skills.findName('Ice shard') }
-  random.prime(19)
-  random.prime(4)
-  random.prime(7)
-  random.prime(9)
+  random.prime([19, 4, 7, 9])
   test.assertCmd('attack goblin', ['You cast <i>Ice shard</i>.', 'A shard of ice jumps from your finger to the goblin!', 'Damage: 10', 'Health now: 30'])
   w.goblin.health = 40
   skillUI.getSkillFromButtons = oldgetSkillFromButtons
-  random.prime(19)
-  random.prime(4)
-  random.prime(7)
-  random.prime(9)
+  random.prime([19, 4, 7, 9])
   test.assertCmd('cast Ice shard at goblin', ['You cast <i>Ice shard</i>.', 'A shard of ice jumps from your finger to the goblin!', 'Damage: 10', 'Health now: 30'])
   w.goblin.health = 40
   skillUI.getSkillFromButtons = oldgetSkillFromButtons
@@ -287,18 +258,16 @@ test.tests = function() {
   game.player.skillsLearnt = ["Double attack", "Fireball", "Lightning bolt"]
   test.assertCmd('cast lightning bolt', ['You need a target for the spell <i>Lightning bolt</i>.'])
   skillUI.getSkillFromButtons = function() { return skills.findName('Lightning bolt') }
-  random.prime(19)
-  random.prime(4)
-  random.prime(7)
-  random.prime(9)
-  
-  // For the orc
-  random.prime(2)
-  
-  // For the snotling
-  random.prime(19)
-  random.prime(4)
-  random.prime(7)
+  random.prime([
+    19, 4, 7, 9,
+
+    // For the orc
+    2,
+   
+    // For the snotling
+    19, 4, 7,
+  ])
+
   test.assertCmd('attack goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to the goblin!', 'Damage: 20', 'Health now: 20', 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', 'Damage: 11', 'Health now: 9'])
   w.goblin.health = 40
   w.snotling.health = 20
@@ -319,19 +288,13 @@ test.tests = function() {
   test.assertEqual([w.me], attack2b.primaryTargets)
   test.assertEqual('3d6', attack2b.damage)
   test.assertEqual(3, attack2b.offensiveBonus)
-  random.prime(19)
-  random.prime(5)
-  random.prime(5)
-  random.prime(5)
+  random.prime([19, 5, 5, 5])
   attack2b.resolve(w.me, true, 0)
   test.assertEqual(94, w.me.health)
 
   const attack2c = Attack.createAttack(w.goblin, game.player, skills.findName('Psi-blast'))
   test.assertEqual('goblin', attack2c.attacker.name)
-  random.prime(19)
-  random.prime(5)
-  random.prime(5)
-  random.prime(5)
+  random.prime([19, 5, 5, 5])
   attack2c.resolve(w.me, true, 0)
   test.assertEqual(79, w.me.health)
   

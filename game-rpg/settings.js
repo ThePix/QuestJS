@@ -88,13 +88,8 @@ settings.setup = function() {
   game.player.hitpoints = 20;
   game.player.status = "You are feeling fine";
   game.player.skillsLearnt = ["Double attack", "Fireball"]
-
   settings.updateCustomUI()
-  
-  console.log(skills.findName("Flaming weapon"))
-  console.log(skills.findName("Fireball"))
   w.rabbit.setLeader(game.player)
-  
 }
 
 

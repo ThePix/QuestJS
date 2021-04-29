@@ -233,6 +233,50 @@ test.tests = function() {
 
 
 
+  test.title("Text processor 9: rndalt");
+  test.assertEqual("Kyle is here.", processText("{rndalt:Kyle} is here."));
+  test.assertEqual("Kyle is here.", processText("{rndalt:npc} is here.", {npc:w.Kyle}));
+  w.Kyle.alt = ['red', 'green', 'blue']
+  random.prime(1)
+  test.assertEqual("green is here.", processText("{rndalt:Kyle} is here."));
+
+
+
+  test.title("Text processor 10: quest 5 style if")
+  w.Kyle.flag = true
+  test.assertEqual("Kyle is here. Lara is here.", processText("{if Kyle.flag:Kyle is here. }Lara is here."))
+  test.assertEqual("Lara is here.", processText("{if not Kyle.flag:Kyle is not here. }Lara is here."))
+  w.Kyle.flag = false
+  test.assertEqual("Kyle is here. Lara is here.", processText("{if not Kyle.flag:Kyle is here. }Lara is here."))
+  test.assertEqual("Lara is here.", processText("{if Kyle.flag:Kyle is not here. }Lara is here."))
+
+  test.assertEqual("Kyle is here. Lara is here.", processText("{if Kyle.colour=0:Kyle is here. }Lara is here."))
+  test.assertEqual("Kyle is here. Lara is here.", processText("{if Kyle.colour<>10:Kyle is here. }Lara is here."))
+  test.assertEqual("Kyle is here. Lara is here.", processText("{if Kyle.colour !== 10:Kyle is here. }Lara is here."))
+  test.assertEqual("Lara is here.", processText("{if Kyle.colour=10:Kyle is here. }Lara is here."))
+  test.assertEqual("Lara is here.", processText("{if Kyle.colour != 0:Kyle is here. }Lara is here."))
+
+  test.assertEqual("Kyle is here. Lara is here.", processText("{if Kyle.colour>=0:Kyle is here. }Lara is here."))
+  test.assertEqual("Lara is here.", processText("{if Kyle.colour>=1:Kyle is here. }Lara is here."))
+  test.assertEqual("Lara is here.", processText("{if Kyle.colour>0:Kyle is here. }Lara is here."))
+  test.assertEqual("Kyle is here. Lara is here.", processText("{if Kyle.colour>-1:Kyle is here. }Lara is here."))
+
+
+
+  test.title("Text processor 11: here");
+  test.assertEqual("He is here. Lara is not.", processText("{ifHere:Kyle:He is here.} Lara is not."));
+  test.assertEqual("He is here. Lara is not.", processText("{here Kyle:He is here.} Lara is not."));
+  test.assertEqual(" Lara is not.", processText("{ifHere:Lara:He is here.} Lara is not."));
+  test.assertEqual(" Lara is not.", processText("{here Lara:He is here.} Lara is not."));
+
+  test.assertEqual("He is here. Lara is not.", processText("{ifNotHere:Lara:He is here.} Lara is not."));
+  test.assertEqual("He is here. Lara is not.", processText("{nothere Lara:He is here.} Lara is not."));
+  test.assertEqual(" Lara is not.", processText("{ifNotHere:Kyle:He is here.} Lara is not."));
+  test.assertEqual(" Lara is not.", processText("{nothere Kyle:He is here.} Lara is not."));
+
+
+/*
+  
   test.title("Numbers");
   test.assertEqual("fourteen", lang.toWords(14));
   test.assertEqual("minus four hundred and three", lang.toWords(-403));
