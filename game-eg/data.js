@@ -215,7 +215,7 @@ createItem("cardboard_box", TAKEABLE(), CONTAINER(true), {
   closed:false,
 });
 
-createItem("sandwich", EDIBLE(false), {
+createItem("ham_and_cheese_sandwich", EDIBLE(false), {
   loc:"lounge",
   onIngesting:function() { msg("That was great!"); },
 })
