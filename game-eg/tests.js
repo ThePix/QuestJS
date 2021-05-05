@@ -117,6 +117,13 @@ test.tests = function() {
 
 
 
+  test.title("isUltimatelyHeldBy")
+  test.assertEqual(true, w.ring.isUltimatelyHeldBy(w.jewellery_box))
+  test.assertEqual(true, w.ring.isUltimatelyHeldBy(w.glass_cabinet))
+  test.assertEqual(false, w.ring.isUltimatelyHeldBy(game.player))
+
+
+
   test.title("exit.reverse")
   const ex1 = w.lounge.east
   const ex2 = w.lounge.up
@@ -397,6 +404,10 @@ test.tests = function() {
   test.assertCmd("drop all", "Knife: You drop the knife.");
   test.assertCmd("drop all", "Nothing there to do that with.");
   test.assertCmd("get knife", "You take the knife.");
+  
+  
+  
+  /*
   
   const knifeDrop = w.knife.drop
   w.knife.drop = false
@@ -737,6 +748,9 @@ test.tests = function() {
   test.assertCmd("e", ["You head east.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock, Kyle (wearing a straw boater) and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("kyle,n", "Kyle tries the door to the garage, but it is locked.");
   test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: He can't take it.", "Camera: Kyle takes the camera.", "Big kitchen table: He can't take it.", "Jug: Kyle takes the jug."]);
+  
+  
+  /*
   test.assertCmd("kyle, drop picture box", "Kyle drops the camera.");
   test.assertCmd("kyle, open trapdoor", "Kyle opens the trapdoor.");
   test.assertCmd("kyle, down", "You watch Kyle disappear through the trapdoor.");
