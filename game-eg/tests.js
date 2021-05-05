@@ -104,6 +104,17 @@ test.tests = function() {
   test.assertEqual(['boots', 'cardboard_box', 'book', 'boots'], array.clone(testAry2, {reverse:true}));
   test.assertEqual(['boots', 'book', 'cardboard_box'], array.clone(testAry2, {compress:true}));
 
+  test.title("array.combos")
+  test.assertEqual([], array.combos([]))
+  test.assertEqual(['one'], array.combos(['one']))
+  test.assertEqual(['one', 'one two', 'two'], array.combos(['one', 'two']))
+  test.assertEqual([
+    'boots','boots book','boots book cardboard_box','boots book shoes','boots cardboard_box','boots cardboard_box shoes','boots shoes',
+    'book','book cardboard_box','book cardboard_box shoes','book shoes',
+    'cardboard_box','cardboard_box shoes',
+    'shoes'
+  ], array.combos(['boots', 'book', 'cardboard_box', 'shoes']))
+
 
   test.title("util.getByInterval")
   const intervals = [2, 14, 4]
@@ -430,18 +441,29 @@ test.tests = function() {
 
   test.title("Simple object commands (eat)");
   test.assertCmd("eat knife", "The knife's not something you can eat.");
-  test.assertEqual(["Examine", "Take"], w.sandwich.getVerbs())
-  test.assertCmd("get sandwich", "You take the sandwich.");
-  test.assertCmd("x sandwich", "It's just your typical, every day sandwich.")
-  test.assertEqual(["Examine", "Drop", "Eat"], w.sandwich.getVerbs())
-  test.assertCmd("drink sandwich", "The sandwich's not something you can drink.");
-  test.assertCmd("ingest sandwich", ["You eat the sandwich.", "That was great!"]);
+  test.assertEqual(["Examine", "Take"], w.ham_and_cheese_sandwich.getVerbs())
+  test.assertCmd("get sandwich", "You take the ham and cheese sandwich.");
+  test.assertCmd("x sandwich", "It's just your typical, every day ham and cheese sandwich.")
+  test.assertCmd("x sandwich", "It's just your typical, every day ham and cheese sandwich.")
+  test.assertCmd("x ham and cheese sandwich", "It's just your typical, every day ham and cheese sandwich.")
+  test.assertCmd("x sandwich and knife", [
+    "Ham and cheese sandwich: It's just your typical, every day ham and cheese sandwich.",
+    "Knife: A blunt knife.",
+  ])
+  test.assertCmd("x ham and cheese sandwich, knife", [
+    "Ham and cheese sandwich: It's just your typical, every day ham and cheese sandwich.",
+    "Knife: A blunt knife.",
+  ])
+
+  test.assertEqual(["Examine", "Drop", "Eat"], w.ham_and_cheese_sandwich.getVerbs())
+  test.assertCmd("drink sandwich", "The ham and cheese sandwich's not something you can drink.");
+  test.assertCmd("ingest sandwich", ["You eat the ham and cheese sandwich.", "That was great!"]);
   
   test.title("Simple object commands (drink the sandwich?)")
-  w.sandwich.loc = game.player.name
-  w.sandwich.isLiquid = true
-  test.assertEqual(["Examine", "Drop", "Drink"], w.sandwich.getVerbs())
-  test.assertCmd("drink sandwich", ["You drink the sandwich.", "That was great!"]);
+  w.ham_and_cheese_sandwich.loc = game.player.name
+  w.ham_and_cheese_sandwich.isLiquid = true
+  test.assertEqual(["Examine", "Drop", "Drink"], w.ham_and_cheese_sandwich.getVerbs())
+  test.assertCmd("drink sandwich", ["You drink the ham and cheese sandwich.", "That was great!"]);
 
 
   
@@ -968,6 +990,7 @@ test.tests = function() {
   test.assertCmd("l", ["The wardrobe", "Oddly empty of fantasy worlds.", "You can see a jacket and a waistcoat here.", "You can go out."]);
   test.assertCmd("i", ["You are carrying a flashlight, a garage key and some suit trousers."]);
   test.assertCmd("get jacket, waistcoat", ["Jacket: You take the jacket.", "Waistcoat: You take the waistcoat."]);
+  
   test.assertCmd("i", ["You are carrying a flashlight, a garage key and a suit."]);
   test.assertCmd("drop suit", ["You drop the suit."]);
   test.assertCmd("get suit", ["You take the suit."]);
