@@ -216,6 +216,7 @@ createItem("cardboard_box", TAKEABLE(), CONTAINER(true), {
 });
 
 createItem("ham_and_cheese_sandwich", EDIBLE(false), {
+  pattern:'egg|mayo',
   loc:"lounge",
   onIngesting:function() { msg("That was great!"); },
 })
