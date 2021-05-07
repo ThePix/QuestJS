@@ -1,23 +1,138 @@
 "use strict"
 
-test.printTitles = true
+//test.printTitles = true
 test.resetOnCompletion = false
 
 test.tests = function() {
   
   
   test.title("parser.scoreObjectMatch");
-  test.assertEqual(55, parser.scoreObjectMatch("me", w.Buddy, ""));
-  test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.Buddy, ""));
-  test.assertEqual(-1, parser.scoreObjectMatch("xme", w.Buddy, ""));
-  test.assertEqual(60, parser.scoreObjectMatch("flashlight", w.flashlight, ""));
-  test.assertEqual(16, parser.scoreObjectMatch("f", w.flashlight, ""));
-  test.assertEqual(18, parser.scoreObjectMatch("fla", w.flashlight, ""));
-  test.assertEqual(55, parser.scoreObjectMatch("torch", w.flashlight, ""));
-  test.assertEqual(60, parser.scoreObjectMatch("glass cabinet", w.glass_cabinet, ""));
-  test.assertEqual(50, parser.scoreObjectMatch("glass", w.glass_cabinet, ""));
-  test.assertEqual(50, parser.scoreObjectMatch("cabinet", w.glass_cabinet, ""));
-  test.assertEqual(3, parser.scoreObjectMatch("cab", w.glass_cabinet, ""));
+  test.assertEqual(55, parser.scoreObjectMatch("me", w.Buddy, {}));
+  test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.Buddy, {}));
+  test.assertEqual(-1, parser.scoreObjectMatch("xme", w.Buddy, {}));
+  
+  test.assertEqual(60, parser.scoreObjectMatch("flashlight", w.flashlight, {}));
+  test.assertEqual(16, parser.scoreObjectMatch("f", w.flashlight, {}));
+  test.assertEqual(18, parser.scoreObjectMatch("fla", w.flashlight, {}));
+  test.assertEqual(55, parser.scoreObjectMatch("torch", w.flashlight, {}));
+
+  test.assertEqual(75, parser.scoreObjectMatch("torch", w.flashlight, {attName:'lightSource'}));
+  test.assertEqual(55, parser.scoreObjectMatch("torch", w.flashlight, {attName:'silly'}));
+
+  test.assertEqual(55, parser.scoreObjectMatch("torch", w.flashlight, {items:['glass_cabinet']}));
+  test.assertEqual(100, parser.scoreObjectMatch("torch", w.flashlight, {items:['glass_cabinet', 'flashlight']}));
+  
+  test.assertEqual(60, parser.scoreObjectMatch("glass cabinet", w.glass_cabinet, {}));
+  test.assertEqual(50, parser.scoreObjectMatch("glass", w.glass_cabinet, {}));
+  test.assertEqual(50, parser.scoreObjectMatch("cabinet", w.glass_cabinet, {}));
+  test.assertEqual(3, parser.scoreObjectMatch("cab", w.glass_cabinet, {}));
+  
+  
+  test.title("parser.itemSetup")
+  test.assertEqual(undefined, w.ham_and_cheese_sandwich.parserOptionsSet)
+  parser.itemSetup(w.ham_and_cheese_sandwich)
+  test.assertEqual(true, w.ham_and_cheese_sandwich.parserOptionsSet)
+  test.assertEqual('ham and cheese sandwich', w.ham_and_cheese_sandwich.parserItemName)
+  test.assertEqual(['egg', 'mayo'], w.ham_and_cheese_sandwich.parserAltNames)
+  test.assertEqual(["ham", "ham and", "ham and cheese", "ham and sandwich", "ham cheese", "ham cheese sandwich", "ham sandwich", "and", "and cheese", "and cheese sandwich", "and sandwich", "cheese", "cheese sandwich", "sandwich"], w.ham_and_cheese_sandwich.parserItemNameParts)
+  
+
+  test.title("parser.findInList")
+  test.assertEqual([], parser.findInList('book', [w.ham_and_cheese_sandwich, w.Buddy, w.glass_cabinet], {}))
+  test.assertEqual([w.book], parser.findInList('book', [w.ham_and_cheese_sandwich, w.Buddy, w.book], {}))
+  test.assertEqual([w.Buddy, w.book, w.boots], parser.findInList('b', [w.ham_and_cheese_sandwich, w.Buddy, w.book, w.boots], {}))
+  test.assertEqual([w.book], parser.findInList('b', [w.ham_and_cheese_sandwich, w.Buddy, w.book], {attName:'read'}))
+
+  test.title("parser.findInScope")
+  let parserResult
+  parserResult = parser.findInScope('book', [[w.ham_and_cheese_sandwich, w.Buddy, w.glass_cabinet]], {})
+  test.assertEqual(0, parserResult[0].length)
+  test.assertEqual(0, parserResult[1])
+  parserResult = parser.findInScope('b', [[], [w.ham_and_cheese_sandwich, w.Buddy, w.book]], {attName:'read'})
+  test.assertEqual(1, parserResult[0].length)
+  test.assertEqual('book', parserResult[0][0].name)
+  test.assertEqual(1, parserResult[1])
+  parserResult = parser.findInScope('b', [[w.boots], [w.ham_and_cheese_sandwich, w.Buddy, w.book]], {attName:'read'})
+  test.assertEqual(1, parserResult[0].length)
+  test.assertEqual('boots', parserResult[0][0].name)
+  test.assertEqual(2, parserResult[1])
+
+
+  test.title("parser.findInScope with it")
+  parser.pronouns = {it:w.book, him:w.Buddy}
+  parserResult = parser.findInScope('it', [[w.boots], [w.ham_and_cheese_sandwich, w.Buddy, w.book]], {attName:'read'})
+  test.assertEqual(1, parserResult[0].length)
+  test.assertEqual('book', parserResult[0][0].name)
+  test.assertEqual(1, parserResult[1])
+  parserResult = parser.findInScope('him', [[w.boots], [w.ham_and_cheese_sandwich, w.Buddy, w.book]], {attName:'read'})
+  test.assertEqual(1, parserResult[0].length)
+  test.assertEqual('Buddy', parserResult[0][0].name)
+  test.assertEqual(1, parserResult[1])
+  
+  
+  test.title("parser.matchToName 1")
+  let parserObjs = []
+  parserResult = parser.matchToName('book', [[w.boots], [w.ham_and_cheese_sandwich, w.Buddy, w.book]], {attName:'read'}, parserObjs)
+  test.assertEqual(1, parserResult)
+  test.assertEqual(1, parserObjs.length)
+  test.assertEqual([w.book], parserObjs[0])
+  
+  test.title("parser.matchToName 2")
+  parserObjs = []
+  parserResult = parser.matchToName('boo', [[w.boots], [w.ham_and_cheese_sandwich, w.Buddy, w.book]], {attName:'read'}, parserObjs)
+  test.assertEqual(2, parserResult)
+  test.assertEqual(1, parserObjs.length)
+  test.assertEqual([w.boots], parserObjs[0])
+
+  test.title("parser.matchToName 3")
+  parserObjs = []
+  parserResult = parser.matchToName('boo', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book]], {}, parserObjs)
+  test.assertEqual(1, parserResult)
+  test.assertEqual(1, parserObjs.length)  // matched one word
+  test.assertEqual(2, parserObjs[0].length)  // found two possible items
+  test.assertEqual([w.boots, w.book], parserObjs[0])
+
+  test.title("parser.matchToNames 1")
+  parserResult = {objects:[], score:0}
+  parser.matchToNames('boo', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book]], {}, parserResult)
+  test.assertEqual(1, parserResult.score)
+  test.assertEqual([w.boots, w.book], parserResult.objects[0][0])
+
+  test.title("parser.matchToNames 2")
+  parserResult = {objects:[], score:0}
+  parser.matchToNames('ham and cheese', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book]], {multiple:true}, parserResult)
+  test.assertEqual(1, parserResult.score)
+  test.assertEqual([w.ham_and_cheese_sandwich], parserResult.objects[0][0])
+
+  test.title("parser.matchToNames 3")
+  parserResult = {objects:[], score:0}
+  parser.matchToNames('book and coin', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book, w.coin]], {multiple:true}, parserResult)
+  test.assertEqual(1, parserResult.score)
+  test.assertEqual([w.book], parserResult.objects[0][0])
+  test.assertEqual([w.coin], parserResult.objects[0][1])
+  
+  test.title("parser.matchToNames 4")
+  parserResult = {objects:[], score:0}
+  parser.matchToNames('book and coin', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book]], {multiple:true}, parserResult)
+  test.assertEqual(-1, parserResult.score)
+
+  test.title("parser.matchToNames 5")
+  parserResult = {objects:[], score:0}
+  parser.matchToNames('book and coin', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book, w.coin]], {}, parserResult)
+  test.assertEqual(-3, parserResult.score)
+
+
+  test.title("parser.matchToNames 5")
+  parserResult = {objects:[], score:0}
+  parser.matchToNames('ham and cheese', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book]], {}, parserResult)
+  test.assertEqual(1, parserResult.score)
+  test.assertEqual([w.ham_and_cheese_sandwich], parserResult.objects[0][0])
+
+
+
+
+
+ 
   
   
   test.title("sentenceCase");
@@ -125,6 +240,13 @@ test.tests = function() {
   test.assertEqual(2, util.getByInterval(intervals, 16))
   test.assertEqual(2, util.getByInterval(intervals, 19))
   test.assertEqual(false, util.getByInterval(intervals, 20))
+
+
+
+  test.title("isUltimatelyHeldBy")
+  test.assertEqual(true, w.ring.isUltimatelyHeldBy(w.jewellery_box))
+  test.assertEqual(true, w.ring.isUltimatelyHeldBy(w.glass_cabinet))
+  test.assertEqual(false, w.ring.isUltimatelyHeldBy(game.player))
 
 
 
@@ -408,6 +530,10 @@ test.tests = function() {
   test.assertCmd("drop all", "Knife: You drop the knife.");
   test.assertCmd("drop all", "Nothing there to do that with.");
   test.assertCmd("get knife", "You take the knife.");
+  
+  
+  
+
   
   const knifeDrop = w.knife.drop
   w.knife.drop = false
@@ -714,7 +840,7 @@ test.tests = function() {
   
   
   test.title("NPC commands 2");
-  test.assertCmd("boots,get coin", "You can tell the boots to do what you like, but there is no way they'll do it.");
+  test.assertCmd("boots,get coin", "You can tell the boots to do anything you like, but there is no way they'll do it.");
   test.assertCmd("kyle,get coin", "He tries to pick up the coin, but it just will not budge.");
   test.assertCmd("kyle,get knife", "You've got it already.");
   test.assertCmd("kyle,get cabinet", "He can't take it.");
@@ -753,12 +879,16 @@ test.tests = function() {
   test.title("NPC commands (go)");
   test.assertCmd("kyle, go ne", "Kyle can't go northeast.");
   test.assertCmd("kyle, go e", "Kyle heads east.");
-  test.assertCmd("kyle, get torch", "You can't see anything you might call 'kyle' here.");
+  test.assertCmd("kyle, get torch", "You can't see anything you might call 'kyle' here.")
+  
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("get garage", "You take the garage key.");
   test.assertCmd("e", ["You head east.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock, Kyle (wearing a straw boater) and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("kyle,n", "Kyle tries the door to the garage, but it is locked.");
   test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: He can't take it.", "Camera: Kyle takes the camera.", "Big kitchen table: He can't take it.", "Jug: Kyle takes the jug."]);
+  
+  
+  
   test.assertCmd("kyle, drop picture box", "Kyle drops the camera.");
   test.assertCmd("kyle, open trapdoor", "Kyle opens the trapdoor.");
   test.assertCmd("kyle, down", "You watch Kyle disappear through the trapdoor.");

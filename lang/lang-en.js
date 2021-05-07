@@ -256,7 +256,7 @@ const lang = {
 */
 
   // NPC
-  not_npc:"{nv:char:can:true} tell {nm:item:the} to do what you like, but there is no way {pv:item:'ll} do it.",
+  not_npc:"{nv:char:can:true} tell {nm:item:the} to do anything you like, but there is no way {pv:item:'ll} do it.",
   not_npc_for_give:"Realistically, {nv:item:be} not interested in anything {sb:char} might give {ob:item}.",
 
   cannot_ask_about:"You can ask {ob:item} about {param:text} all you like, but {pv:item:'be} not about to reply.",
@@ -713,6 +713,7 @@ const lang = {
       { name:"@n't", value:"n't"},
       { name:"'ve", value:"'s"},
       { name:"'be", value:"'s"},
+      { name:"'ll", value:"'ll"},
       { name:"*ay", value:"ays"},
       { name:"*uy", value:"uys"},
       { name:"*oy", value:"oys"},
