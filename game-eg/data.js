@@ -412,7 +412,7 @@ createItem("big_kitchen_table", SURFACE(), {
   examine: "A Formica table.",
 })
 
-createItem("jug", VESSEL(4), TAKEABLE(), {
+createItem("jug", TAKEABLE(), VESSEL(), {
   loc:"big_kitchen_table",
   examine:"A small jug, stripped blue and white.",
 })
@@ -421,17 +421,14 @@ createItem("kitchen_sink", {
   loc:"kitchen",
   scenery:true, 
   examine:"A dirty sink.",
-  isSourceOf:function(subst) { return subst === "water" || subst === "lemonade"; }
+  isSourceOf:function(fluid) {
+    return fluid === "water" 
+  },
+  sink:function(fluid, char, vessel) {
+    msg("{nv:char:empty:true} {nm:item:the} into the dirty sink.", {char:char, item:vessel} )
+  },
 })
 
-createItem("water", LIQUID(), {
-})
-
-createItem("honey", LIQUID(), {
-})
-
-createItem("lemonade", LIQUID(), {
-})
 
 
 

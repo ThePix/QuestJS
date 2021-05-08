@@ -104,7 +104,7 @@ commands.unshift(new Cmd('EgKick', {
   rules:[cmdRules.isHere],
   regex:/^(kick) (.+)$/,
   objects:[
-    {ignore:true},
+    {special:'ignore'},
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
@@ -119,7 +119,7 @@ commands.unshift(new Cmd('EgCharge', {
   rules:[cmdRules.isHeld],
   regex:/^(charge) (.+)$/,
   objects:[
-    {ignore:true},
+    {special:'ignore'},
     {scope:parser.isHeld}
   ],
   default:function(item, isMultiple, char) {
@@ -133,7 +133,7 @@ commands.unshift(new Cmd('EgMove', {
   rules:[cmdRules.isHere],
   regex:/^(move) (.+)$/,
   objects:[
-    {ignore:true},
+    {special:'ignore'},
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {

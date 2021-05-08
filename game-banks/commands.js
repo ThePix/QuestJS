@@ -384,7 +384,7 @@ findCmd('MetaHelp').script = function() {
 commands.push(new Cmd('HelpSubject', {
   regex:/^(?:\?|help) (.*)$/,
   objects:[
-    {text:true},
+    {special:'text'},
   ],
   script:function(objects) {
     for (let el of this.topics) {

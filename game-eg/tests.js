@@ -1385,23 +1385,24 @@ test.tests = function() {
   test.assertEqual(0, res.progress)
   test.assertEqual(quest.ACTIVE, res.state)
   
+*/  
   
   
   
   
   
-  /*
   
-  test.title("vessels and liquids");
-  game.player.loc = "kitchen"
+  test.title("vessels and liquids")
   w.jug.loc = "big_kitchen_table"
-  game.update();
-  test.assertCmd("get jug", ["You take the jug."]);
-  test.assertCmd("fill jug with tears", ["You can't see anything you might call 'tears' here."]);
-  test.assertCmd("fill jug with honey", ["There's no honey here."]);
-  test.assertCmd("fill jug with water", ["You fill the jug."]);
-  test.assertCmd("fill jug with water", ["It already is."]);
-  test.assertCmd("fill jug with lemonade", ["It's not something you can mix liquids in."]);
+  test.movePlayer('kitchen')
+  test.assertCmd("get jug", ["You take the jug."])
+  test.assertCmd("fill jug with tears", ["I don't know of a fluid called tears."])
+  test.assertCmd("fill jug with honey", ["There's no honey here."])
+  test.assertCmd("fill jug with water", ["You fill the jug."])
+  test.assertCmd("fill jug with water", ["It is already full."])
+  test.assertCmd("empty jug", ["You empty the jug onto the ground, and it soaks away."])
+  test.assertCmd("fill jug", ["You fill the jug."])
+  test.assertCmd("empty jug into sink", ["You empty the jug into the dirty sink."])
   
   
   

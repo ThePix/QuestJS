@@ -23,6 +23,8 @@ settings.textEffectDelay = 100
 
 settings.symbolsForCompass = true
 
+settings.fluids = ['water', 'honey', 'lemonade']
+
 settings.status = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },

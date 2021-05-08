@@ -95,7 +95,7 @@ const lang = {
     Push:/^(?:push|press) (.+)$/,
     Pull:/^(?:pull|drag) (.+)$/,
     Fill:/^(?:fill) (.+)$/,
-    Empty:/^(?:empty) (.+)$/,
+    Empty:/^(?:empty|discharge|decant|pour out|pour) (.+)$/,
     Eat:/^(eat|feed on|feed|partake of|partake|dine on|dine) (.+)$/,
     Drink:/^(drink|imbibe|quaff|guzzle|knock back|swig|swill|sip|down|chug) (.+)$/,
     Ingest:/^(consume|swallow|ingest) (.+)$/,
@@ -113,6 +113,10 @@ const lang = {
     NpcStand:[/^(.+), ?(?:stand|stand up|get up)$/, /^tell (.+) to (?:stand|stand up|get up)$/],
     FillWith:/^(?:fill) (.+) (?:with) (.+)$/,
     NpcFillWith:[/^(.+), ?(?:fill) (.+) (?:with) (.+)$/, /^tell (.+) to (?:fill) (.+) (?:with) (.+)$/],
+
+    EmptyInto:/^(?:empty|pour out|pour|discharge|decant) (.+) (?:into|in to|in|down) (.+)$/,
+    NpcEmptyInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down) (.+)$/, /^tell (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down) (.+)$/],
+
     PutIn:/^(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/,
     NpcPutIn:[/^(.+), ?(?:put|place|drop|insert) (.+) (?:in to|into|in|on to|onto|on) (.+)$/, /^tell (.+) to (?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/],
     TakeOut:/^(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/,
@@ -245,15 +249,21 @@ const lang = {
   cannot_switch_on:"{nv:char:can't:true} turn {ob:item} on.",
   cannot_switch_off:"{nv:char:can't:true} turn {ob:item} off.",
 
-/*
+
   // VESSEL
-  fill_successful:"{nv:char:fill:true} {nm:container:the}.",
-  empty_successful:"{nv:char:empty:true} {nm:container:the}.",
-  cannot_fill:"{nv:container:'be:true} not something you can fill.",
-  cannot_mix:"{nv:container:'be:true} not something you can mix liquids in.",
-  cannot_empty:"{nv:container:'be:true} not something you can empty.",
-  not_vessel:"{pv:container:be:true} is not a vessel.",
-*/
+  fill_successful:"{nv:char:fill:true} {nm:item:the}.",
+  empty_successful:"{nv:char:empty:true} {nm:item:the} onto the ground, and it soaks away.",
+  empty_into_successful:"{nv:char:empty:true} {nm:item:the} into {nm:sink:the}.",
+  empty_onto_successful:"{nv:char:empty:true} {nm:item:the} over {nm:sink:the}, and then watch it all run down on to the ground.",
+  cannot_fill:"{nv:item:'be:true} not something you can fill.",
+  cannot_mix:"{nv:item:'be:true} not something you can mix liquids in.",
+  cannot_empty:"{nv:item:'be:true} not something you can empty.",
+  not_vessel:"{pv:item:be:true} not a vessel.",
+  no_fluid_here:"There's no {param:fluid} here.",
+  not_a_fluid_here:"I don't know of a fluid called {show:text}.",
+  already_full:"{pv:item:be:true} already full.",
+  no_generic_fluid_here:"There's nothing to fill {sb:item} with here.",
+
 
   // NPC
   not_npc:"{nv:char:can:true} tell {nm:item:the} to do anything you like, but there is no way {pv:item:'ll} do it.",
@@ -633,6 +643,9 @@ const lang = {
     standOn:"Stand on",
     reclineOn:"Lie on",
     getOff:"Get off",
+    fill:"Fill",
+    empty:"Empty",
+    turn:"Turn",
   },
   
   // Flag the state of an item in a list
@@ -650,7 +663,7 @@ const lang = {
     {name:'northwest', abbrev:'NW', niceDir:"the northwest", type:'compass', key:103, x:-1 ,y:1, z:0, opp:'southeast', symbol:'fa-arrow-left', rotate:45}, 
     {name:'north', abbrev:'N', niceDir:"the north", type:'compass', key:104, x:0 ,y:1, z:0, opp:'south', symbol:'fa-arrow-up'}, 
     {name:'northeast', abbrev:'NE', niceDir:"the northeast", type:'compass', key:105, x:1 ,y:1, z:0, opp:'southwest', symbol:'fa-arrow-up', rotate:45}, 
-    {name:'in', abbrev:'In', alt:'enter|i', niceDir:"inside", type:'inout', key:111, opp:'out', symbol:'fa-sign-in-alt'}, 
+    {name:'in', abbrev:'In', alt:'enter', niceDir:"inside", type:'inout', key:111, opp:'out', symbol:'fa-sign-in-alt'}, 
     {name:'up', abbrev:'U', niceDir:"above", type:'vertical', key:109, x:0 ,y:0, z:1, opp:'down', symbol:'fa-arrow-up'},
     
     {name:'west', abbrev:'W', niceDir:"the west", type:'compass', key:100, x:-1 ,y:0, z:0, opp:'east', symbol:'fa-arrow-left'}, 
