@@ -151,8 +151,7 @@ createItem("your_spacesuit", WEARABLE(2, ["body"]), {
   spray:function(isMultiple, char) {
     msg("")
   },
-  canWearRemove:function(char, wear) {
-    if (wear) return true
+  testRemoveRestrictions:function(char) {
     if (isRoomPressured(w[char.loc])) return true
     msg("{nv:char:start:true} to unseal {pa:char} spacesuit... There is a hissing sound, and suddenly {nv:char:be} struggling for breath. Quickly, {nv:char:seal:true} it up again. Perhaps taking a spacesuit off in a vacuum is not such a good idea?")
     return false
