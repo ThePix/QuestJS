@@ -826,11 +826,13 @@ test.tests = function() {
   
   test.assertCmd("l", ["The dining room", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and Lara (sitting on the chair) here.", "You can go east, up or west.",]);  
   
+  test.title("NPC commands 1.1");
   w.Lara.canPosture = function() { msg("She is turned to stone."); return false; }
   test.assertCmd("lara, get off chair", "She is turned to stone.");
   w.Lara.canPosture = function() { return true; }
   test.assertCmd("lara, get off chair", "Lara gets off the chair.");
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
+  
   test.assertCmd("lara,e", ["Lara gets off the chair.", "Lara heads east."]);
   test.assertCmd("e", ["You head east.", "The lounge", "A smelly room with an old settee and a tv.", "You can see a book, some boots, seven bricks, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), Lara, a small key and a waterskin here.", "You can go east, south, up or west.",]);
   test.assertCmd("lara,get boots", "Lara takes the boots.");
@@ -1100,7 +1102,7 @@ test.tests = function() {
   
   
   test.title("ensemble");
-  world.setRoom(game.player, "wardrobe", "suppress");
+  test.movePlayer("wardrobe");
   test.assertCmd("l", ["The wardrobe", "Oddly empty of fantasy worlds.", "You can see a suit here.", "You can go out."]);
   test.assertCmd("get trousers", ["You take the suit trousers."]);
   test.assertCmd("l", ["The wardrobe", "Oddly empty of fantasy worlds.", "You can see a jacket and a waistcoat here.", "You can go out."]);
@@ -1378,6 +1380,21 @@ test.tests = function() {
 
 
 
+  test.title("vessels and liquids")
+  w.jug.loc = "big_kitchen_table"
+  test.movePlayer('kitchen')
+  test.assertCmd("get jug", ["You take the jug."])
+  test.assertCmd("fill jug with tears", ["I don't know of a fluid called tears."])
+  test.assertCmd("fill jug with honey", ["There's no honey here."])
+  test.assertCmd("fill jug with water", ["You fill the jug."])
+  test.assertCmd("fill jug with water", ["It is already full."])
+  test.assertCmd("empty jug", ["You empty the jug onto the ground, and it soaks away."])
+  test.assertCmd("fill jug", ["You fill the jug."])
+  test.assertCmd("empty jug into sink", ["You empty the jug into the dirty sink."])
+  
+  
+
+
 /*
   test.title("quests")
   test.assertCmd("talk to buddy", ["'Hey, Buddy,' you say.", "'Hey yourself! Say, could you get me a carrot?'","Quest started: <i>A carrot for Buddy</i>", "Go find a carrot."])
@@ -1390,19 +1407,6 @@ test.tests = function() {
   
   
   
-  
-  
-  test.title("vessels and liquids")
-  w.jug.loc = "big_kitchen_table"
-  test.movePlayer('kitchen')
-  test.assertCmd("get jug", ["You take the jug."])
-  test.assertCmd("fill jug with tears", ["I don't know of a fluid called tears."])
-  test.assertCmd("fill jug with honey", ["There's no honey here."])
-  test.assertCmd("fill jug with water", ["You fill the jug."])
-  test.assertCmd("fill jug with water", ["It is already full."])
-  test.assertCmd("empty jug", ["You empty the jug onto the ground, and it soaks away."])
-  test.assertCmd("fill jug", ["You fill the jug."])
-  test.assertCmd("empty jug into sink", ["You empty the jug into the dirty sink."])
   
   
   

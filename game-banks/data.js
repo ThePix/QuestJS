@@ -197,7 +197,7 @@ createRoom("stasis_pod_room", {
   out:new Exit('stasis_bay', {
     use:function() {
       msg("You climb out of the stasis pod.");
-      world.setRoom(game.player, this.name, "out");
+      game.player.moveChar(this.name, "out");
       if (w.your_jumpsuit.loc === "stasis_pod_drawer") {
         w.stasis_pod_drawer.loc = "stasis_bay";
         msg("A drawer under the pod slides open to reveal your jumpsuit.");

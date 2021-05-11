@@ -191,7 +191,7 @@ createRoom("garden", {
       }
       else {
         msg('You walk into the shed.')
-        world.setRoom(w.me, "shed")
+        w.me.moveChar("shed")
         return true
       }
     },
@@ -389,10 +389,10 @@ createRoom("laboratory", {
         msg("The robot opens the heavy door with ease.")
         w.lab_door.closed = false
       }
-      world.setRoom(w.robot, "reactor_room", "north")
+      w.robot.moveChar("reactor_room", "north")
       return true
     }
-    world.setRoom(w.me, "reactor_room", "north")
+    w.me.moveChar("reactor_room", "north")
     return true
   }}),
 })
@@ -558,7 +558,7 @@ createRoom("office", {
   west:new Exit("lift", { use:function() {
     if (w.office.lift_exit_locked) return falsemsg("The lift door is closed. You suspect Professor Kleinscope is in he lift and on his way up right now.")
     msg("You walk back into the lift.")
-    world.setRoom(w.me, this.name, this.dir)
+    w.me.moveChar(this.name, this.dir)
   }}),
   out:new Exit("garden", {
     use:function() {
