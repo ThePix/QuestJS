@@ -218,7 +218,7 @@ findCmd('MetaSave').script = function() {
 commands.push(new Cmd('Crowbar', {
   regex:/^(crowbar|level) (.+)$/,
   objects:[
-    {ignore:true},
+    {special:'ignore'},
     {scope:parser.isHere},
   ],
   default:function(item) {
@@ -233,7 +233,7 @@ commands.unshift(new Cmd('Move', {
   rules:[cmdRules.isHere],
   regex:/^(move) (.+)$/,
   objects:[
-    {ignore:true},
+    {special:'ignore'},
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {

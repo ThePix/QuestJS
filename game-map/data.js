@@ -60,14 +60,14 @@ createRoom("shed", {
 
 createItem("Lara", NPC(true), {
   loc:'shed',
-  properNoun:true,
+  properName:true,
   agenda:['walkRandom'],
   mapDrawBase:function() { return map.rectangle(w[this.loc], [[-5,-5], [10, 10]], 'fill:red;stroke:black') }
 })
 
 createItem("Kyle", NPC(false), {
   loc:'shed',
-  properNoun:true,
+  properName:true,
   agenda:['walkRandom'],
   mapDrawBase:function() { return map.rectangle(w[this.loc], [[0,0], [10, 10]], 'fill:blue;stroke:black') }
 })
