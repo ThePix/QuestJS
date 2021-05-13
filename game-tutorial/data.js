@@ -495,7 +495,7 @@ createRoom("reactor", CONTAINER(false), {
   },
   scenery:true,
   loc:'reactor_room',
-  testPutInRestrictions:function(object, char) {
+  testDropInRestrictions:function(object, char) {
     if (object === w.control_rod) return true
     msg("That cannot go in there!")
     return false
