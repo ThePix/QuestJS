@@ -592,7 +592,7 @@ const lang = {
   carrying:"carrying",
 
 
-
+  command_split_regex:/\.| then |, then |,then |, and then |,and then /i,  // case insenstive as used early
   article_filter_regex:/^(?:the |an |a )?(.+)$/,
   joiner_regex:/\band\b|\, ?and\b|\,/,
   all_regex:/^(all|everything)$/,

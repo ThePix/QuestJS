@@ -512,7 +512,7 @@ test.tests = function() {
   
   test.assertCmd("look inside box", "Inside the cardboard box you can see nothing.")
   test.assertCmd("look inside boots", "There's nothing to see inside.")
-  test.assertCmd("look inside book", "The book has pages and pages of text, but you do not even recongise the text.")
+  test.assertCmd("look inside book", "The book has pages and pages of text, but you do not even recognise the alphabet.")
 
   test.assertCmd("smell", "You can't smell anything here.")
   test.assertCmd("listen", "You can't hear anything of note here.")
@@ -530,15 +530,19 @@ test.tests = function() {
   test.assertCmd("drop all", "Knife: You drop the knife.");
   test.assertCmd("drop all", "Nothing there to do that with.");
   test.assertCmd("get knife", "You take the knife.");
-  
-  
-  
-
-  
   const knifeDrop = w.knife.drop
   w.knife.drop = false
   test.assertCmd("drop knife", "You can't drop it.");
   w.knife.drop = knifeDrop
+
+
+  
+  
+  test.title("Concatenated commands")
+  test.assertCmd("drop knife, and then get it", ["You drop the knife.", "You take the knife."]);
+  test.assertCmd("get book.read it.drop book", ["You take the book.", "It is not in a language you understand.", "Abandoning later commands: drop book"]);
+  test.assertCmd("drop book.read it.drop book", ["You drop the book.", "You don't have it.", "You don't have it."]);
+  
   
 
   test.title("Simple object commands");

@@ -130,13 +130,14 @@ createItem("book", TAKEABLE(), READABLE(true), {
       else {
         msg (prefix(this, isMultiple) + "It is not in a language " + lang.pronounVerb(char, "understand") + ".");
       }
+      parser.abort()
       return true;
     }          
     else {
       return false;
     }
   },
-  lookinside:"The book has pages and pages of text, but you do not even recongise the text.",
+  lookinside:"The book has pages and pages of text, but you do not even recognise the alphabet.",
 })
 
 
