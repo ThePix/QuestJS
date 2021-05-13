@@ -8,7 +8,7 @@ commands.push(new Cmd('Kick', {
   rules:[cmdRules.isHere],
   regex:/^(kick) (.+)$/,
   objects:[
-    {ignore:true},
+    {special:'ignore'},
     {scope:parser.isPresent}
   ],
   default:function(item, isMultiple, char) {
@@ -22,7 +22,7 @@ commands.push(new Cmd('Move', {
   rules:[cmdRules.isHere],
   regex:/^(move) (.+)$/,
   objects:[
-    {ignore:true},
+    {special:'ignore'},
     {scope:parser.isHere}
   ],
   default:function(item, isMultiple, char) {
