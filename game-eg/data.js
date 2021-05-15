@@ -84,13 +84,18 @@ createItem("knife",
 
 
 createRoom("lounge", {
-  desc:'A smelly room with an [old settee:couch:sofa] and a [tv:telly].',
+  desc:'A smelly room with an old settee and a tv. There is a tatty rug on the floor.',
   mapColour:'silver',
   east:new Exit('kitchen'),
   west:new Exit("dining_room"),
   south:new Exit("conservatory"),
   up:new Exit("bedroom"),
   hint:"There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).",
+  scenery:[
+    'tv',
+    {alias:['old settee', 'couch', 'sofa']},
+    {alias:'rug', desc:'It might have been blue at one time. Maybe.'},
+  ],
 });
 
 
@@ -543,7 +548,7 @@ createItem("charger_button", COMPONENT("charger"), BUTTON(), {
 
 
 createRoom("bedroom", {
-  desc:"A large room, with a big [bed] and a wardrobe.",
+  desc:"A large room, with a big bed and a wardrobe.",
   down:new Exit("lounge"),
   in:new Exit("wardrobe"),
   west:new Exit('lift'),
