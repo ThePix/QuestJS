@@ -302,7 +302,16 @@ const lang = {
   rope_examine_end_attached:'is {rope.attachedVerb} to {nm:obj:the}.',
   rope_examine_end_held:'is held by {nm:holder:the}.',
   rope_examine_end_headed:'heads into {nm:loc:the}.',
-    
+  rope_not_attachable_to:"That is not something you can attach {nm:rope:the} to.",
+  rope_not_detachable:"You cannot attach that to - or detach it from - anything.",
+  rope_tied_both_ends_already:"{pv:rope:be:true} already attached to {nm:obj1:the} and {nm:obj12:the}.",
+  rope_not_attachable:"You cannot attach that to anything.",
+  rope_not_attached:"{nv:rope:be:true} not {rope.attachedVerb} to anything.",
+  rope_detach_end_ambig:"Which end of {nm:rope:the} do you want to detach?",
+  rope_not_attached_to:"{nv:rope:be:true} not attached to {nm:obj2:the}.",
+  rope_tethered:"{nv:char:can:true} not detach {nm:rope:the} from {nm:obj2:the}.",
+  rope_attach_success:"{nv:char:attach:true} {nm:rope:the} to {nm:obj2:the}.",
+  rope_detach_success:"{nv:char:detach:true} {nm:rope:the} from {nm:obj2:the}.",    
 
 
   // Movement
