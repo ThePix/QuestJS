@@ -123,6 +123,7 @@ const lang = {
     NpcTakeOut:[/^(.+), ?(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/, /^tell (.+) to (?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/],
     GiveTo:/^(?:give|offer|proffer) (.+) (?:to) (.+)$/,
     NpcGiveTo:[/^(.+), ?(?:give) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/],
+    NpcGiveToMe:[/^(.+), ?(?:give) me (.+)$/, /^tell (.+) to ?(?:give) me (.+)$/],
 
     TieTo:/^(?:tie|fasten|attach) (.+) (?:to) (.+)$/,
     NpcTieTo:[/^(.+), ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/],

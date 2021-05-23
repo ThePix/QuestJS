@@ -862,7 +862,7 @@ createItem("Lara", NPC(true), {
   examine:"A normal-sized bunny.",
   properName:true, 
   happy:false,
-  giveReaction:function(item, multiple, char) {
+  giveToReaction:function(item, multiple, char) {
     if (item === w.ring) {
       msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
       w.ring.loc = "Lara"

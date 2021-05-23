@@ -433,7 +433,7 @@ test.tests = function() {
   settings.moneyFormat = "!+3.2! credits"
   test.assertEqual("+012.34 credits", displayMoney(1234));
   test.assertEqual("-012.34 credits", displayMoney(-1234));
-  settings.moneyFormat = game.moneyformat = "!$1,2!($1,2)!"
+  settings.moneyFormat = "!$1,2!($1,2)!"
   test.assertEqual("$12,34", displayMoney(1234));
   test.assertEqual("($12,34)", displayMoney(-1234));
   
