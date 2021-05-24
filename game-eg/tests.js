@@ -5,7 +5,6 @@ test.resetOnCompletion = false
 
 test.tests = function() {
   
-  
   test.title("parser.scoreObjectMatch");
   test.assertEqual(55, parser.scoreObjectMatch("me", w.Buddy, {}));
   test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.Buddy, {}));
@@ -765,7 +764,6 @@ test.tests = function() {
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
   test.assertCmd("get knife", "You take the knife.");
   
-  
   test.title("Postures")
   test.assertCmd("lie on bed", "You lie down on the bed.")
   test.assertCmd("get off bed", "You get off the bed.")
@@ -912,6 +910,7 @@ test.tests = function() {
   test.title("The charger");
   test.assertCmd("open garage", ["You unlock the garage door.", "You open the garage door."]);
   test.assertCmd("n", ["The garage", "An empty garage.", /You can see/, "You can go south."]);
+  
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is closed.");
   test.assertCmd("push button", "You push the button, but nothing happens.");
   test.assertCmd("put torch in compartment", "The compartment is closed.");
@@ -924,18 +923,21 @@ test.tests = function() {
   test.assertCmd("put torch in compartment", "Done.");
   test.assertCmd("put key in compartment", "The compartment is full.");
   test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment contains a flashlight.");
+  
   test.assertCmd("push button", "You push the button, but nothing happens.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "You push the button. There is a brief hum of power, and a flash.");
   test.assertCmd("get torch", "You can't see anything you might call 'torch' here.");
   test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see a flashlight.");
+  
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("open compartment", "It already is.");
   test.assertCmd("put knife in compartment", "Done.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "There is a loud bang, and the knife is destroyed.");
   test.assertCmd("open compartment", "You open the compartment. It is empty.");
-  test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.");
+  
+  test.assertCmd("x charger", "A device bigger than a washing machine to charge a torch? It has a compartment and a button. The compartment is empty.")
   
 
   test.title("Clone");
@@ -1003,7 +1005,6 @@ test.tests = function() {
   test.assertEqual('three', w.boots.special_att_3)
   
   
-  
   test.title("Save/Load 2");
   // Set up some changes to be saved
   w.boots.counter = 17;
@@ -1027,6 +1028,7 @@ test.tests = function() {
   saveLoad.loadTheWorld(s, 4)
   
   
+  
   test.assertEqual(count + 2, Object.keys(w).length)
   test.assertEqual(17, w.boots.counter)
   test.assertEqual([4, 5, 8], w.boots.sizes)
@@ -1042,7 +1044,7 @@ test.tests = function() {
   tp.usedStrings = ['One', 'Two']
   const tps = tp.getSaveString()
   tp.usedStrings = ['three']
-  tp.setLoadString("tpUsedStrings=" + tps)
+  tp.setLoadString(tps)
   test.assertEqual(['One', 'Two'], tp.usedStrings)
  
 
@@ -1054,8 +1056,9 @@ test.tests = function() {
   test.assertEqual("conservatory, dining room, lounge", formatList(agenda.findPath(w.garden, w.dining_room)));
   test.assertEqual(null, w.dining_room.findExit(w.far_away));
   test.assertEqual("east", w.dining_room.findExit(w.lounge).dir);
+  test.assertCmd("s", ["The kitchen", "A clean room. There is a sink in the corner.", /You can see/, "You can go down, north or west."])
   
-  test.assertCmd("s", ["The kitchen", "A clean room. There is a sink in the corner.", /You can see/, "You can go down, north or west."]);
+  
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", /^You can see/, "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", /You can see/, "You can go north or west."]);
   test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur here.", "You can go east or west."]);
