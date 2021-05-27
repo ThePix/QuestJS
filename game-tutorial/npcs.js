@@ -5,7 +5,7 @@ createItem("robot", NPC(false), {
   examine:"The robot is approximately man-shaped, if a little squat. It looks a little... clunky, like might have been designed in the fifties.",
   strong:true,
   attachable:true,
-  eventIsActive:function() { w.me.loc === 'laboratory' },
+/*  eventIsActive:function() { w.me.loc === 'laboratory' },
   eventPeriod:1,
   eventScript:function() {
     if (w.me.hints < 250 && this.loc === 'reactor_room') {
@@ -13,7 +13,7 @@ createItem("robot", NPC(false), {
       tmsg("Of course, there may be other topics you can ask about, so you might want to experiment. But that does NOT mean you should start asking about every rude word you can think of.")
       w.me.hints = 220
     }
-  },
+  },*/
 
   isAtLoc:function(loc, situation) {
     if (situation === world.PARSER && w.me.loc === 'laboratory') return true

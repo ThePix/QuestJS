@@ -18,8 +18,8 @@ hint.data = [
   { name:'readBox', hint:'Read the writing on the box (READ BOX)', tutorial:"There is something written on the label, so we should try READ BOX (or READ LABEL; I think that will work in this game, but it can be worth trying alternatives when one noun fails)."},
   { name:'openBox', hint:'OPEN THE BOX and then GET THE CROWBAR.', tutorial:"Okay, so that is kind of odd, but we will roll with it. Time to open the box. Hopefully by now you will have guessed you need to say OPEN BOX. On the off-chance that there is a crowbar in there, pick it up (was that a spoiler?)."},
   { name:'hatInBox', hint:'REMOVE THE HAT and then PUT IT IN THE BOX, then CLOSE BOX.', tutorial:"I am guessing the Hat and Crowbar Company are expecting a hat back now, better put the hat in the box. Can you guess how?|The clue was in the question: PUT THE HAT IN THE BOX.|You will need to REMOVE the hat first. And once the hat is in there, close the box. Quest will understand IT to the last thing you referred to, so you could say REMOVE HAT and then PUT IT IN THE BOX.|You might want to see if anything happens if you close the box while it is empty first..."},
-  { name:'crowbar', hint:'CROWBAR THE SHED DOOR and then GO EAST.', tutorial:"Cool... Wait, does that mean you're now naked? Let's assume not! So we have a crowbar, we can get into the shed.|Up to now we have been using commands that pretty much every game will understand, but games will usually have their own set of commands unique to them, as required by the plot. This game is no different.|One of the problems when playing - and when authoring - a text adventure is deciding how a command should be phrased (a problem known as \"guess the verb\"). Are we going to CROWBAR THE SHED or LEVER OPEN THE DOOR or what? Often it takes some experimenting, though sometimes the text will give you a hint - always worth trying any verb that is used in the text (at least you can be sure the author knows that word).|Often the generic USE will work, so is worth a try."},
-  { name:'getTorch', hint:'GET TORCH.', tutorial:"This room has a torch, but it is described in the room description as part of the scenery, so not as obvious as the hat. But you can still pick it up just the same. And if you then drop it again, you will see it is just an ordinary item (though that may not be the case in all games).|Incidentally, you can call it a flashlight if you prefer."},
+  { name:'crowbar', hint:'CROWBAR THE SHED DOOR and then GO EAST.', tutorial:"Cool... Wait, does that mean you're now naked? Let's assume not! So we have a crowbar, we can get into the shed.|Up to now we have been using commands that pretty much every game will understand, but games will usually have their own set of commands unique to them, as required by the plot. This game is no different.|One of the problems when playing - and when authoring - a text adventure is deciding how a command should be phrased (a problem known as \"guess the verb\"). Are we going to CROWBAR THE SHED or LEVER OPEN THE DOOR or what? Often it takes some experimenting, though sometimes the text will give you a hint - always worth trying any verb that is used in the text (at least you can be sure the author knows that word).|Often the generic USE will work, so is worth a try. See if you can get into that shed."},
+  { name:'getTorch', hint:'GET TORCH.', tutorial:"This room has a torch, but it is described in the room description as part of the scenery, so not as obvious as the hat. But you can still pick it up just the same. And if you then drop it again, you will see it is just an ordinary item (though that may not be the case in all games).|Incidentally, you can call it a flashlight if you prefer. Oh, and you need to be somewhere light to turn it on, so switch it on {i:before} going into the basement."},
   { name:'torchOn', hint:'TURN ON TORCH, then head to the basement (out, southwest, then down). If you are in the basement and it is dark, you will need to go back up, and then turn the torch on before coming back down.', tutorial:"Now it is calling it a flashlight? So anyway, we have a torch, we can now take a proper look in the basement (go down from the kitchen).|The torch can  be turned on and off, with TURN ON TORCH or SWITCH FLASHLIGHT OFF or whatever."},
   { name:'turnOnLight', hint:'SWITCH ON THE LIGHT, and then TURN OFF THE TORCH (in that order!).', tutorial:"Great, at last we can see down here. And it turns out there is a light switch, but we needed the torch to see the switch.|It is quite common for torch batteries to run out after so many turns, and then you have to re-charge it or find a battery. Hopefully that will not happen here, but it would be a good idea to save the battery just in case, so turn the light on, and turn off the torch."},
   { name:'getAll', hint:'Try GET ALL to pick up everything.', tutorial:"So we have managed to turn on a light!|A lot of adventure games are like this in that you need to do A, but to do that you need to do B, but you cannot do B without doing C first, and so on. And often - as here - you do not know what A even is.|There are a few things down here that we might want to grab. Most adventure games understand the word ALL, so we can just do GET ALL to pick up the lot."},
@@ -27,7 +27,8 @@ hint.data = [
   { name:'enterPassage', hint:'Head WEST.', tutorial:"Now we are getting somewhere!"},
   { name:'save', hint:'Type SAVE.', tutorial:"Not much in this room, so let's pause for a moment. It is a good idea to save occasionally whilst playing, just in case you die (not possible in this game) or lose the connection to the server (not an issue for Quest 6) or your PC crashes or you just have some else to do and want to return later. You really do not want to have to start from the beginning, so save your game.|Different systems have different ways to handle saving and loading (and some games may not support it at all), but a good start is to type SAVE."},
   { name:'saveGame', hint:'Type SAVE TUTORIAL (or some other name).', tutorial:"So in Quest 6 SAVE just tells you how to save your game. You need to add a file name to actually save. Do that now! You can call it whatever you want; how about \"tutorial\"?"},
-  { name:'westRobot', hint:'Head WEST.', tutorial:"The robot in the next room is a non-player character, or NPC. NPCs are common in adventure games, and may be implemented in various ways. At the simplest, the NPC will be part of the background, perhaps saying a few words to you, but not really interacting. But we can interact with the robot. We will start by talking to it.|There are two approaches to conversations. We will try TALK TO with another character. Here we will do ASK and TELL. Start by asking the robot about the laboratory."},
+  { name:'westRobot', hint:'Head WEST.',},
+  { name:'robot', hint:'ASK THE ROBOT ABOUT THE LABORATORY.', tutorial:"The robot is a non-player character, or NPC. NPCs are common in adventure games, and may be implemented in various ways. At the simplest, the NPC will be part of the background, perhaps saying a few words to you, but not really interacting. But we can interact with the robot. We will start by talking to it.|There are two approaches to conversations. We will try TALK TO with another character. Here we will do ASK and TELL. Start by asking the robot about the laboratory."},
   { name:'', hint:'ASK THE ROBOT ABOUT THE LABORATORY.', tutorial:""},
   { name:'', hint:'ASK ROBOT ABOUT ZETA-PARTICLES.', tutorial:""},
   { name:'', hint:'Go WEST to the lift.', tutorial:""},
@@ -123,9 +124,9 @@ const walkthroughs = {
     "read label", "hint",
     "open box", "hint",
     "get crowbar", "hint",
-    //"remove hat", "hint",
-    //"put it in box", "hint",
-    //"close lid", "hint",
+    "remove hat", "hint",
+    "put it in box", "hint",
+    "close lid", "hint",
     "crowbar shed", "hint",
     "east", "hint",
     "get torch", "hint",
@@ -134,18 +135,17 @@ const walkthroughs = {
     "turn on torch", "hint",
     "down", "hint",
     "turn on light", "hint",
-    //"save game",
     "turn off torch", "hint",
     "get all", "hint",
     "move crates", "hint",
     "w", "hint",
     "save", "hint",
-    "save Tutorial", "hint",
+    "save Tutorial ow", "hint",
     "w", "hint",
     "ask robot about the laboratory", "hint",
     "topics for robot",
     "ask robot about zeta-particles", "hint",
-    "w", "hint",
+    "w", "hint",/*
     "press 3", "hint",
     "e", "hint",
     "ask robot about lift", "hint",
@@ -207,7 +207,6 @@ const walkthroughs = {
 findCmd('MetaSave').script = function() {
   script:lang.saveLoadScript()
   if (hint.before('saveGame')) {
-    tmsg("So in Quest 6 SAVE just tells you how to save your game. You need to add a file name to actually save. Do that now! You can call it whatever you want; how about \"tutorial\"?")
     hint.now('saveGame')
   }
   return world.SUCCESS_NO_TURNSCRIPTS;

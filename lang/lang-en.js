@@ -139,8 +139,8 @@ const lang = {
       /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
       /^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
     ],
-    AskAbout:/^(?:ask) (.+) (about|what|who|how|why|where|when) (.+)$/,
-    TellAbout:/^(?:tell) (.+) (about|what|who|how|why|where|when) (.+)$/,
+    AskAbout:/^(?:ask) (.+?) (about|what|who|how|why|where|when) (.+)$/,
+    TellAbout:/^(?:tell) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     
     //Debug
     DebugWalkThrough:/^wt (.+)$/,
@@ -151,6 +151,7 @@ const lang = {
     DebugListCommands:/^cmds$/,
     DebugListCommands2:/^cmds2$/,
     DebugParserToggle:/^parser$/,
+    DebugStats:/^stats?$/,
   },
 
   // This will be added to the start of the regex of a command to make an NPC command

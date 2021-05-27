@@ -44,7 +44,7 @@ createRoom("lounge", {
     switch (this.eventCount) {
       case 1:
         tmsg("Typing WAIT made time pass in the game, while the player-character did nothing. You can also just type Z, which is a shortcut for WAIT.")
-        tmsg("Look to the left, and you will see a panel; you can perform a lot of actions here without typing anything at all. In some games it is on the right, and many do not have it at all, so we will mostly ignore it, but for now click the &#9208; to again wait one turn.")
+        tmsg("Look to the left, and you will see a panel; you can perform a lot of actions here without typing anything at all. In some games it is on the right, and many do not have it at all, so we will mostly ignore it, but for now click the clock icon to again wait one turn.")
         break
       case 2:
         tmsg("Some games have commands that tell you about the game or set it up differently to suit the player. In Quest 6 (but not necessarily other games) none of these count as a turn, so try a couple, and when you are done, do WAIT again.")
@@ -106,7 +106,7 @@ createRoom("basement", {
 createItem("light_switch", SWITCHABLE(false), {
   loc:"basement",
   examine:"A switch, presumably for the light.",
-  regex:/light|switch/,
+  regex:/^light|switch/,
 })
 
 createItem("crates", {
@@ -263,7 +263,7 @@ createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
   closeMsg:function() {
     if (this.loc && w.hat.loc === 'box' && w.crowbar.loc !== 'box') {
       msg("You close the lid. 'Thank you for your custom!' says the box. It starts to shake violently then leaps into the air, rapidly disappearing from sight.")
-      hint.now("hatInBox")
+      hint.now("crowbar")
       this.loc = false
     }
     else {
@@ -278,7 +278,7 @@ createItem("crowbar", TAKEABLE(), {
   examine:"A cheap plastic crowbar; it is red, white, blue and yellow.",
   loc:"box",
   onMove:function(toLoc) {
-    if (toLoc === 'me') hint.now("crowbar")
+    if (toLoc === 'me') hint.now("hatInBox")
   },
   use:function(isMultiple, char) {
     if (char.loc === 'laboratory' && w.lab_door.locked) {
@@ -373,10 +373,10 @@ createRoom("laboratory", {
   desc:"This is a laboratory of some sort. The room is full of screens and instruments, but you cannot tell what sort of science is being done here. There is a big steel door {ifNot:lab_door:closed:lying open }to the north{if:lab_door:closed:; you feel pretty sure it will be too heavy for you to open}.",
   afterFirstEnter:function() {
     if (hint.before('saveGame')) tmsg("Okay, so not bothering with saving...")
-    hint.now("westRobot")
+    hint.now("robot")
   },
   afterEnter:function() {
-    hint.now("rGoNorth")
+    //hint.now("rGoNorth")
   },
   
   lab_door_locked:true,
@@ -493,7 +493,6 @@ createRoom("reactor", CONTAINER(false), {
   examine:function() {
     return "The reactor is composed of a series of rings, hoops and cylinders arranged on a vertical axis. Some are shiny metal, other dull black, but you have no idea of the significant of any of them.{if:reactor_room:reactorRunning: An intense blue light spills out from various points up it length.}"
   },
-  scenery:true,
   loc:'reactor_room',
   testDropInRestrictions:function(object, char) {
     if (object === w.control_rod) return true
@@ -509,7 +508,7 @@ createRoom("reactor", CONTAINER(false), {
   },
 })
 
-createRoom("vomit", {
+createItem("vomit", {
   examine:"You decide against looking too closely at the vomit, but it occurs to you that perhaps you should tell the robot about it.",
   scenery:true,
 })
