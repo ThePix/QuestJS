@@ -844,12 +844,14 @@ test.tests = function() {
   test.assertCmd("lara, get off chair", "Lara gets off the chair.");
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
   
-  test.assertCmd("lara,e", ["Lara gets off the chair.", "Lara heads east."]);
+  
+  test.assertCmd("lara,e", ["Lara gets off the chair.", "Lara leaves the dining room, heading east."]);
   test.assertCmd("e", ["You head east.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, seven bricks, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), Lara, a small key and a waterskin here.", "You can go east, south, up or west.",]);
   test.assertCmd("lara,get boots", "Lara takes the boots.");
   test.assertCmd("lara,wear boots", "'I'm not doing that!' says Lara indignantly.");
+  
   test.assertCmd("lara,drop boots", "Lara drops the boots.");
-  test.assertCmd("lara,w", "Lara heads west.");
+  test.assertCmd("lara,w", "Lara leaves the lounge, heading west.");
   
   
   test.title("NPC commands 2");
@@ -891,7 +893,7 @@ test.tests = function() {
 
   test.title("NPC commands (go)");
   test.assertCmd("kyle, go ne", "Kyle can't go northeast.");
-  test.assertCmd("kyle, go e", "Kyle heads east.");
+  test.assertCmd("kyle, go e", "Kyle leaves the lounge, heading east.");
   test.assertCmd("kyle, get torch", "You can't see anything you might call 'kyle' here.")
   
   test.assertCmd("get torch", "You take the flashlight.");
@@ -1074,15 +1076,21 @@ test.tests = function() {
   test.assertCmd("z", ["Time passes...", "Arthur stands up and stretches."]);
   test.assertCmd("e", ["You head east.", "The conservatory", "A light airy room.", /You can see/, "You can go north or west."]);
   test.assertEqual(0, w.Arthur.followers.length);
+  
+  
   test.assertCmd("z", ["Time passes...", "Arthur enters the conservatory from the west."]);
+  
+  
   test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", /^You can see/, "You can go east, south, up or west.", "Arthur enters the lounge from the south."]);
   test.assertCmd("w", ["You head west.", "The dining room", "An old-fashioned room.", /^You can see/, "You can go east, up or west.", "Arthur enters the dining room from the east.", "'Hi, Lara,' says Arthur. 'Come look at the garden.'"]);  
   test.assertEqual(0, w.Arthur.followers.length);
   test.assertCmd("z", ["Time passes...", "'Sure,' says Lara."]);
   test.assertEqual(1, w.Arthur.followers.length);
+  
   test.assertCmd("z", ["Time passes...", "Arthur and Lara leave the dining room, heading east."]);
   test.assertCmd("z", ["Time passes..."]);
   test.assertCmd("z", ["Time passes...", "Through the window you can see Arthur and Lara enter the garden from the east.", "Through the window you see Arthur say something to Lara."]);
+  test.assertCmd("z", ["Time passes...", "You notice Lara is smelling the flowers in the garden."]);
   
   
   test.title("Transit");
@@ -1346,6 +1354,8 @@ test.tests = function() {
   test.title("changing POV")
   util.changePOV(w.piggy_suu)
   test.assertCmd("l", ["The bridge", "From the bridge you can just how deep the canyon is.", "You can go east or west."])
+  
+  
   test.assertCmd("e", ["You head east.", "The road", "A road heading west over a bridge. You can see a shop to the north.", "You can see Buddy (holding a flashlight and a garage key; wearing a suit) and a carrot here.", "You can go east, north or west."])
 
 

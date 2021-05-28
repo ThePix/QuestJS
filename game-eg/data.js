@@ -299,8 +299,6 @@ createRoom("dining_room", {
   desc:'An old-fashioned room.',
   east:new Exit('lounge'),
   west:new Exit('lift'),
-  canViewLocs:["garden"],
-  canViewPrefix:"Through the window you can see ",
   up:new Exit("dining_room_on_stool", {mapIgnore:true}),
   alias:"dining room",
   hint:"This room features an NPC who will sometimes do as you ask. Compliment her, and she will go to another room, and with then pick things up and drop them (but not bricks). Also not that the glass cabinet is in this room as well as the lounge.",
@@ -658,6 +656,8 @@ createRoom("garden", {
   mapColour:'green',
   east:new Exit("conservatory"),
   west:new Exit("road"),
+  visibleFrom:["dining_room"],
+  visibleFromPrefix:"Through the window you can see ",
 });
 
 createItem("hook", { 
@@ -693,7 +693,9 @@ createItem("Arthur",
       "walkTo:Lara:'Hi, Lara,' says Arthur. 'Come look at the garden.'",
       "joinedBy:Lara:'Sure,' says Lara.",
       "walkTo:garden:inTheGardenWithLara:'Look at all the beautiful flowers,' says Arthur.:Through the window you see Arthur say something to Lara.",
-      "text:Lara smells the flowers.",
+      "run:inTheGardenWithLara:Lara smells the flowers.:You notice Lara is smelling the flowers in the garden.",
+      "walkTo:conservatory",
+      "walkTo:garden",
     ],
     inTheGardenWithLara:function(arr) {
       if (this.isHere()) {
@@ -896,9 +898,6 @@ createItem("Lara", NPC(true), {
   getAgreementDrop:function() {
     return true
   },
-  getAgreementStand:function() {
-    return true
-  },
   getAgreementRead:function() {
     return true
   },
@@ -909,7 +908,7 @@ createItem("Lara", NPC(true), {
     }
     return true
   },
-  getAgreement() {
+  getAgreementDefault() {
     msg("'I'm not doing that!' says Lara indignantly.")
     return false
   },

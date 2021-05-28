@@ -141,6 +141,11 @@ const lang = {
     ],
     AskAbout:/^(?:ask) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TellAbout:/^(?:tell) (.+?) (about|what|who|how|why|where|when) (.+)$/,
+    FollowMe:[/^(.+), ?(?:follow|follow me)$/, /^tell (.+) to (?:follow|follow me)$/],    
+    WaitHere:[
+      /^(.+), ?(?:stop follow|stop following|stop follow me|stop following me|wait|wait here)$/,
+      /^tell (.+) to (?:stop follow|stop following|stop follow me|stop following me|wait|wait here)$/,
+    ],    
     
     //Debug
     DebugWalkThrough:/^wt (.+)$/,
@@ -270,6 +275,10 @@ const lang = {
   // NPC
   not_npc:"{nv:char:can:true} tell {nm:item:the} to do anything you like, but there is no way {pv:item:'ll} do it.",
   not_npc_for_give:"Realistically, {nv:item:be} not interested in anything {sb:char} might give {ob:item}.",
+  cannot_follow:"'Follow me,' {nv:char:say} to {nm:npc:the}. Being an inanimate object, {nv:char:be} not too optimistic it will do as it is told.",
+  cannot_wait:"'Wait here,' {nv:char:say} to {nm:item:the}. Being an inanimate object, {nv:char:feel} pretty confident it will do as it is told.",
+  already_following:"'I'm already following you!'",
+  already_waiting:"'I'm already waiting!'",
 
   cannot_ask_about:"You can ask {ob:item} about {param:text} all you like, but {pv:item:'be} not about to reply.",
   cannot_tell_about:"You can tell {ob:item} about {param:text} all you like, but {pv:item:'be} not interested.",
@@ -412,40 +421,39 @@ const lang = {
   ask_about_intro:function(char, text1, text2) {
     return "You ask " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
-  
-  // Use when the NPC leaves a room; will give a message if the player can observe it
-  npc_leaving_msg:function(npc, dest) {
-    let s = "";
-    let flag = false;
-    if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
-      s = w[game.player.loc].canViewPrefix;
-      flag = true;
+
+  // Use when the NPC changes rooms; will give a message if the player can observe it
+  npc_moving_msg:function(npc, exit) {
+    if (npc === player) {
+      msg(lang.go_successful, {char:npc, dir:exit.dir})
     }
-    if (flag || npc.inSight()) {
-      s += lang.nounVerb(npc, "leave", !flag) + " " + lang.getName(w[npc.loc], {article:DEFINITE});
-      const exit = w[npc.loc].findExit(dest);
-      if (exit) s += ", heading " + exit.dir;
-      s += ".";
-      msg(s);
+    if (currentLocation === exit.origin) {
+      lang.npc_leaving_msg(npc, exit)
+    }
+    else if (currentLocation.name === exit.name) {
+      lang.npc_entering_msg(npc, exit)
     }
   },
 
+  
+  // Use when the NPC leaves a room; will give a message if the player can observe it
+  npc_leaving_msg:function(npc, exit) {
+    log('leaving')
+    let flag = npc.inSight(exit.origin)
+    log(flag)
+    if (!flag) return
+    let s = typeof flag === 'string' ? flag + "{nv:npc:leave}" : "{nv:npc:leave:true}"
+    s += " {nm:room:the}, heading {show:dir}."
+    msg(s, {room:exit.origin, npc:npc, dir:exit.dir})
+  },
+
   // the NPC has already been moved, so npc.loc is the destination
-  npc_entering_msg:function(npc, origin) {
-    let s = "";
-    let flag = false;
-    if (w[game.player.loc].canViewLocs && w[game.player.loc].canViewLocs.includes(npc.loc)) {
-      // Can the player see the location the NPC enters, from another location?
-      s = w[game.player.loc].canViewPrefix;
-      flag = true;
-    }
-    if (flag || npc.inSight()) {
-      s += lang.nounVerb(npc, "enter", !flag) + " " + lang.getName(w[npc.loc], {article:DEFINITE});
-      const exit = w[npc.loc].findExit(origin);
-      if (exit) s += " from " + exit.nice();
-      s += ".";
-      msg(s);
-    }
+  npc_entering_msg:function(npc, exit) {
+    let flag = npc.inSight(w[exit.name])
+    if (!flag) return
+    let s = typeof flag === 'string' ? flag + "{nv:npc:enter}" : "{nv:npc:enter:true}"
+    s += " {nm:room:the} from {show:dir}."
+    msg(s, {room:w[exit.name], npc:npc, dir:exit.reverseNice()})
   },
 
   //----------------------------------------------------------------------------------------------

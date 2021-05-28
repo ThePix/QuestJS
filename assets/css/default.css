@@ -63,8 +63,13 @@ ol, ul {
   margin-left: 5px;
 }
 
+pre {
+  padding-left: 10px;
+}
 
-
+.centred {
+  text-align:center;
+}
 
 /***
 * Heading
