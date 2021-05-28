@@ -422,27 +422,15 @@ const lang = {
     return "You ask " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
 
-  // Use when the NPC changes rooms; will give a message if the player can observe it
-  npc_moving_msg:function(npc, exit) {
-    if (npc === player) {
-      msg(lang.go_successful, {char:npc, dir:exit.dir})
-    }
-    if (currentLocation === exit.origin) {
-      lang.npc_leaving_msg(npc, exit)
-    }
-    else if (currentLocation.name === exit.name) {
-      lang.npc_entering_msg(npc, exit)
-    }
-  },
+
 
   
   // Use when the NPC leaves a room; will give a message if the player can observe it
   npc_leaving_msg:function(npc, exit) {
-    log('leaving')
     let flag = npc.inSight(exit.origin)
-    log(flag)
     if (!flag) return
-    let s = typeof flag === 'string' ? flag + "{nv:npc:leave}" : "{nv:npc:leave:true}"
+    if (exit.npcLeaveMsg) { return exit.npcLeaveMsg(npc) }
+    let s = typeof flag === 'string' ? flag + " {nv:npc:leave}" : "{nv:npc:leave:true}"
     s += " {nm:room:the}, heading {show:dir}."
     msg(s, {room:exit.origin, npc:npc, dir:exit.dir})
   },
@@ -451,7 +439,8 @@ const lang = {
   npc_entering_msg:function(npc, exit) {
     let flag = npc.inSight(w[exit.name])
     if (!flag) return
-    let s = typeof flag === 'string' ? flag + "{nv:npc:enter}" : "{nv:npc:enter:true}"
+    if (exit.npcEnterMsg) { return exit.npcEnterMsg(npc) }
+    let s = typeof flag === 'string' ? flag + " {nv:npc:enter}" : "{nv:npc:enter:true}"
     s += " {nm:room:the} from {show:dir}."
     msg(s, {room:w[exit.name], npc:npc, dir:exit.reverseNice()})
   },

@@ -380,12 +380,12 @@ createRoom("kitchen", {
   west:new Exit("lounge"),
   down:new Exit('basement', {
     isHidden:function() { return w.trapdoor.closed; },
-    msg:function(isMultiple, char) {
-      if (char === game.player) {
-        msg("You go through the trapdoor, and down the ladder.");
-      } else {
-        msg("You watch " + lang.getName(char, {article:DEFINITE}) + " disappear through the trapdoor.");
-      }
+    msg:"You go through the trapdoor, and down the ladder.",
+    npcLeaveMsg:function(char) {
+      msg("{nv:char:disappear:true} through the trapdoor.", {char:char});
+    },
+    npcEnterMsg:function(char) {
+      msg("{nv:char:come:true} through the trapdoor, and {cj:char:climb} down the ladder to join you in the basement.", {char:char});
     },
   }),
   north:new Exit("garage"),
@@ -657,8 +657,8 @@ createRoom("garden", {
   east:new Exit("conservatory"),
   west:new Exit("road"),
   visibleFrom:["dining_room"],
-  visibleFromPrefix:"Through the window you can see ",
-});
+  visibleFromPrefix:"Through the window you can see",
+})
 
 createItem("hook", { 
   loc:"garden", 

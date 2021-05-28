@@ -906,7 +906,7 @@ test.tests = function() {
   
   test.assertCmd("kyle, drop picture box", "Kyle drops the camera.");
   test.assertCmd("kyle, open trapdoor", "Kyle opens the trapdoor.");
-  test.assertCmd("kyle, down", "You watch Kyle disappear through the trapdoor.");
+  test.assertCmd("kyle, down", "Kyle disappears through the trapdoor.");
 
 
   test.title("The charger");
@@ -1089,6 +1089,7 @@ test.tests = function() {
   
   test.assertCmd("z", ["Time passes...", "Arthur and Lara leave the dining room, heading east."]);
   test.assertCmd("z", ["Time passes..."]);
+  
   test.assertCmd("z", ["Time passes...", "Through the window you can see Arthur and Lara enter the garden from the east.", "Through the window you see Arthur say something to Lara."]);
   test.assertCmd("z", ["Time passes...", "You notice Lara is smelling the flowers in the garden."]);
   
