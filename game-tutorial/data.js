@@ -211,7 +211,7 @@ createRoom("garden", {
 createItem("hat", WEARABLE(), {
   examine:"It is straw boater, somewhat the worse for wear.",
   loc:"garden",
-  onMove:function(toLoc) {
+  afterMove:function(toLoc) {
     if (!this.flag1 && toLoc === 'me') hint.now('wearHat')
   },
   onWear:function() {
@@ -277,7 +277,7 @@ createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
 createItem("crowbar", TAKEABLE(), {
   examine:"A cheap plastic crowbar; it is red, white, blue and yellow.",
   loc:"box",
-  onMove:function(toLoc) {
+  afterMove:function(toLoc) {
     if (toLoc === 'me') hint.now("hatInBox")
   },
   use:function(isMultiple, char) {
@@ -333,7 +333,7 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
-  onMove:function(toLoc) {
+  afterMove:function(toLoc) {
     if (!this.flag1 && toLoc === 'me') {
       hint.now("torchOn")
       w.cobwebs.loc = 'basement'
@@ -499,7 +499,7 @@ createRoom("reactor", CONTAINER(false), {
     msg("That cannot go in there!")
     return false
   },
-  itemDropped:function(item) {
+  afterItemDroppedHere:function(item) {
     if (w.control_rod.loc === this.name) {
       msg("The reactor starts to glow with a blue light, and you can hear it is now buzzing.")
       w.reactor_room.reactorRunning = true

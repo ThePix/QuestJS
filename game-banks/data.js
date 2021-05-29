@@ -42,7 +42,7 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
-  onMove:function(toLoc, fromLoc) {
+  afterMove:function(toLoc, fromLoc) {
     if (fromLoc === "stasis_pod_drawer") {
       w.stasis_pod_drawer.loc = false
       msg("The stasis pod drawer slides shut.");
@@ -205,7 +205,7 @@ createRoom("stasis_pod_room", {
       return true;
     }      
   }),
-  itemDropped:function(item) {
+  afterItemDroppedHere:function(item) {
     item.loc = "stasis_bay"
   }
 });
