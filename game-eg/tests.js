@@ -143,6 +143,11 @@ test.tests = function() {
   test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
   test.assertEqual("you", lang.getName(w.Buddy));
   test.assertEqual("You", lang.getName(w.Buddy, {article:INDEFINITE, capital:true}));
+  test.assertEqual("Five bricks", lang.getName(w.brick, {brick_count:5, capital:true, article:INDEFINITE}));
+  test.assertEqual("a brick", lang.getName(w.brick, {brick_count:1, article:INDEFINITE}));
+  test.assertEqual("seven bricks", lang.getName(w.brick, {loc:'lounge', article:INDEFINITE}));
+  test.assertEqual("a lot of bricks", lang.getName(w.brick, {brick_count:'infinity', article:INDEFINITE}));
+  
   
   test.title("random.fromArray");
   const ary = ["one", "two", "three"];
@@ -337,6 +342,15 @@ test.tests = function() {
   test.assertEqual("It is your book.", processText("It is {nms:chr:the} book.", {chr:game.player}));
   test.assertEqual("It is Kyle's book.", processText("It is {nms:chr:the} book.", {chr:w.Kyle}));
 
+  test.title("Text processor 5a: nm with COUNTABLE.");
+  test.assertEqual("Five bricks", processText("{nm:item:count:true}", {item:w.brick, brick_count:5}))
+  test.assertEqual("Five bricks", processText("{nm:item:a:true}", {item:w.brick, brick_count:5}))
+  test.assertEqual("five bricks", processText("{nm:item:a}", {item:w.brick, item_count:5}))
+  test.assertEqual("a brick", processText("{nm:item:a}", {item:w.brick, brick_count:1}))
+  test.assertEqual("one brick", processText("{nm:item:count}", {item:w.brick, brick_count:1}))
+  test.assertEqual("a brick", lang.getName(w.brick, {brick_count:1, article:INDEFINITE}));
+  test.assertEqual("seven bricks", lang.getName(w.brick, {loc:'lounge', article:INDEFINITE}));
+  test.assertEqual("a lot of bricks", lang.getName(w.brick, {brick_count:'infinity', article:INDEFINITE}));
   
   test.title("Text processor 6: show");
   test.assertEqual("Kyle is a bear.", processText("{Kyle.alias} is a bear."));

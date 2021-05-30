@@ -175,10 +175,10 @@ const lang = {
 
   // TAKEABLE
   take_successful:"{nv:char:take:true} {nm:item:the}.",
-  //take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
+  take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
   //take_successful_counted_plural:"{nv:char:take:true} {number:count} {nm:item}.",
   drop_successful:"{nv:char:drop:true} {nm:item:the}.",
-  //drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
+  drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
   cannot_take:"{pv:char:can't:true} take {ob:item}.",
   cannot_drop:"{pv:char:can't:true} drop {ob:item}.",
   not_carrying:"{pv:char:don't:true} have {ob:item}.",
@@ -798,10 +798,12 @@ const lang = {
     return "a ";
   },
 
-  getName(item, options) {
+  getName:function(item, options) {
     if (!options) options = {}
     if (!item.alias) item.alias = item.name
     let s = ''
+    // The count needs to be an item specific attribute because there could be several items in a list
+    // and we need to be clear which item the count belongs to
     let count = options[item.name + '_count'] ? options[item.name + '_count'] : false
     if (!count && options.loc && item.countable) count = item.countAtLoc(options.loc)
 
@@ -810,7 +812,10 @@ const lang = {
     }
 
     else {    
-      if (count && count > 1) {
+      if (count === 'infinity') {
+        s += item.infinity ? item.infinity + ' ' : 'a lot of '
+      }
+      else if (count && count > 1) {
         s += lang.toWords(count) + ' '
       }
       else if (options.article === DEFINITE) {
@@ -818,6 +823,9 @@ const lang = {
       }
       else if (options.article === INDEFINITE) {
         s += lang.addIndefiniteArticle(item, count)
+      }
+      else if (options.article === COUNT) {
+        s += 'one '
       }
       if (item.getAdjective) {
         s += item.getAdjective()
