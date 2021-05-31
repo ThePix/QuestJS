@@ -673,7 +673,8 @@ test.tests = function() {
   test.assertEqual(false, parser.isContained(w.brick));
   test.assertCmd("drop bricks in box", "Done.");
   test.assertEqual(true, parser.isContained(w.brick));
-  test.assertCmd("get bricks", "You take seven bricks.");
+  
+  test.assertCmd("get bricks", "You take the brick.");
   test.assertEqual(false, parser.isContained(w.brick));  
   test.assertCmd("drop three bricks in box", "Done.");
   test.assertEqual(true, parser.isContained(w.brick));
