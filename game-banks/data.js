@@ -16,8 +16,8 @@ createItem("me", PLAYER(), {
   oxygenUse:function() {
     return this.baseOxygeUse * this.oxygenUseModifier
   },
-  examine:function(isMultiple) {
-    msg(prefix(this, isMultiple) + "You feel fine...")
+  examine:function(multiple) {
+    msg(prefix(this, multiple) + "You feel fine...")
   },
   canMove:function(ex) {
     let room1 = w[this.loc]
@@ -29,7 +29,7 @@ createItem("me", PLAYER(), {
     msg("The door to " + lang.getName(room2, {article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + lang.getName(room1, {article:DEFINITE}) + " is not.")
     return false
   },
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     msg("You spray sealant on yourself.")
   },
 })
@@ -49,7 +49,7 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
     }
   },
   sprayCount:2,
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     msg("")
   },
 });
@@ -61,7 +61,7 @@ createItem("your_underwear", WEARABLE(1, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your underwear is standard issue; white and functional.",
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     msg("")
   },
 });
@@ -100,7 +100,7 @@ createItem("pile_of_vomit", {
   scenery:true,
   regex:/vomit|sick/,
   examine:"A large splat of vomit, it stinks. You decide not to look too closely. You already know what you ate last, so what is the point?",
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     msg("")
   },
 });
@@ -111,7 +111,7 @@ createItem("stasis_pod", {
   scenery:true,
   loc:"stasis_bay",
   examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     msg("")
   },
 });
@@ -128,15 +128,15 @@ createItem("stasis_locker", CONTAINER(true), {
   alias:"locker",
   scenery:true,
   loc:"stasis_bay",
-  examine:function(isMultiple) {
+  examine:function(multiple) {
     if (this.closed) {
-      msg(prefix(this, isMultiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
+      msg(prefix(this, multiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
     }
     else {
-      msg(prefix(this, isMultiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(world.LOOK), {lastJoiner:lang.list_and, article:INDEFINITE}) + ".");
+      msg(prefix(this, multiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(world.LOOK), {lastJoiner:lang.list_and, article:INDEFINITE}) + ".");
     }
   },
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     msg("")
   },
 });
@@ -148,7 +148,7 @@ createItem("your_spacesuit", WEARABLE(2, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility. It says \"{nm:player}\" on the back.",
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     msg("")
   },
   testRemoveRestrictions:function(char) {
@@ -163,7 +163,7 @@ createItem("other_spacesuit", WEARABLE(2, ["body"]), {
   loc:"stasis_locker",
   parsePriority:-10,
   examine:"The other spacesuit is identical to your own, except it does not have your name on the back.",
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     msg("")
   },
 });
@@ -174,7 +174,7 @@ createItem("spray_sealant", TAKEABLE(), {
   uses:5,
   examine:"A spray can; the label says \"No-Leak Sealant\" and there is some other writing on it.",
   read:"You read the label on the can: \"No-Leak Sealant is a high performance foam sealant suitable for emergency use in space. It can be used to seal holes up to 30 mm side and 200 mm long, and is designed to maintain integrity for up to 24 hours. Typically one can is sufficient for five holes. WARNING: Highly flammable. Do not ingest. Do not breath fumes.\"",
-  spray:function(isMultiple, char) {
+  spray:function(multiple, char) {
     metamsg("Spray the spray with the spray? Not going to happen.")
     this.uses++
     return world.FAILED
@@ -219,7 +219,7 @@ createItem("stasis_pod_interior",
     loc:"stasis_pod_room",
     closed:false,
     examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
-    close:function(isMultiple, char) {
+    close:function(multiple, char) {
       if (w.Kyle.deployProbeAction < 5) {
         msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'closing the lid of a stasis pod will put you back in stasis. That is not permitted until the satellite is deployed, and not advised until probes have been deployed and data collected.' The lid rises to its fully open position.");
         return false;
@@ -644,7 +644,7 @@ createItem("ship", {
 createItem("probe_prototype", COUNTABLE([]), { 
   alias:"probe",
   regex:/^(\d+ )?(bio-|geo-|bio|geo)?(probe|satellite|satelite)s?$/,
-  launch:function(isMultiple, char) {
+  launch:function(multiple, char) {
     if (!char.probeType) return falsemsg("To launch a probe, see either Aada or Ostap. For a satellite see Kyle.")
     
     let number = this.extractNumber();

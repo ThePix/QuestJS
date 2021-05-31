@@ -235,8 +235,8 @@ commands.unshift(new Cmd('Move', {
     {special:'ignore'},
     {scope:parser.isHere}
   ],
-  default:function(item, isMultiple, char) {
-    return failedmsg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
+  default:function(item, multiple, char) {
+    return failedmsg(prefix(item, multiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
   },
 }));
 

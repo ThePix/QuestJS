@@ -107,8 +107,8 @@ commands.unshift(new Cmd('EgKick', {
     {special:'ignore'},
     {scope:parser.isPresent}
   ],
-  default:function(item, isMultiple, char) {
-    return failedmsg(prefix(this, isMultiple) + lang.pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
+  default:function(item, multiple, char) {
+    return failedmsg(prefix(this, multiple) + lang.pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
   },
 }));
 
@@ -122,8 +122,8 @@ commands.unshift(new Cmd('EgCharge', {
     {special:'ignore'},
     {scope:parser.isHeld}
   ],
-  default:function(item, isMultiple, char) {
-    return failedmsg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can charge.");
+  default:function(item, multiple, char) {
+    return failedmsg(prefix(item, multiple) + lang.pronounVerb(item, "'be", true) + " not something you can charge.");
   },
 }));
 
@@ -136,8 +136,8 @@ commands.unshift(new Cmd('EgMove', {
     {special:'ignore'},
     {scope:parser.isHere}
   ],
-  default:function(item, isMultiple, char) {
-    return failedmsg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
+  default:function(item, multiple, char) {
+    return failedmsg(prefix(item, multiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
   },
 }));
 
@@ -217,7 +217,7 @@ commands.unshift(new Cmd('SliceCarrot', {
   script:function(objects) {
     msg("You slice {nm:ob1:the} with {nm:ob2:the}.", {ob1:objects[1][0], ob2:objects[0][0]})
   },
-  default:function(item, isMultiple, char) {
-    return failedmsg(prefix(this, isMultiple) + "Not going to happen.");
+  default:function(item, multiple, char) {
+    return failedmsg(prefix(this, multiple) + "Not going to happen.");
   },
 }));

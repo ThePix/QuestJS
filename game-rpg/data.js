@@ -14,8 +14,8 @@ createItem("me", RPG_PLAYER(), {
   armour:3,
   spellCasting:5,
   offensiveBonus:3,
-  examine:function(isMultiple) {
-    msg(prefix(this, isMultiple) + "A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
+  examine:function(multiple) {
+    msg(prefix(this, multiple) + "A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
   },
 });
 

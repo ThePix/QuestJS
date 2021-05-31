@@ -11,8 +11,8 @@ commands.push(new Cmd('Kick', {
     {special:'ignore'},
     {scope:parser.isPresent}
   ],
-  default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + lang.pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
+  default:function(item, multiple, char) {
+    msg(prefix(item, multiple) + lang.pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
     return false;
   },
 }));
@@ -25,8 +25,8 @@ commands.push(new Cmd('Move', {
     {special:'ignore'},
     {scope:parser.isHere}
   ],
-  default:function(item, isMultiple, char) {
-    msg(prefix(item, isMultiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
+  default:function(item, multiple, char) {
+    msg(prefix(item, multiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
     return false;
   },
 }));
@@ -97,12 +97,12 @@ commands.push(new Cmd('Revive', {
 commands.push(new Cmd('Spray', {
   regex:/^(?:spray) (.+)$/,
   rules:[
-    function(cmd, char, item, isMultiple) {
+    function(cmd, char, item, multiple) {
       if (w.spray_sealant.loc !== char.name) {
-        return falsemsg(prefix(item, isMultiple) + "{nv:char:do:true} not have the sealant spray.", {char:char})
+        return falsemsg(prefix(item, multiple) + "{nv:char:do:true} not have the sealant spray.", {char:char})
       }
       if (w.spray.uses <= 0) {
-        return falsemsg(prefix(item, isMultiple) + "{nv:char:aim:true} the spray can at {nm:item}, but it is empty.", {char:char, item:item})
+        return falsemsg(prefix(item, multiple) + "{nv:char:aim:true} the spray can at {nm:item}, but it is empty.", {char:char, item:item})
       }
       w.spray.uses--
       return true

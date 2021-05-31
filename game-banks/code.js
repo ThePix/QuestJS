@@ -66,7 +66,7 @@ const CREW = function(isFemale) {
     if (typeof this.status !== 'number') return 0
     return this.baseOxygeUse * this.oxygenUseModifier
   }
-  res.revive = function(isMultiple, char) {
+  res.revive = function(multiple, char) {
     const tpParams = {actor:this, char:char}
     if (char === game.player) {
       msg("You wonder how to revive {nm:actor} - probably best to leave that to Xsansi.", tpParams);
@@ -86,7 +86,7 @@ const CREW = function(isFemale) {
     
   }
   // Description
-  res.examine = function(isMultiple) {
+  res.examine = function(multiple) {
     const tpParams = {actor:this}
     let s;
     switch (this.clothing) {
@@ -100,7 +100,7 @@ const CREW = function(isFemale) {
     else if (this.posture) {
       s += " {pv:actor:be:true} " + this.posture + ".";
     }
-    msg(prefix(this, isMultiple) + this.desc + s, tpParams);
+    msg(prefix(this, multiple) + this.desc + s, tpParams);
   }
   res.stasis = function() {
     const tpParams = {actor:this}

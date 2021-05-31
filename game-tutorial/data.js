@@ -125,8 +125,8 @@ createItem("crates", {
       return false
     }
   },
-  take:function(isMultiple, char) {
-    msg(prefix(this, isMultiple) + 'The crates are too heavy to pick... But you might be able to move them.')
+  take:function(multiple, char) {
+    msg(prefix(this, multiple) + 'The crates are too heavy to pick... But you might be able to move them.')
     return false
   },    
 })
@@ -139,8 +139,8 @@ createItem("cobwebs", {
       this.flag = true
     }
   },
-  take:function(isMultiple, char) {
-    msg(prefix(this, isMultiple) + 'The cobwebs just disintegrate when you try to take them.')
+  take:function(multiple, char) {
+    msg(prefix(this, multiple) + 'The cobwebs just disintegrate when you try to take them.')
     return false
   },    
   scenery:true,
@@ -280,7 +280,7 @@ createItem("crowbar", TAKEABLE(), {
   afterMove:function(toLoc) {
     if (toLoc === 'me') hint.now("hatInBox")
   },
-  use:function(isMultiple, char) {
+  use:function(multiple, char) {
     if (char.loc === 'laboratory' && w.lab_door.locked) {
       msg("The crowbar is not going to help open that door.")
       tmsg("Nice try, but you have to get the robot to open this door, not the crowbar.")
@@ -400,19 +400,19 @@ createRoom("laboratory", {
 createItem("lab_door", OPENABLE(false), {
   examine:"A very solid, steel door.",
   loc:'laboratory',
-  open:function(isMultiple, char) {
+  open:function(multiple, char) {
     if (!this.closed) {
-      msg(prefix(this, isMultiple) + lang.already, {item:this})
+      msg(prefix(this, multiple) + lang.already, {item:this})
       return false;
     }
     if (char.strong) {
       this.closed = false;
-      this.openMsg(isMultiple, {char:char, container:this})
+      this.openMsg(multiple, {char:char, container:this})
       hint.now("northToReactor")
       return true
     }
     else {
-      msg(prefix(this, isMultiple) + 'The door is too heavy to open.')
+      msg(prefix(this, multiple) + 'The door is too heavy to open.')
       return false
     }
   },
@@ -515,10 +515,10 @@ createItem("vomit", {
 
 createItem("control_rod", TAKEABLE(), {
   examine:"The control rod is about two foot long, and a dull black colour.",
-  take:function(isMultiple, char) {
+  take:function(multiple, char) {
     const tpParams = {char:char, item:this}
     if (this.isAtLoc(char.name)) {
-      msg(prefix(this, isMultiple) + lang.already_have, tpParams);
+      msg(prefix(this, multiple) + lang.already_have, tpParams);
       return false;
     }
     if (!char.canManipulate(this, "take")) return false;
@@ -529,7 +529,7 @@ createItem("control_rod", TAKEABLE(), {
       return false 
     }
     let flag = (this.loc === "reactor")
-    msg(prefix(this, isMultiple) + lang.take_successful, tpParams)
+    msg(prefix(this, multiple) + lang.take_successful, tpParams)
     this.moveToFrom(char.name)
     if (flag) {
       msg("The blue light in the reactor winks out and the buzz dies.")

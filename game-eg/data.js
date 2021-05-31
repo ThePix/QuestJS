@@ -42,12 +42,12 @@ function showSidePaneOptions(item, options, fn) {
 createItem("knife",
   TAKEABLE(),
   { loc:"Buddy", sharp:false,
-    examine:function(isMultiple) {
+    examine:function(multiple) {
       if (this.sharp) {
-        msg(prefix(this, isMultiple) + "A really sharp knife.");
+        msg(prefix(this, multiple) + "A really sharp knife.");
       }
       else {
-        msg(prefix(this, isMultiple) + "A blunt knife.");
+        msg(prefix(this, multiple) + "A blunt knife.");
       }
     },
     chargeResponse:function(participant) {
@@ -125,8 +125,8 @@ createRoom("hole", {
 createItem("book", TAKEABLE(), READABLE(true), { 
   loc:"lounge",
   examine:"A leather-bound book.",
-  read:function(isMultiple, char) {
-    if (cmdRules.isHeld(null, char, this, isMultiple)) {
+  read:function(multiple, char) {
+    if (cmdRules.isHeld(null, char, this, multiple)) {
       if (char === w.Lara) {
         msg ("'Okay.' Lara spends a few minutes reading the book.");
         msg ("'I meant, read it to me.'");
@@ -135,7 +135,7 @@ createItem("book", TAKEABLE(), READABLE(true), {
         msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
       }
       else {
-        msg (prefix(this, isMultiple) + "It is not in a language " + lang.pronounVerb(char, "understand") + ".");
+        msg (prefix(this, multiple) + "It is not in a language " + lang.pronounVerb(char, "understand") + ".");
       }
       parser.abort()
       return true;
@@ -165,19 +165,19 @@ createItem("boots", WEARABLE(), {
 
 
 createItem("waterskin", TAKEABLE(), { 
-  examine:function(isMultiple) { 
-    msg(prefix(this, isMultiple) + "The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full.")
+  examine:function(multiple) { 
+    msg(prefix(this, multiple) + "The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full.")
   },
   capacity:10,
   full:3,
   loc:"lounge",
-  fill:function(isMultiple) {
+  fill:function(multiple) {
     if (game.player.loc != "garage") {
-      msg(prefix(this, isMultiple) + "There is nothing to charge the torch with here.")
+      msg(prefix(this, multiple) + "There is nothing to charge the torch with here.")
       return false
     }
     else {
-      msg(prefix(this, isMultiple) + "You charge the torch - it should last for hours now.")
+      msg(prefix(this, multiple) + "You charge the torch - it should last for hours now.")
       this.power = 20
       return true
     }
@@ -242,8 +242,8 @@ createItem("ornate_doll", TAKEABLE(), {
 createItem("coin", TAKEABLE(), {
   loc:"lounge",
   examine: "A gold coin.",
-  take:function(isMultiple, participant) {
-    msg(prefix(this, isMultiple) + lang.pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
+  take:function(multiple, participant) {
+    msg(prefix(this, multiple) + lang.pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
     return false;
   },
 })
@@ -526,7 +526,7 @@ createItem("charger_compartment", COMPONENT("charger"), CONTAINER(true), {
 createItem("charger_button", COMPONENT("charger"), BUTTON(), {
   examine:"A big red button.",
   alias:"button",
-  push:function(isMultiple, char) {
+  push:function(multiple, char) {
     const contents = w.charger_compartment.getContents(world.ALL)[0]
     if (!w.charger_compartment.closed || !contents) {
       msg(lang.pronounVerb(char, "push", true) + " the button, but nothing happens.");
@@ -677,12 +677,12 @@ createItem("Arthur",
   NPC(false),
   { 
     loc:"garden",
-    examine:function(isMultiple) {
+    examine:function(multiple) {
       if (this.suspended) {
-        msg(prefix(item, isMultiple) + "Arthur is asleep.");
+        msg(prefix(item, multiple) + "Arthur is asleep.");
       }
       else {
-        msg(prefix(item, isMultiple) + "Arthur is awake.");
+        msg(prefix(item, multiple) + "Arthur is awake.");
       }
     },
     suspended:true,
