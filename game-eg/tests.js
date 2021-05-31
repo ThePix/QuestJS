@@ -1115,12 +1115,12 @@ test.tests = function() {
   test.assertCmd("push 1", ["You press the button; the door closes and the lift heads to the first floor. The door opens again."]);
   test.assertCmd("e", ["You head east.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
-  w.lift.onTransitMove = function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); };
+  w.lift.afterTransitMove = function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); };
   test.assertCmd("push 1", ["You press the button; nothing happens."]);
   test.assertCmd("push 2", ["That does nothing, the button does not work."]);
   test.assertCmd("push g", ["The old man presses the button....", "MOVING to dining_room from bedroom"]);
-  test.assertCmd("e", ["You head east.", "The dining room", "An old-fashioned room.", /^You can see/, "You can go east, up or west."]);  
-  w.lift.transitCheck = function() {
+  test.assertCmd("e", ["You head east.", "The dining room", "An old-fashioned room.", /^You can see/, "You can go east, up or west."])
+  w.lift.testTransitRestrictions = function() {
     msg("The lift is out of order");
     return false;
   };

@@ -389,10 +389,10 @@ createRoom("laboratory", {
         msg("The robot opens the heavy door with ease.")
         w.lab_door.closed = false
       }
-      w.robot.moveChar("reactor_room", "north")
+      w.robot.moveChar("reactor_room", this)
       return true
     }
-    w.me.moveChar("reactor_room", "north")
+    w.me.moveChar("reactor_room", this)
     return true
   }}),
 })
@@ -557,7 +557,7 @@ createRoom("office", {
   west:new Exit("lift", { use:function() {
     if (w.office.lift_exit_locked) return falsemsg("The lift door is closed. You suspect Professor Kleinscope is in he lift and on his way up right now.")
     msg("You walk back into the lift.")
-    w.me.moveChar(this.name, this.dir)
+    w.me.moveChar(this.name, this)
   }}),
   out:new Exit("garden", {
     use:function() {
@@ -769,7 +769,7 @@ createRoom("lift", TRANSIT("east"), {
   afterFirstEnter:function() {
     hint.now("press3")
   },
-  transitCheck:function() {
+  testTransitRestrictions:function() {
     if (!w.reactor_room.reactorRunning) {
       msg("The lift does not seem to be working.")
       hint.now("askRLift")
@@ -785,7 +785,7 @@ createRoom("lift", TRANSIT("east"), {
     }
     return true;
   },
-  onTransitMove:function(transitDest, exitName) {
+  afterTransitMove:function(transitDest, exitName) {
     if (transitDest === 'office') hint.now("eastOffice")
   }
 })
