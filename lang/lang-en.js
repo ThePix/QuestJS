@@ -7,7 +7,7 @@
 
 const lang = {
 
-    regex:{
+  regex:{
     //----------------------------------------------------------------------------------------------
     // Regular Expressions for Commands
     
@@ -32,7 +32,7 @@ const lang = {
     MetaTranscriptShow:/^transcript show$|^script show$/,
     MetaTranscriptShowWithOptions:/^(?:transcript|script) show (\w+)$/,
     MetaTranscriptToWalkthrough:/^(?:transcript|script) (?:w|wt|walk|walkthrough)$/,
-    MetaPlayerComment:/^\*(.+)$/,
+    MetaUserComment:/^\*(.+)$/,
     MetaSave:/^save$/,
     MetaSaveGame:/^(?:save) (.+)$/,
     MetaSaveOverwriteGame:/^(?:save) (.+) (?:overwrite|ow)$/,

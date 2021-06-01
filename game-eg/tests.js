@@ -567,6 +567,7 @@ test.tests = function() {
   test.assertCmd("drop knife, and then get it", ["You drop the knife.", "You take the knife."]);
   test.assertCmd("get book.read it.drop book", ["You take the book.", "It is not in a language you understand.", "Abandoning later commands: drop book"]);
   test.assertCmd("drop book.read it.drop book", ["You drop the book.", "You don't have it.", "You don't have it."]);
+  test.assertCmd("*drop book.read it.drop book", ["Comment: drop book.read it.drop book"]);
   
   
 
