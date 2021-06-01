@@ -365,8 +365,11 @@ test.tests = function() {
   w.Kyle.colours = ['red', 'green', 'blue']
   w.Kyle.colour = 1
   test.assertEqual("Kyle is green.", processText("Kyle is {select:Kyle:colours:colour}."));
+  test.assertEqual("Kyle is blue.", processText("Kyle is {select:Kyle:colour:green:blue:red}."));
+  test.assertEqual("Kyle is blue.", processText("Kyle is {select:Kyle.colour:green:blue:red}."));
   w.Kyle.colour = 0
   test.assertEqual("Kyle is red.", processText("Kyle is {select:Kyle:colours:colour}."));
+  test.assertEqual("Kyle is green.", processText("Kyle is {select:Kyle:colour:green:blue:red}."));
 
 
   test.title("Text processor 8: dialogue");
