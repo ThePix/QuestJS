@@ -117,6 +117,8 @@ const lang = {
 
     EmptyInto:/^(?:empty|pour out|pour|discharge|decant) (.+) (?:into|in to|in|down) (.+)$/,
     NpcEmptyInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down) (.+)$/, /^tell (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down) (.+)$/],
+    EmptyFluidInto:/^(?:empty|pour out|pour|discharge|decant) (.+) (?:into|in to|in|down) (.+)$/,
+    NpcEmptyFluidInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down) (.+)$/, /^tell (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down) (.+)$/],
 
     PutIn:/^(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/,
     NpcPutIn:[/^(.+), ?(?:put|place|drop|insert) (.+) (?:in to|into|in|on to|onto|on) (.+)$/, /^tell (.+) to (?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/],
@@ -271,7 +273,9 @@ const lang = {
   no_fluid_here:"There's no {param:fluid} here.",
   not_a_fluid_here:"I don't know of a fluid called {show:text}.",
   already_full:"{pv:item:be:true} already full.",
+  already_empty:"{nv:item:be:true} already empty.",
   no_generic_fluid_here:"There's nothing to fill {sb:item} with here.",
+  not_carrying_fluid:"{nv:char:be:true} not carrying anything with {show:fluid} in it.",
 
 
   // NPC
