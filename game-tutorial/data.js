@@ -211,10 +211,10 @@ createRoom("garden", {
 createItem("hat", WEARABLE(), {
   examine:"It is straw boater, somewhat the worse for wear.",
   loc:"garden",
-  afterMove:function(toLoc) {
-    if (!this.flag1 && toLoc === 'me') hint.now('wearHat')
+  afterMove:function(char, options) {
+    if (!this.flag1 && options.toLoc === 'me') hint.now('wearHat')
   },
-  onWear:function() {
+  afterWear:function() {
     if (!this.flag2) hint.now('xGrass')
   },
 })
@@ -277,8 +277,8 @@ createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
 createItem("crowbar", TAKEABLE(), {
   examine:"A cheap plastic crowbar; it is red, white, blue and yellow.",
   loc:"box",
-  afterMove:function(toLoc) {
-    if (toLoc === 'me') hint.now("hatInBox")
+  afterMove:function(char, options) {
+    if (options.toLoc === 'me') hint.now("hatInBox")
   },
   use:function(multiple, char) {
     if (char.loc === 'laboratory' && w.lab_door.locked) {
@@ -333,8 +333,8 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
-  afterMove:function(toLoc) {
-    if (!this.flag1 && toLoc === 'me') {
+  afterMove:function(char, options) {
+    if (!this.flag1 && options.toLoc === 'me') {
       hint.now("torchOn")
       w.cobwebs.loc = 'basement'
     }
@@ -494,12 +494,12 @@ createRoom("reactor", CONTAINER(false), {
     return "The reactor is composed of a series of rings, hoops and cylinders arranged on a vertical axis. Some are shiny metal, other dull black, but you have no idea of the significant of any of them.{if:reactor_room:reactorRunning: An intense blue light spills out from various points up it length.}"
   },
   loc:'reactor_room',
-  testDropInRestrictions:function(object, char) {
-    if (object === w.control_rod) return true
+  testDropIn:function(char, options) {
+    if (options.item === w.control_rod) return true
     msg("That cannot go in there!")
     return false
   },
-  afterItemDroppedHere:function(item) {
+  afterItemDroppedHere:function(char, options) {
     if (w.control_rod.loc === this.name) {
       msg("The reactor starts to glow with a blue light, and you can hear it is now buzzing.")
       w.reactor_room.reactorRunning = true
@@ -530,7 +530,7 @@ createItem("control_rod", TAKEABLE(), {
     }
     let flag = (this.loc === "reactor")
     msg(prefix(this, multiple) + lang.take_successful, tpParams)
-    this.moveToFrom(char.name)
+    this.moveToFrom(char, char.name)
     if (flag) {
       msg("The blue light in the reactor winks out and the buzz dies.")
       w.reactor_room.reactorRunning = false
@@ -769,7 +769,7 @@ createRoom("lift", TRANSIT("east"), {
   afterFirstEnter:function() {
     hint.now("press3")
   },
-  testTransitRestrictions:function() {
+  testTransit:function() {
     if (!w.reactor_room.reactorRunning) {
       msg("The lift does not seem to be working.")
       hint.now("askRLift")

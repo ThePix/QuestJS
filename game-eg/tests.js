@@ -1120,7 +1120,7 @@ test.tests = function() {
   test.assertCmd("push 2", ["That does nothing, the button does not work."]);
   test.assertCmd("push g", ["The old man presses the button....", "MOVING to dining_room from bedroom"]);
   test.assertCmd("e", ["You head east.", "The dining room", "An old-fashioned room.", /^You can see/, "You can go east, up or west."])
-  w.lift.testTransitRestrictions = function() {
+  w.lift.testTransit = function() {
     msg("The lift is out of order");
     return false;
   };
@@ -1170,8 +1170,10 @@ test.tests = function() {
   
   test.title("rope - room one");
   test.assertEqual(['conservatory'], w.rope.locs)
+  test.assertEqual(false, w.rope.isUltimatelyHeldBy(w.Buddy))
   test.assertCmd("get rope", ['You take the rope.'])
   test.assertEqual(['Buddy'], w.rope.locs)
+  test.assertEqual(true, w.rope.isUltimatelyHeldBy(w.Buddy))
   test.assertCmd("x rope", ['The rope is about 40\' long.'])
   test.assertCmd("tie rope to chair", ["You attach the rope to the broken chair."])
   test.assertEqual(['conservatory', 'Buddy'], w.rope.locs)
@@ -1183,17 +1185,14 @@ test.tests = function() {
   test.assertEqual(['Buddy'], w.rope.locs)
   test.assertCmd("tie rope to chair", ["You attach the rope to the broken chair."])
   test.assertEqual(['conservatory', 'Buddy'], w.rope.locs)
+  test.assertEqual(true, w.rope.isUltimatelyHeldBy(w.Buddy))
+  test.assertEqual(true, w.rope.isUltimatelyHeldBy(w.conservatory))
+  test.assertEqual(false, w.rope.isUltimatelyHeldBy(w.lounge))
 
   test.title("rope - room two");
   test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
   test.assertEqual(['conservatory', 'garden', 'Buddy'], w.rope.locs)
-  
-  
-  
   test.assertCmd("tie rope to crate", ["That is not something you can attach the rope to."])
-
-
-
   test.assertCmd("untie rope from crate", ["The rope is not attached to the crate."])
   test.assertCmd("tie rope to hook", ["You attach the rope to the hook."])
   test.assertEqual(['conservatory', 'garden'], w.rope.locs)
@@ -1251,6 +1250,8 @@ test.tests = function() {
   test.assertEqual(true, parser.isForSale(w.trophy))
   test.assertEqual(undefined, parser.isForSale(w.flashlight))
   test.assertCmd("buy carrot", ["You buy the carrot for $0,02."]);
+  
+
   
   test.assertEqual(false, parser.isForSale(w.carrot0))
   test.assertEqual(false, w.carrot0.isForSale(game.player.loc))

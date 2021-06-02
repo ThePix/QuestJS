@@ -44,7 +44,7 @@ commands.push(new Cmd('HangUp', {
       return failedmsg ("Hang {sb:obj} where, exactly?", {obj:objects[0][0]})
     }
     else {
-      objects[0][0].moveToFrom('hook')
+      objects[0][0].moveToFrom(player, 'hook')
       msg ("You hang {nm:obj:the} on the hook.", {obj:objects[0][0]})
       return world.SUCCESS
     }
@@ -69,7 +69,7 @@ commands.push(new Cmd('HangUp', {
       return failedmsg ("Hang {sb:obj} where, exactly?", {obj:objects[0][0]})
     }
     else {
-      objects[0][0].moveToFrom('hook')
+      objects[0][0].moveToFrom(player, 'hook')
       msg ("You hang {nm:obj:the} on the hook.", {obj:objects[0][0]})
       return world.SUCCESS
     }

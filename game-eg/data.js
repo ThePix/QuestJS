@@ -511,7 +511,7 @@ createItem("charger", {
 createItem("charger_compartment", COMPONENT("charger"), CONTAINER(true), {
   alias:"compartment",
   examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.",
-  testDropInRestrictions:function(item) {
+  testDropIn:function() {
     const contents = w.charger_compartment.getContents(world.LOOK)
     if (contents.length > 0) {
       msg("The compartment is full.")

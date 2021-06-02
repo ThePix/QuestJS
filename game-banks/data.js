@@ -42,8 +42,8 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
-  afterMove:function(toLoc, fromLoc) {
-    if (fromLoc === "stasis_pod_drawer") {
+  afterMove:function(char, options) {
+    if (options.fromLoc === "stasis_pod_drawer") {
       w.stasis_pod_drawer.loc = false
       msg("The stasis pod drawer slides shut.");
     }
@@ -151,7 +151,7 @@ createItem("your_spacesuit", WEARABLE(2, ["body"]), {
   spray:function(multiple, char) {
     msg("")
   },
-  testRemoveRestrictions:function(char) {
+  testRemove:function(char) {
     if (isRoomPressured(w[char.loc])) return true
     msg("{nv:char:start:true} to unseal {pa:char} spacesuit... There is a hissing sound, and suddenly {nv:char:be} struggling for breath. Quickly, {nv:char:seal:true} it up again. Perhaps taking a spacesuit off in a vacuum is not such a good idea?")
     return false
@@ -205,8 +205,8 @@ createRoom("stasis_pod_room", {
       return true;
     }      
   }),
-  afterItemDroppedHere:function(item) {
-    item.loc = "stasis_bay"
+  afterItemDroppedHere:function(char, options) {
+    options.item.loc = "stasis_bay"
   }
 });
 
