@@ -499,7 +499,7 @@ createRoom("reactor", CONTAINER(false), {
     msg("That cannot go in there!")
     return false
   },
-  afterItemDroppedHere:function(char, options) {
+  afterDropIn:function(char, options) {
     if (w.control_rod.loc === this.name) {
       msg("The reactor starts to glow with a blue light, and you can hear it is now buzzing.")
       w.reactor_room.reactorRunning = true

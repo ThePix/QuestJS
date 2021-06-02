@@ -205,7 +205,7 @@ createRoom("stasis_pod_room", {
       return true;
     }      
   }),
-  afterItemDroppedHere:function(char, options) {
+  afterDropIn:function(char, options) {
     options.item.loc = "stasis_bay"
   }
 });
