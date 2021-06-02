@@ -365,8 +365,11 @@ test.tests = function() {
   w.Kyle.colours = ['red', 'green', 'blue']
   w.Kyle.colour = 1
   test.assertEqual("Kyle is green.", processText("Kyle is {select:Kyle:colours:colour}."));
+  test.assertEqual("Kyle is blue.", processText("Kyle is {select:Kyle:colour:green:blue:red}."));
+  test.assertEqual("Kyle is blue.", processText("Kyle is {select:Kyle.colour:green:blue:red}."));
   w.Kyle.colour = 0
   test.assertEqual("Kyle is red.", processText("Kyle is {select:Kyle:colours:colour}."));
+  test.assertEqual("Kyle is green.", processText("Kyle is {select:Kyle:colour:green:blue:red}."));
 
 
   test.title("Text processor 8: dialogue");
@@ -564,6 +567,7 @@ test.tests = function() {
   test.assertCmd("drop knife, and then get it", ["You drop the knife.", "You take the knife."]);
   test.assertCmd("get book.read it.drop book", ["You take the book.", "It is not in a language you understand.", "Abandoning later commands: drop book"]);
   test.assertCmd("drop book.read it.drop book", ["You drop the book.", "You don't have it.", "You don't have it."]);
+  test.assertCmd("*drop book.read it.drop book", ["Comment: drop book.read it.drop book"]);
   
   
 
