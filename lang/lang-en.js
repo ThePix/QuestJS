@@ -334,7 +334,7 @@ const lang = {
   // Movement
   go_successful:"{nv:char:head:true} {param:dir}.",
   not_that_way:"{nv:char:can't:true} go {param:dir}.",
-  can_go:"You think you can go {exits}.",
+  can_go:"{nv:char:think:true} {pv:char:can} go {exits}.",
 
 
   // General cannot Messages

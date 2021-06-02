@@ -226,7 +226,7 @@ createItem("cardboard_box", TAKEABLE(), CONTAINER(true), {
 createItem("ham_and_cheese_sandwich", EDIBLE(false), {
   pattern:'egg|mayo',
   loc:"lounge",
-  onIngesting:function() { msg("That was great!"); },
+  afterIngest:function() { msg("That was great!"); },
 })
 
 
@@ -275,7 +275,7 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
       this.doSwitchoff()
     }
   },
-  checkCanSwitchOn () {
+  testSwitchOn () {
     if (this.power < 0) {
       msg("The torch is dead.")
       return false
@@ -307,7 +307,7 @@ createRoom("dining_room", {
 
 createItem("chair", FURNITURE({sit:true}), {
   loc:"dining_room", examine:"A wooden chair.",
-  onSit:function(char) {
+  afterPostureOn:function(char) {
     msg("The chair makes a strange noise when " + lang.nounVerb(char, "sit") + " on it.")
   },
 })
@@ -456,7 +456,7 @@ createItem("light_switch", SWITCHABLE(false), {
   loc:"basement", 
   examine:"A switch, presumably for the light.", 
   alias:"light switch",
-  checkCanSwitchOn:function() {
+  testSwitchOn:function() {
     if (!w.crates.moved) {
       msg("You cannot reach the light switch, without first moving the crates.");
       return false;

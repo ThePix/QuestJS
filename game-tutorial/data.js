@@ -675,20 +675,17 @@ createItem("chair", FURNITURE({sit:true, stand:true}), {
   examine:"This is an elegant, white office chair in good condition.",
   loc:'office',
   scenery:true,
-  onSit:function(char) {
-    if (w.Professor_Kleinscope.loc === 'office') {
+  afterPostureOn:function(char, options) {
+    if (w.Professor_Kleinscope.loc === 'office' && options.posture === 'sit' {
       msg("'Making yourself at home, I see...' notes Professor Kleinscope.")
     }
   },
-  onStand:function(char) {
-    if (w.Professor_Kleinscope.loc === 'office') {
+  testPostureOn:function(char, options) {
+    if (w.Professor_Kleinscope.flag && options.posture === 'sit') return true
+    if (options.posture === 'sit') return falsemsg("You think about " + options.posture + " on the chair, but are unsure how Professor Kleinscope feel about it - given he is already sat on it.")
+    if (w.Professor_Kleinscope.loc === 'office' && options.posture === 'stand') {
       msg("'I'd rather you kept your feet {i:off} the furniture,' says Professor Kleinscope crossly.")
-    }
-  },
-  testForPosture:function(char, posture) {
-    if (w.Professor_Kleinscope.flag) return true
-    msg("You think about " + posture + " on the chair, but are unsure how Professor Kleinscope feel about it - given he is already sat on it.")
-    return false
+    }    
   },
 })
 
