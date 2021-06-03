@@ -44,7 +44,7 @@ createRoom("lobby", {
   }}),
   west:new Exit('cloakroom'),
   south:new Exit('bar'),
-  onSmell:'It smells of damp and neglect in here.',
+  smell:'It smells of damp and neglect in here.',
 })
 
 
@@ -112,12 +112,12 @@ createRoom("bar", {
   beforeEnter:function() {
     w.message.visible = !cloakHere()
   },
-  onExit:function() {
+  afterExit:function() {
     w.message.count = 0
   },
   north:new Exit('lobby'),
-  onSmell:'There is a musty smell, but behind that, something else, something that reminds you of the zoo, perhaps?',
-  onListen:'Is there something moving?',
+  smell:'There is a musty smell, but behind that, something else, something that reminds you of the zoo, perhaps?',
+  listen:'Is there something moving?',
 })
 
 

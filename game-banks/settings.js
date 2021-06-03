@@ -102,7 +102,7 @@ settings.updateCustomUI = function() {
   updateMap()
 }
 
-settings.onDarkToggle = function() {
+settings.afterDarkToggle = function() {
   updateMap()
 }
 

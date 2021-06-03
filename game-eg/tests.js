@@ -251,7 +251,10 @@ test.tests = function() {
   test.assertEqual(true, w.ring.isUltimatelyHeldBy(w.jewellery_box))
   test.assertEqual(true, w.ring.isUltimatelyHeldBy(w.glass_cabinet))
   test.assertEqual(false, w.ring.isUltimatelyHeldBy(game.player))
-
+  test.assertEqual(false, w.brick.isUltimatelyHeldBy(game.player))
+  w.brick.countableLocs.Buddy = 3
+  test.assertEqual(true, w.brick.isUltimatelyHeldBy(game.player))
+  delete w.brick.countableLocs.Buddy
 
 
   test.title("exit.reverse")
@@ -314,6 +317,11 @@ test.tests = function() {
   test.assertEqual("Simple text: no", processText("Simple text: {ifNot:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: seen first time only", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
 
+  const testObject = {someOddAtt:true, someOtherAttribute:5}
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:obj:someOddAtt:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {if:obj:someUnknownAtt:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:obj:someOtherAttribute:5:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {if:obj:someOtherAttribute:3:yes:no}", {obj:testObject}))
 
 
 
@@ -608,7 +616,7 @@ test.tests = function() {
   w.ham_and_cheese_sandwich.loc = game.player.name
   w.ham_and_cheese_sandwich.isLiquid = true
   test.assertEqual(["Examine", "Drop", "Drink"], w.ham_and_cheese_sandwich.getVerbs())
-  test.assertCmd("drink sandwich", ["You drink the ham and cheese sandwich.", "That was great!"]);
+  test.assertCmd("drink sandwich", ["You eat the ham and cheese sandwich.", "That was great!"]);
 
 
   
@@ -1180,6 +1188,7 @@ test.tests = function() {
   test.assertEqual(true, w.rope.isUltimatelyHeldBy(w.Buddy))
   test.assertCmd("x rope", ['The rope is about 40\' long.'])
   test.assertCmd("tie rope to chair", ["You attach the rope to the broken chair."])
+  
   test.assertEqual(['conservatory', 'Buddy'], w.rope.locs)
   test.assertCmd("x rope", ["The rope is about 40' long. One end is tied to the broken chair. The other end is held by you."])
   
@@ -1194,14 +1203,14 @@ test.tests = function() {
   test.assertEqual(false, w.rope.isUltimatelyHeldBy(w.lounge))
 
   test.title("rope - room two");
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west.", "The rope unwinds behind you."]);
   test.assertEqual(['conservatory', 'garden', 'Buddy'], w.rope.locs)
   test.assertCmd("tie rope to crate", ["That is not something you can attach the rope to."])
   test.assertCmd("untie rope from crate", ["The rope is not attached to the crate."])
   test.assertCmd("tie rope to hook", ["You attach the rope to the hook."])
   test.assertEqual(['conservatory', 'garden'], w.rope.locs)
   test.assertCmd("x rope", ["The rope is about 40' long. One end heads into the conservatory. The other end is tied to the hook."], true)
-  test.assertCmd("get rope", ['It is tied up at both ends.'])
+  test.assertCmd("get rope", ['It is tied up at this end.'])
 
 
 
@@ -1213,15 +1222,15 @@ test.tests = function() {
   test.assertCmd("untie rope from chair", ["You detach the rope from the broken chair."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
   test.assertEqual(['Buddy', 'conservatory', 'garden'], w.rope.locs)
-  test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."])
+  test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west.", "The rope unwinds behind you."])
   test.assertCmd("e", ["The rope is not long enough, you cannot go any further."])
   test.assertCmd("i", ["You are carrying a flashlight, a garage key, a rope and a suit (worn)."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the conservatory."])
   test.assertEqual(['Buddy', 'lounge', 'conservatory', 'garden'], w.rope.locs)
-  test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
+  test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west.", "You wind in the rope."]);
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
   test.assertEqual(['Buddy', 'conservatory', 'garden'], w.rope.locs)
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate, Lara and a rope here.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate, Lara and a rope here.", "You can go east or west.", "You wind in the rope."]);
   test.assertEqual(['Buddy', 'garden'], w.rope.locs)
   test.assertCmd("untie rope", ["You detach the rope from the hook."])
   test.assertEqual(['Buddy'], w.rope.locs)

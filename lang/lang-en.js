@@ -179,7 +179,6 @@ const lang = {
   // TAKEABLE
   take_successful:"{nv:char:take:true} {nm:item:the}.",
   take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
-  //take_successful_counted_plural:"{nv:char:take:true} {number:count} {nm:item}.",
   drop_successful:"{nv:char:drop:true} {nm:item:the}.",
   drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
   cannot_take:"{pv:char:can't:true} take {ob:item}.",
@@ -198,15 +197,14 @@ const lang = {
 
 
   // WEARABLE
-  wear_successful:"{nv:char:put:true} on {nm:garment:the}.",
-  remove_successful:"{nv:char:take:true} {nm:garment:the} off.",
+  wear_successful:"{nv:char:put:true} on {nm:item:the}.",
+  remove_successful:"{nv:char:take:true} {nm:item:the} off.",
   cannot_wear:"{nv:char:can't:true} wear {ob:item}.",
   cannot_wear_ensemble:"Individual parts of an ensemble must be worn and removed separately.",
-  //wearing:"{nv:char:'be:true} wearing {ob:garment}.",  // I do not think this is used at all
   not_wearing:"{nv:char:'be:true} not wearing {ob:item}.",
-  cannot_wear_over:"{nv:char:can't:true} put {nm:garment:the} on over {pa:char} {nm:outer}.",
-  cannot_remove_under:"{nv:char:can't:true} take off {pa:char} {nm:garment} whilst wearing {pa:char} {nm:outer}.",
-  already_wearing:"{nv:char:'be:true} already wearing {ob:garment}.",
+  cannot_wear_over:"{nv:char:can't:true} put {nm:item:the} on over {pa:char} {nm:outer}.",
+  cannot_remove_under:"{nv:char:can't:true} take off {pa:char} {nm:item} whilst wearing {pa:char} {nm:outer}.",
+  already_wearing:"{nv:char:'be:true} already wearing {ob:item}.",
   invWearingPrefix:"wearing",
   invHoldingPrefix:"holding",
 
@@ -254,8 +252,8 @@ const lang = {
 
 
   // SWITCHABLE
-  turn_on_successful:"{nv:char:switch:true} {nm:item:the} on.",
-  turn_off_successful:"{nv:char:switch:true} {nm:item:the} off.",
+  switch_on_successful:"{nv:char:switch:true} {nm:item:the} on.",
+  switch_off_successful:"{nv:char:switch:true} {nm:item:the} off.",
   cannot_switch_on:"{nv:char:can't:true} turn {ob:item} on.",
   cannot_switch_off:"{nv:char:can't:true} turn {ob:item} off.",
 
@@ -299,7 +297,7 @@ const lang = {
 
 
   // BUTTON
-  push_button_successful:"{nv:char:push:true} {nm:item:the}.",
+  press_button_successful:"{nv:char:push:true} {nm:item:the}.",
 
   // SHIFTABLE
   push_exit_successful:"{nv:char:push:true} {nm:item:the} {param:dir}.",
@@ -309,26 +307,32 @@ const lang = {
 
 
   // ROPE
-  rope_examine_attached_both_ends:" It is {rope.attachedVerb} to both {nm:obj1:the} and {nm:obj2:the}.",
-  rope_examine_attached_one_end:" It is {rope.attachedVerb} to {nm:obj1:the}.",
+  rope_examine_attached_both_ends:" It is {item.attachedVerb} to both {nm:obj1:the} and {nm:obj2:the}.",
+  rope_examine_attached_one_end:" It is {item.attachedVerb} to {nm:obj1:the}.",
   rope_attach_verb:'tie',
   rope_attached_verb:'tied',
   rope_detach_verb:'untie',
   rope_one_end:'One end',
   rope_other_end:'The other end',
-  rope_examine_end_attached:'is {rope.attachedVerb} to {nm:obj:the}.',
+  rope_examine_end_attached:'is {item.attachedVerb} to {nm:obj:the}.',
   rope_examine_end_held:'is held by {nm:holder:the}.',
   rope_examine_end_headed:'heads into {nm:loc:the}.',
-  rope_not_attachable_to:"That is not something you can attach {nm:rope:the} to.",
+  rope_not_attachable_to:"That is not something you can attach {nm:item:the} to.",
   rope_not_detachable:"You cannot attach that to - or detach it from - anything.",
-  rope_tied_both_ends_already:"{pv:rope:be:true} already attached to {nm:obj1:the} and {nm:obj12:the}.",
+  rope_tied_both_ends_already:"{pv:item:be:true} already attached to {nm:obj1:the} and {nm:obj12:the}.",
   rope_not_attachable:"You cannot attach that to anything.",
-  rope_not_attached:"{nv:rope:be:true} not {rope.attachedVerb} to anything.",
-  rope_detach_end_ambig:"Which end of {nm:rope:the} do you want to detach?",
-  rope_not_attached_to:"{nv:rope:be:true} not attached to {nm:obj2:the}.",
-  rope_tethered:"{nv:char:can:true} not detach {nm:rope:the} from {nm:obj2:the}.",
-  rope_attach_success:"{nv:char:attach:true} {nm:rope:the} to {nm:obj2:the}.",
-  rope_detach_success:"{nv:char:detach:true} {nm:rope:the} from {nm:obj2:the}.",    
+  rope_not_attached:"{nv:item:be:true} not {item.attachedVerb} to anything.",
+  rope_detach_end_ambig:"Which end of {nm:item:the} do you want to detach?",
+  rope_not_attached_to:"{nv:item:be:true} not attached to {nm:obj:the}.",
+  rope_tethered:"{nv:char:can:true} not detach {nm:item:the} from {nm:obj:the}.",
+  rope_attach_success:"{nv:char:attach:true} {nm:item:the} to {nm:obj:the}.",
+  rope_detach_success:"{nv:char:detach:true} {nm:item:the} from {nm:obj:the}.",
+  rope_cannot_move:"{nv:item:be:true} not long enough, {nv:char:cannot} go any further.",
+  rope_wind:"{nv:char:wind:true} in {nm:item:the}.",
+  rope_unwind:"{nv:item:unwind:true} behind {nm:char:the}.",
+  rope_tied_both_end:"It is tied up at both ends.",
+  rope_tied_both_end:"It is tied up at this end.",
+  rope_no_end:"{nv:char:cannot:true} see either end of {nm:item:the}.",
 
 
   // Movement

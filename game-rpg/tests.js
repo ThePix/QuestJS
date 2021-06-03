@@ -59,7 +59,7 @@ test.tests = function() {
   // behavior - hostile, following, guarding, etc.
 
   // non-corporeal
-  // death, onDeath, corpseDescription
+  // death, afterDeath, corpseDescription
   
   // pickpocket
 

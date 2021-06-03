@@ -643,9 +643,8 @@ createItem("broken_chair", {
   attachable:true,
 })
 
-createItem("rope", ROPE(), { 
+createItem("rope", ROPE(3), { 
   loc:"conservatory",
-  ropeLength:3,
   examine:"The rope is about 40' long.",
 })
 

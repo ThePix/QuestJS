@@ -280,7 +280,7 @@ skills.add(new Spell("Lightning bolt", {
   modifyOutgoingAttack:function(attack) {
     attack.element = "storm";
   },
-  onPrimaryFailure:function(attack) {
+  afterPrimaryFailure:function(attack) {
     attack.secondaryTargets = []
   },
 }))

@@ -196,7 +196,7 @@ createRoom("garden", {
       }
     },
   }),
-  onSmell:function() {
+  smell:function() {
     msg("You can smell the freshly-cut grass!")
     if (hint.before('xBox')) {
       tmsg("You can also smell specific items, so SMELL GRASS would have also worked.")
@@ -260,9 +260,10 @@ createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
     hint.now('openBox')
     this.locked = false
   },
-  closeMsg:function() {
+  msgClose:"You close the lid.",
+  afterClose:function() {
     if (this.loc && w.hat.loc === 'box' && w.crowbar.loc !== 'box') {
-      msg("You close the lid. 'Thank you for your custom!' says the box. It starts to shake violently then leaps into the air, rapidly disappearing from sight.")
+      msg(" 'Thank you for your custom!' says the box. It starts to shake violently then leaps into the air, rapidly disappearing from sight.")
       hint.now("crowbar")
       this.loc = false
     }
@@ -407,7 +408,7 @@ createItem("lab_door", OPENABLE(false), {
     }
     if (char.strong) {
       this.closed = false;
-      this.openMsg(multiple, {char:char, container:this})
+      msg(prefix(this, multiple) + this.msgOpen, tpParams)
       hint.now("northToReactor")
       return true
     }
