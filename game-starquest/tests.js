@@ -3,7 +3,7 @@
 test.tests = function() {
   test.title("Text processor 1")
   test.assertEqual("Sir! Yes, sir", processText("{Sir}! Yes, {sir}"))
-  game.player.callmemaam = true 
+  player.callmemaam = true 
   test.assertEqual("Ma'am! Yes, ma'am", processText("{Sir}! Yes, {sir}"))
 
   test.title("Text processor 2")

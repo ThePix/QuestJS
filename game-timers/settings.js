@@ -22,11 +22,11 @@ settings.eventFunctions = {
   },
 
   sayOften:function() {
-    if (!game.player.count) game.player.count = 0
-    game.player.count++
-    msg("Often! " + game.player.count)
+    if (!player.count) player.count = 0
+    player.count++
+    msg("Often! " + player.count)
     io.scrollToEnd()
-    if (game.player.count > 3) return true
+    if (player.count > 3) return true
   },
 }
 

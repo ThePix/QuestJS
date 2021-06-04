@@ -141,7 +141,7 @@ createItem('message', {
   },
   read:function() { this.examine() },
   eventPeriod:1,
-  eventIsActive:function() { return game.player.isAtLoc('bar') && !this.finished },
+  eventIsActive:function() { return player.isAtLoc('bar') && !this.finished },
   eventScript:function() { 
     this.count++
     if (this.count > 1) {
@@ -149,7 +149,7 @@ createItem('message', {
         msg ("You think it might be a bad idea to disturb things in the dark.")
       }
       else {
-        if (!game.player.suppress_background_sounds) {
+        if (!player.suppress_background_sounds) {
           msg ("You can hear {random:scratching:something moving in the dark:rasping breathing}.")
         }
       }
@@ -168,7 +168,7 @@ createItem('message', {
 
 createItem('walls', {
   examine:function() {
-    if (cloakHere() && game.player.isAtLoc('bar')) {
+    if (cloakHere() && player.isAtLoc('bar')) {
       msg("It is too dark to see the walls.")
     }
     else {
@@ -183,7 +183,7 @@ createItem('walls', {
 
 createItem('ceiling', {
   examine:function() {
-    if (cloakHere() && game.player.isAtLoc('bar')) {
+    if (cloakHere() && player.isAtLoc('bar')) {
       msg("It is too dark to see the ceiling.")
     }
     else {
@@ -199,7 +199,7 @@ createItem('ceiling', {
 createItem('floor', {
   regex:/^carpet$/,
   examine:function() {
-    if (cloakHere() && game.player.isAtLoc('bar')) {
+    if (cloakHere() && player.isAtLoc('bar')) {
       msg("It is too dark to see the floor.")
     }
     else {
@@ -215,7 +215,7 @@ createItem('floor', {
 createItem('doors', {
   regex:/^carpet$/,
   examine:function() {
-    if (cloakHere() && game.player.isAtLoc('bar')) {
+    if (cloakHere() && player.isAtLoc('bar')) {
       msg("It is too dark to see the door properly.")
     }
     else {

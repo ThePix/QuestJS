@@ -6,7 +6,7 @@
 // if over 1000 it is completed or otherwise can no longer be pursued
 const missions = {
   getMission(name) { return this.data.find(el => el.name === name) },
-  getState(name) { return game.player['mission_' + name] },
+  getState(name) { return player['mission_' + name] },
   isActive(name) { return this.getState(name) !== undefined },
   getStatus(name) { return this.isActive(name) ? this.getMission(name).steps[this.getState(name) - 1].alias : 'n/a' },
   getList:function() {
@@ -35,8 +35,8 @@ const missions = {
 
   start:function(name) {
     const mission = this.getMission(name)
-    game.player['mission_' + name] = 1
-    game.player['missionStart_' + name] = w.ship.dateTime
+    player['mission_' + name] = 1
+    player['missionStart_' + name] = w.ship.dateTime
     if (mission.star) {
       w.PAGE.add(mission.star.alias, 'star')
       for (let el of mission.star.locations) w.PAGE.add(el.alias, 'star')

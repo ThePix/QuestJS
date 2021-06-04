@@ -125,8 +125,8 @@ createItem("crates", {
       return false
     }
   },
-  take:function(multiple, char) {
-    msg(prefix(this, multiple) + 'The crates are too heavy to pick... But you might be able to move them.')
+  take:function(options) {
+    msg('The crates are too heavy to pick... But you might be able to move them.')
     return false
   },    
 })
@@ -139,8 +139,8 @@ createItem("cobwebs", {
       this.flag = true
     }
   },
-  take:function(multiple, char) {
-    msg(prefix(this, multiple) + 'The cobwebs just disintegrate when you try to take them.')
+  take:function(options) {
+    msg('The cobwebs just disintegrate when you try to take them.')
     return false
   },    
   scenery:true,
@@ -211,7 +211,7 @@ createRoom("garden", {
 createItem("hat", WEARABLE(), {
   examine:"It is straw boater, somewhat the worse for wear.",
   loc:"garden",
-  afterMove:function(char, options) {
+  afterMove:function(options) {
     if (!this.flag1 && options.toLoc === 'me') hint.now('wearHat')
   },
   afterWear:function() {
@@ -248,7 +248,7 @@ createItem("grass", {
 
 createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
   examine:function() {
-    const tpParams = {char:game.player, container:this}
+    const tpParams = {char:player, container:this}
     tpParams.list = this.listContents(world.LOOK)
     msg("It is large, wooden box. It does not look very substantial, but it survived the fall nevertheless. There is a label on the {ifNot:box:closed:open }lid.")
     if (!this.closed) msg(lang.look_inside, tpParams)
@@ -278,20 +278,20 @@ createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
 createItem("crowbar", TAKEABLE(), {
   examine:"A cheap plastic crowbar; it is red, white, blue and yellow.",
   loc:"box",
-  afterMove:function(char, options) {
+  afterMove:function(options) {
     if (options.toLoc === 'me') hint.now("hatInBox")
   },
-  use:function(multiple, char) {
-    if (char.loc === 'laboratory' && w.lab_door.locked) {
+  use:function(options) {
+    if (options.char.loc === 'laboratory' && w.lab_door.locked) {
       msg("The crowbar is not going to help open that door.")
       tmsg("Nice try, but you have to get the robot to open this door, not the crowbar.")
       return false
     }
-    if (char.loc === 'office' && w.lab_door.locked) {
+    if (options.char.loc === 'office' && w.lab_door.locked) {
       msg("Use it on what?")
       return false
     }
-    if (char.loc !== 'garden') return falsemsg("There is nothing to use the crowbar on here.")
+    if (options.char.loc !== 'garden') return falsemsg("There is nothing to use the crowbar on here.")
     return w.shed_door.crowbar()
   },
 })
@@ -334,7 +334,7 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
-  afterMove:function(char, options) {
+  afterMove:function(options) {
     if (!this.flag1 && options.toLoc === 'me') {
       hint.now("torchOn")
       w.cobwebs.loc = 'basement'
@@ -401,19 +401,19 @@ createRoom("laboratory", {
 createItem("lab_door", OPENABLE(false), {
   examine:"A very solid, steel door.",
   loc:'laboratory',
-  open:function(multiple, char) {
+  open:function(options) {
     if (!this.closed) {
-      msg(prefix(this, multiple) + lang.already, {item:this})
+      msg(lang.already, {item:this})
       return false;
     }
-    if (char.strong) {
+    if (options.char.strong) {
       this.closed = false;
-      msg(prefix(this, multiple) + this.msgOpen, tpParams)
+      msg(this.msgOpen, tpParams)
       hint.now("northToReactor")
       return true
     }
     else {
-      msg(prefix(this, multiple) + 'The door is too heavy to open.')
+      msg('The door is too heavy to open.')
       return false
     }
   },
@@ -495,12 +495,12 @@ createRoom("reactor", CONTAINER(false), {
     return "The reactor is composed of a series of rings, hoops and cylinders arranged on a vertical axis. Some are shiny metal, other dull black, but you have no idea of the significant of any of them.{if:reactor_room:reactorRunning: An intense blue light spills out from various points up it length.}"
   },
   loc:'reactor_room',
-  testDropIn:function(char, options) {
+  testDropIn:function(options) {
     if (options.item === w.control_rod) return true
     msg("That cannot go in there!")
     return false
   },
-  afterDropIn:function(char, options) {
+  afterDropIn:function(options) {
     if (w.control_rod.loc === this.name) {
       msg("The reactor starts to glow with a blue light, and you can hear it is now buzzing.")
       w.reactor_room.reactorRunning = true
@@ -516,10 +516,10 @@ createItem("vomit", {
 
 createItem("control_rod", TAKEABLE(), {
   examine:"The control rod is about two foot long, and a dull black colour.",
-  take:function(multiple, char) {
+  take:function(char.options) {
     const tpParams = {char:char, item:this}
     if (this.isAtLoc(char.name)) {
-      msg(prefix(this, multiple) + lang.already_have, tpParams);
+      msg(lang.already_have, tpParams);
       return false;
     }
     if (!char.canManipulate(this, "take")) return false;
@@ -530,7 +530,7 @@ createItem("control_rod", TAKEABLE(), {
       return false 
     }
     let flag = (this.loc === "reactor")
-    msg(prefix(this, multiple) + lang.take_successful, tpParams)
+    msg(lang.take_successful, tpParams)
     this.moveToFrom(char, char.name)
     if (flag) {
       msg("The blue light in the reactor winks out and the buzz dies.")
@@ -676,12 +676,12 @@ createItem("chair", FURNITURE({sit:true, stand:true}), {
   examine:"This is an elegant, white office chair in good condition.",
   loc:'office',
   scenery:true,
-  afterPostureOn:function(char, options) {
+  afterPostureOn:function(options) {
     if (w.Professor_Kleinscope.loc === 'office' && options.posture === 'sit' {
       msg("'Making yourself at home, I see...' notes Professor Kleinscope.")
     }
   },
-  testPostureOn:function(char, options) {
+  testPostureOn:function(options) {
     if (w.Professor_Kleinscope.flag && options.posture === 'sit') return true
     if (options.posture === 'sit') return falsemsg("You think about " + options.posture + " on the chair, but are unsure how Professor Kleinscope feel about it - given he is already sat on it.")
     if (w.Professor_Kleinscope.loc === 'office' && options.posture === 'stand') {

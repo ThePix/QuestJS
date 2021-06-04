@@ -107,9 +107,7 @@ commands.unshift(new Cmd('EgKick', {
     {special:'ignore'},
     {scope:parser.isPresent}
   ],
-  default:function(item, multiple, char) {
-    return failedmsg(prefix(this, multiple) + lang.pronounVerb(char, "kick", true) + " " + this.pronouns.objective + ", but nothing happens.");
-  },
+  defmsg:"{pn:char:kick:true} {ob:item}, but nothing happens.",
 }));
 
 
@@ -117,15 +115,12 @@ commands.unshift(new Cmd('EgKick', {
 commands.unshift(new Cmd('EgCharge', {
   npcCmd:true,
   rules:[cmdRules.isHeld],
-  regex:/^(charge) (.+)$/,
+  regex:/^(?:charge|power) (.+)$/,
   objects:[
-    {special:'ignore'},
     {scope:parser.isHeld}
   ],
-  default:function(item, multiple, char) {
-    return failedmsg(prefix(item, multiple) + lang.pronounVerb(item, "'be", true) + " not something you can charge.");
-  },
-}));
+  defmsg:"{pv:item:'be:true} not something you can charge.",
+}))
 
 
 commands.unshift(new Cmd('EgMove', {
@@ -136,14 +131,12 @@ commands.unshift(new Cmd('EgMove', {
     {special:'ignore'},
     {scope:parser.isHere}
   ],
-  default:function(item, multiple, char) {
-    return failedmsg(prefix(item, multiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
-  },
+  defmsg:"{pv:item:'be:true} not something you can move.",
 }));
 
 findCmd('MetaHint').script = function() {
-  if (w[game.player.loc].hint) {
-    metamsg(w[game.player.loc].hint);
+  if (w[player.loc].hint) {
+    metamsg(w[player.loc].hint);
   }
   else {
     return lang.hintScript()
@@ -217,7 +210,5 @@ commands.unshift(new Cmd('SliceCarrot', {
   script:function(objects) {
     msg("You slice {nm:ob1:the} with {nm:ob2:the}.", {ob1:objects[1][0], ob2:objects[0][0]})
   },
-  default:function(item, multiple, char) {
-    return failedmsg(prefix(this, multiple) + "Not going to happen.");
-  },
+  defmsg:"Not going to happen.",
 }));

@@ -5,10 +5,10 @@
 
 
 npc_utilities.talkto = function() {
-  if (!game.player.canTalk(this)) return false
+  if (!player.canTalk(this)) return false
   const topics = this.getTopics(this)
-  game.player.conversingWithNpc = this
-  if (topics.length === 0) return failedmsg(lang.no_topics, {char:game.player, item:this})
+  player.conversingWithNpc = this
+  if (topics.length === 0) return failedmsg(lang.no_topics, {char:player, item:this})
   topics.push(lang.never_mind)
   showSidePaneOptions(this, topics, function(result) {
     $('#sidepane-menu').remove()
@@ -39,7 +39,7 @@ function showSidePaneOptions(title, options, fn) {
 
 findCmd('TalkTo').objects[0].scope = function(item) {
   if (item.name === w.ship.onView) return true
-  return item.isAtLoc(game.player.loc, world.PARSER) && (item.npc || item.player);
+  return item.isAtLoc(player.loc, world.PARSER) && (item.npc || item.player);
 }
 
 
@@ -105,8 +105,8 @@ tp.addDirective("role", function(arr, params) {
   return arr[2] === 'true' ? sentenceCase(s) : s
 })
 
-tp.addDirective("sir", function(arr, params) { return game.player.callmemaam ? "ma'am" : "sir" })
-tp.addDirective("Sir", function(arr, params) { return game.player.callmemaam ? "Ma'am" : "Sir" })
+tp.addDirective("sir", function(arr, params) { return player.callmemaam ? "ma'am" : "sir" })
+tp.addDirective("Sir", function(arr, params) { return player.callmemaam ? "Ma'am" : "Sir" })
 
 tp.addDirective("time", function(arr, params) {
   return "Stardate " + w.ship.getDateTime(arr[0])
@@ -132,10 +132,7 @@ for (let el of newCmds) {
     objects:[
       {scope:el.scopeHeld ? parser.isHeld : parser.isHere},
     ],
-    default:function(item) {
-      msg("{pv:item:'be:true} not something you can do that with.", {item:item});
-      return false;
-    },
+    defmsg:"{pv:item:'be:true} not something you can do that with.",
   }))
 }
 

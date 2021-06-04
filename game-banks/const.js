@@ -77,7 +77,7 @@ const PLANETS = [
     onArrival:function() {
       msg("'Good morning,' says a female voice. {i:Who the hell?} you wonder for a few minutes, before again realising you are in a stasis pod. 'We have arrived at " + this.starName + ",' the voice continues, 'our second destination, after a lengthy journey, with a single incident. On the nineteenth of September, 2338 at 2104, ship time, the ship passed through a meteor shower, resulting in a loss of integrity in: the lounge, the captain's cabin, the top deck corridor.");
       msg("'You may be suffering from disorientation, nausea, headache and muscle fatigue. If symptoms persist, you should seek medical advice.' You sit up, and for a moment you do feel dizzy, but it soon passes.");
-      game.player.status = Math.min(game.player.status, 95);
+      player.status = Math.min(player.status, 95);
       w.Kyle.status = Math.min(w.Kyle.status, 93);
       w.Ostap.status = Math.min(w.Ostap.status, 96);
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 84);
@@ -126,7 +126,7 @@ const PLANETS = [
     bioProbeBonusPerRank:2,
     onArrival:function() {
       msg("'Good morning,' says a female voice. {i:Xsansi,} you think to yourself. 'We have arrived at " + this.starName + ",' the voice continues, 'our third destination, after a long and oh-so-tedious journey. You may be suffering from disorientation, nausea, headache and muscle fatigue, but I expect that is nothing to decades of loniness, right? If symptoms persist, I suggest you man-up.' You sit up, and immediately feel sick. You grip the sides of the pod as the room spins, waiting for it stop. It is a few minutes before you feel well enough to actually think.");
-      game.player.status = Math.min(game.player.status, 85);
+      player.status = Math.min(player.status, 85);
       w.Kyle.status = Math.min(w.Kyle.status, 82);
       w.Ostap.status = Math.min(w.Ostap.status, 89);
       w.Ha_yoon.status = Math.min(w.Ha_yoon.status, 76);

@@ -38,8 +38,8 @@ settings.saveLoadExcludedAtts.push("data")
 
 
 settings.status = [
-  function() { return '<td width="55px" title="You receive a bonus for collecting good data"><b>Bonus:</b></td><td width="20px"></td><td align="right"><b>$' + game.player.bonus + 'k</b></td>' },
-  function() { return settings.statusReport(game.player) },
+  function() { return '<td width="55px" title="You receive a bonus for collecting good data"><b>Bonus:</b></td><td width="20px"></td><td align="right"><b>$' + player.bonus + 'k</b></td>' },
+  function() { return settings.statusReport(player) },
   function() { return settings.statusReport(w.Xsansi) },
   function() { return settings.statusReport(w.Ha_yoon) },
   function() { return settings.statusReport(w.Kyle) },
@@ -154,7 +154,7 @@ settings.startingDialogWidth = 530
 settings.startingDialogHeight = 500
 settings.startingDialogHtml = s
 settings.startingDialogOnClick = function() {
-  let p = game.player;
+  let p = player;
   const jobName = $("#job").val();
   const job = professions.find(function(el) { return el.name === jobName; });
   w.me.job = job.name;

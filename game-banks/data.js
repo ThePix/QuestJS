@@ -16,8 +16,8 @@ createItem("me", PLAYER(), {
   oxygenUse:function() {
     return this.baseOxygeUse * this.oxygenUseModifier
   },
-  examine:function(multiple) {
-    msg(prefix(this, multiple) + "You feel fine...")
+  examine:function() {
+    msg("You feel fine...")
   },
   canMove:function(ex) {
     let room1 = w[this.loc]
@@ -29,7 +29,7 @@ createItem("me", PLAYER(), {
     msg("The door to " + lang.getName(room2, {article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + lang.getName(room1, {article:DEFINITE}) + " is not.")
     return false
   },
-  spray:function(multiple, char) {
+  spray:function(char) {
     msg("You spray sealant on yourself.")
   },
 })
@@ -42,14 +42,14 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
-  afterMove:function(char, options) {
+  afterMove:function(options) {
     if (options.fromLoc === "stasis_pod_drawer") {
       w.stasis_pod_drawer.loc = false
       msg("The stasis pod drawer slides shut.");
     }
   },
   sprayCount:2,
-  spray:function(multiple, char) {
+  spray:function(char) {
     msg("")
   },
 });
@@ -61,7 +61,7 @@ createItem("your_underwear", WEARABLE(1, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your underwear is standard issue; white and functional.",
-  spray:function(multiple, char) {
+  spray:function(char) {
     msg("")
   },
 });
@@ -100,7 +100,7 @@ createItem("pile_of_vomit", {
   scenery:true,
   regex:/vomit|sick/,
   examine:"A large splat of vomit, it stinks. You decide not to look too closely. You already know what you ate last, so what is the point?",
-  spray:function(multiple, char) {
+  spray:function(char) {
     msg("")
   },
 });
@@ -111,7 +111,7 @@ createItem("stasis_pod", {
   scenery:true,
   loc:"stasis_bay",
   examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
-  spray:function(multiple, char) {
+  spray:function(char) {
     msg("")
   },
 });
@@ -128,15 +128,15 @@ createItem("stasis_locker", CONTAINER(true), {
   alias:"locker",
   scenery:true,
   loc:"stasis_bay",
-  examine:function(multiple) {
+  examine:function() {
     if (this.closed) {
-      msg(prefix(this, multiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
+      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
     }
     else {
-      msg(prefix(this, multiple) + "This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(world.LOOK), {lastJoiner:lang.list_and, article:INDEFINITE}) + ".");
+      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(world.LOOK), {lastJoiner:lang.list_and, article:INDEFINITE}) + ".");
     }
   },
-  spray:function(multiple, char) {
+  spray:function(char) {
     msg("")
   },
 });
@@ -148,7 +148,7 @@ createItem("your_spacesuit", WEARABLE(2, ["body"]), {
   defArticle:"your",
   indefArticle:"your",
   examine:"Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility. It says \"{nm:player}\" on the back.",
-  spray:function(multiple, char) {
+  spray:function(char) {
     msg("")
   },
   testRemove:function(char) {
@@ -163,7 +163,7 @@ createItem("other_spacesuit", WEARABLE(2, ["body"]), {
   loc:"stasis_locker",
   parsePriority:-10,
   examine:"The other spacesuit is identical to your own, except it does not have your name on the back.",
-  spray:function(multiple, char) {
+  spray:function(char) {
     msg("")
   },
 });
@@ -174,7 +174,7 @@ createItem("spray_sealant", TAKEABLE(), {
   uses:5,
   examine:"A spray can; the label says \"No-Leak Sealant\" and there is some other writing on it.",
   read:"You read the label on the can: \"No-Leak Sealant is a high performance foam sealant suitable for emergency use in space. It can be used to seal holes up to 30 mm side and 200 mm long, and is designed to maintain integrity for up to 24 hours. Typically one can is sufficient for five holes. WARNING: Highly flammable. Do not ingest. Do not breath fumes.\"",
-  spray:function(multiple, char) {
+  spray:function(char) {
     metamsg("Spray the spray with the spray? Not going to happen.")
     this.uses++
     return world.FAILED
@@ -197,7 +197,7 @@ createRoom("stasis_pod_room", {
   out:new Exit('stasis_bay', {
     use:function() {
       msg("You climb out of the stasis pod.");
-      game.player.moveChar(this.name, this);
+      player.moveChar(this.name, this);
       if (w.your_jumpsuit.loc === "stasis_pod_drawer") {
         w.stasis_pod_drawer.loc = "stasis_bay";
         msg("A drawer under the pod slides open to reveal your jumpsuit.");
@@ -205,7 +205,7 @@ createRoom("stasis_pod_room", {
       return true;
     }      
   }),
-  afterDropIn:function(char, options) {
+  afterDropIn:function() {
     options.item.loc = "stasis_bay"
   }
 });
@@ -219,12 +219,12 @@ createItem("stasis_pod_interior",
     loc:"stasis_pod_room",
     closed:false,
     examine:"Externally, the pods are rather less like coffins, as the sides are thick with the stasis equipment, and flared towards the floor. Each stasis pod is about waist height. {stasis_pod_status}.{ifHere:pile_of_vomit: One has a slight splattering of vomit.}",
-    close:function(multiple, char) {
+    close:function(char) {
       if (w.Kyle.deployProbeAction < 5) {
         msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'closing the lid of a stasis pod will put you back in stasis. That is not permitted until the satellite is deployed, and not advised until probes have been deployed and data collected.' The lid rises to its fully open position.");
         return false;
       }
-      if (w.your_jumpsuit.loc === game.player.name) {
+      if (w.your_jumpsuit.loc === player.name) {
         msg("You give pod lid a pull, and it starts to descend for a moment, before stopping. 'Commander,' says Xsensi, 'your jumpsuit should be left outside the pod when going into stasis.' The lid rises to its fully open position.");
         return false;
       }
@@ -625,7 +625,7 @@ createItem("ship", {
   eventIsActive:function() { return true },
   eventPeriod:1,
   eventScript:function() {
-    this.oxygen -= game.player.oxygenUse()  // player using it
+    this.oxygen -= player.oxygenUse()  // player using it
     for (let npc of NPCS) {
       this.oxygen -= npc.oxygenUse()
     }
@@ -644,7 +644,7 @@ createItem("ship", {
 createItem("probe_prototype", COUNTABLE([]), { 
   alias:"probe",
   regex:/^(\d+ )?(bio-|geo-|bio|geo)?(probe|satellite|satelite)s?$/,
-  launch:function(multiple, char) {
+  launch:function(char) {
     if (!char.probeType) return falsemsg("To launch a probe, see either Aada or Ostap. For a satellite see Kyle.")
     
     let number = this.extractNumber();
@@ -722,7 +722,7 @@ createItem("probe_prototype", COUNTABLE([]), {
     const arr = PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeRanks"][this.probeNumber - 1]
     if (arr !== undefined && arr.includes(this.launchCounter - TURNS_TO_LANDING)) {
       w[this.owner]["rank" + this.planetNumber]++
-      game.player.bonus += PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeBonusPerRank"]
+      player.bonus += PLANETS[this.planetNumber][this.probeType.substring(0, 3) + "ProbeBonusPerRank"]
     }
   },
 
@@ -737,7 +737,7 @@ createItem("probe_prototype", COUNTABLE([]), {
       w[this.owner].deployProbeAction++
     }
     if (this.launchCounter > TURNS_TO_ORBIT + 1 && this.launchCounter % 4 === 0) {
-      game.player.bonus += 1
+      player.bonus += 1
       w[this.owner].rank++
     }
   },

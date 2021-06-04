@@ -17,8 +17,8 @@ settings.noTalkTo = false
 
 settings.onView = function(item) { return w.ship.onView === item.name }
 settings.inventoryPane = [
-  {name:'Items Held', alt:'itemsHeld', test:settings.isHeldNotWorn, getLoc:function() { return game.player.name; } },
-  {name:'People Here', alt:'itemsHere', test:settings.isHere, getLoc:function() { return game.player.loc; } },
+  {name:'Items Held', alt:'itemsHeld', test:settings.isHeldNotWorn, getLoc:function() { return player.name; } },
+  {name:'People Here', alt:'itemsHere', test:settings.isHere, getLoc:function() { return player.loc; } },
   {name:'On Viewscreen', alt:'itemsView', test:settings.onView },
 ]
 

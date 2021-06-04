@@ -11,8 +11,8 @@ commands.push(new Cmd('Kick', {
     {special:'ignore'},
     {scope:parser.isPresent}
   ],
-  default:function(item, multiple, char) {
-    msg(prefix(item, multiple) + lang.pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
+  default:function(item, char, options) {
+    msg(lang.pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
     return false;
   },
 }));
@@ -25,8 +25,8 @@ commands.push(new Cmd('Move', {
     {special:'ignore'},
     {scope:parser.isHere}
   ],
-  default:function(item, multiple, char) {
-    msg(prefix(item, multiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
+  default:function(item, char, options) {
+    msg(lang.pronounVerb(item, "'be", true) + " not something you can move.");
     return false;
   },
 }));
@@ -99,10 +99,10 @@ commands.push(new Cmd('Spray', {
   rules:[
     function(cmd, char, item, multiple) {
       if (w.spray_sealant.loc !== char.name) {
-        return falsemsg(prefix(item, multiple) + "{nv:char:do:true} not have the sealant spray.", {char:char})
+        return falsemsg("{nv:char:do:true} not have the sealant spray.", {char:char})
       }
       if (w.spray.uses <= 0) {
-        return falsemsg(prefix(item, multiple) + "{nv:char:aim:true} the spray can at {nm:item}, but it is empty.", {char:char, item:item})
+        return falsemsg("{nv:char:aim:true} the spray can at {nm:item}, but it is empty.", {char:char, item:item})
       }
       w.spray.uses--
       return true
@@ -121,12 +121,8 @@ commands.push(new Cmd('Pressurise', {
   objects:[
     {scope:isRoomScope},
   ],
-  script:function(objects) {
-    return handlePressurise(game.player, objects, true);
-  },
-  default:function(item) {
-    return failedmsg('Not something you can pressurise.', {char:game.player, item:item});
-  },
+  script:function(objects) { return handlePressurise(player, objects, true) },
+  defmsg:'Not something you can pressurise.',
 }));
 commands.push(new Cmd('Depressurise', {
   regex:/^(?:depressuri[sz]e|evacuate|depres) (.+)$/,
@@ -134,12 +130,8 @@ commands.push(new Cmd('Depressurise', {
   objects:[
     {scope:isRoomScope},
   ],
-  script:function(objects) {
-    return handlePressurise(game.player, objects, false);
-  },
-  default:function(item) {
-    return failedmsg('Not something you can evacuate.', {char:game.player, item:item});
-  },
+  script:function(objects) { return handlePressurise(player, objects, false) },
+  defmsg:'Not something you can evacuate.',
 }));
 commands.push(new Cmd('NpcPressurise1', {
   regex:/^(.+), ?(?:pressuri[sz]e|pres) (.+)$/,
@@ -221,7 +213,7 @@ function handlePressurise(char, objects, pressurise) {
     msg("You can't " + (pressurise ? pressurise : depressurise) + " that.")
     return world.FAILED
   }
-  if (char === game.player) {
+  if (char === player) {
     metamsg("You need to ask Xsansi to pressurise or depressurise any part of the ship.")
     return world.FAILED
   }
@@ -270,7 +262,7 @@ commands.push(new Cmd('Approach', {
       metamsg("The APPROACH command is for piloting the ship to a specific destination; a satellite or vessel for example.")
       return world.FAILED
     }
-    if (game.player.loc !== "flightdeck") {
+    if (player.loc !== "flightdeck") {
       msg("You need to be on the flight-deck to pilot the ship.")
       return world.FAILED
     }
@@ -298,7 +290,7 @@ commands.push(new Cmd('Scan', {
       metamsg("The SCAN command is for scanning a target nearby in space, having approached it; a satellite or vessel for example.")
       return world.FAILED
     }
-    if (game.player.loc !== "flightdeck") {
+    if (player.loc !== "flightdeck") {
       msg("You need to be on the flight-deck to scan the ship.")
       return world.FAILED
     }

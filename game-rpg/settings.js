@@ -85,11 +85,11 @@ settings.dateTime = {
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
-  game.player.hitpoints = 20;
-  game.player.status = "You are feeling fine";
-  game.player.skillsLearnt = ["Double attack", "Fireball"]
+  player.hitpoints = 20;
+  player.status = "You are feeling fine";
+  player.skillsLearnt = ["Double attack", "Fireball"]
   settings.updateCustomUI()
-  w.rabbit.setLeader(game.player)
+  w.rabbit.setLeader(player)
 }
 
 
@@ -141,26 +141,26 @@ settings.customUI = function() {
 
 
 settings.updateCustomUI = function() {
-  $('#weaponImage').attr('src', settings.imagesFolder + 'icon-' + game.player.getEquippedWeapon().image + '.png');
-  $('#weapon-td').prop('title', "Weapon: " + game.player.getEquippedWeapon().alias);
+  $('#weaponImage').attr('src', settings.imagesFolder + 'icon-' + player.getEquippedWeapon().image + '.png');
+  $('#weapon-td').prop('title', "Weapon: " + player.getEquippedWeapon().alias);
   
-  $('#hits-indicator').css('padding-right', 120 * game.player.health / game.player.maxHealth);
-  $('#hits-td').prop('title', "Hits: " + game.player.health + "/" + game.player.maxHealth);
+  $('#hits-indicator').css('padding-right', 120 * player.health / player.maxHealth);
+  $('#hits-td').prop('title', "Hits: " + player.health + "/" + player.maxHealth);
 
-  $('#pp-indicator').css('padding-right', 120 * game.player.pp / game.player.maxPP);
-  $('#pp-td').prop('title', "Power points: " + game.player.pp + "/" + game.player.maxPP);
+  $('#pp-indicator').css('padding-right', 120 * player.pp / player.maxPP);
+  $('#pp-td').prop('title', "Power points: " + player.pp + "/" + player.maxPP);
 
-  $('#armour-indicator').css('padding-right', 120 * game.player.armour / game.player.maxArmour);
-  $('#armour-td').prop('title', "Armour: " + game.player.armour + "/" + game.player.maxArmour);
+  $('#armour-indicator').css('padding-right', 120 * player.armour / player.maxArmour);
+  $('#armour-td').prop('title', "Armour: " + player.armour + "/" + player.maxArmour);
 
   //console.log($('#hits-td').prop('title'));
 
 
-  //console.log(game.player.skillsLearnt)
+  //console.log(player.skillsLearnt)
   skillUI.removeAllButtons()
   for (let skill of skills.list) {
     //console.log(skill.name)
-    if (game.player.skillsLearnt.includes(skill.name)) {
+    if (player.skillsLearnt.includes(skill.name)) {
       skillUI.setButton(skill)
     }
   }
@@ -243,7 +243,7 @@ const skillUI = {
     console.log("in chooseWeapon");
     const weapons = [];
     for (let o in w) {
-      if (w[o].isAtLoc(game.player, world.SCOPING) && w[o].weapon) {
+      if (w[o].isAtLoc(player, world.SCOPING) && w[o].weapon) {
         console.log(o);
         weapons.push('<option value="'+ o +'">' + w[o].listAlias + '</option>');
       }
@@ -260,7 +260,7 @@ const skillUI = {
     $("#choose-weapon-div").dialog("close");
     const selected = $("#weapon-select").val();
     console.log("in chosenWeapon: " + selected);
-    w[selected].equip(false, game.player);
+    w[selected].equip(false, player);
     world.endTurn(world.SUCCESS);
   },
 
@@ -317,7 +317,7 @@ $(function() {
         text: "OK",
         click: function() {
           $(this).dialog("close");
-          const p = game.player;
+          const p = player;
           const job = $("#job").val();
           p.job = settings.professions.find(function(el) { return el.name === job; });
           p.isFemale = $("#female").is(':checked');
@@ -438,14 +438,14 @@ function scrollPara(element) {
 }    
 
 function setValues() {
-  game.player.alias = $('#name_input').val();
-  game.player.isFemale = !wizardMale;
-  game.player.background = $('#para4').html();
-  game.player.magic = $('#para5').html();
-  game.player.hairColour = $('#para6').html();
-  game.player.eyeColour = $('#para7').html();
-  game.player.spellColour = $('#para8').html();
-  msg(game.player.alias);
+  player.alias = $('#name_input').val();
+  player.isFemale = !wizardMale;
+  player.background = $('#para4').html();
+  player.magic = $('#para5').html();
+  player.hairColour = $('#para6').html();
+  player.eyeColour = $('#para7').html();
+  player.spellColour = $('#para8').html();
+  msg(player.alias);
   msg($("#diag-inner").text());
 }
 

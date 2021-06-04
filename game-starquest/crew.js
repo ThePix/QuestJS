@@ -83,7 +83,7 @@ createItem("yeoman_call_me_maam", TOPIC(true), {
   runscript:function() {
     msg("'I prefer ma'am to sir,' you tell the yeoman.");
     msg("'As you wish, ma'am.'");
-    game.player.callmemaam = true        
+    player.callmemaam = true        
   },
 })
 

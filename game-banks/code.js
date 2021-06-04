@@ -66,27 +66,26 @@ const CREW = function(isFemale) {
     if (typeof this.status !== 'number') return 0
     return this.baseOxygeUse * this.oxygenUseModifier
   }
-  res.revive = function(multiple, char) {
-    const tpParams = {actor:this, char:char}
-    if (char === game.player) {
-      msg("You wonder how to revive {nm:actor} - probably best to leave that to Xsansi.", tpParams);
+  res.revive = function(options) {
+    if (char === player) {
+      msg("You wonder how to revive {nm:item} - probably best to leave that to Xsansi.", options);
       return false;
     }
-    if (char !== w.Xsansi) {
-      msg("'{nm:char}, can you revive {nm:actor}?' you ask.", tpParams);
+    if (options.char !== w.Xsansi) {
+      msg("'{nm:char}, can you revive {nm:item}?' you ask.", options);
       msg("'Probably best to leave that to Xsansi.'");
       return false;
     }
     if (!this.inPod) {
-      msg("'Xsansi, please revive {nm:actor},' you say.", tpParams);
-      msg("'Crew member {nm:actor} is not currently in stasis.'", tpParams);
+      msg("'Xsansi, please revive {nm:item},' you say.", options);
+      msg("'Crew member {nm:item} is not currently in stasis.'", options);
       return false;
     }
     // check number revived TODO!!!
     
   }
   // Description
-  res.examine = function(multiple) {
+  res.examine = function(options) {
     const tpParams = {actor:this}
     let s;
     switch (this.clothing) {
@@ -100,7 +99,7 @@ const CREW = function(isFemale) {
     else if (this.posture) {
       s += " {pv:actor:be:true} " + this.posture + ".";
     }
-    msg(prefix(this, multiple) + this.desc + s, tpParams);
+    msg(this.desc + s, tpParams);
   }
   res.stasis = function() {
     const tpParams = {actor:this}
@@ -472,7 +471,7 @@ function shipAlert(s) {
 
 
 function isOnShip() {
-  return w[game.player.loc].notOnShip === undefined;
+  return w[player.loc].notOnShip === undefined;
 }
 
 
@@ -500,14 +499,14 @@ function updateMap() {
   $('#layer1').hide()
   $('#layer3').hide()
   $('#layer4').hide()
-  const currentDeck = w[game.player.loc].deckName
+  const currentDeck = w[player.loc].deckName
   $('#map').attr('title', 'The Joseph Banks, ' + settings.deckNames[currentDeck]);
-  if (!currentDeck) return errormsg("No deckName for " + game.player.loc)
+  if (!currentDeck) return errormsg("No deckName for " + player.loc)
   $('#' + currentDeck).show()
   for (let key in w) {
     if (w[key].svgId) $('#' + w[key].svgId).css('fill', isRoomPressured(w[key]) ? '#777' : '#222')
   }
-  const mySvgId = w[game.player.loc].svgId
+  const mySvgId = w[player.loc].svgId
   let otherSvgId
   if (w.Xsansi.locate) otherSvgId = w[w[w.Xsansi.locate].loc].svgId
 

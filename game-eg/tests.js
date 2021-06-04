@@ -147,7 +147,7 @@ test.tests = function() {
   test.assertEqual("a brick", lang.getName(w.brick, {brick_count:1, article:INDEFINITE}));
   test.assertEqual("seven bricks", lang.getName(w.brick, {loc:'lounge', article:INDEFINITE}));
   test.assertEqual("a lot of bricks", lang.getName(w.brick, {brick_count:'infinity', article:INDEFINITE}));
-  
+
   
   test.title("random.fromArray");
   const ary = ["one", "two", "three"];
@@ -250,10 +250,10 @@ test.tests = function() {
   test.title("isUltimatelyHeldBy")
   test.assertEqual(true, w.ring.isUltimatelyHeldBy(w.jewellery_box))
   test.assertEqual(true, w.ring.isUltimatelyHeldBy(w.glass_cabinet))
-  test.assertEqual(false, w.ring.isUltimatelyHeldBy(game.player))
-  test.assertEqual(false, w.brick.isUltimatelyHeldBy(game.player))
+  test.assertEqual(false, w.ring.isUltimatelyHeldBy(player))
+  test.assertEqual(false, w.brick.isUltimatelyHeldBy(player))
   w.brick.countableLocs.Buddy = 3
-  test.assertEqual(true, w.brick.isUltimatelyHeldBy(game.player))
+  test.assertEqual(true, w.brick.isUltimatelyHeldBy(player))
   delete w.brick.countableLocs.Buddy
 
 
@@ -289,7 +289,7 @@ test.tests = function() {
   test.assertEqual("Simple <span style=\"color:red\">text with <i>nesting</i></span>.", processText("Simple {colour:red:text with {i:nesting}}."));
   test.assertEqual("Simple text", processText("Simple {random:text}"));
   test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:yes:no}"));
-  game.player.someOddAtt = 67;
+  player.someOddAtt = 67;
   test.assertEqual("Simple text: 67", processText("Simple text: {show:player:someOddAtt}"));
 
   test.title("Text processor 2");
@@ -311,7 +311,7 @@ test.tests = function() {
 
 
   test.title("Text processor 3");
-  game.player.someOddAtt = true;
+  player.someOddAtt = true;
   test.assertEqual("Simple text: true", processText("Simple text: {show:player:someOddAtt}"));
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: no", processText("Simple text: {ifNot:player:someOddAtt:yes:no}"));
@@ -347,7 +347,7 @@ test.tests = function() {
   test.assertEqual("There is a book.", processText("There is {nm:chr:a}.", {chr:w.book}));
   test.assertEqual("Kyle is here.", processText("{nm:chr:the:true} is here.", {chr:w.Kyle}));
   test.assertEqual("The book is here.", processText("{nm:chr:the:true} is here.", {chr:w.book}));
-  test.assertEqual("It is your book.", processText("It is {nms:chr:the} book.", {chr:game.player}));
+  test.assertEqual("It is your book.", processText("It is {nms:chr:the} book.", {chr:player}));
   test.assertEqual("It is Kyle's book.", processText("It is {nms:chr:the} book.", {chr:w.Kyle}));
 
   test.title("Text processor 5a: nm with COUNTABLE.");
@@ -356,10 +356,11 @@ test.tests = function() {
   test.assertEqual("five bricks", processText("{nm:item:a}", {item:w.brick, item_count:5}))
   test.assertEqual("a brick", processText("{nm:item:a}", {item:w.brick, brick_count:1}))
   test.assertEqual("one brick", processText("{nm:item:count}", {item:w.brick, brick_count:1}))
-  test.assertEqual("a brick", lang.getName(w.brick, {brick_count:1, article:INDEFINITE}));
-  test.assertEqual("seven bricks", lang.getName(w.brick, {loc:'lounge', article:INDEFINITE}));
-  test.assertEqual("a lot of bricks", lang.getName(w.brick, {brick_count:'infinity', article:INDEFINITE}));
-  
+
+  test.assertEqual("five bricks", processText("{nm:item:a}", {item:w.brick, count:5}))
+  test.assertEqual("five bricks and one book", processText("{nm:item:a} and {nm:item2:count}", {item:w.brick, count:5, item2:w.book}))
+
+
   test.title("Text processor 6: show");
   test.assertEqual("Kyle is a bear.", processText("{Kyle.alias} is a bear."));
   test.assertEqual("Kyle is a bear.", processText("{show:Kyle:alias} is a bear."));
@@ -558,22 +559,17 @@ test.tests = function() {
   test.assertCmd("switch off knife", "You can't turn it off.")
   test.assertCmd("exits", "You think you can go east, south, up or west.")
   
-  
   test.title("Drop all");
-  test.assertCmd("drop all", "Knife: You drop the knife.");
+  test.assertCmd("drop all", "You drop the knife.");
   test.assertCmd("drop all", "Nothing there to do that with.");
   test.assertCmd("get knife", "You take the knife.");
-  const knifeDrop = w.knife.drop
-  w.knife.drop = false
-  test.assertCmd("drop knife", "You can't drop it.");
-  w.knife.drop = knifeDrop
 
 
-  
   
   test.title("Concatenated commands")
   test.assertCmd("drop knife, and then get it", ["You drop the knife.", "You take the knife."]);
   test.assertCmd("get book.read it.drop book", ["You take the book.", "It is not in a language you understand.", "Abandoning later commands: drop book"]);
+  
   test.assertCmd("drop book.read it.drop book", ["You drop the book.", "You don't have it.", "You don't have it."]);
   test.assertCmd("*drop book.read it.drop book", ["Comment: drop book.read it.drop book"]);
   
@@ -600,12 +596,12 @@ test.tests = function() {
   test.assertCmd("x sandwich", "It's just your typical, every day ham and cheese sandwich.")
   test.assertCmd("x ham and cheese sandwich", "It's just your typical, every day ham and cheese sandwich.")
   test.assertCmd("x sandwich and knife", [
-    "Ham and cheese sandwich: It's just your typical, every day ham and cheese sandwich.",
-    "Knife: A blunt knife.",
+    "It's just your typical, every day ham and cheese sandwich.",
+    "A blunt knife.",
   ])
   test.assertCmd("x ham and cheese sandwich, knife", [
-    "Ham and cheese sandwich: It's just your typical, every day ham and cheese sandwich.",
-    "Knife: A blunt knife.",
+    "It's just your typical, every day ham and cheese sandwich.",
+    "A blunt knife.",
   ])
 
   test.assertEqual(["Examine", "Drop", "Eat"], w.ham_and_cheese_sandwich.getVerbs())
@@ -613,7 +609,7 @@ test.tests = function() {
   test.assertCmd("ingest sandwich", ["You eat the ham and cheese sandwich.", "That was great!"]);
   
   test.title("Simple object commands (drink the sandwich?)")
-  w.ham_and_cheese_sandwich.loc = game.player.name
+  w.ham_and_cheese_sandwich.loc = player.name
   w.ham_and_cheese_sandwich.isLiquid = true
   test.assertEqual(["Examine", "Drop", "Drink"], w.ham_and_cheese_sandwich.getVerbs())
   test.assertCmd("drink sandwich", ["You eat the ham and cheese sandwich.", "That was great!"]);
@@ -679,7 +675,7 @@ test.tests = function() {
   test.assertCmd("drop clock", "You drop the clock.");
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), a small key and a waterskin here.", "You can go east, south, up or west."]);
-  
+ 
 
   test.title("Simple object commands (bricks and a box)");
   test.assertEqual(false, parser.isContained(w.brick));
@@ -709,7 +705,6 @@ test.tests = function() {
   
   test.assertCmd("get bricks", "You take three bricks.");
   test.assertCmd("drop box", "You drop the cardboard box.");
-  
 
   test.title("Simple object commands (cabinet and key)")
   test.assertCmd("open small key", "The small key can't be opened.")
@@ -763,18 +758,19 @@ test.tests = function() {
 
   test.title("Restricting");
   test.assertEqual(["Look at", "Talk to"], w.Kyle.getVerbs())
-  game.player.canTalk = function() { msg("You are gagged."); return false; }
+  player.canTalk = function() { msg("You are gagged."); return false; }
   test.assertCmd("talk to kyle", "You are gagged.");
-  game.player.canTalk = function() { return true; }
-  game.player.canManipulate = function() { msg("You are handcuffed."); return false; }
+  player.canTalk = function() { return true; }
+  player.canManipulate = function() { msg("You are handcuffed."); return false; }
   test.assertCmd("drop bricks", "You are handcuffed.");
-  game.player.canManipulate = function() { return true; }
+  player.canManipulate = function() { return true; }
   test.assertCmd("drop bricks", "You drop seven bricks.");  
   
   
   test.title("Wear/remove");
   test.assertCmd("u", ["You head up.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west.",]);
-  test.assertCmd("get all", ["Wardrobe: You can't take it.", "Underwear: You take the underwear.", "Jeans: You take the jeans.", "Shirt: You take the shirt.", "Coat: You take the coat.", "Jumpsuit: You take the jumpsuit.", ]);
+  
+  test.assertCmd("get all", ["Wardrobe: You can't take it.", "You take the underwear.", "You take the jeans.", "You take the shirt.", "You take the coat.", "You take the jumpsuit.", ]);
   test.assertCmd("wear underwear", "You put on the underwear.");
   test.assertCmd("wear jeans", "You put on the jeans.");
   test.assertCmd("wear shirt", "You put on the shirt.");
@@ -787,7 +783,7 @@ test.tests = function() {
   test.assertCmd("wear coat", "You put on the coat.");
   test.assertCmd("wear underwear", "You can't put the underwear on over your jumpsuit.");
   test.assertCmd("remove coat", "You take the coat off.");  
-  test.assertCmd("drop all", ["Knife: You drop the knife.", "Underwear: You drop the underwear.", "Jeans: You drop the jeans.", "Shirt: You drop the shirt.", "Coat: You drop the coat.", "Jumpsuit: You're already wearing it.", ]);
+  test.assertCmd("drop all", ["You drop the knife.", "You drop the underwear.", "You drop the jeans.", "You drop the shirt.", "You drop the coat.", "Jumpsuit: You're already wearing it.", ]);
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
   test.assertCmd("get knife", "You take the knife.");
   
@@ -884,7 +880,7 @@ test.tests = function() {
   test.title("NPC commands 2");
   test.assertCmd("boots,get coin", "You can tell the boots to do anything you like, but there is no way they'll do it.");
   test.assertCmd("kyle,get coin", "He tries to pick up the coin, but it just will not budge.");
-  test.assertCmd("kyle,get knife", "You've got it already.");
+  test.assertCmd("kyle,get knife", "You have it.");
   test.assertCmd("kyle,get cabinet", "He can't take it.");
   test.assertCmd("kyle,get cover", "He can't take it; it's part of the book.");
 
@@ -893,9 +889,8 @@ test.tests = function() {
   test.assertCmd("kyle, wear boots", "He doesn't have them.");
   test.assertCmd("kyle, remove boots", "He doesn't have them.");
   test.assertCmd("kyle, get boots", "Kyle takes the boots.");
-  test.assertCmd("kyle, get boots", "Kyle has them.");
-  test.assertCmd("kyle,give boots to box", "Realistically, the cardboard box is not interested in anything he might give it.");
-  test.assertCmd("kyle, get boots", "Kyle has them.");
+  test.assertCmd("kyle, get boots", "He's got them already.");
+  test.assertCmd("kyle,give boots to box", "Realistically, the cardboard box is not interested in anything he might give it.")
   test.assertCmd("kyle, wear boots", "Kyle puts on the boots.");
   test.assertCmd("kyle, wear boots", "Kyle's already wearing them.");
   test.assertCmd("kyle, remove boots", "Kyle takes the boots off.");
@@ -927,8 +922,8 @@ test.tests = function() {
   test.assertCmd("get garage", "You take the garage key.");
   test.assertCmd("e", ["You head east.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock, Kyle (wearing a straw boater) and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("kyle,n", "Kyle tries the door to the garage, but it is locked.");
-  test.assertCmd("kyle,get all", ["Clock: Kyle takes the clock.", "Trapdoor: He can't take it.", "Camera: Kyle takes the camera.", "Big kitchen table: He can't take it.", "Jug: Kyle takes the jug."]);
-  
+  test.assertCmd("kyle,get all", ["Kyle takes the clock.", "Trapdoor: He can't take it.", "Kyle takes the camera.", "Big kitchen table: He can't take it.", "Kyle takes the jug."]);
+ 
   
   
   test.assertCmd("kyle, drop picture box", "Kyle drops the camera.");
@@ -976,7 +971,7 @@ test.tests = function() {
   test.assertEqual(w.book, clone.clonePrototype);
   test.assertEqual(w.book.examine, clone.examine);
   test.assertEqual(["Examine", "Take"], clone.getVerbs())
-  clone.loc = game.player.name
+  clone.loc = player.name
   test.assertEqual(["Examine", "Drop", "Read"], clone.getVerbs())
   clone.loc = 'lounge'
   const clone2 = cloneObject(clone);
@@ -1056,7 +1051,7 @@ test.tests = function() {
   w.far_away.north.locked = true
   saveLoad.loadTheWorld(s, 4)
   
-  
+
   
   test.assertEqual(count + 2, Object.keys(w).length)
   test.assertEqual(17, w.boots.counter)
@@ -1159,7 +1154,7 @@ test.tests = function() {
   test.assertCmd("get trousers", ["You take the suit trousers."]);
   test.assertCmd("l", ["The wardrobe", "Oddly empty of fantasy worlds.", "You can see a jacket and a waistcoat here.", "You can go out."]);
   test.assertCmd("i", ["You are carrying a flashlight, a garage key and some suit trousers."]);
-  test.assertCmd("get jacket, waistcoat", ["Jacket: You take the jacket.", "Waistcoat: You take the waistcoat."]);
+  test.assertCmd("get jacket, waistcoat", ["You take the jacket.", "You take the waistcoat."]);
   
   test.assertCmd("i", ["You are carrying a flashlight, a garage key and a suit."]);
   test.assertCmd("drop suit", ["You drop the suit."]);
@@ -1236,7 +1231,7 @@ test.tests = function() {
   test.assertEqual(['Buddy'], w.rope.locs)
   test.assertCmd("drop rope", ["You drop the rope."])
 
-  
+
   
   
   test.title("Get all (nothing)");
@@ -1267,7 +1262,7 @@ test.tests = function() {
 
   
   test.assertEqual(false, parser.isForSale(w.carrot0))
-  test.assertEqual(false, w.carrot0.isForSale(game.player.loc))
+  test.assertEqual(false, w.carrot0.isForSale(player.loc))
   test.assertCmd("buy carrot", ["You buy the carrot for $0,02."]);
   test.assertEqual(16, w.Buddy.money)
   test.assertCmd("buy flashlight", ["You can't buy the flashlight here."]);
@@ -1421,8 +1416,8 @@ test.tests = function() {
 
 
   test.title("reverse order commands")
-  w.knife.loc = game.player.name
-  w.carrot1.loc = game.player.name
+  w.knife.loc = player.name
+  w.carrot1.loc = player.name
   test.assertCmd("slice carrot with knife", "You slice the carrot with the knife.")
   test.assertCmd("use knife slice carrot", "You slice the carrot with the knife.")
   test.assertCmd("use knife to slice carrot", "You slice the carrot with the knife.")

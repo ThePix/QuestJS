@@ -29,7 +29,7 @@ createItem("PAGE", TAKEABLE(), {
   stardatabase:function() { this.usePage("star", "look up") },
   otheruse:function() { this.usePage("otherUse", "") },
   crewroster:function() {
-    if (game.player.arrivedAtSector) {
+    if (player.arrivedAtSector) {
       msg(roster.getRoster(), {}, 'lookUp')
       return
     }

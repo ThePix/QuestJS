@@ -10,7 +10,7 @@ test.tests = function() {
 
 
 
-  //game.player.skillsLearnt = ["Double attack", "Fireball",  "Commune with animal", "Unlock", "Stoneskin", "Steelskin", "Lightning bolt", "Ice shard", "Psi-blast"]
+  //player.skillsLearnt = ["Double attack", "Fireball",  "Commune with animal", "Unlock", "Stoneskin", "Steelskin", "Lightning bolt", "Ice shard", "Psi-blast"]
   //ioUpdateCustom()
 
   settings.attackOutputLevel = 2
@@ -23,15 +23,15 @@ test.tests = function() {
 
 
   test.title("Equip")
-  test.assertEqual('unarmed', game.player.getEquippedWeapon().alias)
+  test.assertEqual('unarmed', player.getEquippedWeapon().alias)
   test.assertCmd("i", "You are carrying a flail, an ice amulet and a knife.");
   test.assertCmd("equip knife", "You draw the knife.");
   test.assertCmd("i", "You are carrying a flail, an ice amulet and a knife (equipped).");
-  test.assertEqual('knife', game.player.getEquippedWeapon().alias)
+  test.assertEqual('knife', player.getEquippedWeapon().alias)
   test.assertCmd("equip knife", "It already is.");
   test.assertCmd("drop knife", "You drop the knife.");
-  test.assertEqual('unarmed', game.player.getEquippedWeapon().alias)
-  test.assertEqual(undefined, game.player.equipped)
+  test.assertEqual('unarmed', player.getEquippedWeapon().alias)
+  test.assertEqual(undefined, player.equipped)
   test.assertCmd("take knife", "You take the knife.");
   test.assertCmd("unequip knife", "It already is.");
   test.assertCmd("equip knife", "You draw the knife.");
@@ -40,15 +40,15 @@ test.tests = function() {
 
   test.title("Armour")
   settings.armourScaling = 1
-  test.assertEqual(0, game.player.getArmour())
+  test.assertEqual(0, player.getArmour())
   test.assertCmd("get helmet", "You take the helmet.");
-  test.assertEqual(0, game.player.getArmour())
+  test.assertEqual(0, player.getArmour())
   test.assertCmd("wear helmet", "You put on the helmet.");
-  test.assertEqual(10, game.player.getArmour())
+  test.assertEqual(10, player.getArmour())
   test.assertCmd("get chestplate", "You take the chestplate.");
-  test.assertEqual(10, game.player.getArmour())
+  test.assertEqual(10, player.getArmour())
   test.assertCmd("wear chestplate", "You put on the chestplate.");
-  test.assertEqual(30, game.player.getArmour())
+  test.assertEqual(30, player.getArmour())
   settings.armourScaling = 10
 
 
@@ -66,7 +66,7 @@ test.tests = function() {
 
 
   test.title("Attack.createAttack (unarmed) misses");
-  const attack0 = Attack.createAttack(game.player, w.goblin)
+  const attack0 = Attack.createAttack(player, w.goblin)
   test.assertEqual('me', attack0.attacker.name)
   test.assertEqual([w.goblin], attack0.primaryTargets)
   test.assertEqual('d4', attack0.damage)
@@ -82,7 +82,7 @@ test.tests = function() {
 
 
   test.title("Attack.createAttack (unarmed)");
-  const attack1 = Attack.createAttack(game.player, w.goblin)
+  const attack1 = Attack.createAttack(player, w.goblin)
   test.assertEqual('me', attack1.attacker.name)
   test.assertEqual([w.goblin], attack1.primaryTargets)
   test.assertEqual('d4', attack1.damage)
@@ -102,11 +102,11 @@ test.tests = function() {
 
 
   test.title("Attack.createAttack flail)");
-  const oldProcessAttack = game.player.modifyOutgoingAttack
-  game.player.modifyOutgoingAttack = function(attack) { attack.offensiveBonus += 2 }
+  const oldProcessAttack = player.modifyOutgoingAttack
+  player.modifyOutgoingAttack = function(attack) { attack.offensiveBonus += 2 }
   w.flail.equipped = true
 
-  const attack2 = Attack.createAttack(game.player, w.orc)
+  const attack2 = Attack.createAttack(player, w.orc)
   test.assertEqual('me', attack2.attacker.name)
   test.assertEqual('2d10+4', attack2.damage)
   test.assertEqual(2, attack2.offensiveBonus)
@@ -122,14 +122,14 @@ test.tests = function() {
   w.goblin.armour = 0
   w.goblin.health = 40
   
-  game.player.modifyOutgoingAttack = oldProcessAttack
+  player.modifyOutgoingAttack = oldProcessAttack
   w.flail.equipped = false
 
 
 
 
   test.title("Attack.createAttack (goblin)");
-  const attack2a = Attack.createAttack(w.goblin, game.player)
+  const attack2a = Attack.createAttack(w.goblin, player)
   test.assertEqual('goblin', attack2a.attacker.name)
   test.assertEqual([w.me], attack2a.primaryTargets)
   test.assertEqual('d8', attack2a.damage)
@@ -156,7 +156,7 @@ test.tests = function() {
   const oldgetSkillFromButtons = skillUI.getSkillFromButtons
   skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
   
-  const attack3 = Attack.createAttack(game.player, w.goblin)
+  const attack3 = Attack.createAttack(player, w.goblin)
   
   test.assertEqual('spellCasting', attack3.skill.statForOffensiveBonus)
   test.assertEqual(5, w.me.spellCasting)
@@ -217,14 +217,14 @@ test.tests = function() {
 
 
   test.title("learn fireball")
-  game.player.skillsLearnt = ["Double attack"]
+  player.skillsLearnt = ["Double attack"]
   test.assertCmd('cast nonsense', ['There is no spell called nonsense.'])
   test.assertCmd('cast fireball', ['You do not know the spell <i>Fireball</i>.'])
   test.assertCmd('learn nonsense', ['There is no spell called nonsense.'])
   test.assertCmd('learn fireball', ['You do not have anything you can learn <i>Fireball</i> from.'])
   test.assertCmd('get spellbook', ['You take the spellbook.'])
   test.assertCmd('learn fireball', ['You learn <i>Fireball</i> from the spellbook.'])
-  test.assertEqual(["Double attack", "Fireball"], game.player.skillsLearnt) 
+  test.assertEqual(["Double attack", "Fireball"], player.skillsLearnt) 
   //goblin, orc, snotling, rabbit
 
   random.prime([19, 4, 4, 19, 2, 2, 4, 4])
@@ -238,7 +238,7 @@ test.tests = function() {
 
   test.title("learn Ice shard")
   test.assertCmd('learn ice shard', ['You learn <i>Ice shard</i> from the spellbook.'])
-  game.player.skillsLearnt = ["Double attack", "Fireball", "Ice shard"]
+  player.skillsLearnt = ["Double attack", "Fireball", "Ice shard"]
   test.assertCmd('cast ice shard', ['You need a target for the spell <i>Ice shard</i>.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
   skillUI.getSkillFromButtons = function() { return skills.findName('Ice shard') }
@@ -255,7 +255,7 @@ test.tests = function() {
 
 
   test.title("Lightning bolt")
-  game.player.skillsLearnt = ["Double attack", "Fireball", "Lightning bolt"]
+  player.skillsLearnt = ["Double attack", "Fireball", "Lightning bolt"]
   test.assertCmd('cast lightning bolt', ['You need a target for the spell <i>Lightning bolt</i>.'])
   skillUI.getSkillFromButtons = function() { return skills.findName('Lightning bolt') }
   random.prime([
@@ -283,7 +283,7 @@ test.tests = function() {
   test.title("Attack.createAttack  (goblin, spells)")
   w.goblin.spellCasting = 3
   
-  const attack2b = Attack.createAttack(w.goblin, game.player, skills.findName('Ice shard'))
+  const attack2b = Attack.createAttack(w.goblin, player, skills.findName('Ice shard'))
   test.assertEqual('goblin', attack2b.attacker.name)
   test.assertEqual([w.me], attack2b.primaryTargets)
   test.assertEqual('3d6', attack2b.damage)
@@ -292,7 +292,7 @@ test.tests = function() {
   attack2b.resolve(w.me, true, 0)
   test.assertEqual(94, w.me.health)
 
-  const attack2c = Attack.createAttack(w.goblin, game.player, skills.findName('Psi-blast'))
+  const attack2c = Attack.createAttack(w.goblin, player, skills.findName('Psi-blast'))
   test.assertEqual('goblin', attack2c.attacker.name)
   random.prime([19, 5, 5, 5])
   attack2c.resolve(w.me, true, 0)
@@ -300,7 +300,7 @@ test.tests = function() {
   
   
   w.ice_amulet.worn = true
-  const attack2d = Attack.createAttack(w.goblin, game.player, skills.findName('Ice shard'))
+  const attack2d = Attack.createAttack(w.goblin, player, skills.findName('Ice shard'))
   random.prime(19)
   attack2d.resolve(w.me, true, 0)
   test.assertEqual(79, w.me.health)
@@ -317,12 +317,12 @@ test.tests = function() {
   test.assertCmd('learn steelskin', ['You learn <i>Steelskin</i> from the spellbook.'])
   test.assertCmd('learn stoneskin', ['You learn <i>Stoneskin</i> from the spellbook.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
-  test.assertEqual([], game.player.activeEffects)
+  test.assertEqual([], player.activeEffects)
   test.assertCmd('cast stoneskin', ['You cast the <i>Stoneskin</i> spell.', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
 
-  test.assertEqual(['Stoneskin effect'], game.player.activeEffects)
+  test.assertEqual(['Stoneskin effect'], player.activeEffects)
   test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin effect</i> terminates.'])
-  test.assertEqual(['Steelskin effect'], game.player.activeEffects)
+  test.assertEqual(['Steelskin effect'], player.activeEffects)
 
 
 
@@ -331,14 +331,14 @@ test.tests = function() {
 
 
   test.title("ongoing spells expire")
-  game.player['countdown_Steelskin effect'] = 3
+  player['countdown_Steelskin effect'] = 3
   w.spell_handler.eventScript()
-  test.assertEqual(2, game.player['countdown_Steelskin effect'])
+  test.assertEqual(2, player['countdown_Steelskin effect'])
   test.assertCmd('z', ['Time passes...'])
-  test.assertEqual(1, game.player['countdown_Steelskin effect'])
+  test.assertEqual(1, player['countdown_Steelskin effect'])
   test.assertCmd('z', ['Time passes...', 'The <i>Steelskin effect</i> terminates.'])
-  test.assertEqual(false, game.player['countdown_Steelskin effect'])
-  test.assertEqual([], game.player.activeEffects)
+  test.assertEqual(false, player['countdown_Steelskin effect'])
+  test.assertEqual([], player.activeEffects)
   test.assertCmd('z', ['Time passes...'])
   
 
@@ -347,7 +347,7 @@ test.tests = function() {
 
 
   test.title("cast unlock")
-  game.player.skillsLearnt = ["Double attack", "Fireball", "Unlock"]
+  player.skillsLearnt = ["Double attack", "Fireball", "Unlock"]
   test.assertCmd('cast unlock', ['You cast the <i>Unlock</i> spell.', 'The door to the south unlocks.'])
   test.assertCmd('cast unlock', ['You cast the <i>Unlock</i> spell.', 'There are no locked doors.'])
   // should also open other door!!!
@@ -356,14 +356,14 @@ test.tests = function() {
 
 
   test.title("cast Commune with animal")
-  game.player.skillsLearnt = ["Double attack", "Fireball", "Commune with animal"]
+  player.skillsLearnt = ["Double attack", "Fireball", "Commune with animal"]
   test.assertCmd('talk to rabbit', [/You spend a few minutes telling the rabbit/])
   test.assertCmd('cast commune on rabbit', ['You cast <i>Commune with animal</i>.', 'You can now talk to the rabbit for a short time.'])
   test.assertCmd('talk to rabbit', [/You say \'Hello,\' to the rabbit/, /Fading away bunny/])
 
 
 
-  game.player.skillsLearnt = ["Double attack", "Fireball"]
+  player.skillsLearnt = ["Double attack", "Fireball"]
 
 
 

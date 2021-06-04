@@ -6,8 +6,8 @@ createItem("me",
   { 
     loc:"lounge",
     regex:/^(me|myself|player)$/,
-    examine:function(multiple) {
-      msg(prefix(this, multiple) + "A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
+    examine:function(options) {
+      msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
     },
   }
 );
@@ -18,12 +18,12 @@ createItem("knife",
   { 
     loc:"me",
     sharp:false,
-    examine:function(multiple) {
+    examine:function(options) {
       if (this.sharp) {
-        msg(prefix(this, multiple) + "A really sharp knife.");
+        msg("A really sharp knife.");
       }
       else {
-        msg(prefix(this, multiple) + "A blunt knife.");
+        msg("A blunt knife.");
       }
     },
     chargeResponse:function(participant) {

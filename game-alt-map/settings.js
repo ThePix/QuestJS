@@ -14,7 +14,7 @@ settings.libraries.push('quest')
 settings.tests = true
 
 settings.status = [
-  function() { return '<td>Health points:</td><td>' + game.player.hitpoints + '</td>' },
+  function() { return '<td>Health points:</td><td>' + player.hitpoints + '</td>' },
   function() { return '<td colspan="2">' + util.getDateTime() + '</td>' },
 ]
 

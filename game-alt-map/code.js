@@ -23,7 +23,7 @@ util.openingTimes = function () {
 
 tp.addDirective("timeOfDayComment", function(arr, params) {
   const time = util.getCustomDateTimeDict({})
-  const location = w[game.player.loc]
+  const location = w[player.loc]
   if (!location.timeStatus) return ''
   let hour = time.hour
   for (let i = 0; i < location.timeStatus.length; i++) {

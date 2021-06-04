@@ -2,9 +2,9 @@
 
 /*
 npc_utilities.talkto = function() {
-  if (!game.player.canTalk(this)) return false
+  if (!player.canTalk(this)) return false
   const topics = this.getTopics(this)
-  if (topics.length === 0) return failedmsg(lang.no_topics, {char:game.player, item:this})
+  if (topics.length === 0) return failedmsg(lang.no_topics, {char:player, item:this})
   topics.push(lang.never_mind)
 
   showSidePaneOptions(this, topics, function(result) {
@@ -42,15 +42,15 @@ function showSidePaneOptions(item, options, fn) {
 createItem("knife",
   TAKEABLE(),
   { loc:"Buddy", sharp:false,
-    examine:function(multiple) {
+    examine:function(options) {
       if (this.sharp) {
-        msg(prefix(this, multiple) + "A really sharp knife.");
+        msg("A really sharp knife.");
       }
       else {
-        msg(prefix(this, multiple) + "A blunt knife.");
+        msg("A blunt knife.");
       }
     },
-    chargeResponse:function(participant) {
+    chargeResponse:function(options) {
       msg("There is a loud bang, and the knife is destroyed.")
       this.loc = false
       return false
@@ -125,9 +125,9 @@ createRoom("hole", {
 createItem("book", TAKEABLE(), READABLE(true), { 
   loc:"lounge",
   examine:"A leather-bound book.",
-  read:function(multiple, char) {
-    if (cmdRules.isHeld(null, char, this, multiple)) {
-      if (char === w.Lara) {
+  read:function(options) {
+    if (cmdRules.isHeld(null, options)) {
+      if (options.char === w.Lara) {
         msg ("'Okay.' Lara spends a few minutes reading the book.");
         msg ("'I meant, read it to me.'");
         msg ("'All of it?'");
@@ -135,7 +135,7 @@ createItem("book", TAKEABLE(), READABLE(true), {
         msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
       }
       else {
-        msg (prefix(this, multiple) + "It is not in a language " + lang.pronounVerb(char, "understand") + ".");
+        msg ("It is not in a language " + lang.pronounVerb(options.char, "understand") + ".");
       }
       parser.abort()
       return true;
@@ -165,19 +165,19 @@ createItem("boots", WEARABLE(), {
 
 
 createItem("waterskin", TAKEABLE(), { 
-  examine:function(multiple) { 
-    msg(prefix(this, multiple) + "The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full.")
+  examine:function() { 
+    msg("The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full.")
   },
   capacity:10,
   full:3,
   loc:"lounge",
-  fill:function(multiple) {
-    if (game.player.loc != "garage") {
-      msg(prefix(this, multiple) + "There is nothing to charge the torch with here.")
+  fill:function() {
+    if (player.loc != "garage") {
+      msg("There is nothing to charge the torch with here.")
       return false
     }
     else {
-      msg(prefix(this, multiple) + "You charge the torch - it should last for hours now.")
+      msg("You charge the torch - it should last for hours now.")
       this.power = 20
       return true
     }
@@ -242,10 +242,10 @@ createItem("ornate_doll", TAKEABLE(), {
 createItem("coin", TAKEABLE(), {
   loc:"lounge",
   examine: "A gold coin.",
-  take:function(multiple, participant) {
-    msg(prefix(this, multiple) + lang.pronounVerb(participant, "try", true) + " to pick up the coin, but it just will not budge.");
-    return false;
+  take2:function(options) {
+    return falsemsg("{pv:char:try:true} to pick up the coin, but it just will not budge.", options)
   },
+  take:"{pv:char:try:true} to pick up the coin, but it just will not budge.",
 })
 
 
@@ -283,8 +283,8 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
     return true
   },
   power:2,
-  chargeResponse:function(participant) {
-    msg(lang.pronounVerb(participant, "push", true) + " the button. There is a brief hum of power, and a flash.")
+  chargeResponse:function(options) {
+    msg("{nv:char:push:true} the button. There is a brief hum of power, and a flash.", options)
     w.flashlight.power = 20
     return true
   },
@@ -307,8 +307,8 @@ createRoom("dining_room", {
 
 createItem("chair", FURNITURE({sit:true}), {
   loc:"dining_room", examine:"A wooden chair.",
-  afterPostureOn:function(char) {
-    msg("The chair makes a strange noise when " + lang.nounVerb(char, "sit") + " on it.")
+  afterPostureOn:function(options) {
+    msg("The chair makes a strange noise when {nv:char:sit} on it.", options)
   },
 })
 
@@ -526,19 +526,11 @@ createItem("charger_compartment", COMPONENT("charger"), CONTAINER(true), {
 createItem("charger_button", COMPONENT("charger"), BUTTON(), {
   examine:"A big red button.",
   alias:"button",
-  push:function(multiple, char) {
+  push:function(options) {
     const contents = w.charger_compartment.getContents(world.ALL)[0]
-    if (!w.charger_compartment.closed || !contents) {
-      msg(lang.pronounVerb(char, "push", true) + " the button, but nothing happens.");
-      return false
-    }
-    else if (!contents.chargeResponse) {
-      msg(lang.pronounVerb(char, "push", true) + " the button. There is a brief hum of power, but nothing happens.")
-      return false
-    }
-    else {
-      return contents.chargeResponse(char)
-    }
+    if (!w.charger_compartment.closed || !contents) return falsemsg("{pv:char:push:true} the button, but nothing happens.", options)
+    if (!contents.chargeResponse) return falsemsg("{pv:char:push:true} the button. There is a brief hum of power, but nothing happens.", options)
+    return contents.chargeResponse(options)
   }
 })
 
@@ -676,12 +668,12 @@ createItem("Arthur",
   NPC(false),
   { 
     loc:"garden",
-    examine:function(multiple) {
+    examine:function() {
       if (this.suspended) {
-        msg(prefix(item, multiple) + "Arthur is asleep.");
+        msg("Arthur is asleep.");
       }
       else {
-        msg(prefix(item, multiple) + "Arthur is awake.");
+        msg("Arthur is awake.");
       }
     },
     suspended:true,
@@ -700,7 +692,7 @@ createItem("Arthur",
       if (this.isHere()) {
         msg(arr[0]);
       }
-      if (game.player.loc === "dining_room") {
+      if (player.loc === "dining_room") {
         msg(arr[1]);
       }
     },
@@ -865,14 +857,14 @@ createItem("Lara", NPC(true), {
   examine:"A normal-sized bunny.",
   properName:true, 
   happy:false,
-  giveToReaction:function(item, multiple, char) {
-    if (item === w.ring) {
+  afterGive:function(options) {
+    if (options.item === w.ring) {
       msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
       w.ring.loc = "Lara"
       w.ring.worn = true
-      w.garage_key.loc = char.name
+      w.garage_key.loc = options.char.name
     }
-    if (item === w.book) {
+    if (options.item === w.book) {
       msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'")
       w.book.loc = "Lara"
     }
@@ -1108,8 +1100,8 @@ createRoom("bridge", {
   west:new Exit('desert'),
   east:new Exit('road'),
   beforeEnter:function() {
-    game.player.positionX = 5
-    game.player.positionY = 0
+    player.positionX = 5
+    player.positionY = 0
   },
 })
 
@@ -1120,8 +1112,8 @@ createRoom("inside_tower", {
   alias:'Inside the tower',
   properName:true,
   beforeEnter:function() {
-    game.player.positionX = -1
-    game.player.positionY = 3
+    player.positionX = -1
+    player.positionY = 3
   },
 })
 

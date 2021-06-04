@@ -181,11 +181,11 @@ const lang = {
   take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
   drop_successful:"{nv:char:drop:true} {nm:item:the}.",
   drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
-  cannot_take:"{pv:char:can't:true} take {ob:item}.",
-  cannot_drop:"{pv:char:can't:true} drop {ob:item}.",
-  not_carrying:"{pv:char:don't:true} have {ob:item}.",
-  already_have:"{pv:char:'ve:true} got {ob:item} already.",
-  cannot_take_component:"{pv:char:can't:true} take {ob:item}; {pv:item:'be} part of {nm:whole:the}.",
+  cannot_take:"{multi}{pv:char:can't:true} take {ob:item}.",
+  cannot_drop:"{multi}{pv:char:can't:true} drop {ob:item}.",
+  not_carrying:"{multi}{pv:char:don't:true} have {ob:item}.",
+  already_have:"{multi}{pv:char:'ve:true} got {ob:item} already.",
+  cannot_take_component:"{multi}{pv:char:can't:true} take {ob:item}; {pv:item:'be} part of {nm:whole:the}.",
 
 
   // EDIBLE
@@ -199,12 +199,12 @@ const lang = {
   // WEARABLE
   wear_successful:"{nv:char:put:true} on {nm:item:the}.",
   remove_successful:"{nv:char:take:true} {nm:item:the} off.",
-  cannot_wear:"{nv:char:can't:true} wear {ob:item}.",
-  cannot_wear_ensemble:"Individual parts of an ensemble must be worn and removed separately.",
-  not_wearing:"{nv:char:'be:true} not wearing {ob:item}.",
+  cannot_wear:"{multi}{nv:char:can't:true} wear {ob:item}.",
+  cannot_wear_ensemble:"{multi}Individual parts of an ensemble must be worn and removed separately.",
+  not_wearing:"{multi}{nv:char:'be:true} not wearing {ob:item}.",
   cannot_wear_over:"{nv:char:can't:true} put {nm:item:the} on over {pa:char} {nm:outer}.",
   cannot_remove_under:"{nv:char:can't:true} take off {pa:char} {nm:item} whilst wearing {pa:char} {nm:outer}.",
-  already_wearing:"{nv:char:'be:true} already wearing {ob:item}.",
+  already_wearing:"{multi}{nv:char:'be:true} already wearing {ob:item}.",
   invWearingPrefix:"wearing",
   invHoldingPrefix:"holding",
 
@@ -371,7 +371,7 @@ const lang = {
   nothing_inside:"There's nothing to see inside.",
   it_is_empty:"{pv:container:be:true} empty.",
   not_here:"{pv:item:'be:true} not here.",
-  char_has_it:"{nv:holder:have:true} {ob:item}.",
+  char_has_it:"{multi}{nv:holder:have:true} {ob:item}.",
   none_here:"There's no {nm:item} here.",
   none_held:"{nv:char:have:true} no {nm:item}.",
   nothing_useful:"That's not going to do anything useful.",
@@ -385,7 +385,7 @@ const lang = {
 
   // Used deep in the parser, so prefer to use function, rather than string
   object_unknown_msg:function(name) {
-    return lang.nounVerb(game.player, "can't", true) + " see anything you might call '" + name + "' here.";
+    return lang.nounVerb(player, "can't", true) + " see anything you might call '" + name + "' here.";
   },
 
 
@@ -1018,7 +1018,7 @@ const lang = {
   // would return the pronoun "you go".
   // The first letter is capitalised if 'capitalise' is true.
   nounVerb:function(item, verb, capitalise) {
-    if (item === game.player && !game.player.useProperName) {
+    if (item === player && !player.useProperName) {
       return lang.pronounVerb(item, verb, capitalise);
     }
     let s = lang.getName(item, {article:DEFINITE}) + " " + lang.conjugate (item, verb);
@@ -1027,7 +1027,7 @@ const lang = {
   },
 
   verbNoun:function(item, verb, capitalise) {
-    if (item === game.player) {
+    if (item === player) {
       return lang.pronounVerb(item, verb, capitalise);
     }
     let s = lang.conjugate (item, verb) + " " + lang.getName(item, {article:DEFINITE});

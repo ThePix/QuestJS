@@ -30,7 +30,7 @@ settings.mapMarker = function(loc) {
 }
 settings.mapExtras = function() {
   const result = []
-  const room = w[game.player.loc]
+  const room = w[player.loc]
   /*for (let o of [w.Robot, w.Lara, w.Kyle]) {
     if (w[o.loc].mapZ !== room.mapZ || w[o.loc].mapRegion !== room.mapRegion) continue
     result.push(o.mapDrawBase())

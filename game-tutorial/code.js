@@ -74,8 +74,8 @@ hint.data = [
 hint.now = function(name) {
   const n = hint.data.findIndex(el => el.name === name)
   if (n === -1) throw "No hint found called " + name
-  if (n > game.player.hintCounter) {
-    game.player.hintCounter = n
+  if (n > player.hintCounter) {
+    player.hintCounter = n
     if (hint.data[n].tutorial) {
       for (let s of hint.data[n].tutorial.split('|')) tmsg(s)
     }
@@ -85,22 +85,22 @@ hint.now = function(name) {
 hint.before = function(name) {
   const n = hint.data.findIndex(el => el.name === name)
   if (n === -1) throw "No hint found called " + name
-  return (n > game.player.hintCounter) 
+  return (n > player.hintCounter) 
 }
 
 
   
 
 findCmd('MetaHint').script = function() {
-  if (typeof hint.data[game.player.hintCounter].hint === 'string') {
-    metamsg(hint.data[game.player.hintCounter].hint)
+  if (typeof hint.data[player.hintCounter].hint === 'string') {
+    metamsg(hint.data[player.hintCounter].hint)
   }
-  else if (typeof hint.data[game.player.hintCounter].hint === 'function') {
-    hint.data[game.player.hintCounter].hint()
+  else if (typeof hint.data[player.hintCounter].hint === 'function') {
+    hint.data[player.hintCounter].hint()
   }
   else {
-    console.log(hint.data[game.player.hintCounter].name)
-    console.log("hint.data[game.player.hintCounter].hint is a " + (typeof hint.data[game.player.hintCounter].hint))
+    console.log(hint.data[player.hintCounter].name)
+    console.log("hint.data[player.hintCounter].hint is a " + (typeof hint.data[player.hintCounter].hint))
   }
   return world.SUCCESS_NO_TURNSCRIPTS;
 }
@@ -220,10 +220,7 @@ commands.push(new Cmd('Crowbar', {
     {special:'ignore'},
     {scope:parser.isHere},
   ],
-  default:function(item) {
-    msg("That's not something you can crowbar open.")
-    return world.FAILED
-  },
+  defmsg:"That's not something you can crowbar open.",
 }));
 
 
@@ -235,9 +232,7 @@ commands.unshift(new Cmd('Move', {
     {special:'ignore'},
     {scope:parser.isHere}
   ],
-  default:function(item, multiple, char) {
-    return failedmsg(prefix(item, multiple) + lang.pronounVerb(item, "'be", true) + " not something you can move.");
-  },
+  defmsg:"{pv:item:'be:true} not something you can move.",
 }));
 
 
@@ -413,7 +408,7 @@ commands.unshift(new Cmd('TieUp', {
   ],
   script:function(objects) {
     const tpParams = {item:objects[0][0]}
-    if (!w.rope.isAtLoc(game.player)) {
+    if (!w.rope.isAtLoc(player)) {
       return failedmsg("What were you thinking you could tie {ob:item} up with it exactly?", tpParams)
     }
     

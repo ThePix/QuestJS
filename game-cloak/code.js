@@ -4,7 +4,7 @@
 const cloakHere = function() {
   if (w.cloak.isAtLoc('me')) return true
   if (w.cloak.isHere()) return true
-  if (w.cloak.isAtLoc('hook') && game.player.isAtLoc('cloakroom')) return true
+  if (w.cloak.isAtLoc('hook') && player.isAtLoc('cloakroom')) return true
   return false
 }
 
@@ -34,13 +34,13 @@ commands.push(new Cmd('HangUp', {
     {scope:parser.isHeld},
   ],
   script:function(objects) {
-    if (!objects[0][0].isAtLoc(game.player)) {
+    if (!objects[0][0].isAtLoc(player)) {
       return failedmsg ("You're not carrying {sb:obj}.", {obj:objects[0][0]})
     }
     else if (objects[0][0].worn) {
       return failedmsg ("Not while you're wearing {sb:obj}!", {obj:objects[0][0]})
     }
-    else if (!game.player.isAtLoc('cloakroom')) {
+    else if (!player.isAtLoc('cloakroom')) {
       return failedmsg ("Hang {sb:obj} where, exactly?", {obj:objects[0][0]})
     }
     else {
@@ -59,13 +59,13 @@ commands.push(new Cmd('HangUp', {
     {scope:parser.isHeld},
   ],
   script:function(objects) {
-    if (!objects[0][0].isAtLoc(game.player)) {
+    if (!objects[0][0].isAtLoc(player)) {
       return failedmsg ("You're not carrying {sb:obj}.", {obj:objects[0][0]})
     }
     else if (objects[0][0].worn) {
       return failedmsg ("Not while you're wearing {sb:obj}!", {obj:objects[0][0]})
     }
-    else if (!game.player.isAtLoc('cloakroom')) {
+    else if (!player.isAtLoc('cloakroom')) {
       return failedmsg ("Hang {sb:obj} where, exactly?", {obj:objects[0][0]})
     }
     else {

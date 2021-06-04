@@ -432,9 +432,9 @@ createItem("Kyle", CREW(false), {
 
   // Reactions
   reactions:function() {
-    const g = game.player.getOuterWearable("body");
+    const g = player.getOuterWearable("body");
     if (g === false && this.reactionToUndress < 2) {
-      if (game.player.isFemale) {
+      if (player.isFemale) {
         msg("Kyle glances at you briefly. Kind of insulting that he is so uninterested in your naked body.");
       }
       else {
@@ -603,7 +603,7 @@ createItem("Ostap", CREW(false), {
   // Reactions
   reactionToUndress:0,
   reactions:function() {
-    const g = game.player.getOuterWearable("body");
+    const g = player.getOuterWearable("body");
     if (g === false && this.reactionToUndress < 2) {
       msg("Ostap looks you up and down, and smiles. 'Maybe I will get naked too! So liberating. The others are okay with it?'");
       this.reactionToUndress = 2;
@@ -711,9 +711,9 @@ createItem("Aada", CREW(true), {
   
   // Reactions
   reactions:function() {
-    const g = game.player.getOuterWearable("body");
+    const g = player.getOuterWearable("body");
     if (g === false && this.reactionToUndress < 2) {
-      if (game.player.isFemale) {
+      if (player.isFemale) {
         msg("Aada looks you up and down. 'Very trim!' she notes. 'I bet the guys like the view.'");
         if (w.Kyle.reactionToUndress === 2) {
           msg("'Well, Kyle was none too impressed.'");
@@ -863,9 +863,9 @@ createItem("Ha_yoon", CREW(true), {
   
   // Reactions
   reactions:function() {
-    const g = game.player.getOuterWearable("body");
+    const g = player.getOuterWearable("body");
     if (g === false && this.reactionToUndress < 2) {
-      if (game.player.isFemale) {
+      if (player.isFemale) {
         msg("'Captain!' exclaims Ha-yoon when she sees you naked.");
       }
       else {
