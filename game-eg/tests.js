@@ -309,6 +309,16 @@ test.tests = function() {
   test.assertEqual("Simple text: no", processText("Simple text: {ifLessThanOrEqual:player:someOddAtt:66:yes:no}"));
   test.assertEqual("Simple text: yes", processText("Simple text: {ifLessThanOrEqual:player:someOddAtt:67:yes}"));
 
+  test.title("Text processor 2a");
+  player.tpTest1 = function(params) { return lang.toWords(2 * params.val) }
+  player.tpTest2 = function(params) { return 2 * params.val }
+  player.tpTest3 = function(params) { return w.Lara }
+  test.assertEqual("Simple text: sixteen", processText("Simple text: {show:player:tpTest1}", {val:8}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:player:tpTest2:16:yes:no}", {val:8}))
+  test.assertEqual("Simple text: no", processText("Simple text: {if:player:tpTest2:15:yes:no}", {val:8}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:player:tpTest3:Lara:yes:no}", {val:8}))
+  test.assertEqual("Simple text: no", processText("Simple text: {if:player:tpTest3:Kyle:yes:no}", {val:8}))
+
 
   test.title("Text processor 3");
   player.someOddAtt = true;
@@ -335,6 +345,8 @@ test.tests = function() {
   test.assertEqual("Simple text: p2=test1", processText("Simple text: p2={param:item:func1}", {item:"book"}));
   test.assertEqual("Simple text: p2=test2(one, two)", processText("Simple text: p2={param:item:func2:one:two}", {item:"book"}));
   test.assertEqual("Simple text: p2=It is Kyle reading the book.", processText("Simple text: p2={param:item:func3:char}", {item:"book", char:"Kyle"}));
+  test.assertEqual("Simple text2: seen first time only", processText("Simple text2: {once:seen first time only:other times}"));
+  test.assertEqual("Simple text2: other times", processText("Simple text2: {once:seen first time only:other times}"));
 
 
 
@@ -1119,7 +1131,12 @@ test.tests = function() {
   test.title("Transit");
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
   test.assertCmd("push button: g", ["You're already there mate!"]);
+  
+  test.assertEqual("dining_room", w.lift.getDestLocation().name)
+  test.assertEqual("button_0", w.lift.getDestButton().name)
   test.assertCmd("push 1", ["You press the button; the door closes and the lift heads to the first floor. The door opens again."]);
+  test.assertEqual("bedroom", w.lift.getDestLocation().name)
+  test.assertEqual("button_1", w.lift.getDestButton().name)
   test.assertCmd("e", ["You head east.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
   w.lift.afterTransitMove = function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); };

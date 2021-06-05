@@ -516,7 +516,7 @@ createItem("vomit", {
 
 createItem("control_rod", TAKEABLE(), {
   examine:"The control rod is about two foot long, and a dull black colour.",
-  take:function(char.options) {
+  take:function(options) {
     const tpParams = {char:char, item:this}
     if (this.isAtLoc(char.name)) {
       msg(lang.already_have, tpParams);
@@ -677,7 +677,7 @@ createItem("chair", FURNITURE({sit:true, stand:true}), {
   loc:'office',
   scenery:true,
   afterPostureOn:function(options) {
-    if (w.Professor_Kleinscope.loc === 'office' && options.posture === 'sit' {
+    if (w.Professor_Kleinscope.loc === 'office' && options.posture === 'sit') {
       msg("'Making yourself at home, I see...' notes Professor Kleinscope.")
     }
   },
