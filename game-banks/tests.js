@@ -7,7 +7,7 @@ test.tests = function() {
   
   test.title("Planet Analysis")
   w.Xsansi.currentPlanet = 2
-  const response = {actor:w.Ostap}
+  const response = {char:w.Ostap}
   test.assertEqual("'Not as interesting as the last one, I think.'", planetAnalysis(response))
   w.Ostap.rank2 = 4
   test.assertEqual("'There are things a live here, but buried. There's bacteria in the soil. But it is not primitive bacteria. I cannot say for sure - I know only Earth bacteria - but I think this is highly evolved. I think some disaster, an extinction event, has wiped out virtually all life. This is all that survives.'", planetAnalysis(response))

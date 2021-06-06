@@ -86,23 +86,23 @@ const CREW = function(isFemale) {
   }
   // Description
   res.examine = function(options) {
-    const tpParams = {actor:this}
+    const tpParams = {char:this}
     let s;
     switch (this.clothing) {
-      case 0: s = " {pv:actor:be:true} naked."; break;
-      case 1: s = " {pv:actor:be:true} in his underwear."; break;
-      case 2: s = " {pv:actor:be:true} wearing a dark grey jumpsuit."; break;
+      case 0: s = " {pv:char:be:true} naked."; break;
+      case 1: s = " {pv:char:be:true} in his underwear."; break;
+      case 2: s = " {pv:char:be:true} wearing a dark grey jumpsuit."; break;
     }
     if (this.posture === "reclining" && this.loc === "stasis_bay") {
-      s += " {pv:actor:be:true} lying in his stasis pod.";
+      s += " {pv:char:be:true} lying in his stasis pod.";
     }
     else if (this.posture) {
-      s += " {pv:actor:be:true} " + this.posture + ".";
+      s += " {pv:char:be:true} " + this.posture + ".";
     }
     msg(this.desc + s, tpParams);
   }
   res.stasis = function() {
-    const tpParams = {actor:this}
+    const tpParams = {char:this}
     msg("'{nm:actor}, you're work here is done; you can go get in your stasis pod.'", tpParams);
     if (this.deployProbeTotal === 0) {
       msg("'You don't think I should deploy a probe first?'", tpParams);
@@ -114,18 +114,18 @@ const CREW = function(isFemale) {
     this.stasisPodCount = 0;
   }
   res.stasisPod = function() {
-    const tpParams = {actor:this}
+    const tpParams = {char:this}
     if (this.clothing === 2) {
-      this.msg("{nv:actor:pull:true} off {pa:actor} jumpsuit, and puts it in the drawer under {pa:actor} stasis pod.", tpParams);
+      this.msg("{nv:char:pull:true} off {pa:actor} jumpsuit, and puts it in the drawer under {pa:actor} stasis pod.", tpParams);
       this.clothing = 1;
       return false;
     }
     if (this.posture !== "reclining") {
-      this.msg("Just in {pa:actor} underwear, {nv:actor:climb} into {pa:actor} stasis pod.", tpParams);
+      this.msg("Just in {pa:actor} underwear, {nv:char:climb} into {pa:actor} stasis pod.", tpParams);
       this.posture = "reclining";
       return false;
     }
-    this.msg("'Close the pod, Xsansi,' {nv:actor:say}. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field.", tpParams);
+    this.msg("'Close the pod, Xsansi,' {nv:char:say}. The stasis pod lid smoothly lowers, and Xsansi operates the stasis field.", tpParams);
     this.status = "stasis";
     this.loc = "nowhere";
     return true;
@@ -146,18 +146,18 @@ const CREW = function(isFemale) {
     // 3 is noting the job is done
     // Once a probe is launched this system forgets it
     const count = parseInt(arr[0])
-    const tpParams = {actor:this, count:this.deployProbeCount + 1}
+    const tpParams = {char:this, count:this.deployProbeCount + 1}
     switch (this.deployProbeAction) {
       case 0:
         this.probeAction0(count)
         this.deployProbeAction++
         break
       case 1:
-        this.msg("{nv:actor:prepare:true} the {ordinal:count} {param:actor:probeType}.", tpParams)
+        this.msg("{nv:char:prepare:true} the {ordinal:count} {param:char:probeType}.", tpParams)
         this.deployProbeAction++
         break
       case 2:
-        this.msg("{nv:actor:launch:true} the {ordinal:count} {param:actor:probeType}.", tpParams)
+        this.msg("{nv:char:launch:true} the {ordinal:count} {param:char:probeType}.", tpParams)
         this.actuallyDeployProbe(count)
         break
       case 3:
@@ -326,8 +326,8 @@ function createTopics(npc) {
     regex:/(this |the |)?planet/,
     test:function(p) { return p.text.match(this.regex) }, 
     script:function(response) {
-      const tpParams = {actor:response.actor}
-      msg("'What's your report on {planet}?' you ask {nm:actor:the}.", tpParams)
+      const tpParams = {char:response.actor}
+      msg("'What's your report on {planet}?' you ask {nm:char:the}.", tpParams)
       msg(planetAnalysis(response), tpParams)
     },
   });
@@ -359,7 +359,7 @@ function createTopics(npc) {
     }
   });
   npc.askOptions.push({
-    msg:"{nv:actor:have:true} no interest in that.",
+    msg:"{nv:char:have:true} no interest in that.",
     failed:true,
   })
 }

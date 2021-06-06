@@ -319,6 +319,13 @@ test.tests = function() {
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:tpTest3:Lara:yes:no}", {val:8}))
   test.assertEqual("Simple text: no", processText("Simple text: {if:player:tpTest3:Kyle:yes:no}", {val:8}))
 
+  settings.tpTest = 9
+  test.assertEqual("Simple text: 9", processText("Simple text: {show:settings:tpTest}"))
+  test.assertEqual("Simple text: nine", processText("Simple text: {number:settings:tpTest}"))
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:settings:tpTest:9:yes:no}", {val:8}))
+  test.assertEqual("Simple text: no", processText("Simple text: {if:settings:tpTest:8:yes:no}", {val:8}))
+
+
 
   test.title("Text processor 3");
   player.someOddAtt = true;
@@ -1132,11 +1139,11 @@ test.tests = function() {
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
   test.assertCmd("push button: g", ["You're already there mate!"]);
   
-  test.assertEqual("dining_room", w.lift.getDestLocation().name)
-  test.assertEqual("button_0", w.lift.getDestButton().name)
+  test.assertEqual("dining_room", w.lift.getTransitDestLocation().name)
+  test.assertEqual("button_0", w.lift.getTransitDestButton().name)
   test.assertCmd("push 1", ["You press the button; the door closes and the lift heads to the first floor. The door opens again."]);
-  test.assertEqual("bedroom", w.lift.getDestLocation().name)
-  test.assertEqual("button_1", w.lift.getDestButton().name)
+  test.assertEqual("bedroom", w.lift.getTransitDestLocation().name)
+  test.assertEqual("button_1", w.lift.getTransitDestButton().name)
   test.assertCmd("e", ["You head east.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
   w.lift.afterTransitMove = function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); };

@@ -44,7 +44,7 @@ commands.push(new Cmd('HangUp', {
       return failedmsg ("Hang {sb:obj} where, exactly?", {obj:objects[0][0]})
     }
     else {
-      objects[0][0].moveToFrom(player, 'hook')
+      objects[0][0].moveToFrom(player, w.hook)
       msg ("You hang {nm:obj:the} on the hook.", {obj:objects[0][0]})
       return world.SUCCESS
     }
@@ -59,20 +59,14 @@ commands.push(new Cmd('HangUp', {
     {scope:parser.isHeld},
   ],
   script:function(objects) {
-    if (!objects[0][0].isAtLoc(player)) {
-      return failedmsg ("You're not carrying {sb:obj}.", {obj:objects[0][0]})
-    }
-    else if (objects[0][0].worn) {
-      return failedmsg ("Not while you're wearing {sb:obj}!", {obj:objects[0][0]})
-    }
-    else if (!player.isAtLoc('cloakroom')) {
-      return failedmsg ("Hang {sb:obj} where, exactly?", {obj:objects[0][0]})
-    }
-    else {
-      objects[0][0].moveToFrom(player, 'hook')
-      msg ("You hang {nm:obj:the} on the hook.", {obj:objects[0][0]})
-      return world.SUCCESS
-    }
+    const options = {char:player, toLoc:'hook', item:objects[0][0]}
+    if (!objects[0][0].isAtLoc(player)) return failedmsg ("You're not carrying {sb:item}.", options)
+    if (objects[0][0].worn) return failedmsg ("Not while you're wearing {sb:item}!", options)
+    if (!player.isAtLoc('cloakroom')) return failedmsg ("Hang {sb:item} where, exactly?", options)
+
+    objects[0][0].moveToFrom(options, w.hook)
+    msg ("You hang {nm:item:the} on the hook.", options)
+    return world.SUCCESS
   }  
 }))
 

@@ -23,7 +23,7 @@ createItem("Xsansi", NPC(true), {
   seederPods:6,
   locate:'Ostap',
   satellites:6,
-  crewStatusTemplate:"'Crew member {nms:actor} designation is: {param:actor:specialisation}. {pa:actor:true} current status is: {status}.{ifNot:actor:loc:nowhere: {pa:actor:true} current location is@@@colon@@@ {nm:room:the}.}'",
+  crewStatusTemplate:"'Crew member {nms:actor} designation is: {param:char:specialisation}. {pa:char:true} current status is: {status}.{ifNot:char:loc:nowhere: {pa:char:true} current location is@@@colon@@@ {nm:room:the}.}'",
   currentPlanet:-1,
   shipStatus:"All systems nominal.",
   pressureOverride:false,
@@ -45,7 +45,7 @@ createItem("Xsansi", NPC(true), {
       test:function(p) { return p.text.match(/crew|team/); }, 
       script:function() {
         msg("'Tell me about the crew, Xsansi,' you say.");
-        for (let npc of NPCS) msg(processText(w.Xsansi.crewStatusTemplate, {actor:npc, room:w[npc.loc]}))
+        for (let npc of NPCS) msg(processText(w.Xsansi.crewStatusTemplate, {char:npc, room:w[npc.loc]}))
       },
     },
     
@@ -55,7 +55,7 @@ createItem("Xsansi", NPC(true), {
       script:function() {
         msg("'Tell me about Kyle, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
-          msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Kyle, room:w[w.Kyle.loc]}))
+          msg(processText(w.Xsansi.crewStatusTemplate, {char:w.Kyle, room:w[w.Kyle.loc]}))
           w.Xsansi.locate = 'Kyle'
         }
         else {
@@ -70,7 +70,7 @@ createItem("Xsansi", NPC(true), {
       script:function() {
         msg("'Tell me about Aada, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
-          msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Aada, room:w[w.Aada.loc]}))
+          msg(processText(w.Xsansi.crewStatusTemplate, {char:w.Aada, room:w[w.Aada.loc]}))
           w.Xsansi.locate = 'Aada'
         }
         else {
@@ -85,7 +85,7 @@ createItem("Xsansi", NPC(true), {
       script:function() {
         msg("'Tell me about Ha-yoon, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
-          msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ha_yoon, room:w[w.Ha_yoon.loc]}))
+          msg(processText(w.Xsansi.crewStatusTemplate, {char:w.Ha_yoon, room:w[w.Ha_yoon.loc]}))
           w.Xsansi.locate = 'Ha_yoon'
         }
         else {
@@ -102,7 +102,7 @@ createItem("Xsansi", NPC(true), {
       script:function() {
         msg("'Tell me about Ostap, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
-          msg(processText(w.Xsansi.crewStatusTemplate, {actor:w.Ostap, room:w[w.Ostap.loc]}))
+          msg(processText(w.Xsansi.crewStatusTemplate, {char:w.Ostap, room:w[w.Ostap.loc]}))
           w.Xsansi.locate = 'Ostap'
         }
         else {

@@ -531,7 +531,7 @@ createItem("control_rod", TAKEABLE(), {
     }
     let flag = (this.loc === "reactor")
     msg(lang.take_successful, tpParams)
-    this.moveToFrom(char, char.name)
+    this.moveToFrom(options, "name")
     if (flag) {
       msg("The blue light in the reactor winks out and the buzz dies.")
       w.reactor_room.reactorRunning = false

@@ -56,7 +56,7 @@ createRoom("wheat_road", {
   west:new Exit('market_square'),
   south:new Exit('quayside_east'),
   east:new Exit('granite_bridge'),
-  northwest:new Exit('madame_rels', {isUnlocked:util.openingTimes}),
+  northwest:new Exit('madame_rels', {testExit:util.openingTimes}),
   mapX:666,
   mapY:532,
   mapRegion:'Halmuth',
