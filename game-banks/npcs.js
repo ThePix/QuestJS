@@ -14,7 +14,7 @@ createItem("Xsansi", NPC(true), {
     if (typeof loc !== "string") loc = loc.name
     return isOnShip() && (situation === world.PARSER || situation === world.SIDE_PANE);
   },
-  properName:true,
+  properNoun:true,
   regex:/^(ai|xsan|computer)$/,
   scenery:true,
   status:100,

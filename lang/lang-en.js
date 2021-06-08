@@ -782,7 +782,7 @@ const lang = {
     if (item.defArticle) {
       return item.defArticle + " ";
     }
-    return item.properName ? "" : "the ";
+    return item.properNoun ? "" : "the ";
   },
 
   //@DOC
@@ -793,7 +793,7 @@ const lang = {
     if (item.indefArticle) {
       return item.indefArticle + " ";
     }
-    if (item.properName) {
+    if (item.properNoun) {
       return "";
     }
     if (item.pronouns === lang.pronouns.plural) {
@@ -816,6 +816,9 @@ const lang = {
     // and we need to be clear which item the count belongs to
     let count = options[item.name + '_count'] ? options[item.name + '_count'] : false
     if (!count && options.loc && item.countable) count = item.countAtLoc(options.loc)
+    //log(options)
+    //log(count)
+    //log(item)
 
     if (item.pronouns === lang.pronouns.firstperson || item.pronouns === lang.pronouns.secondperson) {
       s = options.possessive ? item.pronouns.poss_adj : item.pronouns.subjective;
@@ -843,11 +846,8 @@ const lang = {
       if (!count || count === 1) {
         s += (options.enhanced && item.enhancedAlias ? item.enhancedAlias : item.alias)
       }
-      else if (item.pluralAlias) {
-        s += item.pluralAlias
-      }
       else {
-        s += item.alias + "s"
+        s += item.pluralAlias
       }
       if (options.possessive) {
         if (s.endsWith('s')) {
@@ -936,7 +936,17 @@ const lang = {
     return s;
   },
 
-
+  getPlural:function(s) {
+    if (s.match(/o$/)) return s + 'es'
+    if (s.match(/on$/)) return s + 'a'
+    if (s.match(/us$/)) return s.replace(/us$/, 'i')
+    if (s.match(/um$/)) return s.replace(/um$/, 'a')
+    if (s.match(/[aeiou]y$/)) return s + 's'
+    if (s.match(/y$/)) return s.replace(/y$/, 'ies')
+    if (s.match(/sis$/)) return s.replace(/sis$/, 'ses')
+    if (s.match(/(s|ss|sh|ch|z|x)$/)) return s + 'es'
+    return s + 's'
+  },
 
 
 
@@ -1018,7 +1028,7 @@ const lang = {
   // would return the pronoun "you go".
   // The first letter is capitalised if 'capitalise' is true.
   nounVerb:function(item, verb, capitalise) {
-    if (item === player && !player.useProperName) {
+    if (item === player && !player.useproperNoun) {
       return lang.pronounVerb(item, verb, capitalise);
     }
     let s = lang.getName(item, {article:DEFINITE}) + " " + lang.conjugate (item, verb);

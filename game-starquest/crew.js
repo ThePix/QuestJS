@@ -13,7 +13,7 @@ createItem("player", PLAYER(), {
 // Your boss
 createItem("nagoshima", NPC(true), {
   alias:"Commander Nagoshima",
-  properName:true,
+  properNoun:true,
   examine:"Despite her striking black hair, which she wears in a neat bun, you would judge Commanda Nagoshima to be in her fifties. You find yourself warming to her smile.",
 })
 
@@ -36,7 +36,7 @@ createItem("nagoshima_missions", TOPIC(true), {
 createItem("yeoman", NPC(true), {
   loc:"room",
   alias:"Yeoman Rand",
-  properName:true,
+  properNoun:true,
   examine:"Yeoman Rand arrived at Starbase One on the same shuttle as you, and you conversed with her a little on the journey; this is her first assignment to a star ship. She is above average height for a woman, with cropped blonde hair, and is dressed smarkly in the fleet uniform.",
 })
 
@@ -93,7 +93,7 @@ createItem("yeoman_call_me_maam", TOPIC(true), {
 const CANDIDATE = function(female) {
   const res = NPC(female)
   res.candidate = true
-  res.properName = true
+  res.properNoun = true
   res.dutiesDiag = function() {
     settings.startingDialogHtml = '<p>Name: <i>' + this.alias + '</i></p>'
     settings.startingDialogHtml += '<p>Species: <i>' + this.species + '</i></p>'

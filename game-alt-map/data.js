@@ -64,7 +64,7 @@ createRoom("wheat_road", {
 
 createRoom("madame_rels", {
   alias:"Madame Rel's Little Shop of Wonders",
-  properName:true,
+  properNoun:true,
   desc:".",
   southeast:new Exit('wheat_road'),
 })

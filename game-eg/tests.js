@@ -27,12 +27,24 @@ test.tests = function() {
   test.assertEqual(3, parser.scoreObjectMatch("cab", w.glass_cabinet, {}));
   
   
+  test.title("Plurals")
+  test.assertEqual('houses', lang.getPlural('house'))
+  test.assertEqual('rays', lang.getPlural('ray'))
+  test.assertEqual('ries', lang.getPlural('ry'))
+  test.assertEqual('stadia', lang.getPlural('stadium'))
+  test.assertEqual('tosses', lang.getPlural('toss'))
+  test.assertEqual('potatoes', lang.getPlural('potato'))
+  test.assertEqual('analyses', lang.getPlural('analysis'))
+  
+  
+  
+  
   test.title("parser.itemSetup")
-  test.assertEqual(undefined, w.ham_and_cheese_sandwich.parserOptionsSet)
+  test.assertEqual(false, w.ham_and_cheese_sandwich.parserOptionsSet)
   parser.itemSetup(w.ham_and_cheese_sandwich)
   test.assertEqual(true, w.ham_and_cheese_sandwich.parserOptionsSet)
   test.assertEqual('ham and cheese sandwich', w.ham_and_cheese_sandwich.parserItemName)
-  test.assertEqual(['egg', 'mayo'], w.ham_and_cheese_sandwich.parserAltNames)
+  test.assertEqual(['egg', 'mayo'], w.ham_and_cheese_sandwich.synonyms)
   test.assertEqual(["ham", "ham and", "ham and cheese", "ham and sandwich", "ham cheese", "ham cheese sandwich", "ham sandwich", "and", "and cheese", "and cheese sandwich", "and sandwich", "cheese", "cheese sandwich", "sandwich"], w.ham_and_cheese_sandwich.parserItemNameParts)
   
 

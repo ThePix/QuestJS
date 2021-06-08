@@ -37,7 +37,7 @@ createItem("ship", {
     const c = this.alerts[this.alert]
     return this.alert ? '<span style="border:black 1px solid;background-color:' + c + ';">&nbsp;' + c + '&nbsp;</span>' : '-'
   },
-  postLoad:function() {
+  afterLoad:function() {
     if (w.ship.arrivedAtSector) {
       // load missions
     }

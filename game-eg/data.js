@@ -83,7 +83,7 @@ createRoom("lounge", {
 createItem("Buddy", NPC(false), { 
   loc:"lounge",
   money:10,
-  properName:true,
+  properNoun:true,
   examine:'An orangutan!',
   talkto:function() {
     const res = quest.getState('A carrot for Buddy', this)
@@ -680,7 +680,7 @@ createItem("Arthur",
       }
     },
     suspended:true,
-    properName:true,
+    properNoun:true,
     agenda:[
       "text:Arthur stands up and stretches.", 
       "text:'I'm going to find Lara, and show her the garden,' says Arthur.:'Whatever!'", 
@@ -858,7 +858,7 @@ createItem("straw_boater",
 createItem("Lara", NPC(true), {
   loc:"dining_room", 
   examine:"A normal-sized bunny.",
-  properName:true, 
+  properNoun:true, 
   happy:false,
   afterGive:function(options) {
     if (options.item === w.ring) {
@@ -1113,7 +1113,7 @@ createRoom("inside_tower", {
   down:new Exit("desert"),
   north:new Exit("shop"),
   alias:'Inside the tower',
-  properName:true,
+  properNoun:true,
   beforeEnter:function() {
     player.positionX = -1
     player.positionY = 3

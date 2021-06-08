@@ -330,7 +330,7 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
   loc:"shed",
   scenery:true,
   examine:"A small red torch.",
-  parserAltNames:['torch'],
+  synonyms:['torch'],
   lightSource:function() {
     return this.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
