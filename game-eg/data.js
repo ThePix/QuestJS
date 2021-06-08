@@ -135,7 +135,7 @@ createItem("book", TAKEABLE(), READABLE(true), {
         msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
       }
       else {
-        msg ("It is not in a language " + lang.pronounVerb(options.char, "understand") + ".");
+        msg ("It is not in a language {pv:char:understand}.", options)
       }
       parser.abort()
       return true;

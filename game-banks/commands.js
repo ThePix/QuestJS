@@ -12,7 +12,7 @@ commands.push(new Cmd('Kick', {
     {scope:parser.isPresent}
   ],
   default:function(item, char, options) {
-    msg(lang.pronounVerb(char, "kick", true) + " " + item.pronouns.objective + ", but nothing happens.");
+    msg("{pv:char:kick:true} {ob:item:the}, but nothing happens.", options);
     return false;
   },
 }));
@@ -26,7 +26,7 @@ commands.push(new Cmd('Move', {
     {scope:parser.isHere}
   ],
   default:function(item, char, options) {
-    msg(lang.pronounVerb(item, "'be", true) + " not something you can move.");
+    msg("{pv:char:be:true} not something you can move.", options);
     return false;
   },
 }));

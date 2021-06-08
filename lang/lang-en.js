@@ -385,7 +385,7 @@ const lang = {
 
   // Used deep in the parser, so prefer to use function, rather than string
   object_unknown_msg:function(name) {
-    return lang.nounVerb(player, "can't", true) + " see anything you might call '" + name + "' here.";
+    return "There doesn't seem to be anything you might call '" + name + "' here.";
   },
 
 
@@ -393,32 +393,22 @@ const lang = {
   stop_posture:function(char) {
     if (!char.posture) return ""
     if (!char.postureFurniture && char.posture === "standing") return ""
-    let s
-    // You could split up sitting, standing and lying
-    if (char.postureFurniture) {
-      s = lang.nounVerb(char, "get", true) + " off " + lang.getName(w[char.postureFurniture], {article:DEFINITE}) + "."
-    }
-    else {
-      s = lang.nounVerb(char, "stand", true) + " up."
-    }
+    const options = {char:char}
+    if (w[char.postureFurniture]) options.item = w[char.postureFurniture]
     char.posture = false
     char.postureFurniture = false
-    return s
+    return processText(options.item ? "{nv:char:get:true} off {nm:item:the}." : "{nv:char:stand:true} up.", options)
   },
 
 
 
   // use (or potentially use) different verbs in the responses, so not simple strings
-  say_no_one_here:function(char, verb, text) {
-    return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one notices.";
-  },
-  say_no_response:function(char, verb, text) {
-    return "No one seemed interested in what you say.";
-  },
-  say_no_response_full:function(char, verb, text) {
-    return lang.nounVerb(char, verb, true) + ", '" + sentenceCase(text) + ",' but no one seemed interested in what you say.";
-  },
+  say_no_one_here:"{nv:char:say:true}, '{show:text},' but no one notices.",
+  say_no_response: "No one seems interested in what you say.",
+  say_no_response_full: "{nv:char:say:true}, '{show:text},' but no one seem interested.",
+  say_something:"{nv:char:say:true}, '{show:text}.'",
 
+  // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
   // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
   speak_to_menu_title:function(char) {
     return "Talk to " + lang.getName(char, {article:DEFINITE}) + " about:";
@@ -816,6 +806,7 @@ const lang = {
     // and we need to be clear which item the count belongs to
     let count = options[item.name + '_count'] ? options[item.name + '_count'] : false
     if (!count && options.loc && item.countable) count = item.countAtLoc(options.loc)
+    if (count !== 'infinity' && typeof count === 'string') count = parseInt(count)
     //log(options)
     //log(count)
     //log(item)
@@ -824,7 +815,8 @@ const lang = {
       s = options.possessive ? item.pronouns.poss_adj : item.pronouns.subjective;
     }
 
-    else {    
+    else {
+      
       if (count === 'infinity') {
         s += item.infinity ? item.infinity + ' ' : 'a lot of '
       }
@@ -968,7 +960,7 @@ const lang = {
   //@DOC
   // Returns the verb properly conjugated for the item, so "go" with a ball would return
   // "goes", but "go" with the player (if using second person pronouns).
-  conjugate:function(item, verb) {
+  conjugate:function(item, verb, options = {}) {
     let gender = item.pronouns.subjective;
     if (gender === "he" || gender === "she") { gender = "it"; }
     const arr = lang.conjugations[gender.toLowerCase()];
@@ -993,7 +985,7 @@ const lang = {
         return item, verb.substring(0, verb.length - name.length + 1) + value;
       }
     }
-    return verb;
+    return options.capitalise ? sentenceCase(verb) : verb
   },
 
 
@@ -1003,22 +995,22 @@ const lang = {
   // so "go" with a ball would return "it goes", but "go" with the player (if using second person pronouns)
   // would return "you go".
   // The first letter is capitalised if 'capitalise' is true.
-  pronounVerb:function(item, verb, capitalise) {
+  pronounVerb:function(item, verb, options) {
     let s = item.pronouns.subjective + " " + lang.conjugate (item, verb);
     s = s.replace(/ +\'/, "'");  // yes this is a hack!
-    return capitalise ? sentenceCase(s) : s;
+    return options.capitalise ? sentenceCase(s) : s;
   },
 
-  pronounVerbForGroup:function(item, verb, capitalise) {
+  pronounVerbForGroup:function(item, verb, options) {
     let s = item.groupPronouns().subjective + " " + lang.conjugate (item.group(), verb);
     s = s.replace(/ +\'/, "'");  // yes this is a hack!
-    return capitalise ? sentenceCase(s) : s;
+    return options.capitalise ? sentenceCase(s) : s;
   },
 
-  verbPronoun:function(item, verb, capitalise) {
+  verbPronoun:function(item, verb, options) {
     let s = lang.conjugate (item, verb) + " " + item.pronouns.subjective;
     s = s.replace(/ +\'/, "'");  // yes this is a hack!
-    return capitalise ? sentenceCase(s) : s;
+    return options.capitalise ? sentenceCase(s) : s;
   },
 
   //@DOC
@@ -1027,22 +1019,24 @@ const lang = {
   // a some bees would return "the bees go". For the player, (if using second person pronouns)
   // would return the pronoun "you go".
   // The first letter is capitalised if 'capitalise' is true.
-  nounVerb:function(item, verb, capitalise) {
+  nounVerb:function(item, verb, options) {
     if (item === player && !player.useproperNoun) {
-      return lang.pronounVerb(item, verb, capitalise);
+      return lang.pronounVerb(item, verb, options);
     }
-    let s = lang.getName(item, {article:DEFINITE}) + " " + lang.conjugate (item, verb);
+    if (options.article === undefined) options.article = DEFINITE
+    let s = lang.getName(item, options) + " " + lang.conjugate (item, verb);
     s = s.replace(/ +\'/, "'");  // yes this is a hack!
-    return capitalise ? sentenceCase(s) : s;
+    return options.capitalise ? sentenceCase(s) : s;
   },
 
-  verbNoun:function(item, verb, capitalise) {
+  verbNoun:function(item, verb, options) {
     if (item === player) {
-      return lang.pronounVerb(item, verb, capitalise);
+      return lang.pronounVerb(item, verb, options);
     }
-    let s = lang.conjugate (item, verb) + " " + lang.getName(item, {article:DEFINITE});
+    if (options.article === undefined) options.article = DEFINITE
+    let s = lang.conjugate (item, verb) + " " + lang.getName(item, options);
     s = s.replace(/ +\'/, "'");  // yes this is a hack!
-    return capitalise ? sentenceCase(s) : s;
+    return options.capitalise ? sentenceCase(s) : s;
   },
 
 }

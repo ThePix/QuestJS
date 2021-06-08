@@ -381,6 +381,8 @@ test.tests = function() {
   test.assertEqual("It is your book.", processText("It is {nms:chr:the} book.", {chr:player}));
   test.assertEqual("It is Kyle's book.", processText("It is {nms:chr:the} book.", {chr:w.Kyle}));
 
+  test.assertEqual("There are seven bricks.", processText("There are {nm:item:count}.", {item:w.brick, brick_count:'7'}));
+
   test.title("Text processor 5a: nm with COUNTABLE.");
   test.assertEqual("Five bricks", processText("{nm:item:count:true}", {item:w.brick, brick_count:5}))
   test.assertEqual("Five bricks", processText("{nm:item:a:true}", {item:w.brick, brick_count:5}))
@@ -556,7 +558,7 @@ test.tests = function() {
 
 
   test.title("errors")
-  test.assertCmd("get sdjfghfg", "You can't see anything you might call 'sdjfghfg' here.")
+  test.assertCmd("get sdjfghfg", "There doesn't seem to be anything you might call 'sdjfghfg' here.")
   test.assertCmd("map", "Sorry, no map available.")
 
 
@@ -845,7 +847,7 @@ test.tests = function() {
 
   
   test.title("say");
-  test.assertCmd("say hello", ["You say, 'Hello.'", "No one seemed interested in what you say."]);
+  test.assertCmd("say hello", ["You say, 'Hello.'", "No one seems interested in what you say."]);
   w.Kyle.loc = "dining_room"
   test.assertCmd("w", ["You head west.", "The dining room", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and Lara here.", "You can go east, up or west.",]);
   test.assertCmd("say hello", ["You say, 'Hello.'", "'Oh, hello there,' replies Lara.", "'Have you two met before?' asks Kyle."]);
@@ -853,7 +855,7 @@ test.tests = function() {
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
   test.assertCmd("say yes", ["You say, 'Yes.'", "'Oh, cool,' says Kyle."]);
-  test.assertCmd("say hello", ["You say, 'Hello.'", "No one seemed interested in what you say."]);
+  test.assertCmd("say hello", ["You say, 'Hello.'", "No one seems interested in what you say."]);
 
 
   test.title("ask");
@@ -947,7 +949,7 @@ test.tests = function() {
   test.title("NPC commands (go)");
   test.assertCmd("kyle, go ne", "Kyle can't go northeast.");
   test.assertCmd("kyle, go e", "Kyle leaves the lounge, heading east.");
-  test.assertCmd("kyle, get torch", "You can't see anything you might call 'kyle' here.")
+  test.assertCmd("kyle, get torch", "There doesn't seem to be anything you might call 'kyle' here.")
   
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("get garage", "You take the garage key.");
@@ -982,7 +984,7 @@ test.tests = function() {
   test.assertCmd("push button", "You push the button, but nothing happens.");
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "You push the button. There is a brief hum of power, and a flash.");
-  test.assertCmd("get torch", "You can't see anything you might call 'torch' here.");
+  test.assertCmd("get torch", "There doesn't seem to be anything you might call 'torch' here.");
   test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see a flashlight.");
   
   test.assertCmd("get torch", "You take the flashlight.");
@@ -1381,7 +1383,7 @@ test.tests = function() {
   
   
   test.title("the zone - invisible border");
-  test.assertCmd("x barrier", ["You can't see anything you might call 'barrier' here."]);
+  test.assertCmd("x barrier", ["There doesn't seem to be anything you might call 'barrier' here."]);
   test.assertCmd("n", ["You head north.", "The desert", "You are stood in the desert, north of the road. The air seems to kind of shimmer.", "You can go east, north, northeast, northwest, south, southeast, southwest or west."]);
   test.assertCmd("n", ["You try to head north, but hit an invisible barrier."]);
   test.assertCmd("x barrier", ["It is invisible!"]);
