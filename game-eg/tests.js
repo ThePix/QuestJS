@@ -380,8 +380,7 @@ test.tests = function() {
   test.assertEqual("The book is here.", processText("{nm:chr:the:true} is here.", {chr:w.book}));
   test.assertEqual("It is your book.", processText("It is {nms:chr:the} book.", {chr:player}));
   test.assertEqual("It is Kyle's book.", processText("It is {nms:chr:the} book.", {chr:w.Kyle}));
-
-  test.assertEqual("There are seven bricks.", processText("There are {nm:item:count}.", {item:w.brick, brick_count:'7'}));
+  test.assertEqual("There are seven bricks.", processText("There are {nm:item:count}.", {item:w.brick, brick_count:7}));
 
   test.title("Text processor 5a: nm with COUNTABLE.");
   test.assertEqual("Five bricks", processText("{nm:item:count:true}", {item:w.brick, brick_count:5}))
@@ -392,6 +391,8 @@ test.tests = function() {
 
   test.assertEqual("five bricks", processText("{nm:item:a}", {item:w.brick, count:5}))
   test.assertEqual("five bricks and one book", processText("{nm:item:a} and {nm:item2:count}", {item:w.brick, count:5, item2:w.book}))
+  w.book.specialCount = 4
+  test.assertEqual("five bricks and four books", processText("{nm:item:a} and {nm:item2:count:false:count_this}", {item:w.brick, count:5, item2:w.book, count_this:'specialCount'}))
 
 
   test.title("Text processor 6: show");

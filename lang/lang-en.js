@@ -805,13 +805,20 @@ const lang = {
     // The count needs to be an item specific attribute because there could be several items in a list
     // and we need to be clear which item the count belongs to
     let count = options[item.name + '_count'] ? options[item.name + '_count'] : false
+    // Or we can set count_this to an attribute, and use that to get the number
+    // processText("Mandy watches as {nv:item:grow:false:count_this}.", {item:w.grown_tamarind_tree, count_this:'seedsPlanted'})
+    if (options.count_this) count = item[options.count_this]
+    // Or if this is a countable, and loc is set, get the count from that location
     if (!count && options.loc && item.countable) count = item.countAtLoc(options.loc)
-    if (count !== 'infinity' && typeof count === 'string') count = parseInt(count)
-    //log(options)
-    //log(count)
-    //log(item)
+    
+//    if (count !== 'infinity' && typeof count === 'string') count = parseInt(count)
 
-    if (item.pronouns === lang.pronouns.firstperson || item.pronouns === lang.pronouns.secondperson) {
+    if (item.getDisplayName) {
+      options.count = count
+      s = item.getDisplayName(options)
+    }
+
+    else if (item.pronouns === lang.pronouns.firstperson || item.pronouns === lang.pronouns.secondperson) {
       s = options.possessive ? item.pronouns.poss_adj : item.pronouns.subjective;
     }
 
