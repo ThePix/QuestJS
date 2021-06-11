@@ -2,9 +2,8 @@
 
 createItem("me", PLAYER(), {
   loc:"lounge",
-  regex:/^(me|myself|player)$/,
+  synonyms:['me', 'myself'],
   examine: "Just a regular guy.",
-  hitpoints:100,
 })
 
 createRoom("lounge", {
