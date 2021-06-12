@@ -19,13 +19,15 @@
   <script src="lib/_settings.js"></script>
   <script>
     let folder = 'game'
+    let loaded = false
     if (window.location.search)
     folder += '-' + window.location.search.substring(1)
-    //console.log("Loading from folder: " + folder)
-    document.writeln('<script src="' + folder + '/settings.js"></scr' + "ipt>")
+    document.writeln('<script src="' + folder + '/settings.js" onload="loaded=true"></scr' + "ipt>")
   </script>
   <script>
-    settings.writeScript(folder)
+    // New script element as we need the actions in the previous one to complete before we do this
+    if (loaded) settings.writeScript(folder)
+    if (!loaded) console.error("Trying to load \"" + folder + "/settings.js\" and not finding it. Does that folder exist?")
   </script>
   
 </head>
@@ -44,7 +46,7 @@
 </div>
 
 <script>
-  io.createPanes();
+  if (loaded) io.createPanes();
 </script>
 
 <div id="dialog"></div>
