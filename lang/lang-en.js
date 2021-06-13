@@ -820,8 +820,6 @@ const lang = {
     // Or if this is a countable, and loc is set, get the count from that location
     if (!count && options.loc && item.countable) count = item.countAtLoc(options.loc)
     
-//    if (count !== 'infinity' && typeof count === 'string') count = parseInt(count)
-
     if (item.getDisplayName) {
       options.count = count
       s = item.getDisplayName(options)
@@ -835,6 +833,9 @@ const lang = {
       
       if (count === 'infinity') {
         s += item.infinity ? item.infinity + ' ' : 'a lot of '
+      }
+      else if (options.article === DEFINITE && options.suppressCount) {
+        s += lang.addDefiniteArticle(item)
       }
       else if (count && count > 1) {
         s += lang.toWords(count) + ' '

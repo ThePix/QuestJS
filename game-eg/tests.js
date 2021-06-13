@@ -149,6 +149,9 @@ test.tests = function() {
   test.title("sentenceCase");
   test.assertEqual("Simple text", sentenceCase("simple text"));
   
+  test.title("titleCase");
+  test.assertEqual("Simple Text", titleCase("simple text"));
+  
   test.title("getName");
   test.assertEqual("book", lang.getName(w.book));
   test.assertEqual("the book", lang.getName(w.book, {article:DEFINITE}));
