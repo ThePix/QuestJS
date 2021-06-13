@@ -161,7 +161,7 @@ createItem("your_spacesuit", WEARABLE(2, ["body"]), {
 createItem("other_spacesuit", WEARABLE(2, ["body"]), {
   alias:"spare spacesuit",
   loc:"stasis_locker",
-  parsePriority:-10,
+  parserPriority:-10,
   examine:"The other spacesuit is identical to your own, except it does not have your name on the back.",
   spray:function(char) {
     msg("")
@@ -698,7 +698,7 @@ createItem("probe_prototype", COUNTABLE([]), {
     probe.planetNumber = w.Xsansi.currentPlanet
     probe.probeNumber = owner.deployProbeTotal
     probe.owner = owner.name
-    probe.parsePriority  = -100
+    probe.parserPriority  = -100
     probe.eventScript = (owner.probeType === 'satellite' ? this.satelliteEventScript : this.probeEventScript)
     return probe
   },

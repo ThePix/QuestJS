@@ -554,12 +554,12 @@ const lang = {
   },
 
   transcriptScript:function() {
-    metamsg("The TRANSCRIPT or SCRIPT command can be used to handle saving the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the player got there.");
+    metamsg("The TRANSCRIPT or SCRIPT command can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.");
     metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place in the game). To empty the file, use SCRIPT CLEAR.");
     metamsg("You can add options to the SCRIPT SHOW to hide various types of text. Use M to hide meta-information (like this), I to hide your input, P to hide parser errors (when the parser says it has no clue what you mean), E to hide programming errors and D to hide debugging messages. These can be combined, so SCRIPT SHOW ED will hide programming errors and debugging messages, and SCRIPT SHOW EDPID will show only the output game text.");
-    metamsg("You can add a comment to the transcript by starting your text with an asterisk (*).")
+    metamsg("You can add a comment to the transcript by starting your text with an asterisk (*) - Quest will record it, but otherwise just ignore it.")
     metamsg("You can do TRANSCRIPT WALKTHROUGH or just SCRIPT W to copy the transcript to the clipboard formatted for a walk-through. You can then paste it straight into the code.")
-    metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser. The transcript is not saved when you save your game (but will not be lost when you load a game). If you complete the game the text input will disappear, however if you have a transcript a link will be available to access it.");
+    metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser. The transcript is {i:not} saved when you save your game (but will not be lost when you load a game). If you complete the game the text input will disappear, however if you have a transcript recording, a link will be available to access it.");
     metamsg("Transcript is currently: " + (io.transcript ? 'on' : 'off'))
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
@@ -570,8 +570,15 @@ const lang = {
   },
   
   betaTestIntro:function() {
-    metamsg("This version is for beta-testing (" + settings.version + "). A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab; it can then be copy-and-pasted into an e-mail.")
-    if (settings.textInput) metamsg("You can add your own comments to the transcript by starting a command with *.")
+    metamsg("This version is for beta-testing (" + settings.version + ").")
+    if (settings.textInput) {
+      metamsg("A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab, or click the link if you reach the end of the game; it can then be copy-and-pasted into an e-mail.")
+      metamsg("You can add your own comments to the transcript by starting a command with *.")
+    }
+    else {    
+      metamsg("A transcript will be automatically recorded. As this game has no text input, you will need to access the transcript through the developer tools. Press F12 to show the tools, and click on the \"Console\" tab. Type <code>io.scriptShow()</code> and press return. the transcript should appear in a new tab.")
+    }
+    metamsg("If you have not already done so, I recommend checking to ensure you can see the transcript before progressing too far though the game.")
     io.scriptStart()
   },
   
@@ -707,6 +714,7 @@ const lang = {
     i:[
       { name:"be", value:"am"},
       { name:"'be", value:"'m"},
+      { name:"were", value:"was"},  // Used in present tense for, eg "I was going to do that"
     ],
     you:[
       { name:"be", value:"are"},
@@ -722,6 +730,7 @@ const lang = {
     ],
     it:[
       { name:"be", value:"is"},
+      { name:"were", value:"was"},
       { name:"have", value:"has"},
       { name:"can", value:"can"},
       { name:"mould", value:"moulds"},
@@ -882,9 +891,9 @@ const lang = {
       let hundreds = Math.floor(number / 100);
       number = number % 100;
       if (hundreds > 0) {
-        s = s + lang.numberUnits[hundreds] + " hundred ";
+        s = s + lang.numberUnits[hundreds] + " hundred";
         if (number > 0) {
-          s = s + "and ";
+          s = s + " and ";
         }
       }
       if (number < 20) {

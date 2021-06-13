@@ -198,8 +198,7 @@ tp.addDirective("charger_state", function(){
 });
 
 
-
-
+// This is not a properly written command, it is just to test the item order can be reversed.
 commands.unshift(new Cmd('SliceCarrot', {
   rules:[cmdRules.isHeld],
   regexes:[/^use (.+) to slice (.+)$/, /^use (.+) slice (.+)$/, {regex:/slice (.+) with (.+)/, mod:{reverse:true}}],
@@ -209,6 +208,7 @@ commands.unshift(new Cmd('SliceCarrot', {
   ],
   script:function(objects) {
     msg("You slice {nm:ob1:the} with {nm:ob2:the}.", {ob1:objects[1][0], ob2:objects[0][0]})
+    return world.SUCCESS
   },
   defmsg:"Not going to happen.",
 }));

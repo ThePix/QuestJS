@@ -151,7 +151,7 @@ createItem("book", TAKEABLE(), READABLE(true), {
 
 createItem("book_cover", COMPONENT("book"), { 
   examine:"The book cover is very fancy.",
-  parsePriority:-20,
+  parserPriority:-20,
 });
 
 

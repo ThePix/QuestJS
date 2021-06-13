@@ -426,9 +426,17 @@ span.compass-button {
 
 .meta {
   color: grey;
-  /*background-color: #f9f9f9;
-  border: #ccc 1px solid;*/
   padding: 10px;
+}
+
+.todo {
+  color: grey;
+  font-weight: bold;
+  text-decoration: underline;
+  padding: 10px;
+}
+.todo::before {
+  content: "To do: ";
 }
 
 .dark-body .meta {
