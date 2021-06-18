@@ -318,6 +318,7 @@ skills.add(new Effect("Stoneskin effect", {
 skills.add(new SpellSelf("Steelskin", {
   targetEffect:function(attack, target) {
     attack.msg("Your skin becomes as hard as steel - and yet still just as flexible.", 1)
+    target.activeEffects.push("Steelskin effect")
     skills.limitDuration(target, "Steelskin effect", 3)
   },
   incompatible:[/skin effect$/],
