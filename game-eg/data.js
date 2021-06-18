@@ -74,7 +74,7 @@ createRoom("lounge", {
   scenery:[
     'tv',
     {alias:['old settee', 'couch', 'sofa']},
-    {alias:'rug', desc:'It might have been blue at one time. Maybe.'},
+    {alias:'rug', examine:'It might have been blue at one time. Maybe.'},
   ],
 });
 
