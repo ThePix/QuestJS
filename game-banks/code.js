@@ -153,11 +153,11 @@ const CREW = function(isFemale) {
         this.deployProbeAction++
         break
       case 1:
-        this.msg("{nv:char:prepare:true} the {ordinal:count} {param:char:probeType}.", tpParams)
+        this.msg("{nv:char:prepare:true} the {ordinal:count} {show:char:probeType}.", tpParams)
         this.deployProbeAction++
         break
       case 2:
-        this.msg("{nv:char:launch:true} the {ordinal:count} {param:char:probeType}.", tpParams)
+        this.msg("{nv:char:launch:true} the {ordinal:count} {show:char:probeType}.", tpParams)
         this.actuallyDeployProbe(count)
         break
       case 3:

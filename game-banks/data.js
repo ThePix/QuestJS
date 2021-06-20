@@ -19,7 +19,7 @@ createItem("me", PLAYER(), {
   examine:function() {
     msg("You feel fine...")
   },
-  canMove:function(ex) {
+  testMove:function(ex) {
     let room1 = w[this.loc]
     if (typeof room1.vacuum === "string") room1 = w[room1.vacuum]
     if (ex.name === '_') return true

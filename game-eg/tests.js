@@ -340,11 +340,22 @@ test.tests = function() {
   test.assertEqual("Simple text: yes", processText("Simple text: {if:settings:tpTest:9:yes:no}", {val:8}))
   test.assertEqual("Simple text: no", processText("Simple text: {if:settings:tpTest:8:yes:no}", {val:8}))
 
+  test.title("Text processor 2b");
+  test.assertEqual("Simple text: ", processText("Simple text: {show:item:att_does_not_exist}", {item:w.book}))
+  // Test using a function
+  w.book.tpStringTest = function() { return 'testy' }
+  test.assertEqual("Simple text: testy", processText("Simple text: {show:item:tpStringTest}", {item:w.book}))
+  // Test using params in function
+  w.book.tpStringTest = function(options) { return 'testy=' + options.obj.name }
+  test.assertEqual("Simple text: testy=Lara", processText("Simple text: {show:item:tpStringTest}", {item:w.book, obj:w.Lara}))
+  // Test binding for this
+  w.book.tpStringTest = function(options) { return 'testy=' + this.name }
+  test.assertEqual("Simple text: testy=book", processText("Simple text: {show:item:tpStringTest}", {item:w.book}))
+  player.someOddAtt = true;
+  test.assertEqual("Simple text: true", processText("Simple text: {show:player:someOddAtt}"));
 
 
   test.title("Text processor 3");
-  player.someOddAtt = true;
-  test.assertEqual("Simple text: true", processText("Simple text: {show:player:someOddAtt}"));
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: no", processText("Simple text: {ifNot:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: seen first time only", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
@@ -355,18 +366,18 @@ test.tests = function() {
   test.assertEqual("Simple text: yes", processText("Simple text: {if:obj:someOtherAttribute:5:yes:no}", {obj:testObject}))
   test.assertEqual("Simple text: no", processText("Simple text: {if:obj:someOtherAttribute:3:yes:no}", {obj:testObject}))
 
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifPlayer:Buddy:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifPlayer:Lara:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifPlayer:obj:yes:no}", {obj:w.Buddy}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifPlayer:obj:yes:no}", {obj:w.Lara}))
+
+
 
 
   test.title("Text processor 4");
   test.assertEqual("Simple text: other times", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
   test.assertEqual("Simple text: other times", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
-  test.assertEqual("Simple text: p2=red", processText("Simple text: p2={param:p2}", {p1:"yellow", p2:"red"}));
-  w.book.func1 = function() { return "test1" }
-  w.book.func2 = function(a, b) { return "test2(" + a + ", " + b + ")" }
-  w.book.func3 = function(a) { return "It is " + w[a].alias + " reading the book." }
-  test.assertEqual("Simple text: p2=test1", processText("Simple text: p2={param:item:func1}", {item:"book"}));
-  test.assertEqual("Simple text: p2=test2(one, two)", processText("Simple text: p2={param:item:func2:one:two}", {item:"book"}));
-  test.assertEqual("Simple text: p2=It is Kyle reading the book.", processText("Simple text: p2={param:item:func3:char}", {item:"book", char:"Kyle"}));
+  test.assertEqual("Simple text: p2=red", processText("Simple text: p2={show:p2}", {p1:"yellow", p2:"red"}))
   test.assertEqual("Simple text2: seen first time only", processText("Simple text2: {once:seen first time only:other times}"));
   test.assertEqual("Simple text2: other times", processText("Simple text2: {once:seen first time only:other times}"));
 

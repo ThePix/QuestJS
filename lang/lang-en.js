@@ -225,12 +225,12 @@ const lang = {
   locked:"{nv:container:be:true} locked.",
   no_key:"{nv:char:do:true} have the right key.",
   locked_exit:"That way is locked.",
-  open_and_enter:"{nv:char:open:true} the {param:doorName} and walk through.",
-  unlock_and_enter:"{nv:char:unlock:true} the {param:doorName}, open it and walk through.",
-  try_but_locked:"{nv:char:try:true} the {param:doorName}, but it is locked.",
+  open_and_enter:"{nv:char:open:true} the {show:doorName} and walk through.",
+  unlock_and_enter:"{nv:char:unlock:true} the {show:doorName}, open it and walk through.",
+  try_but_locked:"{nv:char:try:true} the {show:doorName}, but it is locked.",
   container_closed:"{nv:container:be:true} closed.",
   inside_container:"{nv:item:be:true} inside {nm:container:the}.",
-  look_inside:"Inside {nm:container:the} {nv:char:can} see {param:list}.",
+  look_inside:"Inside {nm:container:the} {nv:char:can} see {show:list}.",
   
   
   // MECHANDISE
@@ -268,7 +268,7 @@ const lang = {
   cannot_empty:"{nv:item:'be:true} not something you can empty.",
   not_vessel:"{pv:item:be:true} not a vessel.",
   cannot_get_fluid:"{nv:char:try:true} to scoop up {show:fluid} but it all slips through {pa:char} fingers. Perhaps {pv:char:need} some kind of vessel.",
-  no_fluid_here:"There's no {param:fluid} here.",
+  no_fluid_here:"There's no {show:fluid} here.",
   not_a_fluid_here:"I don't know of a fluid called {show:text}.",
   already_full:"{pv:item:be:true} already full.",
   already_empty:"{nv:item:be:true} already empty.",
@@ -284,12 +284,12 @@ const lang = {
   already_following:"'I'm already following you!'",
   already_waiting:"'I'm already waiting!'",
 
-  cannot_ask_about:"You can ask {ob:item} about {param:text} all you like, but {pv:item:'be} not about to reply.",
-  cannot_tell_about:"You can tell {ob:item} about {param:text} all you like, but {pv:item:'be} not interested.",
+  cannot_ask_about:"You can ask {ob:item} about {show:text} all you like, but {pv:item:'be} not about to reply.",
+  cannot_tell_about:"You can tell {ob:item} about {show:text} all you like, but {pv:item:'be} not interested.",
   topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
   topics_none_found:"No suggestions for what to ask or tell {nm:item:the} available.",
-  topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {param:list}.",
-  topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {param:list}.",
+  topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {show:list}.",
+  topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {show:list}.",
   cannot_talk_to:"You chat to {nm:item:the} for a few moments, before releasing that {pv:item:'be} not about to reply.",
   no_topics:"{nv:char:have:true} nothing to talk to {nm:item:the} about.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
@@ -300,7 +300,7 @@ const lang = {
   press_button_successful:"{nv:char:push:true} {nm:item:the}.",
 
   // SHIFTABLE
-  push_exit_successful:"{nv:char:push:true} {nm:item:the} {param:dir}.",
+  push_exit_successful:"{nv:char:push:true} {nm:item:the} {show:dir}.",
   cannot_push:"{pv:item:'be:true} not something you can move around like that.",
   cannot_push_up:"{pv:char:'be:true} not getting {nm:item:the} up there!",
   take_not_push:"Just pick the thing up already!",
@@ -336,8 +336,8 @@ const lang = {
 
 
   // Movement
-  go_successful:"{nv:char:head:true} {param:dir}.",
-  not_that_way:"{nv:char:can't:true} go {param:dir}.",
+  go_successful:"{nv:char:head:true} {show:dir}.",
+  not_that_way:"{nv:char:can't:true} go {show:dir}.",
   can_go:"{nv:char:think:true} {pv:char:can} go {exits}.",
 
 
@@ -525,7 +525,7 @@ const lang = {
   },
 
   aboutScript:function() {
-    metamsg("{i:{param:settings:title} version {param:settings:version}} was written by {param:settings:author} using Quest 6 AKA Quest JS version {param:settings:questVersion}.", {settings:settings})
+    metamsg("{i:{show:settings:title} version {show:settings:version}} was written by {show:settings:author} using Quest 6 AKA Quest JS version {show:settings:questVersion}.", {settings:settings})
     if (settings.ifdb) metamsg("IFDB number: " + settings.ifdb)
     if (settings.thanks && settings.thanks.length > 0) {
       metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".")
@@ -613,7 +613,8 @@ const lang = {
   go_pre_regex:"go to |goto |go |head |",
 
   yesNo:['Yes', 'No'],
-
+  tp_false:'false',
+  tp_true:'true',
 
 
 

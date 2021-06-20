@@ -23,7 +23,7 @@ createItem("Xsansi", NPC(true), {
   seederPods:6,
   locate:'Ostap',
   satellites:6,
-  crewStatusTemplate:"'Crew member {nms:actor} designation is: {param:char:specialisation}. {pa:char:true} current status is: {status}.{ifNot:char:loc:nowhere: {pa:char:true} current location is@@@colon@@@ {nm:room:the}.}'",
+  crewStatusTemplate:"'Crew member {nms:actor} designation is: {show:char:specialisation}. {pa:char:true} current status is: {status}.{ifNot:char:loc:nowhere: {pa:char:true} current location is@@@colon@@@ {nm:room:the}.}'",
   currentPlanet:-1,
   shipStatus:"All systems nominal.",
   pressureOverride:false,
