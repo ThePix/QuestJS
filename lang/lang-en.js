@@ -29,9 +29,7 @@ const lang = {
     MetaTranscriptOn:/^transcript on$|^script on$/,
     MetaTranscriptOff:/^transcript off$|^script off$/,
     MetaTranscriptClear:/^transcript clear$|^script clear$|^transcript delete$|^script delete$/,
-    MetaTranscriptShow:/^transcript show$|^script show$/,
-    MetaTranscriptShowWithOptions:/^(?:transcript|script) show (\w+)$/,
-    MetaTranscriptToWalkthrough:/^(?:transcript|script) (?:w|wt|walk|walkthrough)$/,
+    MetaTranscriptShow:/^transcript show$|^script show$|^show script$|^show transcript$/,
     MetaUserComment:/^\*(.+)$/,
     MetaSave:/^save$/,
     MetaSaveGame:/^(?:save) (.+)$/,
@@ -334,6 +332,10 @@ const lang = {
   rope_tied_both_end:"It is tied up at this end.",
   rope_no_end:"{nv:char:cannot:true} see either end of {nm:item:the}.",
 
+
+  // TRANSIT
+  transit_already_here:"You press the button; nothing happens.",
+  transit_go_to_dest:"You press the button; the door closes...",
 
   // Movement
   go_successful:"{nv:char:head:true} {show:dir}.",

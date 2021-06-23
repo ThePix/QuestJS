@@ -1129,7 +1129,8 @@ createItem("piggy_suu", NPC(true), {
   examine:'Piggy-suu is a pig.',
 })
 
-
+createItem("Boris", NPC(), { 
+})
 
 
 createItem("timetable", AGENDA_FOLLOWER(), {
