@@ -307,6 +307,12 @@ test.tests = function() {
   player.someOddAtt = 67;
   test.assertEqual("Simple text: 67", processText("Simple text: {show:player:someOddAtt}"));
 
+  test.assertEqual("Simple text to show capitalisation.", processText("{cap:simple text to show capitalisation.}"));
+  test.assertEqual("Simple Text To Show Capitalisation.", processText("{title:simple text to show capitalisation.}"));
+  test.assertEqual("SIMPLE TEXT.", processText("{upper:Simple text.}"));
+  test.assertEqual("simple text.", processText("{lower:Simple text.}"));
+
+
   test.title("Text processor 2");
   test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:50:yes:no}"));
   test.assertEqual("Simple text: yes", processText("Simple text: {if:player:someOddAtt:67:yes:no}"));
@@ -480,8 +486,20 @@ test.tests = function() {
   test.assertEqual(" Lara is not.", processText("{ifNotHere:Kyle:He is here.} Lara is not."));
   test.assertEqual(" Lara is not.", processText("{nothere Kyle:He is here.} Lara is not."));
 
+  test.title("Text processor 12: pa2");
+  test.assertEqual("'Please stop!' exclaims Kyle when you rip his book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:player}))
+  test.assertEqual("'Please stop!' exclaims Kyle when Boris rips Kyle's book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:w.Boris}))
+  test.assertEqual("'Please stop!' exclaims Kyle when Kyle rips his book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:w.Kyle}))
 
 
+  test.title("Text processor 11: numbers");
+  test.assertEqual("Lara is sixteen.", processText("Lara is {number:age}.", {age:16}))
+  w.Lara.age = 17
+  test.assertEqual("Lara is seventeen.", processText("Lara is {number:Lara:age}."))
+  test.assertEqual("Lara is seventeen.", processText("Lara is {number:npc:age}.", {npc:w.Lara}))
+  test.assertEqual("Lara is seventeenth.", processText("Lara is {ordinal:Lara:age}."))
+  w.Buddy.age = 15
+  test.assertEqual("Buddy is fifteen.", processText("Buddy is {number:player:age}."))
   
   test.title("Numbers");
   test.assertEqual("fourteen", lang.toWords(14));
@@ -1303,8 +1321,7 @@ test.tests = function() {
   test.assertEqual("The carrot is $0,02", processText("The carrot is {money:carrot}"))
   test.assertEqual("The carrot is $0,02", processText("The carrot is {$:carrot}"))
   test.assertEqual("You see $0,12", processText("You see {$:12}"))
-  test.assertEqual("The carrot is $0,02", processText("{nm:item:the:true} is {$:carrot}", {item:w.carrot}))
-  test.assertEqual("The carrot is $0,02", processText("{nm:item:the:true} is {$:carrot}", {item:'carrot'}))
+  test.assertEqual("The carrot is $0,02", processText("{nm:item:the:true} is {$:item}", {item:w.carrot}))
 
   test.title("shop - buy");
   test.assertEqual(true, parser.isForSale(w.carrot))

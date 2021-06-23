@@ -431,19 +431,25 @@ createItem("Kyle", CREW(false), {
   desc:"Kyle is the computer expert, but also a good cook, and has volunteered for the role of chef. An Australian, he is slim, and below average height, with very short blonde hair, and green eyes.",
 
   // Reactions
-  reactions:function() {
-    const g = player.getOuterWearable("body");
-    if (g === false && this.reactionToUndress < 2) {
-      if (player.isFemale) {
-        msg("Kyle glances at you briefly. Kind of insulting that he is so uninterested in your naked body.");
-      }
-      else {
-        msg("Kyle looks you up and down, and swallows nervously. 'Er... you're naked,' he says, trying, not to successfully, to stare.");
-        this.pause();
-      }
-      this.reactionToUndress = 2;
-    }
-  },
+  reactions:[
+    {
+      name:'seenNaked',
+      test:function() {
+        const g = player.getOuterWearable("body")
+        return (g === false && this.reactionToUndress < 2)
+      },
+      action:function() {
+        if (player.isFemale) {
+          msg("Kyle glances at you briefly. Kind of insulting that he is so uninterested in your naked body.");
+        }
+        else {
+          msg("Kyle looks you up and down, and swallows nervously. 'Er... you're naked,' he says, trying, not too successfully, to not stare.");
+          this.pause();
+        }
+        this.reactionToUndress = 2;
+      },
+    },
+  ],
 
   // Conversations
   probesAskResponse:function() {
@@ -602,18 +608,25 @@ createItem("Ostap", CREW(false), {
   
   // Reactions
   reactionToUndress:0,
-  reactions:function() {
-    const g = player.getOuterWearable("body");
-    if (g === false && this.reactionToUndress < 2) {
-      msg("Ostap looks you up and down, and smiles. 'Maybe I will get naked too! So liberating. The others are okay with it?'");
-      this.reactionToUndress = 2;
-      this.pause();
-    }
-    else if (g.wear_layer === 1 && this.reactionToUndress < 1) {
-      msg("Ostap looks you up and down, and shrugs.");
-      this.reactionToUndress = 1;
-    }
-  },
+  reactions:[
+    {
+      name:'seenNaked',
+      test:function() { player.getOuterWearable("body") === false && this.reactionToUndress < 2 },
+      action:function() {
+        msg("Ostap looks you up and down, and smiles. 'Maybe I will get naked too! So liberating. The others are okay with it?'")
+        this.reactionToUndress = 2
+      },
+      override:["seenInUnderwear"],
+    },
+    {
+      name:'seenInUnderwear',
+      test:function() { player.getOuterWearable("body").wear_layer === 1 && this.reactionToUndress < 1 },
+      action:function() {
+        msg("Ostap looks you up and down, and shrugs.")
+        this.reactionToUndress = 1
+      },
+    },
+  ],
 
   // Conversations
   probesAskResponse:function() {
@@ -710,22 +723,24 @@ createItem("Aada", CREW(true), {
   baseOxygeUse:6,
   
   // Reactions
-  reactions:function() {
-    const g = player.getOuterWearable("body");
-    if (g === false && this.reactionToUndress < 2) {
-      if (player.isFemale) {
-        msg("Aada looks you up and down. 'Very trim!' she notes. 'I bet the guys like the view.'");
-        if (w.Kyle.reactionToUndress === 2) {
-          msg("'Well, Kyle was none too impressed.'");
+  reactions:[
+    {
+      name:'seenNaked',
+      test:function() { player.getOuterWearable("body") === false && this.reactionToUndress < 2 },
+      action:function() {
+        if (player.isFemale) {
+          msg("Aada looks you up and down. 'Very trim!' she notes. 'I bet the guys like the view.'")
+          if (w.Kyle.reactionToUndress === 2) {
+            msg("'Well, Kyle was none too impressed.'");
+          }
         }
-      }
-      else {
-        msg("Aada looks you up and down. 'Is that really appropriate for a captain,' she muses.");
-      }
-      this.pause();
-      this.reactionToUndress = 2;
-    }
-  },
+        else {
+          msg("Aada looks you up and down. 'Is that really appropriate for a captain,' she muses.")
+        }
+        this.reactionToUndress = 2
+      },
+    },
+  ],
   
   // Conversations
   probesAskResponse:function() {
@@ -862,19 +877,16 @@ createItem("Ha_yoon", CREW(true), {
   baseOxygeUse:4,
   
   // Reactions
-  reactions:function() {
-    const g = player.getOuterWearable("body");
-    if (g === false && this.reactionToUndress < 2) {
-      if (player.isFemale) {
-        msg("'Captain!' exclaims Ha-yoon when she sees you naked.");
-      }
-      else {
-        msg("'Captain!' exclaims Ha-yoon when she sees you naked. 'I'm sure we don't need to see {i:that}!'");
-      }
-      this.pause();
-      this.reactionToUndress = 2;
-    }
-  },
+  reactions:[
+    {
+      name:'seenNaked',
+      test:function() { return player.getOuterWearable("body") === false && this.reactionToUndress < 2 },
+      action:function() {
+        msg("'Captain!' exclaims Ha-yoon when she sees you naked.{ifNot:player:isFemale: 'I'm sure we don't need to see {i:that}!'}");
+        this.reactionToUndress = 2;
+      },
+    },
+  ],
   
   // Conversations
   probesAskResponse:function() {

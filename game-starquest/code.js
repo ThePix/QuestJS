@@ -138,22 +138,6 @@ for (let el of newCmds) {
 
 
 
-io.scriptShow = function(opts) {
-  let html = '';
-  html += '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Quest 6 Unit Tests for '
-  html += settings.title
-  html += '</title></head><body><p>"use strict"</p><p>test.tests = function() {</p><p>test.assertCmd("script on", ['
-  for (let el of this.transcriptText) {
-    switch (el.cssClass) {
-      case 'input': html += '])</p><p>&nbsp;&nbsp;test.assertCmd("' + el.text + '", ['; break;
-      default : html += '"' + el.text.replace(/\"/g, '\\"') + '",'; break;
-    }
-  }
-  html += '])</p><p>}</p></body></html>'
-  const tab = window.open('about:blank', '_blank')
-  tab.document.write(html)
-  tab.document.close()
-}
 
 
 
