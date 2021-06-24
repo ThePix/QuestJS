@@ -913,6 +913,12 @@ test.tests = function() {
   w.Kyle.loc = "lounge"
 
   
+  test.title("NPC topics");
+  test.assertError(/Trying to find topic/, function() {w.Lara.findTopic("What's the deal with the garden?")})
+  test.assertEqual(1, w.Kyle.findTopic("What's the deal with the garden?").nowShow.length)
+  
+  
+  
   test.title("NPC commands 1");
   test.assertCmd("lara,get brick", "'I'm not picking up any bricks,' says Lara indignantly.");
   test.assertCmd("lara,e", "'I'm not going east,' says Lara indignantly. 'I don't like that room.'");
