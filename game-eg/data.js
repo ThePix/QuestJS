@@ -110,7 +110,20 @@ createItem("book", TAKEABLE(), READABLE(true), {
     }
   },
   lookinside:"The book has pages and pages of text, but you do not even recognise the alphabet.",
+  watchedStringAttribute:'yellow',
+  watchedNumberAttribute:5,
 })
+
+util.addChangeListener(w.book, "watchedStringAttribute", function(o, current, previous) {
+  msg("watchedStringAttribute changed from " + previous + " to " + current)
+})
+util.addChangeListener(w.book, "watchedNumberAttribute", function(o, current, previous) {
+  msg("watchedNumberAttribute changed from " + previous + " to " + current)
+}, function(o, current, previous) {
+  return current > 10 && current !== previous
+},
+
+)
 
 
 
