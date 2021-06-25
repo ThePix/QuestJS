@@ -590,6 +590,29 @@ test.tests = function() {
 
 
 
+  test.title("Change listeners")
+  test.assertOut(["watchedStringAttribute changed from yellow to red"], function() {
+    w.book.watchedStringAttribute = 'red'
+    world.endTurn(world.FAILED)
+  })
+  test.assertOut([], function() {
+    w.book.watchedNumberAttribute = 9
+    world.endTurn(world.FAILED)
+  })
+  test.assertOut(["watchedNumberAttribute changed from 9 to 11"], function() {
+    w.book.watchedNumberAttribute = 11
+    world.endTurn(world.FAILED)
+  })
+  test.assertEqual("ChangeListenersUsedStrings=red~11", util.getChangeListenersSaveString())
+  w.book.watchedNumberAttribute = 17
+  w.book.watchedStringAttribute = 'cyan'
+  util.setChangeListenersLoadString("ChangeListenersUsedStrings=cyan~17")
+  test.assertEqual("cyan", util.changeListeners[0].oldValue)
+  test.assertEqual(17, util.changeListeners[1].oldValue)
+  
+
+
+
   test.title("errors")
   test.assertCmd("get sdjfghfg", "There doesn't seem to be anything you might call 'sdjfghfg' here.")
   test.assertCmd("map", "Sorry, no map available.")
@@ -912,6 +935,12 @@ test.tests = function() {
   
   w.Kyle.loc = "lounge"
 
+  
+  test.title("NPC topics");
+  test.assertError(/Trying to find topic/, function() {w.Lara.findTopic("What's the deal with the garden?")})
+  test.assertEqual(1, w.Kyle.findTopic("What's the deal with the garden?").nowShow.length)
+  
+  
   
   test.title("NPC commands 1");
   test.assertCmd("lara,get brick", "'I'm not picking up any bricks,' says Lara indignantly.");

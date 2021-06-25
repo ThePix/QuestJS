@@ -1,40 +1,5 @@
 "use strict";
 
-/*
-npc_utilities.talkto = function() {
-  if (!player.canTalk(this)) return false
-  const topics = this.getTopics(this)
-  if (topics.length === 0) return failedmsg(lang.no_topics, {char:player, item:this})
-  topics.push(lang.never_mind)
-
-  showSidePaneOptions(this, topics, function(result) {
-    $('#sidepane-menu').remove()
-    if (result !== lang.never_mind) {
-      result.runscript()
-    }
-  })
-  
-  return world.SUCCESS_NO_TURNSCRIPTS;
-}
-  
-
-
-
-function showSidePaneOptions(item, options, fn) {
-  const opts = {article:DEFINITE, capital:true}
-  io.input('', options, false, fn, function(options) {
-    let s = '<div id="sidepane-menu"><p class="sidepane-menu-title">Talk to ' + lang.getName(item, {article:DEFINITE}) + ':</p>'
-    for (let i = 0; i < options.length; i++) {
-      s += '<p value="' + i + '" onclick="io.menuResponse(' + i + ')" class="sidepane-menu-option">';
-      s += (typeof options[i] === 'string' ? options[i] : lang.getName(options[i], opts))
-      s += '</p>';
-    }
-    s += '</div>'
-    $('body').append(s)
-  })
-}
-
-*/
   
 
 
@@ -145,6 +110,17 @@ createItem("book", TAKEABLE(), READABLE(true), {
     }
   },
   lookinside:"The book has pages and pages of text, but you do not even recognise the alphabet.",
+  watchedStringAttribute:'yellow',
+  watchedNumberAttribute:5,
+})
+
+util.addChangeListener(w.book, "watchedStringAttribute", function(o, current, previous) {
+  msg("watchedStringAttribute changed from " + previous + " to " + current)
+})
+util.addChangeListener(w.book, "watchedNumberAttribute", function(o, current, previous) {
+  msg("watchedNumberAttribute changed from " + previous + " to " + current)
+}, function(o, current, previous) {
+  return current > 10 && current !== previous
 })
 
 
