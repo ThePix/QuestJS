@@ -140,24 +140,9 @@ createItem("boots", WEARABLE(), {
 
 
 
-createItem("waterskin", TAKEABLE(), { 
-  examine:function() { 
-    msg("The waterskin is " + Math.floor(this.full / this.capacity * 100) + "% full.")
-  },
-  capacity:10,
-  full:3,
+createItem("canteen", TAKEABLE(), VESSEL(), { 
+  examine:"The canteen is {ifExists:canteen:containedFluidName:full:empty}.",
   loc:"lounge",
-  fill:function() {
-    if (player.loc != "garage") {
-      msg("There is nothing to charge the torch with here.")
-      return false
-    }
-    else {
-      msg("You charge the torch - it should last for hours now.")
-      this.power = 20
-      return true
-    }
-  },
 })
 
 

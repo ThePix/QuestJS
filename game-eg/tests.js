@@ -763,7 +763,7 @@ test.tests = function() {
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("drop clock", "You drop the clock.");
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock and a trapdoor here.", "You can go north or west."]);
-  test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), a small key and a waterskin here.", "You can go east, south, up or west."]);
+  test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, a canteen, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and a small key here.", "You can go east, south, up or west."]);
  
 
   test.title("Simple object commands (bricks and a box)");
@@ -899,7 +899,7 @@ test.tests = function() {
   test.assertCmd("stand", "You get off the bed.");
   test.assertEqual(["Examine", "Sit on", "Lie on"], w.bed.getVerbs())
   test.assertCmd("use bed", "You lie down on the bed.");
-  test.assertCmd("d", ["You get off the bed.", "You head down.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, seven bricks, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), a small key and a waterskin here.", "You can go east, south, up or west.",]);  
+  test.assertCmd("d", ["You get off the bed.", "You head down.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, seven bricks, a canteen, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and a small key here.", "You can go east, south, up or west.",]);  
 
   
   test.title("say");
@@ -964,7 +964,7 @@ test.tests = function() {
   
   
   test.assertCmd("lara,e", ["Lara gets off the chair.", "Lara leaves the dining room, heading east."]);
-  test.assertCmd("e", ["You head east.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, seven bricks, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), Lara, a small key and a waterskin here.", "You can go east, south, up or west.",]);
+  test.assertCmd("e", ["You head east.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, seven bricks, a canteen, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater), Lara and a small key here.", "You can go east, south, up or west.",]);
   test.assertCmd("lara,get boots", "Lara takes the boots.");
   test.assertCmd("lara,wear boots", "'I'm not doing that!' says Lara indignantly.");
   
@@ -1237,7 +1237,7 @@ test.tests = function() {
   
   
   test.title("Push");
-  test.assertCmd("e", ["You head east.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."]);
+  test.assertCmd("e", ["You head east.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a canteen, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and a small key here.", "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair, a crate and a rope here.", "You can go north or west."]);
   test.assertCmd("push crate", "That's not going to do anything useful.");
   test.assertCmd("push chair s", "It's not something you can move around like that.");
@@ -1272,7 +1272,7 @@ test.tests = function() {
   
   test.title("pre-rope");
   test.assertCmd("o", ["You head out.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
-  test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west."]);
+  test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a canteen, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and a small key here.", "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
   
   test.title("rope - room one");
@@ -1317,7 +1317,7 @@ test.tests = function() {
   test.assertCmd("untie rope from chair", ["You detach the rope from the broken chair."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
   test.assertEqual(['Buddy', 'conservatory', 'garden'], w.rope.locs)
-  test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), a small key and a waterskin here.", "You can go east, south, up or west.", "The rope unwinds behind you."])
+  test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a canteen, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and a small key here.", "You can go east, south, up or west.", "The rope unwinds behind you."])
   test.assertCmd("e", ["The rope is not long enough, you cannot go any further."])
   test.assertCmd("i", ["You are carrying a flashlight, a garage key, a rope and a suit (worn)."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the conservatory."])
@@ -1525,8 +1525,10 @@ test.tests = function() {
 
   test.title("vessels and liquids")
   w.jug.loc = "big_kitchen_table"
+  w.canteen.loc = "big_kitchen_table"
   test.movePlayer('kitchen')
   test.assertCmd("get jug", ["You take the jug."])
+  test.assertCmd("get canteen", ["You take the canteen."])
   test.assertCmd("fill jug with tears", ["I don't know of a fluid called tears."])
   test.assertCmd("fill jug with honey", ["There's no honey here."])
   test.assertCmd("fill jug with water", ["You fill the jug."])
@@ -1534,6 +1536,13 @@ test.tests = function() {
   test.assertCmd("empty jug", ["You empty the jug onto the ground, and it soaks away."])
   test.assertCmd("fill jug", ["You fill the jug."])
   test.assertCmd("empty jug into sink", ["You empty the jug into the dirty sink."])
+  w.jug.containedFluidName = 'water'
+  test.assertCmd("pour canteen into jug", ["The canteen is already empty."])
+  test.assertCmd("x canteen", ["The canteen is empty."])
+  test.assertCmd("pour jug into canteen", ["You empty the jug into the canteen."])
+  test.assertCmd("x canteen", ["The canteen is full."])
+  test.assertCmd("pour water into jug", ["You empty the canteen into the jug."])
+  
   
   
 
