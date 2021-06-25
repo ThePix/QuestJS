@@ -121,9 +121,7 @@ util.addChangeListener(w.book, "watchedNumberAttribute", function(o, current, pr
   msg("watchedNumberAttribute changed from " + previous + " to " + current)
 }, function(o, current, previous) {
   return current > 10 && current !== previous
-},
-
-)
+})
 
 
 
