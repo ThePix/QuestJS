@@ -1382,7 +1382,7 @@ test.tests = function() {
   test.assertCmd("sell trophy", ["You sell the trophy for $0,08."]);
   test.assertEqual(9, w.Buddy.money)
 
-  test.assertCmd("sell trophy", ["You don't have it."]);
+  test.assertCmd("sell trophy", ["You don't have it."])
   test.assertEqual(9, w.Buddy.money)
   w.Buddy.money = 20
   w.shop.sellingDiscount = 20
