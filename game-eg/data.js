@@ -152,16 +152,14 @@ createItem("canteen", TAKEABLE(), VESSEL(), {
 createItem("glass_cabinet", CONTAINER(true), LOCKED_WITH(["cabinet_key", "small_key"]), {
   examine:"A cabinet with a glass front.",
   transparent:true,
-  isAtLoc:function(loc) {
-    if (typeof loc !== "string") loc = loc.name
-    return (loc == "lounge" || loc == "dining_room");
-  }}
-);
+  isLocatedAt:function(loc) { return (loc == "lounge" || loc == "dining_room") }
+})
+
 
 createItem("cabinet_key", KEY(), { 
   loc:"garage",
   examine: "A small brass key."
-});
+})
 
 
 
@@ -924,15 +922,12 @@ createItem("Lara_carrots",
 
 
 
-createItem("walls",
-  { examine:"They're walls, what are you expecting?", regex:/^wall$/,
-    scenery:true,
-    isAtLoc:function(loc, situation) {
-      if (typeof loc !== "string") loc = loc.name
-      return w[loc].room && situation === world.PARSER; 
-    },
-  }
-);
+createItem("walls", {
+  examine:"They're walls, what are you expecting?",
+  regex:/^wall$/,
+  scenery:true,
+  isLocatedAt:function(loc) { return w[loc].room },
+})
 
 
 createItem("brick",

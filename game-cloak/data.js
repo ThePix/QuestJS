@@ -175,10 +175,8 @@ createItem('walls', {
       msg("The walls are covered in a faded red and gold wallpaper, that is showing signs of damp.")
     }    
   },
-  isAtLoc:function(loc, situation) {
-    if (typeof loc !== "string") loc = loc.name
-    return w[loc].room && situation === world.PARSER; 
-  },
+  scenery:true,
+  isLocatedAt:function(loc) { return w[loc].room },
 })
 
 createItem('ceiling', {
@@ -190,10 +188,8 @@ createItem('ceiling', {
       msg("The ceiling is - or was - white. Now it is a dirty grey.")
     }    
   },
-  isAtLoc:function(loc, situation) {
-    if (typeof loc !== "string") loc = loc.name
-    return w[loc].room && situation === world.PARSER; 
-  },
+  scenery:true,
+  isLocatedAt:function(loc) { return w[loc].room },
 })
 
 createItem('floor', {
@@ -206,10 +202,8 @@ createItem('floor', {
       msg("A red carpet covers the floor, worn almost though in places.")
     }    
   },
-  isAtLoc:function(loc, situation) {
-    if (typeof loc !== "string") loc = loc.name
-    return w[loc].room && situation === world.PARSER; 
-  },
+  scenery:true,
+  isLocatedAt:function(loc) { return w[loc].room },
 })
 
 createItem('doors', {
@@ -222,9 +216,7 @@ createItem('doors', {
       msg("All the doors are wooden, and painted white.")
     }    
   },
-  isAtLoc:function(loc, situation) {
-    if (typeof loc !== "string") loc = loc.name
-    return w[loc].room && situation === world.PARSER; 
-  },
+  scenery:true,
+  isLocatedAt:function(loc) { return w[loc].room },
 })
 

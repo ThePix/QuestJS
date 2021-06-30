@@ -15,9 +15,8 @@ createItem("robot", NPC(false), {
     }
   },*/
 
-  isAtLoc:function(loc, situation) {
+  isLocatedAt:function(loc, situation) {
     if (situation === world.PARSER && w.me.loc === 'laboratory') return true
-    return (this.loc === loc)
   },
   
   getAgreementGo:function(dir) {

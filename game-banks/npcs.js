@@ -10,8 +10,7 @@
 // though perjaps it is mourning Kyle that does it for her
 
 createItem("Xsansi", NPC(true), { 
-  isAtLoc:function(loc, situation) {
-    if (typeof loc !== "string") loc = loc.name
+  isLocatedAt:function(loc, situation) {
     return isOnShip() && (situation === world.PARSER || situation === world.SIDE_PANE);
   },
   properNoun:true,

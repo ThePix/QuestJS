@@ -18,8 +18,7 @@ createItem("fist", {
   alias:'fist',
   regex:/fist|hand|arm/,
   examine:"That funny shaped thing on the end of your arm.",
-  isAtLoc:function(loc, situation) {
-    if (typeof loc !== 'string') loc = loc.name
+  isLocatedAt:function(loc, situation) {
     return situation === world.PARSER && loc === 'me'
   }
 })
