@@ -64,7 +64,7 @@ const lang = {
     LookOut:/^(?:look out of|look out) (.+)$/,
     LookBehind:/^(?:look behind|check behind) (.+)$/,
     LookUnder:/^(?:look under|check under) (.+)$/,
-    LookInside:/^(?:look inside) (.+)$/,
+    LookInside:/^(?:look inside|look in) (.+)$/,
     LookThrough:/^(?:look|peek|peer) (?:down|through) (.+)$/,
     Search:/^(?:search) (.+)$/,
     Take:/^(?:take|get|pick up|t) (.+)$/,
