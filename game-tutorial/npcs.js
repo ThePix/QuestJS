@@ -62,7 +62,7 @@ createItem("robot", NPC(false), {
       test:function(p) { return p.text.match(/\b(zeta)\b/) },
       script:function() {
         msg("'What is a zeta-particle?' you ask the robot.")
-        msg("'Zeta-particles were discovered in Atlantis over 300 years ago, but knowledge of them was lost when that great city disappeared. They offer unlimited power and a cure for all diseases,' says the robot.")
+        msg("'Zeta-particles were discovered in Atlantis over 3000 years ago, but knowledge of them was lost when that great city disappeared. They offer unlimited power and a cure for all diseases,' says the robot.")
         if (w.me.hints < 230) {
           tmsg("Great, you are having a conversation with someone. But it is Professor Kleinscope we want to talk to, so let's take the lift up to him.")
           w.me.hints = 230
