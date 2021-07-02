@@ -346,7 +346,7 @@ test.tests = function() {
   test.assertEqual("Simple text: yes", processText("Simple text: {if:settings:tpTest:9:yes:no}", {val:8}))
   test.assertEqual("Simple text: no", processText("Simple text: {if:settings:tpTest:8:yes:no}", {val:8}))
 
-  test.title("Text processor 2b");
+  test.title("Text processor 2b show");
   test.assertEqual("Simple text: ", processText("Simple text: {show:item:att_does_not_exist}", {item:w.book}))
   // Test using a function
   w.book.tpStringTest = function() { return 'testy' }
@@ -366,11 +366,27 @@ test.tests = function() {
   test.assertEqual("Simple text: no", processText("Simple text: {ifNot:player:someOddAtt:yes:no}"));
   test.assertEqual("Simple text: seen first time only", processText("Simple text: {once:seen first time only}{notOnce:other times}"));
 
-  const testObject = {someOddAtt:true, someOtherAttribute:5}
+  const testObject = {someOddAtt:true, someOtherAttribute:5, falseAtt:false}
   test.assertEqual("Simple text: yes", processText("Simple text: {if:obj:someOddAtt:yes:no}", {obj:testObject}))
   test.assertEqual("Simple text: no", processText("Simple text: {if:obj:someUnknownAtt:yes:no}", {obj:testObject}))
   test.assertEqual("Simple text: yes", processText("Simple text: {if:obj:someOtherAttribute:5:yes:no}", {obj:testObject}))
   test.assertEqual("Simple text: no", processText("Simple text: {if:obj:someOtherAttribute:3:yes:no}", {obj:testObject}))
+
+  test.assertEqual("Simple text: no", processText("Simple text: {ifIs:obj:someUnknownAtt:5:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifIs:obj:someOtherAttribute:5:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifIs:obj:someOtherAttribute:3:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifIs:obj:someOtherAttribute:true:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifIs:obj:someOddAtt:true:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifIs:obj:someOddAtt:false:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifIs:obj:someOddAtt:undefined:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifIs:obj:someOddThatDoesNotExistAtt:undefined:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifIs:obj:falseAtt:false:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifIs:obj:falseAtt2:false:yes:no}", {obj:testObject}))
+
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifNotIs:obj:someOddAtt:undefined:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifNotIs:obj:someOddThatDoesNotExistAtt:undefined:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: no", processText("Simple text: {ifNotIs:obj:falseAtt:false:yes:no}", {obj:testObject}))
+  test.assertEqual("Simple text: yes", processText("Simple text: {ifNotIs:obj:falseAtt2:false:yes:no}", {obj:testObject}))
 
   test.assertEqual("Simple text: yes", processText("Simple text: {ifPlayer:Buddy:yes:no}", {obj:testObject}))
   test.assertEqual("Simple text: no", processText("Simple text: {ifPlayer:Lara:yes:no}", {obj:testObject}))
