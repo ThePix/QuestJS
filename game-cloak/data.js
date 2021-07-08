@@ -16,7 +16,7 @@
 
 createItem("me", PLAYER(), {
   loc:"lobby",
-  regex:/^(me|myself|player)$/,
+  synonyms:["me", "myself", "player"],
   examine: "Just a regular guy.",
 })
 
@@ -32,7 +32,7 @@ createItem('cloak', WEARABLE(), {
 
 
 createRoom("lobby", {
-  desc:"There is something oppressive about the {cloakHere:dark:dingy} {once:room}{notOnce:foyer}; a presence in the air that almost suffocates you. It's former glory has all but faded; the walls still sport old posters from productions that ended over twenty years ago. Paint is peeling, dust is everywhere and it smells decidedly musty. You can see doors to the north, west and south.",
+  desc:"There is something oppressive about the {cloakHere:dark:dingy} {once:room:foyer}; a presence in the air that almost suffocates you. It's former glory has all but faded; the walls still sport old posters from productions that ended over twenty years ago. Paint is peeling, dust is everywhere and it smells decidedly musty. You can see doors to the north, west and south.",
   beforeFirstEnter:function() {
     msg ("You hurry through the night, keen to get out of the rain. Ahead, you can see the old opera house, a brightly-lit beacon of safety.")
     msg ("Moments later you are pushing though the doors into the foyer. Now that you are here it does not seem so bright. The doors close behind you with an ominous finality...")
@@ -80,7 +80,7 @@ createRoom("cloakroom", {
 
 
 createItem('hook', SURFACE(), {
-  regex:/^peg$/,
+  synonyms:["peg"],
   hookable:true,
   scenery:true,
   examine:function() {
@@ -122,7 +122,7 @@ createRoom("bar", {
 
 
 createItem('message', {
-  regex:/writing|note/,
+  synonyms:["writing", "note", "dust"],
   count:0,
   disturbed:0,
   scenery:true,
@@ -130,6 +130,7 @@ createItem('message', {
   examine:function() {
     if (cloakHere()) {
       msg ("You cannot see any message, it is too dark.")
+      return
     }
     if (this.disturbed < 3) {
       msg ("The message in the dust says 'You have won!'")
@@ -141,7 +142,7 @@ createItem('message', {
   },
   read:function() { this.examine() },
   eventPeriod:1,
-  eventIsActive:function() { return player.isAtLoc('bar') && !this.finished },
+  eventIsActive:function() { return player.isAtLoc('bar') && !io.finished },
   eventScript:function() { 
     this.count++
     if (this.count > 1) {
@@ -193,7 +194,7 @@ createItem('ceiling', {
 })
 
 createItem('floor', {
-  regex:/^carpet$/,
+  synonyms:["carpet"],
   examine:function() {
     if (cloakHere() && player.isAtLoc('bar')) {
       msg("It is too dark to see the floor.")
@@ -207,7 +208,6 @@ createItem('floor', {
 })
 
 createItem('doors', {
-  regex:/^carpet$/,
   examine:function() {
     if (cloakHere() && player.isAtLoc('bar')) {
       msg("It is too dark to see the door properly.")
