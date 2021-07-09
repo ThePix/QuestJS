@@ -535,6 +535,7 @@ const lang = {
     if (settings.additionalAbout !== undefined) {
       for (let s of settings.additionalAbout) metamsg(s)
     }
+    if (settings.ifid) metamsg("IFDB number: " + settings.ifid)
     return world.SUCCESS_NO_TURNSCRIPTS
   },
 
