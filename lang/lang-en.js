@@ -572,7 +572,7 @@ const lang = {
   betaTestIntro:function() {
     metamsg("This version is for beta-testing (" + settings.version + ").")
     if (settings.textInput) {
-      metamsg("A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab, or click the link if you reach the end of the game; it can then be copy-and-pasted into an e-mail.")
+      metamsg("A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab, or click the link if you reach the end of the game; it can then be copy-and-pasted into an e-mail or the page saved and attached.")
       metamsg("You can add your own comments to the transcript by starting a command with *.")
     }
     else {    

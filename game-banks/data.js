@@ -205,7 +205,8 @@ createRoom("stasis_pod_room", {
       return true;
     }      
   }),
-  afterDropIn:function() {
+  afterDropIn:function(options) {
+    log(options)
     options.item.loc = "stasis_bay"
   }
 });
@@ -247,21 +248,24 @@ createItem("stasis_pod_interior",
 createRoom("cargo_bay", {
   deckName:'layer1',
   svgId:'rect2758',
-  desc:"The cargo bay is a large, open area, with numerous [crates:crate], several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
+  desc:"The cargo bay is a large, open area, with numerous crates, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
   vacuum:false,
   forward:new Exit("stasis_bay"),
   port:new Exit("top_deck_aft", {
     msg:"You walk up the narrow stair way to the top deck.",
     alsoDir:["up"],
   }),
-  starboard:new Exit("airlock", {alsoDir:["up"]}),
+  starboard:new Exit("airlock"),
   aft:new Exit("engineering3"),
+  scenery:[
+    {alias:'crates', examine:'Each crate is a standard size, 1 m by 2 m by 1 m; they are all a pale grey colour, with a white sealing band, and identity patches on the sides.'},
+  ],
 });
 
 createRoom("airlock", TRANSIT("starboard"), {
   deckName:'layer1',
   svgId:'rect2770',
-  desc:"The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the [controls].",
+  desc:"The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the controls.",
   vacuum:false,
   port:new Exit("cargo_bay"),
   starboard:new Exit("space", { locked:true, alsoDir:["out"]}),
@@ -351,9 +355,9 @@ createRoom("geolab", {
   desc:"The geo-lab is really just a large office, with two chairs, a desk and lots of compuer screens.",
   vacuum:false,
   forward:new Exit("biolab"),
-  starboard:new Exit("probes_aft", {
+  down:new Exit("probes_aft", {
     msg:"You walk down the narrow stair way to the bottom deck.",
-    alsoDir:["down"],
+    alsoDir:["starboard"],
   }),
   aft:new Exit("engineering1"),
 });
@@ -590,10 +594,12 @@ createItem("alien_ship_interior", {
 
 createItem("_button_alien_ship", TRANSIT_BUTTON("airlock"), {
   transitDest:"alien_ship_interior",
+  isLocatedAt:function() { return false },
 })
 
 createItem("_button_space", TRANSIT_BUTTON("airlock"), {
   transitDest:"space",
+  isLocatedAt:function() { return false },
 })
 
 

@@ -87,10 +87,10 @@ const CREW = function(isFemale) {
   }
   res.stasis = function() {
     const tpParams = {char:this}
-    msg("'{nm:actor}, you're work here is done; you can go get in your stasis pod.'", tpParams);
+    msg("'{nm:char}, you're work here is done; you can go get in your stasis pod.'", tpParams);
     if (this.deployProbeTotal === 0) {
       msg("'You don't think I should deploy a probe first?'", tpParams);
-      msg("'I'm the captain,' you remind {ob:actor}.", tpParams);
+      msg("'I'm the captain,' you remind {ob:char}.", tpParams);
     }
     msg(this.okay);
     this.agenda.push("walkTo:stasis_bay");
@@ -100,12 +100,12 @@ const CREW = function(isFemale) {
   res.stasisPod = function() {
     const tpParams = {char:this}
     if (this.clothing === 2) {
-      this.msg("{nv:char:pull:true} off {pa:actor} jumpsuit, and puts it in the drawer under {pa:actor} stasis pod.", tpParams);
+      this.msg("{nv:char:pull:true} off {pa:char} jumpsuit, and puts it in the drawer under {pa:char} stasis pod.", tpParams);
       this.clothing = 1;
       return false;
     }
     if (this.posture !== "reclining") {
-      this.msg("Just in {pa:actor} underwear, {nv:char:climb} into {pa:actor} stasis pod.", tpParams);
+      this.msg("Just in {pa:char} underwear, {nv:char:climb} into {pa:char} stasis pod.", tpParams);
       this.posture = "reclining";
       return false;
     }
@@ -182,7 +182,7 @@ const CREW = function(isFemale) {
 
 
 const walkthroughs = {
-  a:[
+  c:[
     "o",
     "get jumpsuit",
     "wear jumpsuit",
@@ -274,7 +274,7 @@ const walkthroughs = {
 
     /**/
   ],
-  c:[
+  c1:[
     "o",
     "get jumpsuit",
     "wear jumpsuit",
@@ -310,7 +310,7 @@ function createTopics(npc) {
     regex:/(this |the |)?planet/,
     test:function(p) { return p.text.match(this.regex) }, 
     script:function(response) {
-      const tpParams = {char:response.actor}
+      const tpParams = {char:response.char}
       msg("'What's your report on {planet}?' you ask {nm:char:the}.", tpParams)
       msg(planetAnalysis(response), tpParams)
     },
@@ -320,7 +320,7 @@ function createTopics(npc) {
     regex:/probes?/,
     test:function(p) { return p.text.match(this.regex) }, 
     script:function(response) {
-      response.actor.probesAskResponse();
+      response.char.probesAskResponse();
     }
   });
   npc.askOptions.push({
@@ -328,8 +328,8 @@ function createTopics(npc) {
     regex:/(your |his |her )?(area|special.*|expert.*|job|role)/,
     test:function(p) { return p.text.match(this.regex); }, 
     script:function(response) {
-      msg("'What is your area of expertise?' you ask " + lang.getName(response.actor, {article:DEFINITE}) + ".");
-      response.actor.areaAskResponse();
+      msg("'What is your area of expertise?' you ask " + lang.getName(response.char, {article:DEFINITE}) + ".");
+      response.char.areaAskResponse();
     }
   });
   npc.askOptions.push({
@@ -337,9 +337,9 @@ function createTopics(npc) {
     regex:/^((his |her )?(background))|((him|her)self)$/,
     test:function(p) { return p.text.match(this.regex); }, 
     script:function(response) {
-      msg("'Tell me about yourself,' you say to " + lang.getName(response.actor, {article:DEFINITE}) + ".");
-      response.actor.backgroundAskResponse();
-      trackRelationship(response.actor, 1, "background");
+      msg("'Tell me about yourself,' you say to " + lang.getName(response.char, {article:DEFINITE}) + ".");
+      response.char.backgroundAskResponse();
+      trackRelationship(response.char, 1, "background");
     }
   });
   npc.askOptions.push({
@@ -349,15 +349,16 @@ function createTopics(npc) {
 }
  
 function howAreYouFeeling(response) {
-  msg("'How are you feeling?' you ask " + lang.getName(response.actor, {article:DEFINITE}) + ".");
-  msg(PLANETS[w.Xsansi.currentPlanet][response.actor.name + "_how_are_you"]);
+  msg("'How are you feeling?' you ask " + lang.getName(response.char, {article:DEFINITE}) + ".");
+  msg(PLANETS[w.Xsansi.currentPlanet][response.char.name + "_how_are_you"]);
 }
 
 function planetAnalysis(response) {
-  const arr = response.actor.data[w.Xsansi.currentPlanet]
+  log(response)
+  const arr = response.char.data[w.Xsansi.currentPlanet]
   if (Object.keys(arr).length === 0) return falsemsg("You should talk to Aada or Ostap about that stuff.")
 
-  let rank = response.actor["rank" + w.Xsansi.currentPlanet]
+  let rank = response.char["rank" + w.Xsansi.currentPlanet]
   if (rank === undefined) return falsemsg("You should talk to Aada or Ostap about that stuff.")
   rank >>= 1
   if (rank >= arr.length) rank = arr.length - 1

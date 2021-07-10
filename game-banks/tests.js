@@ -72,7 +72,7 @@ test.tests = function() {
   test.assertCmd("remove j", ["You take your jumpsuit off.",])
   test.assertCmd("wear s", ["You put on your spacesuit.","'Satellite I has successfully entered orbit around the planet.' announces Xsansi.",])
   test.assertCmd("s", ["You can't go starboard.",])
-  test.assertCmd("a", ["You head aft.","The cargo bay","The cargo bay is a large, open area, with numerous crates, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",])
+  test.assertCmd("a", ["You head aft.","The cargo bay","The cargo bay is a large, open area, with numerous crates, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",])/*
   test.assertCmd("starboard", ["You head starboard.","The airlock","The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the controls.",])
   test.assertCmd("ai, evac airlock", ["'Evacuating the airlock... Room is now under vacuum.'",])
   test.assertCmd("port", "The door to the cargo bay will not open while it is pressurised and the airlock is not.")

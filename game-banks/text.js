@@ -5,11 +5,11 @@ tp.addDirective("stasis_pod_status", function(arr, params) {
 })
 
 tp.addDirective("status", function(arr, params) {
-  if (typeof params.actor.status === "string") {
-    return params.actor.status === 'stasis' ? 'In stasis' : 'Deceased'
+  if (typeof params.char.status === "string") {
+    return params.char.status === 'stasis' ? 'In stasis' : 'Deceased'
   }
   else {
-    return settings.intervalDescs[util.getByInterval(settings.intervals, params.actor.status)]
+    return settings.intervalDescs[util.getByInterval(settings.intervals, params.char.status)]
   }
 })
 
