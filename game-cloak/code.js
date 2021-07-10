@@ -29,7 +29,7 @@ findCmd('MetaHelp').script = function() {
 
 
 commands.push(new Cmd('HangUp', {
-  regex:/^(?:hang up|hang) (.+)$/,
+  regex:/^(?:hang up|hang) (.+?)(?: on the hook| on hook|)$/,
   objects:[
     {scope:parser.isHeld},
   ],
@@ -50,24 +50,4 @@ commands.push(new Cmd('HangUp', {
     }
   }  
 }))
-
-
-
-commands.push(new Cmd('HangUp', {
-  regex:/^(?:hang up|hang) (.+) on (?:|the )hook$/,
-  objects:[
-    {scope:parser.isHeld},
-  ],
-  script:function(objects) {
-    const options = {char:player, toLoc:'hook', item:objects[0][0]}
-    if (!objects[0][0].isAtLoc(player)) return failedmsg ("You're not carrying {sb:item}.", options)
-    if (objects[0][0].worn) return failedmsg ("Not while you're wearing {sb:item}!", options)
-    if (!player.isAtLoc('cloakroom')) return failedmsg ("Hang {sb:item} where, exactly?", options)
-
-    objects[0][0].moveToFrom(options, w.hook)
-    msg ("You hang {nm:item:the} on the hook.", options)
-    return world.SUCCESS
-  }  
-}))
-
 
