@@ -45,7 +45,7 @@ createItem("street_preacher", NPC(false), {
   loc:"market_square",
   scenery:true,
   locationStatus:function() {
-    return "A preacher is stood on an old crate, telling people about woe and doom that will befall them soon; most of the crowd are happy to ignore him."
+    return "A preacher is standing on an old crate, telling people about woe and doom that will befall them soon; most of the crowd are happy to ignore him."
   },
 })
 

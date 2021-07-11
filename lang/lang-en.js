@@ -78,7 +78,7 @@ const lang = {
     ListenToItem:/^(?:listen to|listen) (.+)$/,
     Purchase:/^(?:purchase|buy) (.+)$/,
     Sell:/^(?:sell) (.+)$/,
-    Smash:/^(?:smash|break|destroy|burst|pierce|puncture) (.+)$/,
+    Smash:/^(?:smash|break|destroy|burst|pierce|puncture|bust) (.+)$/,
     Turn:/^(?:turn|rotate|twist) (.+)$/,
     TurnLeft:/^(?:turn|rotate|twist) (.+) (?:left|anticlockwise|anti-clockwise|widdershins)$/,
     TurnRight:/^(?:turn|rotate|twist) (.+) (?:right|clockwise)$/,
@@ -126,10 +126,10 @@ const lang = {
     NpcGiveTo:[/^(.+), ?(?:give) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/],
     NpcGiveToMe:[/^(.+), ?(?:give) me (.+)$/, /^tell (.+) to ?(?:give) me (.+)$/],
 
-    TieTo:/^(?:tie|fasten|attach) (.+) (?:to) (.+)$/,
-    NpcTieTo:[/^(.+), ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/],
-    Untie:/^(?:untie|unfasten|detach) (.+)$/,
-    NpcUntie:[/^(.+), ?(?:untie|unfasten|detach) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+)$/],
+    TieTo:/^(?:tie|fasten|attach|connect|hook) (.+) (?:to) (.+)$/,
+    NpcTieTo:[/^(.+), ?(?:tie|fasten|attach|connect|hook) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/],
+    Untie:/^(?:untie|unfasten|detach|disconnect|unhook) (.+)$/,
+    NpcUntie:[/^(.+), ?(?:untie|unfasten|detach|disconnect|unhook) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+)$/],
     UntieFrom:/^(?:untie|unfasten|detach) (.+) (?:from) (.+)$/,
     NpcUntieFrom:[/^(.+), ?(?:untie|unfasten|detach) (.+) (?:frm) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+) (?:from) (.+)$/],
     UseWith:/^(?:use) (.+) (?:with|on) (.+)$/,
@@ -144,8 +144,8 @@ const lang = {
     TellAbout:/^(?:tell) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     FollowMe:[/^(.+), ?(?:follow|follow me)$/, /^tell (.+) to (?:follow|follow me)$/],    
     WaitHere:[
-      /^(.+), ?(?:stop follow|stop following|stop follow me|stop following me|wait|wait here)$/,
-      /^tell (.+) to (?:stop follow|stop following|stop follow me|stop following me|wait|wait here)$/,
+      /^(.+), ?(?:stop follow|stop following|stop follow me|stop following me|wait|wait here|stay|stay here)$/,
+      /^tell (.+) to (?:stop follow|stop following|stop follow me|stop following me|wait|wait here|stay|stay here)$/,
     ],    
     
     //Debug
@@ -580,6 +580,7 @@ const lang = {
       metamsg("A transcript will be automatically recorded. As this game has no text input, you will need to access the transcript through the developer tools. Press F12 to show the tools, and click on the \"Console\" tab. Type <code>io.scriptShow()</code> and press return. the transcript should appear in a new tab.")
     }
     metamsg("If you have not already done so, I recommend checking to ensure you can see the transcript before progressing too far though the game.")
+    metamsg("PLEASE NOTE: If you refesh/reload the page to restart the game, the existing transcript will be lost. Save it first!")
     io.scriptStart()
   },
   
@@ -735,6 +736,7 @@ const lang = {
       { name:"were", value:"was"},
       { name:"have", value:"has"},
       { name:"can", value:"can"},
+      { name:"will", value:"will"},
       { name:"mould", value:"moulds"},
       { name:"*ould", value:"ould"},
       { name:"must", value:"must"},

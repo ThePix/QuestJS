@@ -479,7 +479,7 @@ createRoom("top_deck_forward", {
       return this.descThis;
     }
   },
-  descThis: "You are stood at the forward end of a narrow corridor, with your cabin to port, and the canteen to starboard. Ahead, is the lounge.",
+  descThis: "You are standing at the forward end of a narrow corridor, with your cabin to port, and the canteen to starboard. Ahead, is the lounge.",
   vacuum:false,
   down:new Exit("hallway"),
   starboard:new Exit("canteen"),
@@ -503,7 +503,7 @@ createRoom("top_deck_aft", {
       return this.descThis
     }
   },
-  descThis: "You are stood at the aft end of a narrow corridor, with the women's cabin behind you, the men's to port. To starboard, steps lead down to the cargo bay on the lower deck.",
+  descThis: "You are standing at the aft end of a narrow corridor, with the women's cabin behind you, the men's to port. To starboard, steps lead down to the cargo bay on the lower deck.",
   vacuum:"top_deck_forward",
   port:new Exit("guys_cabin"),
   aft:new Exit("girls_cabin"),

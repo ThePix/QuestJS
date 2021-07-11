@@ -1018,18 +1018,18 @@ createRoom("desert", ZONE(), {
   zoneDescs:[
     {
       x:5, y:0,
-      desc: 'You are stood on a road heading west through a desert, and east over a bridge.'
+      desc: 'You are standing on a road heading west through a desert, and east over a bridge.'
     },
     {
       when:function(x, y) { return y === 0 },
-      desc:'You are stood on a road running east to west through a desert.',
+      desc:'You are standing on a road running east to west through a desert.',
     },
     {
       when:function(x, y) { return y > 0 },
-      desc:'You are stood in the desert, north of the road.',
+      desc:'You are standing in the desert, north of the road.',
     },
     {
-      desc:'You are stood in the desert, south of the road.',
+      desc:'You are standing in the desert, south of the road.',
     },
   ],
   size:8,

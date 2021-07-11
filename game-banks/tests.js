@@ -90,7 +90,7 @@ test.tests = function() {
   test.title("Go to Ostap")
   test.assertCmd("a", ["You head aft.", "The cargo bay", /^The cargo bay is/]);
   test.assertCmd("u", ["You walk up the narrow stair way to the top deck.", "The top deck aft", /^The top deck is where the living quarters/]);
-  test.assertCmd("f", ["You head forward.", "The top deck forward", /^You are stood at the forward end /, "'Satellite I has successfully entered orbit around the planet.' announces Xsansi."]);
+  test.assertCmd("f", ["You head forward.", "The top deck forward", /^You are standing at the forward end /, "'Satellite I has successfully entered orbit around the planet.' announces Xsansi."]);
   test.assertCmd("ask ostap about probes", "You can't see anything you might call 'ostap' here.");
   test.assertCmd("s", ["You head starboard.", "The canteen", /^The canteen/, "You can see Ostap here."]);
   test.assertCmd("x chair", ["It's just scenery."]);
@@ -103,7 +103,7 @@ test.tests = function() {
   test.assertCmd("ostap, launch 19 probes", ["'Launch 19 bio-probes,' you say to Ostap.", "'We only have 16 and we should save some for the other planets on our itinerary.'"]);
   test.assertCmd("ostap, launch 2 bio-probe", ["'Launch 2 bio-probes,' you say to Ostap.", "'Okay captain.'"]);
   test.assertCmd("z", ["Time passes...", "Ostap leaves the canteen, heading port."]);
-  test.assertCmd("p", ["You head port.", "The top deck forward", "You are stood at the forward end of a narrow corridor, with your cabin to port, and the canteen to starboard. Ahead, is the lounge.", "You can see Ostap here.", "Ostap leaves the top deck forward, heading down."]);
+  test.assertCmd("p", ["You head port.", "The top deck forward", "You are standing at the forward end of a narrow corridor, with your cabin to port, and the canteen to starboard. Ahead, is the lounge.", "You can see Ostap here.", "Ostap leaves the top deck forward, heading down."]);
   test.assertCmd("d", ["You head down.", "The hallway", /^This is, in a sense, the central nexus of the ship./, "You can see Ostap here.", "Ostap leaves the hallway, heading down."]);
   test.assertCmd("d", ["You head down.", "The Forward probe hanger", /^The forward probe hanger is where the satellites/, "You can see Kyle and Ostap here.", "Ostap leaves the Forward probe hanger, heading aft."]);
   test.assertCmd("a", ["You head aft.", "The Aft probe hanger",/^The aft probe hanger has/, "You can see Ostap here.", "'Okay, two probes to deploy...' mutters Ostap as he types at the console."]);

@@ -149,7 +149,7 @@ createItem("sharraaa", CANDIDATE(false), {
 
 createItem("farrington_moss", CANDIDATE(false), {
   alias:"Farrington Moss",
-  examine:"Farrington is a well-muscled man, with cropped hair that almost looks painted on. His uniform is crisply smart and he seems to be constantly stood at attention, even when in his seat.",
+  examine:"Farrington is a well-muscled man, with cropped hair that almost looks painted on. His uniform is crisply smart and he seems to be constantly standing at attention, even when in his seat.",
   weapons:"5",
   engineering:"4",
   science:"1",
