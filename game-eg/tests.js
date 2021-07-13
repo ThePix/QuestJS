@@ -658,7 +658,7 @@ test.tests = function() {
   test.assertCmd("smell knife", "The knife has no smell.")
   test.assertCmd("listen to knife", "The knife is not making any noise.")
   test.assertCmd("read knife", "Nothing worth reading there.")
-  test.assertCmd("smash knife", "The knife's not something you can break.")
+  test.assertCmd("smash knife", "The knife is not something you can break.")
   test.assertCmd("look out knife", "Not something you can look out of.")
   test.assertCmd("switch on knife", "You can't turn it on.")
   test.assertCmd("switch off knife", "You can't turn it off.")
@@ -694,23 +694,23 @@ test.tests = function() {
 
 
   test.title("Simple object commands (eat)");
-  test.assertCmd("eat knife", "The knife's not something you can eat.");
+  test.assertCmd("eat knife", "The knife is not something you can eat.");
   test.assertEqual(["Examine", "Take"], w.ham_and_cheese_sandwich.getVerbs())
   test.assertCmd("get sandwich", "You take the ham and cheese sandwich.");
-  test.assertCmd("x sandwich", "It's just your typical, every day ham and cheese sandwich.")
-  test.assertCmd("x sandwich", "It's just your typical, every day ham and cheese sandwich.")
-  test.assertCmd("x ham and cheese sandwich", "It's just your typical, every day ham and cheese sandwich.")
+  test.assertCmd("x sandwich", "It is just your typical, every day ham and cheese sandwich.")
+  test.assertCmd("x sandwich", "It is just your typical, every day ham and cheese sandwich.")
+  test.assertCmd("x ham and cheese sandwich", "It is just your typical, every day ham and cheese sandwich.")
   test.assertCmd("x sandwich and knife", [
-    "It's just your typical, every day ham and cheese sandwich.",
+    "It is just your typical, every day ham and cheese sandwich.",
     "A blunt knife.",
   ])
   test.assertCmd("x ham and cheese sandwich, knife", [
-    "It's just your typical, every day ham and cheese sandwich.",
+    "It is just your typical, every day ham and cheese sandwich.",
     "A blunt knife.",
   ])
 
   test.assertEqual(["Examine", "Drop", "Eat"], w.ham_and_cheese_sandwich.getVerbs())
-  test.assertCmd("drink sandwich", "The ham and cheese sandwich's not something you can drink.");
+  test.assertCmd("drink sandwich", "The ham and cheese sandwich is not something you can drink.");
   test.assertCmd("ingest sandwich", ["You eat the ham and cheese sandwich.", "That was great!"]);
   
   test.title("Simple object commands (drink the sandwich?)")
@@ -732,7 +732,7 @@ test.tests = function() {
   test.assertCmd("wear boots", "You put on the boots.");
   test.assertEqual(["Examine", "Remove"], w.boots.getVerbs())
   test.assertCmd("inventory", "You are carrying some boots (worn) and a knife.");
-  test.assertCmd("wear boots", "You're already wearing them.");
+  test.assertCmd("wear boots", "You are already wearing them.");
   test.assertCmd("remove boots", "You take the boots off.");
   test.assertEqual(["Examine", "Drop", "Wear"], w.boots.getVerbs())
   test.assertCmd("drop boots", "You drop the boots.");
@@ -744,7 +744,7 @@ test.tests = function() {
   test.assertCmd("get the book", "You take the book.");
   test.assertEqual(["Examine", "Drop", "Read"], w.book.getVerbs())
   test.assertCmd("wear book", "You can't wear it.");
-  test.assertCmd("remove book", "You're not wearing it.");
+  test.assertCmd("remove book", "You are not wearing it.");
   test.assertCmd("read the book", "It is not in a language you understand.");
   test.assertCmd("give it to kyle", "Done.");
   test.assertCmd("kyle, read the book", "It is not in a language he understands.");
@@ -888,7 +888,7 @@ test.tests = function() {
   test.assertCmd("wear coat", "You put on the coat.");
   test.assertCmd("wear underwear", "You can't put the underwear on over your jumpsuit.");
   test.assertCmd("remove coat", "You take the coat off.");  
-  test.assertCmd("drop all", ["You drop the knife.", "You drop the underwear.", "You drop the jeans.", "You drop the shirt.", "You drop the coat.", "Jumpsuit: You're already wearing it.", ]);
+  test.assertCmd("drop all", ["You drop the knife.", "You drop the underwear.", "You drop the jeans.", "You drop the shirt.", "You drop the coat.", "Jumpsuit: You are already wearing it.", ]);
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
   test.assertCmd("get knife", "You take the knife.");
   
@@ -897,14 +897,16 @@ test.tests = function() {
   test.assertCmd("get off bed", "You get off the bed.")
   test.assertCmd("sit on bed", "You sit on the bed.")
   test.assertCmd("get off bed", "You get off the bed.")
-  test.assertCmd("stand on bed", "The bed's not something you can stand on.")
-  test.assertCmd("lie on wardrobe", "The wardrobe's not something you can lie on.")
-  test.assertCmd("sit on wardrobe", "The wardrobe's not something you can sit on.")
+  test.assertCmd("stand on bed", "The bed is not something you can stand on.")
+  test.assertCmd("lie on wardrobe", "The wardrobe is not something you can lie on.")
+  test.assertCmd("sit on wardrobe", "The wardrobe is not something you can sit on.")
   
   
   test.title("use")
   test.assertCmd("use jumpsuit", "You put on the jumpsuit.");
   test.assertCmd("use knife", "No obvious way to use it.");
+  w.knife.use = function(options) { msg("You juggle the knife.") }
+  test.assertCmd("use knife", "You juggle the knife.");
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
   test.assertCmd("drop jumpsuit", "You drop the jumpsuit.");  
 
@@ -944,8 +946,8 @@ test.tests = function() {
   test.assertCmd("ask kyle about park", ["You ask Kyle about park.", "'Going to the park sounds like fun,' Kyle says with a grin. 'We can go on the swings!'"]);
   test.assertCmd("topics kyle", ["Some suggestions for what to ask Kyle about: Fountain; Garden; House; Park; Swings."])
 
-  test.assertCmd("ask chair about hats", 'You can ask it about hats all you like, but it\'s not about to reply.')
-  test.assertCmd("talk to chair", 'You chat to the chair for a few moments, before releasing that it\'s not about to reply.')
+  test.assertCmd("ask chair about hats", 'You can ask it about hats all you like, but it is not about to reply.')
+  test.assertCmd("talk to chair", 'You chat to the chair for a few moments, before releasing that it is not about to reply.')
 
 
   
@@ -993,7 +995,7 @@ test.tests = function() {
   test.assertCmd("kyle,get coin", "He tries to pick up the coin, but it just will not budge.");
   test.assertCmd("kyle,get knife", "You have it.");
   test.assertCmd("kyle,get cabinet", "He can't take it.");
-  test.assertCmd("kyle,get cover", "He can't take it; it's part of the book.");
+  test.assertCmd("kyle,get cover", "He can't take it; it is part of the book.");
 
 
   test.title("NPC commands (boots)");
@@ -1003,7 +1005,7 @@ test.tests = function() {
   test.assertCmd("kyle, get boots", "He's got them already.");
   test.assertCmd("kyle,give boots to box", "Realistically, the cardboard box is not interested in anything he might give it.")
   test.assertCmd("kyle, wear boots", "Kyle puts on the boots.");
-  test.assertCmd("kyle, wear boots", "Kyle's already wearing them.");
+  test.assertCmd("kyle, wear boots", "Kyle is already wearing them.");
   test.assertCmd("kyle, remove boots", "Kyle takes the boots off.");
   test.assertCmd("kyle, put boots in box", "Done.");
 
@@ -1256,7 +1258,7 @@ test.tests = function() {
   test.assertCmd("e", ["You head east.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a canteen, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and a small key here.", "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair, a crate and a rope here.", "You can go north or west."]);
   test.assertCmd("push crate", "That's not going to do anything useful.");
-  test.assertCmd("push chair s", "It's not something you can move around like that.");
+  test.assertCmd("push chair s", "It is not something you can move around like that.");
   w.broken_chair.shift = function() { msg("You try to push chair, but it just breaks even more."); return false; }
   w.broken_chair.shiftable = true;
   test.assertCmd("push chair w", "You try to push chair, but it just breaks even more.");
@@ -1545,10 +1547,13 @@ test.tests = function() {
   test.movePlayer('kitchen')
   test.assertCmd("get jug", ["You take the jug."])
   test.assertCmd("get canteen", ["You take the canteen."])
+  
   test.assertCmd("fill jug with tears", ["I don't know of a fluid called tears."])
   test.assertCmd("fill jug with honey", ["There's no honey here."])
   test.assertCmd("fill jug with water", ["You fill the jug."])
-  test.assertCmd("fill jug with water", ["It is already full."])
+  test.assertCmd("fill knife with water", ["Trying to put a fluid in the knife is just going to cause a mess."])
+  test.assertCmd("fill jug with water", ["It is already full of water."])
+  test.assertCmd("empty knife", ["The knife is not something you can empty."])
   test.assertCmd("empty jug", ["You empty the jug onto the ground, and it soaks away."])
   test.assertCmd("fill jug", ["You fill the jug."])
   test.assertCmd("empty jug into sink", ["You empty the jug into the dirty sink."])
@@ -1558,7 +1563,10 @@ test.tests = function() {
   test.assertCmd("pour jug into canteen", ["You empty the jug into the canteen."])
   test.assertCmd("x canteen", ["The canteen is full."])
   test.assertCmd("pour water into jug", ["You empty the canteen into the jug."])
+  test.assertCmd("empty jug", ["You empty the jug onto the ground, and it soaks away."])
   
+  w.canteen.containedFluidName = 'honey'
+  test.assertCmd("fill jug with honey", ["You empty the canteen into the jug."])
   
   
 

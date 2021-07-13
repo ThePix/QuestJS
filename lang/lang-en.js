@@ -183,15 +183,15 @@ const lang = {
   cannot_drop:"{multi}{pv:char:can't:true} drop {ob:item}.",
   not_carrying:"{multi}{pv:char:don't:true} have {ob:item}.",
   already_have:"{multi}{pv:char:'ve:true} got {ob:item} already.",
-  cannot_take_component:"{multi}{pv:char:can't:true} take {ob:item}; {pv:item:'be} part of {nm:whole:the}.",
+  cannot_take_component:"{multi}{pv:char:can't:true} take {ob:item}; {pv:item:be} part of {nm:whole:the}.",
 
 
   // EDIBLE
   eat_successful:"{nv:char:eat:true} {nm:item:the}.",
   drink_successful:"{nv:char:drink:true} {nm:item:the}.",
-  cannot_eat:"{nv:item:'be:true} not something you can eat.",
-  cannot_drink:"{nv:item:'be:true} not something you can drink.",
-  //cannot_ingest:"{nv:item:'be:true} not something you can ingest.",
+  cannot_eat:"{nv:item:be:true} not something you can eat.",
+  cannot_drink:"{nv:item:be:true} not something you can drink.",
+  //cannot_ingest:"{nv:item:be:true} not something you can ingest.",
 
 
   // WEARABLE
@@ -199,10 +199,10 @@ const lang = {
   remove_successful:"{nv:char:take:true} {nm:item:the} off.",
   cannot_wear:"{multi}{nv:char:can't:true} wear {ob:item}.",
   cannot_wear_ensemble:"{multi}Individual parts of an ensemble must be worn and removed separately.",
-  not_wearing:"{multi}{nv:char:'be:true} not wearing {ob:item}.",
+  not_wearing:"{multi}{nv:char:be:true} not wearing {ob:item}.",
   cannot_wear_over:"{nv:char:can't:true} put {nm:item:the} on over {pa:char} {nm:outer}.",
   cannot_remove_under:"{nv:char:can't:true} take off {pa:char} {nm:item} whilst wearing {pa:char} {nm:outer}.",
-  already_wearing:"{multi}{nv:char:'be:true} already wearing {ob:item}.",
+  already_wearing:"{multi}{nv:char:be:true} already wearing {ob:item}.",
   invWearingPrefix:"wearing",
   invHoldingPrefix:"holding",
 
@@ -219,7 +219,7 @@ const lang = {
   cannot_unlock:"{nv:char:can't:true} unlock {ob:item}.",
   not_container:"{nv:container:be:true} not a container.",
   container_recursion:"What? You want to put {nm:item:the} in {nm:container:the} when {nm:container:the} is already in {nm:item:the}? That's just too freaky for me.",
-  not_inside:"{nv:item:'be:true} not inside that.",
+  not_inside:"{nv:item:be:true} not inside that.",
   locked:"{nv:container:be:true} locked.",
   no_key:"{nv:char:do:true} have the right key.",
   locked_exit:"That way is locked.",
@@ -244,9 +244,9 @@ const lang = {
   sit_on_successful:"{nv:char:sit:true} on {nm:item:the}.",
   stand_on_successful:"{nv:char:stand:true} on {nm:item:the}.",
   recline_on_successful:"{nv:char:lie:true} down on {nm:item:the}.",
-  cannot_stand_on:"{nv:item:'be:true} not something you can stand on.",
-  cannot_sit_on:"{nv:item:'be:true} not something you can sit on.",
-  cannot_recline_on:"{nv:item:'be:true} not something you can lie on.",
+  cannot_stand_on:"{nv:item:be:true} not something you can stand on.",
+  cannot_sit_on:"{nv:item:be:true} not something you can sit on.",
+  cannot_recline_on:"{nv:item:be:true} not something you can lie on.",
 
 
   // SWITCHABLE
@@ -259,16 +259,19 @@ const lang = {
   // VESSEL
   fill_successful:"{nv:char:fill:true} {nm:item:the}.",
   empty_successful:"{nv:char:empty:true} {nm:item:the} onto the ground, and it soaks away.",
-  empty_into_successful:"{nv:char:empty:true} {nm:item:the} into {nm:sink:the}.",
-  empty_onto_successful:"{nv:char:empty:true} {nm:item:the} over {nm:sink:the}, and then watch it all run down on to the ground.",
-  cannot_fill:"{nv:item:'be:true} not something you can fill.",
-  cannot_mix:"{nv:item:'be:true} not something you can mix liquids in.",
-  cannot_empty:"{nv:item:'be:true} not something you can empty.",
+  empty_into_successful:"{nv:char:empty:true} {nm:item:the} into {nm:obj:the}.",
+  empty_onto_successful:"{nv:char:empty:true} {nm:item:the} over {nm:obj:the}, and then watch it all run down on to the ground.",
+  cannot_fill:"{nv:item:be:true} not something you can fill.",
+  cannot_mix:"{nv:item:be:true} not something you can mix liquids in.",
+  cannot_empty:"{nv:item:be:true} not something you can empty.",
   not_vessel:"{pv:item:be:true} not a vessel.",
+  not_sink:"Trying to put a fluid in {nm:obj:the} is just going to cause a mess.",
+  not_source:"{pv:item:be:true} not something you get get a fluid out of.",
   cannot_get_fluid:"{nv:char:try:true} to scoop up {show:fluid} but it all slips through {pa:char} fingers. Perhaps {pv:char:need} some kind of vessel.",
   no_fluid_here:"There's no {show:fluid} here.",
+  no_fluid_here_at_all:"There's nothing to fill anything with here.",
   not_a_fluid_here:"I don't know of a fluid called {show:text}.",
-  already_full:"{pv:item:be:true} already full.",
+  already_full:"{pv:item:be:true} already full of {show:fluid}.",
   already_empty:"{nv:item:be:true} already empty.",
   no_generic_fluid_here:"There's nothing to fill {sb:item} with here.",
   not_carrying_fluid:"{nv:char:be:true} not carrying anything with {show:fluid} in it.",
@@ -282,13 +285,13 @@ const lang = {
   already_following:"'I'm already following you!'",
   already_waiting:"'I'm already waiting!'",
 
-  cannot_ask_about:"You can ask {ob:item} about {show:text} all you like, but {pv:item:'be} not about to reply.",
-  cannot_tell_about:"You can tell {ob:item} about {show:text} all you like, but {pv:item:'be} not interested.",
+  cannot_ask_about:"You can ask {ob:item} about {show:text} all you like, but {pv:item:be} not about to reply.",
+  cannot_tell_about:"You can tell {ob:item} about {show:text} all you like, but {pv:item:be} not interested.",
   topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
   topics_none_found:"No suggestions for what to ask or tell {nm:item:the} available.",
   topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {show:list}.",
   topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {show:list}.",
-  cannot_talk_to:"You chat to {nm:item:the} for a few moments, before releasing that {pv:item:'be} not about to reply.",
+  cannot_talk_to:"You chat to {nm:item:the} for a few moments, before releasing that {pv:item:be} not about to reply.",
   no_topics:"{nv:char:have:true} nothing to talk to {nm:item:the} about.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
@@ -299,8 +302,8 @@ const lang = {
 
   // SHIFTABLE
   push_exit_successful:"{nv:char:push:true} {nm:item:the} {show:dir}.",
-  cannot_push:"{pv:item:'be:true} not something you can move around like that.",
-  cannot_push_up:"{pv:char:'be:true} not getting {nm:item:the} up there!",
+  cannot_push:"{pv:item:be:true} not something you can move around like that.",
+  cannot_push_up:"{pv:char:be:true} not getting {nm:item:the} up there!",
   take_not_push:"Just pick the thing up already!",
 
 
@@ -346,8 +349,8 @@ const lang = {
   // General cannot Messages
   cannot_read:"Nothing worth reading there.",
   cannot_use:"No obvious way to use {ob:item}.",
-  cannot_smash:"{nv:item:'be:true} not something you can break.",
-  cannot_turn:"{nv:item:'be:true} not something you can turn.",
+  cannot_smash:"{nv:item:be:true} not something you can break.",
+  cannot_turn:"{nv:item:be:true} not something you can turn.",
   cannot_look_out:"Not something you can look out of.",
   cannot_smell:"{nv:item:have:true} no smell.",
   cannot_listen:"{nv:item:be:true} not making any noise.",
@@ -372,13 +375,13 @@ const lang = {
   nothing_there:"{nv:char:be:true} sure there's nothing there.",
   nothing_inside:"There's nothing to see inside.",
   it_is_empty:"{pv:container:be:true} empty.",
-  not_here:"{pv:item:'be:true} not here.",
+  not_here:"{pv:item:be:true} not here.",
   char_has_it:"{multi}{nv:holder:have:true} {ob:item}.",
   none_here:"There's no {nm:item} here.",
   none_held:"{nv:char:have:true} no {nm:item}.",
   nothing_useful:"That's not going to do anything useful.",
   already:"{sb:item:true} already {cj:item:be}.",
-  default_examine:"{pv:item:'be:true} just your typical, every day {nm:item}.",
+  default_examine:"{pv:item:be:true} just your typical, every day {nm:item}.",
   
   error:"Oh dear, I seem to have hit an error trying to handle that (F12 for more details).",
 
