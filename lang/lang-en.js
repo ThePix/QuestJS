@@ -914,7 +914,7 @@ const lang = {
         let tens = Math.floor(number / 10) % 10;
         s = s + lang.numberTens[tens - 2];
         if (units !== 0) {
-          s = s + lang.numberUnits[units];
+          s = s + '-' + lang.numberUnits[units];
         }
       }
     }
