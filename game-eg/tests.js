@@ -429,6 +429,14 @@ test.tests = function() {
   test.assertEqual("five bricks and one book", processText("{nm:item:a} and {nm:item2:count}", {item:w.brick, count:5, item2:w.book}))
   w.book.specialCount = 4
   test.assertEqual("five bricks and four books", processText("{nm:item:a} and {nm:item2:count:false:count_this}", {item:w.brick, count:5, item2:w.book, count_this:'specialCount'}))
+  test.assertEqual("Lara looks at the four books thoughtfully.", processText("Lara looks at the {nm:item:false:false:count_this} thoughtfully.", {item:w.book, count_this:'specialCount'}))
+  w.book.specialCount = 1
+  test.assertEqual("Lara looks at the book thoughtfully.", processText("Lara looks at the {nm:item:false:false:count_this} thoughtfully.", {item:w.book, count_this:'specialCount'}))
+  
+  test.title("Text processor 5b: nm with COUNTABLE too.");
+  w.book.getDisplayName = function(options) { return 'a ' + options.adj + ' tomb' }
+  test.assertEqual("You see a mighty tomb", processText("You see {nm:item:a:false:adj}", {item:w.book, adj:'mighty'}))
+  delete w.book.getDisplayName
 
 
   test.title("Text processor 6: show");
@@ -768,13 +776,21 @@ test.tests = function() {
   test.assertCmd("inv", "You are carrying four bricks and a knife.");
   test.assertCmd("drop 4 bricks", "You drop four bricks.");
   test.assertCmd("inv", "You are carrying a knife.");
-  test.assertCmd("get 10 bricks", "You take seven bricks.");
+  test.assertCmd("get 10 bricks", "You take seven bricks, that is all there is.");
   test.assertCmd("e", ["You head east.", "The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west.", "A fresh smell here!"]);
   test.assertCmd("put 2 bricks on to the table", "Done.");
   test.assertCmd("inv", "You are carrying five bricks and a knife.");
   test.assertCmd("look", ["The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with two bricks and a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
   
   test.assertCmd("get the bricks", "You take two bricks.");
+  
+  test.assertCmd("put 12 bricks on to the table", "Done.");
+  test.assertCmd("look", ["The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with seven bricks and a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
+  test.assertCmd("drop 2 bricks", "You don't have any.");
+  test.assertCmd("put 2 bricks on to the table", "You don't have any.");
+  
+  test.assertCmd("get 90 bricks", "You take seven bricks, that is all there is.");
+  
   test.assertCmd("get clock", "You take the clock.");
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("drop clock", "You drop the clock.");
@@ -787,7 +803,7 @@ test.tests = function() {
   test.assertCmd("drop bricks in box", "Done.");
   test.assertEqual(true, parser.isContained(w.brick));
   
-  test.assertCmd("get bricks", "You take the brick.");
+  test.assertCmd("get bricks", "You take seven bricks.");
   test.assertEqual(false, parser.isContained(w.brick));  
   test.assertCmd("drop three bricks in box", "Done.");
   test.assertEqual(true, parser.isContained(w.brick));

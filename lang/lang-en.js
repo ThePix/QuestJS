@@ -175,13 +175,13 @@ const lang = {
 
 
   // TAKEABLE
-  take_successful:"{nv:char:take:true} {nm:item:the}.",
+  take_successful:"{nv:char:take:true} {nm:item:the}{ifIs:params:excess:true:, that is all there is}.",
   take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
-  drop_successful:"{nv:char:drop:true} {nm:item:the}.",
+  drop_successful:"{nv:char:drop:true} {nm:item:the}{ifIs:params:excess:true:, that is all you have}.",
   drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
   cannot_take:"{multi}{pv:char:can't:true} take {ob:item}.",
   cannot_drop:"{multi}{pv:char:can't:true} drop {ob:item}.",
-  not_carrying:"{multi}{pv:char:don't:true} have {ob:item}.",
+  not_carrying:"{multi}{pv:char:don't:true} have {if:item:countable:any:{ob:item}}.",
   already_have:"{multi}{pv:char:'ve:true} got {ob:item} already.",
   cannot_take_component:"{multi}{pv:char:can't:true} take {ob:item}; {pv:item:be} part of {nm:whole:the}.",
 
@@ -379,9 +379,12 @@ const lang = {
   char_has_it:"{multi}{nv:holder:have:true} {ob:item}.",
   none_here:"There's no {nm:item} here.",
   none_held:"{nv:char:have:true} no {nm:item}.",
+  //none_here_countable:"There's no {nm:item} here.",
+  //none_held_countable:"{nv:char:have:true} no {nm:item}.",
   nothing_useful:"That's not going to do anything useful.",
   already:"{sb:item:true} already {cj:item:be}.",
   default_examine:"{pv:item:be:true} just your typical, every day {nm:item}.",
+  not_enough:"There {ifMoreThan:count:1:are:is} only {show:count} {nm:item}.",
   
   error:"Oh dear, I seem to have hit an error trying to handle that (F12 for more details).",
 
@@ -837,7 +840,6 @@ const lang = {
     }
 
     else {
-      
       if (count === 'infinity') {
         s += item.infinity ? item.infinity + ' ' : 'a lot of '
       }
