@@ -306,6 +306,12 @@ test.tests = function() {
   test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:yes:no}"));
   player.someOddAtt = 67;
   test.assertEqual("Simple text: 67", processText("Simple text: {show:player:someOddAtt}"));
+  player.someOddAtt = 0;
+  test.assertEqual("Simple text: 0", processText("Simple text: {show:player:someOddAtt}"));
+  player.someOddAtt = undefined;
+  test.assertEqual("Simple text: ", processText("Simple text: {show:player:someOddAtt}"));
+
+  player.someOddAtt = 67;
 
   test.assertEqual("Simple text to show capitalisation.", processText("{cap:simple text to show capitalisation.}"));
   test.assertEqual("Simple Text To Show Capitalisation.", processText("{title:simple text to show capitalisation.}"));
