@@ -507,6 +507,7 @@ const lang = {
       metamsg("{b:Accessibility:}  Type {class:help-eg:DARK} to toggle dark mode or {class:help-eg:SPOKEN} to toggle the text being read out. Use {class:help-eg:FONT} to toggle all the fonts the author carefully chose to a standard sans-serif font.")
       metamsg("{b:Shortcuts:} You can often just type the first few characters of an item's name and Quest will guess what you mean.  If fact, if you are in a room with Brian, who is holding a ball, and a box, Quest should be able to work out that {class:help-eg:B,PUT B IN B} mean you want Brian to put the ball in the box.")
       metamsg("You can use the up and down arrows to scroll back though your previous typed commands - especially useful if you realise you spelled something wrong. If you do not have arrow keys, use {class:help-eg:OOPS} to retrieve the last typed command so you can edit it. Use {class:help-eg:AGAIN} or just {class:help-eg:G} to repeat the last typed command.")
+      metamsg("See also {link:here:https://github.com/ThePix/QuestJS/wiki/How-To-Play}, which will open in a new tab.")      
     }
     if (settings.panes !== "none") {
       if (settings.inventoryPane) {
@@ -533,15 +534,15 @@ const lang = {
   },
 
   aboutScript:function() {
-    metamsg("{i:{show:settings:title} version {show:settings:version}} was written by {show:settings:author} using Quest 6 AKA Quest JS version {show:settings:questVersion}.", {settings:settings})
+    metamsg("{i:{show:settings:title} version {show:settings:version}} was written by {show:settings:author} using QuestJS (Quest 6) version {show:settings:questVersion}.", {settings:settings})
     if (settings.ifdb) metamsg("IFDB number: " + settings.ifdb)
     if (settings.thanks && settings.thanks.length > 0) {
-      metamsg("Thanks to " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".")
+      metamsg("{i:Thanks to:} " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".")
     }
     if (settings.additionalAbout !== undefined) {
       for (let s of settings.additionalAbout) metamsg(s)
     }
-    if (settings.ifid) metamsg("IFDB number: " + settings.ifid)
+    if (settings.ifid) metamsg("{i:IFDB number:} " + settings.ifid)
     return world.SUCCESS_NO_TURNSCRIPTS
   },
 
