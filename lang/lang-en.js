@@ -559,7 +559,8 @@ const lang = {
     metamsg("To save your progress, type SAVE [filename]. By default, if you have already saved the game, you will not be permitted to save with the same filename, to prevent you accidentally saving when you meant to load. However, you can overwrite a file with the same name by using SAVE [filename] OVERWRITE or just SAVE [filename] OV.");
     metamsg("To load your game, refresh/reload this page in your browser, then type LOAD [filename].");
     metamsg("To see a list of all your QuestJS save games, type DIR or LS. You can delete a saved file with DELETE [filename] or DEL [filename].");
-    metamsg("Games are saved on your computer in a special area for the browser called \"localStorage\".");
+    metamsg("Games are saved on your computer in a special area for the browser called \"Web Storage\" or \"LocalStorage\".");
+    metamsg("NOTE: If you clear your browsing data (or have your browser set to do so automatically when the browser is closed) you will lose your saved games.");
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 

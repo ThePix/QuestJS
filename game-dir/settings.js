@@ -8,6 +8,8 @@ settings.warnings = "No warnings have been set for this game."
 settings.playMode = "dev"
 
 settings.compassPane = false
+//settings.noAskTell = false
+settings.noTalkTo = false
 
 settings.setup = function() {
   let html = '<div></div>'
@@ -17,10 +19,28 @@ settings.setup = function() {
 
 settings.updateCustomUI = function() {
   let html = ''
-  for (const ex of currentLocation.getExits({excludeLocked:true})) {
+  for (const ex of currentLocation.dests) {
     const dest = w[ex.name]
-    html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'' + ex.dir + '\')">' + dest.headingAlias + '</p></div>'
+    html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'go to ' + ex.name + '\')">' + dest.headingAlias + '</p></div>'
   }
   $('#directions').html(html)
 }
 
+settings.roomCreateFunc = function(o) {
+  if (o.dests) {
+    for (const ex of o.dests) {
+      ex.origin = o
+      ex.dir = 'to ' + (o.dirAlias ? o.dirAlias : o.alias)
+    }
+  }
+}
+
+settings.inventoryPane.push(
+  {name:'On Phone To', alt:'onPhoneTo', test:function(item) { return item.name === player.onPhoneTo  } }
+)
+
+settings.afterEnter = function() {
+  if (player.onPhoneTo && w[player.onPhoneTo].loc === player.loc) {
+    w.phone.hangUp()
+  }
+}
