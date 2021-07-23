@@ -385,6 +385,11 @@ createItem("jug", TAKEABLE(), VESSEL(), {
   examine:"A small jug, stripped blue and white.",
 })
 
+createItem("honey_pot", {
+  scenery:true,
+  examine:"A pot of honey.",
+})
+
 createItem("kitchen_sink", {
   loc:"kitchen",
   scenery:true, 

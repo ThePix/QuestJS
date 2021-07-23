@@ -1590,7 +1590,18 @@ test.tests = function() {
   w.canteen.containedFluidName = 'honey'
   test.assertCmd("fill jug with honey", ["You empty the canteen into the jug."])
   
+  test.assertCmd("put jug in canteen", ["The canteen is not a container. It is a vessel, they are different, alright?"])
+  test.assertCmd("put water in canteen", ["You fill the canteen."])
   
+  w.honey_pot.loc = 'kitchen'
+  delete w.canteen.containedFluidName
+  delete w.jug.containedFluidName
+  test.assertCmd("x honey", ["A pot of honey."])
+  // the honey pot is NOT a source of honey, so this is right
+  test.assertCmd("put honey in canteen", ["There's no honey here."])
+  
+
+
 
 
 /*

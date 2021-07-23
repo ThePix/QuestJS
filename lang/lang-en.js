@@ -117,6 +117,7 @@ const lang = {
     NpcEmptyInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/, /^tell (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/],
     EmptyFluidInto:/^(?:empty|pour out|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/,
     NpcEmptyFluidInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/, /^tell (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/],
+    PutFluidIn:/^(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/,
 
     PutIn:/^(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/,
     NpcPutIn:[/^(.+), ?(?:put|place|drop|insert) (.+) (?:in to|into|in|on to|onto|on) (.+)$/, /^tell (.+) to (?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/],
@@ -218,6 +219,7 @@ const lang = {
   cannot_lock:"{nv:char:can't:true} lock {ob:item}.",
   cannot_unlock:"{nv:char:can't:true} unlock {ob:item}.",
   not_container:"{nv:container:be:true} not a container.",
+  not_container_not_vessel:"{nv:container:be:true} not a container. It is a vessel, they are different, alright?",
   container_recursion:"What? You want to put {nm:item:the} in {nm:container:the} when {nm:container:the} is already in {nm:item:the}? That's just too freaky for me.",
   not_inside:"{nv:item:be:true} not inside that.",
   locked:"{nv:container:be:true} locked.",
