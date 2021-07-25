@@ -346,6 +346,8 @@ const lang = {
   go_successful:"{nv:char:head:true} {show:dir}.",
   not_that_way:"{nv:char:can't:true} go {show:dir}.",
   can_go:"{nv:char:think:true} {pv:char:can} go {exits}.",
+  cannot_go_in:"{pv:item:be:true} not something Mandy can get inside.",
+  cannot_go_through:"{pv:item:be:true} not something Mandy can get through.",
 
 
   // General cannot Messages
@@ -697,7 +699,7 @@ const lang = {
     {name:'west', abbrev:'W', niceDir:"the west", type:'compass', key:100, x:-1 ,y:0, z:0, opp:'east', symbol:'fa-arrow-left'}, 
     {name:'Look', abbrev:'L', type:'nocmd', key:101, symbol:'fa-eye'}, 
     {name:'east', abbrev:'E', niceDir:"the east", type:'compass', key:102, x:1 ,y:0, z:0, opp:'west', symbol:'fa-arrow-right'}, 
-    {name:'out', abbrev:'Out', alt:'exit|o', niceDir:"outside", type:'inout', key:106,opp:'in', symbol:'fa-sign-out-alt'}, 
+    {name:'out', abbrev:'Out', alt:'exit|o|leave', niceDir:"outside", type:'inout', key:106,opp:'in', symbol:'fa-sign-out-alt'}, 
     {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", type:'vertical', key:107, x:0 ,y:0, z:-1, opp:'up', symbol:'fa-arrow-down'}, 
 
     {name:'southwest', abbrev:'SW', niceDir:"the southwest", type:'compass', key:97, x:-1 ,y:-1, z:0, opp:'northeast', symbol:'fa-arrow-down', rotate:45}, 

@@ -11,7 +11,7 @@ settings.compassPane = false
 settings.panesCollapseAt = 0
 settings.themes = ['sans-serif']
 settings.styleFile = 'style'
-settings.files = ["code", "commands", "crew", "page", "data", "stars", "missions"]
+settings.files = ["code", "crew", "page", "data", "stars", "missions"]
 settings.tests = true
 settings.noTalkTo = false
 
@@ -22,6 +22,7 @@ settings.inventoryPane = [
   {name:'On Viewscreen', alt:'itemsView', test:settings.onView },
 ]
 
+settings.favicon = 'assets/icons/starquest.png'
 
 
 

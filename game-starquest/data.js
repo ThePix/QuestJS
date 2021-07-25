@@ -2,7 +2,7 @@
 
 
 createRoom("room", {
-  alias:"bridge",
+  alias:"Bridge",
   desc:"This is the the brains of the Star Quest; this is where everything across the rest of the ship is controlled. In the centre is the command chair, surrounded by the workstations for each of the bridge officers. At the front, the view screen gives a panoramic view  of {if:ship:arrivedAtSector:space:the inside of the stardock}.",
 })
 
@@ -23,7 +23,7 @@ createItem("ship", {
     return Math.floor(n / 24 / 360) + "." + (Math.floor(n / 24) % 360) + "." + (n % 24)
   },
   hullIntegrity:100,
-  shields:0,
+  shields:101,
   getShields:function() {
     if (this.shields <= 0) return '<b>Failed</b>'
     if (this.shields === 101) return '<i>Off</i>'
@@ -31,7 +31,7 @@ createItem("ship", {
   },
   //currentSystem:'sol',
   currentLocation:'stardock',
-  alert:2,
+  alert:0,
   alerts:['grey', 'Yellow', 'Orange', 'Red'],
   getAlert:function() {
     const c = this.alerts[this.alert]

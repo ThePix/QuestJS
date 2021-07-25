@@ -1,7 +1,7 @@
 "use strict"
 
 
-createItem("PAGE", TAKEABLE(), {
+createItem("PAGE", {
   examine:'You look at the PAGE. It is a standard issue, type 3, doubtless one of dozens on the ship.',
   starActiveOptions:[],
   contactActiveOptions:[],
@@ -15,6 +15,7 @@ createItem("PAGE", TAKEABLE(), {
   },
 
   verbFunction:function(verbList) {
+    log(verbList)
     verbList.pop()
     if (this.loc !== 'player') return
     verbList.push("Missions")
@@ -25,7 +26,22 @@ createItem("PAGE", TAKEABLE(), {
   },
 
   contact:function() { this.usePage("contact", "contact") },
-  encyclopedia:function() { this.usePage("lookUp", "look up") },
+  encyclopedia:function() {
+    showTextDiag("Search the web", function(s) {
+      msg("On your PAGE you search for \"" + s + "\".")
+      const regex = RegExp(s, 'i')
+      log(s)
+      for (const key in encyclopedia) {
+        log(key)
+        if (regex.test(key)) {
+          msg("{i:{b:" + key + ":} " + encyclopedia[key] + "}")
+          return true
+        }
+      }
+      msg("You find nothing of interest.")
+      return false      
+    })
+  },
   stardatabase:function() { this.usePage("star", "look up") },
   otheruse:function() { this.usePage("otherUse", "") },
   crewroster:function() {
@@ -77,49 +93,20 @@ createItem("PAGE", TAKEABLE(), {
 
 
 const pageData = []
-const addToEncyclopaedia = function(name, data) { pageData.push({name:data.alias, t:data.examine, type:'lookUp'}) }
 
 
 
-
-
-
-addToEncyclopaedia("pirates", {
-  alias:"Pirates",
-  examine:"Pirates have plagued interstellar travel for centuries. ",
-})
-addToEncyclopaedia("star_quest", {
-  alias:"SS Star Quest",
-  examine:"The SS Star Quest is an {i:Intrepid} class warship, launched {time:-43254} from Newport, in Mars orbit. She is a general purpose ship, fitted with medical and science facilities, armaments and limited cargo facilities.|She has a mass of 984 te, has a typical crew of 54 plus 18 marines and can achieve a maximum speed of warp 6 with her two Mark 7 engines. She is armed with twin turbo lasers and hard-light torpedoes.",
-})
-addToEncyclopaedia("brakk", {
-  alias:"The Brakk",
-  examine:"The Brakk are a belligerent, war-like race who have taken it upon themselves to halt the natural expansion of mankind into space.",
-})
-addToEncyclopaedia("admiralty", {
-  alias:"The Admiralty",
-  examine:"The Space Admiralty, or more often just the Admiralty, is the administration for Earth-based space military.",
-})
-addToEncyclopaedia("girrgirr", {
-  alias:"The Girr-Girr",
-  examine:"The Girr-Girr are a sentient race from the planet Noshtrim, noted for their abstract poetry and athletic dance. As a species, they tend to be quick and agile, if flighty.",
-})
-addToEncyclopaedia("sector", {
-  alias:"Sector 7 Iota",
-  examine:"Sector 7 Iota is approximately 60 lightyears from Earth, heading approximately away from the galatic centre. It is characterised by a cluster of some twenty stars, many with inhabited planets, with a limited number of outlying worlds at some remove.|The admiralty maintain Starbase 142 in orbit around Mendone III, the most populous planet.",
-})
-addToEncyclopaedia("salis", {
-  alias:"Salis",
-  examine:"Salis are a race of amorphous blobs. They were first encountered on Sirius Beta V, but xenobiologists consider it unlikely they originated there, as there are no other lifeforms on the planet with the same biochemistry. They had no written or oral history and so their origins remain a mystery.|Due to issues with communication, it was only some thirty years after discovery they were found to be sentient, and indeed to be particularly intelligent.",
-})
-addToEncyclopaedia("chal", {
-  alias:"Chal",
-  examine:"The similarities between the Chal and mankind, both in shape and in thought, are very apparent, and more than one commentator hassuggested this led to the three decades of war between the two species. After some five years of tentative peace, we are at last learning more about this species, and realising just how much we are alike.",
-})
-addToEncyclopaedia("stardate", {
-  alias:"Stardate",
-  examine:"The \"Stardate\" has been adopted as a universal time system across Accord space. Due to relativistic effects, time travels at different rates depending on the observer's own speed, and as stars are moving relative to each other, even different planets have slight different time rates. The Stardate is a theoretical time based on a stationary galaxy. It uses midnight, New Year's day, 1970 in the original Earth-based system as the start of the epoch.|It is split into parts, separated by dots. The first is the number of years since the start of the epoch, the second part is the number of days since the start of the year, the third part is the number of hours. Further divisions divide into minutes and second. Later parts may be omitted as convenient. Note that Stardate uses a \"standard year\", which is exactly 360 days long or 31,104,000 seconds.",
-})
+const encyclopedia = {
+  "pirates":"Pirates have plagued interstellar travel for centuries.",
+  "SS Star Quest":"The SS Star Quest is an {i:Intrepid} class warship, launched {time:-43254} from Newport, in Mars orbit. She is a general purpose ship, fitted with medical and science facilities, armaments and limited cargo facilities.|She has a mass of 984 te, has a typical crew of 54 plus 18 marines and can achieve a maximum speed of warp 6 with her two Mark 7 engines. She is armed with twin turbo lasers and hard-light torpedoes.",
+  "The Brakk":"The Brakk are a belligerent, war-like race who have taken it upon themselves to halt the natural expansion of mankind into space.",
+  "The Admiralty":"The Space Admiralty, or more often just the Admiralty, is the administration for Earth-based space military.",
+  "The Girr-Girr":"The Girr-Girr are a sentient race from the planet Noshtrim, noted for their abstract poetry and athletic dance. As a species, they tend to be quick and agile, if flighty.",
+  "Sector 7 Iota":"Sector 7 Iota is approximately 60 lightyears from Earth, heading approximately away from the galatic centre. It is characterised by a cluster of some twenty stars, many with inhabited planets, with a limited number of outlying worlds at some remove.|The admiralty maintain Starbase 142 in orbit around Mendone III, the most populous planet.",
+  "Salis":"Salis are a race of amorphous blobs. They were first encountered on Sirius Beta V, but xenobiologists consider it unlikely they originated there, as there are no other lifeforms on the planet with the same biochemistry. They had no written or oral history and so their origins remain a mystery.|Due to issues with communication, it was only some thirty years after discovery they were found to be sentient, and indeed to be particularly intelligent.",
+  "Chal":"The similarities between the Chal and mankind, both in shape and in thought, are very apparent, and more than one commentator has suggested this led to the three decades of war between the two species. After some five years of tentative peace, we are at last learning more about this species, and realising just how much we are alike.",
+  "Stardate":"The \"Stardate\" has been adopted as a universal time system across Accord space. Due to relativistic effects, time travels at different rates depending on the observer's own speed, and as stars are moving relative to each other, even different planets have slight different time rates. The Stardate is a theoretical time based on a stationary galaxy. It uses midnight, New Year's day, 1970 in the original Earth-based system as the start of the epoch.|It is split into parts, separated by dots. The first is the number of years since the start of the epoch, the second part is the number of days since the start of the year, the third part is the number of hours. Further divisions divide into minutes and second. Later parts may be omitted as convenient. Note that Stardate uses a \"standard year\", which is exactly 360 days long or 31,104,000 seconds.",
+}
 
 
 
