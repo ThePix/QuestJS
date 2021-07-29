@@ -34,9 +34,8 @@ const lang = {
     MetaSave:/^save$/,
     MetaSaveGame:/^(?:save) (.+)$/,
     MetaSaveOverwriteGame:/^(?:save) (.+) (?:overwrite|ow)$/,
-    MetaLoad:/^(?:reload|load|restore)$/,
     MetaLoadGame:/^(?:load|reload|restore) (.+)$/,
-    MetaDir:/^dir$|^directory$|^ls$|^save ls$|^save dir$/,
+    MetaDir:/^(?:reload|load|restore|dir|directory|ls|save ls|save dir)$/,
     MetaDeleteGame:/^(?:delete|del) (.+)$/,
     MetaUndo:/^undo$/,
     MetaAgain:/^(?:again|g)$/,
@@ -104,6 +103,32 @@ const lang = {
     Use:/^(?:use) (.+)$/,
     TalkTo:/^(?:talk to|talk|speak to|speak|converse with|converse) (.+)$/,
     Topics:/^topics? (?:for )?(.+)$/,
+    
+    GoInItem:/^(?:enter|go in|in|inside|go inside|climb in|climb inside) (.+)$/,
+    GoOutItem:/^(?:exit|go out|out|outside|go outide|leave) (.+)$/,
+    GoUpItem:/^(?:go up|up|climb up|climb|ascend) (.+)$/,
+    GoDownItem:/^(?:go down|down|climb down|descend) (.+)$/,
+    GoThroughItem:/^(?:go through|walk through) (.+)$/,
+    NpcGoInItem:[
+      /^(.+), ?(?:enter|go in|in|inside|go inside|climb in|climb inside) (.+)$/,
+      /^tell (.+) to (?:enter|go in|in|inside|go inside|climb in|climb inside) (.+)$/,
+    ],
+    NpcGoOutItem:[
+      /^(.+), ?(?:exit|go out|out|outside|go outide|leave) (.+)$/,
+      /^tell (.+) to (?:exit|go out|out|outside|go outide|leave) (.+)$/,
+    ],
+    NpcGoUpItem:[
+      /^(.+), ?(?:go up|up|climb up|climb|ascend) (.+)$/,
+      /^tell (.+) to (?:go up|up|climb up|climb|ascend) (.+)$/,
+    ],
+    NpcGoDownItem:[
+      /^(.+), ?(?:go down|down|climb down|descend) (.+)$/,
+      /^tell (.+) to (?:go down|down|climb down|descend) (.+)$/,
+    ],
+    NpcGoThroughItem:[
+      /^(.+), ?(?:go through|walk through) (.+)$/,
+      /^tell (.+) to (?:go through|walk through) (.+)$/,
+    ],
     
     // Misc again
     Say:/^(say|shout|whisper|holler|scream|yell) (.+)$/,
@@ -333,8 +358,8 @@ const lang = {
   rope_cannot_move:"{nv:item:be:true} not long enough, {nv:char:cannot} go any further.",
   rope_wind:"{nv:char:wind:true} in {nm:item:the}.",
   rope_unwind:"{nv:item:unwind:true} behind {nm:char:the}.",
-  rope_tied_both_end:"It is tied up at both ends.",
-  rope_tied_both_end:"It is tied up at this end.",
+  rope_tied_both_end:"It is tied to something.",
+  rope_tied_one_end:"It is tied up at this end.",
   rope_no_end:"{nv:char:cannot:true} see either end of {nm:item:the}.",
 
 
@@ -346,8 +371,11 @@ const lang = {
   go_successful:"{nv:char:head:true} {show:dir}.",
   not_that_way:"{nv:char:can't:true} go {show:dir}.",
   can_go:"{nv:char:think:true} {pv:char:can} go {exits}.",
-  cannot_go_in:"{pv:item:be:true} not something Mandy can get inside.",
-  cannot_go_through:"{pv:item:be:true} not something Mandy can get through.",
+  cannot_go_in:"{pv:item:be:true} not something {nv:char:can} get inside.",
+  cannot_go_out:"{pv:item:be:true} not something from which {nv:char:can} go out.",
+  cannot_go_up:"{pv:item:be:true} not something {nv:char:can} go up.",
+  cannot_go_down:"{pv:item:be:true} not something {nv:char:can} go down.",
+  cannot_go_through:"{pv:item:be:true} not something {nv:char:can} get through.",
 
 
   // General cannot Messages
@@ -464,7 +492,7 @@ const lang = {
   // Save/load messages
 
   sl_dir_headings:['Filename', 'Game', 'Ver', 'Timestamp', 'Comment'],
-  sl_dir_msg:"Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command.",
+  sl_dir_msg:"Ver is the version of the game that was being played when saved. Loading a save game from a different version may or may not work. You can delete a file with the DEL command. Type SAVE for general instructions on saving and loading.",
   sl_no_filename:"Trying to save with no filename.",
   sl_saved:"Saved file \"{filename}\".",
   sl_already_exists:"File already exists. To overwrite an existing file, use SAVE [filename] OVERWRITE or SAVE [filename] OW.",

@@ -1345,7 +1345,7 @@ test.tests = function() {
   test.assertCmd("tie rope to hook", ["You attach the rope to the hook."])
   test.assertEqual(['conservatory', 'garden'], w.rope.locs)
   test.assertCmd("x rope", ["The rope is about 40' long. One end heads into the conservatory. The other end is tied to the hook."], true)
-  test.assertCmd("get rope", ['It is tied up at this end.'])
+  test.assertCmd("get rope", ['It is tied to something.'])
 
 
 

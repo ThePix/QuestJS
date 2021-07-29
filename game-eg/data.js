@@ -264,6 +264,13 @@ createRoom("dining_room", {
 });
 
 
+createItem("lift_item", { 
+  alias:'lift',
+  loc:"dining_room",
+  examine:"An old-fashioned lift.",
+  goInDirection:'west',
+})
+
 createItem("chair", FURNITURE({sit:true}), {
   loc:"dining_room", examine:"A wooden chair.",
   afterPostureOn:function(options) {
