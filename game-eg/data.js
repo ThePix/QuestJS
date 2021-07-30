@@ -268,6 +268,7 @@ createItem("lift_item", {
   alias:'lift',
   loc:"dining_room",
   examine:"An old-fashioned lift.",
+  scenery:true,
   goInDirection:'west',
 })
 
@@ -374,6 +375,7 @@ createItem("clock", TAKEABLE(), {
 createItem("trapdoor", OPENABLE(false), {
   loc:"kitchen",
   examine:"A small trapdoor in the floor.",
+  goThroughDirection:'down',
 })
 
 createItem("camera", TAKEABLE(), {
@@ -442,15 +444,20 @@ createItem("light_switch", SWITCHABLE(false), {
 })
 
 
-createItem("crates", 
-  { loc:"basement", examine:"A bunch of old crates.",
-    move:function() {
-      msg("You move the crates, so the light switch is accessible.");
-      this.moved = true;
-      return true;
-    }
-  }  
-);
+createItem("ladder", {
+  loc:"basement",
+  examine:"A ladder, fixed to the wall, leading to the trapdoor.",
+  goUpDirection:'up',
+})
+createItem("crates", {
+  loc:"basement",
+  examine:"A bunch of old crates.",
+  move:function() {
+    msg("You move the crates, so the light switch is accessible.");
+    this.moved = true;
+    return true;
+  }
+})
 
 
 

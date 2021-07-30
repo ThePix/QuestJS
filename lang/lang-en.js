@@ -152,7 +152,9 @@ const lang = {
     NpcGiveTo:[/^(.+), ?(?:give) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/],
     NpcGiveToMe:[/^(.+), ?(?:give) me (.+)$/, /^tell (.+) to ?(?:give) me (.+)$/],
 
+    TieUp:/^(?:tie|fasten|attach|connect|hook) (.+)$/,
     TieTo:/^(?:tie|fasten|attach|connect|hook) (.+) (?:to) (.+)$/,
+    NpcTieUp:[/^(.+), ?(?:tie|fasten|attach|connect|hook) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+)$/],
     NpcTieTo:[/^(.+), ?(?:tie|fasten|attach|connect|hook) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/],
     Untie:/^(?:untie|unfasten|detach|disconnect|unhook) (.+)$/,
     NpcUntie:[/^(.+), ?(?:untie|unfasten|detach|disconnect|unhook) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+)$/],
@@ -345,6 +347,7 @@ const lang = {
   rope_examine_end_attached:'is {item.attachedVerb} to {nm:obj:the}.',
   rope_examine_end_held:'is held by {nm:holder:the}.',
   rope_examine_end_headed:'heads into {nm:loc:the}.',
+  rope_no_attachable_here:"There is nothing here you can attach {nm:item:the} to.",
   rope_not_attachable_to:"That is not something you can attach {nm:item:the} to.",
   rope_not_detachable:"You cannot attach that to - or detach it from - anything.",
   rope_tied_both_ends_already:"{pv:item:be:true} already attached to {nm:obj1:the} and {nm:obj12:the}.",
@@ -598,7 +601,7 @@ const lang = {
 
   transcriptScript:function() {
     metamsg("The TRANSCRIPT or SCRIPT command can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.");
-    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place in the game). To empty the file, use SCRIPT CLEAR.");
+    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place in the game). To clear the data, use SCRIPT CLEAR.");
     metamsg("You can add a comment to the transcript by starting your text with an asterisk (*) - Quest will record it, but otherwise just ignore it.")
     metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser. The transcript is {i:not} saved when you save your game (but will not be lost when you load a game). If you complete the game the text input will disappear, however if you have a transcript recording, a link will be available to access it.");
     metamsg("Transcript is currently: " + (io.transcript ? 'on' : 'off'))
@@ -613,14 +616,14 @@ const lang = {
   betaTestIntro:function() {
     metamsg("This version is for beta-testing (" + settings.version + ").")
     if (settings.textInput) {
-      metamsg("A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab, or click the link if you reach the end of the game; it can then be copy-and-pasted into an e-mail or the page saved and attached.")
+      metamsg("A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab, or click the link if you reach the end of the game; it can then be saved (you may need to do {i:Print} and print to file, perhaps as a PDF) and attached to an e-mail. Alternatively, copy-and-pasted into an e-mail.")
       metamsg("You can add your own comments to the transcript by starting a command with *.")
     }
     else {    
       metamsg("A transcript will be automatically recorded. As this game has no text input, you will need to access the transcript through the developer tools. Press F12 to show the tools, and click on the \"Console\" tab. Type <code>io.scriptShow()</code> and press return. the transcript should appear in a new tab.")
     }
     metamsg("If you have not already done so, I recommend checking to ensure you can see the transcript before progressing too far though the game.")
-    metamsg("PLEASE NOTE: If you refesh/reload the page to restart the game, the existing transcript will be lost. Save it first!")
+    metamsg("PLEASE NOTE: If you refresh/reload the page to restart the game, the existing transcript will be lost. Save it first!")
     io.scriptStart()
   },
   

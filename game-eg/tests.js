@@ -1355,6 +1355,8 @@ test.tests = function() {
   test.assertEqual(['conservatory', 'garden'], w.rope.locs)
   test.assertCmd("x rope", ["The rope is about 40' long. One end is tied to the broken chair. The other end heads into the garden."])
   test.assertCmd("untie rope from chair", ["You detach the rope from the broken chair."])
+  test.assertCmd("attach rope", ["You attach the rope to the broken chair."])
+  test.assertCmd("untie rope", ["You detach the rope from the broken chair."])
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
   test.assertEqual(['Buddy', 'conservatory', 'garden'], w.rope.locs)
   test.assertCmd("n", ["You head north.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a canteen, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and a small key here.", "You can go east, south, up or west.", "The rope unwinds behind you."])
@@ -1601,6 +1603,14 @@ test.tests = function() {
   test.assertCmd("put honey in canteen", ["There's no honey here."])
   
 
+
+  test.title("item directions")
+  w.Kyle.loc = 'kitchen'
+  w.light_switch.switchedon = true
+  test.assertCmd("tell kyle to go through trapdoor", ["Kyle disappears through the trapdoor."])
+  test.assertCmd("go through trapdoor", ["You go through the trapdoor, and down the ladder.", "The basement", "A dank room, with piles of crates everywhere.", "You can see a crates, Kyle (holding a clock; wearing a straw boater), a ladder and a light switch here.", "You can go up."])
+  test.assertCmd("tell kyle to climb ladder", ["Kyle leaves the basement, heading up."])
+  test.assertCmd("go up ladder", ["You head up.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table, a camera, Kyle (holding a clock; wearing a straw boater) and a trapdoor (open) here.", "You can go down, north or west."])
 
 
 
