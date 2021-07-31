@@ -170,6 +170,10 @@ const lang = {
     ],
     AskAbout:/^(?:ask) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TellAbout:/^(?:tell) (.+?) (about|what|who|how|why|where|when) (.+)$/,
+    TalkAbout:[
+      /^(?:talk to|talk with|talk) (.+?) about (what|who|how|why|where|when) (.+)$/,
+      /^(?:talk to|talk with|talk) (.+?) (about|what|who|how|why|where|when) (.+)$/,
+    ],
     FollowMe:[/^(.+), ?(?:follow|follow me)$/, /^tell (.+) to (?:follow|follow me)$/],    
     WaitHere:[
       /^(.+), ?(?:stop follow|stop following|stop follow me|stop following me|wait|wait here|stay|stay here)$/,
@@ -316,6 +320,7 @@ const lang = {
 
   cannot_ask_about:"You can ask {ob:item} about {show:text} all you like, but {pv:item:be} not about to reply.",
   cannot_tell_about:"You can tell {ob:item} about {show:text} all you like, but {pv:item:be} not interested.",
+  cannot_talk_about:"You can talk to {ob:item} about {show:text} all you like, but {pv:item:be} not interested.",
   topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
   topics_none_found:"No suggestions for what to ask or tell {nm:item:the} available.",
   topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {show:list}.",
@@ -463,6 +468,10 @@ const lang = {
   // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
   ask_about_intro:function(char, text1, text2) {
     return "You ask " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
+  },
+  // If the player does TALK TO MARY ABOUT HOUSE this will appear before the response.
+  talk_about_intro:function(char, text1, text2) {
+    return "You talk to " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
 
 
