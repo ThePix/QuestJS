@@ -504,7 +504,6 @@ test.tests = function() {
   test.assertEqual("Kyle is here. Lara is here.", processText("{if Kyle.colour>-1:Kyle is here. }Lara is here."))
 
 
-
   test.title("Text processor 11: here");
   test.assertEqual("He is here. Lara is not.", processText("{ifHere:Kyle:He is here.} Lara is not."));
   test.assertEqual("He is here. Lara is not.", processText("{here Kyle:He is here.} Lara is not."));
@@ -515,6 +514,11 @@ test.tests = function() {
   test.assertEqual("He is here. Lara is not.", processText("{nothere Lara:He is here.} Lara is not."));
   test.assertEqual(" Lara is not.", processText("{ifNotHere:Kyle:He is here.} Lara is not."));
   test.assertEqual(" Lara is not.", processText("{nothere Kyle:He is here.} Lara is not."));
+
+  test.assertEqual("He is here. Lara is not.", processText("{ifHeld:knife:He is here.} Lara is not."));
+  test.assertEqual(" Lara is not.", processText("{ifHeld:book:He is here.} Lara is not."));
+  test.assertEqual("He is here. Lara is not.", processText("{ifNotHeld:book:He is here.} Lara is not."));
+  test.assertEqual(" Lara is not.", processText("{ifNotHeld:knife:He is here.} Lara is not."));
 
   test.title("Text processor 12: pa2");
   test.assertEqual("'Please stop!' exclaims Kyle when you rip his book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:player}))

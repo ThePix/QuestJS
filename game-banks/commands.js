@@ -45,7 +45,7 @@ commands.push(new Cmd('Get in pod1', {
   defmsg:"That's not about to get in a stasis!",
 }));
 commands.push(new Cmd('Get in pod2', {
-  regex:/^tell (.+) to (?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
+  regex:/^(?:tell|ask|instruct) (.+) to (?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
   npcCmd:true,
   attName:"stasis",
   objects:[
@@ -64,7 +64,7 @@ commands.push(new Cmd('Stop1', {
   defmsg:"That's not doing anything!",
 }));
 commands.push(new Cmd('Stop2', {
-  regex:/^tell (.+) to (?:stop|halt|forget it)$/,
+  regex:/^(?:tell|ask|instruct) (.+) to (?:stop|halt|forget it)$/,
   npcCmd:true,
   attName:"stopAgenda",
   objects:[
@@ -152,7 +152,7 @@ commands.push(new Cmd('NpcPressurise1', {
   },
 }));
 commands.push(new Cmd('NpcPressurise2', {
-  regex:/^tell (.+) to (?:pressuri[sz]e|pres) (.+)$/,
+  regex:/^(?:tell|ask|instruct) (.+) to (?:pressuri[sz]e|pres) (.+)$/,
   attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
@@ -188,7 +188,7 @@ commands.push(new Cmd('NpcDepressurise1', {
   },
 }))
 commands.push(new Cmd('NpcDepressurise2', {
-  regex:/^tell (.+) to (?:depressuri[sz]e|evacuate|depres) (.+)$/,
+  regex:/^(?:tell|ask|instruct) (.+) to (?:depressuri[sz]e|evacuate|depres) (.+)$/,
   attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},

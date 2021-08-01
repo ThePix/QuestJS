@@ -104,80 +104,80 @@ const lang = {
     TalkTo:/^(?:talk to|talk|speak to|speak|converse with|converse) (.+)$/,
     Topics:/^topics? (?:for )?(.+)$/,
     
-    GoInItem:/^(?:enter|go in|in|inside|go inside|climb in|climb inside) (.+)$/,
+    GoInItem:/^(?:enter|go in|in|inside|go inside|climb in|climb inside|get in|get inside) (.+)$/,
     GoOutItem:/^(?:exit|go out|out|outside|go outide|leave) (.+)$/,
     GoUpItem:/^(?:go up|up|climb up|climb|ascend) (.+)$/,
     GoDownItem:/^(?:go down|down|climb down|descend) (.+)$/,
     GoThroughItem:/^(?:go through|walk through) (.+)$/,
     NpcGoInItem:[
-      /^(.+), ?(?:enter|go in|in|inside|go inside|climb in|climb inside) (.+)$/,
-      /^tell (.+) to (?:enter|go in|in|inside|go inside|climb in|climb inside) (.+)$/,
+      /^(.+), ?(?:enter|go in|in|inside|go inside|climb in|climb inside|get in|get inside) (.+)$/,
+      /^(?:tell|ask|instruct) (.+) to (?:enter|go in|in|inside|go inside|climb in|climb inside|get in|get inside) (.+)$/,
     ],
     NpcGoOutItem:[
       /^(.+), ?(?:exit|go out|out|outside|go outide|leave) (.+)$/,
-      /^tell (.+) to (?:exit|go out|out|outside|go outide|leave) (.+)$/,
+      /^(?:tell|ask|instruct) (.+) to (?:exit|go out|out|outside|go outide|leave) (.+)$/,
     ],
     NpcGoUpItem:[
       /^(.+), ?(?:go up|up|climb up|climb|ascend) (.+)$/,
-      /^tell (.+) to (?:go up|up|climb up|climb|ascend) (.+)$/,
+      /^(?:tell|ask|instruct) (.+) to (?:go up|up|climb up|climb|ascend) (.+)$/,
     ],
     NpcGoDownItem:[
       /^(.+), ?(?:go down|down|climb down|descend) (.+)$/,
-      /^tell (.+) to (?:go down|down|climb down|descend) (.+)$/,
+      /^(?:tell|ask|instruct) (.+) to (?:go down|down|climb down|descend) (.+)$/,
     ],
     NpcGoThroughItem:[
       /^(.+), ?(?:go through|walk through) (.+)$/,
-      /^tell (.+) to (?:go through|walk through) (.+)$/,
+      /^(?:tell|ask|instruct) (.+) to (?:go through|walk through) (.+)$/,
     ],
     
     // Misc again
     Say:/^(say|shout|whisper|holler|scream|yell) (.+)$/,
     Stand:/^stand$|^stand up$|^get up$/,
-    NpcStand:[/^(.+), ?(?:stand|stand up|get up)$/, /^tell (.+) to (?:stand|stand up|get up)$/],
+    NpcStand:[/^(.+), ?(?:stand|stand up|get up)$/, /^(?:tell|ask|instruct) (.+) to (?:stand|stand up|get up)$/],
     GetFluid:/^(?:get|take|scoop|pick|grab)(?:| up) (.+)$/,
     FillWith:/^(?:fill) (.+) (?:with) (.+)$/,
-    NpcFillWith:[/^(.+), ?(?:fill) (.+) (?:with) (.+)$/, /^tell (.+) to (?:fill) (.+) (?:with) (.+)$/],
+    NpcFillWith:[/^(.+), ?(?:fill) (.+) (?:with) (.+)$/, /^(?:tell|ask|instruct) (.+) to (?:fill) (.+) (?:with) (.+)$/],
 
     EmptyInto:/^(?:empty|pour out|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/,
-    NpcEmptyInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/, /^tell (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/],
+    NpcEmptyInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/, /^(?:tell|ask|instruct) (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/],
     EmptyFluidInto:/^(?:empty|pour out|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/,
-    NpcEmptyFluidInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/, /^tell (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/],
+    NpcEmptyFluidInto:[/^(.+), ?(?:empty|pour|discharge|decant) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/, /^(?:tell|ask|instruct) (.+) to (?:empty|pour|discharge) (.+) (?:into|in to|in|down|onto|on to|on) (.+)$/],
     PutFluidIn:/^(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/,
 
     PutIn:/^(?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/,
-    NpcPutIn:[/^(.+), ?(?:put|place|drop|insert) (.+) (?:in to|into|in|on to|onto|on) (.+)$/, /^tell (.+) to (?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/],
+    NpcPutIn:[/^(.+), ?(?:put|place|drop|insert) (.+) (?:in to|into|in|on to|onto|on) (.+)$/, /^(?:tell|ask|instruct) (.+) to (?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/],
     TakeOut:/^(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/,
-    NpcTakeOut:[/^(.+), ?(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/, /^tell (.+) to (?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/],
+    NpcTakeOut:[/^(.+), ?(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/, /^(?:tell|ask|instruct) (.+) to (?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/],
     GiveTo:/^(?:give|offer|proffer) (.+) (?:to) (.+)$/,
-    NpcGiveTo:[/^(.+), ?(?:give) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:give) (.+) (?:to) (.+)$/],
-    NpcGiveToMe:[/^(.+), ?(?:give) me (.+)$/, /^tell (.+) to ?(?:give) me (.+)$/],
+    NpcGiveTo:[/^(.+), ?(?:give) (.+) (?:to) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give) (.+) (?:to) (.+)$/],
+    NpcGiveToMe:[/^(.+), ?(?:give) me (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give) me (.+)$/],
 
     TieUp:/^(?:tie|fasten|attach|connect|hook) (.+)$/,
     TieTo:/^(?:tie|fasten|attach|connect|hook) (.+) (?:to) (.+)$/,
-    NpcTieUp:[/^(.+), ?(?:tie|fasten|attach|connect|hook) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+)$/],
-    NpcTieTo:[/^(.+), ?(?:tie|fasten|attach|connect|hook) (.+) (?:to) (.+)$/, /^tell (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/],
+    NpcTieUp:[/^(.+), ?(?:tie|fasten|attach|connect|hook) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:tie|fasten|attach) (.+)$/],
+    NpcTieTo:[/^(.+), ?(?:tie|fasten|attach|connect|hook) (.+) (?:to) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:tie|fasten|attach) (.+) (?:to) (.+)$/],
     Untie:/^(?:untie|unfasten|detach|disconnect|unhook) (.+)$/,
-    NpcUntie:[/^(.+), ?(?:untie|unfasten|detach|disconnect|unhook) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+)$/],
+    NpcUntie:[/^(.+), ?(?:untie|unfasten|detach|disconnect|unhook) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:untie|unfasten|detach) (.+)$/],
     UntieFrom:/^(?:untie|unfasten|detach) (.+) (?:from) (.+)$/,
-    NpcUntieFrom:[/^(.+), ?(?:untie|unfasten|detach) (.+) (?:frm) (.+)$/, /^tell (.+) to ?(?:untie|unfasten|detach) (.+) (?:from) (.+)$/],
+    NpcUntieFrom:[/^(.+), ?(?:untie|unfasten|detach) (.+) (?:frm) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:untie|unfasten|detach) (.+) (?:from) (.+)$/],
     UseWith:/^(?:use) (.+) (?:with|on) (.+)$/,
 
 
     PushExit:/^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
     NpcPushExit:[
       /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
-      /^tell (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+      /^(?:tell|ask|instruct) (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
     ],
     AskAbout:/^(?:ask) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TellAbout:/^(?:tell) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TalkAbout:[
-      /^(?:talk to|talk with|talk) (.+?) about (what|who|how|why|where|when) (.+)$/,
-      /^(?:talk to|talk with|talk) (.+?) (about|what|who|how|why|where|when) (.+)$/,
+      /^(?:talk to|talk with|talk|speak to|speak with|speak) (.+?) about (what|who|how|why|where|when) (.+)$/,
+      /^(?:talk to|talk with|talk|speak to|speak with|speak) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     ],
-    FollowMe:[/^(.+), ?(?:follow|follow me)$/, /^tell (.+) to (?:follow|follow me)$/],    
+    FollowMe:[/^(.+), ?(?:follow|follow me)$/, /^(?:tell|ask|instruct) (.+) to (?:follow|follow me)$/],    
     WaitHere:[
       /^(.+), ?(?:stop follow|stop following|stop follow me|stop following me|wait|wait here|stay|stay here)$/,
-      /^tell (.+) to (?:stop follow|stop following|stop follow me|stop following me|wait|wait here|stay|stay here)$/,
+      /^(?:tell|ask|instruct) (.+) to (?:stop follow|stop following|stop follow me|stop following me|wait|wait here|stay|stay here)$/,
     ],    
     
     //Debug
@@ -195,7 +195,7 @@ const lang = {
   // This will be added to the start of the regex of a command to make an NPC command
   // The saved capture group is the NPC's name
   tell_to_prefixes:{
-    1:'(?:tell|ask) (.+) to ',   // TELL KYLE TO GET SPOON
+    1:'(?:tell|ask|instruct) (.+) to ',   // TELL KYLE TO GET SPOON
     2:'(.+), ?',                 // KYLE, GET SPOON
   },
 
