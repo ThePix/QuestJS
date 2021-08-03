@@ -166,7 +166,7 @@ test.tests = function() {
   
   test.title("random.fromArray");
   const ary = ["one", "two", "three"];
-  const ary2 = [];
+  let ary2 = [];
   for (let i = 0; i < 3; i++) {
     const res = random.fromArray(ary, true);
     if (ary2.includes(res)) test.fail("ary2 already has that value");
@@ -647,6 +647,51 @@ test.tests = function() {
 
 
 
+  test.title("tokenising")
+  let res2 
+  
+  ary2 = ['ham', 'cheese']
+  res2 = array.oneFromTokens(ary2, [w.book, w.boots, w.ham_and_cheese_sandwich, w.knife], {})
+  test.assertEqual(0, ary2.length)
+  test.assertEqual(w.ham_and_cheese_sandwich, res2[0])
+  
+  ary2 = ['ham', 'cheese', 'boots']
+  res2 = array.oneFromTokens(ary2, [w.book, w.boots, w.ham_and_cheese_sandwich, w.knife], {})
+  test.assertEqual(1, ary2.length)
+  test.assertEqual(w.ham_and_cheese_sandwich, res2[0])
+
+  ary2 = ['boots', 'ham', 'cheese']
+  res2 = array.oneFromTokens(ary2, [w.book, w.boots, w.ham_and_cheese_sandwich, w.knife], {})
+  test.assertEqual(2, ary2.length)
+  test.assertEqual(w.boots, res2[0])
+
+  ary2 = ['hat', 'boots', 'ham', 'cheese']
+  res2 = array.oneFromTokens(ary2, [w.book, w.boots, w.ham_and_cheese_sandwich, w.knife], {})
+  test.assertEqual(4, ary2.length)
+  test.assertEqual(null, res2)
+
+  test.title("tokenising 2")
+  ary2 = ['ham', 'cheese']
+  res2 = array.fromTokens(ary2, [w.book, w.boots, w.ham_and_cheese_sandwich, w.knife], {})
+  test.assertEqual(1, res2.length)
+  test.assertEqual('ham_and_cheese_sandwich', res2[0][0].name)
+
+  ary2 = ['ham', 'cheese', 'boots']
+  res2 = array.fromTokens(ary2, [w.book, w.boots, w.ham_and_cheese_sandwich, w.knife], {})
+  test.assertEqual(2, res2.length)
+  test.assertEqual('ham_and_cheese_sandwich', res2[0][0].name)
+  test.assertEqual('boots', res2[1][0].name)
+
+  ary2 = ['boots', 'ham', 'cheese']
+  res2 = array.fromTokens(ary2, [w.book, w.boots, w.ham_and_cheese_sandwich, w.knife], {})
+  test.assertEqual(2, res2.length)
+  test.assertEqual('ham_and_cheese_sandwich', res2[1][0].name)
+  test.assertEqual('boots', res2[0][0].name)
+
+
+
+
+/*
   test.title("errors")
   test.assertCmd("get sdjfghfg", "There doesn't seem to be anything you might call 'sdjfghfg' here.")
   test.assertCmd("map", "Sorry, no map available.")
