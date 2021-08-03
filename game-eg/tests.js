@@ -125,12 +125,12 @@ test.tests = function() {
   test.title("parser.matchToNames 4")
   parserResult = {objects:[], score:0}
   parser.matchToNames('book and coin', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book]], {multiple:true}, parserResult)
-  test.assertEqual(-1, parserResult.score)
+  test.assertEqual(parser.NO_OBJECT, parserResult.score)
 
   test.title("parser.matchToNames 5")
   parserResult = {objects:[], score:0}
   parser.matchToNames('book and coin', [[], [w.boots, w.ham_and_cheese_sandwich, w.Buddy, w.book, w.coin]], {}, parserResult)
-  test.assertEqual(-3, parserResult.score)
+  test.assertEqual(parser.DISALLOWED_MULTIPLE, parserResult.score)
 
 
   test.title("parser.matchToNames 5")
@@ -691,7 +691,7 @@ test.tests = function() {
 
 
 
-/*
+
   test.title("errors")
   test.assertCmd("get sdjfghfg", "There doesn't seem to be anything you might call 'sdjfghfg' here.")
   test.assertCmd("map", "Sorry, no map available.")
