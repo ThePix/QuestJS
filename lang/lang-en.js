@@ -149,8 +149,10 @@ const lang = {
     TakeOut:/^(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/,
     NpcTakeOut:[/^(.+), ?(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/, /^(?:tell|ask|instruct) (.+) to (?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/],
     GiveTo:/^(?:give|offer|proffer) (.+) (?:to) (.+)$/,
-    NpcGiveTo:[/^(.+), ?(?:give) (.+) (?:to) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give) (.+) (?:to) (.+)$/],
-    NpcGiveToMe:[/^(.+), ?(?:give) me (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give) me (.+)$/],
+    NpcGiveTo:[/^(.+), ?(?:give|offer|proffer) (.+) (?:to) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give|offer|proffer) (.+) (?:to) (.+)$/],
+    Give:/^(?:give|offer|proffer) (.+)$/,
+    NpcGive:[/^(.+), ?(?:give|offer|proffer) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give|offer|proffer) (.+)$/],
+    //NpcGiveToMe:[/^(.+), ?(?:give) me (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give) me (.+)$/],
 
     TieUp:/^(?:tie|fasten|attach|connect|hook) (.+)$/,
     TieTo:/^(?:tie|fasten|attach|connect|hook) (.+) (?:to) (.+)$/,
@@ -402,11 +404,12 @@ const lang = {
   no_multiples_msg:"You cannot use multiple objects with that command.",
   nothing_msg:"Nothing there to do that with.",
   general_obj_error:"So I kind of get what you want to do, but not what you want to do it with.",
-  done_msg:"Done.",
+  done_msg:"{multi}Done.",
   nothing_for_sale:"Nothing for sale here.",
   wait_msg:"Time passes...",
   no_map:"Sorry, no map available.",
   inventory_prefix:"{nv:char:be:true} carrying",
+  no_receiver:"There's no one here to give things to.",
 
 
   // General command fails

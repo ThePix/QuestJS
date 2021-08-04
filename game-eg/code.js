@@ -17,6 +17,11 @@ quest.create('A carrot for Buddy', [
 
 
 
+
+
+
+
+
 commands.unshift(new Cmd('Test input', {
   npcCmd:true,
   rules:[cmdRules.isHere],

@@ -1662,6 +1662,72 @@ test.tests = function() {
   test.assertCmd("go up ladder", ["You head up.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table, a camera, Kyle (holding a clock; wearing a straw boater) and a trapdoor (open) here.", "You can go down, north or west."])
 
 
+  test.title("give plus")
+  w.ham_and_cheese_sandwich.loc = player.name
+  test.assertCmd("give kyle knife", ["Done."])
+  test.assertEqual('Kyle', w.knife.loc)
+  w.knife.loc = player.name
+
+  test.assertCmd("give knife", ["Done."])
+  test.assertEqual('Kyle', w.knife.loc)
+  w.knife.loc = player.name
+
+  test.assertCmd("give knife to kyle", ["Done."])
+  test.assertEqual('Kyle', w.knife.loc)
+  w.knife.loc = player.name
+
+  test.menuResponseNumber = 0
+  test.assertCmd("give c", ["Done."])
+  test.assertEqual('Kyle', w.canteen.loc)
+  w.canteen.loc = player.name
+
+  test.assertCmd("give knife canteen", ["Knife: Done.", "Canteen: Done."])
+  test.assertEqual('Kyle', w.knife.loc)
+  test.assertEqual('Kyle', w.canteen.loc)
+  w.knife.loc = player.name
+  w.canteen.loc = player.name
+
+  test.assertCmd("give kyle knife canteen", ["Knife: Done.", "Canteen: Done."])
+  test.assertEqual('Kyle', w.knife.loc)
+  test.assertEqual('Kyle', w.canteen.loc)
+  w.knife.loc = player.name
+  w.canteen.loc = player.name
+
+  test.assertCmd("give nonsense canteen", ["There doesn't seem to be anything you might call 'nonsense canteen' here."])
+
+  test.assertCmd("give kyle knife ham canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
+  test.assertEqual('Kyle', w.knife.loc)
+  test.assertEqual('Kyle', w.canteen.loc)
+  test.assertEqual('Kyle', w.ham_and_cheese_sandwich.loc)
+  w.knife.loc = player.name
+  w.canteen.loc = player.name
+  w.ham_and_cheese_sandwich.loc = player.name
+
+  test.assertCmd("give kyle knife ham sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
+  test.assertEqual('Kyle', w.knife.loc)
+  test.assertEqual('Kyle', w.canteen.loc)
+  test.assertEqual('Kyle', w.ham_and_cheese_sandwich.loc)
+  test.assertCmd("kyle, give piggy knife ham sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
+  test.assertEqual(player.name, w.knife.loc)
+  test.assertEqual(player.name, w.canteen.loc)
+  test.assertEqual(player.name, w.ham_and_cheese_sandwich.loc)
+
+  test.assertCmd("give kyle knife ham and cheese sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
+  test.assertEqual('Kyle', w.knife.loc)
+  test.assertEqual('Kyle', w.canteen.loc)
+  test.assertEqual('Kyle', w.ham_and_cheese_sandwich.loc)
+
+  test.assertCmd("kyle, give me knife ham and cheese sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
+  test.assertEqual(player.name, w.knife.loc)
+  test.assertEqual(player.name, w.canteen.loc)
+  test.assertEqual(player.name, w.ham_and_cheese_sandwich.loc)
+
+
+  w.knife.loc = player.name
+  w.canteen.loc = player.name
+  w.ham_and_cheese_sandwich.loc = player.name
+
+
 
 /*
   test.title("quests")
