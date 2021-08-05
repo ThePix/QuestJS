@@ -463,6 +463,16 @@ test.tests = function() {
   w.Kyle.colour = 0
   test.assertEqual("Kyle is red.", processText("Kyle is {select:Kyle:colours:colour}."));
   test.assertEqual("Kyle is green.", processText("Kyle is {select:Kyle:colour:green:blue:red}."));
+  w.Kyle.colour = 6
+  test.assertEqual("Kyle is .", processText("Kyle is {select:Kyle:colours:colour}."));
+  test.assertEqual("Kyle is .", processText("Kyle is {select:Kyle:colour:green:blue:red}."));
+  w.Kyle.colour = 6
+  test.assertEqual("Kyle is red.", processText("Kyle is {selectWrap:Kyle:colours:colour}."));
+  test.assertEqual("Kyle is red.", processText("Kyle is {selectWrap:Kyle:colour:green:blue:red:yellow}."));
+  w.Kyle.colour = 6
+  test.assertEqual("Kyle is blue.", processText("Kyle is {selectEnd:Kyle:colours:colour}."));
+  test.assertEqual("Kyle is red.", processText("Kyle is {selectEnd:Kyle:colour:green:blue:red}."));
+  w.Kyle.colour = 0
 
 
   test.title("Text processor 8: dialogue");
