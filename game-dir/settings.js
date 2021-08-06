@@ -23,7 +23,8 @@ settings.updateCustomUI = function() {
     const dest = w[ex.name]
     html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'go to ' + ex.name + '\')">' + dest.headingAlias + '</p></div>'
   }
-  $('#directions').html(html)
+  const el = document.querySelector('#directions')
+  if (el) el.innerHTML = html
 }
 
 settings.roomCreateFunc = function(o) {

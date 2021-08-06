@@ -129,31 +129,31 @@ settings.customUI = function() {
   document.writeln('<div id="choose-weapon-div" title="Select a weapon">');
   document.writeln('<select id="weapon-select"></select>');
   document.writeln('</div>');
-  $(function() {
-    $( "#choose-weapon-div" ).dialog({
+  document.onreadystatechange = function() {  // !!!!!  I think this will overwrite the main one !!!!
+    document.querySelector( "#choose-weapon-div" ).dialog({
       autoOpen: false,  
       buttons: {
         OK: function() { skillUI.chosenWeapon() }
       },
     });
-  });
+  }
 };  
 
 
 settings.updateCustomUI = function() {
-  $('#weaponImage').attr('src', settings.imagesFolder + 'icon-' + player.getEquippedWeapon().image + '.png');
-  $('#weapon-td').prop('title', "Weapon: " + player.getEquippedWeapon().alias);
+  document.querySelector('#weaponImage').setAttribute('src', settings.imagesFolder + 'icon-' + player.getEquippedWeapon().image + '.png');
+  document.querySelector('#weapon-td').prop('title', "Weapon: " + player.getEquippedWeapon().alias);
   
-  $('#hits-indicator').css('padding-right', 120 * player.health / player.maxHealth);
-  $('#hits-td').prop('title', "Hits: " + player.health + "/" + player.maxHealth);
+  document.querySelector('#hits-indicator').style.padding-right = (120 * player.health / player.maxHealth) + 'px'
+  document.querySelector('#hits-td').prop('title', "Hits: " + player.health + "/" + player.maxHealth);
 
-  $('#pp-indicator').css('padding-right', 120 * player.pp / player.maxPP);
-  $('#pp-td').prop('title', "Power points: " + player.pp + "/" + player.maxPP);
+  document.querySelector('#pp-indicator').style.padding-right = (120 * player.pp / player.maxPP) + 'px'
+  document.querySelector('#pp-td').prop('title', "Power points: " + player.pp + "/" + player.maxPP);
 
-  $('#armour-indicator').css('padding-right', 120 * player.armour / player.maxArmour);
-  $('#armour-td').prop('title', "Armour: " + player.armour + "/" + player.maxArmour);
+  document.querySelector('#armour-indicator').style.padding-right = (120 * player.armour / player.maxArmour) + 'px'
+  document.querySelector('#armour-td').prop('title', "Armour: " + player.armour + "/" + player.maxArmour);
 
-  //console.log($('#hits-td').prop('title'));
+  //console.log(document.querySelector('#hits-td').prop('title'));
 
 
   //console.log(player.skillsLearnt)
@@ -182,35 +182,35 @@ const skillUI = {
   
   setButton:function(skill) {
     if (!skill.icon) skill.icon = skill.name.toLowerCase()
-    const cell = $('#cell' + skillUI.skills.length)
+    const cell = document.querySelector('#cell' + skillUI.skills.length)
     let s = '<div class="skill-container" title="' + skill.tooltip + '" >'
     s += '<img class="skill-image" src="' + settings.imagesFolder + 'icon-' + skill.icon + '.png"/>'
     if (skill.spell) s += '<img class="skill-image" src="' + settings.imagesFolder + 'flag-spell.png"/>'
     s += '</div>'
-    cell.html(s)
+    cell.innerHTML = s)
     cell.click(skillUI.buttonClickHandler)
-    cell.css("background-color", "black")
-    cell.css("padding", "2px")
-    cell.attr("name", skill.name)
+    cell.style.background-color = 'black'
+    cell.style.padding = '2px'
+    cell.setAttribute("name", skill.name)
     skillUI.skills.push(skill)
   },
 
   resetButtons:function() {
     //console.log('reset')
     for (let i = 0; i < skillUI.skills.length; i++) {
-      $('#cell' + i).css("background-color", "black");
+      document.querySelector('#cell' + i).style.background-color = 'black'
     }
-    $('#castButton').prop('disabled', true)
+    document.querySelector('#castButton').prop('disabled', true)
     skillUI.selected = false
   },
 
 
   removeAllButtons:function() {
     for (let i = 0; i < skillUI.skills.length; i++) {
-      $('#cell' + i).html("")
+      document.querySelector('#cell' + i).innerHTML = "")
     }
     skillUI.skills = []
-    $('#castButton').prop('disabled', true)
+    document.querySelector('#castButton').prop('disabled', true)
     skillUI.selected = false
   },
 
@@ -221,10 +221,10 @@ const skillUI = {
     const n = parseInt(event.currentTarget.id.replace('cell', ''))
     console.log(n)
     skillUI.selected = n
-    const cell = $("#cell" + n)
-    cell.css("background-color", "yellow")
+    const cell = document.querySelector("#cell" + n)
+    cell.style.background-color = 'yellow'
     const skill = skillUI.skills[n]
-    if (skill.noTarget) $('#castButton').prop('disabled', false)
+    if (skill.noTarget) document.querySelector('#castButton').prop('disabled', false)
   },
 
   getSkillFromButtons:function() {
@@ -251,14 +251,14 @@ const skillUI = {
     const s = weapons.join('');
     console.log(s);
 
-    $('#weapon-select').html(s);  
+    document.querySelector('#weapon-select').innerHTML = s);  
     
-    $("#choose-weapon-div").dialog("open");
+    document.querySelector("#choose-weapon-div").dialog("open");
   },
 
   chosenWeapon:function() {
-    $("#choose-weapon-div").dialog("close");
-    const selected = $("#weapon-select").val();
+    document.querySelector("#choose-weapon-div").dialog("close");
+    const selected = document.querySelector("#weapon-select").value;
     console.log("in chosenWeapon: " + selected);
     w[selected].equip(false, player);
     world.endTurn(world.SUCCESS);
@@ -282,7 +282,7 @@ settings.professions = [
   {name:"Merchant", bonus:"charisma"},
 ];
 
-$(function() {
+document.onreadystatechange = function() {   // !!!!!! second in this file, plus we have one in _io.js
   if (settings.startingDialogDisabled) {
     const p = w.me;
     p.job = settings.professions[0];
@@ -291,7 +291,7 @@ $(function() {
     settings.gui = true
     return; 
   }
-  const diag = $("#dialog");
+  const diag = document.querySelector("#dialog");
   diag.prop("title", "Who are you?");
   let s;
   s = '<p>Name: <input id="namefield" type="text" value="Zoxx" /></p>';
@@ -306,7 +306,7 @@ $(function() {
   s += '<p>Classic interface: <input type="radio" id="classic" name="interface" value="classic" checked>&nbsp;&nbsp;&nbsp;&nbsp;'
   s += 'GUI<input type="radio" id="gui" name="interface" value="gui"></p>'
   
-  diag.html(s);
+  diag.innerHTML = s
   diag.dialog({
     modal:true,
     dialogClass: "no-close",
@@ -316,20 +316,20 @@ $(function() {
       {
         text: "OK",
         click: function() {
-          $(this).dialog("close");
+          document.querySelector(this).dialog("close");
           const p = player;
-          const job = $("#job").val();
+          const job = document.querySelector("#job").value;
           p.job = settings.professions.find(function(el) { return el.name === job; });
-          p.isFemale = $("#female").is(':checked');
-          settings.gui = $("#gui").is(':checked');
-          p.fullname = $("#namefield").val();
-          if (settings.textInput) { $('#textbox').focus(); }
+          p.isFemale = document.querySelector("#female").checked
+          settings.gui = document.querySelector("#gui").checked
+          p.fullname = document.querySelector("#namefield").value;
+          if (settings.textInput) { document.querySelector('#textbox').focus(); }
           console.log(p)
         }
       }
     ]
   });
-});
+}
 
 
 /*
@@ -416,15 +416,15 @@ var wizardMale = true;
 
 function scrollWizard() {
   wizardMale = !wizardMale;
-  $('#wizardname').html(wizardMale ? 'Master Shalazin' :  'Mistress Shalazin');
-  $('#wizardwitch').html(wizardMale ? 'wizard' :  'witch');
-  $('#wizardhe').html(wizardMale ? 'he' :  'she');
+  document.querySelector('#wizardname').innerHTML = wizardMale ? 'Master Shalazin' :  'Mistress Shalazin'
+  document.querySelector('#wizardwitch').innerHTML = wizardMale ? 'wizard' :  'witch'
+  document.querySelector('#wizardhe').innerHTML = wizardMale ? 'he' :  'she'
 }
 
 function scrollPara(element) {
   var paraNumber = parseInt(element.id.replace('para', ''));
   if (isNaN(paraNumber)) { return; }
-  var para = $('#para' + paraNumber);
+  var para = document.querySelector('#para' + paraNumber);
   if (typeof paraPositions[paraNumber] !== 'number') {
     var list = dialogeOptions['para' + paraNumber + 'Opts'];
     paraOpts[paraNumber] = list;
@@ -434,47 +434,47 @@ function scrollPara(element) {
   if (paraPositions[paraNumber] >= paraOpts[paraNumber].length) {
     paraPositions[paraNumber] = 0;
   }
-  para.html(paraOpts[paraNumber][paraPositions[paraNumber]]);
+  para.innerHTML = paraOpts[paraNumber][paraPositions[paraNumber]];
 }    
 
 function setValues() {
-  player.alias = $('#name_input').val();
+  player.alias = document.querySelector('#name_input').value;
   player.isFemale = !wizardMale;
-  player.background = $('#para4').html();
-  player.magic = $('#para5').html();
-  player.hairColour = $('#para6').html();
-  player.eyeColour = $('#para7').html();
-  player.spellColour = $('#para8').html();
+  player.background = document.querySelector('#para4').innerHTML = ''
+  player.magic = document.querySelector('#para5').innerHTML = ''
+  player.hairColour = document.querySelector('#para6').innerHTML = ''
+  player.eyeColour = document.querySelector('#para7').innerHTML = ''
+  player.spellColour = document.querySelector('#para8').innerHTML = ''
   msg(player.alias);
-  msg($("#diag-inner").text());
+  msg(document.querySelector("#diag-inner").text());
 }
 
 
-$(document).ready(function () {
-      $('.scrolling').each(function() {
+document.querySelector(document).ready(function () {
+      document.querySelector('.scrolling').each(function() {
         scrollPara(this);
       });
-      that = $("#dialog_window_1");
-      $('#dialog_window_1').dialog({
+      that = document.querySelector("#dialog_window_1");
+      document.querySelector('#dialog_window_1').dialog({
          height: 400,
          width: 640,
          buttons: {
             "Done": function() { setValues();}
         }
       });
-      $("button[title='Close']")[0].style.world. = 'none';
+      document.querySelector("button[title='Close']")[0].style.world. = 'none';
 });
 
 function scrollWizard() {
   wizardMale = !wizardMale;
-  $('#wizardname').html(wizardMale ? 'Master Shalazin' :  'Mistress Shalazin');
-  $('#wizardwitch').html(wizardMale ? 'wizard' :  'witch');
-  $('#wizardhe').html(wizardMale ? 'he' :  'she');
+  document.querySelector('#wizardname').innerHTML = wizardMale ? 'Master Shalazin' :  'Mistress Shalazin'
+  document.querySelector('#wizardwitch').innerHTML = wizardMale ? 'wizard' :  'witch'
+  document.querySelector('#wizardhe').innerHTML = wizardMale ? 'he' :  'she'
 }
 
 function showStartDiag() {
 
-  var diag = $("#dialog");
+  var diag = document.querySelector("#dialog");
   diag.prop("title", "Who are you?");
   var s;
   s = 'Name: <input type="text" id="name_input" value="Skybird"/><br/><br/>';
@@ -489,8 +489,8 @@ function showStartDiag() {
   s += 'Either way, you slowly learnt the basics of magic, and have recently learnt how to turn yourself <span id="para8" class="scrolling" onclick="scrollPara(this)"></span>. ';
   s += 'Perhaps more importantly, you have also learnt how to turn yourself back.</div>';
 
-  diag.html(s);
-  $('.scrolling').each(function() {
+  diag.innerHTML = s
+  document.querySelector('.scrolling').each(function() {
     scrollPara(this);
   });
   diag.dialog({
@@ -502,9 +502,9 @@ function showStartDiag() {
       {
         text: "OK",
         click: function() {
-          $(this).dialog("close");
+          document.querySelector(this).dialog("close");
           setValues(this);
-          if (settings.textInput) { $('#textbox').focus(); }
+          if (settings.textInput) { document.querySelector('#textbox').focus(); }
         }
       }
     ]

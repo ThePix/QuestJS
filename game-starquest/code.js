@@ -11,7 +11,7 @@ npc_utilities.talkto = function() {
   if (topics.length === 0) return failedmsg(lang.no_topics, {char:player, item:this})
   topics.push(lang.never_mind)
   showSidePaneOptions(this, topics, function(result) {
-    $('#sidepane-menu').remove()
+    document.querySelector('#sidepane-menu').remove()
     if (result !== lang.never_mind) {
       log(result)
       result.runscript()
@@ -31,7 +31,7 @@ function showSidePaneOptions(title, options, fn) {
       s += '</p>';
     }
     s += '</div>'
-    $('body').append(s)
+    document.querySelector('body').innerHTML += s
   })
 }
 
@@ -45,7 +45,7 @@ findCmd('TalkTo').objects[0].scope = function(item) {
 
 io.msgInputText = function(s) {
   if (!settings.cmdEcho || s === '') return
-  $("#output").append('<p id="n' + io.nextid + '" class="input-text">&gt; ' + s.toUpperCase() + "</p>")
+  document.querySelector("#output").innerHTML += '<p id="n' + io.nextid + '" class="input-text">&gt; ' + s.toUpperCase() + "</p>"
   io.nextid++
   if (io.spoken) io.speak(s, true)
   if (io.transcript) io.scriptAppend({cssClass:'input', text:s})
