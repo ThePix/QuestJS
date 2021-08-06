@@ -242,7 +242,7 @@ commands.push(new Cmd('Tutorial', {
   objects:[
   ],
   script:function() {
-    $('body').toggleClass("hidden")
+    document.querySelector('body').toggleClass("hidden")
     msg(lang.done_msg)
     return world.SUCCESS_NO_TURNSCRIPTS
   },

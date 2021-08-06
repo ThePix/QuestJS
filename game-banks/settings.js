@@ -94,7 +94,7 @@ settings.inventoryPane = false
 
 settings.setup = function() {
   arrival()
-  $('#panes').append('<div id="map" class="pane-div" style="text-align:center;">' + mapSVG + '</div>')
+  document.querySelector('#panes').innerHTML += '<div id="map" class="pane-div" style="text-align:center;">' + mapSVG + '</div>'
   updateMap()
 }
 
@@ -148,26 +148,26 @@ for (let back of backgrounds) {
 s += '</select></td></tr></table>'
 
 
-//settings.startingDialogEnabled = true
+settings.startingDialogEnabled = true
 settings.startingDialogTitle = "To start with..."
 settings.startingDialogWidth = 530
 settings.startingDialogHeight = 500
 settings.startingDialogHtml = s
 settings.startingDialogOnClick = function() {
   let p = player;
-  const jobName = $("#job").val();
+  const jobName = document.querySelector("#job").value;
   const job = professions.find(function(el) { return el.name === jobName; });
   w.me.job = job.name;
   w.me.jobBonus = job.bonus;
-  const backgroundName = $("#background").val()
-  const background = backgrounds.find(function(el) { return el.name === backgroundName; });
-  w.me.background = background.name;
-  w.me.backgroundBonus = background.bonus;
-  w.me.isFemale = $("#female").is(':checked');
-  w.me.alias = $("#namefield").val();
+  const backgroundName = document.querySelector("#background").value
+  const background = backgrounds.find(function(el) { return el.name === backgroundName; })
+  w.me.background = background.name
+  w.me.backgroundBonus = background.bonus
+  w.me.isFemale = document.querySelector("#female").checked
+  w.me.alias = document.querySelector("#namefield").value
 }
 settings.startingDialogInit = function() {
-  $('#namefield').focus();
+  document.querySelector('#namefield').focus()
 }
 settings.startingDialogAlt = function() {
   w.me.job = professions[0].name;

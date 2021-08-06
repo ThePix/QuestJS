@@ -68,7 +68,7 @@ createItem("PAGE", {
     const choices = this[s + 'ActiveOptions'].concat('Forget it')
     log(choices)
     showSidePaneOptions("Use your PAGE to " + s2 + "..?", choices, function(result) {
-      $('#sidepane-menu').remove()
+      document.querySelector('#sidepane-menu').remove()
       if (result === 'Forget it') return
       if (f) {
         f(result)

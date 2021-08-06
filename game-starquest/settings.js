@@ -73,18 +73,18 @@ settings.startingDialogOnClick = function() {
   // ...
 }
 settings.startingDialogInit = function() {
-  //$('#namefield').focus()
+  //document.querySelector('#namefield').focus()
 }
 
 settings.startingDialogOnClick = function() {
   settings.startingDialogEnabled = true
-  const npc = w[$("#diag-name").val()]
+  const npc = w[document.querySelector("#diag-name").value]
 
   for (let role of roster.data) {
     const assignedNpc = roster.getOfficer(role.name)
     log(assignedNpc)
     if (assignedNpc && assignedNpc !== npc) continue
-    if ($("#diag-" + role.name).is(':checked')) {
+    if (document.querySelector("#diag-" + role.name).checked) {
       w.ship[role.name] = npc.name
     }
     else {

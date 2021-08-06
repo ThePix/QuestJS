@@ -481,15 +481,16 @@ function probeLandsOkay() {
 settings.deckNames = {layer1:'Deck 2', layer3:'Deck 1', layer4:'Deck 3'}
 
 function updateMap() {
-  $('#layer1').hide()
-  $('#layer3').hide()
-  $('#layer4').hide()
+  if (!document.querySelector('#layer1')) return
+  document.querySelector('#layer1').style.display = 'none'
+  document.querySelector('#layer3').style.display = 'none'
+  document.querySelector('#layer4').style.display = 'none'
   const currentDeck = w[player.loc].deckName
-  $('#map').attr('title', 'The Joseph Banks, ' + settings.deckNames[currentDeck]);
+  document.querySelector('#map').setAttribute('title', 'The Joseph Banks, ' + settings.deckNames[currentDeck]);
   if (!currentDeck) return errormsg("No deckName for " + player.loc)
-  $('#' + currentDeck).show()
+  document.querySelector('#' + currentDeck).style.display = 'block'
   for (let key in w) {
-    if (w[key].svgId) $('#' + w[key].svgId).css('fill', isRoomPressured(w[key]) ? '#777' : '#222')
+    if (w[key].svgId) document.querySelector('#' + w[key].svgId).style.fill = isRoomPressured(w[key]) ? '#777' : '#222'
   }
   const mySvgId = w[player.loc].svgId
   let otherSvgId
@@ -497,17 +498,17 @@ function updateMap() {
 
   if (!mySvgId && !otherSvgId) return
   if (mySvgId === otherSvgId) {
-    $('#' + mySvgId).css('fill', 'green')
+    document.querySelector('#' + mySvgId).style.fill = 'green'
     w.Xsansi.locate = false
   }
   else {
-    if (mySvgId) $('#' + mySvgId).css('fill', 'yellow')
-    if (otherSvgId) $('#' + otherSvgId).css('fill', 'blue')
+    if (mySvgId) document.querySelector('#' + mySvgId).style.fill = 'yellow'
+    if (otherSvgId) document.querySelector('#' + otherSvgId).style.fill ='blue'
   }
-  $('#rect10').css('fill', settings.darkModeActive ? '#606' : '#bbb')
+  document.querySelector('#rect10').style.fill = settings.darkModeActive ? '#606' : '#bbb'
   for (let id of [3334, 2800, 2788, 3330]) {
-    $('#text' + id).css('fill', settings.darkModeActive ? 'white' : 'black')
-    $('#text' + id).css('font-family', 'Orbitron, sans-serif')
+    document.querySelector('#text' + id).style.fill = settings.darkModeActive ? 'white' : 'black'
+    document.querySelector('#text' + id).style.fontFamily = 'Orbitron, sans-serif'
   }
 }
 
