@@ -104,7 +104,7 @@ missions.add({
   encyc:[
     {
       alias:'Asteroid',
-      t:'Asteroids are basically rocks in space. Occasionally they fall into the gravity well of a planet. Smaller ones just burn up in the atmosphere, larger ones are catestophic - for example the asteroid that wiped out the dinosaurs 66 million years ago.',
+      t:'Asteroids are basically rocks in space. Occasionally they fall into the gravity well of a planet. Smaller ones just burn up in the atmosphere, larger ones are catastrophic - for example the asteroid that wiped out the dinosaurs 66 million years ago.',
       add:'mission',
     },  
   ]
@@ -150,7 +150,7 @@ missions.add({
   // The colony has awoken a sleeping star beast. All the personal have joined its hive-mind.
   alias:'Investigate Mining Colony',
   start:true,
-  brief:'There is a considerable asteroid mining operation orbiting Proxima Major. The last supply ship was due back four days ago, and attempts to raise the colony on subspace have been unsuccessful.|Investigate the colony, and take action as appropriate.|The asteroids are particular rich in trans-uranics, and it is important that the mining operation is running as soon as possible.',
+  brief:'There is a considerable asteroid mining operation orbiting Proxima Major. The last supply ship was due back four days ago, and attempts to raise the colony on subspace have been unsuccessful.|Investigate the colony, and take action as appropriate. Be careful of possible Brakk involvement.|The asteroids are particular rich in trans-uranics, and it is important that the mining operation is running as soon as possible.',
   steps:[
     {
       name:'Go to Proxima Major',

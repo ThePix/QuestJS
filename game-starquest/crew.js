@@ -14,19 +14,23 @@ createItem("player", PLAYER(), {
 createItem("nagoshima", NPC(true), {
   alias:"Commander Nagoshima",
   properNoun:true,
-  examine:"Despite her striking black hair, which she wears in a neat bun, you would judge Commanda Nagoshima to be in her fifties. You find yourself warming to her smile.",
+  examine:"Despite her striking black hair, which she wears in a neat bun, you would judge Commander Nagoshima to be in her fifties. You find yourself warming to her smile.",
+  convTopics:[
+    {
+      name:"nagoshima_missions",
+      showTopic:true,
+      alias:"Mission?",
+      script:function() {
+        msg("'I imagine you have some specific missions you need us for?' you say to the commander.");
+        msg("'Indeed! Quite a few in fact; as I say, we have been sorely lacking in available ships. You should already have them on your PAGE.'");
+      },
+    })
+  
+  ],
 })
 
 
 
-createItem("nagoshima_missions", TOPIC(true), {
-  loc:"nagoshima",
-  alias:"Mission?",
-  runscript:function() {
-    msg("'I imagine you have some specific missions you need us for?' you say to the commander.");
-    msg("'Indeed! Quite a few in fact; as I say, we have been sorely lacking in available ships. You should already have them on your PAGE.'");
-  },
-})
 
 
     
@@ -37,56 +41,52 @@ createItem("yeoman", NPC(true), {
   loc:"room",
   alias:"Yeoman Rand",
   properNoun:true,
-  examine:"Yeoman Rand arrived at Starbase One on the same shuttle as you, and you conversed with her a little on the journey; this is her first assignment to a star ship. She is above average height for a woman, with cropped blonde hair, and is dressed smarkly in the fleet uniform.",
+  examine:"Yeoman Rand arrived at Starbase One on the same shuttle as you, and you conversed with her a little on the journey; this is her first assignment to a star ship. She is above average height for a woman, with cropped blonde hair, and is dressed smartly in the fleet uniform.",
+  convTopics:[
+    {
+      name:"yeoman_settling_in",
+      showTopic:true,
+      alias:"Are you settling in okay?",
+      script:function() {
+        msg("'Are you settling in okay?' you ask Yeoman Rand.");
+        msg("'Yes, {sir}. It's much bigger than the ships I'm used to, but I'm finding my way around.'");
+        msg("'Well, I'm not used to commanding anything this big. We'll both have to get used to it.'");
+        msg("'Yes {sir}.'");
+      },
+    },
+    {
+      name:"yeoman_academy",
+      showTopic:true,
+      alias:"Which space academy did you go to?",
+      script:function() {
+        msg("'What academy did you graduate from?' you ask Yeoman Rand.");
+        msg("'Nairobi, Earth, {sir}.'");
+        msg("'Must've been hot.'");
+        msg("'They do have air con there... But outside, yes, it could be very hot.'");
+        msg("'I'm a Mars alumni myself. I wanted to get out into space as soon as possible, and that seemed like the first step.'");
+        msg("'Oh, I was born on Dewar III. I suppose I did it in reverse. I wanted to go to the centre of it all - Earth.'");
+      },
+    },
+    {
+      name:"yeoman_dewar_pun",
+      alias:"Is it always the same temperature of Dewar III?",
+      script:function() {
+        msg("'So is it always the same temperature of Dewar III?' you ask with a smile, recalling that James Dewar invented the vacuum flask.");
+        msg("She signs. 'Very droll sir. In fact the region where I was raised was noteable for its extremes of temperature.'");
+      },
+    },
+    {
+      name:"yeoman_call_me_maam",
+      showTopic:true,
+      alias:"Call me ma'am",
+      script:function() {
+        msg("'I prefer ma'am to sir,' you tell the yeoman.");
+        msg("'As you wish, ma'am.'");
+        player.callmemaam = true        
+      },
+    },
+  ],
 })
-
-
-createItem("yeoman_settling_in", TOPIC(true), {
-  loc:"yeoman",
-  alias:"Are you settling in okay?",
-  runscript:function() {
-    msg("'Are you settling in okay?' you ask Yeoman Rand.");
-    msg("'Yes, {sir}. It's much bigger than the ships I'm used to, but I'm finding my way around.'");
-    msg("'Well, I'm not used to commanding anything this big. We'll both have to get used to it.'");
-    msg("'Yes {sir}.'");
-  },
-})
-
-
-createItem("yeoman_academy", TOPIC(true), {
-  loc:"yeoman",
-  alias:"Which space academy did you go to?",
-  runscript:function() {
-    msg("'What academy did you graduate from?' you ask Yeoman Rand.");
-    msg("'Nairobi, Earth, {sir}.'");
-    msg("'Must've been hot.'");
-    msg("'They do have air con there... But outside, yes, it could be very hot.'");
-    msg("'I'm a Mars alumni myself. I wanted to get out into space as soon as possible, and that seemed like the first step.'");
-    msg("'Oh, I was born on Dewar III. I suppose I did it in reverse. I wanted to go to the centre of it all - Earth.'");
-  },
-})
-
-
-createItem("yeoman_dewar_pun", TOPIC(false), {
-  loc:"yeoman",
-  alias:"Is it always the same temperature of Dewar III?",
-  runscript:function() {
-    msg("'So is it always the same temperature of Dewar III?' you ask with a smile, recalling that James Dewar invented the vacuum flask.");
-    msg("She signs. 'Very droll sir. In fact the region where I was raised was noteable for its extremes of temperature.'");
-  },
-})
-
-
-createItem("yeoman_call_me_maam", TOPIC(true), {
-  loc:"yeoman",
-  alias:"Call me ma'am",
-  runscript:function() {
-    msg("'I prefer ma'am to sir,' you tell the yeoman.");
-    msg("'As you wish, ma'am.'");
-    player.callmemaam = true        
-  },
-})
-
 
 
 
@@ -231,17 +231,21 @@ createItem("river_severn", CANDIDATE(true), {
   cv:"River Severn gained a Ph.D. in biology from MIT and was on track to be one of their youngest professors, until an undisclosed incident caused her to rethink her career. She joined the fleet, and her knowledge of biology, and indeed all science, has been of great value, though she does have issues with insubordination.",
   species:"human",
   altName:"River",
+  convTopics:[
+    {
+      name:"river_incident_mit",
+      showTopic:true,
+      alias:"Incident at MIT",
+      script:function() {
+        msg("'Your record mentions an \"incident\" while you were at MIT.'");
+        msg("'Too dreadful to mention!' she says, with a straight face. Then she smiles. 'No, it was just some wild parties that got seriously out of control. Good times... But the university starting saying the damage had to be paid for, so I had to get a proper job. Bummer. I mean, no offense, but when do you guys smile?'");
+      },
+    },
+  ],
 })
 
 
-createItem("river_incident_mit", TOPIC(true), {
-  loc:"river_severn",
-  alias:"Incident at MIT",
-  runscript:function() {
-    msg("'Your record mentions an \"incident\" while you were at MIT.'");
-    msg("'Too dreadful to mention!' she says, with a straight face. Then she smiles. 'No, it was just some wild parties that got seriously out of control. Good times... But the university starting saying the damage had to be paid for, so I had to get a proper job. Bummer. I mean, no offense, but when do you guys smile?'");
-  },
-})
+
 
 
 createItem("milton_keynes", CANDIDATE(false), {
@@ -263,20 +267,24 @@ createItem("milton_keynes", CANDIDATE(false), {
   cv:"Milton Keynes is an excellent engineer, though his religious convictions can occasionally be an issue",
   species:"human",
   altName:"he",
+  convTopics:[
+    {  
+      name:"milton_religion",
+      showTopic:true,
+      alias:"Religion",
+      script:function() {
+        msg("'I hear you're a religious man, Milton.'");
+        msg("'Indeed, {sir}. Janus, the bifold godhead, the One True Religion.'");
+        msg("'Er, remind me...'");
+        msg("'The twin gods, Yinus and Yango, that rules our lives. Yinus the goddess who controls all that is moving, the flowing river of time, the entropy of the universe. Yango the god, controlling all that is static, the foundations of the world, the energy of the universe. I'll give you one of my pamphlets; it explains how the whole of creation is set out in the Book of the All, written by the prophet.'");
+        msg("'Yeah, I'll read it... later. I guess.'");
+      },
+    }
+  ],
 })
 
 
-createItem("milton_religion", TOPIC(true), {
-  loc:"milton_keynes",
-  alias:"Religion",
-  runscript:function() {
-    msg("'I hear you're a religious man, Milton.'");
-    msg("'Indeed, {sir}. Janus, the bifold godhead, the One True Religion.'");
-    msg("'Er, remind me...'");
-    msg("'The twin gods, Yinus and Yango, that rules our lives. Yinus the goddess who controls all that is moving, the flowing river of time, the entropy of the universe. Yango the god, controlling all that is static, the foundations of the world, the energy of the universe. I'll give you one of my pamphlets; it explains how the whole of creation is set out in the Book of the All, written by the prophet.'");
-    msg("'Yeah, I'll read it... later. I guess.'");
-  },
-})
+
 
 
 createItem("norton_canes", CANDIDATE(false), {
@@ -298,41 +306,46 @@ createItem("norton_canes", CANDIDATE(false), {
   cv:"Controversy seems to have dogged Norton Canes throughout his career, though it must be emphasized that nothing was ever proven in any of the cases. His graduation from Nairobi academy was questioned after irregularities in the marking came to light, and he resigned his post on the Storm of Fury and later the Demonic Trout when the ships' accounts were audited. Despite all this there is no doubt that he is a capable office in any role, especially that of armsman.",
   species:"human",
   altName:"he",
+  convTopics:[
+    {
+      name:"norton_storm_of_fury",
+      showTopic:true,
+      alias:"Storm of Fury",
+      script:function() {
+        msg("'So you served on the Storm of Fury?' you ask Norton.");
+        msg("'That's right, guv, under Captain Mallet. Good ship that Storm of Fury, bigger than this one, that's for sure.'");
+        msg("'And you resigned?'");
+        msg("'Yeah... All a bit awkward really. There was these... mistakes in the inventory. Seemed best all around if I just walked away from it.'");
+      },
+    },
+    {
+      name:"norton_demonic_trout",
+      showTopic:true,
+      alias:"Demonic Trout",
+      script:function() {
+        msg("'You were on the Demonic Trout?'");
+        msg("'Yeah, gov. Right tug it was. Maximum warp two point three if you was lucky.'");
+        msg("'And you resigned from it?'");
+        msg("'Couldn't get off it quick enough. First sign of trouble, I was out of there.'");
+      },
+    },
+    {
+      name:"marking_irregularies",
+      showTopic:true,
+      alias:"Marking irregularies",
+      script:function() {
+        msg("'I heard there were marking irregularities when you graduated.'");
+        msg("'Stone me, that story gets round fast, gov. I don't know much about it really, but there was a right brouhaha. Well, I suppose it's only to be expected. You work 'ard for years, then some joker goes and... I was right dischuffed. We all was.'");
+      },
+    },
+  ],
 })
 
 
-createItem("norton_storm_of_fury", TOPIC(true), {
-  loc:"norton_canes",
-  alias:"Storm of Fury",
-  runscript:function() {
-    msg("'So you served on the Storm of Fury?' you ask Norton.");
-    msg("'That's right, guv, under Captain Mallet. Good ship that Storm of Fury, bigger than this one, that's for sure.'");
-    msg("'And you resigned?'");
-    msg("'Yeah... All a bit awkward really. There was these... mistakes in the inventory. Seemed best all around if I just walked away from it.'");
-  },
-})
 
 
-createItem("norton_demonic_trout", TOPIC(true), {
-  loc:"norton_canes",
-  alias:"Demonic Trout",
-  runscript:function() {
-    msg("'You were on the Demonic Trout?'");
-    msg("'Yeah, gov. Right tug it was. Maximum warp two point three if you was lucky.'");
-    msg("'And you resigned from it?'");
-    msg("'Couldn't get off it quick enough. First sign of trouble, I was out of there.'");
-  },
-})
 
 
-createItem("marking_irregularies", TOPIC(true), {
-  loc:"norton_canes",
-  alias:"Marking irregularies",
-  runscript:function() {
-    msg("'I heard there were marking irregularities when you graduated.'");
-    msg("'Stone me, that story gets round fast, gov. I don't know much about it really, but there was a right brouhaha. Well, I suppose it's only to be expected. You work 'ard for years, then some joker goes and... I was right dischuffed. We all was.'");
-  },
-})
 
 
 createItem("info", CANDIDATE(false), {
@@ -382,9 +395,13 @@ createItem("restrel_juazz", CANDIDATE(true), {
 
 
 
+
+
+
+
 createItem("helmsman_go_to_7iota", TOPIC(true), {
   belongsTo:function(loc) {
-    return loc === w.ship.helm 
+    return loc === w.ship.helm.name
   },
   nowShow:['helmsman_go_to'],
   alias:"Lay in a course for 7 Iota",
@@ -403,9 +420,7 @@ createItem("helmsman_go_to_7iota", TOPIC(true), {
 
 createItem("helmsman_go_to", TOPIC(false), {
   belongsTo:function(loc) { 
-    //log(loc)
-    //log(w.ship.helm)
-    return loc === w.ship.helm 
+    return loc === w.ship.helm.name
   },
   hideAfter:false,
   alias:"Lay in a course for...",

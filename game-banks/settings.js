@@ -19,7 +19,7 @@ settings.givePlayerAskTellMsg = false
 settings.symbolsForCompass  = true
 
 
-settings.playMode = 'dev'
+settings.playMode = 'play'
 settings.tests = true
 settings.dateTime.start = new Date('April 14, 2387 09:43:00')
 
@@ -148,10 +148,10 @@ for (let back of backgrounds) {
 s += '</select></td></tr></table>'
 
 
-//settings.startingDialogEnabled = true
+settings.startingDialogEnabled = settings.playMode !== 'dev'
 settings.startingDialogTitle = "To start with..."
-settings.startingDialogWidth = 530
-settings.startingDialogHeight = 500
+settings.startingDialogWidth = 500
+settings.startingDialogHeight = 550
 settings.startingDialogHtml = s
 settings.startingDialogOnClick = function() {
   let p = player;
