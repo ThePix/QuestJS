@@ -20,20 +20,7 @@ npc_utilities.talkto = function() {
   return world.SUCCESS_NO_TURNSCRIPTS;
 }
 
-function showSidePaneOptions(title, options, fn) {
-  if (typeof title !== 'string') title = 'Talk to ' + lang.getName(title, {article:DEFINITE}) + ':'
-  const opts = {article:DEFINITE, capital:true}
-  io.input('', options, false, fn, function(options) {
-    let s = '<div id="sidepane-menu"><p class="sidepane-menu-title">' + title + '</p>'
-    for (let i = 0; i < options.length; i++) {
-      s += '<p value="' + i + '" onclick="io.menuResponse(' + i + ')" class="sidepane-menu-option">';
-      s += (typeof options[i] === 'string' ? options[i] : lang.getName(options[i], opts))
-      s += '</p>';
-    }
-    s += '</div>'
-    document.querySelector('body').innerHTML += s
-  })
-}
+
 
 
 

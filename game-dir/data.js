@@ -160,7 +160,7 @@ createItem("phone", {
     rabbit:"Rabbits are small mammals in the family Leporidae (along with the hare) of the order Lagomorpha (along with the pika).",
   },
   searchinternet:function() {
-    showTextDiag("Search the web", function(s) {
+    askDiag("Search the web", function(s) {
       msg("On your phone you search for \"" + s + "\".")
       const regex = RegExp(s)
       for (const key in w.phone.internet) {

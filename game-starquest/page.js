@@ -27,7 +27,7 @@ createItem("PAGE", {
 
   contact:function() { this.usePage("contact", "contact") },
   encyclopedia:function() {
-    showTextDiag("Search the web", function(s) {
+    askDiag("Search the web", function(s) {
       msg("On your PAGE you search for \"" + s + "\".")
       const regex = RegExp(s, 'i')
       log(s)

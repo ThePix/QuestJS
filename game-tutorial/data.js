@@ -716,7 +716,7 @@ createItem("computer", {
     }
     else {
       msg("You press a key on the keyboard, and a message appears on the screen: 'Please input your six digit PIN.'")
-      askQuestion("PIN?", function(result) {
+      askText("PIN?", function(result) {
         if (result === w.computer.code) {
           msg("You type \"" + result + "\", and unlock the computer. You put in your USB stick, and download the files... It takes nearly twenty minutes; this is one slow computer.")
           if (hint.before('smashWindow')) {

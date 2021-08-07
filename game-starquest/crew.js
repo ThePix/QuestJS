@@ -24,7 +24,7 @@ createItem("nagoshima", NPC(true), {
         msg("'I imagine you have some specific missions you need us for?' you say to the commander.");
         msg("'Indeed! Quite a few in fact; as I say, we have been sorely lacking in available ships. You should already have them on your PAGE.'");
       },
-    })
+    }
   
   ],
 })

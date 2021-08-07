@@ -22,7 +22,7 @@ quest.create('A carrot for Buddy', [
 
 
 
-commands.unshift(new Cmd('Test input', {
+commands.unshift(new Cmd('TestInput', {
   npcCmd:true,
   rules:[cmdRules.isHere],
   regex:/^inp/,
@@ -36,7 +36,7 @@ commands.unshift(new Cmd('Test input', {
         msg("You picked " + lang.getName(result, {article:DEFINITE}) + ".");
       }
     })
-/*    askQuestion("What colour?", function(result) {
+/*    askText("What colour?", function(result) {
       msg("You picked " + result + ".");
       showYesNoMenu("Are you sure?", function(result) {
         msg("You said " + result + ".")
@@ -98,8 +98,41 @@ commands.unshift(  new Cmd('Alpha', {
     msg("Some text in Nko {encode:7C1:7C1:The quick brown fox jumped over the lazy dog}.")
   },
 }));
-  
 
+
+
+
+commands.unshift(new Cmd('DialogTest', {
+  npcCmd:true,
+  regex:/^(?:dialog) (.*)$/,
+  objects:[
+    {special:'text'},
+  ],
+  script:function(objects) {
+    const funcName = parser.currentCommand.tmp.string.replace(/dialog /i, '')
+    console.log("Testing dialog: " + funcName)
+    const choices = ['red', 'yellow', 'blue']
+    io.menuFunctions[funcName]('Pick a colour?', choices, function(result) {
+      msg("You picked " + result)
+    })
+    return world.SUCCESS_NO_TURNSCRIPTS
+  },
+}))
+
+
+
+commands.unshift(new Cmd('TextTest', {
+  npcCmd:true,
+  regex:/^(?:text)$/,
+  objects:[
+  ],
+  script:function(objects) {
+    askDiag("What colour?", function(result) {
+      msg("You picked " + result + ".");
+    }, "Go")
+    return world.SUCCESS_NO_TURNSCRIPTS
+  },
+}))
 
 
 
