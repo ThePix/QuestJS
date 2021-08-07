@@ -866,6 +866,11 @@ const lang = {
     return "a ";
   },
 
+  addArticle:function(item, type){
+    if (!type || (type != DEFINITE && type != INDEFINITE)) return
+    return type === DEFINITE ? lang.addDefiniteArticle(item) : lang.addIndefiniteArticle(item)
+  },
+
   getName:function(item, options) {
     if (!options) options = {}
     if (!item.alias) item.alias = item.name
@@ -925,9 +930,10 @@ const lang = {
         }
       }
     }
+    if (options.capital) s = sentenceCase(s)
+    if (settings.nameTransformer) s = settings.nameTransformer(s, item, options)
     s += util.getNameModifiers(item, options)
-
-    return (options && options.capital ? sentenceCase(s) : s)
+    return s
   },
 
 
