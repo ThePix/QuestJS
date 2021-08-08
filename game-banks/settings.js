@@ -19,7 +19,7 @@ settings.givePlayerAskTellMsg = false
 settings.symbolsForCompass  = true
 
 
-settings.playMode = 'play'
+settings.playMode = 'dev'
 settings.tests = true
 settings.dateTime.start = new Date('April 14, 2387 09:43:00')
 
@@ -154,6 +154,7 @@ settings.startingDialogTitle = "To start with..."
 settings.startingDialogWidth = 500
 settings.startingDialogHeight = 550
 settings.startingDialogHtml = s
+settings.startingDialogButton = 'OK'
 settings.startingDialogOnClick = function() {
   let p = player;
   const jobName = document.querySelector("#job").value;

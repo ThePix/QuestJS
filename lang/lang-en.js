@@ -192,6 +192,7 @@ const lang = {
     DebugListCommands2:/^cmds2$/,
     DebugParserToggle:/^parser$/,
     DebugStats:/^stats?$/,
+    DebugHighlight:/^highlight$/,
   },
 
   // This will be added to the start of the regex of a command to make an NPC command

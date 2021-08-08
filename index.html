@@ -46,7 +46,17 @@
   if (loaded) io.createPanes();
 </script>
 
-<div id="dialog"></div>
+<dialog id="dialog">
+  <form method="dialog">
+    <h4 id="dialog-title"></h4>
+    <hr/>
+    <div id="dialog-content"></div>
+    <div id="dialog-footer" style="text-align:right">
+    <hr/>
+    <button id="dialog-button" value="default">Confirm</button>
+    </div>
+  </form>
+</dialog>
 <div id="quest-map"></div>
 <div id="quest-image"></div>
 
