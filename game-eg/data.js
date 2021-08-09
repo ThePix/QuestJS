@@ -972,6 +972,12 @@ createRoom("road", {
 
 createItem("carrot", TAKEABLE(), MERCH(2, ["shop"]), {
   examine:"It's a carrot!",
+  slice:function(options) {
+    if (options.with !== w.knife) return falsemsg("You can't cut a carrot with {nm:with:the}.", {with:options.with})
+      
+    msg('Done.')
+    return true
+  },
 });
 
 createItem("honey_pasta",  TAKEABLE(), MERCH(5, ["shop"]),{

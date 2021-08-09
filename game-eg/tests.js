@@ -1618,9 +1618,10 @@ test.tests = function() {
   test.title("reverse order commands")
   w.knife.loc = player.name
   w.carrot1.loc = player.name
-  test.assertCmd("slice carrot with knife", "You slice the carrot with the knife.")
-  test.assertCmd("use knife slice carrot", "You slice the carrot with the knife.")
-  test.assertCmd("use knife to slice carrot", "You slice the carrot with the knife.")
+  test.assertCmd("slice carrot with knife", "Done.")
+  test.assertCmd("use knife slice carrot", "Done.")
+  test.assertCmd("use knife to slice carrot", "Done.")
+  test.assertCmd("slice carrot with carrot", "You can't cut a carrot with the carrot.")
 
 
 

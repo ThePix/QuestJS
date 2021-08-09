@@ -86,6 +86,10 @@ const lang = {
     SwitchOff2:/^(?:turn|switch|deactivate|disable) (.+) off$/,
     SwitchOff:/^(?:turn off|switch off) (.+)$/,
     Open:/^(?:open) (.+)$/,
+    OpenWith:[
+      /^(?:open) (.+) (?:with|using) (.+)$/,
+      {regex:/^(?:use|with|using) (.+) (?:to open|open) (.+)$/, mod:{reverse:true}},
+    ],
     Close:/^(?:close) (.+)$/,
     Lock:/^(?:lock) (.+)$/,
     Unlock:/^(?:unlock) (.+)$/,
@@ -249,6 +253,7 @@ const lang = {
   unlock_successful:"{nv:char:unlock:true} {nm:container:the}.",
   close_and_lock_successful:"{nv:char:close:true} {nm:container:the} and {cj:char:lock} {sb:container}.",
   cannot_open:"{nv:item:can't:true} be opened.",
+  cannot_open_with:"{nv:item:can't:true} be opened with that.",
   cannot_close:"{nv:item:can't:true} be closed.",
   cannot_lock:"{nv:char:can't:true} lock {ob:item}.",
   cannot_unlock:"{nv:char:can't:true} unlock {ob:item}.",
@@ -1126,6 +1131,46 @@ const lang = {
 
 
 
+
+
+lang.createVerb = function(name, options = {}) {
+  if (options.words === undefined) options.words = name.toLowerCase()
+  if (options.ing === undefined) options.ing = name + 'ing'
+  if (options.defmsg === undefined) options.defmsg = options.ing + " {nm:item:the} is not going to achieve much."
+  if (options.defmsg === true) options.defmsg = "{pv:item:'be:true} not something you can do that with."
+  commands.unshift(new Cmd(name, {
+    regex:new RegExp("^(?:" + options.words + ") (.+)$"),
+    objects:[
+      {scope:options.held ? parser.isHeld : parser.isHere},
+    ],
+    npcCmd:true,
+    defmsg:options.defmsg
+  }))
+}
+
+
+
+lang.createVerbWith = function(name, options = {}) {
+  if (options.words === undefined) options.words = name.toLowerCase()
+  if (options.ing === undefined) options.ing = name + 'ing'
+  if (options.defmsg === undefined) options.defmsg = options.ing + " {nm:item:the} is not going to achieve much."
+  if (options.defmsg === true) options.defmsg = "{pv:item:'be:true} not something you can do that with."
+  commands.unshift(new Cmd(name + "With", {
+    regexes:[
+      new RegExp("^(?:" + options.words + ") (.+) (?:using|with) (.+)$"),
+      { regex:new RegExp("^(?:use|with|using) (.+) to (?:" + options.words + ") (.+)$"), mod:{reverse:true}},
+      { regex:new RegExp("^(?:use|with|using) (.+) (?:" + options.words + ") (.+)$"), mod:{reverse:true}},
+    ],
+    objects:[
+      {scope:options.held ? parser.isHeld : parser.isHere},
+      {scope:parser.isHeld},
+    ],
+    attName:name.toLowerCase(),
+    npcCmd:true,
+    withScript:true,
+    defmsg:options.defmsg
+  }))
+}
 
 
 

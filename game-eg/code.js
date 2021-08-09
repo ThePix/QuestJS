@@ -233,6 +233,10 @@ tp.addDirective("charger_state", function(){
 });
 
 
+
+lang.createVerbWith("Slice", {held:true, ing:'Slicing'})
+
+/*
 // This is not a properly written command, it is just to test the item order can be reversed.
 commands.unshift(new Cmd('SliceCarrot', {
   rules:[cmdRules.isHeld],
@@ -246,4 +250,4 @@ commands.unshift(new Cmd('SliceCarrot', {
     return world.SUCCESS
   },
   defmsg:"Not going to happen.",
-}));
+}));*/
