@@ -63,6 +63,15 @@ createItem("Buddy", NPC(false), {
       msg("'Hey yourself! Where is that carrot?'")
     }
   },
+  receiveItems:[
+    {
+      test:function() { return true },
+      f:function(options) { 
+        msg("{multi}Done.", options)
+        options.item.loc = this.name
+      }
+    },
+  ],
 })
 util.changePOV(w.Buddy)
 
