@@ -707,8 +707,31 @@ createItem("Kyle", NPC(false),
 { 
   loc:"lounge",
   //alias:'Bobby',
-  examine:"A grizzly bear. But cute.", 
+  examine:"A grizzly bear. But cute.",
+  receiveItems:[
+    {
+      item:w.book, 
+      f:function() { 
+        msg("'Oh!' says Kyle. 'Is this a book?'")
+        w.book.loc = this.name
+        return true
+      }
+    },
+    {
+      test:function() { return true },
+      f:function(options) { 
+        msg("{multi}Done.", options)
+        options.item.loc = this.name
+        return true
+      }
+    },
+  ],
   askOptions:[
+    {
+      name:'Himself',
+      test:function(p) { return p.text.match(/kyle|himself/); }, 
+      script:function() { msg("'Oh!' says Kyle. 'I suppose I would say: " + this.examine + "'") },
+    },
     {
       name:'House',
       test:function(p) { return p.text.match(/house/); }, 
@@ -838,21 +861,41 @@ createItem("Lara", NPC(true), {
   examine:"A normal-sized bunny.",
   properNoun:true, 
   happy:false,
-  afterGive:function(options) {
-    if (options.item === w.ring) {
-      msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
-      w.ring.loc = "Lara"
-      w.ring.worn = true
-      w.garage_key.loc = options.char.name
-    }
-    if (options.item === w.book) {
-      msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'")
-      w.book.loc = "Lara"
-    }
-    else {
-      msg("'Why would I want {i:that}?'")
-    }
-  },
+  receiveItemsFailMsg:"'That's not a carrot,' Lara points out.",
+  receiveItems:[
+    {
+      item:w.knife, 
+      f:function() { 
+        msg("'A knife?' says Lara. 'I guess I could use that... for something?'")
+        w.knife.loc = this.name
+      }
+    },
+    {
+      test:function(options) {
+        return options.item.name.startsWith('carrot')
+      },
+      f:function(options) { 
+        msg("'A carrot!' says Lara with delight, before stuffing it in her mouth. 'So, do you have any more?'")
+        delete options.item.loc
+      }
+    },
+    {
+      item:w.ring,
+      f:function(options) { 
+        msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
+        w.ring.loc = "Lara"
+        w.ring.worn = true
+        w.garage_key.loc = options.char.name
+      }
+    },
+    {
+      item:w.book,
+      f:function(options) { 
+        msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'")
+        w.book.loc = "Lara"
+      }
+    },
+  ],
   getAgreementTake:function(item) {
     if (item === w.brick) {
       msg("'I'm not picking up any bricks,' says Lara indignantly.")
@@ -1108,6 +1151,16 @@ createItem("piggy_suu", NPC(true), {
   alias:'Piggy-suu',
   money:10,
   examine:'Piggy-suu is a pig.',
+  receiveItems:[
+    {
+      test:function() { return true },
+      f:function(options) { 
+        msg(lang.done_msg, options)
+        options.item.loc = this.name
+        return true
+      }
+    },
+  ],
 })
 
 createItem("Boris", NPC(), { 

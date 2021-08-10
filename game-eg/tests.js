@@ -819,7 +819,8 @@ test.tests = function() {
   test.assertCmd("wear book", "You can't wear it.");
   test.assertCmd("remove book", "You are not wearing it.");
   test.assertCmd("read the book", "It is not in a language you understand.");
-  test.assertCmd("give it to kyle", "Done.");
+  test.assertCmd("give it to kyle", "'Oh!' says Kyle. 'Is this a book?'");
+  
   test.assertCmd("kyle, read the book", "It is not in a language he understands.");
   test.assertCmd("kyle, drop book", "Kyle drops the book.");
   test.assertEqual(["Examine", "Take"], w.book.getVerbs())
@@ -1698,6 +1699,7 @@ test.tests = function() {
   w.knife.loc = player.name
   w.canteen.loc = player.name
 
+  test.title("give plus 2")
   test.assertCmd("give kyle knife canteen", ["Knife: Done.", "Canteen: Done."])
   test.assertEqual('Kyle', w.knife.loc)
   test.assertEqual('Kyle', w.canteen.loc)
@@ -1714,6 +1716,7 @@ test.tests = function() {
   w.canteen.loc = player.name
   w.ham_and_cheese_sandwich.loc = player.name
 
+
   test.assertCmd("give kyle knife ham sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
   test.assertEqual('Kyle', w.knife.loc)
   test.assertEqual('Kyle', w.canteen.loc)
@@ -1723,6 +1726,7 @@ test.tests = function() {
   test.assertEqual(player.name, w.canteen.loc)
   test.assertEqual(player.name, w.ham_and_cheese_sandwich.loc)
 
+  test.title("give plus 3")
   test.assertCmd("give kyle knife ham and cheese sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
   test.assertEqual('Kyle', w.knife.loc)
   test.assertEqual('Kyle', w.canteen.loc)
@@ -1737,6 +1741,14 @@ test.tests = function() {
   w.knife.loc = player.name
   w.canteen.loc = player.name
   w.ham_and_cheese_sandwich.loc = player.name
+
+  test.title("give alt")
+  w.Lara.loc = 'kitchen'
+  world.update()
+  test.assertCmd("give lara jug", ["'That's not a carrot,' Lara points out."])
+  test.assertCmd("give lara knife", ["'A knife?' says Lara. 'I guess I could use that... for something?'"])
+  test.assertCmd("give lara carrot", ["'A carrot!' says Lara with delight, before stuffing it in her mouth. 'So, do you have any more?'"])
+
 
 
 

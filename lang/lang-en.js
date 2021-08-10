@@ -321,6 +321,7 @@ const lang = {
   // NPC
   not_npc:"{nv:char:can:true} tell {nm:item:the} to do anything you like, but there is no way {pv:item:'ll} do it.",
   not_npc_for_give:"Realistically, {nv:item:be} not interested in anything {sb:char} might give {ob:item}.",
+  not_interested_for_give:"{nv:npc:be:true} not interested in {nm:item:the}.",
   cannot_follow:"'Follow me,' {nv:char:say} to {nm:npc:the}. Being an inanimate object, {nv:char:be} not too optimistic it will do as it is told.",
   cannot_wait:"'Wait here,' {nv:char:say} to {nm:item:the}. Being an inanimate object, {nv:char:feel} pretty confident it will do as it is told.",
   already_following:"'I'm already following you!'",
