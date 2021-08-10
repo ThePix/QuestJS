@@ -737,7 +737,6 @@ createItem("Kyle", NPC(false),
   ],
   askOptions:[
     {
-      name:'Himself',
       test:function(p) { return p.text.match(/kyle|himself/); }, 
       script:function() { msg("'Oh!' says Kyle. 'I suppose I would say: " + this.examine + "'") },
     },
@@ -1025,12 +1024,19 @@ createRoom("road", {
 createItem("carrot", TAKEABLE(), MERCH(2, ["shop"]), {
   examine:"It's a carrot!",
   slice:function(options) {
-    if (options.with !== w.knife) return falsemsg("You can't cut a carrot with {nm:with:the}.", {with:options.with})
-      
+    if (options.with === undefined) {
+      if (w.knife.loc !== player.name) {
+        return falsemsg("Going to need a knife to do that.")
+      }
+    }
+    else if (options.with !== w.knife) {
+      return falsemsg("You can't cut a carrot with {nm:with:the}.", {with:options.with})
+    }
+    // do stuff
     msg('Done.')
     return true
   },
-});
+})
 
 createItem("honey_pasta",  TAKEABLE(), MERCH(5, ["shop"]),{
   examine:"It's pasta. With honey on it.",
