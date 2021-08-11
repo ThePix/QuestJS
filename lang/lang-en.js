@@ -888,6 +888,9 @@ const lang = {
     // Or we can set count_this to an attribute, and use that to get the number
     // processText("Mandy watches as {nv:item:grow:false:count_this}.", {item:w.grown_tamarind_tree, count_this:'seedsPlanted'})
     if (options.count_this) count = item[options.count_this]
+    // Or use suppressCount if we do not want the number, but do want it plural when it should
+    if (!count && options.suppressCount) count = item[options.suppressCount]
+
     // Or if this is a countable, and loc is set, get the count from that location
     if (!count && options.loc && item.countable) count = item.countAtLoc(options.loc)
     
@@ -907,7 +910,7 @@ const lang = {
       else if (options.article === DEFINITE && options.suppressCount) {
         s += lang.addDefiniteArticle(item)
       }
-      else if (count && count > 1) {
+      else if (!options.suppressCount && count && count > 1) {
         s += lang.toWords(count) + ' '
       }
       else if (options.article === DEFINITE) {
