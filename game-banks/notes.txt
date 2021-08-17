@@ -1,0 +1,121 @@
+Notes
+
+The ship damage
+
+Need a set of external locations for space walk.
+Need a way to fix the holes
+Need some choices - not all can be fixed, what is important?
+Perhaps a shoddy job fails later
+
+Option to revive someone to help or do it
+
+
+
+
+
+
+The artefact
+
+Need to approach it
+
+Can AI do it?
+
+Can AI be programmed to do it by Kyle? What commands?
+kyle, (program|tell) ai to approach (artefact|ship|vessel)
+kyle, (make) ai approach (artefact|ship|vessel)
+
+
+
+
+The mad AI
+
+
+
+
+
+The colonised planet
+
+
+
+
+Space Survey
+
+Discuss with each crew member how they feel and who they are, as well as opinions on the current situation
+
+How are you doing?
+
+How is the mission going
+
+Tell me about yourself
+
+Tell me about the planet
+
+Deploy 
+
+
+Computer guy can deploy satellites as they are for communication
+
+Biologist can deploy land and marine probes, and seeder pods
+
+Engineer or soldier can deploy escape pods
+
+
+Topics
+
+For this star:
+Deploy
+What are your initial impressions of the planet?
+What analysis do you have?
+
+
+Situational
+How are you do doing?
+How was stasis for you?
+Go to stasis
+What do you think of the food
+
+General:
+What do you thunk about the others?
+Where are you from?
+Why are you here?
+What family doid you leave behind?
+What do you think Earth will be like when we get back?
+
+
+
+msg("'Deploy a couple of geological probes,' you tell Kyle.");
+msg("'Sure thing, mate!'");
+w.Kyle.agenda = ["walkTo:probes_aft:Kyle starts looking through the crates.", "deployProbe:geology", "walkTo:lab3"];
+
+
+deployProbe takes a few turns
+multiple NPCs could be doing this at the same time.
+
+once a probe is deployed its progress can be tracked. Run as a turnscript
+
+Each probe has a turnscript that starts when launched. After X turns it reaches the destination; what happens next depends on the planet and destination on the planet.
+Possibly could modify a probe (or get crew member to).
+
+
+
+
+
+We are detecting radio signals, and they are emanating from a body orbits the planet.
+
+Aada is EVA trained
+The engineer will suggest cabling the ships together, then sealing with LeakSeal(TM). Then have the ship stay in the artefact's shadow so the cables keep cold and so taut. Perhaps pump out the connection when not in use. Use a probe to test the atmosphere. Ostap would be able to modify one with help from Engineer.
+
+'We are getting data back from the probe. Gravity is low, 5 .7 m/s/s, air pressure is a little low at 0.83 bar. The composition... Its a mix of helium, oyxygen and what looks like sulfur
+
+
+
+
+
+Wait...
+
+Wait is not compatible with menu and does not wait for room title or description
+Need to capture the move or start
+
+
+
+

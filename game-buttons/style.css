@@ -1,0 +1,30 @@
+.side-panes {
+  width: 300px;
+}
+
+
+.item-class {
+  padding: 3px;
+  margin-top: 1em ;
+  margin-bottom: 1em ;
+  line-height: 2em;
+}
+
+.item-name {
+  font-style: italic;
+  padding-right: 5px;
+}
+
+.item-nothing {
+  font-style: italic;
+  padding: 3px;
+  line-height: 2em;
+}
+
+.item-action-button {
+  cursor: pointer;
+  color:white;
+  background-color:black;
+  border-radius: 3px;
+  padding: 3px;
+}

@@ -143,6 +143,13 @@ test.tests = function() {
 
 
 
+  test.title("util.clamp")
+  test.assertEqual(4, util.clamp(4, 0, 10))
+  test.assertEqual(0, util.clamp(-4, 0, 10))
+  test.assertEqual(10, util.clamp(14, 0, 10))
+  test.assertEqual(0, util.clamp(0, 0, 10))
+  test.assertEqual(10, util.clamp(10, 0, 10))
+  
  
   
   

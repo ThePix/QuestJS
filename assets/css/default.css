@@ -320,9 +320,7 @@ span.compass-button {
   margin-left: 0px;
 }
 
-#itemsHeld,
-#itemsWorn,
-#itemsHere {
+.item-list {
   margin-bottom: 10px;
 }
 

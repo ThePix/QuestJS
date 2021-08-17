@@ -1,15 +1,7 @@
-tmp.*
-*.xml
-*.aslx
-*.yml
-*.txt
 game-x*/
 game-y*/
 game-z*/
 libx/
-page-x*.html
-page-y*.html
-page-z*.html
 assets/images/*.*
 assets/sounds/
 misc/

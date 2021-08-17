@@ -27,8 +27,6 @@ settings.output = function(report) {
 }
 
 
-
-
 settings.dateTime = {
   startTime:1000000000,
   data:[
@@ -81,7 +79,6 @@ settings.dateTime = {
 }
 
 
-
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
@@ -91,9 +88,6 @@ settings.setup = function() {
   settings.updateCustomUI()
   w.rabbit.setLeader(player)
 }
-
-
-
 
 
 
@@ -129,31 +123,31 @@ settings.customUI = function() {
   document.writeln('<div id="choose-weapon-div" title="Select a weapon">');
   document.writeln('<select id="weapon-select"></select>');
   document.writeln('</div>');
-  document.onreadystatechange = function() {  // !!!!!  I think this will overwrite the main one !!!!
-    document.querySelector( "#choose-weapon-div" ).dialog({
+  //document.onreadystatechange = function() {  // !!!!!  I think this will overwrite the main one !!!!
+    /*document.querySelector( "#choose-weapon-div" ).dialog({    !!!!!!!!!!!!!
       autoOpen: false,  
       buttons: {
         OK: function() { skillUI.chosenWeapon() }
       },
-    });
-  }
+    });*/
+  //}
 };  
 
 
 settings.updateCustomUI = function() {
   document.querySelector('#weaponImage').setAttribute('src', settings.imagesFolder + 'icon-' + player.getEquippedWeapon().image + '.png');
-  document.querySelector('#weapon-td').prop('title', "Weapon: " + player.getEquippedWeapon().alias);
+  document.querySelector('#weapon-td').setAttribute('title', "Weapon: " + player.getEquippedWeapon().alias);
   
-  document.querySelector('#hits-indicator').style.padding-right = (120 * player.health / player.maxHealth) + 'px'
-  document.querySelector('#hits-td').prop('title', "Hits: " + player.health + "/" + player.maxHealth);
+  document.querySelector('#hits-indicator').style.paddingRight = (120 * player.health / player.maxHealth) + 'px'
+  document.querySelector('#hits-td').setAttribute('title', "Hits: " + player.health + "/" + player.maxHealth);
 
-  document.querySelector('#pp-indicator').style.padding-right = (120 * player.pp / player.maxPP) + 'px'
-  document.querySelector('#pp-td').prop('title', "Power points: " + player.pp + "/" + player.maxPP);
+  document.querySelector('#pp-indicator').style.paddingRight = (120 * player.pp / player.maxPP) + 'px'
+  document.querySelector('#pp-td').setAttribute('title', "Power points: " + player.pp + "/" + player.maxPP);
 
-  document.querySelector('#armour-indicator').style.padding-right = (120 * player.armour / player.maxArmour) + 'px'
-  document.querySelector('#armour-td').prop('title', "Armour: " + player.armour + "/" + player.maxArmour);
+  document.querySelector('#armour-indicator').style.paddingRight = (120 * player.armour / player.maxArmour) + 'px'
+  document.querySelector('#armour-td').setAttribute('title', "Armour: " + player.armour + "/" + player.maxArmour);
 
-  //console.log(document.querySelector('#hits-td').prop('title'));
+  //console.log(document.querySelector('#hits-td').setAttribute('title'));
 
 
   //console.log(player.skillsLearnt)
@@ -187,9 +181,9 @@ const skillUI = {
     s += '<img class="skill-image" src="' + settings.imagesFolder + 'icon-' + skill.icon + '.png"/>'
     if (skill.spell) s += '<img class="skill-image" src="' + settings.imagesFolder + 'flag-spell.png"/>'
     s += '</div>'
-    cell.innerHTML = s)
+    cell.innerHTML = s
     cell.click(skillUI.buttonClickHandler)
-    cell.style.background-color = 'black'
+    cell.style.backgroundColor = 'black'
     cell.style.padding = '2px'
     cell.setAttribute("name", skill.name)
     skillUI.skills.push(skill)
@@ -198,19 +192,19 @@ const skillUI = {
   resetButtons:function() {
     //console.log('reset')
     for (let i = 0; i < skillUI.skills.length; i++) {
-      document.querySelector('#cell' + i).style.background-color = 'black'
+      document.querySelector('#cell' + i).style.backgroundColor = 'black'
     }
-    document.querySelector('#castButton').prop('disabled', true)
+    document.querySelector('#castButton').setAttribute('disabled', true)
     skillUI.selected = false
   },
 
 
   removeAllButtons:function() {
     for (let i = 0; i < skillUI.skills.length; i++) {
-      document.querySelector('#cell' + i).innerHTML = "")
+      document.querySelector('#cell' + i).innerHTML = ""
     }
     skillUI.skills = []
-    document.querySelector('#castButton').prop('disabled', true)
+    document.querySelector('#castButton').setAttribute('disabled', true)
     skillUI.selected = false
   },
 
@@ -222,9 +216,9 @@ const skillUI = {
     console.log(n)
     skillUI.selected = n
     const cell = document.querySelector("#cell" + n)
-    cell.style.background-color = 'yellow'
+    cell.style.backgroundColor = 'yellow'
     const skill = skillUI.skills[n]
-    if (skill.noTarget) document.querySelector('#castButton').prop('disabled', false)
+    if (skill.noTarget) document.querySelector('#castButton').setAttribute('disabled', false)
   },
 
   getSkillFromButtons:function() {
@@ -251,17 +245,17 @@ const skillUI = {
     const s = weapons.join('');
     console.log(s);
 
-    document.querySelector('#weapon-select').innerHTML = s);  
+    document.querySelector('#weapon-select').innerHTML = s
     
-    document.querySelector("#choose-weapon-div").dialog("open");
+    document.querySelector("#choose-weapon-div").dialog("open")
   },
 
   chosenWeapon:function() {
-    document.querySelector("#choose-weapon-div").dialog("close");
-    const selected = document.querySelector("#weapon-select").value;
-    console.log("in chosenWeapon: " + selected);
-    w[selected].equip(false, player);
-    world.endTurn(world.SUCCESS);
+    document.querySelector("#choose-weapon-div").dialog("close")
+    const selected = document.querySelector("#weapon-select").value
+    console.log("in chosenWeapon: " + selected)
+    w[selected].equip(false, player)
+    world.endTurn(world.SUCCESS)
   },
 
 }
@@ -269,246 +263,92 @@ const skillUI = {
 
 
 
+settings.startingDialogEnabled  = true;
 
-
-
-
-settings.startingDialogDisabled = true;
-
+settings.maxPoints = 10
+settings.skills = [
+  "Athletics",
+  "Lore",
+  "Manipulation",
+  "Subterfuge",
+]
 settings.professions = [
   {name:"Farm hand", bonus:"strength"},
   {name:"Scribe", bonus:"intelligence"},
   {name:"Exotic dancer", bonus:"agility"},
   {name:"Merchant", bonus:"charisma"},
-];
+]
+settings.startingDialogTitle = "Who are you?"
+settings.startingDialogWidth = 500
+settings.startingDialogHeight = 480
+settings.startingDialogButton = 'OK'
 
-document.onreadystatechange = function() {   // !!!!!! second in this file, plus we have one in _io.js
-  if (settings.startingDialogDisabled) {
-    const p = w.me;
-    p.job = settings.professions[0];
-    p.isFemale = true;
-    p.fullname = "Shaala"
-    settings.gui = true
-    return; 
+settings.startingDialogHtml = '<p>Name: <input id="namefield" type="text" value="Zoxx" /></p>'
+
+settings.startingDialogHtml += '<p>Male: <input type="radio" id="male" name="sex" value="male">&nbsp;&nbsp;&nbsp;&nbsp;'
+settings.startingDialogHtml += 'Female<input type="radio" id="female" name="sex" value="female" checked></p>'
+
+settings.startingDialogHtml += '<p>Background: <select id="job">'
+for (const s of settings.professions) {
+  settings.startingDialogHtml += '<option value="' + s.name + '">' + s.name + '</option>'
+}
+settings.startingDialogHtml += '</select></p>'
+
+settings.startingDialogHtml += '<p>Magic vs combat: <input type="range" id="magic" name="magic" value="50" min="0" max="100" oninput="settings.updateMagic()"></p>'
+settings.startingDialogHtml += '<p>Magic: <span id="sliderMagic">50</span> Combat: <span id="sliderCombat">50</span></p>'
+
+settings.startingDialogHtml += '<table>'
+for (const s of settings.skills) {
+  settings.startingDialogHtml += '<tr><td>' + s + '</td><td id="points-' + s + '">0</td><td>'
+  settings.startingDialogHtml += '<input type="button" value="-" onclick="settings.pointsAdjust(\'' + s + '\', false)" />'
+  settings.startingDialogHtml += '<input type="button" value="+" onclick="settings.pointsAdjust(\'' + s + '\', true)" />'
+  settings.startingDialogHtml += '</td></tr>'
+}
+settings.startingDialogHtml += '<tr><td>Total</td><td id="points-total">0/' + settings.maxPoints + '</td><td>'
+settings.startingDialogHtml += '</td></tr>'
+settings.startingDialogHtml += '</table>'
+
+
+settings.pointsAdjust = function(skill, up) {
+  if (player[skill] === undefined) {
+    for (const s of settings.skills) player[s] = 0
   }
-  const diag = document.querySelector("#dialog");
-  diag.prop("title", "Who are you?");
-  let s;
-  s = '<p>Name: <input id="namefield" type="text" value="Zoxx" /></p>';
-  s += '<p>Male: <input type="radio" id="male" name="sex" value="male">&nbsp;&nbsp;&nbsp;&nbsp;';
-  s += 'Female<input type="radio" id="female" name="sex" value="female" checked></p>';
-  s += '<p>Job:<select id="job">'
-  for (let profession of settings.professions) {
-    s += '<option value="' + profession.name + '">' + profession.name + '</option>';
+  let n = 0
+  for (const s of settings.skills) n += player[s]
+
+  if (up && n < settings.maxPoints) {
+    player[skill]++
+    n++
   }
-  s += '</select></p>'
-  
-  s += '<p>Classic interface: <input type="radio" id="classic" name="interface" value="classic" checked>&nbsp;&nbsp;&nbsp;&nbsp;'
-  s += 'GUI<input type="radio" id="gui" name="interface" value="gui"></p>'
-  
-  diag.innerHTML = s
-  diag.dialog({
-    modal:true,
-    dialogClass: "no-close",
-    width: 400,
-    height: 340,
-    buttons: [
-      {
-        text: "OK",
-        click: function() {
-          document.querySelector(this).dialog("close");
-          const p = player;
-          const job = document.querySelector("#job").value;
-          p.job = settings.professions.find(function(el) { return el.name === job; });
-          p.isFemale = document.querySelector("#female").checked
-          settings.gui = document.querySelector("#gui").checked
-          p.fullname = document.querySelector("#namefield").value;
-          if (settings.textInput) { document.querySelector('#textbox').focus(); }
-          console.log(p)
-        }
-      }
-    ]
-  });
-}
-
-
-/*
-
-
-
-const dialogeOptions = {
-  para0Opts:[
-    "a tiny village",
-    "a provincial town",
-    "the slums",
-    "the merchant's quarter"
-  ],
-
-  para1Opts:[
-    "loving the outdoors",
-    "appreciating the finer things in life",
-    "always hungry",
-    "isolated from children of your own age"
-  ],
-
-  para2Opts:[
-    "introspective",
-    "precocious",
-    "attractive",
-    "curious",
-  ],
-
-  para3Opts:[
-    "boy",
-    "girl"
-  ],
-
-  para4Opts:[
-    "getting into trouble",
-    "with your nose in a book",
-    "stealing things",
-    "getting into fights",
-    "arguing with the local priest"
-  ],
-
-  para5Opts:[
-    "potion brewing",
-    "crystal magic",
-    "shadow magic",
-    "nature magic"
-  ],
-
-  para6Opts:[
-    "raven black",
-    "dark brown",
-    "brunette",
-    "dark blond",
-    "blond",
-    "platinum blond",
-    "ginger",
-    "electric blue",
-    "shocking pink",
-  ],
-
-para7Opts:[
-  "brown",
-  "green",
-  "hazel",
-  "blue",
-  "aquamarine"
-],
-
-para8Opts:[
-  "blue",
-  "green",
-  "orange",
-],
-};
-
-
-
-var paraOpts = [];
-
-var paraPositions = [];
-
-
-var wizardMale = true;
-
-function scrollWizard() {
-  wizardMale = !wizardMale;
-  document.querySelector('#wizardname').innerHTML = wizardMale ? 'Master Shalazin' :  'Mistress Shalazin'
-  document.querySelector('#wizardwitch').innerHTML = wizardMale ? 'wizard' :  'witch'
-  document.querySelector('#wizardhe').innerHTML = wizardMale ? 'he' :  'she'
-}
-
-function scrollPara(element) {
-  var paraNumber = parseInt(element.id.replace('para', ''));
-  if (isNaN(paraNumber)) { return; }
-  var para = document.querySelector('#para' + paraNumber);
-  if (typeof paraPositions[paraNumber] !== 'number') {
-    var list = dialogeOptions['para' + paraNumber + 'Opts'];
-    paraOpts[paraNumber] = list;
-    paraPositions[paraNumber] = random.int(list.length - 1);
+  if (!up && player[skill] > 0) {
+    player[skill]--
+    n--
   }
-  paraPositions[paraNumber]++;
-  if (paraPositions[paraNumber] >= paraOpts[paraNumber].length) {
-    paraPositions[paraNumber] = 0;
-  }
-  para.innerHTML = paraOpts[paraNumber][paraPositions[paraNumber]];
-}    
 
-function setValues() {
-  player.alias = document.querySelector('#name_input').value;
-  player.isFemale = !wizardMale;
-  player.background = document.querySelector('#para4').innerHTML = ''
-  player.magic = document.querySelector('#para5').innerHTML = ''
-  player.hairColour = document.querySelector('#para6').innerHTML = ''
-  player.eyeColour = document.querySelector('#para7').innerHTML = ''
-  player.spellColour = document.querySelector('#para8').innerHTML = ''
-  msg(player.alias);
-  msg(document.querySelector("#diag-inner").text());
+  document.querySelector('#points-' + skill).innerHTML = player[skill]
+  document.querySelector('#points-total').innerHTML = n + '/' + settings.maxPoints
 }
 
-
-document.querySelector(document).ready(function () {
-      document.querySelector('.scrolling').each(function() {
-        scrollPara(this);
-      });
-      that = document.querySelector("#dialog_window_1");
-      document.querySelector('#dialog_window_1').dialog({
-         height: 400,
-         width: 640,
-         buttons: {
-            "Done": function() { setValues();}
-        }
-      });
-      document.querySelector("button[title='Close']")[0].style.world. = 'none';
-});
-
-function scrollWizard() {
-  wizardMale = !wizardMale;
-  document.querySelector('#wizardname').innerHTML = wizardMale ? 'Master Shalazin' :  'Mistress Shalazin'
-  document.querySelector('#wizardwitch').innerHTML = wizardMale ? 'wizard' :  'witch'
-  document.querySelector('#wizardhe').innerHTML = wizardMale ? 'he' :  'she'
+settings.updateMagic = function() {
+  player.magic = parseInt(document.querySelector("#magic").value)
+  player.combat = 100 - player.magic
+  document.querySelector('#sliderMagic').innerHTML = player.magic
+  document.querySelector('#sliderCombat').innerHTML = player.combat
 }
 
-function showStartDiag() {
-
-  var diag = document.querySelector("#dialog");
-  diag.prop("title", "Who are you?");
-  var s;
-  s = 'Name: <input type="text" id="name_input" value="Skybird"/><br/><br/>';
-  s += '<div id="diag-inner">Born in <span id="para0" class="scrolling" onclick="scrollPara(this)"></span>, you grew up <span id="para1" class="scrolling" onclick="scrollPara(this)"></span>. ';
-  s += 'You were a <span id="para2" class="scrolling" onclick="scrollPara(this)"></span> <span id="para3" class="scrolling" onclick="scrollPara(this)"></span>, ';
-  s += 'always <span id="para4" class="scrolling" onclick="scrollPara(this)"></span>.';
-  s += 'At the age of seven, you caught the eye of <span id="wizardname" class="scrolling" onclick="scrollWizard();">Master Shalazin</span>, ';
-  s += 'a <span id="wizardwitch">wizard</span> ';
-  s += 'who specialises in <span id="para5" class="scrolling" onclick="scrollPara(this)"></span>. ';
-  s += 'Perhaps <span id="wizardhe">he</span> recognised potential in you, or just a pair of hands willing to work for next to nothing; may be just liked your ';
-  s += '<span id="para6" class="scrolling" onclick="scrollPara(this)"></span> hair and <span id="para7" class="scrolling" onclick="scrollPara(this)"></span> eyes. ';
-  s += 'Either way, you slowly learnt the basics of magic, and have recently learnt how to turn yourself <span id="para8" class="scrolling" onclick="scrollPara(this)"></span>. ';
-  s += 'Perhaps more importantly, you have also learnt how to turn yourself back.</div>';
-
-  diag.innerHTML = s
-  document.querySelector('.scrolling').each(function() {
-    scrollPara(this);
-  });
-  diag.dialog({
-    modal:true,
-    dialogClass: "no-close",
-    width: 600,
-    height: 600,
-    buttons: [
-      {
-        text: "OK",
-        click: function() {
-          document.querySelector(this).dialog("close");
-          setValues(this);
-          if (settings.textInput) { document.querySelector('#textbox').focus(); }
-        }
-      }
-    ]
-  });
-
+settings.startingDialogOnClick = function() {
+  player.class = document.querySelector("#job").value
+  player.isFemale = document.querySelector("#female").checked
+  player.setAlias(document.querySelector("#namefield").value)
 }
-*/
+settings.startingDialogInit = function() {
+  document.querySelector('#namefield').focus()
+}
+settings.startingDialogAlt = function() {
+  for (const s of settings.skills) player[s] = Math.floor(settings.maxPoints / settings.skills.length)
+  player.magic = 50
+  player.combat = 50
+  player.class = 'Merchant'
+  player.setAlias('Zoxx')
+}
+
