@@ -534,6 +534,7 @@ const lang = {
   transcript_off:"Transcript is now off.",
   transcript_already_on:"Transcript is already turned on.",
   transcript_already_off:"Transcript is already turned off.",
+  trancript_new_tab_failed:"I am unable to create a new tab to put the transcript in. This is probably because your browser is blocking me! There may be a banner across the top of the screen where you can give permisssion. You will need to do the command again.",
   undo_disabled:"Sorry, UNDO is not enabled in this game.",
   undo_not_available:"There are no saved game-states to UNDO back to.",
   undo_done:"Undoing...",
