@@ -113,10 +113,6 @@ pre {
   text-justify: inter-word;
 }
 
-/* Is this used? */
-.default-p strong {
-  margin-bottom: 10px;
-}
 
 
 
@@ -157,8 +153,9 @@ pre {
 }
 
 /***
-* Buttons
+* Buttons (is this used anywhere; not that I can find)
 ***/
+/*
 .qbtn {
   display: inline-flex;
   width: 20px;
@@ -179,6 +176,8 @@ pre {
 .qbtn i:hover {
   color: #FF0000;
 }
+*/
+
 
 /***
 * Dialog
@@ -188,26 +187,15 @@ pre {
   text-align: justify;
 }
 
-.ui-dialog .ui-dialog-buttonpane {
-  padding: 0px !important;
-}
 
-.ui-widget {
-  font-family: Verdana,Arial,sans-serif;
-  font-size: 0.95em;
-}
-
-.ui-widget .ui-widget {
-  font-size: 0.75em;
-}
-
-/* The command bar  */
+/***
+* The command bar
+***/
 #textbox {
   border:none;
   outline: none;
   width:95%;
 }
-
 .dark-body   #textbox {
   background-color: #111;
   color: white;
@@ -217,8 +205,7 @@ pre {
   font-style:italic;
   color:green;
 }
-
-.dark-body   .input-text {
+.dark-body  .input-text {
   color:lightgreen;
 }
 
@@ -236,19 +223,19 @@ pre {
   padding-left: 5px;
   font-size: 10pt;
 }
+
 .pane-div {
   background-color: #f9f9f9;
   border: #ccc 1px solid;
   padding: 0px;
   margin-bottom: 5px;
 }
+.dark-body .pane-div {
+  background-color:#606;
+}
 
 .pane-content {
   padding: 5px 10px 5px 10px;
-}
-
-.dark-body  .pane-div {
-  background-color:#606;
 }
 
 .side-panes-left {
@@ -291,14 +278,14 @@ td.compass-button {
   width: 20px;
   height: 20px;
 }
+.dark-body td.compass-button {
+  background-color:#404;
+}
 
 td.compass-button:hover {
   color:blue;
 }
 
-.dark-body .compass-button {
-  background-color:#404;
-}
 
 span.compass-button {
   padding: 3px;
@@ -335,13 +322,12 @@ span.compass-button {
   margin-left: 10px;
   margin-bottom: 0px;
 }
+.dark-body  div  .item {
+  background-color:#404;
+}
 
 .item:first-child {
   margin-top: 10px;
-}
-
-.dark-body  div  .item {
-  background-color:#404;
 }
 
 .sub-item {
@@ -349,8 +335,7 @@ span.compass-button {
   width: 140px;
   margin-top: 0px;
 }
-
-.dark-body  div  .sub-item {
+.dark-body .sub-item {
   background-color:#305;
 }
 
@@ -367,8 +352,7 @@ span.compass-button {
   font-style:italic;
   display:none;
 }
-
-.dark-body  div  .item-action {
+.dark-body .item-action {
   background-color:#602;
 }
 
@@ -405,22 +389,22 @@ span.compass-button {
   color: blue;
   font-style:italic;
 }
-
-.dark-body   .tutorial {
+.dark-body .tutorial {
   color: lightblue;
 }
 
 .hidden {}
 
-.hidden    .tutorial {
+.hidden .tutorial {
   display: none;
 }
 
+/*
 .metapanel {
   background-color: #f9f9f9;
   border: #ccc 1px solid;
   padding: 10px;
-}
+}*/
 
 .meta {
   color: grey;
@@ -435,11 +419,6 @@ span.compass-button {
 }
 .todo::before {
   content: "To do: ";
-}
-
-.dark-body .meta {
-  /*background-color: #070707;*/
-  /*border: #333 1px solid;*/
 }
 
 table.meta {
@@ -471,16 +450,6 @@ table.meta {
   font-size: 10pt;
   color: grey;
   font-family: monospace;
-}
-
-/* For dialog panels */
-.no-close .ui-dialog-titlebar-close {
-  display: none;
-}
-
-.ui-dialog-titlebar {
-  background-image: none;
-  background-color: #f9f9f9;
 }
 
 .scrolling {
@@ -535,16 +504,19 @@ th, td {
   top:40%;
   width:400px;
   margin-left: -200px;
-  background-color:yellow;
+  background-color:#ffd;
   border:2px solid;
   padding:5px;
 }
-
+.dark-body .popup {
+  background-color: #301;
+}
 
 
 /***
-* Panel 
+* Panel (is this used anywhere; not that I can find)
 ***/
+/*
 #panel {
   width: 101%;
   border: #ccc solid 1px;
@@ -618,7 +590,6 @@ th, td {
 }
 
 #panel .sidepane ul {
-  /*margin-left: 15px;*/
   counter-reset: section;
 }
 
@@ -632,10 +603,12 @@ th, td {
   list-style-type: none;
   margin-bottom: 7px;
 }
+*/
 
 /***
-* Rules 
+* Rules (is this used anywhere; not that I can find)
 ***/
+/*
 .rules {
   float: right;
   width: 70%;
@@ -668,42 +641,50 @@ th, td {
 
 .rules .fragment a {
   color: #9C2A4D;
-}
+}*/
+
+
+
 
 /***
 * Toolbar 
 ***/
 .toolbar {
+  width: 100%; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 2; /* Stay on top */
+  top:0;
   display: inline-flex;
-  width: 100%;
   height: 20px;
-  margin-top: 5px;
-}
-
-.toolbar.button {
-  height: 20px;
-  border: #ccc 1px solid;
-  border-radius: 4px;
   padding: 4px;
+  border: #ccc 1px solid;
   background-color: #f9f9f9;
   text-decoration: none;
   vertical-align: middle;
 }
+.dark-body .toolbar {
+  background-color:#606;
+}
 
-.toolbar .status {
+.toolbar .left {
   float: left;
   text-align: left;
   padding-left: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-.toolbar .room {
+.toolbar .middle {
   text-align: center;
   margin: auto;
 }
 
-.toolbar .links {
+.toolbar .right {
   float: right;
   text-align: right;
+  padding-right: 15px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .toolbar a.link {
@@ -714,53 +695,26 @@ th, td {
   padding-right: 5px;
   text-decoration: none;
 }
+.dark-body .toolbar a.link {
+  color: #fff;
+}
 
 .toolbar a.link:hover {
   color: blue;
 }
 
+
+
+
 /***
-* Context Menu 
+* Loading Screen
 ***/
-#context-menu {
-  position: fixed;
-  z-index: 10000;
-  width: 150px;
-  background-color: #f9f9f9;
-  transform: scale(0);
-  transform-origin: top left;
-}
-
-#context-menu.acive {
-  transform: scale(1);
-  transition: transform 200ms ease-in-out;
-}
-
-#context-menu .item {
-  padding: 8px 10px;
-  font-size: 15px;
-  color: #000;
-}
-
-#context-menu .item:hover {
-  color: #a0a0ff;
-}
-
-#context-menu .item i {
-  display: inline-block;
-  margin-right: 5px;
-}
-
-#context-menu hr {
-  margin: 2px 0px;
-  border-color: #CCC;
-}
-
-
 #loading {
   text-align: center;
   padding: 20px;
 }
+
+
 
 
 /***
@@ -774,33 +728,28 @@ th, td {
   font-size: inherit;
 }
 .droplink:not(.disabled) {
-    /*background-color: #3498DB;
-    color: blue;
-    padding: 16px;
-    font-size: 16px;
-    border: none;*/
-    cursor: pointer;
-    text-decoration: underline;
-    font-size:inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size:inherit;
 }
 
 .droplink:hover:not(.disabled), .droplink:focus:not(.disabled), .exit-link:hover:not(.disabled) {
-    color: blue;
+  color: blue;
 }
 
 .dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    overflow: auto;
-	border: 1px solid black;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  overflow: auto;
+  border: 1px solid black;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
 }
 
 .dropdown-content span {
@@ -814,10 +763,16 @@ th, td {
 .dropdown  a:hover {
 	background-color: #ddd;
 }
+.dark-body .dropdown  a:hover {
+	background-color: #222;
+}
 
 .list-link-verb:hover {
 	background-color: #ddd;
 }
+.dark-body .list-link-verb:hover {
+	background-color: #222;
+} 
 
 .show {
   display:block;
@@ -830,8 +785,11 @@ th, td {
 }
 
 
-/* For a menu that appears by the side pane */
 
+
+/***
+* For a menu that appears by the side pane
+***/
 #sidepane-menu {
   position: fixed;
   top: 200px;
@@ -841,6 +799,9 @@ th, td {
   width:240px;
   background-color: #f9f9f9;
   border:solid #ccc 1px;
+}
+.dark-body #sidepane-menu {
+  background-color:#060606;
 }
 
 .sidepane-menu-title {
@@ -858,7 +819,11 @@ th, td {
   background: #e1ebf2;
   margin-top: 10px;
 }
-
-.sidepane-menu-forgetit {
-  background-color: #faa;
+.dark-body #sidepane-menu .sidepane-menu-option {
+  background-color:#306;
 }
+
+a {
+  text-decoration: none;
+}
+
