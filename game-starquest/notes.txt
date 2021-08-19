@@ -1,0 +1,11 @@
+crew.js has the members of the crew, inc. Rand, plus commander
+also topics
+
+page.js is the PAGE, and includes the encyclopedia
+
+
+
+So you go to a planet, what then?
+
+Ask crew for advice
+Tell crew what to do
