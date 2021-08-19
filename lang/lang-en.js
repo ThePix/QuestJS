@@ -26,10 +26,12 @@ const lang = {
     MetaTerse:/^terse$/,
     MetaVerbose:/^verbose$/,
     MetaTranscript:/^transcript$|^script$/,
+    MetaTranscriptStart:/^transcript on$|^script start$/,
     MetaTranscriptOn:/^transcript on$|^script on$/,
     MetaTranscriptOff:/^transcript off$|^script off$/,
     MetaTranscriptClear:/^transcript clear$|^script clear$|^transcript delete$|^script delete$/,
     MetaTranscriptShow:/^transcript show$|^script show$|^show script$|^show transcript$/,
+    MetaTranscriptWalkthrough:/^(?:transcript|script) walk$/,
     MetaUserComment:/^\*(.+)$/,
     MetaSave:/^save$/,
     MetaSaveGame:/^(?:save) (.+)$/,
@@ -532,9 +534,12 @@ const lang = {
   mode_silent_off:"Silent mode off.",
   transcript_on:"Transcript is now on.",
   transcript_off:"Transcript is now off.",
+  transcript_cleared:"Transcript cleared.",
+  transcript_none:"Cannot show transcript, nothing has been recorded.",
   transcript_already_on:"Transcript is already turned on.",
   transcript_already_off:"Transcript is already turned off.",
-  trancript_new_tab_failed:"I am unable to create a new tab to put the transcript in. This is probably because your browser is blocking me! There may be a banner across the top of the screen where you can give permisssion. You will need to do the command again.",
+  transcript_finish:"To see the transcript, click {cmd:SCRIPT SHOW:here}.",
+  new_tab_failed:"I am unable to create a new tab. This is probably because your browser is blocking me! There may be a banner across the top of the screen where you can give permission. You will need to do the command again.",
   undo_disabled:"Sorry, UNDO is not enabled in this game.",
   undo_not_available:"There are no saved game-states to UNDO back to.",
   undo_done:"Undoing...",
@@ -620,13 +625,30 @@ const lang = {
   },
 
   transcriptScript:function() {
-    metamsg("The TRANSCRIPT or SCRIPT command can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.");
-    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place in the game). To clear the data, use SCRIPT CLEAR.");
+    metamsg("The TRANSCRIPT or SCRIPT commands can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.");
+    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place in the game). To clear the data, use SCRIPT CLEAR. To clear the old data and turn recording on in one step, use SCRIPT START.");
     metamsg("You can add a comment to the transcript by starting your text with an asterisk (*) - Quest will record it, but otherwise just ignore it.")
-    metamsg("Everything gets saved to memory, and will be lost if you go to another web page or close your browser. The transcript is {i:not} saved when you save your game (but will not be lost when you load a game). If you complete the game the text input will disappear, however if you have a transcript recording, a link will be available to access it.");
+    metamsg("Everything gets saved to \"LocalStorage\", so will be saved between sessions. If you complete the game the text input will disappear, however if you have a transcript recording, a link will be available to access it.");
     metamsg("Transcript is currently: " + (io.transcript ? 'on' : 'off'))
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
+  
+  transcriptTitle:function() {
+    let html = ''
+    html += '<h2>QuestJS Transcript for "'
+    html += settings.title + '" (version ' + settings.version
+    html += ')</h2>'
+    return html
+  },
+  transcriptStart:function() {
+    const now = new Date()
+    return '<p><i>Transcript started at ' + now.toLocaleTimeString() + ' on ' + now.toDateString() + '</i></p>'
+  },
+  transcriptEnd:function() {
+    const now = new Date()
+    return '<p><i>Transcript ended at ' + now.toLocaleTimeString() + ' on ' + now.toDateString() + '</i></p>'
+  },
+  
 
   topicsScript:function() {
     metamsg("Use TOPICS FOR [name] to see a list of topic suggestions to ask a character about (if implemented in this game).");
@@ -644,7 +666,7 @@ const lang = {
     }
     metamsg("If you have not already done so, I recommend checking to ensure you can see the transcript before progressing too far though the game.")
     metamsg("PLEASE NOTE: If you refresh/reload the page to restart the game, the existing transcript will be lost. Save it first!")
-    io.scriptStart()
+    saveLoad.transcriptStart()
   },
   
   game_over_html:'<p>G<br/>A<br/>M<br/>E<br/>/<br/>O<br/>V<br/>E<br/>R</p>',
