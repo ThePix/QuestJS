@@ -250,7 +250,7 @@ createItem("box", READABLE(), CONTAINER(true), LOCKED_WITH([]), {
     const tpParams = {char:player, container:this}
     tpParams.list = this.listContents(world.LOOK)
     msg("It is large, wooden box. It does not look very substantial, but it survived the fall nevertheless. There is a label on the {ifNot:box:closed:open }lid.")
-    if (!this.closed) msg(lang.look_inside, tpParams)
+    if (!this.closed) msg(lang.look_inside_it, tpParams)
     if (!this.flag2) hint.now('readBox')
   },
   regex:/crate|label|lid/,

@@ -272,6 +272,7 @@ const lang = {
   container_closed:"{nv:container:be:true} closed.",
   inside_container:"{nv:item:be:true} inside {nm:container:the}.",
   look_inside:"Inside {nm:container:the} {nv:char:can} see {show:list}.",
+  look_inside_it:"Inside {sb:container} {nv:char:can} see {show:list}.",
   
   
   // MECHANDISE

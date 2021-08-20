@@ -911,7 +911,7 @@ test.tests = function() {
   test.assertCmd("get small key", "You take the small key.")
   test.assertEqual(true, w.glass_cabinet.locked)
   test.assertEqual(true, w.glass_cabinet.closed)
-  test.assertCmd("open cabinet", ["You unlock the glass cabinet.", "You open the glass cabinet. Inside the glass cabinet you can see a jewellery box (containing a ring) and an ornate doll."])
+  test.assertCmd("open cabinet", ["You unlock the glass cabinet.", "You open the glass cabinet. Inside it you can see a jewellery box (containing a ring) and an ornate doll."])
   test.assertEqual(false, w.glass_cabinet.locked)
   test.assertEqual(false, w.glass_cabinet.closed)
   test.assertCmd("open cabinet", "It already is.")
@@ -923,7 +923,7 @@ test.tests = function() {
 
 
   test.title("Simple object commands (cabinet and box)")
-  test.assertCmd("open cabinet", ["You open the glass cabinet. Inside the glass cabinet you can see a jewellery box (containing a ring) and an ornate doll."])
+  test.assertCmd("open cabinet", ["You open the glass cabinet. Inside it you can see a jewellery box (containing a ring) and an ornate doll."])
 
   test.assertCmd("pick up cardboard box", "You take the cardboard box.")
   test.assertCmd("pick up jewellery box", "You take the jewellery box.")
@@ -1154,7 +1154,7 @@ test.tests = function() {
   test.assertCmd("close compartment", "You close the compartment.");
   test.assertCmd("push button", "You push the button. There is a brief hum of power, and a flash.");
   test.assertCmd("get torch", "There doesn't seem to be anything you might call 'torch' here.");
-  test.assertCmd("open compartment", "You open the compartment. Inside the compartment you can see a flashlight.");
+  test.assertCmd("open compartment", "You open the compartment. Inside it you can see a flashlight.");
   
   test.assertCmd("get torch", "You take the flashlight.");
   test.assertCmd("open compartment", "It already is.");
