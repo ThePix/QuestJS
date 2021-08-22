@@ -155,12 +155,12 @@ test.tests = function() {
   test.title("Attack.createAttack (fireball)");
   const oldgetSkillFromButtons = skillUI.getSkillFromButtons
   skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
-  
+
   const attack3 = Attack.createAttack(player, w.goblin)
-  
+
   test.assertEqual('spellCasting', attack3.skill.statForOffensiveBonus)
   test.assertEqual(5, w.me.spellCasting)
-  
+
   test.assertEqual('me', attack3.attacker.name)
   test.assertEqual(undefined, attack3.weapon)
   test.assertEqual([w.goblin, w.orc, w.snotling, w.rabbit], attack3.primaryTargets)
@@ -304,7 +304,7 @@ test.tests = function() {
   random.prime(19)
   attack2d.resolve(w.me, true, 0)
   test.assertEqual(79, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you, but the ice amulet protects you, and you take no damage.", attack2d.report[5].t)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you, but the ice amulet protects you, and you take no damage.", attack2d.report[4].t)
   
   w.me.health = 100
   w.goblin.spellCasting = false
@@ -317,12 +317,16 @@ test.tests = function() {
   test.assertCmd('learn steelskin', ['You learn <i>Steelskin</i> from the spellbook.'])
   test.assertCmd('learn stoneskin', ['You learn <i>Stoneskin</i> from the spellbook.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
+  
+  
+  
+  test.title("cast ongoing spells")
   test.assertEqual([], player.activeEffects)
   test.assertCmd('cast stoneskin', ['You cast the <i>Stoneskin</i> spell.', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
-
-  test.assertEqual(['Stoneskin effect'], player.activeEffects)
-  test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin effect</i> terminates.'])
-  test.assertEqual(['Steelskin effect'], player.activeEffects)
+  test.assertEqual(['Stoneskin'], player.activeEffects)
+  
+  test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> on you terminates.'])
+  test.assertEqual(['Steelskin'], player.activeEffects)
 
 
 
@@ -331,13 +335,13 @@ test.tests = function() {
 
 
   test.title("ongoing spells expire")
-  player['countdown_Steelskin effect'] = 3
+  player['countdown_Steelskin'] = 3
   w.spell_handler.eventScript()
-  test.assertEqual(2, player['countdown_Steelskin effect'])
+  test.assertEqual(2, player['countdown_Steelskin'])
   test.assertCmd('z', ['Time passes...'])
-  test.assertEqual(1, player['countdown_Steelskin effect'])
-  test.assertCmd('z', ['Time passes...', 'The <i>Steelskin effect</i> terminates.'])
-  test.assertEqual(false, player['countdown_Steelskin effect'])
+  test.assertEqual(1, player['countdown_Steelskin'])
+  test.assertCmd('z', ['Time passes...', 'The <i>Steelskin</i> on you terminates.'])
+  test.assertEqual(undefined, player['countdown_Steelskin'])
   test.assertEqual([], player.activeEffects)
   test.assertCmd('z', ['Time passes...'])
   
@@ -360,6 +364,12 @@ test.tests = function() {
   test.assertCmd('talk to rabbit', [/You spend a few minutes telling the rabbit/])
   test.assertCmd('cast commune on rabbit', ['You cast <i>Commune with animal</i>.', 'You can now talk to the rabbit for a short time.'])
   test.assertCmd('talk to rabbit', [/You say \'Hello,\' to the rabbit/, /Fading away bunny/])
+  test.assertCmd('z', ['Time passes...'])
+  test.assertCmd('z', ['Time passes...'])
+  test.assertCmd('z', ['Time passes...', 'The <i>Commune with animal</i> spell on the rabbit expires.'])
+
+
+
 
 
 

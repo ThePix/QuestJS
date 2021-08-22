@@ -118,10 +118,11 @@ settings.customUI = function() {
     document.writeln('  </tr>');
   }
   document.writeln('</table>');
-  document.writeln('</div>');
   
   document.writeln('<div id="choose-weapon-div" title="Select a weapon">');
   document.writeln('<select id="weapon-select"></select>');
+  document.writeln('</div>');
+
   document.writeln('</div>');
   //document.onreadystatechange = function() {  // !!!!!  I think this will overwrite the main one !!!!
     /*document.querySelector( "#choose-weapon-div" ).dialog({    !!!!!!!!!!!!!
@@ -213,7 +214,6 @@ const skillUI = {
     skillUI.resetButtons()
     
     const n = parseInt(event.currentTarget.id.replace('cell', ''))
-    console.log(n)
     skillUI.selected = n
     const cell = document.querySelector("#cell" + n)
     cell.style.backgroundColor = 'yellow'
@@ -263,7 +263,7 @@ const skillUI = {
 
 
 
-settings.startingDialogEnabled  = true;
+//settings.startingDialogEnabled  = true;
 
 settings.maxPoints = 10
 settings.skills = [

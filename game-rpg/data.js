@@ -286,49 +286,69 @@ skills.add(new Spell("Lightning bolt", {
 }))
 
 skills.add(new Spell("Cursed armour", {
-  targetEffect:function(attack, target) {
-    attack.msg("{nms:target:the:true} armour is reduced.", 1)
-    target.activeEffects.push("Cursed armour effect")
-  },
-  incompatible:[/skin effect$/],
+  primarySuccess:"{nms:target:the:true} armour is reduced.",
+  targetEffectName:true,
+  incompatible:[/skin$/],
   icon:'unarmour',
 }))
-
-
-skills.add(new Effect("Cursed armour effect", {
+skills.add(new Effect("Cursed armour", {
   modifyOutgoingAttack:function(attack) {
     attack.armourModifier = (attack.armourModifier > 2 ? attack.armourModifier - 2 : 0)
   },
 }))
 
 skills.add(new SpellSelf("Stoneskin", {
-  targetEffect:function(attack, target) {
-    attack.msg("Your skin becomes as hard as stone - and yet still just as flexible.", 1)
-    target.activeEffects.push("Stoneskin effect")
-  },
-  incompatible:[/skin effect$/],
+  primarySuccess:"Your skin becomes as hard as stone - and yet still just as flexible.",
+  targetEffectName:true,
+  incompatible:[/skin$/],
 }))
-
-skills.add(new Effect("Stoneskin effect", {
+skills.add(new Effect("Stoneskin", {
   modifyIncomingAttack:function(attack) {
     attack.armourModifier += 2
   },
 }))
 
 skills.add(new SpellSelf("Steelskin", {
-  targetEffect:function(attack, target) {
-    attack.msg("Your skin becomes as hard as steel - and yet still just as flexible.", 1)
-    target.activeEffects.push("Steelskin effect")
-    skills.limitDuration(target, "Steelskin effect", 3)
-  },
-  incompatible:[/skin effect$/],
+  primarySuccess:"Your skin becomes as hard as steel - and yet still just as flexible.",
+  duration:3,
+  incompatible:[/skin$/],
+  targetEffectName:true,
 }))
-  
-skills.add(new Effect("Steelskin effect", {
+skills.add(new Effect("Steelskin", {
   modifyIncomingAttack:function(attack) {
     attack.armourModifier += 4
   },
 }))
+
+
+skills.add(new Spell("Commune with animal", {
+  icon:'commune',
+  regex:/commune/,
+  duration:5,
+  automaticSuccess:true,
+  targetEffectName:true,
+}))
+skills.add(new Effect("Commune with animal", {
+  start:function(target) {
+    if (target.canTalkFlag) {
+      return "{nv:attacker:can:true} talk to {nm:target:the} for a short time (like before the spell...)."
+    }
+    else {
+      target.canTalkFlag = true
+      target.canTalkFlagIsTemporary = true
+      return "{nv:attacker:can:true} now talk to {nm:target:the} for a short time."
+    }
+  },
+  finish:function(target) {
+    if (!target.canTalkFlagIsTemporary) return
+    target.canTalkFlag = false
+    target.canTalkFlagIsTemporary = false
+    return "The {i:Commune with animal} spell on {nm:target:the} expires."
+  },
+}))
+
+
+
 
 skills.add(new SpellSelf("Unlock", {
   targetEffect:function(attack) {
@@ -344,29 +364,3 @@ skills.add(new SpellSelf("Unlock", {
     if (!flag) attack.msg("There are no locked doors.", 1)
   },
 }))
-
-skills.add(new Spell("Commune with animal", {
-  icon:'commune',
-  targetEffect:function(attack) {
-    if (attack.target.canTalkFlag) {
-      attack.msg("{nv:attacker:can:true} talk to {nm:target:the} for a short time (like before the spell...).", 1)
-    }
-    else {
-      attack.target.canTalkFlag = true
-      attack.target.canTalkFlagIsTemporary = true
-      attack.msg("{nv:attacker:can:true} now talk to {nm:target:the} for a short time.", 1)
-    }
-  },
-  regex:/commune/,
-  duration:5,
-  automaticSuccess:true,
-  terminatingScript:function(target) {
-    if (target.canTalkFlagIsTemporary) {
-      target.canTalkFlag = false
-      target.canTalkFlagIsTemporary = false
-      return "The {i:Commune with animal} spell on " + lang.getName(target, {article:DEFINITE}) + " expires."
-    }
-    return ''
-  },
-}))
-
