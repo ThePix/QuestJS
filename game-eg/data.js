@@ -29,7 +29,7 @@ createItem("knife",
 
 
 createRoom("lounge", {
-  desc:'A smelly room with an old settee and a tv. There is a tatty rug on the floor.',
+  desc:'A smelly room with an old settee and a tv. There is a tatty rug on the floor.{if:player:name:piggy_suu: This is Piggy-Suu\'s favourite room.}',
   mapColour:'silver',
   east:new Exit('kitchen'),
   west:new Exit("dining_room"),
