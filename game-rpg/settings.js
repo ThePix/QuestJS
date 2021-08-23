@@ -159,12 +159,7 @@ settings.updateCustomUI = function() {
       skillUI.setButton(skill)
     }
   }
-  for (let key in w) {
-    if (w[key].health !== undefined && w[key].maxHealth === undefined) {
-      w[key].maxHealth = w[key].health;
-    }
-  }
-};
+}
 
 
 

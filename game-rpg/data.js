@@ -7,17 +7,14 @@ createItem("me", RPG_PLAYER(), {
   loc:"practice_room",
   regex:/^(me|myself|player)$/,
   health:100,
-  maxHealth:100,
   pp:40,
   maxPP:40,
-  maxArmour:20,
-  armour:3,
   spellCasting:5,
   offensiveBonus:3,
   examine:function() {
     msg("A " + (this.isFemale ? "chick" : "guy") + " called " + this.alias);
   },
-});
+})
 
 
 
