@@ -109,6 +109,25 @@ const lang = {
     Use:/^(?:use) (.+)$/,
     TalkTo:/^(?:talk to|talk|speak to|speak|converse with|converse) (.+)$/,
     Topics:/^topics? (?:for )?(.+)$/,
+
+    Make:/^(?:make|build|construct) (.+)$/,
+    MakeWith:[
+      /^(?:make|build|construct) (.+) (?:with|from|using) (.+)$/,
+      {regex:/^(?:with:from|using) (.+) (?:make|build|construct) (.+)$/, mod:{reverse:true}},
+      {regex:/^(?:use) (.+) to (?:make|build|construct) (.+)$/, mod:{reverse:true}},
+    ],
+    NpcMake:[
+      /^(.+), ?(?:make|build|construct) (.+)$/,
+      /^(?:tell|ask|instruct) (.+) to (?:make|build|construct) (.+)$/,
+    ],
+    NpcMakeWith:[
+      /^(.+), ?(?:make|build|construct) (.+) (?:with|from|using) (.+)$/,
+      /^(?:tell|ask|instruct) (.+) to (?:make|build|construct) (.+) (?:with|from|using) (.+)$/,
+      {regex:/^(.+), ?(?:with:from|using) (.+) (?:make|build|construct) (.+)$/, mod:{reverse:true}},
+      {regex:/^(?:tell|ask|instruct) (.+) to (?:with:from|using) (.+) (?:make|build|construct) (.+)$/, mod:{reverse:true}},
+      {regex:/^(.+), ?(?:use) (.+) to (?:make|build|construct) (.+)$/, mod:{reverse:true}},
+      {regex:/^(?:tell|ask|instruct) (.+) to (?:use) (.+) to (?:make|build|construct) (.+)$/, mod:{reverse:true}},
+    ],
     
     GoInItem:/^(?:enter|go in|in|inside|go inside|climb in|climb inside|get in|get inside) (.+)$/,
     GoOutItem:/^(?:exit|go out|out|outside|go outide|leave) (.+)$/,
@@ -320,6 +339,13 @@ const lang = {
   no_generic_fluid_here:"There's nothing to fill {sb:item} with here.",
   not_carrying_fluid:"{nv:char:be:true} not carrying anything with {show:fluid} in it.",
 
+
+  // CONSTRUCTION
+  component_wrong:"{nv:char:cannot:true} make {nm:item:a} from {nm:wrong:a}.",
+  component_missing:"{nv:char:need:true} {nm:missing:a} to build {nm:item:a}.",
+  construction_done:"{nv:char:build:true} {nm:item:a} from {show:list}.",
+  construction_already:"{nm:item:the:true} has already been made.",
+  
 
   // NPC
   not_npc:"{nv:char:can:true} tell {nm:item:the} to do anything you like, but there is no way {pv:item:'ll} do it.",
