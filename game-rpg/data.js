@@ -171,6 +171,7 @@ createItem("shotgun", LIMITED_USE_WEAPON("2d10+4", 1), {
 
 
 skills.add(new Skill("Double attack", {
+  level:2,
   icon:"sword2",
   tooltip:"Attack one foe twice, but at -2 to the attack roll",
   modifyOutgoingAttack:function(attack) {
@@ -202,6 +203,7 @@ skills.add(new Effect("Report for testing", {
 }))
 
 skills.add(new Skill("Sweeping attack", {
+  level:1,
   icon:"sword3", 
   tooltip:"Attack one foe for normal damage, and any other for 4 damage; at -3 to the attack roll for reach", 
   getPrimaryTargets:rpg.getFoes,
@@ -215,6 +217,7 @@ skills.add(new Skill("Sweeping attack", {
 }))
 
 skills.add(new Skill("Sword of Fire", {
+  level:2,
   icon:"sword-fire", 
   tooltip:"Attack with a flaming sword", 
   modifyOutgoingAttack:function(attack) {
@@ -223,6 +226,7 @@ skills.add(new Skill("Sword of Fire", {
 }))
 
 skills.add(new Skill("Ice Sword", {
+  level:2,
   icon:"sword-ice", 
   tooltip:"Attack with a freezing blade",
   modifyOutgoingAttack:function(attack) {
@@ -232,6 +236,7 @@ skills.add(new Skill("Ice Sword", {
 
 skills.add(new Spell("Fireball", {
   noTarget:true,
+  level:3,
   damage:'2d6',
   tooltip:"A fireball that fills the room (but does not affect you!)",
   primarySuccess:"{nv:target:reel:true} from the explosion.",
@@ -244,6 +249,7 @@ skills.add(new Spell("Fireball", {
 }))
 
 skills.add(new Spell("Ice shard", {
+  level:3,
   damage:'3d6',
   icon:'ice-shard',
   tooltip:"A shard of ice pierces your foe!",
@@ -254,6 +260,7 @@ skills.add(new Spell("Ice shard", {
 }))
 
 skills.add(new Spell("Psi-blast", {
+  level:5,
   damage:'3d6',
   icon:'psi-blast',
   tooltip:"A blast of mental energy (ignores armour)",
@@ -265,6 +272,7 @@ skills.add(new Spell("Psi-blast", {
 }))
 
 skills.add(new Spell("Lightning bolt", {
+  level:5,
   damage:'3d6',
   secondaryDamage:'2d6',
   icon:'lightning',
@@ -283,6 +291,7 @@ skills.add(new Spell("Lightning bolt", {
 }))
 
 skills.add(new Spell("Cursed armour", {
+  level:3,
   primarySuccess:"{nms:target:the:true} armour is reduced.",
   targetEffectName:true,
   incompatible:[/skin$/],
@@ -295,6 +304,7 @@ skills.add(new Effect("Cursed armour", {
 }))
 
 skills.add(new SpellSelf("Stoneskin", {
+  level:2,
   primarySuccess:"Your skin becomes as hard as stone - and yet still just as flexible.",
   targetEffectName:true,
   incompatible:[/skin$/],
@@ -306,6 +316,7 @@ skills.add(new Effect("Stoneskin", {
 }))
 
 skills.add(new SpellSelf("Steelskin", {
+  level:4,
   primarySuccess:"Your skin becomes as hard as steel - and yet still just as flexible.",
   duration:3,
   incompatible:[/skin$/],
@@ -319,6 +330,7 @@ skills.add(new Effect("Steelskin", {
 
 
 skills.add(new Spell("Commune with animal", {
+  level:1,
   icon:'commune',
   regex:/commune/,
   duration:5,
@@ -348,6 +360,7 @@ skills.add(new Effect("Commune with animal", {
 
 
 skills.add(new SpellSelf("Unlock", {
+  level:2,
   targetEffect:function(attack) {
     const room = w[attack.attacker.loc]
     let flag = false

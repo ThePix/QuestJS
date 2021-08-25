@@ -126,7 +126,7 @@ test.tests = function() {
   w.flail.equipped = false
 
 
-
+log('----------------------------')
 
   test.title("Attack.createAttack (goblin)");
   const attack2a = Attack.createAttack(w.goblin, player)
@@ -292,6 +292,7 @@ test.tests = function() {
   attack2b.resolve(w.me, true, 0)
   test.assertEqual(94, w.me.health)
 
+
   const attack2c = Attack.createAttack(w.goblin, player, skills.findName('Psi-blast'))
   test.assertEqual('goblin', attack2c.attacker.name)
   random.prime([19, 5, 5, 5])
@@ -370,6 +371,9 @@ test.tests = function() {
 
 
 
+  test.title("cast Commune with animal restricted")
+  skills.defaultSpellTestUseable = function(char) { return falsemsg("You have no mana.") }
+  test.assertCmd('cast commune on rabbit', ['You have no mana.'])
 
 
 
