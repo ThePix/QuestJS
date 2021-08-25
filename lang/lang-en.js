@@ -665,6 +665,8 @@ const lang = {
     html += '<h2>QuestJS Transcript for "'
     html += settings.title + '" (version ' + settings.version
     html += ')</h2>'
+    html += '<p><a onclick="document.download()" style="cursor:pointer;border:black solid 1px;border-radius:5px;background:silver;line-height:1em">Click here</a> to save this file to your downloads folder as "transcript.html".</p>'
+    html += '<hr/>'
     return html
   },
   transcriptStart:function() {
