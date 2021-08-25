@@ -30,7 +30,7 @@ const lang = {
     MetaTranscriptOn:/^transcript on$|^script on$/,
     MetaTranscriptOff:/^transcript off$|^script off$/,
     MetaTranscriptClear:/^transcript clear$|^script clear$|^transcript delete$|^script delete$/,
-    MetaTranscriptShow:/^transcript show$|^script show$|^show script$|^show transcript$/,
+    MetaTranscriptShow:/^transcript show$|^script show$|^show script$|^show transcript$|^showscript$/,
     MetaTranscriptWalkthrough:/^(?:transcript|script) walk$/,
     MetaUserComment:/^\*(.+)$/,
     MetaSave:/^save$/,
@@ -68,11 +68,11 @@ const lang = {
     LookInside:/^(?:look inside|look in) (.+)$/,
     LookThrough:/^(?:look|peek|peer) (?:down|through) (.+)$/,
     Search:/^(?:search) (.+)$/,
-    Take:/^(?:take|get|pick up|t) (.+)$/,
+    Take:/^(?:take|get|pick up|pick|t) (.+)$/,
     Drop:/^(?:drop|d) (.+)$/,
     Wear2:/^put (?:my |your |his |her |)(.+) on$/,
     Wear:/^(?:wear|don|put on) (?:my |your |his |her |)(.+)$/,
-    Remove:/^(?:remove|doff|take off) (?:my |your |his |her |)(.+)$/,
+    Remove:/^(?:remove|doff|take off|unwear) (?:my |your |his |her |)(.+)$/,
     Remove2:/^take (?:my |your |his |her |)(.+) off$/,
     Read:/^(?:read|r) (.+)$/,
     SmellItem:/^(?:smell|sniff) (.+)$/,
@@ -237,7 +237,7 @@ const lang = {
   // TAKEABLE
   take_successful:"{nv:char:take:true} {nm:item:the}{ifIs:params:excess:true:, that is all there is}.",
   take_successful_counted:"{nv:char:take:true} {number:count} {nm:item}.",
-  drop_successful:"{nv:char:drop:true} {nm:item:the}{ifIs:params:excess:true:, that is all you have}.",
+  drop_successful:"{nv:char:drop:true} {nm:item:the}{ifIs:params:excess:true:, that is all {nv:char:have}}.",
   drop_successful_counted:"{nv:char:drop:true} {number:count} {nm:item}.",
   cannot_take:"{multi}{pv:char:can't:true} take {ob:item}.",
   cannot_drop:"{multi}{pv:char:can't:true} drop {ob:item}.",
@@ -249,9 +249,9 @@ const lang = {
   // EDIBLE
   eat_successful:"{nv:char:eat:true} {nm:item:the}.",
   drink_successful:"{nv:char:drink:true} {nm:item:the}.",
-  cannot_eat:"{nv:item:be:true} not something you can eat.",
-  cannot_drink:"{nv:item:be:true} not something you can drink.",
-  //cannot_ingest:"{nv:item:be:true} not something you can ingest.",
+  cannot_eat:"{nv:item:be:true} not something {nv:char:can} eat.",
+  cannot_drink:"{nv:item:be:true} not something {nv:char:can} drink.",
+  //cannot_ingest:"{nv:item:be:true} not something {nv:char:can} ingest.",
 
 
   // WEARABLE
@@ -280,7 +280,7 @@ const lang = {
   cannot_unlock:"{nv:char:can't:true} unlock {ob:item}.",
   not_container:"{nv:container:be:true} not a container.",
   not_container_not_vessel:"{nv:container:be:true} not a container. It is a vessel, they are different, alright?",
-  container_recursion:"What? You want to put {nm:item:the} in {nm:container:the} when {nm:container:the} is already in {nm:item:the}? That's just too freaky for me.",
+  container_recursion:"What? {nv:char:want:true} to put {nm:item:the} in {nm:container:the} when {nm:container:the} is already in {nm:item:the}? That's just too freaky for me.",
   not_inside:"{nv:item:be:true} not inside that.",
   locked:"{nv:container:be:true} locked.",
   no_key:"{nv:char:do:true} have the right key.",
@@ -307,9 +307,9 @@ const lang = {
   sit_on_successful:"{nv:char:sit:true} on {nm:item:the}.",
   stand_on_successful:"{nv:char:stand:true} on {nm:item:the}.",
   recline_on_successful:"{nv:char:lie:true} down on {nm:item:the}.",
-  cannot_stand_on:"{nv:item:be:true} not something you can stand on.",
-  cannot_sit_on:"{nv:item:be:true} not something you can sit on.",
-  cannot_recline_on:"{nv:item:be:true} not something you can lie on.",
+  cannot_stand_on:"{nv:item:be:true} not something {nv:char:can} stand on.",
+  cannot_sit_on:"{nv:item:be:true} not something {nv:char:can} sit on.",
+  cannot_recline_on:"{nv:item:be:true} not something {nv:char:can} lie on.",
 
 
   // SWITCHABLE
@@ -324,12 +324,12 @@ const lang = {
   empty_successful:"{nv:char:empty:true} {nm:item:the} onto the ground, and it soaks away.",
   empty_into_successful:"{nv:char:empty:true} {nm:item:the} into {nm:obj:the}.",
   empty_onto_successful:"{nv:char:empty:true} {nm:item:the} over {nm:obj:the}, and then watch it all run down on to the ground.",
-  cannot_fill:"{nv:item:be:true} not something you can fill.",
-  cannot_mix:"{nv:item:be:true} not something you can mix liquids in.",
-  cannot_empty:"{nv:item:be:true} not something you can empty.",
+  cannot_fill:"{nv:item:be:true} not something {nv:char:can} fill.",
+  cannot_mix:"{nv:item:be:true} not something {nv:char:can} mix liquids in.",
+  cannot_empty:"{nv:item:be:true} not something {nv:char:can} empty.",
   not_vessel:"{pv:item:be:true} not a vessel.",
   not_sink:"Trying to put a fluid in {nm:obj:the} is just going to cause a mess.",
-  not_source:"{pv:item:be:true} not something you get get a fluid out of.",
+  not_source:"{pv:item:be:true} not something {nv:char:can} get a fluid out of.",
   cannot_get_fluid:"{nv:char:try:true} to scoop up {show:fluid} but it all slips through {pa:char} fingers. Perhaps {pv:char:need} some kind of vessel.",
   no_fluid_here:"There's no {show:fluid} here.",
   no_fluid_here_at_all:"There's nothing to fill anything with here.",
@@ -348,7 +348,7 @@ const lang = {
   
 
   // NPC
-  not_npc:"{nv:char:can:true} tell {nm:item:the} to do anything you like, but there is no way {pv:item:'ll} do it.",
+  not_npc:"{nv:char:can:true} tell {nm:item:the} to do anything {pv:char:like}, but there is no way {pv:item:'ll} do it.",
   not_npc_for_give:"Realistically, {nv:item:be} not interested in anything {sb:char} might give {ob:item}.",
   not_interested_for_give:"{nv:npc:be:true} not interested in {nm:item:the}.",
   cannot_follow:"'Follow me,' {nv:char:say} to {nm:npc:the}. Being an inanimate object, {nv:char:be} not too optimistic it will do as it is told.",
@@ -356,14 +356,14 @@ const lang = {
   already_following:"'I'm already following you!'",
   already_waiting:"'I'm already waiting!'",
 
-  cannot_ask_about:"You can ask {ob:item} about {show:text} all you like, but {pv:item:be} not about to reply.",
-  cannot_tell_about:"You can tell {ob:item} about {show:text} all you like, but {pv:item:be} not interested.",
-  cannot_talk_about:"You can talk to {ob:item} about {show:text} all you like, but {pv:item:be} not interested.",
+  cannot_ask_about:"{nv:char:can:true} ask {ob:item} about {show:text} all {pv:char:like}, but {pv:item:be} not about to reply.",
+  cannot_tell_about:"{nv:char:can:true} tell {ob:item} about {show:text} all {pv:char:like}, but {pv:item:be} not interested.",
+  cannot_talk_about:"{nv:char:can:true} talk to {ob:item} about {show:text} all {pv:char:like}, but {pv:item:be} not interested.",
   topics_no_ask_tell:"This character has no ASK/ABOUT or TELL/ABOUT options set up.",
   topics_none_found:"No suggestions for what to ask or tell {nm:item:the} available.",
   topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {show:list}.",
   topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {show:list}.",
-  cannot_talk_to:"You chat to {nm:item:the} for a few moments, before releasing that {pv:item:be} not about to reply.",
+  cannot_talk_to:"{nv:char:chat:true} to {nm:item:the} for a few moments, before releasing that {pv:item:be} not about to reply.",
   no_topics:"{nv:char:have:true} nothing to talk to {nm:item:the} about.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
@@ -374,7 +374,7 @@ const lang = {
 
   // SHIFTABLE
   push_exit_successful:"{nv:char:push:true} {nm:item:the} {show:dir}.",
-  cannot_push:"{pv:item:be:true} not something you can move around like that.",
+  cannot_push:"{pv:item:be:true} not something {nv:char:can} move around like that.",
   cannot_push_up:"{pv:char:be:true} not getting {nm:item:the} up there!",
   take_not_push:"Just pick the thing up already!",
 
@@ -390,11 +390,11 @@ const lang = {
   rope_examine_end_attached:'is {item.attachedVerb} to {nm:obj:the}.',
   rope_examine_end_held:'is held by {nm:holder:the}.',
   rope_examine_end_headed:'heads into {nm:loc:the}.',
-  rope_no_attachable_here:"There is nothing here you can attach {nm:item:the} to.",
-  rope_not_attachable_to:"That is not something you can attach {nm:item:the} to.",
-  rope_not_detachable:"You cannot attach that to - or detach it from - anything.",
+  rope_no_attachable_here:"There is nothing here {nv:char:can} attach {nm:item:the} to.",
+  rope_not_attachable_to:"That is not something {nv:char:can} attach {nm:item:the} to.",
+  rope_not_detachable:"{nv:char:cannot:true} attach that to - or detach it from - anything.",
   rope_tied_both_ends_already:"{pv:item:be:true} already attached to {nm:obj1:the} and {nm:obj12:the}.",
-  rope_not_attachable:"You cannot attach that to anything.",
+  rope_not_attachable:"{nv:char:cannot:true} attach that to anything.",
   rope_not_attached:"{nv:item:be:true} not {item.attachedVerb} to anything.",
   rope_detach_end_ambig:"Which end of {nm:item:the} do you want to detach?",
   rope_not_attached_to:"{nv:item:be:true} not attached to {nm:obj:the}.",
@@ -410,8 +410,8 @@ const lang = {
 
 
   // TRANSIT
-  transit_already_here:"You press the button; nothing happens.",
-  transit_go_to_dest:"You press the button; the door closes...",
+  transit_already_here:"{nv:char:press:true} the button; nothing happens.",
+  transit_go_to_dest:"{nv:char:press:true} the button; the door closes...",
 
   // Movement
   go_successful:"{nv:char:head:true} {show:dir}.",
@@ -427,9 +427,9 @@ const lang = {
   // General cannot Messages
   cannot_read:"Nothing worth reading there.",
   cannot_use:"No obvious way to use {ob:item}.",
-  cannot_smash:"{nv:item:be:true} not something you can break.",
-  cannot_turn:"{nv:item:be:true} not something you can turn.",
-  cannot_look_out:"Not something you can look out of.",
+  cannot_smash:"{nv:item:be:true} not something {nv:char:can} break.",
+  cannot_turn:"{nv:item:be:true} not something {nv:char:can} turn.",
+  cannot_look_out:"Not something {nv:char:can} look out of.",
   cannot_smell:"{nv:item:have:true} no smell.",
   cannot_listen:"{nv:item:be:true} not making any noise.",
 
@@ -491,7 +491,7 @@ const lang = {
 
   // use (or potentially use) different verbs in the responses, so not simple strings
   say_no_one_here:"{nv:char:say:true}, '{show:text},' but no one notices.",
-  say_no_response: "No one seems interested in what you say.",
+  say_no_response: "No one seems interested in what {nv:char:say}.",
   say_no_response_full: "{nv:char:say:true}, '{show:text},' but no one seem interested.",
   say_something:"{nv:char:say:true}, '{show:text}.'",
 
@@ -502,15 +502,15 @@ const lang = {
   },
   // If the player does TELL MARY ABOUT HOUSE this will appear before the response.
   tell_about_intro:function(char, text1, text2) {
-    return "You tell " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
+    return "{nv:char:tell:true} " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
   // If the player does ASK MARY ABOUT HOUSE this will appear before the response.
   ask_about_intro:function(char, text1, text2) {
-    return "You ask " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
+    return "{nv:char:ask:true} " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
   // If the player does TALK TO MARY ABOUT HOUSE this will appear before the response.
   talk_about_intro:function(char, text1, text2) {
-    return "You talk to " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
+    return "{nv:char:talk:true} to " + lang.getName(char, {article:DEFINITE}) + " " + text2 + " " + text1 + ".";
   },
 
 
@@ -652,8 +652,9 @@ const lang = {
   },
 
   transcriptScript:function() {
-    metamsg("The TRANSCRIPT or SCRIPT commands can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.");
-    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. Use SCRIPT SHOW to display it (it will appear in a new tab; you will not lose your place in the game). To clear the data, use SCRIPT CLEAR. To clear the old data and turn recording on in one step, use SCRIPT START.");
+    metamsg("The TRANSCRIPT or SCRIPT commands can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.")
+    metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. To clear the stored data, use SCRIPT CLEAR. To clear the old data and turn recording on in one step, use SCRIPT START.")
+    metamsg("Use SCRIPT SHOW to display it - it will appear in a new tab; you will not lose your place in the game. Some browsers (Firefox especially) may block the new tab, but will probably give the option to allow it in a banner at the top. You will prpobably need to do the command again.")
     metamsg("You can add a comment to the transcript by starting your text with an asterisk (*) - Quest will record it, but otherwise just ignore it.")
     metamsg("Everything gets saved to \"LocalStorage\", so will be saved between sessions. If you complete the game the text input will disappear, however if you have a transcript recording, a link will be available to access it.");
     metamsg("Transcript is currently: " + (io.transcript ? 'on' : 'off'))
@@ -687,14 +688,14 @@ const lang = {
   betaTestIntro:function() {
     metamsg("This version is for beta-testing (" + settings.version + ").")
     if (settings.textInput) {
-      metamsg("A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab, or click the link if you reach the end of the game; it can then be saved (you may need to do {i:Print} and print to file, perhaps as a PDF) and attached to an e-mail. Alternatively, copy-and-pasted into an e-mail.")
+      metamsg("A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab, or click the link if you reach the end of the game; it can then be saved (you should see a save button at the top) and attached to an e-mail. Alternatively, copy-and-pasted into an e-mail.")
       metamsg("You can add your own comments to the transcript by starting a command with *.")
     }
     else {    
       metamsg("A transcript will be automatically recorded. As this game has no text input, you will need to access the transcript through the developer tools. Press F12 to show the tools, and click on the \"Console\" tab. Type <code>io.scriptShow()</code> and press return. the transcript should appear in a new tab.")
     }
     metamsg("If you have not already done so, I recommend checking to ensure you can see the transcript before progressing too far though the game.")
-    metamsg("PLEASE NOTE: If you refresh/reload the page to restart the game, the existing transcript will be lost. Save it first!")
+    metamsg("PLEASE NOTE: Transcripts and save games are saved in LocalStorage; if you have this set to be deleted when you closeyour browser, you will lose all progress!")
     saveLoad.transcriptStart()
   },
   
