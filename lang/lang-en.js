@@ -102,6 +102,8 @@ const lang = {
     Eat:/^(eat|feed on|feed|partake of|partake|dine on|dine) (.+)$/,
     Drink:/^(drink|imbibe|quaff|guzzle|knock back|swig|swill|sip|down|chug) (.+)$/,
     Ingest:/^(consume|swallow|ingest) (.+)$/,
+    Sit:/^(?:sit down|sit)$/,
+    Recline:/^(?:recline|lie down|lie)$/,
     SitOn:/^(?:sit on|sit upon|sit) (.+)$/,
     StandOn:/^(?:stand on|stand upon|stand) (.+)$/,
     ReclineOn:/^(?:recline on|recline upon|recline|lie on|lie upon|lie) (.+)$/,
@@ -310,6 +312,8 @@ const lang = {
   cannot_stand_on:"{nv:item:be:true} not something {nv:char:can} stand on.",
   cannot_sit_on:"{nv:item:be:true} not something {nv:char:can} sit on.",
   cannot_recline_on:"{nv:item:be:true} not something {nv:char:can} lie on.",
+  no_sit_object:"There is nothing to sit on here.",
+  no_recline_object:"There is nothing to lie down on here.",
 
 
   // SWITCHABLE
