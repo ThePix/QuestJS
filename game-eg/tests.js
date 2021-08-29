@@ -1640,10 +1640,10 @@ test.tests = function() {
   test.assertCmd("get jug", ["You take the jug."])
   test.assertCmd("get canteen", ["You take the canteen."])
   
-  test.assertCmd("fill jug with tears", ["I don't know of a fluid called tears."])
+  test.assertCmd("fill jug with tears", ["I don't know of a liquid (or similar substance) called tears."])
   test.assertCmd("fill jug with honey", ["There's no honey here."])
   test.assertCmd("fill jug with water", ["You fill the jug."])
-  test.assertCmd("fill knife with water", ["Trying to put a fluid in the knife is just going to cause a mess."])
+  test.assertCmd("fill knife with water", ["Trying to put a liquid (or similar substance) in the knife is just going to cause a mess."])
   test.assertCmd("fill jug with water", ["It is already full of water."])
   test.assertCmd("empty knife", ["The knife is not something you can empty."])
   test.assertCmd("empty jug", ["You empty the jug onto the ground, and it soaks away."])
