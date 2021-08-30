@@ -699,7 +699,7 @@ const lang = {
       metamsg("A transcript will be automatically recorded. As this game has no text input, you will need to access the transcript through the developer tools. Press F12 to show the tools, and click on the \"Console\" tab. Type <code>io.scriptShow()</code> and press return. the transcript should appear in a new tab.")
     }
     metamsg("If you have not already done so, I recommend checking to ensure you can see the transcript before progressing too far though the game.")
-    metamsg("PLEASE NOTE: Transcripts and save games are saved in LocalStorage; if you have this set to be deleted when you closeyour browser, you will lose all progress!")
+    metamsg("PLEASE NOTE: Transcripts and save games are saved in LocalStorage; if you have this set to be deleted when you close your browser, you will lose all progress!")
     saveLoad.transcriptStart()
   },
   
