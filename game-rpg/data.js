@@ -293,25 +293,23 @@ skills.add(new Spell("Lightning bolt", {
 skills.add(new Spell("Cursed armour", {
   level:3,
   primarySuccess:"{nms:target:the:true} armour is reduced.",
-  targetEffectName:true,
-  incompatible:[/skin$/],
+  incompatible:'magic armour',
   icon:'unarmour',
-}))
-skills.add(new Effect("Cursed armour", {
-  modifyOutgoingAttack:function(attack) {
-    attack.armourModifier = (attack.armourModifier > 2 ? attack.armourModifier - 2 : 0)
+  effect:{
+    modifyOutgoingAttack:function(attack) {
+      attack.armourModifier = (attack.armourModifier > 2 ? attack.armourModifier - 2 : 0)
+    },
   },
 }))
 
 skills.add(new SpellSelf("Stoneskin", {
   level:2,
   primarySuccess:"Your skin becomes as hard as stone - and yet still just as flexible.",
-  targetEffectName:true,
-  incompatible:[/skin$/],
-}))
-skills.add(new Effect("Stoneskin", {
-  modifyIncomingAttack:function(attack) {
-    attack.armourModifier += 2
+  incompatible:'magic armour',
+  effect:{
+    modifyIncomingAttack:function(attack) {
+      attack.armourModifier += 2
+    },
   },
 }))
 
@@ -319,15 +317,59 @@ skills.add(new SpellSelf("Steelskin", {
   level:4,
   primarySuccess:"Your skin becomes as hard as steel - and yet still just as flexible.",
   duration:3,
-  incompatible:[/skin$/],
-  targetEffectName:true,
-}))
-skills.add(new Effect("Steelskin", {
-  modifyIncomingAttack:function(attack) {
-    attack.armourModifier += 4
+  incompatible:'magic armour',
+  effect:{
+    modifyIncomingAttack:function(attack) {
+      attack.armourModifier += 4
+    },
   },
 }))
 
+
+for (const el of ['Fire', 'Frost', 'Storm']) {
+  skills.add(new SpellSelf("Protection From " + el, {
+    level:4,
+    primarySuccess:"You take only a third damage from " + el.toLowerCase() + "-based attacks for six turns.",
+    duration:6,
+    incompatible:'protection',
+    element:el.toLowerCase(),
+    effect:{
+      modifyIncomingAttack:function(attack) {
+        if (attack.element !== this.element) return
+        attack.damageMultiplier /= 3
+      },
+    },
+  }))
+
+  skills.add(new Spell("Vulnerability To " + el, {
+    level:4,
+    primarySuccess:"Target takes triple damage from " + el.toLowerCase() + "-based attacks for six turns.",
+    duration:6,
+    incompatible:'protection',
+    element:el.toLowerCase(),
+    effect:{
+      modifyIncomingAttack:function(attack) {
+        if (attack.element !== this.element) return
+        attack.damageMultiplier *= 3
+      },
+    },
+  }))
+
+  skills.add(new SpellSelf("Immunity To " + el, {
+    level:4,
+    primarySuccess:"You take no damage from " + el.toLowerCase() + "-based attacks for six turns.",
+    duration:6,
+    incompatible:'protection',
+    element:el.toLowerCase(),
+    effect:{
+      modifyIncomingAttack:function(attack) {
+        if (attack.element !== this.element) return
+        attack.damageMultiplier *= 0
+      },
+    },
+  }))
+
+}
 
 skills.add(new Spell("Commune with animal", {
   level:1,
@@ -335,42 +377,66 @@ skills.add(new Spell("Commune with animal", {
   regex:/commune/,
   duration:5,
   automaticSuccess:true,
-  targetEffectName:true,
-}))
-skills.add(new Effect("Commune with animal", {
-  start:function(target) {
-    if (target.canTalkFlag) {
-      return "{nv:attacker:can:true} talk to {nm:target:the} for a short time (like before the spell...)."
-    }
-    else {
-      target.canTalkFlag = true
-      target.canTalkFlagIsTemporary = true
-      return "{nv:attacker:can:true} now talk to {nm:target:the} for a short time."
-    }
-  },
-  finish:function(target) {
-    if (!target.canTalkFlagIsTemporary) return
-    target.canTalkFlag = false
-    target.canTalkFlagIsTemporary = false
-    return "The {i:Commune with animal} spell on {nm:target:the} expires."
-  },
-}))
-
-
-
-
-skills.add(new SpellSelf("Unlock", {
-  level:2,
-  targetEffect:function(attack) {
-    const room = w[attack.attacker.loc]
-    let flag = false
-    for (let el of room.getExits()) {
-      if (el.isLocked()) {
-        attack.msg("The door to " + el.nice() + " unlocks.", 1)
-        el.setLock(false)
-        flag = true
+  effect:{
+    start:function(target) {
+      if (target.canTalkFlag) {
+        return "{nv:attacker:can:true} talk to {nm:target:the} for a short time (like before the spell...)."
       }
-    }
-    if (!flag) attack.msg("There are no locked doors.", 1)
+      else {
+        target.canTalkFlag = true
+        target.canTalkFlagIsTemporary = true
+        return "{nv:attacker:can:true} now talk to {nm:target:the} for a short time."
+      }
+    },
+    finish:function(target) {
+      if (!target.canTalkFlagIsTemporary) return
+      target.canTalkFlag = false
+      target.canTalkFlagIsTemporary = false
+      return "The {i:Commune with animal} spell on {nm:target:the} expires."
+    },
   },
 }))
+
+
+
+
+skills.add(new SpellEnvironment("Unlock", {
+  level:2,
+  getAffected:function(attack) { return w[attack.attacker.loc].getExits().filter(el => el.isLocked()) },
+  effect:function(attack, ex) {
+    attack.msg("The door to " + ex.nice() + " unlocks.", 1)
+    ex.setLock(false)
+  },
+  noEffect:"There are no locked doors.",
+}))
+
+
+
+/*
+Summon creature
+
+Summon weapon/shield
+
+Merchant's tongue
+
+Lore
+
+Repel undead
+
+Light
+
+Extinguish
+
+Fog
+
+Command
+
+Befriend
+
+Sleep
+
+Beast form
+
+
+
+*/

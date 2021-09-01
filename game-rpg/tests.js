@@ -309,6 +309,7 @@ log('----------------------------')
   
   w.me.health = 100
   w.goblin.spellCasting = false
+  w.ice_amulet.worn = false
   
 
 
@@ -374,11 +375,49 @@ log('----------------------------')
   test.title("cast Commune with animal restricted")
   skills.defaultSpellTestUseable = function(char) { return falsemsg("You have no mana.") }
   test.assertCmd('cast commune on rabbit', ['You have no mana.'])
+  skills.defaultSpellTestUseable = function(char) { return true }
 
+
+
+  test.title("cast Protection from Frost")
+  player.skillsLearnt = ["Double attack", "Fireball", "Protection From Frost"]
+  test.assertCmd('cast Protection From Frost', ['You cast the <i>Protection From Frost</i> spell.', 'You take only a third damage from frost-based attacks for six turns.'])
+  w.me.health = 100
+  let attack4 = Attack.createAttack(w.goblin, player, skills.findName('Ice shard'))
+  random.prime([19,6, 6, 6])
+  log(attack4)
+  attack4.resolve(w.me, true, 0)
+  test.assertEqual(97, w.me.health)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
+
+
+  test.title("cast Vuln to Frost")
+  player.skillsLearnt = ["Double attack", "Fireball", "Vulnerability To Frost"]
+  random.prime([19])
+  test.assertCmd('cast Vulnerability To Frost on me', ['You cast <i>Vulnerability To Frost</i>.', 'Target takes triple damage from frost-based attacks for six turns.', 'The <i>Protection From Frost</i> on you terminates.'])
+  w.me.health = 100
+  attack4 = Attack.createAttack(w.goblin, player, skills.findName('Ice shard'))
+  random.prime([19,6, 6, 6])
+  log(attack4)
+  attack4.resolve(w.me, true, 0)
+  test.assertEqual(73, w.me.health)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
+
+
+  test.title("cast Immunity to Frost")
+  player.skillsLearnt = ["Double attack", "Fireball", "Immunity To Frost"]
+  random.prime([19])
+  test.assertCmd('cast Immunity To Frost on me', ['You cast the <i>Immunity To Frost</i> spell.', 'You take no damage from frost-based attacks for six turns.', 'The <i>Vulnerability To Frost</i> on you terminates.'])
+  w.me.health = 100
+  attack4 = Attack.createAttack(w.goblin, player, skills.findName('Ice shard'))
+  random.prime([19,6, 6, 6])
+  log(attack4)
+  attack4.resolve(w.me, true, 0)
+  test.assertEqual(100, w.me.health)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
 
 
   player.skillsLearnt = ["Double attack", "Fireball"]
-
 
 
   
