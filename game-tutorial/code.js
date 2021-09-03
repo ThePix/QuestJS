@@ -226,7 +226,7 @@ commands.push(new Cmd('Crowbar', {
 
 commands.unshift(new Cmd('Move', {
   npcCmd:true,
-  rules:[cmdRules.isHere],
+  rules:[cmdRules.isPresent],
   regex:/^(move) (.+)$/,
   objects:[
     {special:'ignore'},
