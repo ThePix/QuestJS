@@ -5,7 +5,7 @@
 /*
 commands.push(new Cmd('Kick', {
   npcCmd:true,
-  rules:[cmdRules.isHere],
+  rules:[cmdRules.isPresent],
   regex:/^(kick) (.+)$/,
   objects:[
     {special:'ignore'},
@@ -19,7 +19,7 @@ commands.push(new Cmd('Kick', {
 
 commands.push(new Cmd('Move', {
   npcCmd:true,
-  rules:[cmdRules.isHere],
+  rules:[cmdRules.isPresent],
   regex:/^(move) (.+)$/,
   objects:[
     {special:'ignore'},

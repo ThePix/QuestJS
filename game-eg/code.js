@@ -21,7 +21,7 @@ quest.create('A carrot for Buddy', [
 
 commands.unshift(new Cmd('TestInput', {
   npcCmd:true,
-  rules:[cmdRules.isHere],
+  rules:[cmdRules.isPresent],
   regex:/^inp/,
   script:function() {
     msg("First some preamble...")
@@ -136,7 +136,7 @@ commands.unshift(new Cmd('TextTest', {
 
 commands.unshift(new Cmd('EgKick', {
   npcCmd:true,
-  rules:[cmdRules.isHere],
+  rules:[cmdRules.isPresent],
   regex:/^(kick) (.+)$/,
   objects:[
     {special:'ignore'},
@@ -160,7 +160,7 @@ commands.unshift(new Cmd('EgCharge', {
 
 commands.unshift(new Cmd('EgMove', {
   npcCmd:true,
-  rules:[cmdRules.isHere],
+  rules:[cmdRules.isPresent],
   regex:/^(move) (.+)$/,
   objects:[
     {special:'ignore'},
