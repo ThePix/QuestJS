@@ -68,8 +68,8 @@ const lang = {
     LookInside:/^(?:look inside|look in) (.+)$/,
     LookThrough:/^(?:look|peek|peer) (?:down|through) (.+)$/,
     Search:/^(?:search) (.+)$/,
-    Take:/^(?:take|get|pick up|pick|t) (.+)$/,
-    Drop:/^(?:drop|d) (.+)$/,
+    Take:/^(?:take|get|pick up|pick|t|grab) (.+)$/,
+    Drop:/^(?:drop|d|discard) (.+)$/,
     Wear2:/^put (?:my |your |his |her |)(.+) on$/,
     Wear:/^(?:wear|don|put on) (?:my |your |his |her |)(.+)$/,
     Remove:/^(?:remove|doff|take off|unwear) (?:my |your |his |her |)(.+)$/,
@@ -325,23 +325,27 @@ const lang = {
 
   // VESSEL
   fill_successful:"{nv:char:fill:true} {nm:item:the}.",
-  empty_successful:"{nv:char:empty:true} {nm:item:the} onto the ground, and it soaks away.",
-  empty_into_successful:"{nv:char:empty:true} {nm:item:the} into {nm:obj:the}.",
-  empty_onto_successful:"{nv:char:empty:true} {nm:item:the} over {nm:obj:the}, and then watch it all run down on to the ground.",
+  empty_into_successful:"{nv:char:empty:true} {nm:source:the} into {nm:item:the}.",
+  empty_onto_successful:"{nv:char:empty:true} {nm:source:the} over {nm:item:the}, and then watch it all run down on to the ground.",
+  empty_successful:"{nv:char:empty:true} {nm:source:the} onto the ground, and it soaks away.",
+  already_empty:"{nv:source:be:true} already empty.",
   cannot_fill:"{nv:item:be:true} not something {nv:char:can} fill.",
   cannot_mix:"{nv:item:be:true} not something {nv:char:can} mix liquids in.",
-  cannot_empty:"{nv:item:be:true} not something {nv:char:can} empty.",
   not_vessel:"{pv:item:be:true} not a vessel.",
-  not_sink:"Trying to put a liquid (or similar substance) in {nm:obj:the} is just going to cause a mess.",
-  not_source:"{pv:item:be:true} not something {nv:char:can} get a liquid (or similar substance) out of.",
+  not_sink:"Trying to put a liquid (or similar substance) in {nm:item:the} is just going to cause a mess.",
+  not_source:"{pv:source:be:true} not something {nv:char:can} get a liquid (or similar substance) out of.",
   cannot_get_fluid:"{nv:char:try:true} to scoop up {show:fluid} but it all slips through {pa:char} fingers. Perhaps {pv:char:need} some kind of vessel.",
   no_fluid_here:"There's no {show:fluid} here.",
   no_fluid_here_at_all:"There's nothing to fill anything with here.",
   not_a_fluid_here:"I don't know of a liquid (or similar substance) called {show:text}.",
   already_full:"{pv:item:be:true} already full of {show:fluid}.",
-  already_empty:"{nv:item:be:true} already empty.",
+  pour_into_self:"It is not possible to pour from a vessel into the same vessel!",
   no_generic_fluid_here:"There's nothing to fill {sb:item} with here.",
   not_carrying_fluid:"{nv:char:be:true} not carrying anything with {show:fluid} in it.",
+
+  // VESSEL (but source is referred to as "item" as it is caught by the general item handling)
+  cannot_empty:"{nv:item:be:true} not something {nv:char:can} empty.",
+
 
 
   // CONSTRUCTION

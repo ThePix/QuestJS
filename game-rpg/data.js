@@ -437,6 +437,8 @@ Sleep
 
 Beast form
 
+Walk on water
 
+Breathe under water
 
 */
