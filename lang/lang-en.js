@@ -694,7 +694,7 @@ const lang = {
   },
   
   betaTestIntro:function() {
-    metamsg("This version is for beta-testing (" + settings.version + ").")
+    metamsg("This version is for beta-testing (" + settings.version + "); the browser reports that it is running on: " + navigator.userAgent)
     if (settings.textInput) {
       metamsg("A transcript will be automatically recorded. When you finish, do Ctrl-Enter or type SCRIPT SHOW to open the transcript in a new tab, or click the link if you reach the end of the game; it can then be saved (you should see a save button at the top) and attached to an e-mail. Alternatively, copy-and-pasted into an e-mail.")
       metamsg("You can add your own comments to the transcript by starting a command with *.")

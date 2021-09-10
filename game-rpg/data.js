@@ -18,20 +18,20 @@ createItem("me", RPG_PLAYER(), {
 
 
 
-createItem("knife", WEAPON("d4+2"), {
+createItem("knife", BLADE_WEAPON("d4+2"), {
   loc:"me",
   image:"knife",
   examine:"An example of a poor weapon.",
   offensiveBonus:-2,
 });
 
-createItem("flail", WEAPON("2d10+4"), {
+createItem("flail", CRUSH_WEAPON("2d10+4"), {
   loc:"me",
   image:"flail",
   examine:"An example of a good weapon.",
 });
 
-createItem("flaming_sword", WEAPON("3d6+2"), {
+createItem("flaming_sword", BLADE_WEAPON("3d6+2"), {
   //loc:"me",
   image:"sword",
   examine:"An example of a magic weapon.",
@@ -69,21 +69,50 @@ createRoom("practice_room", {
 createRoom("great_hall", {
   desc:'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.',
   east:new Exit('practice_room'),
-});
+  north:new Exit('yard'),
+})
 
 createItem("practice_room_door", LOCKED_DOOR("small_key", "great_hall", "practice_room"), {
   examine:'A very solid, wooden door.',
-});
+})
 
 createRoom("cupboard", {
-  desc:'A small cupboard.',
-  north:new Exit('practice_room'),
-});
+  desc:'A large storeroom, with no windows.',
+  darkDesc:"It is dark, but the exit is north.",
+  lightSource:function() { return world.LIGHT_NONE },
+  north:new Exit('practice_room', {
+    isHidden:function() { return false }
+  }),
+})
 
 createItem("small_key", KEY(), {
   examine:'A small key.',
   loc:"practice_room",
-});
+})
+
+createRoom("yard", {
+  desc:'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.',
+  south:new Exit('great_hall'),
+  north:new Exit('lake_swimming', {
+    simpleUse:function(char) {
+      if (char.hasEffect('Walk On Water')) {
+        return util.defaultSimpleExitUse(char, new Exit('lake', {origin:this.origin, dir:this.dir, msg:"You walk out on to the surface of the lake."}))
+      }
+      return util.defaultSimpleExitUse(char, this)
+    },
+    msg:'You dive into the lake...',
+  }),
+})
+
+createRoom("lake", {
+  desc:'You are stood on a lake! Dry land is to the south.',
+  south:new Exit('yard'),
+})
+
+createRoom("lake_swimming", {
+  desc:'You are swimming in a lake! Dry land is to the south.',
+  south:new Exit('yard'),
+})
 
 
 
@@ -113,29 +142,43 @@ createItem("snotling", RPG_NPC(false), {
   examine:"An example of a simple monster.",
 });
 
-createItem("rabbit", RPG_NPC(false), {
+createItem("rabbit", RPG_BEAST(false), {
   loc:"practice_room",
   damage:"2d4",
   health:20,
-  examine:"An example of a monster you can talk to after casting the right spell, and is generally not hostile.",
-  canTalkFlag:false,
-  isHostile:function() { return false; },
-  talkto:function() {
-    if (!this.canTalk()) {
-      msg("You spend a few minutes telling the rabbit about your life, but it does not seem interested. Possibly because it is rabbit.")
-      return
-    }
+  examine:"{lore:An example of a monster you can talk to after casting the right spell, and is generally not hostile.:With Lore active, you can learn all about rabbit culture... they like carrots.}",
+  talk:function() {
     switch (this.talktoCount) {
-      case 0 : 
+      case 1 : 
         msg("You say 'Hello,' to the rabbit, 'how is it going?'");
         msg("The rabbit looks at you. 'Need carrots.' It looks plaintively at it round tummy. 'Fading away bunny!");
         break;
       default: msg("You wonder what you can talk to the rabbit about."); break;
     }
+    return true
   },  
 });
 
-createItem("chest", CONTAINER(true), {
+
+
+
+
+
+
+createItem("frost_elemental_prototype", RPG_NPC(false), {
+  alias:'frost elemental',
+  damage:"2d4",
+  element:'frost',
+  health:35,
+  examine:"A swirling mass of freezing air that chills you to the bone.",
+})
+
+
+
+
+
+
+createItem("chest", CONTAINER(true), LOCKED_WITH(), {
   loc:"practice_room",
 });
 
@@ -233,212 +276,3 @@ skills.add(new Skill("Ice Sword", {
     attack.element = "ice";
   },
 }))
-
-skills.add(new Spell("Fireball", {
-  noTarget:true,
-  level:3,
-  damage:'2d6',
-  tooltip:"A fireball that fills the room (but does not affect you!)",
-  primarySuccess:"{nv:target:reel:true} from the explosion.",
-  primaryFailure:"{nv:target:ignore:true} it.",
-  getPrimaryTargets:rpg.getAll,
-  modifyOutgoingAttack:function(attack) {
-    attack.element = "fire";
-    attack.msg("The room is momentarily filled with fire.", 1)
-  },
-}))
-
-skills.add(new Spell("Ice shard", {
-  level:3,
-  damage:'3d6',
-  icon:'ice-shard',
-  tooltip:"A shard of ice pierces your foe!",
-  primarySuccess:"A shard of ice jumps from {nms:attacker:the} finger to {nm:target:the}!",
-  modifyOutgoingAttack:function(attack) {
-    attack.element = "frost";
-  },
-}))
-
-skills.add(new Spell("Psi-blast", {
-  level:5,
-  damage:'3d6',
-  icon:'psi-blast',
-  tooltip:"A blast of mental energy (ignores armour)",
-  primarySuccess:"A blast of raw psi-energy sends {nm:target:the} reeling.",
-  primaryFailure:"A blast of raw psi-energy... is barely noticed by {nm:target:the}.",
-  modifyOutgoingAttack:function(attack) {
-    attack.armourMultiplier = 0
-  },
-}))
-
-skills.add(new Spell("Lightning bolt", {
-  level:5,
-  damage:'3d6',
-  secondaryDamage:'2d6',
-  icon:'lightning',
-  tooltip:"A lightning bolt jumps from your out-reached hand to you foe!",
-  primarySuccess:"A lightning bolt jumps from {nms:attacker:the} out-reached hand to {nm:target:the}!",
-  secondarySuccess:"A smaller bolt jumps {nms:attacker:the} target to {nm:target:the}!",
-  primaryFailure:"A lightning bolt jumps from {nms:attacker:the} out-reached hand to {nm:target:the}, fizzling out before it can actually do anything.",
-  secondaryFailure:"A smaller bolt jumps {nms:attacker:the} target, but entirely misses {nm:target:the}!",
-  getSecondaryTargets:rpg.getFoesBut,
-  modifyOutgoingAttack:function(attack) {
-    attack.element = "storm";
-  },
-  afterPrimaryFailure:function(attack) {
-    attack.secondaryTargets = []
-  },
-}))
-
-skills.add(new Spell("Cursed armour", {
-  level:3,
-  primarySuccess:"{nms:target:the:true} armour is reduced.",
-  incompatible:'magic armour',
-  icon:'unarmour',
-  effect:{
-    modifyOutgoingAttack:function(attack) {
-      attack.armourModifier = (attack.armourModifier > 2 ? attack.armourModifier - 2 : 0)
-    },
-  },
-}))
-
-skills.add(new SpellSelf("Stoneskin", {
-  level:2,
-  primarySuccess:"Your skin becomes as hard as stone - and yet still just as flexible.",
-  incompatible:'magic armour',
-  effect:{
-    modifyIncomingAttack:function(attack) {
-      attack.armourModifier += 2
-    },
-  },
-}))
-
-skills.add(new SpellSelf("Steelskin", {
-  level:4,
-  primarySuccess:"Your skin becomes as hard as steel - and yet still just as flexible.",
-  duration:3,
-  incompatible:'magic armour',
-  effect:{
-    modifyIncomingAttack:function(attack) {
-      attack.armourModifier += 4
-    },
-  },
-}))
-
-
-for (const el of ['Fire', 'Frost', 'Storm']) {
-  skills.add(new SpellSelf("Protection From " + el, {
-    level:4,
-    primarySuccess:"You take only a third damage from " + el.toLowerCase() + "-based attacks for six turns.",
-    duration:6,
-    incompatible:'protection',
-    element:el.toLowerCase(),
-    effect:{
-      modifyIncomingAttack:function(attack) {
-        if (attack.element !== this.element) return
-        attack.damageMultiplier /= 3
-      },
-    },
-  }))
-
-  skills.add(new Spell("Vulnerability To " + el, {
-    level:4,
-    primarySuccess:"Target takes triple damage from " + el.toLowerCase() + "-based attacks for six turns.",
-    duration:6,
-    incompatible:'protection',
-    element:el.toLowerCase(),
-    effect:{
-      modifyIncomingAttack:function(attack) {
-        if (attack.element !== this.element) return
-        attack.damageMultiplier *= 3
-      },
-    },
-  }))
-
-  skills.add(new SpellSelf("Immunity To " + el, {
-    level:4,
-    primarySuccess:"You take no damage from " + el.toLowerCase() + "-based attacks for six turns.",
-    duration:6,
-    incompatible:'protection',
-    element:el.toLowerCase(),
-    effect:{
-      modifyIncomingAttack:function(attack) {
-        if (attack.element !== this.element) return
-        attack.damageMultiplier *= 0
-      },
-    },
-  }))
-
-}
-
-skills.add(new Spell("Commune with animal", {
-  level:1,
-  icon:'commune',
-  regex:/commune/,
-  duration:5,
-  automaticSuccess:true,
-  effect:{
-    start:function(target) {
-      if (target.canTalkFlag) {
-        return "{nv:attacker:can:true} talk to {nm:target:the} for a short time (like before the spell...)."
-      }
-      else {
-        target.canTalkFlag = true
-        target.canTalkFlagIsTemporary = true
-        return "{nv:attacker:can:true} now talk to {nm:target:the} for a short time."
-      }
-    },
-    finish:function(target) {
-      if (!target.canTalkFlagIsTemporary) return
-      target.canTalkFlag = false
-      target.canTalkFlagIsTemporary = false
-      return "The {i:Commune with animal} spell on {nm:target:the} expires."
-    },
-  },
-}))
-
-
-
-
-skills.add(new SpellEnvironment("Unlock", {
-  level:2,
-  getAffected:function(attack) { return w[attack.attacker.loc].getExits().filter(el => el.isLocked()) },
-  effect:function(attack, ex) {
-    attack.msg("The door to " + ex.nice() + " unlocks.", 1)
-    ex.setLock(false)
-  },
-  noEffect:"There are no locked doors.",
-}))
-
-
-
-/*
-Summon creature
-
-Summon weapon/shield
-
-Merchant's tongue
-
-Lore
-
-Repel undead
-
-Light
-
-Extinguish
-
-Fog
-
-Command
-
-Befriend
-
-Sleep
-
-Beast form
-
-Walk on water
-
-Breathe under water
-
-*/

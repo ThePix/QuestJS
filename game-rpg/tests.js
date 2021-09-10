@@ -125,9 +125,6 @@ test.tests = function() {
   player.modifyOutgoingAttack = oldProcessAttack
   w.flail.equipped = false
 
-
-log('----------------------------')
-
   test.title("Attack.createAttack (goblin)");
   const attack2a = Attack.createAttack(w.goblin, player)
   test.assertEqual('goblin', attack2a.attacker.name)
@@ -152,42 +149,7 @@ log('----------------------------')
 
 
 
-  test.title("Attack.createAttack (fireball)");
-  const oldgetSkillFromButtons = skillUI.getSkillFromButtons
-  skillUI.getSkillFromButtons = function() { return skills.findName('Fireball') }
 
-  const attack3 = Attack.createAttack(player, w.goblin)
-
-  test.assertEqual('spellCasting', attack3.skill.statForOffensiveBonus)
-  test.assertEqual(5, w.me.spellCasting)
-
-  test.assertEqual('me', attack3.attacker.name)
-  test.assertEqual(undefined, attack3.weapon)
-  test.assertEqual([w.goblin, w.orc, w.snotling, w.rabbit], attack3.primaryTargets)
-  test.assertEqual('2d6', attack3.damage)
-  test.assertEqual(5, attack3.offensiveBonus)
-  test.assertEqual('fire', attack3.element)
-
-  random.prime([19, 4, 3])
-  attack3.resolve(w.goblin, true, 0)
-  test.assertEqual(33, w.goblin.health)
-
-  attack3.report = []
-  random.prime(2)
-  attack3.resolve(w.goblin, true, 0)
-  test.assertEqual(33, w.goblin.health)
-  
-  w.goblin.element = 'frost'
-  random.prime([19, 4, 3])
-  attack3.resolve(w.goblin, true, 0)
-  test.assertEqual(19, w.goblin.health)
-  //attack3.output(40)
-  
-    
-  w.goblin.fireModifier = false
-  w.goblin.health = 40
-  skillUI.getSkillFromButtons = oldgetSkillFromButtons
-  
 
 
 
@@ -217,6 +179,10 @@ log('----------------------------')
 
 
   test.title("learn fireball")
+  
+  const spell = skills.find('fireball')
+  test.assertEqual(true, spell.spell)
+  
   player.skillsLearnt = ["Double attack"]
   test.assertCmd('cast nonsense', ['There is no spell called nonsense.'])
   test.assertCmd('cast fireball', ['You do not know the spell <i>Fireball</i>.'])
@@ -228,7 +194,7 @@ log('----------------------------')
   //goblin, orc, snotling, rabbit
 
   random.prime([19, 4, 4, 19, 2, 2, 4, 4])
-  test.assertCmd('cast fireball', ['You cast <i>Fireball</i>.', 'The room is momentarily filled with fire.', 'The goblin reels from the explosion.', 'Damage: 16', 'Health now: 24', 'The orc reels from the explosion.', 'Damage: 4', 'Health now: 56', 'The snotling ignores it.', 'The rabbit ignores it.'])
+  test.assertCmd('cast fireball', ['You cast <i>Fireball</i>.', 'The room is momentarily filled with fire.', 'The goblin reels from the explosion.', 'Damage: 8', 'Health now: 32', 'The orc reels from the explosion.', 'Damage: 4', 'Health now: 56', 'The snotling ignores it.', 'The rabbit ignores it.'])
   w.goblin.health = 40
   w.orc.health = 60
 
@@ -241,15 +207,9 @@ log('----------------------------')
   player.skillsLearnt = ["Double attack", "Fireball", "Ice shard"]
   test.assertCmd('cast ice shard', ['You need a target for the spell <i>Ice shard</i>.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
-  skillUI.getSkillFromButtons = function() { return skills.findName('Ice shard') }
   random.prime([19, 4, 7, 9])
-  test.assertCmd('attack goblin', ['You cast <i>Ice shard</i>.', 'A shard of ice jumps from your finger to the goblin!', 'Damage: 10', 'Health now: 30'])
+  test.assertCmd('cast Ice shard at goblin', ['You cast <i>Ice shard</i>.', 'A shard of ice jumps from your finger to the goblin!', 'Damage: 20', 'Health now: 20'])
   w.goblin.health = 40
-  skillUI.getSkillFromButtons = oldgetSkillFromButtons
-  random.prime([19, 4, 7, 9])
-  test.assertCmd('cast Ice shard at goblin', ['You cast <i>Ice shard</i>.', 'A shard of ice jumps from your finger to the goblin!', 'Damage: 10', 'Health now: 30'])
-  w.goblin.health = 40
-  skillUI.getSkillFromButtons = oldgetSkillFromButtons
 
 
 
@@ -257,7 +217,6 @@ log('----------------------------')
   test.title("Lightning bolt")
   player.skillsLearnt = ["Double attack", "Fireball", "Lightning bolt"]
   test.assertCmd('cast lightning bolt', ['You need a target for the spell <i>Lightning bolt</i>.'])
-  skillUI.getSkillFromButtons = function() { return skills.findName('Lightning bolt') }
   random.prime([
     19, 4, 7, 9,
 
@@ -268,15 +227,13 @@ log('----------------------------')
     19, 4, 7,
   ])
 
-  test.assertCmd('attack goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to the goblin!', 'Damage: 20', 'Health now: 20', 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', 'Damage: 11', 'Health now: 9'])
+  test.assertCmd('cast Lightning bolt at goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to the goblin!', 'Damage: 20', 'Health now: 20', 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', 'Damage: 11', 'Health now: 9'])
   w.goblin.health = 40
   w.snotling.health = 20
   
   random.prime(4)
-  test.assertCmd('attack goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to the goblin, fizzling out before it can actually do anything.'])
+  test.assertCmd('cast lightning bolt at goblin', ['You cast <i>Lightning bolt</i>.', 'A lightning bolt jumps from your out-reached hand to the goblin, fizzling out before it can actually do anything.'])
   
-  
-  skillUI.getSkillFromButtons = oldgetSkillFromButtons
 
 
 
@@ -327,7 +284,7 @@ log('----------------------------')
   test.assertCmd('cast stoneskin', ['You cast the <i>Stoneskin</i> spell.', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
   test.assertEqual(['Stoneskin'], player.activeEffects)
   
-  test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> on you terminates.'])
+  test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> effect on you expires.'])
   test.assertEqual(['Steelskin'], player.activeEffects)
 
 
@@ -342,7 +299,7 @@ log('----------------------------')
   test.assertEqual(2, player['countdown_Steelskin'])
   test.assertCmd('z', ['Time passes...'])
   test.assertEqual(1, player['countdown_Steelskin'])
-  test.assertCmd('z', ['Time passes...', 'The <i>Steelskin</i> on you terminates.'])
+  test.assertCmd('z', ['Time passes...', 'The <i>Steelskin</i> effect on you expires.'])
   test.assertEqual(undefined, player['countdown_Steelskin'])
   test.assertEqual([], player.activeEffects)
   test.assertCmd('z', ['Time passes...'])
@@ -354,9 +311,8 @@ log('----------------------------')
 
   test.title("cast unlock")
   player.skillsLearnt = ["Double attack", "Fireball", "Unlock"]
-  test.assertCmd('cast unlock', ['You cast the <i>Unlock</i> spell.', 'The door to the south unlocks.'])
-  test.assertCmd('cast unlock', ['You cast the <i>Unlock</i> spell.', 'There are no locked doors.'])
-  // should also open other door!!!
+  test.assertCmd('cast unlock', ['You cast <i>Unlock</i>.', 'The door to the south unlocks.', 'The practice room door unlocks.', 'The chest unlocks.'])
+  test.assertCmd('cast unlock', ['There are no locked doors.'])
 
 
 
@@ -368,7 +324,7 @@ log('----------------------------')
   test.assertCmd('talk to rabbit', [/You say \'Hello,\' to the rabbit/, /Fading away bunny/])
   test.assertCmd('z', ['Time passes...'])
   test.assertCmd('z', ['Time passes...'])
-  test.assertCmd('z', ['Time passes...', 'The <i>Commune with animal</i> spell on the rabbit expires.'])
+  test.assertCmd('z', ['Time passes...', 'The <i>Commune with animal</i> effect on the rabbit expires.'])
 
 
 
@@ -378,14 +334,12 @@ log('----------------------------')
   skills.defaultSpellTestUseable = function(char) { return true }
 
 
-
   test.title("cast Protection from Frost")
   player.skillsLearnt = ["Double attack", "Fireball", "Protection From Frost"]
   test.assertCmd('cast Protection From Frost', ['You cast the <i>Protection From Frost</i> spell.', 'You take only a third damage from frost-based attacks for six turns.'])
   w.me.health = 100
   let attack4 = Attack.createAttack(w.goblin, player, skills.findName('Ice shard'))
   random.prime([19,6, 6, 6])
-  log(attack4)
   attack4.resolve(w.me, true, 0)
   test.assertEqual(97, w.me.health)
   test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
@@ -394,11 +348,10 @@ log('----------------------------')
   test.title("cast Vuln to Frost")
   player.skillsLearnt = ["Double attack", "Fireball", "Vulnerability To Frost"]
   random.prime([19])
-  test.assertCmd('cast Vulnerability To Frost on me', ['You cast <i>Vulnerability To Frost</i>.', 'Target takes triple damage from frost-based attacks for six turns.', 'The <i>Protection From Frost</i> on you terminates.'])
+  test.assertCmd('cast Vulnerability To Frost on me', ['You cast <i>Vulnerability To Frost</i>.', 'Target takes triple damage from frost-based attacks for six turns.', 'The <i>Protection From Frost</i> effect on you expires.'])
   w.me.health = 100
   attack4 = Attack.createAttack(w.goblin, player, skills.findName('Ice shard'))
   random.prime([19,6, 6, 6])
-  log(attack4)
   attack4.resolve(w.me, true, 0)
   test.assertEqual(73, w.me.health)
   test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
@@ -406,12 +359,10 @@ log('----------------------------')
 
   test.title("cast Immunity to Frost")
   player.skillsLearnt = ["Double attack", "Fireball", "Immunity To Frost"]
-  random.prime([19])
-  test.assertCmd('cast Immunity To Frost on me', ['You cast the <i>Immunity To Frost</i> spell.', 'You take no damage from frost-based attacks for six turns.', 'The <i>Vulnerability To Frost</i> on you terminates.'])
+  test.assertCmd('cast Immunity To Frost on me', ['You cast the <i>Immunity To Frost</i> spell.', 'You take no damage from frost-based attacks for six turns.', 'The <i>Vulnerability To Frost</i> effect on you expires.'])
   w.me.health = 100
   attack4 = Attack.createAttack(w.goblin, player, skills.findName('Ice shard'))
   random.prime([19,6, 6, 6])
-  log(attack4)
   attack4.resolve(w.me, true, 0)
   test.assertEqual(100, w.me.health)
   test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
@@ -420,7 +371,64 @@ log('----------------------------')
   player.skillsLearnt = ["Double attack", "Fireball"]
 
 
-  
+  // knife does d4+2 normally
+  test.title("cast Flaming blade")
+  player.skillsLearnt = ["Double attack", "Fireball", "Flaming Blade"]
+  test.assertCmd('cast Flaming blade', ['You cast <i>Flaming Blade</i>.', 'The knife now has fire along its blade.'])
+  test.assertCmd('equip knife', ['You draw the knife.', ])
+  random.prime([19, 3, 4])
+  test.assertCmd('attack goblin', ['You attack the goblin.', 'A hit!', 'Damage: 9', 'Health now: 31'])
+
+  test.assertCmd('z', ['Time passes...',])
+  test.assertCmd('z', ['Time passes...', 'The <i>Immunity To Frost</i> effect on you expires.'])
+
+
+  test.title("cast Summon Frost Elemental")
+  player.skillsLearnt = ["Double attack", "Fireball", "Summon Frost Elemental"]
+  test.assertCmd('cast Summon Frost Elemental', ['You cast <i>Summon Frost Elemental</i>.', 'A frost elemental appears before you.'])
+  random.prime([19, 3, 4])
+  test.assertCmd('attack elemental', ['You attack the frost elemental.', 'A hit!', 'Damage: 18', 'Health now: 17'])
+
+ 
+
+  test.title("cast Lore")
+  player.activeEffects = []
+  player.skillsLearnt = ["Double attack", "Fireball", "Lore", "Steelskin"]
+  test.assertCmd('x rabbit', ['An example of a monster you can talk to after casting the right spell, and is generally not hostile.'])
+  test.assertCmd('cast lore', ['You cast the <i>Lore</i> spell.', 'You feel enlightened.'])
+  test.assertEqual(['Lore'], player.activeEffects)
+  test.assertCmd('x rabbit', ['With Lore active, you can learn all about rabbit culture... they like carrots.'])
+
+
+  w.rabbit.setLeader()
+
+
+
+  test.title("cast Mage Light")
+  player.skillsLearnt = ["Double attack", "Fireball", "Lore", "Steelskin", "Mage Light"]
+  test.assertCmd('cast Mage Light', ['You cast the <i>Mage Light</i> spell.', 'You are shines brightly.'])
+  test.assertEqual(['Lore', 'Mage Light'], player.activeEffects)
+  test.assertEqual(true, player.isLight)
+  test.assertEqual(world.LIGHT_FULL, player.lightSource())
+  test.assertCmd('s', ['You head south.', 'The cupboard', 'A large storeroom, with no windows.', 'You can go north.'])
+  test.assertCmd('n', ['You head north.', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a frost elemental, a goblin, an orc (holding a huge shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go south or west.'])
+
+  test.assertCmd('z', ['Time passes...',])
+  test.assertCmd('z', ['Time passes...', 'You stop shining.'])
+
+
+  test.title("cast Walk On Water")
+  test.assertCmd('w', ['You open the door to the great hall and walk through.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.', 'You can go east or north.'])
+  test.assertCmd('n', ['You head north.', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can go north or south.'])
+  test.assertCmd('n', ['You dive into the lake...', 'The lake swimming', 'You are swimming in a lake! Dry land is to the south.', 'You can go south.'])
+  test.assertCmd('s', ['You head south.', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can go north or south.'])
+  player.skillsLearnt = ["Double attack", "Fireball", "Lore", "Steelskin", "Walk On Water"]
+  test.assertCmd('cast walk on water', ['You cast the <i>Walk On Water</i> spell.', 'You feel lighter.', 'The <i>Lore</i> effect on you expires.'])
+  test.assertEqual(['Walk On Water'], player.activeEffects)
+  test.assertCmd('n', ['You walk out on to the surface of the lake.', 'The lake', 'You are stood on a lake! Dry land is to the south.', 'You can go south.'])
+
+
+
 
 /**/
   

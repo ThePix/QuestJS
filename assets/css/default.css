@@ -702,6 +702,7 @@ th, td {
   width:28px;
 }
 .dark-body .toolbar a.link {
+  background-color:#444;
   color: #fff;
 }
 
