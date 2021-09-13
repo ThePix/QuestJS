@@ -18,20 +18,30 @@ createItem("me", RPG_PLAYER(), {
 
 
 
-createItem("knife", BLADE_WEAPON("d4+2"), {
+createItem("knife", WEAPON("d4+2", "blade"), {
   loc:"me",
   image:"knife",
   examine:"An example of a poor weapon.",
   offensiveBonus:-2,
 });
 
-createItem("flail", CRUSH_WEAPON("2d10+4"), {
+createItem("flail", WEAPON("2d10+4", "crush"), {
   loc:"me",
   image:"flail",
   examine:"An example of a good weapon.",
 });
 
-createItem("flaming_sword", BLADE_WEAPON("3d6+2"), {
+createItem("long_bow", LIMITED_AMMO_WEAPON("2d8", "bow", "arrow"), {
+  loc:"me",
+  examine:"An example of a bow.",
+})
+
+createItem("arrow", COUNTABLE({yard:14}), {
+  examine:"A simple arrow.",
+})
+
+
+createItem("flaming_sword", WEAPON("3d6+2", "blade"), {
   //loc:"me",
   image:"sword",
   examine:"An example of a magic weapon.",
@@ -175,6 +185,25 @@ createItem("frost_elemental_prototype", RPG_NPC(false), {
 
 
 
+createItem("phantasm_prototype", RPG_NPC(false), {
+  damage:"1",
+  element:'frost',
+  health:1,
+  unillusionable:true,
+  unillusion:function(attack) {
+    attack.msg("{nv:target:disappear:true}.", 1)
+    if (this.clonePrototype) {
+      delete w[this.name]
+    }
+    else {
+      delete w[this.name].loc
+    }
+  },
+})
+
+
+
+
 
 
 
@@ -204,75 +233,100 @@ createItem("boots", WEARABLE(2, ['feet']), {
   pronouns:lang.pronouns.plural,
 });
 
-createItem("shotgun", LIMITED_USE_WEAPON("2d10+4", 1), {
+createItem("shotgun", LIMITED_AMMO_WEAPON("2d10+4", 'firearm', 1), {
   loc:"practice_room",
   ammo:1,
-  examine:"An example of a limited use weapon.",
+  examine:"An example of a limited ammo weapon.",
   image:"flail",
 });
 
 
 
-skills.add(new Skill("Double attack", {
-  level:2,
-  icon:"sword2",
-  tooltip:"Attack one foe twice, but at -2 to the attack roll",
-  modifyOutgoingAttack:function(attack) {
-    attack.offensiveBonus -= 2
-    attack.attackNumber = 2
-  },
-}))
+createItem("Stone_of_Returning", TAKEABLE(), {
+  loc:"yard",
+});
 
-skills.add(new Effect("Flaming weapon", {
+
+
+
+new Effect("Flaming weapon", {
   modifyOutgoingAttack:function(attack, source) {
     if (!source.equipped) return
     attack.element = 'fire'
   },
-}))
+})
 
-skills.add(new Effect("Frost vulnerability", {
+
+new Effect("Frost vulnerability", {
   modifyIncomingAttack:function(attack) {
     if (attack.element) attack.damageMultiplier *= 2
   },
-}))
+})
 
-skills.add(new Effect("Report for testing", {
+new Effect("Report for testing", {
   modifyOutgoingAttack:function(attack) {
     attack.element = 'fire'
   },
   modifyIncomingAttack:function(attack) {
     if (attack.element) attack.damageMultiplier *= 2
   },
-}))
+})
 
-skills.add(new Skill("Sweeping attack", {
+new Effect("Defensive", {
+  modifyIncomingAttack:function(attack) {
+    attack.offensiveBonus -= 3
+  },
+  suppressFinishMsg:true,
+})
+
+
+
+
+
+
+new Skill("Double attack", {
+  level:2,
+  description:"Two attacks is better than one - though admittedky less accurate.",
+  tactical:"Attack one foe twice, but at -2 to the attack roll",
+  modifyOutgoingAttack:function(attack) {
+    attack.offensiveBonus -= 2
+    attack.attackNumber = 2
+  },
+})
+
+new Skill("Sweeping attack", {
   level:1,
-  icon:"sword3", 
-  tooltip:"Attack one foe for normal damage, and any other for 4 damage; at -3 to the attack roll for reach", 
-  getPrimaryTargets:rpg.getFoes,
+  description:"You attack you foe with a flourish that may do minor damage to the others who assail you.",
+  tactical:"Attack one foe as normal. In addition, attack any other foe -2; on a success do 4 damage.", 
+  getSecondaryTargets:rpg.getFoesBut,
+  testUseable:function(char) {
+    if (!char.equipped.weaponType === 'blade') return falsemsg("This skill is only useable with a bladed weapon.")
+    return rpg.defaultSkillTestUseable(char)
+  },
   modifyOutgoingAttack:function(attack) {
     if (options.secondary) {
-      attack.damageNumber = 0;
-      attack.damageBonus = 4;
+      attack.damageNumber = 0
+      attack.damageBonus = 4
     }
-    attack.offensiveBonus -= 3;
+    attack.offensiveBonus -= 2
   },
-}))
+})
 
-skills.add(new Skill("Sword of Fire", {
+new Skill("Defensive attack", {
   level:2,
-  icon:"sword-fire", 
-  tooltip:"Attack with a flaming sword", 
-  modifyOutgoingAttack:function(attack) {
-    attack.element = "fire";
+  description:"Make a cautious attack, careful to maintain your defense, at the expense of your attack.",
+  tactical:"Attack one foe with a -2 penalty, but any attacks on you will suffer a -3 penalty until your next turn.",
+  testUseable:function(char) {
+    if (char.getEquippedWeapon().weaponType === 'bow') return falsemsg("This skill is not useable with a bow.")
+    return rpg.defaultSkillTestUseable(char)
   },
-}))
+  modifyOutgoingAttack:function(attack) {
+    attack.offensiveBonus -= 2
+  },
+  afterUse:function(attack, count) {
+    const effect = rpg.findEffect('Defensive')
+    effect.apply(attack, attack.attacker, 1)
+    rpg.defaultSkillAfterUse(attack, count)
+  }
+})
 
-skills.add(new Skill("Ice Sword", {
-  level:2,
-  icon:"sword-ice", 
-  tooltip:"Attack with a freezing blade",
-  modifyOutgoingAttack:function(attack) {
-    attack.element = "ice";
-  },
-}))

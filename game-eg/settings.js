@@ -45,8 +45,6 @@ settings.setup = function() {
   player.hitpoints = 20;
   player.status = "You are feeling fine";
   io.updateStatus()
-  createPaneBox(2, "Extra options", '<button onclick="alert(\'Here!\')">Alert</button>')
-  
 }
 
 //settings.libraries.push('item_links')

@@ -13,19 +13,17 @@ settings.noTalkTo = false
 
 settings.setup = function() {
   let html = '<div></div>'
-  createPaneBox(2, "Go to", html, 'directions')
-  settings.updateCustomUI()
+  createAdditionalPane(2, "Go to", 'directions', function() {
+    log('here')
+    let html = ''
+    for (const ex of currentLocation.dests) {
+      const dest = w[ex.name]
+      html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'go to ' + ex.name + '\')">' + dest.headingAlias + '</p></div>'
+    }
+    return html
+  })
 }
 
-settings.updateCustomUI = function() {
-  let html = ''
-  for (const ex of currentLocation.dests) {
-    const dest = w[ex.name]
-    html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'go to ' + ex.name + '\')">' + dest.headingAlias + '</p></div>'
-  }
-  const el = document.querySelector('#directions')
-  if (el) el.innerHTML = html
-}
 
 settings.roomCreateFunc = function(o) {
   if (o.dests) {

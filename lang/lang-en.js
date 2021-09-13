@@ -474,6 +474,27 @@ const lang = {
   not_enough:"There {ifMoreThan:count:1:are:is} only {show:count} {nm:item}.",
   
   error:"Oh dear, I seem to have hit an error trying to handle that (F12 for more details).",
+  
+  
+  // Purely for RPGs
+  
+  primarySuccess:"A hit!",
+  primaryFailure:"A miss!",
+  noTarget:'No target found for attack',
+  equip:"{nv:char:draw:true} {nm:item:the}.",
+  unequip:"{nv:char:put:true} away {nm:item:the}.",
+  unequipAndEquip:"{nv:char:put:true} away {show:list}, and equip {nm:item:the}.",
+  castSpell:"{nv:attacker:cast:true} the {i:{nm:skill}} spell.",
+  defaultEffectExpires:"The {i:{show:effect:alias}} effect on {nm:target:the} expires.",
+
+  damage:'Damage',
+  damageRoll:'Damage roll',
+
+  communeWithAnimalSpell:'Commune with animal',
+  cannotTalkToBeast:"{nv:char:spend:true} a few minutes telling {nm:item:the} about {pa:char} life, but {pv:item:do} not seem interested. Possibly because {pv:item:be} just a dumb beast.",
+  teleport:"{nv:attacker:feel:true} disorientated and the world around {sb:attacker} dissolves. A moment later, {nv:attacker:be} somewhere else.",
+  summoning_successful:"{nv:item:appear:true} before {nm:attacker:the}.",
+  
 
   //----------------------------------------------------------------------------------------------
   // Complex responses (requiring functions)
@@ -618,7 +639,7 @@ const lang = {
       }
     }
     if (settings.additionalHelp !== undefined) {
-      for (let s of settings.additionalHelp) metamsg(s)
+      for (const s of settings.additionalHelp) metamsg(s)
     }
     return world.SUCCESS_NO_TURNSCRIPTS
   },
@@ -635,7 +656,7 @@ const lang = {
       metamsg("{i:Thanks to:} " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".")
     }
     if (settings.additionalAbout !== undefined) {
-      for (let s of settings.additionalAbout) metamsg(s)
+      for (const key in settings.additionalAbout) metamsg('{i:' + key + ':} ' + settings.additionalAbout[key])
     }
     if (settings.ifid) metamsg("{i:IFDB number:} " + settings.ifid)
     return world.SUCCESS_NO_TURNSCRIPTS
@@ -645,7 +666,7 @@ const lang = {
     switch (typeof settings.warnings) {
       case 'undefined' : metamsg('No warning have been set for this game.'); break;
       case 'string' : metamsg(settings.warnings); break;
-      default: for (let el of settings.warnings) metamsg(el)
+      default: for (const el of settings.warnings) metamsg(el)
     }
     return world.SUCCESS_NO_TURNSCRIPTS;
   },

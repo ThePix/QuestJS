@@ -4,7 +4,7 @@
 settings.title = "Professor Kleinscope";
 settings.author = "The Pixie"
 settings.version = "1.4";
-settings.additionalAbout = ['Thanks to Pertex and R2T1 for beta-testing.']
+settings.additionalAbout = {'Thanks to':'Pertex and R2T1 for beta-testing.'}
 settings.warnings = 'No warning relevant for this game.'
 settings.files = ["data", "code", "npcs"];
 settings.playMode = 'dev'

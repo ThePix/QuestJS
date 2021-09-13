@@ -28,6 +28,9 @@ settings.output = function(report) {
 }
 
 
+
+
+
 settings.dateTime = {
   startTime:1000000000,
   data:[
@@ -83,13 +86,19 @@ settings.dateTime = {
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
-  player.hitpoints = 20;
-  player.status = "You are feeling fine";
   player.skillsLearnt = ["Double attack", "Fireball"]
+  createAdditionalPane(0, "Spells", 'spells-known', function() {
+    let html = ''
+    for (const name of player.skillsLearnt) {
+      html += '<p class="item" onclick="runCmd(\'cast ' + name + '\')" >' + name + '</p><br/>'
+    }
+    return html
+  })
+
+  player.hitpoints = 20
+  player.status = "You are feeling fine"
+  player.skillsLearnt = ["Double attack", "Fireball"]
+  //settings.updateCustomUI()
   w.rabbit.setLeader(player)
 }
-
-
-
-
 

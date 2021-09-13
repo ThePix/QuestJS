@@ -44,7 +44,17 @@ settings.inventoryPane = [
 // For directions
 settings.compassPane = false
 settings.setup = function() {
-  createPaneBox(0, "Go to", '', 'directions')
+  createAdditionalPane(0, "Go to", 'directions', function() {
+    const exitList = currentLocation.getExits({excludeLocked:true})
+    let s = '<p class="item-class"><span class="item-name">You can go:</span>'
+    for (let ex of exitList) {
+      s += ' <span class="item-action-button" onclick="io.clickExit(\'' + ex.dir + '\')">'
+      s += ex.dir
+      s += '</span>'
+    }
+    s += '</p>'
+    return s    
+  })
   settings.updateCustomUI()
 }
 
@@ -56,18 +66,6 @@ settings.updateCustomUI = function() {
     log(el.innerHTML)
   }
 
-  // For directions
-  const el = document.querySelector('#directions')
-  if (!el) return // not there yet
-  const exitList = currentLocation.getExits({excludeLocked:true})
-  let s = '<p class="item-class"><span class="item-name">You can go:</span>'
-  for (let ex of exitList) {
-    s += ' <span class="item-action-button" onclick="io.clickExit(\'' + ex.dir + '\')">'
-    s += ex.dir
-    s += '</span>'
-  }
-  s += '</p>'
-  el.innerHTML = s
   el.previousSibling.innerHTML = currentLocation.headingAlias
 }
 

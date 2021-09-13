@@ -11,7 +11,3 @@ tp.addDirective("lore", function(arr, params) {
 
 
 
-lang.defaultEffectExpires = "The {i:{show:effect:alias}} effect on {nm:target:the} expires."
-lang.communeWithAnimalSpell = 'Commune with animal'
-lang.cannotTalkToBeast = "You spend a few minutes telling {nm:item:the} about your life, but it does not seem interested. Possibly because it is just a dumb beast."
-

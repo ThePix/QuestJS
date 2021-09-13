@@ -1000,10 +1000,10 @@ createItem("walls", {
 })
 
 
-createItem("brick",
-  COUNTABLE({lounge:7, dining_room:1}),
-    { examine:"A brick is a brick.", regex:/^(\d+ )?bricks?$/}
-);
+createItem("brick", COUNTABLE({lounge:7, dining_room:1}), {
+  examine:"A brick is a brick.",
+  //regex:/^(\d+ )?bricks?$/,
+})
 
 
 createRoom("shop", {
