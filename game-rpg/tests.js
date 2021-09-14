@@ -66,6 +66,7 @@ test.tests = function() {
 
 
   test.title("Attack.createAttack (unarmed) misses");
+  test.assertEqual(rpg.NEUTRAL, w.goblin.attitude)
   let attack = Attack.createAttack(player, w.goblin)
   test.assertEqual('me', attack.attacker.name)
   test.assertEqual([w.goblin], attack.primaryTargets)
@@ -75,6 +76,7 @@ test.tests = function() {
   random.prime(3)
   attack.resolve(w.goblin, true, 0)
   test.assertEqual(40, w.goblin.health)
+  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.goblin.attitude)
 
   
 

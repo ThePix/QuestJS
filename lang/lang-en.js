@@ -32,7 +32,7 @@ const lang = {
     MetaTranscriptClear:/^transcript clear$|^script clear$|^transcript delete$|^script delete$/,
     MetaTranscriptShow:/^transcript show$|^script show$|^show script$|^show transcript$|^showscript$/,
     MetaTranscriptWalkthrough:/^(?:transcript|script) walk$/,
-    MetaUserComment:/^\*(.+)$/,
+    MetaUserComment:/^(?:\*|\;)(.+)$/,
     MetaSave:/^save$/,
     MetaSaveGame:/^(?:save) (.+)$/,
     MetaSaveOverwriteGame:/^(?:save) (.+) (?:overwrite|ow)$/,

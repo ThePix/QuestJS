@@ -31,6 +31,7 @@ footer, header, hgroup, menu, nav, section {
 html {
   overflow-y:scroll;
   scroll-behavior: smooth;
+  text-size-adjust: none;
 }
 
 body {
@@ -40,6 +41,7 @@ body {
   font-family: sans-serif;
   width: 100%;
   margin-bottom: 20px;
+  text-size-adjust: none;
 }
 .dark-body {
   background-color: #111;
