@@ -80,9 +80,9 @@ new Spell("Cursed armour", {
   description:"Can be cast on a foe to reduce the protection armour gives.",
   tactical:"Target loses 2 from their armour, to a minimum of zero.",
   primarySuccess:"{nms:target:the:true} armour is reduced.",
-  incompatible:'magic armour',
   icon:'unarmour',
   effect:{
+    category:'armour',
     modifyOutgoingAttack:function(attack) {
       attack.armourModifier = (attack.armourModifier > 2 ? attack.armourModifier - 2 : 0)
     },
@@ -95,8 +95,8 @@ new SpellSelf("Stoneskin", {
   description:"Can be cast on yourself to give protection to all physical and many elemental attacks.",
   tactical:"Adds 2 to your armour.",
   primarySuccess:"Your skin becomes as hard as stone - and yet still just as flexible.",
-  incompatible:'magic armour',
   effect:{
+    category:'armour',
     modifyIncomingAttack:function(attack) {
       attack.armourModifier += 2
     },
@@ -109,8 +109,8 @@ new SpellSelf("Steelskin", {
   tactical:"Adds 3 to your armour.",
   primarySuccess:"Your skin becomes as hard as steel - and yet still just as flexible.",
   duration:3,
-  incompatible:'magic armour',
   effect:{
+    category:'armour',
     modifyIncomingAttack:function(attack) {
       attack.armourModifier += 3
     },
@@ -129,8 +129,8 @@ new SpellSelf("Strength", {
   description:"The target of this spell is made much stronger, able to do far more damage in non-magical attacks.",
   tactical:"Target will do twice the normal damage when making non-spell attacks",
   primarySuccess:"{nms:target:the:true} strength is enhanced.",
-  incompatible:'enhancement',
   effect:{
+    category:'enhancement',
     modifyOutgoingAttack:function(attack) {
       if (!attack.skill.spell) attack.damageModifier *= 2
     },
@@ -143,8 +143,8 @@ new Spell("Weakness", {
   description:"The target of this spell is made much weaker, doing far less damage in non-magical attacks.",
   tactical:"Target will do half the normal damage when making non-spell attacks",
   primarySuccess:"{nms:target:the:true} strength is reduced.",
-  incompatible:'enhancement',
   effect:{
+    category:'enhancement',
     modifyOutgoingAttack:function(attack) {
       if (!attack.skill.spell) attack.damageModifier /= 2
     },
@@ -156,8 +156,8 @@ new SpellSelf("Focus", {
   description:"The target of this spell can cast attack spells better.",
   tactical:"Gives a +3 bonus to attack rolls for spells.",
   primarySuccess:"{nms:target:the:true} mental acuity is enhanced.",
-  incompatible:'enhancement',
   effect:{
+    category:'enhancement',
     modifyOutgoingAttack:function(attack) {
       if (!attack.skill.spell) attack.offensiveBonus += 3
     },
@@ -170,8 +170,8 @@ new Spell("Befuddle", {
   description:"The target of this spell will cast attack spells poorly.",
   tactical:"Gives a -3 penalty to attack rolls for spells.",
   primarySuccess:"{nms:target:the:true} mental acuity is reduced.",
-  incompatible:'enhancement',
   effect:{
+    category:'enhancement',
     modifyOutgoingAttack:function(attack) {
       if (!attack.skill.spell) attack.offensiveBonus -= 3
     },
@@ -192,24 +192,27 @@ new SpellSelf("Lore", {
   level:2,
   description:"While this spell is active, you will gain new insights into items and creatures you look at.",
   primarySuccess:"You feel enlightened.",
-  incompatible:'enhancements',
-  effect:{},
+  effect:{
+    category:'enhancement',
+  },
 })
 
 new SpellSelf("Walk On Water", {
   level:2,
   description:"While this spell is active, you can walk on water!",
   primarySuccess:"You feel lighter.",
-  incompatible:'enhancements',
-  effect:{},
+  effect:{
+    category:'enhancement',
+  },
 })
 
 new SpellSelf("Featherfall", {
   level:2,
   description:"While this spell is active, you can fall from a great height without harm (as long as it is not into lava!).",
   primarySuccess:"You feel lighter.",
-  incompatible:'enhancements',
-  effect:{},
+  effect:{
+    category:'enhancement',
+  },
 })
 
 
@@ -230,9 +233,9 @@ for (const el of ['Fire', 'Frost', 'Storm']) {
     tactical:"Your take one third damage from all " + el + "-based attacks.",
     primarySuccess:"You take only a third damage from " + el.toLowerCase() + "-based attacks for six turns.",
     duration:6,
-    incompatible:'protection',
     element:el.toLowerCase(),
     effect:{
+      category:'protection',
       modifyIncomingAttack:function(attack) {
         if (attack.element !== this.element) return
         attack.damageMultiplier /= 3
@@ -246,9 +249,9 @@ for (const el of ['Fire', 'Frost', 'Storm']) {
     tactical:"Target takes three times damage from all " + el + "-based attacks.",
     primarySuccess:"Target takes triple damage from " + el.toLowerCase() + "-based attacks for six turns.",
     duration:6,
-    incompatible:'protection',
     element:el.toLowerCase(),
     effect:{
+      category:'protection',
       modifyIncomingAttack:function(attack) {
         if (attack.element !== this.element) return
         attack.damageMultiplier *= 3
@@ -261,9 +264,9 @@ for (const el of ['Fire', 'Frost', 'Storm']) {
     description:"Can be cast on yourself to give immunity to all " + el + "-based attacks.",
     primarySuccess:"You take no damage from " + el.toLowerCase() + "-based attacks for six turns.",
     duration:6,
-    incompatible:'protection',
     element:el.toLowerCase(),
     effect:{
+      category:'protection',
       modifyIncomingAttack:function(attack) {
         if (attack.element !== this.element) return
         attack.damageMultiplier *= 0
@@ -289,7 +292,6 @@ new SpellInanimate("Earthmight Smasher", {
   getTargets:function(attack) { return scopeReachable().filter(el => el.weaponType === 'crush' && el.loc === attack.attacker.name) },
   targetEffect:function(attack, item) {
     attack.msg(processText("{nm:item:the:true} now has earthmight pounding in it.", {item:item}), 1)
-    item.activeEffects.push('Earthmight Smasher')
   },
   effect:{
     modifyOutgoingAttack:function(attack) {
@@ -308,7 +310,6 @@ new SpellInanimate("Storm Bow", {
   getTargets:function(attack) { return scopeReachable().filter(el => el.weaponType === 'bow' && el.loc === attack.attacker.name) },
   targetEffect:function(attack, item) {
     attack.msg(processText("{nm:item:the:true} now fizzles with electrical energy.", {item:item}), 1)
-    item.activeEffects.push('Storm Bow')
   },
   effect:{
     modifyOutgoingAttack:function(attack) {
@@ -327,7 +328,6 @@ new SpellInanimate("Ice Spear", {
   getTargets:function(attack) { return scopeReachable().filter(el => el.weaponType === 'polearm' && el.loc === attack.attacker.name) },
   targetEffect:function(attack, item) {
     attack.msg(processText("{nm:item:the:true} has frost over it.", {item:item}), 1)
-    item.activeEffects.push('Ice Spear')
   },
   effect:{
     modifyOutgoingAttack:function(attack) {
@@ -346,7 +346,6 @@ new SpellInanimate("Flaming Blade", {
   getTargets:function(attack) { return scopeReachable().filter(el => el.weaponType === 'blade' && el.loc === attack.attacker.name) },
   targetEffect:function(attack, item) {
     attack.msg(processText("{nm:item:the:true} now has fire along its blade.", {item:item}), 1)
-    item.activeEffects.push('Flaming Blade')
   },
   effect:{
     modifyOutgoingAttack:function(attack) {
@@ -374,8 +373,8 @@ new SpellSelf("Kobold Glamour", {
   duration:5,
   visage:'kobold',
   regex:/kobold/,
-  incompatible:'visage',
   effect:{
+    category:'visage',
     start:function(target) {
       target.visage === this.visage
       return "{nv:target:have:true} now has a long, crocodilian snout, and green scales."
@@ -432,8 +431,8 @@ new SpellInanimate("Unillusion", {
     if (currentLocation.unillusionable) list.push(currentLocation)
     return list
   },
-  targetEffect:function(attack, ex) {
-    ex.unillusion(attack)
+  targetEffect:function(attack, item) {
+    item.unillusion(attack)
   },
   msgNoTarget:"{nv:attacker:cast:true} the {i:{nm:skill}} spell, but there are no illusions here.",
 })

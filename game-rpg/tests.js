@@ -102,15 +102,17 @@ test.tests = function() {
   
 
 
-  test.title("Attack.createAttack (flail)");
+  test.title("Attack.createAttack (flail)")
   const oldProcessAttack = player.modifyOutgoingAttack
   player.modifyOutgoingAttack = function(attack) { attack.offensiveBonus += 2 }
   w.flail.equipped = true
 
+  //settings.attackOutputLevel = 5
   attack = Attack.createAttack(player, w.orc)
   test.assertEqual('me', attack.attacker.name)
   test.assertEqual('2d10+4', attack.damage)
-  test.assertEqual(2, attack.offensiveBonus)
+  test.assertEqual(5, attack.offensiveBonus)  // player has + 3 plus 2 from l107 above
+  
 
   random.prime([19, 4, 7])
   attack.resolve(w.goblin, true, 0)
@@ -185,7 +187,7 @@ test.tests = function() {
   random.prime([19, 4, 7])
   w.flail.equipped = true
 
-  test.assertCmd('attack goblin', ['You attack the goblin.', /A hit/, 'Damage: 15', 'Health now: 25'])
+  test.assertCmd('attack goblin', ['You attack the goblin.', /A hit/, "The attack does 15 hits, the goblin's health is now 25."])
   test.assertEqual(25, w.goblin.health)
 
   w.goblin.health = 40
@@ -221,7 +223,7 @@ test.tests = function() {
   //goblin, orc, snotling, rabbit
 
   random.prime([19, 4, 4, 19, 2, 2, 4, 4])
-  test.assertCmd('cast fireball', ['You cast the <i>Fireball</i> spell.', 'The room is momentarily filled with fire.', 'The goblin reels from the explosion.', 'Damage: 8', 'Health now: 32', 'The orc reels from the explosion.', 'Damage: 4', 'Health now: 56', 'The snotling ignores it.', 'The rabbit ignores it.'])
+  test.assertCmd('cast fireball', ['You cast the <i>Fireball</i> spell.', 'The room is momentarily filled with fire.', 'The goblin reels from the explosion.', "The attack does 8 hits, the goblin's health is now 32.", 'The orc reels from the explosion.', "The attack does 4 hits, the orc's health is now 56.", 'The snotling ignores it.', 'The rabbit ignores it.'])
   w.goblin.health = 40
   w.orc.health = 60
 
@@ -235,7 +237,7 @@ test.tests = function() {
   test.assertCmd('cast ice shard', ['You need a target for the spell <i>Ice shard</i>.'])
   test.assertCmd('drop spellbook', ['You drop the spellbook.'])
   random.prime([19, 4, 7, 9])
-  test.assertCmd('cast Ice shard at goblin', ['You cast the <i>Ice shard</i> spell.', 'A shard of ice jumps from your finger to the goblin!', 'Damage: 20', 'Health now: 20'])
+  test.assertCmd('cast Ice shard at goblin', ['You cast the <i>Ice shard</i> spell.', 'A shard of ice jumps from your finger to the goblin!', "The attack does 20 hits, the goblin's health is now 20."])
   w.goblin.health = 40
 
 
@@ -254,7 +256,7 @@ test.tests = function() {
     19, 4, 7,
   ])
 
-  test.assertCmd('cast Lightning bolt at goblin', ['You cast the <i>Lightning bolt</i> spell.', 'A lightning bolt jumps from your out-reached hand to the goblin!', 'Damage: 20', 'Health now: 20', 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', 'Damage: 11', 'Health now: 9'])
+  test.assertCmd('cast Lightning bolt at goblin', ['You cast the <i>Lightning bolt</i> spell.', 'A lightning bolt jumps from your out-reached hand to the goblin!', "The attack does 20 hits, the goblin's health is now 20.", 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', "The attack does 11 hits, the snotling's health is now 9."])
   w.goblin.health = 40
   w.snotling.health = 20
   
@@ -289,7 +291,8 @@ test.tests = function() {
   random.prime(19)
   attack.resolve(w.me, true, 0)
   test.assertEqual(79, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you, but the ice amulet protects you, and you take no damage.", attack.report[4].t)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you, but the ice amulet protects you, and you take no damage.", attack.reportTexts[13].t)
+  log(attack.reportTexts)
   
   w.me.health = 100
   w.goblin.spellCasting = false
@@ -310,7 +313,6 @@ test.tests = function() {
   test.assertEqual([], player.activeEffects)
   test.assertCmd('cast stoneskin', ['You cast the <i>Stoneskin</i> spell.', 'Your skin becomes as hard as stone - and yet still just as flexible.'])
   test.assertEqual(['Stoneskin'], player.activeEffects)
-  
   test.assertCmd('cast steelskin', ['You cast the <i>Steelskin</i> spell.', 'Your skin becomes as hard as steel - and yet still just as flexible.', 'The <i>Stoneskin</i> effect on you expires.'])
   test.assertEqual(['Steelskin'], player.activeEffects)
 
@@ -368,7 +370,7 @@ test.tests = function() {
   random.prime([19,6, 6, 6])
   attack4.resolve(w.me, true, 0)
   test.assertEqual(97, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[13].t)
 
 
   test.title("cast Vuln to Frost")
@@ -380,7 +382,7 @@ test.tests = function() {
   random.prime([19,6, 6, 6])
   attack4.resolve(w.me, true, 0)
   test.assertEqual(73, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[13].t)
 
 
   test.title("cast Immunity to Frost")
@@ -391,7 +393,7 @@ test.tests = function() {
   random.prime([19,6, 6, 6])
   attack4.resolve(w.me, true, 0)
   test.assertEqual(100, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.report[4].t)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[13].t)
 
 
   player.skillsLearnt = ["Double attack", "Fireball"]
@@ -399,11 +401,16 @@ test.tests = function() {
 
   // knife does d4+2 normally
   test.title("cast Flaming blade")
+  test.assertEqual([], w.knife.activeEffects)
   player.skillsLearnt = ["Double attack", "Fireball", "Flaming Blade"]
   test.assertCmd('cast Flaming blade', ['You cast the <i>Flaming Blade</i> spell.', 'The knife now has fire along its blade.'])
+  test.assertEqual(['Flaming Blade'], w.knife.activeEffects)
   test.assertCmd('equip knife', ['You draw the knife.', ])
   random.prime([19, 3, 4])
-  test.assertCmd('attack goblin', ['You attack the goblin.', 'A hit!', 'Damage: 9', 'Health now: 31'])
+
+  test.assertCmd('attack goblin', ['You attack the goblin.', 'A hit!', "The attack does 9 hits, the goblin's health is now 31."])
+
+
 
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...', 'The <i>Immunity To Frost</i> effect on you expires.'])
@@ -413,7 +420,7 @@ test.tests = function() {
   player.skillsLearnt = ["Double attack", "Fireball", "Summon Frost Elemental"]
   test.assertCmd('cast Summon Frost Elemental', ['You cast the <i>Summon Frost Elemental</i> spell.', 'The frost elemental appears before you.'])
   random.prime([19, 3, 4])
-  test.assertCmd('attack elemental', ['You attack the frost elemental.', 'A hit!', 'Damage: 18', 'Health now: 17'])
+  test.assertCmd('attack elemental', ['You attack the frost elemental.', 'A hit!', "The attack does 18 hits, the frost elemental's health is now 17."])
 
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...',])
@@ -500,6 +507,44 @@ test.tests = function() {
   test.assertCmd('s', ['You head south.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.', 'You can see a red dragon here.', 'You can go east or north.'])
   test.assertCmd('cast unillusion', ['You cast the <i>Unillusion</i> spell.', 'The red dragon disappears.'])
   test.assertCmd('cast unillusion', ['You cast the <i>Unillusion</i> spell, but there are no illusions here.'])
+
+
+
+
+  test.title("selectSkill")
+  test.assertEqual('Basic attack', w.goblin.selectSkill().name)
+  w.goblin.skillOptions = ["Fireball"]
+  test.assertEqual('Fireball', w.goblin.selectSkill().name)
+  w.goblin.skillOptions = ["Double attack", "Fireball", "Returning", "Teleport", "Mark"]
+  random.prime([1])
+  test.assertEqual('Fireball', w.goblin.selectSkill().name)
+  delete w.goblin.skillOptions
+
+
+  test.title("makeAttack  (goblin)")
+  random.prime([19, 5])
+  attack = w.goblin.makeAttack(player)
+  test.assertEqual('goblin', attack.attacker.name)
+  test.assertEqual('Basic attack', attack.skill.name)
+  test.assertEqual([w.me], attack.primaryTargets)
+  test.assertEqual('d8', attack.damage)
+  test.assertEqual(0, attack.offensiveBonus)
+  test.assertEqual(98, w.me.health)
+
+  test.title("makeAttack  (goblin, fireball)")
+  random.prime([1, 19, 5, 5, 5])
+  w.goblin.skillOptions = ["Double attack", "Ice shard", "Returning", "Teleport", "Mark"]
+  attack = w.goblin.makeAttack(player)
+  
+  test.assertEqual('goblin', attack.attacker.name)
+  test.assertEqual('Ice shard', attack.skill.name)
+  test.assertEqual([w.me], attack.primaryTargets)
+  test.assertEqual('3d6', attack.damage)
+  test.assertEqual(0, attack.offensiveBonus)
+  test.assertEqual(92, w.me.health)
+
+
+
 
 
 /**/

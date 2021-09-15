@@ -486,6 +486,7 @@ const lang = {
   unequipAndEquip:"{nv:char:put:true} away {show:list}, and equip {nm:item:the}.",
   castSpell:"{nv:attacker:cast:true} the {i:{nm:skill}} spell.",
   defaultEffectExpires:"The {i:{show:effect:alias}} effect on {nm:target:the} expires.",
+  damageReport:"The attack does {show:modifiedDamage} hits, {nms:target:the} health is now {show:target:health}.",
 
   damage:'Damage',
   damageRoll:'Damage roll',
