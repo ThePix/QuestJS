@@ -209,6 +209,16 @@ const lang = {
       /^(?:tell|ask|instruct) (.+) to (?:stop follow|stop following|stop follow me|stop following me|wait|wait here|stay|stay here)$/,
     ],    
     
+    //RPG
+    Attack:/^(?:attack|att) (.+)$/,
+    Search:/^(?:search) (.+)$/,
+    Equip:/^(?:equip|brandish|draw) (.+)$/,
+    Unequip:/^(?:unequip|holster|sheath|put away) (.+)$/,
+    LearnSpell:/^(?:learn) (.+)$/,
+    CastSpell:/^(?:cast|invoke) (.+)$/,
+    CastSpellAt:/^(?:cast|invoke) (.+) (?:at|on) (.+)$/,
+    
+    
     //Debug
     DebugWalkThrough:/^wt (.+)$/,
     DebugInspect:/^inspect (.+)$/,
