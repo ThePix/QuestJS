@@ -67,6 +67,17 @@ createItem("ice_amulet", WEARABLE(4, ['neck']), {
 createRoom("practice_room", {
   desc:'A large room with straw scattered across the floor. The only exit is west',
   west:new Exit('great_hall'),
+  east:new Exit('passage', {
+    simpleUse:function(char) {
+      log('here')
+      if (w.practice_room.guarded && !w.orc.dead) {
+        log('here')
+        rpg.broadcast('guards', 'attack', 'practice room exit')
+        return falsemsg("You try to head east, but the orc bars your way. Looks like he is going to attack!")
+      }
+      return util.defaultSimpleExitUse(char, this)
+    }    
+  }),
   south:new Exit('cupboard', {
     lockedmsg:"It seems to be locked."
   }),
@@ -81,6 +92,12 @@ createRoom("great_hall", {
   east:new Exit('practice_room'),
   north:new Exit('yard'),
 })
+
+createRoom("passage", {
+  desc:'A long passage.',
+  west:new Exit('practice_room'),
+})
+
 
 createItem("practice_room_door", LOCKED_DOOR("small_key", "great_hall", "practice_room"), {
   examine:'A very solid, wooden door.',
@@ -131,14 +148,22 @@ createItem("goblin", RPG_NPC(false), {
   loc:"practice_room",
   damage:"d8",
   health:40,
-  examine:"An example of a simple monster.",
-});
+  signalGroups:['guards'],
+  afterAttack:function() { rpg.broadcast('guards', 'attack', this.name) },
+  ex:"A rather small green humanoid; hairless and dressed in rags.",
+})
 
 createItem("orc", RPG_NPC(false), {
   loc:"practice_room",
   damage:"2d10+4",
   health:60,
-  examine:"An example of a simple monster.",
+  signalGroups:['guards'],
+  ex:"A large green humanoid; hairless and dressed in leather.",
+  signalResponses:{
+    wake:function() {
+      msg("He rolls over and goes back to sleep.")
+    },
+  },  
 });
 
 createItem("huge_shield", SHIELD(10), {
@@ -149,14 +174,15 @@ createItem("snotling", RPG_NPC(false), {
   loc:"practice_room",
   damage:"2d4",
   health:20,
-  examine:"An example of a simple monster.",
+  signalGroups:['guards'],
+  ex:"A cowering green humanoid; hairless and dressed in rags.",
 });
 
 createItem("rabbit", RPG_BEAST(false), {
   loc:"practice_room",
   damage:"2d4",
   health:20,
-  examine:"{lore:An example of a monster you can talk to after casting the right spell, and is generally not hostile.:With Lore active, you can learn all about rabbit culture... they like carrots.}",
+  ex:"{lore:An example of a monster you can talk to after casting the right spell, and is generally not hostile.:With Lore active, you can learn all about rabbit culture... they like carrots.}",
   talk:function() {
     switch (this.talktoCount) {
       case 1 : 
@@ -180,7 +206,8 @@ createItem("frost_elemental_prototype", RPG_NPC(false), {
   damage:"2d4",
   element:'frost',
   health:35,
-  examine:"A swirling mass of freezing air that chills you to the bone.",
+  signalGroups:['elementals'],
+  ex:"A swirling mass of freezing air that chills you to the bone.",
 })
 
 
@@ -203,9 +230,28 @@ createItem("phantasm_prototype", RPG_NPC(false), {
 
 
 
+createItem("zombie_prototype", RPG_CORPOREAL_UNDEAD(false), {
+  alias:'zombie',
+  damage:"2d4",
+  health:20,
+  signalGroups:['zombies'],
+  ex:"A shambling corpse.",
+})
 
 
 
+
+createItem("pink_scroll", SCROLL("Fireball", false), {
+  examine:'A scroll with a magical glyph on it.',
+})
+
+createItem("blue_scroll", SCROLL("Ice shard", true), {
+  examine:'A scroll with a magical glyph on it.',
+})
+
+createItem("healing_potion", POTION("Healing"), {
+  examine:'A sweet smelling concoction!',
+})
 
 createItem("chest", CONTAINER(true), LOCKED_WITH(), {
   loc:"practice_room",

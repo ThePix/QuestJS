@@ -14,6 +14,7 @@ test.tests = function() {
   //ioUpdateCustom()
 
   settings.attackOutputLevel = 2
+  //settings.includeHitsInExamine = true
 
   test.title("Elements");
   test.assertEqual("fire", elements.opposed('frost'))
@@ -77,6 +78,8 @@ test.tests = function() {
   attack.resolve(w.goblin, true, 0)
   test.assertEqual(40, w.goblin.health)
   test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.goblin.attitude)
+  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.orc.attitude)
+  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.snotling.attitude)
 
   
 
@@ -111,7 +114,7 @@ test.tests = function() {
   attack = Attack.createAttack(player, w.orc)
   test.assertEqual('me', attack.attacker.name)
   test.assertEqual('2d10+4', attack.damage)
-  test.assertEqual(5, attack.offensiveBonus)  // player has + 3 plus 2 from l107 above
+  test.assertEqual(5, attack.offensiveBonus)  // player has + 3 plus 2 from l07 above
   
 
   random.prime([19, 4, 7])
@@ -291,8 +294,8 @@ test.tests = function() {
   random.prime(19)
   attack.resolve(w.me, true, 0)
   test.assertEqual(79, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you, but the ice amulet protects you, and you take no damage.", attack.reportTexts[13].t)
-  log(attack.reportTexts)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you, but the ice amulet protects you, and you take no damage.", attack.reportTexts[14].t)
+  
   
   w.me.health = 100
   w.goblin.spellCasting = false
@@ -370,7 +373,7 @@ test.tests = function() {
   random.prime([19,6, 6, 6])
   attack4.resolve(w.me, true, 0)
   test.assertEqual(97, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[13].t)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[14].t)
 
 
   test.title("cast Vuln to Frost")
@@ -382,7 +385,7 @@ test.tests = function() {
   random.prime([19,6, 6, 6])
   attack4.resolve(w.me, true, 0)
   test.assertEqual(73, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[13].t)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[14].t)
 
 
   test.title("cast Immunity to Frost")
@@ -393,7 +396,7 @@ test.tests = function() {
   random.prime([19,6, 6, 6])
   attack4.resolve(w.me, true, 0)
   test.assertEqual(100, w.me.health)
-  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[13].t)
+  test.assertEqual("A shard of ice jumps from the goblin's finger to you!", attack4.reportTexts[14].t)
 
 
   player.skillsLearnt = ["Double attack", "Fireball"]
@@ -449,7 +452,7 @@ test.tests = function() {
   test.assertEqual(true, player.isLight)
   test.assertEqual(world.LIGHT_FULL, player.lightSource())
   test.assertCmd('s', ['You head south.', 'The cupboard', 'A large storeroom, with no windows.', 'You can go north.'])
-  test.assertCmd('n', ['You head north.', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin, an orc (holding a huge shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go south or west.'])
+  test.assertCmd('n', ['You head north.', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin, an orc (holding a huge shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
 
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...', 'You stop shining.'])
@@ -461,12 +464,18 @@ test.tests = function() {
   test.assertCmd('cast Teleport', ['You cast the <i>Teleport</i> spell.', 'The <i>Teleport</i> spell has no effect - no location has been marked!'])
   test.assertCmd('cast Mark', ['You cast the <i>Mark</i> spell.', 'This location is marked for future use.'])
   test.assertCmd('cast Returning', ['You cast the <i>Returning</i> spell.', 'The air swirls around you, and everything blurs...', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can see fourteen arrows and Stone of Returning here.', 'You can go north or south.'])
-  test.assertCmd('cast Teleport', ['You cast the <i>Teleport</i> spell.', 'The air swirls around you, and everything blurs...', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin, an orc (holding a huge shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go south or west.'])
+  test.assertCmd('cast Teleport', ['You cast the <i>Teleport</i> spell.', 'The air swirls around you, and everything blurs...', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin, an orc (holding a huge shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
   
   
 
-  test.title("cast Walk On Water")
+  test.title("guards")
+  w.practice_room.guarded = true
   test.assertCmd('w', ['You open the door to the great hall and walk through.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.', 'You can go east or north.'])
+  
+  
+
+  
+  test.title("cast Walk On Water")
   test.assertCmd('n', ['You head north.', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can see fourteen arrows and Stone of Returning here.', 'You can go north or south.'])
   test.assertCmd('n', ['You dive into the lake...', 'The lake swimming', 'You are swimming in a lake! Dry land is to the south.', 'You can go south.'])
   test.assertCmd('s', ['You head south.', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can see fourteen arrows and Stone of Returning here.', 'You can go north or south.'])
@@ -502,7 +511,7 @@ test.tests = function() {
   const illusion = cloneObject(w.phantasm_prototype, 'great_hall')
   illusion.alias = 'red dragon'
   illusion.examine = 'A scary dragon, that is definitely real!'
-  player.skillsLearnt = ["Double attack", "Fireball", "Returning", "Teleport", "Mark", "Unillusion"]
+  player.skillsLearnt = ["Double attack", "Fireball", "Returning", "Teleport", "Mark", "Unillusion", "Summon Frost Elemental", "Dispel", "Healing"]
 
   test.assertCmd('s', ['You head south.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.', 'You can see a red dragon here.', 'You can go east or north.'])
   test.assertCmd('cast unillusion', ['You cast the <i>Unillusion</i> spell.', 'The red dragon disappears.'])
@@ -544,6 +553,33 @@ test.tests = function() {
   test.assertEqual(92, w.me.health)
 
 
+  test.title("guards")
+  test.assertCmd('e', ['The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, an orc (holding a huge shield), a rabbit, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
+
+  w.orc.attitude = rpg.BELLIGERENT
+  test.assertCmd('e', ['You try to head east, but the orc bars your way. Looks like he is going to attack!'])
+  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.orc.attitude)
+  
+  
+  
+  test.title("scrolls")
+  w.pink_scroll.loc = player.name
+  w.blue_scroll.loc = player.name
+  world.update()
+
+  random.prime([19, 4, 4, 4, 19, 3, 3, 3, 18, 5, 2, 3])
+  test.assertCmd('use pink on orc', ["You should not specify a target when using this item."])
+  test.assertCmd('use pink', ["You cast the <i>Fireball</i> spell from the pink scroll.", "The room is momentarily filled with fire.", "The orc reels from the explosion.", "The attack does 12 hits, the orc's health is now 48.", "The snotling reels from the explosion.", "The attack does 9 hits, the snotling's health is now 11.", "The rabbit reels from the explosion.", "The attack does 10 hits, the rabbit's health is now 10.", "The scroll crumbles to dust."])
+  
+  random.prime([3])
+  test.assertCmd('use blue', ["You need to specify a target when using this item."])
+  test.assertCmd('use blue on orc', ["You cast the <i>Ice shard</i> spell from the blue scroll.", "A miss...", "The scroll crumbles to dust."])
+
+
+  test.title("potions")
+  w.healing_potion.loc = player.name
+  world.update()
+  test.assertCmd('drink potion', ["You drink the healing potion, casting the <i>Healing</i> spell.", "You have 100 hits."])
 
 
 

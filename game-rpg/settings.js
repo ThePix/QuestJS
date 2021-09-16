@@ -87,7 +87,7 @@ settings.dateTime = {
 // to introduce your game.
 settings.setup = function() {
   player.skillsLearnt = ["Double attack", "Fireball"]
-  createAdditionalPane(0, "Spells", 'spells-known', function() {
+  createAdditionalPane(1, "Spells", 'spells-known', function() {
     let html = ''
     for (const name of player.skillsLearnt) {
       html += '<p class="item" onclick="runCmd(\'cast ' + name + '\')" >' + name + '</p><br/>'

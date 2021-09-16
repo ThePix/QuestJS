@@ -458,6 +458,32 @@ new SpellSelf("Annulment", {
 
 
 
+new SpellSelf("Dispel", {
+  icon:'annul',
+  description:"Dispels all elementals across the entire world!",
+  targetEffect:function(attack) {
+    rpg.broadcast('elementals', 'destroy', 'player')
+    return true
+  },
+})
+
+
+
+new SpellSelf("Healing", {
+  icon:'annul',
+  description:"A standard healing spell.",
+  tactical:"Gives up to 25 hit points (up to your maximum).",
+  hits:25,
+  targetEffect:function(attack) {
+    attack.attacker.health += 25
+    if (attack.attacker.health > attack.attacker.maxHealth) attack.attacker.health = attack.attacker.maxHealth
+    log(attack.attacker.health)
+    attack.msg("{nv:attacker:have:true} {show:attacker:health} hits.")
+    return true
+  },
+})
+
+
 
 new Spell("Commune with animal", {
   level:1,

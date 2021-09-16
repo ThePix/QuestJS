@@ -485,6 +485,8 @@ const lang = {
   unequip:"{nv:char:put:true} away {nm:item:the}.",
   unequipAndEquip:"{nv:char:put:true} away {show:list}, and equip {nm:item:the}.",
   castSpell:"{nv:attacker:cast:true} the {i:{nm:skill}} spell.",
+  castSpellFrom:"{nv:attacker:cast:true} the {i:{nm:skill}} spell from {nm:source:the}.",
+  drinkPotion:"{nv:attacker:drink:true} {nm:source:the}, casting the {i:{nm:skill}} spell.",
   defaultEffectExpires:"The {i:{show:effect:alias}} effect on {nm:target:the} expires.",
   damageReport:"The attack does {show:modifiedDamage} hits, {nms:target:the} health is now {show:target:health}.",
 
@@ -495,6 +497,11 @@ const lang = {
   cannotTalkToBeast:"{nv:char:spend:true} a few minutes telling {nm:item:the} about {pa:char} life, but {pv:item:do} not seem interested. Possibly because {pv:item:be} just a dumb beast.",
   teleport:"{nv:attacker:feel:true} disorientated and the world around {sb:attacker} dissolves. A moment later, {nv:attacker:be} somewhere else.",
   summoning_successful:"{nv:item:appear:true} before {nm:attacker:the}.",
+  
+  deadAddendum:' {pv:item:be:true} dead.',
+  asleepAddendum:' {pv:item:be:true} sleeping.',
+  injuredAddendum:' {pv:item:be:true} somewhat injured.',
+  badlyInjuredAddendum:' {pv:item:be:true} badly injured.',
   
 
   //----------------------------------------------------------------------------------------------
@@ -685,7 +692,7 @@ const lang = {
     metamsg("The TRANSCRIPT or SCRIPT commands can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.")
     metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. To clear the stored data, use SCRIPT CLEAR. To clear the old data and turn recording on in one step, use SCRIPT START.")
     metamsg("Use SCRIPT SHOW to display it - it will appear in a new tab; you will not lose your place in the game. Some browsers (Firefox especially) may block the new tab, but will probably give the option to allow it in a banner at the top. You will prpobably need to do the command again.")
-    metamsg("You can add a comment to the transcript by starting your text with an asterisk (*) - Quest will record it, but otherwise just ignore it.")
+    metamsg("You can add a comment to the transcript by starting your text with an asterisk, {code:*}, or semi-colon, {code:;}, - Quest will record it, but otherwise just ignore it.")
     metamsg("Everything gets saved to \"LocalStorage\", so will be saved between sessions. If you complete the game the text input will disappear, however if you have a transcript recording, a link will be available to access it.");
     metamsg("Transcript is currently: " + (io.transcript ? 'on' : 'off'))
     return world.SUCCESS_NO_TURNSCRIPTS;

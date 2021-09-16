@@ -11,3 +11,7 @@ tp.addDirective("lore", function(arr, params) {
 
 
 
+rpg.signalResponses.destroy = function() {
+  this.msg("{nv:item:be:true} dispelled.", {item:this})
+  rpg.destroy(this)
+}
