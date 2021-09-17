@@ -477,7 +477,6 @@ new SpellSelf("Healing", {
   targetEffect:function(attack) {
     attack.attacker.health += 25
     if (attack.attacker.health > attack.attacker.maxHealth) attack.attacker.health = attack.attacker.maxHealth
-    log(attack.attacker.health)
     attack.msg("{nv:attacker:have:true} {show:attacker:health} hits.")
     return true
   },

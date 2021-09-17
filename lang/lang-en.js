@@ -488,6 +488,7 @@ const lang = {
   
   // Purely for RPGs
   
+  attacking:"{nv:attacker:attack:true} {nm:target:the}.",
   primarySuccess:"A hit!",
   primaryFailure:"A miss!",
   noTarget:'No target found for attack',
@@ -500,9 +501,6 @@ const lang = {
   defaultEffectExpires:"The {i:{show:effect:alias}} effect on {nm:target:the} expires.",
   damageReport:"The attack does {show:modifiedDamage} hits, {nms:target:the} health is now {show:target:health}.",
 
-  damage:'Damage',
-  damageRoll:'Damage roll',
-
   communeWithAnimalSpell:'Commune with animal',
   cannotTalkToBeast:"{nv:char:spend:true} a few minutes telling {nm:item:the} about {pa:char} life, but {pv:item:do} not seem interested. Possibly because {pv:item:be} just a dumb beast.",
   teleport:"{nv:attacker:feel:true} disorientated and the world around {sb:attacker} dissolves. A moment later, {nv:attacker:be} somewhere else.",
@@ -512,6 +510,16 @@ const lang = {
   asleepAddendum:' {pv:item:be:true} sleeping.',
   injuredAddendum:' {pv:item:be:true} somewhat injured.',
   badlyInjuredAddendum:' {pv:item:be:true} badly injured.',
+  
+  searchAlive:'{nv:char:think:true} searching {nm:item:the} whilst {pv:item:be} alive and awake is a bad idea.',
+  searchNothing:'{nv:char:search:true} {nm:item:the}, but find nothing.',
+  
+  deathGeneral:'{nv:target:fall:true} down, dead.',
+  deathConstruct:'{nv:target:fall:true} down; it seems to be inactive.',
+  deathUndead:'{nv:target:fall:true} down - no longer undead, merely dead.',
+  deathUndeadNoCorpse:'{nv:target:vanish:true}, apparently defeated.',
+  deathElemental:'{nv:target:disipate:true}, defeated.',
+  deathPhantom:'{nv:target:vanish:true}.',
   
 
   //----------------------------------------------------------------------------------------------

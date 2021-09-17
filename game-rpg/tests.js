@@ -583,6 +583,19 @@ test.tests = function() {
 
 
 
+  test.title("death")
+  test.assertCmd('x sn', 'A cowering green humanoid; hairless and dressed in rags.')
+  test.assertCmd('search sn', 'You think searching the snotling whilst he is alive and awake is a bad idea.')
+  test.assertCmd('equip knife', 'You draw the knife.')
+  random.prime([18, 3, 3])
+  test.assertCmd('attack snotling', ['You attack the snotling.', 'A hit!', 'The attack does 8 hits, the snotling\'s health is now 3.'])
+  random.prime([18, 3, 3])
+  test.assertCmd('attack snotling', ['You attack the snotling.', 'A hit!', 'The attack does 8 hits, the snotling\'s health is now -5.', 'The snotling falls down, dead.'])
+  test.assertCmd('x sn', 'A cowering green humanoid; hairless and dressed in rags. He is dead.')
+  w.snotling.exDead = 'The bloody corpse of a snotling, merciless cut down in his prime.'
+  test.assertCmd('x sn', 'The bloody corpse of a snotling, merciless cut down in his prime.')
+  test.assertCmd('search sn', 'You search the snotling, but find nothing.')
+
 /**/
   
 };
