@@ -564,9 +564,9 @@ const imported = [
 
 const monsters = [
     {
-        "name": "ghost",
-        "desc": "Floating a little above the ground, the insubstantial ghost regards you with its one good eye.",
-        "instances": [
+        name:"ghost",
+        desc:"Floating a little above the ground, the insubstantial ghost regards you with its one good eye.",
+        instances: [
             {
                 "desc": "The spirit of someone who has died in unfortunate circumstances.",
                 "name": "minor apparition"
@@ -628,54 +628,21 @@ const monsters = [
                 "name": "wraith lord"
             }
         ],
-        "specialAttacks": [
+        specialAttacks: [
             {
                 "name": "ghost_attack",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
-                "canberusted": {
-                    "type": "boolean",
-                    "text": "false"
-                },
+                "canberusted":false,
                 "attackdesc": "The % lunges at you"
             },
             {
                 "name": "wraith_attack",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
-                "canberusted": {
-                    "type": "boolean",
-                    "text": "false"
-                },
+                "canberusted":false,
                 "attackdesc": "The % tries to drain your intelligence",
                 "mustmatch": "wraith"
             },
             {
                 "name": "banshee shriek",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
-                "canberusted": {
-                    "type": "boolean",
-                    "text": "false"
-                },
+                "canberusted":false,
                 "attackdesc": "The % emits an ear-spliting shriek",
                 "mustmatch": "banshee",
                 "onsuccessfulattack": {
@@ -684,13 +651,14 @@ const monsters = [
                 }
             }
         ],
-        "element": "necrotic",
-        "treasureChance": 0,
+        treasureChance: 0,
+        template:RPG_NON_CORPOREAL_UNDEAD(),
     },
     {
-        "name": "zombie",
-        "desc": "The bodies of the recently dead are easily transformed into zombies by those skilled in the necrotic arts.",
-        "instances": [
+        name:"zombie",
+        desc:"The bodies of the recently dead are easily transformed into zombies by those skilled in the necrotic arts.",
+        template:RPG_CORPOREAL_UNDEAD(),
+        instances:[
             {
                 "desc": "The bodies of the recently dead are easily transformed into animated corpses by those skilled in the necrotic arts.",
                 "name": "animated corpse"
@@ -754,8 +722,9 @@ const monsters = [
         ]
     },
     {
-        "name": "kobold",
-        "instances": [
+        name:"kobold",
+        template:RPG_NPC(),
+        instances:[
             {
                 "desc": "Smallest of the goblinoids, the snotling is nevertheless dangerous when encountered in numbers.",
                 "name": "snotling"
@@ -819,8 +788,9 @@ const monsters = [
         ]
     },
     {
-        "name": "kobold_shaman",
-        "instances": [
+        name:"kobold_shaman",
+        template:RPG_NPC(),
+        instances:[
             {
                 "desc": "Smallest of the goblinoids, the snotling is nevertheless dangerous when encountered in numbers.",
                 "name": "snotling shaman"
@@ -882,17 +852,9 @@ const monsters = [
                 "name": "ogre monarch magi"
             }
         ],
-        "specialAttacks": [
+        specialAttacks:[
             {
                 "name": "kobold_shaman_ice_blast",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % casts <i>Ice blast</i> at you",
                 "damagedicenumber": {
                     "type": "int",
@@ -907,14 +869,6 @@ const monsters = [
             },
             {
                 "name": "kobold_shaman_lightning",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % casts <i>Lightning bolt</i> at you",
                 "damagedicesides": {
                     "type": "int",
@@ -929,14 +883,6 @@ const monsters = [
             },
             {
                 "name": "kobold_shaman_staff",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % swings his staff at you",
                 "damagedicesides": {
                     "type": "int",
@@ -946,14 +892,6 @@ const monsters = [
             },
             {
                 "name": "kobold_shaman_weaken",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "damagedicesides": {
                     "type": "int",
                     "text": "14"
@@ -971,12 +909,12 @@ const monsters = [
                 }
             }
         ],
-        "treasureChance": 20,
+        treasureChance:20,
     },
     {
-        "name": "elemental_archetype",
-        "desc": "A swirling mass of %element%.",
-        "instances": [
+        name:"elemental_archetype",
+        desc:"A swirling mass of %element%.",
+        instances:[
             {
                 "desc": "Floating, swirling elemental %element%, a little larger than your head.",
                 "name": "elemental guardian"
@@ -1016,8 +954,9 @@ const monsters = [
         ]
     },
     {
-        "name": "fiend",
-        "instances": [
+        name:"fiend",
+        template:RPG_DEMON(),
+        instances:[
             {
                 "desc": "A small humanoid, the imp has grey skin, pointed eyes and no hair at all. It stares at you with cruel, cat-like eyes.",
                 "name": "imp"
@@ -1079,17 +1018,9 @@ const monsters = [
                 "name": "demon lord"
             }
         ],
-        "specialAttacks": [
+        specialAttacks:[
             {
                 "name": "fiend_fire_blast",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % casts <i>Fire Storm</i> at you",
                 "damagedicenumber": {
                     "type": "int",
@@ -1104,14 +1035,6 @@ const monsters = [
             },
             {
                 "name": "fiend_lightning",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % casts <i>Lightning Storm</i> at you",
                 "damagedicesides": {
                     "type": "int",
@@ -1126,14 +1049,6 @@ const monsters = [
             },
             {
                 "name": "fiend_claw",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % lunges at you with its claws",
                 "damagedicesides": {
                     "type": "int",
@@ -1143,14 +1058,6 @@ const monsters = [
             },
             {
                 "name": "fiend_befuddle",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "damagedicesides": {
                     "type": "int",
                     "text": "14"
@@ -1168,11 +1075,12 @@ const monsters = [
                 }
             }
         ],
-        "treasureChance": 20,
+        treasureChance:20,
     },
     {
-        "name": "horror",
-        "instances": [
+        name:"horror",
+        template:RPG_CORRUPTED(),
+        instances:[
             {
                 "desc": "A mottled worm-like creature, with three sickly-white tentacles emerging from its mouth.",
                 "name": "maloeg grub"
@@ -1234,17 +1142,9 @@ const monsters = [
                 "name": "ascended maloeg"
             }
         ],
-        "specialAttacks": [
+        specialAttacks:[
             {
                 "name": "horror_death_blast",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % blasts you with necrotic might",
                 "damagedicenumber": {
                     "type": "int",
@@ -1259,14 +1159,6 @@ const monsters = [
             },
             {
                 "name": "horror_lightning",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % blasts you with lightning",
                 "damagedicesides": {
                     "type": "int",
@@ -1281,14 +1173,6 @@ const monsters = [
             },
             {
                 "name": "horror_tentacle",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % whips a foul tentacle",
                 "damagedicesides": {
                     "type": "int",
@@ -1297,11 +1181,12 @@ const monsters = [
                 "alias": "Tentacle"
             }
         ],
-        "treasureChance": 0,
+        treasureChance:0,
     },
     {
-        "name": "construct_archetype",
-        "instances": [
+        name:"construct_archetype",
+        template:RPG_CONSTRUCT(),
+        instances:[
             {
                 "desc": "Unlike the usual scarecrow, this one has eyes of fire. And it moves.",
                 "name": "scarecrow"
@@ -1365,8 +1250,9 @@ const monsters = [
         ]
     },
     {
-        "name": "dragon",
-        "instances": [
+        name":"dragon",
+        template:RPG_BEAST(),
+        instances:[
             {
                 "desc": "A large snake with intelligent eyes.",
                 "name": "serpent"
@@ -1428,17 +1314,9 @@ const monsters = [
                 "name": "ancient dragon"
             }
         ],
-        "specialAttacks": [
+        specialAttacks:[
             {
                 "name": "dragon_bite",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % bites at you",
                 "damagedicesides": {
                     "type": "int",
@@ -1457,14 +1335,6 @@ const monsters = [
             },
             {
                 "name": "dragon_claw",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "The % lunges at you with its claws",
                 "damagedicesides": {
                     "type": "int",
@@ -1475,10 +1345,7 @@ const monsters = [
                     "type": "int",
                     "text": "2"
                 },
-                "canberusted": {
-                    "type": "boolean",
-                    "text": "false"
-                },
+                "canberusted":false,
                 "nonweapon": [],
                 "level": {
                     "type": "int",
@@ -1487,14 +1354,6 @@ const monsters = [
             },
             {
                 "name": "dragon_breath",
-                "inherit": [
-                    {
-                        "name": "editor_object"
-                    },
-                    {
-                        "name": "monster_attack"
-                    }
-                ],
                 "attackdesc": "A jet of fire shoots from the %'s mouth",
                 "damagedicesides": {
                     "type": "int",
@@ -1505,10 +1364,7 @@ const monsters = [
                     "type": "int",
                     "text": "4"
                 },
-                "canberusted": {
-                    "type": "boolean",
-                    "text": "false"
-                },
+                "canberusted":false,
                 "nonweapon": [],
                 "level": {
                     "type": "int",
@@ -1522,3 +1378,20 @@ const monsters = [
         ]
     }
 ]
+
+
+for (const el of monsters) {
+  
+  for (let i = 0; i < el.instances.length; i++) {
+    const name = el.instances[i].replace(' ', '_')
+    createItem(name + "_prototype", el.template, {
+      name:name,
+      alias:sentenceCase(el.instances[i]),
+      desc:el.instances[i].desc,
+      element:el.element
+      level:i,
+    }),     
+  }
+  
+  
+}
