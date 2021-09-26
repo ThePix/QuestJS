@@ -218,7 +218,7 @@ createItem("phantasm_prototype", RPG_PHANTOM(), {
 })
 
 
-
+/*
 createItem("zombie_prototype", RPG_CORPOREAL_UNDEAD(), {
   alias:'zombie',
   damage:"2d4",
@@ -226,7 +226,7 @@ createItem("zombie_prototype", RPG_CORPOREAL_UNDEAD(), {
   signalGroups:['zombies'],
   ex:"A shambling corpse.",
 })
-
+*/
 
 
 
@@ -911,7 +911,7 @@ const monsters = [
         ],
         treasureChance:20,
     },
-    {
+    /*
         name:"elemental_archetype",
         desc:"A swirling mass of %element%.",
         instances:[
@@ -952,7 +952,7 @@ const monsters = [
                 "name": "elemental archon"
             }
         ]
-    },
+    },*/
     {
         name:"fiend",
         template:RPG_DEMON(),
@@ -1250,7 +1250,7 @@ const monsters = [
         ]
     },
     {
-        name":"dragon",
+        name:"dragon",
         template:RPG_BEAST(),
         instances:[
             {
@@ -1383,14 +1383,15 @@ const monsters = [
 for (const el of monsters) {
   
   for (let i = 0; i < el.instances.length; i++) {
-    const name = el.instances[i].replace(' ', '_')
-    createItem(name + "_prototype", el.template, {
-      name:name,
-      alias:sentenceCase(el.instances[i]),
+    const name = el.instances[i].name.replace(/ /g, '_') + "_prototype"
+    log(name)
+    createItem(name, el.template, {
+      name:el.instances[i].name,
+      alias:sentenceCase(el.instances[i].name),
       desc:el.instances[i].desc,
-      element:el.element
+      element:el.element,
       level:i,
-    }),     
+    })
   }
   
   
