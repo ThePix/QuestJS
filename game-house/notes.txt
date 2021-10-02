@@ -1,0 +1,328 @@
+20. ‘One Way or Another (Teenage Kicks)’ (2013)
+19. ‘I Should Have Kissed You’ (2011)
+18. ‘Rock Me' (2012)
+17. 'Gotta Be You' (2011)
+16. 'Happily' (2013)
+15. ‘Girl Almighty' (2014)
+14. 'Stockholm Syndrome' (2014)
+13. ‘One Thing’ (2011)
+12. ‘Diana’ (2013)
+11. ‘You & I’ (2013)
+10. ‘Little Things' (2012)
+9. ‘Where Do Broken Hearts Go’ (2014)
+8. ‘Live While We’re Young’ (2012)
+7. ‘Night Changes’ (2014)
+6. ‘Midnight Memories’ (2013)
+5. ‘Story of My Life' (2013)
+4. ‘Kiss You’ (2012)
+3. ‘Steal My Girl’ (2014)
+2. ‘What Makes You Beautiful’ (2011)
+1. ‘Best Song Ever’ (2013)
+
+
+
+
+I liked the main character, and the 3rd person narration helped keep her present in the game rather than fading away.  I did feel like she could use a little bit of additional characterization and motivation after the initial part of the game, though -- it's not clear if she's more excited to be exploring this scary place, or desperate to escape and get back to her family, or a mixture of both.  Since her idiosyncracies are a big part of the endgame, I think you want to make sure the thread continues though the more puzzly midgame.
+
+
+
+
+
+grating:
+
+
+
+agenda wait counter needs to reset!!
+
+
+consider disabling silvers if one is caught. might be tricky, as windows depend on that
+
+
+
+
+
+enlarge seeds
+
+
+
+
+
+More silvers
+
+
+
+
+
+https://github.com/vercel/pkg
+
+
+
+
+Checklist
+Check source code using Notepad++:
+  for spelling (Notepad++ highlights text and will underline words it does not know)
+  for each location
+    check the name is displayed properly (eg "the")
+    are all the items mentioned in the description implemented
+    check the description
+  for each item
+    check the name is displayed properly (eg "the"), pronouns are right
+    think about possible synonyms (if an item's name changes, ensure all options are listed in parserAltName)
+    what happens if the player tries to EXAMINE or TAKE it? What about USE it?
+  for each character
+    check the name is displayed properly (eg "the"), pronouns are right
+    what happens if the player tried to:
+      GIVE him something
+      TALK TO him
+      ASK him ABOUT something; what if it is something you have not anticipated
+      TELL him TO do something; what if it is something you have not anticipated
+      TELL him to FOLLOW or stop following
+
+Play though the game (possibly using a walk-though):
+  ensure you can get to the finish 
+  ensure no warnings in the developer console
+  copy-and-paste the transcript into a word processor, eg MS Word, and check for spelling and grammar
+-Repeat as often as required
+
+Set playMode to "beta"
+
+Upload
+Test transcript
+Test save/load
+
+Get other people to play the game
+  can they find spelling and grammar errors
+  can they get into unwinnable situation
+  are puzzles too difficult
+  are there commands, item and synonyms they try to use that you have not implemented
+  do they see any error messages
+-Repeat as often as required
+
+Set playMode to "play"
+
+Play though the game:
+  ensure you can get to the finish 
+  ensure no any warnings in the developer console
+
+Release
+
+
+
+
+
+
+The hourglass was probably the most complex part of the game. The way I approached it was to add each feature to it incrementally, and to test at each point. I also split off the growing plant, as that is done by the bare earth object.
+
+Size changing was easy - it is just adding the template.
+
+I added a component, the tap/protusion, with a description determined by the size of the hourglass. I tested this by changing the size in the console.
+
+Then I added the command to turn it over, and checked that.
+
+Next I added the turn script, with a dummy getIncrement function that returns a set number. I checked what happened if the hourglass is turned part way through, etc. I realised that turning over had to not just re
+
+I gave the bare earth dummy "magicGrowth" and "magicGrowthEnd" functions that just print messages, then had the hourglass fire these from the turn script and when it is removed from the pedestal, so that could be tested.
+
+I implemented the getIncrement function to take account of size and fill state. As I was not sure how long I wanted the hourglass to run for, I gave it a "targetRoundCount" to represent the number, so I could change it later.
+
+Then I sorted out filling it with sand.
+
+Lastly I did EXAMINE. Size changing objectys have a set of descriptions and a custom "examine" attribute. I wanted to add to that to describe the state of the sand, so created a custom text processor directive to do that.
+
+Next the bare earth object...
+
+
+
+
+Background Notes
+----------------
+23, Highfield Lane, Westleigh
+Hedlington is to the north
+Amanda Kettleton
+She lives in a barn conversion since 3 years ago
+It is Apr/may 2016
+
+
+She attends Kyderbrook High School
+Mrs Kennedy was always saying you should confront you feels head on in Personal Development lessons.
+Ms Coulter, English
+
+Mr Cockbill had once set up a distillation in chemistry, and she tried to remember what it had looked like it. She had a feeling nothing like this, but she seemed to remember spending the lesson passing notes to Finley O'Donnell, trying to convince him that Claire Grossman fancied him.
+
+
+The house changed in 1911
+
+Curently medieval has hamlet. If the map is extended, consider changing. Remember the hints.
+
+
+
+Summary
+-------
+The machine and the house are kind of alive. They got invaded by the silvers. One silver is a renegade and can be talked to.
+
+Winfield says these, in this order. Other characters should say them too.
+
+"Story of my life" tiny man
+"Midnight memories" silver (to be done)
+"More than this" fireman
+"Steal my girl" tiny man
+"Gotta be you" 
+"One thing"
+"One way or another"
+"You and I"
+"Night changes" CT
+"Drag me down"
+"Perfect" CT
+
+
+
+
+
+
+'What are you?'
+'A phantom, not quite real note quite illusion, just midnight memories.
+
+
+
+
+
+'What's it made of?'
+'Steel, my girl'
+'It's a bit big I'm afraid.'
+'Story of my life!'
+
+
+Segment 1: Get boots
+------------------------
+
+Get letter
+Head inside
+Move cabinet in big/little room
+Find boots
+Shrink
+Take to tiny man in dolls house to repair
+Enlarge
+
+Segment 2: Animate Patch
+------------------------
+
+Take the wire onto the roof, wait for lightning
+Get chamber pot
+Give boots
+Get boots
+Enlarge boots
+Remove paper
+Shrink boots
+Give to patch
+
+Segment 3: The Clockwork Thespian
+--------------------------------
+
+Find the key in the clock in the dining room
+Enlarge key
+Wind up the CT
+Solve CT's riddle by looking at the book in the right zone (not possible currently)
+CT will then tell you about the chessboard
+Go through portal
+Get sand in chamber pot
+Get oar to get back
+
+
+tamarind
+lotus flower oil (already bottled)
+frangipani (plumeria) leaves, need to be cut
+
+
+
+Why do we need sand
+Use sand to fill up hourglass to give longer for something
+
+
+
+
+
+
+
+
+
+
+Break window to get shard, perhaps to cut plant. Could then use sand to make potion.
+Could find secret recipe inside boot.
+"Mandy put the left boot on Patch then the right... Suddenly he gets agitated, and pulls the boot off. She tries again, and he does the same. There is definitely something wrong with that boot. Reluctantly she puts her hand in, and feels inside. There {i:is} something there. She can feel it, but not quite reach it."
+Need to flag that it is now one boot
+
+May be have alchemy lab as well as mad science lab.
+Use book to identify flowers; one from balcony, one from below
+The one from the balcony could be knocked down then collected
+Perhaps you need to take precautions to stop something grabbing it - Patch
+... but need him for other stuff too
+
+
+
+Silvers
+
+no follow
+
+boot may not be pair
+
+
+
+
+_________________________________________________________
+
+
+
+
+
+
+
+
+
+Distract the butler by ringing the servant's doorbell; this gives you just enough time to climb up the trellis, enter the library window, and open the bookcase -- but the butler always scuttles in and catches you just then. You might try putting that banana peel just outside the library door, so that when the butler tries to enter the room, he slips, allowing you a little extra time. You'd better be out the window before he recovers, or else he'll suspect what you're up to.
+
+
+
+
+Need an overall plot that requires certain things found/discovered before finding the man at the centre of it all.
+
+
+Something patroling round four rooms in circuit, one round in doorway, one in room. Need to get chair to stand on, etc.
+
+
+
+Cat follows player; stops to wash every niow and again. Maybe it sometimes disappears?
+
+
+
+
+
+
+Airport lounge zone?
+
+
+
+
+
+Glimpses
+Glimpses and gargolyes: every so often mention that get glimpse of something flitting away insidethe house. Gargoyles are outside.
+
+The house is maintained by "glimpses", who kind of resemble gargoyles.
+
+
+
+
+
+
+Mandy approached the glimpse. it stepped back, seemingly afraid of her, or wary at least. 'It's okay, I won't hurt you,' she said, even as she wondered if she should be afraid of it. 'Can you talk?' It shook its head.
+
+
+'What are you?' asked Mandy, then realised it would struggle to answer if it could not talk. Yes and no answer questions only.
+
+
+
+'Are you part of the house?' It nodded.
+
+
+
+
+status bar
