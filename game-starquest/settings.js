@@ -24,7 +24,7 @@ settings.inventoryPane = [
 
 settings.favicon = 'assets/icons/starquest.png'
 
-
+settings.funcForDynamicConv = 'showMenuDiag'
 
 settings.status = [
   function() { return "<td>Stardate:</td><td>" + w.ship.getDateTime() + "</td>"; },
@@ -45,8 +45,27 @@ settings.imageStyle = {
   border:'3px black solid',
 }
 
+settings.roomCreateFunc = function(o) {
+  if (o.dests) {
+    for (const ex of o.dests) {
+      ex.origin = o
+      ex.dir = 'to ' + (o.dirAlias ? o.dirAlias : o.alias)
+    }
+  }
+}
 
 settings.setup = function() {
+  
+  createAdditionalPane(1, "Go to", 'directions', function() {
+    let html = ''
+    for (const ex of currentLocation.dests) {
+      const dest = w[ex.name]
+      html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'go to ' + dest.alias.toLowerCase() + '\')">' + dest.headingAlias + '</p></div>'
+    }
+    return html
+  })
+  
+  
   msg("You step on to the bridge. 'Welcome aboard, sir,' says a blonde woman in a red uniform, handing you a PAGE. 'I'm Yeoman Rand, I've been designated as your aide. The ship is all set, sir. We just need to to appoint the bridge officers. I believe Command has prepared a short list on your PAGE.'")
   msg("'Thank you, yeoman.'")
   msg("'Can I ask what our mission is, sir?'")
@@ -55,16 +74,10 @@ settings.setup = function() {
   msg("'I was just told to report to the Starbase. Beyond that... you know as much as I do, yeoman. Hopefully we'll not be close enough to the border to encounter any Brakk ships.'")
   if (settings.playMode !== 'dev') wait()
   
-  metamsg("Assemble your crew by assigning candidates to posts on the bridge using your PAGE. Then ask the helmsman to lay in a course for sector 7 Iota. You will need a helmsman, but other posts can be left empty if you wish. You can assign officers to multiple roles, but will be less effective in both roles. Some candidates are better suited to a post than others, but it is up to you; if you want to appoint people to posts that will be poor at, go for it! Note that once you set off for Sector 7 Iota you cannot change assignments.")
-  metamsg('The crew will call you "Sir". If you prefer "Ma\'am", tell the yeoman.')
-  metamsg("Once you arrive at Sector 7 Iota, you will get a list of missions. You will need to prioritize. In most cases it takes about a day to travel between locations in the sector, but some locations are further out and will take longer; this will be noted in the mission. Obviously it will take a similar time to get back to a location in the central cluster.")
-  metamsg("As captain, your job is to tell others what to do - you are too value to the ship to risk on away missions.")
-  metamsg("If your screen is wide enough, you will see a star man on the right, but you do not need it to play the game. When you arrive in sector 7 Iota you will be able to toggle between  map of the stars in the sector and the star system you are currently at.")
-  metamsg("Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental. Honest.")
+  metamsg("If thi is your first play through - or you just want a reminder of how to get going - click {cmd:intro page:here}.")
   if (settings.playMode !== 'dev') wait()
   stars.draw('stardock')
 }
-
 
 settings.startingDialogTitle = "Crew Roster"
 settings.startingDialogWidth = 500
@@ -104,7 +117,7 @@ settings.startingDialogOnClick = function() {
     io.updateUIItems()
   }
   if (roles.length !== 0 && !npc.loc) {
-    npc.loc = 'room'
+    npc.loc = 'bridge'
     msg(npc.entering, {char:npc})
     io.updateUIItems()
   }

@@ -4,6 +4,31 @@
 
 
 
+parser.isRoom = function(o) { return o.room }
+
+commands.unshift(new Cmd('GoToDest', {
+  npcCmd:true,
+  regex:/^(?:go to|go) (.+)$/,
+  objects:[
+    {scope:parser.isRoom}
+  ],
+  script:function(objects) {
+    const room = objects[0][0]
+    if (room === currentLocation) return failedmsg("As if by magic, you are suddenly... where you already were.")
+    if (!room.room) return failedmsg("{pv:item:be:true} not a destination.", {item:room})
+    for (const ex of currentLocation.dests) {
+      if (room.name === ex.name) {
+        return ex.use(player, ex) ? world.SUCCESS : world.FAILED
+      }
+    }
+    return failedmsg("{pv:item:be:true} not a destination you can get to from here.", {item:room})
+  },
+}))
+
+
+
+
+/*
 npc_utilities.talkto = function() {
   if (!player.canTalk(this)) return false
   const topics = this.getTopics(this)
@@ -20,14 +45,10 @@ npc_utilities.talkto = function() {
   return world.SUCCESS_NO_TURNSCRIPTS;
 }
 
-
-
-
-
 findCmd('TalkTo').objects[0].scope = function(item) {
   if (item.name === w.ship.onView) return true
   return item.isAtLoc(player.loc, world.PARSER) && (item.npc || item.player);
-}
+}*/
 
 
 io.msgInputText = function(s) {
@@ -110,6 +131,7 @@ const newCmds = [
   { name:'Missions' },
   { name:'Contact planet' },
   { name:'Star database' },
+  { name:'Intro' },
 ]
 
 for (let el of newCmds) {

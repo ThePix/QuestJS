@@ -10,8 +10,8 @@ test.tests = function() {
   w.ship.helm = 'sharraaa'
   w.ship.science = 'sharraaa'
   w.ship.engineering = 'farrington_moss'
-  w.sharraaa.loc = 'room'
-  w.farrington_moss.loc = 'room'
+  w.sharraaa.loc = 'bridge'
+  w.farrington_moss.loc = 'bridge'
   test.assertEqual("The Helmsman is Sharraaa.", processText("The Helmsman is {role:helm:alias}."))
   test.assertEqual("The Helmsman is the Salis.", processText("The Helmsman is {role:helm:altName}."))
   test.assertEqual("The Salis is the Helmsman.", processText("{role:helm:altName:true} is the Helmsman."))

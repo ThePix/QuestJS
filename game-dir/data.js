@@ -9,6 +9,7 @@ createItem("me", PLAYER(), {
 createRoom("lounge", {
   dests:[
     new Exit("kitchen"),
+    new Exit("master_bedroom"),
   ],
   desc:"A smelly room with an old settee and a tv.",
 })
@@ -179,6 +180,12 @@ createItem("phone", {
 
 
 
+createRoom("master_bedroom", {
+  desc:'A small, but snug bedroom.',
+  dests:[
+    new Exit("lounge"),
+  ],
+})
 
 
 

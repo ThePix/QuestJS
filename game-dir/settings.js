@@ -12,13 +12,11 @@ settings.compassPane = false
 settings.noTalkTo = false
 
 settings.setup = function() {
-  let html = '<div></div>'
   createAdditionalPane(2, "Go to", 'directions', function() {
-    log('here')
     let html = ''
     for (const ex of currentLocation.dests) {
       const dest = w[ex.name]
-      html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'go to ' + ex.name + '\')">' + dest.headingAlias + '</p></div>'
+      html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'go to ' + dest.alias.toLowerCase() + '\')">' + dest.headingAlias + '</p></div>'
     }
     return html
   })
