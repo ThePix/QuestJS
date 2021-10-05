@@ -22,32 +22,29 @@
 
 
 
-I liked the main character, and the 3rd person narration helped keep her present in the game rather than fading away.  I did feel like she could use a little bit of additional characterization and motivation after the initial part of the game, though -- it's not clear if she's more excited to be exploring this scary place, or desperate to escape and get back to her family, or a mixture of both.  Since her idiosyncracies are a big part of the endgame, I think you want to make sure the thread continues though the more puzzly midgame.
+
+
+
+> disconnect wires
+Mandy detaches the wire from strange device.
+
+
+
+
+The Gallery (South)
+The south end of the gallery is much like the north, if a little darker without the windows; again there are paintings along the east wall. The wooden panelling on the walls has warped, and shows sign of damp. There are doors to the south, east and west. There is a panel missing in one wall; some kind of mechanism is visible.
+The wire trails behind as Mandy unwinds it.
+> tie wire to mechanism
+There doesn't seem to be anything you might call 'mechanism' here.
 
 
 
 
 
-grating:
-
-
-
-agenda wait counter needs to reset!!
-
-
-consider disabling silvers if one is caught. might be tricky, as windows depend on that
 
 
 
 
-
-enlarge seeds
-
-
-
-
-
-More silvers
 
 
 

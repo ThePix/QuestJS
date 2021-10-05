@@ -218,7 +218,9 @@ createItem("clockwork_thespian", NPC(), CONTAINER(false), {
     return true
   },
   nameModifierFunction:function(list) {
-    if (list.length === 2) list.shift() // A hack!!!
+    list.length = 0
+    if (w.floppy_hat.loc === this.name) list.push('wearing a floppy hat')
+    if (w.large_key.loc === this.name) list.push('a large key in his back')
   },
 
   canTalk:function(text) {
@@ -331,7 +333,7 @@ createItem("clockwork_thespian", NPC(), CONTAINER(false), {
         msg("'Do you know a Dr Winfield Malewicz?' says Mandy. 'I've got a letter for him.'")
         msg("'Indeed I do, young lady. Indeed I do.' He pauses, presumably for dramatic effect - Mandy waits impatiently. 'He's my brother!'")
         msg("'Your brother? And is he... er... clockwork?'")
-        msg("'No, no. That would be absurd! He is flesh-and-blood, like you are me!'")
+        msg("'No, no. That would be absurd! He is flesh-and-blood, like you and me!'")
         msg("'Right... And where would I find him?'")
         msg("'Seems to spend most his time fiddling with that contraction of his. Steam operated analytical engine or some such nonsense. Find the steam engine and take the lift to the top. Nothing simpler, my dear.'")
       }

@@ -320,6 +320,7 @@ createItem("hole_in_wall", {
 })
 createItem("rods", {
   scenery:true,
+  synonym:['mechanism'],
   examine:"The rods that run behind the panels are circular in cross-section and look to be made of steel. There are supports on metal brackets.",
   take:"She gives one of the rods a good tug, but it is not moving.{once:.. And then suddenly it does, jerking to the left, making her squeal in surprise. Maybe she should just leave it; it could be vital to... something?}"
 })

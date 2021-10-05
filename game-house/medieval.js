@@ -501,8 +501,13 @@ createItem("bolts", COMPONENT("strange_device"), {
   synonyms:['pads', 'wires'],
   examine:"There are twelve bolts on the strange device, in a row under the control panel. {ifExists:patchwork_body:loc:Each has a wire that runs to a pad on the patchwork body:Each has a wire dangling from it}.",
   attachable:true,
+  rope:true,
+  parserPriority:15,
   testAttach:function(options) {
     return falsemsg("Mandy thinks about attaching the wire to the the strange device... But the other end is already soldered to it, and she decides having one end fixed to it is enough.")
+  },
+  handleUntieFrom:function() {
+    return failedmsg('Mandy thinks about detaching the wires, but decides to leave it alone. {ifExists:patchwork_body:loc:Just has a weird feeling it is important that they stay attached to the body:They are no use to her, and not doing any harm just dangling there}.')
   },
 })
 
@@ -542,7 +547,8 @@ createItem("wire", ROPE(8, "strange_device"), {
 
   suppessMsgs:true,
   attachTo:function(char, item) {
-    this.loc = item.name
+    if (this.locs[this.locs.length - 1] === player.name) this.locs.pop()
+    this.locs.push(item.name)
     this.tiedTo2 = item.name
     if (item === w.spike) {
       msg("Mandy wraps the wire from the spindle around the letter E on the weather vane, then lets the spindle drop, happy that it is secure.")
@@ -556,8 +562,11 @@ createItem("wire", ROPE(8, "strange_device"), {
     }
   },
   detachFrom:function(char, item) {
+    if (!this.tiedTo2) return falsemsg("Mandy looks at where the wire is soldered to the strange device. That is not coming of there.")
+
     this.tiedTo2 = false
-    item.loc = player.name
+    this.locs.pop()
+    this.locs.push(player.name)
     if (item === w.spike) {
       msg("Mandy unwraps the wire from the spindle around the letter E on the weather vane.")
     }
@@ -573,8 +582,9 @@ createItem("wire", ROPE(8, "strange_device"), {
     }
     if (!this.moved) this.moved = true
   },
-
 })
+
+
 
 createItem("mad_science_journal", SIZE_CHANGING(), {
   loc:"mad_science_lab",
@@ -695,17 +705,34 @@ createItem("yellow_balloon", {
     if (this.state === this.states.length) {
       msg("Suddenly everything goes white...")
       msg(w.great_gallery.north.msg)
-      for (const s of settings.roomTemplate) msg(s)
       this.reset()
       msg(this.states[0])
       this.state++      
+      for (const s of settings.roomTemplate) msg(s)
     }
   },
   reset:function() {
-    // alloon burst, so no reset
+    // balloon burst, so no reset
     if (w.yellow_balloon_remains.loc) return
 
     this.state = 0
+
+    // wire
+    // either the wire is not here OR the player is holding it OR it is in the room
+    // either the player is in the nursery or great_gallery
+    if (w.wire.isAtLoc('nursery')) {
+      log('sort wire')
+      if (w.wire.locs[w.wire.locs.length - 1] === 'player') w.wire.locs.pop()
+      if (w.wire.locs[w.wire.locs.length - 1] === 'nursery') w.wire.locs.pop()
+      log(w.wire.locs)
+      if (player.loc === 'nursery') {
+        log('nursery')
+        w.wire.locs.push('nursery')
+      }
+      w.wire.locs.push('player')
+      log(w.wire.locs)
+    }
+
     // dollshouse
     w.dollshouse.closed = true
     w.dollshouse.hasBeenOpened = false
@@ -732,7 +759,6 @@ createItem("yellow_balloon", {
       // anything else in the nursery goes back to player inventory
       if (w.nursery.hereish(o)) o.loc = player.name
     }
-    array.remove(w.wire.locs, 'nursery')
   },
   examine:"The balloon is bright yellow, and pretty much spherical, except for the bit where it is blown up.",
   take:function() {

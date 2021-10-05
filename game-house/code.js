@@ -126,6 +126,27 @@ const walkthroughs = {
     "x wire",
     "u",
     "up",
+    
+    
+    // "u",
+    // "d",
+    // "n",
+    // "drop wire",
+    // "s",
+    // "get wire",
+    // "n",
+    // "s",
+    
+    
+    // "e",
+    // "s",
+    // "s",
+    // "e",
+    // "drop wire",
+    
+    
+    
+    
     "south",
     "get pot",
     "x pot",
@@ -216,16 +237,16 @@ const walkthroughs = {
     "p,follow",
     "up",
     
-    /*
-    "west",
-    "west",
-    "west",
-    "west",
-    "patch,get grate",
-    "put pot under leak",
-    "e",
-    "patch,wait",
-    "w",*/
+    
+    // "west",
+    // "west",
+    // "west",
+    // "west",
+    // "patch,get grate",
+    // "put pot under leak",
+    // "e",
+    // "patch,wait",
+    // "w",
     
     "up",
     "west",
