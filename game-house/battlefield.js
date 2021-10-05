@@ -90,7 +90,7 @@ createRoom("beach", {
      w.chamber_pot.loc = 'beach'
     return false
   }}),
-  desc:'The beach would be nice if it were not the dead soldiers; there seems to be more blue-uniformed ones here than red. The sand looks fine and almost white, {ifNot:beach:paddleFlag:and the sea to the south looks very inviting}{if:beach:paddleFlag:though the sea full of corpses is not exactly inviting}. There might be a way along the beach through the bodies to the southwest, or she could go back north to the dead horse.{if:sand_item:sandcastleBuilt: There is an impressive sandcastle in the middle of a relative corpse-free area.}',
+  desc:'The beach would be nice if it were not the dead soldiers; there seem to be more blue-uniformed ones here than red. The sand looks fine and almost white, {ifNot:beach:paddleFlag:and the sea to the south looks very inviting}{if:beach:paddleFlag:though the sea full of corpses is not exactly inviting}. There might be a way along the beach through the bodies to the southwest, or she could go back north to the dead horse.{if:sand_item:sandcastleBuilt: There is an impressive sandcastle in the middle of a relative corpse-free area.}',
   scenery:[
     {alias:'corpses', examine:'There must be hundreds or even thousands of dead soldiers here. Mandy wonders how long ago the battle was; her forensic skills are not that great, but it cannot be more than a week or so; the bodies do not seem to have decayed at all.'},
     {alias:'red uniforms', examine:'The soldiers in red are armed with muskets; many have bayonets fitted. As well red jackets, they have white belts and helmets and black trousers and boots.'},

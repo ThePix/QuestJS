@@ -15,6 +15,7 @@ test.tests = function() {
 
   settings.attackOutputLevel = 2
   //settings.includeHitsInExamine = true
+  player.currentWeatherDisabled = true
 
   test.title("Elements");
   test.assertEqual("fire", elements.opposed('frost'))
@@ -596,6 +597,34 @@ test.tests = function() {
   test.assertCmd('x sn', 'The bloody corpse of a snotling, merciless cut down in his prime.')
   test.assertCmd('search sn', 'You search the snotling, but find nothing.')
 
-/**/
+
+  test.title("weather")
+  settings.weatherReportsAssumeYes = true
+  player.currentWeatherDisabled = false
+
+  const hotWeather = weatherTypes['hot']
+  random.prime(0)
+  test.assertEqual('hot', hotWeather.getNext())
   
-};
+  test.assertCmd('wait', ['Time passes...'])
+  test.assertEqual('hot', player.currentWeatherName)
+  test.assertCmd('wait', ['Time passes...'])
+  test.assertEqual('hot', player.currentWeatherName)
+  test.assertCmd('wait', ['Time passes...'])
+  test.assertEqual('hot', player.currentWeatherName)
+  random.prime(1)
+  test.assertCmd('wait', ['Time passes...', "It is starting to get cloudy."])
+  test.assertEqual('cloudingOver', player.currentWeatherName)
+  
+
+  test.title("weather II")
+
+  player.skillsLearnt = ["Double attack", "Fireball", "Call rain", "Cloudbusting"]
+  test.assertCmd('cast call rain', ['You cast the <i>Call rain</i> spell.', 'It is starting to rain.'])
+  test.assertEqual('rain', player.currentWeatherName)
+  test.assertCmd('cast call rain', ['You cast the <i>Call rain</i> spell.', 'The <i>Call rain</i> spell is only going to work if it is not already raining.'])
+  test.assertCmd('cast Cloudbusting', ['You cast the <i>Cloudbusting</i> spell.', "The clouds are clearing, it is going to get warm."])
+  test.assertEqual('clearingToHot', player.currentWeatherName)
+
+  
+}

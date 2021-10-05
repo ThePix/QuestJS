@@ -364,7 +364,7 @@ register('roof', {
 createRoom("roof_location_east", {
   alias:'east end of the roof',
   headingAlias:"On A High Roof",
-  desc:"Mandy is standing -- rather nervously -- on the apex of a roof{once:. She is far above the ground. Not just scary far but also does-not-make-sense far above the ground. It is a two-story house! Then again, she is pretty sure number 23 does not have an observatory at the back.|As she looks harder, she realises she cannot see the Ash Tree Estate, instead there are only fields. Perhaps no bad thing, she thinks, but then she notices that there is no modern housing at all. This is what the town would have looked like before the war. Possibly before the first world war.|:, far above the ground. }As for the roof itself, it is slate, with a rusty iron decorative ridge to which Mandy is clinging. There is a weather vane at one end.",
+  desc:"Mandy is standing -- rather nervously -- on the apex of a roof{once:. She is far above the ground. Not just scary far but also does-not-make-sense far above the ground. It is a two-story house! Then again, she is pretty sure number 23 does not have an observatory at the back.|As she looks harder, she realises she cannot see the Ash Tree Estate, instead there are only fields. Perhaps no bad thing, she thinks, but then she notices that there is no modern housing at all. This is what the town would have looked like before the war. Possibly before the first world war.|:, far above the ground. }As for the roof itself, it is slate, with a rusty iron decorative ridge to which Mandy is clinging. There is a weather vane at one end{ifIs:wire:tiedTo2:spike:, with wire wrapped round the letter E}.",
   afterEnter:function() {
     if (w.wire.isAtLoc(player) && w.sky.state < 3) { 
       w.sky.state = 3
@@ -402,7 +402,7 @@ createItem("spike", {
     }
     let s = "The weather vane is made of black metal. Above the traditional compass points, a flat raven, sat on an arrow, swings round with each gust of wind."
     if (w.wire.tiedTo2 === this.name) {
-      msg(" A metal wire is attached to the letter E.")
+      s += " A metal wire is attached to the letter E."
     }
     msg(s)
   },

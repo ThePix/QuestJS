@@ -71,6 +71,34 @@ new Spell("Lightning bolt", {
 })
 
 
+
+new Spell("Call lightning", {
+  level:3,
+  description:"A bolt of thunder is called down from the clouds to blast your target.",
+  tactical:"On a successful hit, target takes 3d6, but can only be used when outside, in the rain.",
+  damage:'3d6',
+  element:'storm',
+  icon:'lightning',
+  tooltip:"A lightning bolt jumps from your out-reached hand to you foe!",
+  primarySuccess:"A lightning bolt comes down from the sky, to strike {nm:target:the}!",
+  primaryFailure:"A lightning bolt comes down from the sky, towards {nm:target:the}, but fizzles out before it can actually do anything.",
+  modifyOutgoingAttack:function(attack) {
+    attack.element = "storm"
+    if (player.currentWeatherDisabled) return
+    const weather = weatherTypes[player.currentWeatherName]
+    if (!weather.outside()) {
+      attack.abort = true
+      attack.msg("The <i>Call lightning</i> spell can only be used outside.", 1)
+    }
+    if (weather.wetness < 1) {
+      attack.abort = true
+      attack.msg("The <i>Call lightning</i> spell can only be used when it is raining.", 1)
+    }
+  },
+})
+
+
+
 //-------  ARMOUR SPELLS  -----------
 // Spells that have an ongoing effect on attacks against the target
 
@@ -565,7 +593,6 @@ new SpellSelf("Returning", {
     rpg.teleport(attack.target, w[this.item].loc)
     return true
   },
-  automaticSuccess:true,
 })
 
 new SpellSelf("Teleport", {
@@ -580,7 +607,6 @@ new SpellSelf("Teleport", {
     rpg.teleport(attack.target, attack.target.activeTeleportLocation)
     return true
   },
-  automaticSuccess:true,
 })
 
 new SpellSelf("Mark", {
@@ -591,10 +617,62 @@ new SpellSelf("Mark", {
     attack.target.activeTeleportLocation = attack.target.loc
     return true
   },
-  automaticSuccess:true,
 })
 
 
+
+new SpellSelf("Call rain", {
+  description:"Casting this spell will cause it to rain.",
+  icon:'weather',
+  modifyOutgoingAttack:function(attack) {
+    if (player.currentWeatherDisabled) return
+    const weather = weatherTypes[player.currentWeatherName]
+    if (!weather.outside()) {
+      attack.abort = true
+      attack.msg("The <i>Call rain</i> spell can only be used outside.", 1)
+    }
+    if (weather.wetness > 0) {
+      attack.abort = true
+      attack.msg("The <i>Call rain</i> spell is only going to work if it is not already raining.", 1)
+    }
+  },
+  targetEffect:function(attack) {
+    const currentName = 'rain'
+    const current = weatherTypes[currentName]
+    player.currentWeatherName = currentName
+    player.currentWeatherCount = 0
+    player.currentWeatherTotal = current.getNumberOfTurns()
+    if (current.start) current.start(this.name)
+    return true
+  },
+})
+
+
+new SpellSelf("Cloudbusting", {
+  description:"Casting this spell will clear the sky of all clouds, at least for a while.",
+  icon:'weather',
+  modifyOutgoingAttack:function(attack) {
+    if (player.currentWeatherDisabled) return
+    const weather = weatherTypes[player.currentWeatherName]
+    if (!weather.outside()) {
+      attack.abort = true
+      attack.msg("The <i>Cloudbusting</i> spell can only be used outside.", 1)
+    }
+    if (weather.name === 'hot') {
+      attack.abort = true
+      attack.msg("The <i>Cloudbusting</i> spell is only going to work if there are clouds around", 1)
+    }
+  },
+  targetEffect:function(attack) {
+    const currentName = 'clearingToHot'
+    const current = weatherTypes[currentName]
+    player.currentWeatherName = currentName
+    player.currentWeatherCount = 0
+    player.currentWeatherTotal = current.getNumberOfTurns()
+    if (current.start) current.start(this.name)
+    return true
+  },
+})
 
 
 

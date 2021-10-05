@@ -7,6 +7,7 @@ settings.thanks = ["Kyle", "Lara"];
 
 settings.libraries.push('rpg')
 settings.files.push('spells')
+settings.files.push('weather')
 
 settings.statusPane = false;
 settings.tests = true

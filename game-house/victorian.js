@@ -129,10 +129,12 @@ createRoom("brass_dining_room", {
     }
     return true
   },
+  seenMannequins:false,
   desc:function() {
     let s = ''
-    if (this.mannequinCount === 5) {
+    if (!this.seenMannequins) {
       s = "'What? Sorry, I thought...' Mandy starts to apologise to the people sat at the table, before realising none are moving - they are just mannequins. Creepy!|"
+      this.seenMannequins = true
     }
     s += "This room is dominated by an elegant, dark wood table, well-polished, with brass legs shaped like a lion's, and laid out with eight dinner settings. Eight chairs, in matching style, surround it. At the table, "
     msg (" ")
@@ -936,7 +938,7 @@ createItem("huge_cabinet", {
 createRoom("secret_room", {
   windowsface:'none',
   headingAlias:"A Secret Room",
-  desc:"After the opulence of the other rooms, this one is decidedly bare -- but at least it of reasonable proportions. More or less square, the walls are white, or had been at one time. The floor and ceiling are wood.{if:boots:scenery: The only feature of note is a large pair of boots in one corner.}",
+  desc:"After the opulence of the other rooms, this one is decidedly bare -- but at least it is of reasonable proportions. More or less square, the walls are white, or had been at one time. The floor and ceiling are wood.{if:boots:scenery: The only feature of note is a large pair of boots in one corner.}",
   south:new Exit("drawing_room_north"),
 })
 
