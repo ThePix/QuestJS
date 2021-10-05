@@ -69,9 +69,7 @@ createRoom("practice_room", {
   west:new Exit('great_hall'),
   east:new Exit('passage', {
     simpleUse:function(char) {
-      log('here')
       if (w.practice_room.guarded && !w.orc.dead) {
-        log('here')
         rpg.broadcast('guards', 'attack', 'practice room exit')
         return falsemsg("You try to head east, but the orc bars your way. Looks like he is going to attack!")
       }
@@ -119,6 +117,7 @@ createItem("small_key", KEY(), {
 
 createRoom("yard", {
   desc:'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.',
+  yesWeather:true,
   south:new Exit('great_hall'),
   north:new Exit('lake_swimming', {
     simpleUse:function(char) {
@@ -133,11 +132,13 @@ createRoom("yard", {
 
 createRoom("lake", {
   desc:'You are stood on a lake! Dry land is to the south.',
+  yesWeather:true,
   south:new Exit('yard'),
 })
 
 createRoom("lake_swimming", {
   desc:'You are swimming in a lake! Dry land is to the south.',
+  yesWeather:true,
   south:new Exit('yard'),
 })
 
@@ -1095,7 +1096,7 @@ const monsters = [
             },
             {
                 "desc": "A shadowy creature of almost there tentacles.",
-                "name": "spawn of hab-yogsoth"
+                "name": "spawn of hab yogsoth"
             },
             {
                 "desc": "A slender body, held up on loing thin tentacles that flick arounmd it, its round, toothed mouth is pointed at you.",
@@ -1131,7 +1132,7 @@ const monsters = [
             },
             {
                 "desc": "A huge, dark red, almost black writhing mass of tentacles.",
-                "name": "arch-maloeg"
+                "name": "archmaloeg"
             },
             {
                 "desc": "You can see this humanoid bat, with tentacles rounds its foul mouth.",
@@ -1384,7 +1385,7 @@ for (const el of monsters) {
   
   for (let i = 0; i < el.instances.length; i++) {
     const name = el.instances[i].name.replace(/ /g, '_') + "_prototype"
-    log(name)
+    //log(name)
     createItem(name, el.template, {
       name:el.instances[i].name,
       alias:sentenceCase(el.instances[i].name),
