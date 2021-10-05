@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Rozha+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Suranna&display=swap');
+
+body {
+  font-family: Suranna, serif;
+  line-height: 1.25;
+  font-size: 1.2em;
+}
+
+.default-h {
+  font-family: 'Rozha One', serif;
+}
+
+.parser {
+  font-size: 1.0em;
+}
+
+.riddle {
+  color:green;
+}
+
+
+.hideme {
+  animation-duration: 5s;
+  animation-delay: 20s;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity:1;
+    height:184px;
+  }
+
+  100% {
+    height:0;
+    opacity:0;
+  }
+}
