@@ -247,7 +247,7 @@ max number of grow turns is 13
   fill:function(options) {
     if (!util.findSource(options)) return falsemsg(lang.no_generic_fluid_here, {item:this})
     options.item = this
-    if (this.testFill && !this.testFill(options.char, options)) return false
+    if (this.testFill && !this.testFill(options)) return false
     return this.sink(options.fluid, options.char, options.source)
   },
   flip:function() { this.turn() },
@@ -768,7 +768,7 @@ createItem("tamarind_pod_on_tree", {
   alias:'tamarind pod',
   scenery:true,
   parserPriority:-10,
-  examine:'The pods are pale brown, knobbly and about as long as her hand. And out of reach.',
+  examine:'The pods are pale brown, knobbly and about as long as her hand. They hang high up, but while the leaves spread out, they are clustered close to the trunk{if:player:loc:greenhouse_catwalk_east:, so out of reach from the catwalk}.',
   take:'The tamarind pods are out of reach.',
   open:function(options) {
     if (w.Patch.hasPod() && w.Patch.isHere()) {

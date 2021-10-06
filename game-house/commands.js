@@ -185,6 +185,53 @@ commands.unshift(new Cmd('Shout', {
 
 
 
+commands.unshift(new Cmd('ThrowAtPod', {
+  regexes:[
+    /^(?:throw|lob|hurl) (.+) at (?:pods?|tree)$/,
+    /^(?:hit|knock) (?:pods?|tree) with (.+)$/,
+  ],
+  objects:[
+    {scope:parser.isHeld},
+  ],
+  responses:{
+    pen:'Mandy lobs her pen at the pods on the tree. It bounces off one of them.',
+    wooden_panel:'A little worried her precious panel might be damaged, Mandy throws it up at the pods on the tree... It misses, and comes cluttering to the ground.',
+    glass_shard:'Mandy lobs the glass shard at the pods on the tree. It bounces off one of them.',
+    paper_funnel:'Mandy throws the paper funnel at the tree... it gets about an arms length away, then flutters gently to the ground.',
+    letter:'Mandy throws the letter at the tree... it gets about an arms length away, then flutters gently to the ground.',
+    large_key:'Mandy lobs the key at the pods on the tree. It bounces off one of them.',
+    boots:'Mandy hurls the boots at the tree... Well, that general direction. They miss the tree altogether.',
+    secret_recipe:'Mandy throws the sheet of paper at the tree... it gets about an arms length away, then flutters gently to the ground.',
+    chamber_pot:'Mandy hurls the chamber pot at the tree... Well, that general direction. It misses, falling with a huge clang.',
+    stuffed_crocodile:'Mandy tries to throw the crocodile at the tree. Not the easiest thinhg to throw, she realises, as she misses the tree completely.',
+    mad_science_journal:'Mandy throws the journal at the tree... it gets about an arms length away, then flutters gently to the ground.',
+    grating:'Mandy the grating up at the pods on the tree... It misses, and comes cluttering to the ground.',
+    floppy_hat:'Mandy throws the floppy hat at the tree... it bounces off the pods, then tumbles gently to the ground.',
+  },  
+  script(objects) {
+    if (player.loc !== 'greenhouse_east' && player.loc !== 'greenhouse_catwalk_east') return failedmsg('Mandy would have to be holding {nm:item:the} to do that.', {item:obj})
+
+    const obj = objects[0][0]
+    if (!obj.isHeld) return failedmsg('Mandy would have to be holding {nm:item:the} to do that.', {item:obj})
+    
+    if (obj === w.mobile_phone) return failedmsg('Mandy thinks about chucking her crappy phone at the pod, but if she does ever get out of here, she want a phone that is {i:not} smashed.')
+    if (obj === w.school_bag) return failedmsg('Mandy thinks about throwing her bag at the pod, but decides she should hang on to it.')
+    if (obj === w.hourglass) return failedmsg('Mandy thinks about throwing the hourglass at the pod... She has a feeling it might be important, and is unlikely to survive its arboreal journey.')
+    if (obj === w.china_doll) return failedmsg('Mandy thinks about throwing the china doll at the pod... Somehow she cannot bring herself to do it - seeing her smash would be too awful')
+    if (obj.size && obj.size > 5) return failedmsg('Mandy thinks about hurling {nm:item:the} at the tree. Perhaps if {pv:item:was} not so big...', {item:obj})
+      
+    const s = this.responses[obj.name]
+    if (!s) return failedmsg('Mandy thinks about throwing {nm:item:the} at the pod, but decides she should hang on to {sb:item}.', {item:obj})
+      
+    player.throwAtPodTries++
+    obj.moveToFrom({item:obj, char:player}, "greenhouse_east")
+    return failedmsg(s + '{ifMoreThan:player:throwAtPodTries:2:She starts to wonder if chucking things at the pod is going to work. Perhaps she needs another idea.}')
+  }
+}))
+
+
+
+
 commands.unshift(new Cmd('TurnWithOar', {
   regexes:[
     /^(?:turn|shift|rotate|move) (.+) (?:with|using) oar$/,

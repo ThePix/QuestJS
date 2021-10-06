@@ -11,6 +11,7 @@ createItem("player", PLAYER(), {
   examine:"Mandy is just an ordinary 15 year old girl, with dark shoulder-length hair and a nose she feels is too big. {if:currentLocation:zone:external:She is wearing the uniform of Kyderbrook High School.:She is wearing a uniform, but not the one she put on this morning...}{if:floppy_hat:loc:player: She is also wearing a floppy hat.}",
   silverSpotted:0,
   parserPriority:-50,
+  throwAtPodTries:0,
   getSharp:function() {
     if (w.glass_shard.loc === player.name) return w.glass_shard
     if (w.crocodile_tooth.loc === player.name) return w.crocodile_tooth

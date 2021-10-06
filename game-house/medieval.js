@@ -355,14 +355,14 @@ createItem("Patch", NPC(false), {
   },
   endFollow:function() {
     msg("'Wait here,' says Mandy to {nm:npc:the}.", {npc:this})
-    if (!this.leaderName) return falsemsg("{nv:npc:look:true} at Mandy is confusion.", {npc:this})
+    if (!this.leaderName) return falsemsg("{nv:npc:look:true} at Mandy in confusion.", {npc:this})
     this.setLeader()
     msg("{nv:npc:nod:true} his head.", {npc:this})
     return true
   },
   startFollow:function() {
     msg("'Follow me,' says Mandy to {nm:npc:the}.", {npc:this})
-    if (this.leaderName) return falsemsg("{nv:npc:look:true} at Mandy is confusion.", {npc:this})
+    if (this.leaderName) return falsemsg("{nv:npc:look:true} at Mandy in confusion.", {npc:this})
     if (w.boots.loc !== 'Patch') return falsemsg("Patch looks mournfully at his feet. His bare feet.")
     
     this.setLeader(player)

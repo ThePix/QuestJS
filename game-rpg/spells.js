@@ -678,6 +678,17 @@ new SpellSelf("Cloudbusting", {
 
 /*
 
+Lighting and fog
+
+utterlight - no darkness, no shadows
+daylight - destoyrs vampires
+interior light or bright night
+dim light - invisible with shadows
+complete darkness - can see with dark vision
+utterdark - extinguishes all lights except utterlight
+
+
+
 True sight
 Darkness
 Light

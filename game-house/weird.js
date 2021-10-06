@@ -59,6 +59,7 @@ createRoom("weird_room", {
 
 createItem("house_man", NPC(), {
   loc:"weird_room",
+  alias:'house-man',
   talkCount:0,
   parserPriority:20,
   examine:"Just looking at the man hurts Mandy's eyes. People are not supposed to be houses! Does he have ginger hair, or red tiles? Are his lips green or his door? Why does he have four eyes? How can a house laugh at you?",
