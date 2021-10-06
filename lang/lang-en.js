@@ -286,7 +286,7 @@ const lang = {
   unlock_successful:"{nv:char:unlock:true} {nm:container:the}.",
   close_and_lock_successful:"{nv:char:close:true} {nm:container:the} and {cj:char:lock} {sb:container}.",
   cannot_open:"{nv:item:can't:true} be opened.",
-  cannot_open_with:"{nv:item:can't:true} be opened with that.",
+  cannot_open_with:"You can't open that with {nm:item:the}.",
   cannot_close:"{nv:item:can't:true} be closed.",
   cannot_lock:"{nv:char:can't:true} lock {ob:item}.",
   cannot_unlock:"{nv:char:can't:true} unlock {ob:item}.",
