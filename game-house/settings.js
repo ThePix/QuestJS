@@ -1,10 +1,10 @@
 "use strict"
 
-settings.playMode = "dev"
+settings.playMode = "play"
 
 settings.title = "The House on Highfield Lane"
 settings.author = "Andy Joel"
-settings.version = "1.1" // was "0.4.5"
+settings.version = "1.1"
 settings.ifid = "8F79966F-54C6-4DA3-842A-330DBA5D0CB0"
 settings.additionalAbout = {
   'Thanks to':'K.V., Pertex, XanMag, Jade, Mike Russo, Karona, Agnieszka Trzaska, Christopher Merriner, Mike_G, Amanda Walker and Andrew Schultz for beta testing. I would like to particularly pick out K.V., Agnieszka Trzaska and Christopher Merriner who went above and beyond, with any number of helpful suggestions between them.',
@@ -13,7 +13,7 @@ settings.additionalAbout = {
   'Bug reporters':'Thanks to those who did indeed report bugs that have hopefully been sorted in later versions: Rovarsson and Sarah Willson.',
   'Privacy':'QuestJS games do not send any data to the server (besides the initial HTTP requests for the files) and do not use cookies. They only save data to your hard drive (in a place provided by your browser called localStorage) when you choose to save your game progress (or are recording a transcript).',
   'Compatibility':'This game runs on JavaScript ES2015, and should work fine on any reasonably up-to-date browser. It has been tested on Chrome, Firefox, Edge and Safari; and on Windows, Mac, Ubuntu and Android. If you are reading this, you should be fine... ',
-  'QuestJS':'QuestJS is the latest version of Quest, and is also by Andy joel *(aka The Pixie). Learn more about QuestJS {link:here:https://github.com/ThePix/QuestJS/wiki}; the source code for this game will be accessible from that site at some point too.',
+  'QuestJS':'QuestJS is the latest version of Quest, and is also by Andy joel *(aka The Pixie). Learn more about QuestJS {link:here:https://github.com/ThePix/QuestJS/wiki}. Both QuestJS and this game are open-source, and the code is accessible from that site.',
 }
 settings.warnings = "Occasional bad language, including the F-word. A couple of locations have seen recent battles, and there are a lot bodies, but no graphic descriptions."
 settings.transcript = 'walk'

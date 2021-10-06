@@ -467,6 +467,7 @@ createRoom("steam_control_room", {
 createItem("steampunk_controls", {
   alias:'controls',
   count:0,
+  pronouns:lang.pronouns.plural,
   loc:"steam_control_room",
   synonyms:['knobs','dials', 'switches'],
   examine:'There is a myriad of knobs, switches and dials, with no obvious pattern.{ifMoreThan:steampunk_controls:count:4: There is smoke coming from the panel.}',
@@ -552,7 +553,7 @@ createItem("Winfield_Malewicz", NPC(), {
         msg("'I know, right? Who sends letters nowadays?'")
         msg("Malewicz proceeds to open the envelope, and eagerly pulls out the letter. 'A wedding invitation! How delightful!' He thinks for a moment. 'What's the date?'")
         msg("'Thirteenth of May.... Er, 2016.'")
-        msg("'Oh, it seems I have missed it then. And the centenary of it too, if it comes to that. How disappointing.' He throws the envelope away, but put the invitation on the desk. 'He was married back in 1903, but I was aware it was not a happy marriage. His new wife is, I think, his cousin. I hope they'll be happy. Or were happy, I suppose should say.'")
+        msg("'Oh, it seems I have missed it then. And the centenary of it too, if it comes to that. How disappointing.' He throws the envelope away, but puts the invitation on the desk. 'He was married back in 1903, but I was aware it was not a happy marriage. His new wife is, I think, his cousin. I hope they'll be happy. Or were happy, I suppose should say.'")
         delete w.letter.loc
         w.invite.loc = 'steam_control_room'
         w.invite.scenery = true
@@ -797,7 +798,7 @@ createItem("Winfield_Malewicz", NPC(), {
       }
     },
     { // brother
-      test:function(p) { return p.text.match(/brother/) && (w.gallery_south_scenery_portraits.examine_count || w.front_hall_scenery_portraits.examine_count) },
+      test:function(p) { return p.text.match(/brother|cecil/) && (w.gallery_south_scenery_portraits.examine_count || w.front_hall_scenery_portraits.examine_count) },
       script:function() {
         msg("'What was your brother like?'")
         msg("'A bit of a rogue, if I'm honest. Cecil always had a way with the women - quite the opposite to me - and delighted in leading them astray. And vice versa. He rather fancied himself as a thespian, but was never very successful, I'm afraid.'")

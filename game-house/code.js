@@ -145,7 +145,7 @@ const walkthroughs = {
     // "drop wire",
     
     
-    
+   
     
     "south",
     "get pot",
