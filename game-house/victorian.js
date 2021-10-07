@@ -320,6 +320,7 @@ createItem("clock", CONTAINER(false), {
     if (w.large_key.loc === this.name) {
       msg("She decides to hang on to the key.")
       w.large_key.loc = player.name
+      w.large_key.scenery = false
     }
     return true
   },
@@ -542,12 +543,12 @@ createRoom("room_big", {
   desc:function() {
     let s = "The drawing room is rather well appointed with wood panelling on the walls, and an ornate ceiling. A fireplace to the east has portraits on either side, and above it a painting of a battle."
     if (w.mahogany_cabinet.moved) {
-      s += " The mahogany bureau has been pulled out from the north wall."
+      s += " The mahogany bureau has been pulled out from the north wall. There is a thick rug on the floor."
     }
     else {
-      s += " There is a mahogany bureau on the north wall."
+      s += " There is a mahogany bureau on the north wall and a thick rug on the floor."
     }
-    s += " There is a thick rug on the floor. The only way out is the door to the west."
+    s += " The only way out is the door to the west."
     return s
   },
   roll:"Mandy wonders if she could roll up the rug, and carry it that way. Does she really want to be lugging the thing around everywhere? Maybe not.",
@@ -939,14 +940,14 @@ createRoom("secret_room", {
   windowsface:'none',
   headingAlias:"A Secret Room",
   desc:"After the opulence of the other rooms, this one is decidedly bare -- but at least it is of reasonable proportions. More or less square, the walls are white, or had been at one time. The floor and ceiling are wood.{if:boots:scenery: The only feature of note is a large pair of boots in one corner.}",
-  south:new Exit("drawing_room_north"),
+  south:new Exit("drawing_room_north", {alsoDir:['out']}),
 })
 
 createItem("boots", SIZE_CHANGING(), {
   loc:"secret_room",
   scenery:true,
   mended:false,
-  //pronouns:lang.pronouns.plural,
+  parserPronouns:lang.pronouns.plural,
   alias:"pair of boots",
   desc5:"The boots are big, like a size fifteen or something, Mandy reckons. Her dad has big feet, but not like these.",
   desc4:"The boots are tiny, suitable for a doll maybe.",

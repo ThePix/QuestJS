@@ -51,6 +51,7 @@ const walkthroughs = {
     "x clock",
     "x key",
     "get key",
+    "wind clock",
     // got key
     "south",
     "x win",
@@ -81,7 +82,7 @@ const walkthroughs = {
     "x cab",
     "x cracks",
     "north",
-    "get boots",
+    "get boots",/*
     // got boots
     "s",
     "southwest",
