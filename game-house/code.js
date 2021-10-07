@@ -82,7 +82,7 @@ const walkthroughs = {
     "x cab",
     "x cracks",
     "north",
-    "get boots",/*
+    "get boots",
     // got boots
     "s",
     "southwest",
