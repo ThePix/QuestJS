@@ -2,7 +2,8 @@
 
 
 createItem("player", PLAYER(), {
-  loc:"room",
+  loc:"bridge",
+  crewSummary:'',
 })  
   
 
@@ -38,7 +39,7 @@ createItem("nagoshima", NPC(true), {
 
 
 createItem("yeoman", NPC(true), {
-  loc:"room",
+  loc:"bridge",
   alias:"Yeoman Rand",
   properNoun:true,
   examine:"Yeoman Rand arrived at Starbase One on the same shuttle as you, and you conversed with her a little on the journey; this is her first assignment to a star ship. She is above average height for a woman, with cropped blonde hair, and is dressed smartly in the fleet uniform.",
@@ -58,6 +59,7 @@ createItem("yeoman", NPC(true), {
       name:"yeoman_academy",
       showTopic:true,
       alias:"Which space academy did you go to?",
+      nowShow:['yeoman_dewar_pun'],
       script:function() {
         msg("'What academy did you graduate from?' you ask Yeoman Rand.");
         msg("'Nairobi, Earth, {sir}.'");
@@ -72,12 +74,12 @@ createItem("yeoman", NPC(true), {
       alias:"Is it always the same temperature of Dewar III?",
       script:function() {
         msg("'So is it always the same temperature of Dewar III?' you ask with a smile, recalling that James Dewar invented the vacuum flask.");
-        msg("She signs. 'Very droll sir. In fact the region where I was raised was noteable for its extremes of temperature.'");
+        msg("She signs. 'Hilarius, sir. In fact the region where I was raised was notable for its extremes of temperature.'");
       },
     },
     {
       name:"yeoman_call_me_maam",
-      showTopic:true,
+      //showTopic:true,
       alias:"Call me ma'am",
       script:function() {
         msg("'I prefer ma'am to sir,' you tell the yeoman.");
@@ -120,7 +122,19 @@ const CANDIDATE = function(female) {
 
 const getCrew = function() { }
 
-const getCandidates = function() { return scopeBy(o => o.candidate) }
+const getCandidates = function() { return scopeBy(o => o.candidate).sort(function(a, b) {
+  var nameA = a.name.toUpperCase()
+  var nameB = b.name.toUpperCase()
+  return (nameA < nameB ? -1 : 1)
+})}
+
+
+
+const belongsToHelm = function(loc) {
+  log(loc)
+  return w.ship.helm && loc === w.ship.helm
+}
+
 
 
 
@@ -132,10 +146,11 @@ createItem("sharraaa", CANDIDATE(false), {
   engineering:"6",
   science:"7",
   navigation:"6",
+  summary:'Jack-of-all-trades amorphous blob.',
   formalName:"Shu Sharraaa",
   ayeaye:"He raises a pseudopod to indicate assent.",
   dissent:"Sharraaa raises two  pseudopods, indicating his disapproval.",
-  alreadyHere:"Sharraaa slumps a little in his bucket. For a moment, you wonder what is wrong, they realise you are already here.",
+  alreadyHere:"Sharraaa slumps a little in his bucket. For a moment, you wonder what is wrong, then realise you are already here.",
   going:"Sharraaa morphs over the controls, rapidly setting the destination, and a moment later the ship starts to move. There is that stomach-clenching lurch as it hits warp speed...",
   firstFlight:"{role:helm:altName:true} punches in the coordinates.|'Engage!'|The SS Star Quest gently eases out of star-dock, into open space, then, with a stomach-churning lurch, accelerates to warp speed. The stars on the viewscreen become thin red lines as the ship heads to its destination at speeds hard to properly understand unless you are a navigator.",
   thoughtful:"Sharraaa quivers in thought.",
@@ -154,6 +169,7 @@ createItem("farrington_moss", CANDIDATE(false), {
   engineering:"4",
   science:"1",
   navigation:"8",
+  summary:'Excellent helmsman; wants to move into weapon.',
   formalName:"Mister Moss",
   ayeaye:"'{Sir}! Yes, {sir}!'",
   dissent:"'Is that wise, {sir}?'",
@@ -176,6 +192,7 @@ createItem("lashirr_hrong", CANDIDATE(true), {
   engineering:"5",
   science:"8",
   navigation:"1",
+  summary:'A Girr-Girr, who nevertheless is an excellent science officer.',
   formalName:"Ms Hrong",
   ayeaye:"'Of course, captain.'",
   alreadyHere:"Lashirr starts to type in the co-ordinates, then pauses, humming thoughtfully. 'Captain, I believe we're already here.'",
@@ -197,6 +214,7 @@ createItem("dakota_north", CANDIDATE(true), {
   engineering:"4",
   science:"3",
   navigation:"5",
+  summary:'Excellent track record as an armsman.',
   formalName:"Ms North",
   ayeaye:"'Yes {sir}!'",
   dissent:"'With respect, is that wise, {sir}?'",
@@ -219,6 +237,7 @@ createItem("river_severn", CANDIDATE(true), {
   engineering:"6",
   science:"10",
   navigation:"5",
+  summary:'While great at science, she has issues with authority.',
   formalName:"Ms Severn",
   ayeaye:"'No problem.'",
   dissent:"'No way!'",
@@ -255,6 +274,7 @@ createItem("milton_keynes", CANDIDATE(false), {
   engineering:"9",
   science:"4",
   navigation:"3",
+  summary:'One of the best engineers in the fleet.',
   formalName:"Mr Keynes",
   ayeaye:"'Aye aye, {sir}.'",
   dissent:"'That's not a good idea, {sir}.'",
@@ -294,6 +314,7 @@ createItem("norton_canes", CANDIDATE(false), {
   engineering:"4",
   science:"3",
   navigation:"6",
+  summary:'Good at helm and weapons, but some irregularities in his record.',
   formalName:"Mr Canes",
   ayeaye:"'Alright, guv.'",
   dissent:"'Not sure about that, guv.'",
@@ -342,12 +363,6 @@ createItem("norton_canes", CANDIDATE(false), {
 })
 
 
-
-
-
-
-
-
 createItem("info", CANDIDATE(false), {
   alias:"Info",
   examine:"Info is a sophisticated robot; a cylinder on crawler trackers, standing a little over average height for a man, from which six arms can extend, each suited to a different task. He has a flashing orange light on the top; a health and safety requirement.",
@@ -355,6 +370,7 @@ createItem("info", CANDIDATE(false), {
   engineering:"3",
   science:"1",
   navigation:"1",
+  summary:'Experimental android.',
   formalName:"Info",
   ayeaye:"'Affirmative.'",
   dissent:"'Negative.'",
@@ -377,6 +393,7 @@ createItem("restrel_juazz", CANDIDATE(true), {
   engineering:"3",
   science:"9",
   navigation:"4",
+  summary:'Excellent science officer; on exchange with Chal fleet.',
   formalName:"Kr Juazz",
   ayeaye:"'Yes {sir}.'",
   dissent:"'I can't do that, {sir}.'",
@@ -385,7 +402,27 @@ createItem("restrel_juazz", CANDIDATE(true), {
   firstFlight:"{role:helm:altName:true} slowly punches in the coordinates. 'Ready to go, Sir.'|'Engage!'|The SS Star Quest gently eases out of star-dock, into open space, then, then, with a stomach-turning lurch, accelerates to warp speed. The stars on the viewscreen become thin red lines as the ship heads to its destination and speeds hard to properly understand unless you are a navigator.",
   thoughtful:"She tilts her head as she thinks.",
   scared:"She narrows eyes.",
-  cv:"As part of the on-going peace process, officers from the fleet have exchanged places with Chal officers so we can better understand each other. Restrel Juazz has recently become available; this would be her first assignment on an Admiralty ship.|Kr Juazz comes highly commended in all areas, but it is worth bearing in mind that she will be unfamiliar with our vessels.",
+  cv:"As part of the on-going peace process, officers from the fleet have exchanged places with Chal officers so we can better understand each other. Restrel Juazz has recently become available; this would be her first assignment on an Admiralty ship. Kr Juazz comes highly commended in all areas, but it is worth bearing in mind that she will be unfamiliar with our vessels.",
+  convTopics:[
+    {
+      showTopic:true,
+      alias:"Peace treaty",
+      script:function() {
+        msg("'What's your take on the peace treaty, Restrel?'")
+        msg("'I just hope it lasts, {sir}. I know many Chal are concerned; how can we have peace with such blood-thirsty people? Many are worried it is a ploy to learn our secrets, steal our technology.'")
+        msg("'What about you?'")
+        msg("'I... know it's a possibility, but I think we have to at least make the effort to make this work.'")
+      },
+    },
+    {
+      showTopic:true,
+      alias:"Earth technology",
+      script:function() {
+        msg("'How are you coping with earth technology, Restrel?'")
+        msg("'Okay, I think. To be honest, the hardest part was the language. The science is more a question of perspective and the engineering is - well, just fascinating.'")
+      },
+    },
+  ],
   species:"Chal",
   altName:"the Chal",
 })
@@ -398,11 +435,8 @@ createItem("restrel_juazz", CANDIDATE(true), {
 
 
 
-
 createItem("helmsman_go_to_7iota", TOPIC(true), {
-  belongsTo:function(loc) {
-    return loc === w.ship.helm.name
-  },
+  belongsTo:belongsToHelm,
   nowShow:['helmsman_go_to'],
   alias:"Lay in a course for 7 Iota",
   script:function() {
@@ -419,9 +453,7 @@ createItem("helmsman_go_to_7iota", TOPIC(true), {
 
 
 createItem("helmsman_go_to", TOPIC(false), {
-  belongsTo:function(loc) { 
-    return loc === w.ship.helm.name
-  },
+  belongsTo:belongsToHelm,
   hideAfter:false,
   alias:"Lay in a course for...",
 })
