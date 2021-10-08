@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+
 
 body {
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Marcellus', serif;
+  background: black;
+  color: #0490ff;
 }
 
 .default-h2, .default-h3, .default-h4 {
