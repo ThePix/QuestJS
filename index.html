@@ -19,12 +19,19 @@
     let loaded = false
     if (window.location.search)
     folder += '-' + window.location.search.substring(1)
-    document.writeln('<script src="' + folder + '/settings.js" onload="loaded=true"></scr' + "ipt>")
-  </script>
-  <script>
-    // New script element as we need the actions in the previous one to complete before we do this
-    if (loaded) settings.writeScript(folder)
-    if (!loaded) console.error("Trying to load \"" + folder + "/settings.js\" and not finding it. Does that folder exist?")
+
+
+    const myScript = document.createElement("script")
+    myScript.setAttribute("src", folder + '/settings.js')
+    myScript.onload = function() {
+      settings.writeScript(folder)
+    }
+    myScript.onerror = function() {
+      console.log("Failed to load file \"" + folder + "/settings.js\".")
+      console.log("Check the file and folder actually exist.")
+      console.log("This is probably because the folder \"" + folder + "\" does not exist, perhaps because it is wrongly specified in the address.")
+    }
+    document.head.appendChild(myScript)
   </script>
   
 </head>
@@ -41,10 +48,6 @@
 <div id="input"></div>
 </div>
 </div>
-
-<script>
-  if (loaded) io.createPanes();
-</script>
 
 <dialog id="dialog">
   <form method="dialog">
