@@ -131,7 +131,9 @@ const newCmds = [
   { name:'Missions' },
   { name:'Contact planet' },
   { name:'Star database' },
-  { name:'Intro' },
+  { name:'Intro1' },
+  { name:'Intro2' },
+  { name:'Intro3' },
 ]
 
 for (let el of newCmds) {
@@ -148,6 +150,21 @@ for (let el of newCmds) {
 
 
 
+commands.unshift(new Cmd("JumpStart", {
+  regex:/start/,
+  objects:[
+  ],
+  script:function() {
+    w.ship.helm = 'farrington_moss'
+    w.ship.science = 'lashirr_hrong'
+    w.ship.engineering = 'milton_keynes'
+    w.ship.armsman = 'dakota_north'
+    
+    w.helmsman_go_to_7iota.script()
+    //stars.arriveAtSector()
+    return world.SUCCESS
+  },
+}))
 
 
 

@@ -4,6 +4,10 @@
 createItem("player", PLAYER(), {
   loc:"bridge",
   crewSummary:'',
+  mission_assemble_crew:1,
+  missionStart_assemble_crew:w.ship.dateTime,
+  mission_sector_7_iota:1,
+  missionStart_sector_7_iota:w.ship.dateTime,
 })  
   
 
@@ -113,6 +117,7 @@ const CANDIDATE = function(female) {
         settings.startingDialogHtml += '<p><input type="checkbox" name="' + role.name + '" id="diag-' + role.name + '"/> ' + role.alias + '</p>'
       }
     }
+    settings.dialogType = 'crew roster'
     settings.setUpDialog()
   }
   if (!res.entering) res.entering = '{nm:char} enters the bridge.'
@@ -209,7 +214,7 @@ createItem("lashirr_hrong", CANDIDATE(true), {
 
 createItem("dakota_north", CANDIDATE(true), {
   alias:"Dakota North",
-  examine:"Dakota is a tall, slim woman, with blonde hair in a neat poytail. She has a stern look and eyes of steel.",
+  examine:"Dakota is a tall, slim woman, with blonde hair in a neat ponytail. She has a stern look and eyes of steel.",
   weapons:"9",
   engineering:"4",
   science:"3",

@@ -94,7 +94,15 @@ const lang = {
     ],
     Close:/^(?:close) (.+)$/,
     Lock:/^(?:lock) (.+)$/,
+    LockWith:[
+      /^(?:lock) (.+) (?:with|using) (.+)$/,
+      {regex:/^(?:use|with|using) (.+) (?:to lock|lock) (.+)$/, mod:{reverse:true}},
+    ],
     Unlock:/^(?:unlock) (.+)$/,
+    UnlockWith:[
+      /^(?:unlock) (.+) (?:with|using) (.+)$/,
+      {regex:/^(?:use|with|using) (.+) (?:to unlock|unlock) (.+)$/, mod:{reverse:true}},
+    ],
     Push:/^(?:push|press) (.+)$/,
     Pull:/^(?:pull|drag) (.+)$/,
     Fill:/^(?:fill) (.+)$/,

@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
 
 
 body {
   font-family: 'Marcellus', serif;
-  background: black;
-  color: #0490ff;
+  background: rgb(17,17,17);
+  color: #05b0ff;
+  font-size: 1.1em;
 }
 
 .default-h2, .default-h3, .default-h4 {
@@ -26,6 +26,41 @@ td {
   text-align: left;
 }
 
+.input-text {
+  font-family: 'Marcellus', serif;
+  background: rgb(17,17,17);
+  color: #0370bb;
+}
+
+.cmd-link {
+  color: #80e0ff;
+}
+
+#textbox {
+  font-family: 'Marcellus', serif;
+  background: rgb(17,17,17);
+  color: #0490ff;
+}
+
+
+.pane-div {
+  background-color: #102;
+  border:white black 1px;
+  border-radius: 4px;
+  font-size: 1.1em;
+}
+
+.item {
+  background: transparent;
+  border:none;
+}
+.item-action {
+  background-color: #204;
+  border:white black 1px;
+}
+
+
+
 #sidepane-menu {
   position: fixed;
   top: 400px;
@@ -33,9 +68,10 @@ td {
   z-index:50;
   padding:5px;
   width:240px;
-  background-color: #ffd0e0;
-  border: black solid 1px;
+  background-color: rgb(17,17,17);
+  border: white solid 1px;
   border-radius: 4px;
+  color: #aaa;
 }
 
 .sidepane-menu-title {
@@ -44,16 +80,22 @@ td {
 }
 
 .sidepane-menu-option {
-  background-color: #faf;
+  background-color: #204;
   border:solid black 1px;
   cursor: pointer;
   padding:5px;
-  border: black solid 1px;
   border-radius: 4px;
-  background: #e1ebf2;
   margin-top: 10px;
 }
 
+
+button, input[type="button"] {
+  background-color: #aaa;
+  border:solid white 1px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: 'Stalinist One', cursive;
+}
   
 .lookUp, .lookUpRestricted, .news {
   font-family: monospace;
@@ -69,15 +111,11 @@ td {
 .news {
   background-color: #fbf;
 }
-.dark-body .lookUp {
-  background-color: #222;
-  color: #bbf;
-}
-.dark-body .lookUpRestricted {
-  background-color: #220;
-  color: #bbf;
-}
-.dark-body .news {
-  background-color: #202;
-  color: #bbf;
+
+#dialog {
+  border: white solid 1px;
+  border-radius: 4px;
+  font-family: 'Marcellus', serif;
+  background: rgb(17,17,17);
+  color: #0490ff;
 }

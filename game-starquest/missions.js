@@ -7,19 +7,32 @@
 const missions = {
   getMission(name) { return this.data.find(el => el.name === name) },
   getState(name) { return player['mission_' + name] },
-  isActive(name) { return this.getState(name) !== undefined },
-  getStatus(name) { return this.isActive(name) ? this.getMission(name).steps[this.getState(name) - 1].alias : 'n/a' },
+  isActive(name) {
+    const state = this.getState(name)
+    return state !== undefined && state < 1000
+  },
+  getStatus(name) { 
+    return this.isActive(name) ? this.getMission(name).steps[this.getState(name) - 1].alias : 'n/a' 
+  },
   getList:function() {
-    let s = 'Missions:'
+    let l = []
     for (let el of this.data) {
-      if (this.isActive(el.name)) {
-        s += '|' + el.alias + ': ' + this.getStatus(el.name)
-      }
+      if (this.isActive(el.name)) l.push(el)
     }
-    return s
+    return l
   },
 
   add:function(data) {
+    data.diag = function() {
+      settings.startingDialogHtml = '<p>Name: <i>' + this.alias + '</i></p>'
+      settings.startingDialogHtml += '<p>Brief:</p>'
+      const s = (typeof this.brief === 'function') ? this.brief() : this.brief
+      const ary = s.split('|')
+      for (const el of ary) settings.startingDialogHtml += '<p><i>' + el + '</i></p>'
+      settings.setUpDialog()
+    }
+    data.properNoun = true
+  
     this.data.push(data)
     if (data.star) stars.add(data.star)
     if (data.stars) {
@@ -48,7 +61,13 @@ const missions = {
       }
     }
   },
-
+  
+  init:function() {
+    for (const m of this.data) {
+      if (m.start) this.start(m.name)
+    }
+  },
+  
   data:[],
 }
 
@@ -69,6 +88,40 @@ encyc          array of entries    optional  A set of entries to be added to sup
 
 
 */
+
+
+
+
+
+missions.add({
+  name:'assemble_crew',
+  alias:'Assemble bridge crew',
+  brief:function() {
+    let s = "Assemble your officers. Fleet command has some suggestions, but you should check each record and decide for yourself."
+    for (const el of getCandidates()) {
+      s += '|' + '<b>' + el.alias + ':</b> ' + el.summary
+    }
+    s += '|<hr/>|<b>Currently assigned:</b>'
+    for (let role of roster.data) {
+      const npc = roster.getOfficer(role.name)
+      if (npc) {
+        s += ' ' + role.alias + ', ' + npc.alias + ';'
+      }
+      else {
+        s += ' ' + role.alias + ', -;'
+      }
+    }
+    return s
+  },
+})
+
+missions.add({
+  name:'sector_7_iota',
+  alias:'Head to sector 7 iota',
+  brief:'Proceed to sector 7 Iota and report to Commander Nagoshima at Star Base 142. Further details will provided on arrival.'
+})
+  
+
 
 
 missions.add({

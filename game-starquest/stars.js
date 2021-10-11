@@ -37,14 +37,10 @@ const stars = {
     w.ship.datetime += 9 * 24 + 3
     w.ship.currentLocation = 'starbase'
     w.ship.onView = 'nagoshima'
-    log(w.ship)
 
-    missions.start('asteroid')
-    missions.start('deploy_probes')
-    missions.start('mining_colony')
-    missions.start('cruise_ship')
-    missions.start('protect_ship')
-    missions.start('piracy')
+    player.mission_assemble_crew = 1001
+    player.mission_sector_7_iota = 1001
+    missions.init()
     stars.draw()
   },
   draw:function(name) {

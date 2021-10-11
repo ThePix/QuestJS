@@ -61,7 +61,7 @@ createItem("PAGE", {
     }
     const choices = getCandidates()
     choices.push('Forget it')
-    log(choices)
+    //log(choices)
     showMenuDiag("Use your PAGE to manage..?", choices, function(result) {
       //document.querySelector('#sidepane-menu').remove()
       if (result === 'Forget it') return
@@ -71,27 +71,16 @@ createItem("PAGE", {
     })
   },
   missions:function() {
-    if (w.ship.arrivedAtSector) {
-      msg(missions.getList(), {}, 'lookUp')
-    }
-    else {
-      let s = "{b:Mission briefing:} Assemble your officers. Fleet command has some suggestions, but you should check each record and decide for yourself."
-      for (const el of getCandidates()) {
-        s += '|' + '{i:' + el.alias + '}: ' + el.summary
-      }
-      s += '|{i:Currently assigned:}'
-      for (let role of roster.data) {
-        const npc = roster.getOfficer(role.name)
-        if (npc) {
-          s += ' ' + role.alias + ', ' + npc.alias + ';'
-        }
-        else {
-          s += ' ' + role.alias + ', -;'
-        }
-      }
-      msg(s, {}, 'lookUp')
-      msg("{b:Mission briefing:} Proceed to sector 7 Iota and report to Commander Nagoshima at Star Base 142. Further details will provided on arrival.", {}, 'lookUp')
-    }
+    const choices = missions.getList()
+    choices.push('Forget it')
+    showMenuDiag("Current missions", choices, function(result) {
+      //document.querySelector('#sidepane-menu').remove()
+      if (result === 'Forget it') return
+      console.log(result.name)
+      console.log(result)
+      result.diag()
+    })
+
   },
   usePage:function(s, s2, f) {
     const choices = this[s + 'ActiveOptions'].concat('Forget it')
@@ -105,9 +94,17 @@ createItem("PAGE", {
       }
     })
   },
-  introHelp:"All interactions in this game (except some explanatory links like this) are through the panel to the left. You can select different areas of the ship to visit, and from the shuttle bay may also be able to go off ship, depending on whether there is anything near by. You can also talk to people; giving your crew instructions is a big part of the game.|Your PAGE is also there; this gives you access to the ship computer. Use this is check the missions, view the encyclopedia or crew roster.|Your first task is to assemble your crew by assigning candidates to posts on the bridge using your PAGE. Look at the missions on your page for a quick overview of candidates. You will need a helmsman, but other posts can be left empty if you wish. You can assign officers to multiple roles, but they will tend to be less effective in both roles. Some candidates are better suited to a certain post than others, but it is up to you; if you want to appoint people to posts that will be poor at, go for it! Note that if you change your mind, you can unassign a role for the current officer, and then assign it to your new choice.|Once you are happy with your crew, ask the helmsman to lay in a course for sector 7 Iota. Note that once you set off for Sector 7 Iota you cannot change assignments.|Once you arrive there, you will get a list of missions - you will need to prioritize. It may not be possible to  do everything, and the situation could change as time passes. In most cases it takes about a day to travel between star systems in the sector, but some systems are further out and will take longer; this will be noted in the mission. Obviously it will take a similar time to get back to a star system in the central cluster.|If your screen is wide enough, you will see a star man on the right, but you do not need it to play the game. When you arrive in sector 7 Iota you will be able to toggle between  map of the stars in the sector and the star system you are currently at.|It is possible to die; bad decisions or just bad luck may lead to a bad ending.|Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental. Honest.",
-  intro:function() {
-    showDiag('Welcome to your new ship, captain!', '<br/>' + this.introHelp.replace(/\|/g, '<br/><br/>'), 'Okay')
+  introHelp1:"All interactions in this game (except some explanatory links like this) are through the panel to the left. You can select different areas of the ship to visit, and from the shuttle bay may also be able to go off ship, depending on whether there is anything near by. You can also talk to people; giving your crew instructions is a big part of the game.|Your PAGE is also there; this gives you access to the ship computer. Use this is check the missions, view the encyclopedia or crew roster.",
+  introHelp2:"Your first task is to assemble your crew by assigning candidates to posts on the bridge using your PAGE. Look at the missions on your PAGE for a quick overview of the candidates. You will need a helmsman, but other posts can be left empty if you wish. You can assign officers to multiple roles, but they will tend to be less effective in both roles. Some candidates are better suited to a certain roles than others, but it is up to you; if you want to appoint people to posts that will be poor at, go for it! Note that if you change your mind - perhaps after talking to the candidate - you can unassign the role for the current officer, and then assign it to your new choice.|Once you are happy with your crew, ask the helmsman to lay in a course for sector 7 Iota. Note that once you set off for Sector 7 Iota you cannot change assignments.|Once you arrive there, you will get a list of missions - you will need to prioritize. It may not be possible to  do everything, and the situation could change as time passes. In most cases it takes about a day to travel between star systems in the sector, but some systems are further out and will take longer; this will be noted in the mission. Obviously it will take a similar time to get back to a star system in the central cluster.",
+  introHelp3:"If your screen is wide enough, you will see a star man on the right, but you do not need it to play the game. When you arrive in sector 7 Iota you will be able to toggle between  map of the stars in the sector and the star system you are currently at.|It is possible to die; bad decisions or just bad luck may lead to a bad ending.|Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental. Honest.",
+  intro1:function() {
+    showDiag('Welcome to your new ship, captain!', '<br/>' + this.introHelp1.replace(/\|/g, '<br/><br/>'), 'Okay')
+  },
+  intro2:function() {
+    showDiag('Getting started', '<br/>' + this.introHelp2.replace(/\|/g, '<br/><br/>'), 'Okay')
+  },
+  intro3:function() {
+    showDiag('Additional notes', '<br/>' + this.introHelp3.replace(/\|/g, '<br/><br/>'), 'Okay')
   },
 })
 
@@ -130,7 +127,7 @@ const encyclopedia = {
   
   // Locations
   "Sector 7 Iota":"Sector 7 Iota is approximately 60 lightyears from Earth, heading approximately away from the galatic centre. It is characterised by a cluster of some twenty stars, many with inhabited planets, with a limited number of outlying worlds at some remove.|The admiralty maintain Starbase 142 in orbit around Mendone III, the most populous planet.",
-  "83":"Starbase 83 orbits the sun in the same orbit as Earth, at L4, and is considered third starbase at that location, though the first was an unmanned telescope. Its primary role is assembling, re-fitting and overhaul of fleet starships. It has no civilian facilities."
+  "83":"Starbase 83 orbits the sun in the same orbit as Earth, at L4, and is considered third starbase at that location, though the first was an unmanned telescope. Its primary role is assembling, re-fitting and overhaul of fleet starships. It has no civilian facilities.",
   
   // Other
   "pirates":"Pirates have plagued interstellar travel for centuries.",
