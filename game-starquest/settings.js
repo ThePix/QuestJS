@@ -11,9 +11,10 @@ settings.compassPane = false
 settings.panesCollapseAt = 0
 settings.themes = ['sans-serif']
 settings.styleFile = 'style'
-settings.files = ["code", "crew", "page", "data", "stars", "missions"]
+settings.files = ["code", "data", "crew", "page", "stars", "missions"]
 settings.tests = true
 settings.noTalkTo = false
+settings.iconsFolder = false
 
 settings.onView = function(item) { return w.ship.onView === item.name }
 settings.inventoryPane = [
@@ -22,7 +23,7 @@ settings.inventoryPane = [
   {name:'On Viewscreen', alt:'itemsView', test:settings.onView },
 ]
 
-settings.favicon = 'assets/icons/starquest.png'
+settings.favicon = 'assets/icons/sq.png'
 
 settings.funcForDynamicConv = 'showMenuDiag'
 
@@ -74,7 +75,7 @@ settings.setup = function() {
   msg("'I was just told to report to the Starbase. Beyond that... you know as much as I do, yeoman. Hopefully we'll not be close enough to the border to encounter any Brakk ships.'")
   if (settings.playMode !== 'dev') wait()
   
-  metamsg("If thi is your first play through - or you just want a reminder of how to get going - click {cmd:intro page:here}.")
+  metamsg("If this is your first play through - or you just want a reminder of how to get going - you might want to look at the {cmd:intro1 page:introductory text}, see {cmd:intro2 page:how to start} or look at the {cmd:intro3 page:further notes}.")
   if (settings.playMode !== 'dev') wait()
   stars.draw('stardock')
 }
@@ -91,35 +92,38 @@ settings.startingDialogInit = function() {
 
 settings.startingDialogOnClick = function() {
   settings.startingDialogEnabled = true
-  const npc = w[document.querySelector("#diag-name").value]
+  if (settings.dialogType === 'crew roster') {
+    const npc = w[document.querySelector("#diag-name").value]
 
-  for (let role of roster.data) {
-    const assignedNpc = roster.getOfficer(role.name)
-    log(assignedNpc)
-    if (assignedNpc && assignedNpc !== npc) continue
-    if (document.querySelector("#diag-" + role.name).checked) {
-      w.ship[role.name] = npc.name
+    for (let role of roster.data) {
+      const assignedNpc = roster.getOfficer(role.name)
+      //log(assignedNpc)
+      if (assignedNpc && assignedNpc !== npc) continue
+      if (document.querySelector("#diag-" + role.name).checked) {
+        w.ship[role.name] = npc.name
+      }
+      else {
+        w.ship[role.name] = false
+      }
+    }
+    const roles = roster.getRoles(npc)
+    if (roles.length === 0) {
+      msg("You assign no positions to " + npc.alias + ".")
     }
     else {
-      w.ship[role.name] = false
+      msg("You assign " + formatList(roles) + " to " + npc.alias + ".")
     }
-  }
-  const roles = roster.getRoles(npc)
-  if (roles.length === 0) {
-    msg("You assign no positions to " + npc.alias + ".")
-  }
-  else {
-    msg("You assign " + formatList(roles) + " " + npc.alias + ".")
-  }
-  if (roles.length === 0 && npc.loc) {
-    npc.loc = false
-    msg(npc.leaving, {char:npc})
-    io.updateUIItems()
-  }
-  if (roles.length !== 0 && !npc.loc) {
-    npc.loc = 'bridge'
-    msg(npc.entering, {char:npc})
-    io.updateUIItems()
+    if (roles.length === 0 && npc.loc) {
+      npc.loc = false
+      msg(npc.leaving, {char:npc})
+      io.updateUIItems()
+    }
+    if (roles.length !== 0 && !npc.loc) {
+      npc.loc = 'bridge'
+      msg(npc.entering, {char:npc})
+      io.updateUIItems()
+    }
+    delete settings.dialogType
   }
 }        
 
