@@ -31,9 +31,9 @@ settings.afterEnter = function() {
 
 // For items
 settings.inventoryPane = [
-  {name:'You are holding...', alt:'itemsHeld', test:settings.isHeldNotWorn, getLoc:function() { return game.player.name; }, noContent:'Nothing' },
-  {name:'You are wearing...', alt:'itemsWorn', test:settings.isWorn, getLoc:function() { return game.player.name; }, noContent:'Nothing' },
-  {name:'You can see...', alt:'itemsHere', test:settings.isHere, getLoc:function() { return game.player.loc; }, noContent:'Nothing' },
+  {name:'You are holding...', alt:'itemsHeld', test:settings.isHeldNotWorn, getLoc:function() { return player.name; }, noContent:'Nothing' },
+  {name:'You are wearing...', alt:'itemsWorn', test:settings.isWorn, getLoc:function() { return player.name; }, noContent:'Nothing' },
+  {name:'You can see...', alt:'itemsHere', test:settings.isHere, getLoc:function() { return player.loc; }, noContent:'Nothing' },
   {name:'You are on the phone to', alt:'onPhoneTo', test:function(item) { return item.name === player.onPhoneTo  }, noContent:'No one'  }
 ]
 
