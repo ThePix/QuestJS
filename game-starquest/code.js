@@ -30,7 +30,7 @@ commands.unshift(new Cmd('GoToDest', {
 
 /*
 npc_utilities.talkto = function() {
-  if (!player.canTalk(this)) return false
+  if (!player.testTalk(this)) return false
   const topics = this.getTopics(this)
   player.conversingWithNpc = this
   if (topics.length === 0) return failedmsg(lang.no_topics, {char:player, item:this})

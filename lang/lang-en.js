@@ -271,7 +271,7 @@ const lang = {
   drink_successful:"{nv:char:drink:true} {nm:item:the}.",
   cannot_eat:"{nv:item:be:true} not something {nv:char:can} eat.",
   cannot_drink:"{nv:item:be:true} not something {nv:char:can} drink.",
-  //cannot_ingest:"{nv:item:be:true} not something {nv:char:can} ingest.",
+  cannot_ingest:"{nv:item:be:true} not something {nv:char:can} ingest.",
 
 
   // WEARABLE

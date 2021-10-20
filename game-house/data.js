@@ -417,7 +417,7 @@ createItem("glass_shards", {
       msg("Mandy has already taken one glass shard; she decides she does not want to risk cut fingers by taking any more.")
       return false
     }
-    if (!options.char.canManipulate(this, "take")) return false
+    if (!options.char.testManipulate(this, "take")) return false
     msg("Mandy carefully picks up one of the shards of glass.")
     w.glass_shard.moveToFrom(options, "name", "loc")
     return true

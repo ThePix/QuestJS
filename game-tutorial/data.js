@@ -521,7 +521,7 @@ createItem("control_rod", TAKEABLE(), {
       msg(lang.already_have, tpParams);
       return false;
     }
-    if (!char.canManipulate(this, "take")) return false;
+    if (!char.testManipulate(this, "take")) return false;
     
     if (char === w.me) {
       msg("As you go to grab the control rod, a recorded message says: 'Warning: Control rod is highly zeta-active. Handling will result in instant death.' You decide upon reflection that you do not want to pick it up that much.")
