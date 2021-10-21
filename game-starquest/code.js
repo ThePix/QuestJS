@@ -28,27 +28,6 @@ commands.unshift(new Cmd('GoToDest', {
 
 
 
-/*
-npc_utilities.talkto = function() {
-  if (!player.canTalk(this)) return false
-  const topics = this.getTopics(this)
-  player.conversingWithNpc = this
-  if (topics.length === 0) return failedmsg(lang.no_topics, {char:player, item:this})
-  topics.push(lang.never_mind)
-  showSidePaneOptions(this, topics, function(result) {
-    document.querySelector('#sidepane-menu').remove()
-    if (result !== lang.never_mind) {
-      log(result)
-      result.runscript()
-    }
-  })
-  return world.SUCCESS_NO_TURNSCRIPTS;
-}
-
-findCmd('TalkTo').objects[0].scope = function(item) {
-  if (item.name === w.ship.onView) return true
-  return item.isAtLoc(player.loc, world.PARSER) && (item.npc || item.player);
-}*/
 
 
 io.msgInputText = function(s) {
