@@ -744,7 +744,7 @@ test.tests = function() {
   test.assertCmd("switch off knife", "You can't turn it off.")
   test.assertCmd("exits", "You think you can go east, south, up or west.")
   
-  test.title("Drop all");
+  test.title("Drop all")
   test.assertCmd("drop all", "You drop the knife.");
   test.assertCmd("drop all", "Nothing there to do that with.");
   test.assertCmd("get knife", "You take the knife.");
