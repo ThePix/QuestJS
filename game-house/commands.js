@@ -455,7 +455,7 @@ commands.unshift(new Cmd('PhoneAFriend', {
 
 commands.unshift(new Cmd('PutUnder', {
   regex:/^(?:put|place|drop) (.+) (?:under|beneath|below) (.+)$/,
-  rules:[cmdRules.canManipulate, cmdRules.isHeld],
+  rules:[cmdRules.testManipulate, cmdRules.isHeld],
   objects:[
     {scope:parser.isHeld, items:['chamber_pot']},
     {scope:parser.isPresent, items:["leaking_pipe"]},

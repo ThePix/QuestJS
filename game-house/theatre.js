@@ -223,7 +223,7 @@ createItem("clockwork_thespian", NPC(), CONTAINER(false), {
     if (w.large_key.loc === this.name) list.push('a large key in his back')
   },
 
-  canTalk:function(text) {
+  testTalk:function(text) {
     if (!this.npc) return falsemsg(text ? lang.cannot_ask_about : lang.cannot_talk_to, {item:this, char:player, text:text})
     return true
   },

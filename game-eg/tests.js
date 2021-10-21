@@ -952,12 +952,12 @@ test.tests = function() {
 
   test.title("Restricting");
   test.assertEqual(["Look at", "Talk to"], w.Kyle.getVerbs())
-  player.canTalk = function() { msg("You are gagged."); return false; }
+  player.testTalk = function() { msg("You are gagged."); return false; }
   test.assertCmd("talk to kyle", "You are gagged.");
-  player.canTalk = function() { return true; }
-  player.canManipulate = function() { msg("You are handcuffed."); return false; }
+  player.testTalk = function() { return true; }
+  player.testManipulate = function() { msg("You are handcuffed."); return false; }
   test.assertCmd("drop bricks", "You are handcuffed.");
-  player.canManipulate = function() { return true; }
+  player.testManipulate = function() { return true; }
   test.assertCmd("drop bricks", "You drop seven bricks.");  
   
   
@@ -1063,9 +1063,9 @@ test.tests = function() {
   test.assertCmd("l", ["The dining room", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and Lara (sitting on the chair) here.", "You can go east, up or west.",]);  
   
   test.title("NPC commands 1.1");
-  w.Lara.canPosture = function() { msg("She is turned to stone."); return false; }
+  w.Lara.testPosture = function() { msg("She is turned to stone."); return false; }
   test.assertCmd("lara, get off chair", "She is turned to stone.");
-  w.Lara.canPosture = function() { return true; }
+  w.Lara.testPosture = function() { return true; }
   test.assertCmd("lara, get off chair", "Lara gets off the chair.");
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
   

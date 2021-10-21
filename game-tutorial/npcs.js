@@ -19,7 +19,7 @@ createItem("robot", NPC(false), {
     if (situation === world.PARSER && w.me.loc === 'laboratory') return true
   },
   
-  getAgreementGo:function(dir) {
+  getAgreementGo:function(ex) {
     if (w.rope.isAttachedTo(this)) {
       msg("'I cannot move while tied to the rope.'");
       if (!this.ropeMoveFlag) {

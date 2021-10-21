@@ -911,9 +911,9 @@ createItem("Lara", NPC(true), {
     }
     return true
   },
-  getAgreementGo:function(dir) {
+  getAgreementGo:function(ex) {
     if (!this.happy) {
-      msg("'I'm not going " + dir + ",' says Lara indignantly. 'I don't like that room.'")
+      msg("'I'm not going " + ex.dir + ",' says Lara indignantly. 'I don't like that room.'")
       return false
     }
     return true
@@ -935,7 +935,7 @@ createItem("Lara", NPC(true), {
     msg("'I'm not doing that!' says Lara indignantly.")
     return false
   },
-  canTalkPlayer:function() { return true; },
+  testTalkPlayer:function() { return true; },
   
   sayPriority:3,
   sayResponses:[

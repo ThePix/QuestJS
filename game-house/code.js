@@ -647,7 +647,7 @@ const SIZE_CHANGING = function() {
     if (this.isAtLoc(options.char.name)) {
       return falsemsg(lang.already_have, options)
     }
-    if (!options.char.canManipulate(this, "take")) return false
+    if (!options.char.testManipulate(this, "take")) return false
     
     if (this.size === this.maxsize) {
       return falsemsg("{nv:item:be:true} far too big to pick up.", {item:this})
