@@ -109,7 +109,7 @@ tp.addDirective("time", function(arr, params) {
 
 
 
-const newCmds = [
+const newVerbs = [
   { name:'Encyclopedia' },
   { name:'Press button' },
   { name:'Assign crew' },
@@ -117,12 +117,9 @@ const newCmds = [
   { name:'Missions' },
   { name:'Contact planet' },
   { name:'Star database' },
-  { name:'Intro1' },
-  { name:'Intro2' },
-  { name:'Intro3' },
 ]
 
-for (let el of newCmds) {
+for (let el of newVerbs) {
   commands.unshift(new Cmd(el.name, {
     regex:new RegExp('^' + el.name.toLowerCase() + ' (.+)$'),
     attName:el.name.toLowerCase().replace(/ /g, ''),
@@ -130,6 +127,34 @@ for (let el of newCmds) {
       {scope:el.scopeHeld ? parser.isHeld : parser.isHere},
     ],
     defmsg:"{pv:item:'be:true} not something you can do that with.",
+  }))
+}
+
+const newCmds = [
+  { 
+    name:'Intro1',
+    script:function() { showDiag('Welcome to your new ship, captain!', '<br/>' + this.text.replace(/\|/g, '<br/><br/>'), 'Okay'); return world.SUCCESS },
+    text:"All interactions in this game (except some explanatory links like this) are through the panel to the left. You can select different areas of the ship to visit, and from the shuttle bay may also be able to go off ship, depending on whether there is anything near by. You can also talk to people - giving your crew instructions is a big part of the game.|Your PAGE is also there; this gives you access to the ship computer. Use this is check the missions, organise your bridge crew or view the encyclopedia.",
+  },
+  { 
+    name:'Intro2', 
+    script:function() { showDiag('Getting started', '<br/>' + this.text.replace(/\|/g, '<br/><br/>'), 'Okay'); return world.SUCCESS },
+    text:"Your first task is to assemble your crew by assigning candidates to posts on the bridge using your PAGE. Look at the mission on your PAGE for the current assignments and a quick overview of the candidates. You will need a helmsman, but other posts can be left empty if you wish. You can assign officers to multiple roles, but they will tend to be less effective in both roles. Some candidates are better suited to a certain roles than others, but it is up to you; if you want to appoint people to posts that will be poor at, go for it! If you change your mind - perhaps after talking to the candidate - you can unassign the role for the current officer, and then assign it to your new choice.|Once you are happy with your crew, ask the helmsman to lay in a course for sector 7 Iota. Note that once you set off for Sector 7 Iota you cannot change assignments.|Once you arrive there, you will get a new list of missions - you will need to prioritize. It may not be possible to  do everything, and the situation could change as time passes. In most cases it takes about a day to travel between star systems in the sector, but some systems are further out and will take longer; this will be noted in the mission. Obviously it will take a similar time to get back to a star system in the central cluster.",
+  },
+  { 
+    name:'Intro3', 
+    script:function() { showDiag('Additional notes', '<br/>' + this.text.replace(/\|/g, '<br/><br/>'), 'Okay'); return world.SUCCESS },
+    text:"If your screen is wide enough, you will see a star map on the right, but you do not need it to play the game. When you arrive in sector 7 Iota you will be able to toggle between  map of the stars in the sector and the star system you are currently at.|It is possible to die; bad decisions or just bad luck may lead to a bad ending; you may want to save often, and think about how you could do better next time.|Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental. Honest.",
+  },
+]
+
+for (let el of newCmds) {
+  commands.unshift(new Cmd(el.name, {
+    regex:new RegExp('^' + el.name.toLowerCase() + '$'),
+    objects:[
+    ],
+    text:el.text,
+    script:el.script,
   }))
 }
 
@@ -149,6 +174,11 @@ commands.unshift(new Cmd("JumpStart", {
     w.ship.science = 'lashirr_hrong'
     w.ship.engineering = 'milton_keynes'
     w.ship.armsman = 'dakota_north'
+    
+    w.farrington_moss.loc = 'bridge'
+    w.lashirr_hrong.loc = 'bridge'
+    w.milton_keynes.loc = 'bridge'
+    w.dakota_north.loc = 'bridge'
     
     w.helmsman_go_to_7iota.script()
     //stars.arriveAtSector()

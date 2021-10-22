@@ -40,10 +40,7 @@ const missions = {
       for (let star of data.stars) stars.add(star)
     }
     if (data.encyc) {
-      for (let el of data.encyc) {
-        pageData.push({name:el.alias, t:el.t, type:'lookUp'})
-        if (el.add === 'start') w.PAGE.add(e.alias, 'lookUp')
-      }
+      for (let key in data.encyc) encyclopedia[key] = data.encyc[key]
     }
   },
 
@@ -51,16 +48,6 @@ const missions = {
     const mission = this.getMission(name)
     player['mission_' + name] = 1
     player['missionStart_' + name] = w.ship.dateTime
-    if (mission.star) {
-      w.PAGE.add(mission.star.alias, 'star')
-      for (let el of mission.star.locations) w.PAGE.add(el.alias, 'star')
-    }
-    if (mission.stars) {
-      for (let star of mission.stars) {
-        w.PAGE.add(star.alias, 'star')
-        for (let el of star.locations) w.PAGE.add(el.alias, 'star')
-      }
-    }
   },
   
   init:function() {
@@ -150,13 +137,9 @@ missions.add({
       }
     ],
   },
-  encyc:[
-    {
-      alias:'Asteroid',
-      t:'Asteroids are basically rocks in space. Occasionally they fall into the gravity well of a planet. Smaller ones just burn up in the atmosphere, larger ones are catastrophic - for example the asteroid that wiped out the dinosaurs 66 million years ago.',
-      add:'mission',
-    },  
-  ]
+  encyc:{
+    'Asteroid':'Asteroids are basically rocks in space. Occasionally they fall into the gravity well of a planet. Smaller ones just burn up in the atmosphere, larger ones are catastrophic - for example the asteroid that wiped out the dinosaurs 66 million years ago.',
+  }
 })
 
 

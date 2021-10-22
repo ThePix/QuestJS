@@ -77,7 +77,7 @@ settings.setup = function() {
   msg("'I was just told to report to the Starbase. Beyond that... you know as much as I do, yeoman. Hopefully we'll not be close enough to the border to encounter any Brakk ships.'")
   if (settings.playMode !== 'dev') wait()
   
-  metamsg("If this is your first play through - or you just want a reminder of how to get going - you might want to look at the {cmd:intro1 page:introductory text}, see {cmd:intro2 page:how to start} or look at the {cmd:intro3 page:further notes}.")
+  metamsg("If this is your first play through - or you just want a reminder of how to get going - you might want to look at the {cmd:intro1:introductory text}, see {cmd:intro2:how to start} or look at the {cmd:intro3:further notes}.")
   if (settings.playMode !== 'dev') wait()
   stars.draw('stardock')
 }

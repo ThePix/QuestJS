@@ -22,9 +22,7 @@ const stars = {
       encyclopedia[el.alias] = 'In the [[' + data.alias + ']] system.|' + el.desc
       locs.push(el.alias)
     }
-    log(locs)
     encyclopedia[data.alias] = 'A type ' + data.type + ' star in the ' + data.sector + ' sector.|Significant locations include: [[' + locs.join(']], [[') + ']]'
-    log(encyclopedia[data.alias])
   },
   data:[],
   arriveAtSector:function() {
