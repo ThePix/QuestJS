@@ -185,7 +185,7 @@ createItem("rabbit", RPG_BEAST(false), {
   health:20,
   ex:"{lore:An example of a monster you can talk to after casting the right spell, and is generally not hostile.:With Lore active, you can learn all about rabbit culture... they like carrots.}",
   talk:function() {
-    switch (this.talktoCount) {
+    switch (this.talkto_count) {
       case 1 : 
         msg("You say 'Hello,' to the rabbit, 'how is it going?'");
         msg("The rabbit looks at you. 'Need carrots.' It looks plaintively at it round tummy. 'Fading away bunny!");

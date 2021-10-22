@@ -791,7 +791,7 @@ createItem("Kyle", NPC(false),
   ],
   needsWorkCount:0,
   talkto2:function() {
-    switch (this.talktoCount) {
+    switch (this.talkto_count) {
       case 0 : msg("You say 'Hello,' to Kyle, and he replies in kind."); break;
       case 1 : msg("You ask Kyle how to get upstairs. 'You know,' he replies, 'I have no idea.'"); break;
       case 2 : msg("'Where do you sleep?' you ask Kyle."); msg("'What's \"sleep\"?'"); break;
@@ -950,7 +950,7 @@ createItem("Lara", NPC(true), {
     }
   ],
   greeting: function() {
-    if (this.talktoCount === 1) {
+    if (this.talkto_count === 1) {
       msg("'Hello,' says Lara.");
     } else {
       msg("'You again?' says Lara.");
