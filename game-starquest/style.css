@@ -112,10 +112,26 @@ button, input[type="button"] {
   background-color: #fbf;
 }
 
-#dialog {
+#dialog, #text-dialog {
   border: white solid 1px;
   border-radius: 4px;
   font-family: 'Marcellus', serif;
   background: rgb(17,17,17);
   color: #0490ff;
+}
+
+
+#text-dialog {
+  font-size: 1.1em;
+}
+
+.encyclopedia {
+  padding: 5px;
+  color: blue;
+  background-color:#eee;
+}
+
+.encycLink {
+  cursor:pointer;
+  color: purple;
 }

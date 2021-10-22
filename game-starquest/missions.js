@@ -6,6 +6,7 @@
 // if over 1000 it is completed or otherwise can no longer be pursued
 const missions = {
   getMission(name) { return this.data.find(el => el.name === name) },
+  find(alias) { return this.data.find(el => el.alias.toLowerCase() === alias.toLowerCase()) },
   getState(name) { return player['mission_' + name] },
   isActive(name) {
     const state = this.getState(name)
@@ -98,18 +99,13 @@ missions.add({
   alias:'Assemble bridge crew',
   brief:function() {
     let s = "Assemble your officers. Fleet command has some suggestions, but you should check each record and decide for yourself."
-    for (const el of getCandidates()) {
-      s += '|' + '<b>' + el.alias + ':</b> ' + el.summary
-    }
-    s += '|<hr/>|<b>Currently assigned:</b>'
     for (let role of roster.data) {
       const npc = roster.getOfficer(role.name)
-      if (npc) {
-        s += ' ' + role.alias + ', ' + npc.alias + ';'
-      }
-      else {
-        s += ' ' + role.alias + ', -;'
-      }
+      s += '|<b>' + role.alias + ':</b> ' + (npc ? npc.alias : '--')
+    }
+    s += '|<hr/>'
+    for (const el of getCandidates()) {
+      s += '|<b>' + el.alias + ':</b> ' + el.summary
     }
     return s
   },

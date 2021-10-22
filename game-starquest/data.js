@@ -97,6 +97,14 @@ createRoom("shuttle_bay", {
 
 
 
+createItem("stars_mainscreen", {
+  alias:'Forward view',
+  isAtLoc:function(loc, situation) { return situation === world.PARSER && loc === 'bridge' },
+  examine:function() {
+    msg('On the mainscreen you see a field of stars, and familiar constellations you can see from earth, though brighter and more constant and so many more of them.')
+  },
+})
+
 
 
 
@@ -106,6 +114,7 @@ createRoom("shuttle_bay", {
 createItem("ship", {
   showStarMap:false,
   dateTime:0,
+  onView:'stars_mainscreen',
   getDateTime:function(add) { 
     let n = (854 * 360 + 63) * 24 + 5
     if (add) {

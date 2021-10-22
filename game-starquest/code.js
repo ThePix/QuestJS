@@ -94,7 +94,14 @@ const roster = {
       }
     }
     return s
-  }  
+  },
+  getCrew:function() {
+    let l = []
+    for (let el of roster.data) {
+      if (roster.hasOfficer(el.name)) l.push(roster.getOfficer(el.name))
+    }
+    return l
+  },
 }
 
 
@@ -146,6 +153,10 @@ for (let el of newCmds) {
     defmsg:"{pv:item:'be:true} not something you can do that with.",
   }))
 }
+
+
+
+
 
 
 

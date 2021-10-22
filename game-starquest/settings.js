@@ -16,11 +16,13 @@ settings.tests = true
 settings.noTalkTo = false
 settings.iconsFolder = false
 
-settings.onView = function(item) { return w.ship.onView === item.name }
+settings.onView = function(item) { return w.ship.onView === item.name && currentLocation === w.bridge }
+settings.pageOption = function(item) { return item.pageOption }
 settings.inventoryPane = [
-  {name:'Items Held', alt:'itemsHeld', test:settings.isHeldNotWorn, getLoc:function() { return player.name; } },
-  {name:'People Here', alt:'itemsHere', test:settings.isHere, getLoc:function() { return player.loc; } },
+//  {name:'Items Held', alt:'itemsHeld', test:settings.isHeldNotWorn, getLoc:function() { return player.name; } },
   {name:'On Viewscreen', alt:'itemsView', test:settings.onView },
+  {name:'Your PAGE', alt:'pageOptions', test:settings.pageOption },
+  {name:'People Here', alt:'itemsHere', test:settings.isHere, getLoc:function() { return player.loc; } },
 ]
 
 settings.favicon = 'assets/icons/sq.png'
@@ -80,6 +82,16 @@ settings.setup = function() {
   stars.draw('stardock')
 }
 
+
+
+settings.updateCustomUI = function() {
+  const encyc = Array.from(document.getElementsByClassName('item')).filter(el => el.innerHTML === 'Encyclopedia')[0]
+  encyc.onclick = function() { askDiag("Search the web", w.encyclopedia.askDiag, "Submit") }
+  
+}
+
+
+
 settings.startingDialogTitle = "Crew Roster"
 settings.startingDialogWidth = 500
 settings.startingDialogHeight = 480
@@ -92,7 +104,7 @@ settings.startingDialogInit = function() {
 
 settings.startingDialogOnClick = function() {
   settings.startingDialogEnabled = true
-  if (settings.dialogType === 'crew roster') {
+  if (settings.dialogType === 'crew roster' && !w.ship.arrivedAtSector) {
     const npc = w[document.querySelector("#diag-name").value]
 
     for (let role of roster.data) {

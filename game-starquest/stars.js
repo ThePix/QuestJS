@@ -16,19 +16,15 @@ const stars = {
   },
   add:function(data) {
     this.data.push(data)
+    let locs = []
     
-    pageData.push({name:data.alias, 
-      t:data.desc,
-      type:'star',
-    })
-    if (data.start) w.PAGE.starActiveOptions.push(data.alias)
     for (let el of data.locations) {
-      pageData.push({name:el.alias, 
-        t:el.desc,
-        type:'star',
-      })
-      if (data.start) w.PAGE.starActiveOptions.push(el.alias)
+      encyclopedia[el.alias] = 'In the [[' + data.alias + ']] system.|' + el.desc
+      locs.push(el.alias)
     }
+    log(locs)
+    encyclopedia[data.alias] = 'A type ' + data.type + ' star in the ' + data.sector + ' sector.|Significant locations include: [[' + locs.join(']], [[') + ']]'
+    log(encyclopedia[data.alias])
   },
   data:[],
   arriveAtSector:function() {
@@ -165,6 +161,7 @@ stars.add({
   alias:'Cyrennis Minima',
   start:true,
   colour:'red',
+  type: 'M2',
   size:12,
   x:200,
   y:200,

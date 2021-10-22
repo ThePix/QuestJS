@@ -812,15 +812,13 @@ createItem("Kyle", NPC(false),
     },
     {
       alias:"Seriously, what's the deal with the garden?",
-      script:function() {
-        msg("You ask Kyle about the garden, but he's STILL not talking.")
-      },
+      msg:"You ask Kyle about the garden, but he's STILL not talking.",
     },
     {
       showTopic:true,
       alias:"The weather",
       script:function() {
-        msg("You talk to Kyle about the weather.")
+        msg("You talk to " + this.alias + " about the weather.")
       },
     },
   ],

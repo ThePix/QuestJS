@@ -19,18 +19,38 @@ createItem("player", PLAYER(), {
 createItem("nagoshima", NPC(true), {
   alias:"Commander Nagoshima",
   properNoun:true,
+  isAtLoc:function(loc, situation) { return situation === world.PARSER && w.ship.onView === this.name },
   examine:"Despite her striking black hair, which she wears in a neat bun, you would judge Commander Nagoshima to be in her fifties. You find yourself warming to her smile.",
   convTopics:[
     {
       name:"nagoshima_missions",
       showTopic:true,
       alias:"Mission?",
-      script:function() {
-        msg("'I imagine you have some specific missions you need us for?' you say to the commander.");
-        msg("'Indeed! Quite a few in fact; as I say, we have been sorely lacking in available ships. You should already have them on your PAGE.'");
-      },
-    }
-  
+      nowShow:['nagoshima_brakk', 'nagoshima_backwater', 'nagoshima_other_militrary'],
+      msg:"'I imagine you have some specific missions you need us for,' you say to the commander.|'Indeed! Quite a few in fact; as I say, we have been sorely lacking in available ships. You should already have them on your PAGE.'",
+    },
+    {
+      name:"nagoshima_backwater",
+      alias:"Why are you assigned to such a backwater?",
+      nowHide:['nagoshima_cushy'],
+      msg:"'This is quite the backwater. What did you do to get this posting?' you ask the commander.|'Hah! Yes, I've had a run in or two with the top brass. But I'd have to know you better before I say anything about that. Still it's not so bad here. Sometimes I can almost convince myself it more of a comfy retirement.'",
+    },
+    {
+      name:"nagoshima_cushy",
+      alias:"Seems a cushy assignment for you",
+      nowHide:['nagoshima_backwater'],
+      msg:"'This is nice quiet sector. How did you get such a cushy assignment?' you ask the commander.|'I wish. The Union has virtually no miliary presence here at all, and half the planets are not even in the union. It has its quiet days, but when things get rough, they get very rough, and there is precious little I can do.'",
+    },
+    {
+      name:"nagoshima_other_militrary",
+      alias:"Other fleet forces in the sector?",
+      msg:"'What other fleet forces are in the sector?' you ask the commander.|'We have a few shuttles and courier ships, but that is about it. The only weaponry worth a damn in on this starbase. We have agents on a few planets, but even they are spread too thin.'",
+    },
+    {
+      name:"nagoshima_brakk",
+      alias:"Mission?",
+      msg:"'Any problems with the Brakk?' you ask the commander.|'Just some odd rumours; nothing confirmed. We're not far from the border, but I guess there's not much to interest them here.'",
+    },
   ],
 })
 
@@ -107,16 +127,24 @@ const CANDIDATE = function(female) {
     settings.startingDialogHtml += '<input type="hidden" name="name" id="diag-name" value="' + this.name + '"/>'
     for (let role of roster.data) {
       const npc = roster.getOfficer(role.name)
-      if (npc === this) {
-        settings.startingDialogHtml += '<p><input type="checkbox" name="' + role.name + '" id="diag-' + role.name + '" checked="yes"/> ' + role.alias + '</p>'
-      }
-      else if (npc) {
-        settings.startingDialogHtml += '<p><input type="checkbox" checked="yes" disabled="yes"/> ' + role.alias + ': <i>' + npc.alias + '</i></p>'
+      if (!w.ship.arrivedAtSector) {
+        if (npc === this) {
+          settings.startingDialogHtml += '<p><input type="checkbox" name="' + role.name + '" id="diag-' + role.name + '" checked="yes"/> ' + role.alias + '</p>'
+        }
+        else if (npc) {
+          settings.startingDialogHtml += '<p><input type="checkbox" checked="yes" disabled="yes"/> ' + role.alias + ': <i>' + npc.alias + '</i></p>'
+        }
+        else {
+          settings.startingDialogHtml += '<p><input type="checkbox" name="' + role.name + '" id="diag-' + role.name + '"/> ' + role.alias + '</p>'
+        }
       }
       else {
-        settings.startingDialogHtml += '<p><input type="checkbox" name="' + role.name + '" id="diag-' + role.name + '"/> ' + role.alias + '</p>'
+        if (npc === this) {
+          settings.startingDialogHtml += '<p>Assigned as: ' + role.alias + '</p>'
+        }
       }
     }
+    
     settings.dialogType = 'crew roster'
     settings.setUpDialog()
   }

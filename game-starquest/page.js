@@ -1,9 +1,135 @@
 "use strict"
 
 
+createItem("missions", {
+  pageOption:true,
+  verbFunction:function(verbList) {
+    verbList.pop()
+    for (const m of missions.getList()) verbList.push(m.alias)
+  },
+})
+
+commands.unshift(new Cmd("Mission", {
+  regex:/(.+) missions$/,
+  objects:[
+    {special:'text'},
+  ],
+  script:function(objects) {
+    log(objects[0])
+    const mission = missions.find(objects[0])
+    log(mission)
+    settings.startingDialogHtml = '<p>Name: <i>' + mission.alias + '</i></p>'
+    settings.startingDialogHtml += '<p>Brief:</p>'
+    const s = (typeof mission.brief === 'function') ? mission.brief() : mission.brief
+    const ary = s.split('|')
+    for (const el of ary) settings.startingDialogHtml += '<p><i>' + el + '</i></p>'
+    settings.setUpDialog()
+    return world.SUCCESS
+  },
+}))
+
+
+createItem("crew_roster", {
+  pageOption:true,
+  verbFunction:function(verbList) {
+    verbList.pop()
+    if (w.ship.arrivedAtSector) {
+      for (const o of roster.getCrew()) verbList.push(o.alias)
+    }
+    else {
+      for (const o of getCandidates()) verbList.push(o.alias)
+    }
+  },
+})
+
+commands.unshift(new Cmd("Crew Roster", {
+  regex:/(.+) crew roster$/,
+  objects:[
+    {scope:parser.isInWorld, attName:'npc'},
+  ],
+  script:function(objects) {
+    log(objects[0])
+    const o = objects[0][0]
+    o.dutiesDiag()
+    return world.SUCCESS
+  },
+}))
+
+
+
+createItem("encyclopedia", {
+  pageOption:true,
+  askDiag:function(s, fromLink) {
+    if (s.length === 0) return
+    if (s.length < 3) {
+      msg("On your PAGE you search for \"" + s + "\", but get over a billion hits. Perhaps search for something a few more characters long?")
+      return
+    }
+    const regex = RegExp(s, 'i')
+    for (const key in encyclopedia) {
+      if (regex.test(key)) {
+        if (!fromLink) msg("On your PAGE you search for \"" + s + "\".")
+        let strs = []
+        if (doOnce(w.PAGE, 'Encyclopaedia')) {
+          strs.push("<b>Welcome to the Fleet Admiralty Encyclopaedia</b>")
+          strs.push("Please note that the admiralty cannot be held accountable for any inaccuracy or inconsistency on the information contained herein. Continued use is taken as absolving the admiralty of any and all liability.")
+          strs.push("If you do notice any  inaccuracy or inconsistency, please communicate this to the admiralty.")
+        }
+        const paras = encyclopedia[key].split('|')
+        let flag = true
+        for (const s of paras) {
+          if (flag) {
+            strs.push("<b>" + key + "</b> " + w.encyclopedia.expandRefs(s))
+            flag = false
+          }
+          else {
+            strs.push(w.encyclopedia.expandRefs(s))
+          }
+        }
+        msgDiv(strs, {}, 'encyclopedia')
+        return true
+      }
+    }
+    if (fromLink) {
+      msg("The link seems to be broken; you wondeer if you should report it to someone....")
+    }
+    else {
+      msg("On your PAGE you search for \"" + s + "\", but find nothing of interest.")
+    }
+    return false      
+  },
+  expandRefs:function(s) {
+    let match = s.match(/\[\[(.+)\]\]/)
+    while (match) {
+      log(match)
+      const link = '<span onclick="runCmd(\'encyclopedia ' + match[1] + '\')" class="encycLink">' + match[1] + '</span>'
+      log(match[0])
+      log(link)
+      s = s.replace(match[0], link)
+      log(s)
+      match = s.match(/\[\[.+\]\]/)
+    }
+    return s
+  },
+})
+
+commands.unshift(new Cmd("Encyclopedia", {
+  regex:/encyclopedia (.+)$/,
+  objects:[
+    {special:'text'},
+  ],
+  script:function(objects) {
+    log(objects[0])
+    w.encyclopedia.askDiag(objects[0], true) 
+    return world.SUCCESS
+  },
+}))
+
+
 createItem("PAGE", {
-  examine:'You look at the PAGE. It is a standard issue, type 3, doubtless one of dozens on the ship.',
   starActiveOptions:[],
+
+/*  //examine:'You look at the PAGE. It is a standard issue, type 3, doubtless one of dozens on the ship.',
   contactActiveOptions:[],
   lookUpActiveOptions:["SS Star Quest", "Sector 7 Iota", "Stardate", "The Brakk"],
   //otherUseActiveOptions:['Read a book', 'News app', 'Messages'],
@@ -93,7 +219,7 @@ createItem("PAGE", {
         return
       }
     })
-  },
+  },*/
   introHelp1:"All interactions in this game (except some explanatory links like this) are through the panel to the left. You can select different areas of the ship to visit, and from the shuttle bay may also be able to go off ship, depending on whether there is anything near by. You can also talk to people; giving your crew instructions is a big part of the game.|Your PAGE is also there; this gives you access to the ship computer. Use this is check the missions, view the encyclopedia or crew roster.",
   introHelp2:"Your first task is to assemble your crew by assigning candidates to posts on the bridge using your PAGE. Look at the missions on your PAGE for a quick overview of the candidates. You will need a helmsman, but other posts can be left empty if you wish. You can assign officers to multiple roles, but they will tend to be less effective in both roles. Some candidates are better suited to a certain roles than others, but it is up to you; if you want to appoint people to posts that will be poor at, go for it! Note that if you change your mind - perhaps after talking to the candidate - you can unassign the role for the current officer, and then assign it to your new choice.|Once you are happy with your crew, ask the helmsman to lay in a course for sector 7 Iota. Note that once you set off for Sector 7 Iota you cannot change assignments.|Once you arrive there, you will get a list of missions - you will need to prioritize. It may not be possible to  do everything, and the situation could change as time passes. In most cases it takes about a day to travel between star systems in the sector, but some systems are further out and will take longer; this will be noted in the mission. Obviously it will take a similar time to get back to a star system in the central cluster.",
   introHelp3:"If your screen is wide enough, you will see a star man on the right, but you do not need it to play the game. When you arrive in sector 7 Iota you will be able to toggle between  map of the stars in the sector and the star system you are currently at.|It is possible to die; bad decisions or just bad luck may lead to a bad ending.|Any similarity to a certain series from the sixties... and several other decades... is entirely coincidental. Honest.",
@@ -117,7 +243,9 @@ const pageData = []
 const encyclopedia = {
   "SS Star Quest":"The SS Star Quest is an {i:Intrepid} class warship, launched {time:-195341} from Newport, in Mars orbit. Originally a top-of-the-line ship, she has been downgraded twice, and is now classified as a general purpose ship. She is fitted with medical and science facilities, armaments and limited cargo facilities.|She was re-fitted in {time:-49}, and as of the re-fit she has a mass of 984 te, a typical crew of 54 plus 18 marines and can achieve a maximum speed of warp 6 with her two Mark 7 engines. She is armed with twin turbo lasers and hard-light torpedoes. She is due to be decommissioned in {time:25,871}",
   "The Admiralty":"The Space Admiralty, or more often just the Admiralty, is the administration for Earth-based space military.",
-  "Stardate":"The \"Stardate\" has been adopted as a universal time system across Accord space. Due to relativistic effects, time travels at different rates depending on the observer's own speed, and as stars are moving relative to each other, even different planets have slight different time rates. The Stardate is a theoretical time based on a stationary galaxy. It uses midnight, New Year's day, 1970 in the original Earth-based system as the start of the epoch.|It is split into parts, separated by dots. The first is the number of years since the start of the epoch, the second part is the number of days since the start of the year, the third part is the number of hours. Further divisions divide into minutes and second. Later parts may be omitted as convenient. Note that Stardate uses a \"standard year\", which is exactly 360 days long or 31,104,000 seconds.",
+  "Stardate":"The \"Stardate\" has been adopted as a universal time system across [[Union]] space. Due to relativistic effects, time travels at different rates depending on the observer's own speed, and as stars are moving relative to each other, even different planets have slight different time rates. The Stardate is a theoretical time based on a stationary galaxy. It uses midnight, New Year's day, 1970 in the original Earth-based system as the start of the epoch.|It is split into parts, separated by dots. The first is the number of years since the start of the epoch, the second part is the number of days since the start of the year, the third part is the number of hours. Further divisions divide into minutes and second. Later parts may be omitted as convenient. Note that Stardate uses a \"standard year\", which is exactly 360 days long or 31,104,000 seconds.",
+  "Alliance":"Currently thirty four species spread across 3962 planets make up the alliance. Its aim is to promote peace and prosperity throughout the galaxy. The latest species to join the Alliance was the [[Chal]], five years ago.",
+  "Terran Union of Planets":"Of the 84 planets that are considered to be terran (earth and its colonies), 68 are part of the Terran Union of Planets. The union aims to provide protect to its members, but is more of a trade organisation. Members are required to uphold certain rights for all sentient beings on the planets.|The Terran Union of Planets is a subset of the [[Alliance]].",
 
   // Species  
   "The Brakk":"The Brakk are a belligerent, war-like race who have taken it upon themselves to halt the natural expansion of mankind into space.",
@@ -130,7 +258,7 @@ const encyclopedia = {
   "83":"Starbase 83 orbits the sun in the same orbit as Earth, at L4, and is considered third starbase at that location, though the first was an unmanned telescope. Its primary role is assembling, re-fitting and overhaul of fleet starships. It has no civilian facilities.",
   
   // Other
-  "pirates":"Pirates have plagued interstellar travel for centuries.",
+  "pirates":"Pirates have plagued interstellar travel for centuries. The vastness of space has turned out to be the biggest defence against pirates, but also the biggest obstacle in eradicating them altogether.",
   
 }
 
