@@ -470,7 +470,7 @@ createItem("restrel_juazz", CANDIDATE(true), {
 
 createItem("helmsman_go_to_7iota", TOPIC(true), {
   belongsTo:belongsToHelm,
-  nowShow:['helmsman_go_to'],
+  nowShow:['helmsman_go_to_star', 'helmsman_go_to_location'],
   alias:"Lay in a course for 7 Iota",
   script:function() {
     msg("'Lay in a course for sector 7 Iota,' you say to {role:helm:formalName}, 'warp factor 4.'")
@@ -485,8 +485,28 @@ createItem("helmsman_go_to_7iota", TOPIC(true), {
 })
 
 
-createItem("helmsman_go_to", TOPIC(false), {
+createItem("helmsman_go_to_star", TOPIC(false), {
   belongsTo:belongsToHelm,
   hideAfter:false,
-  alias:"Lay in a course for...",
+  alias:"Lay in a course for star...",
+  script:function() {
+    showMenuDiag("Which star system?", stars.getStarNames(), function(result) {
+      log(result)
+      if (result === lang.never_mind) return
+      const system = stars.getSystem(result)
+      log(system)
+    })
+    return world.SUCCESS
+  }
+})
+
+createItem("helmsman_go_to_location", TOPIC(false), {
+  belongsTo:belongsToHelm,
+  hideAfter:false,
+  alias:"Lay in a course for location in this system...",
+  script:function() {
+    let l = []
+    //for (const star og
+
+  }
 })

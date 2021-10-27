@@ -14,6 +14,14 @@ const stars = {
     }
     log("ERROR: Failed to find " + (isLocation ? 'location' : 'system') + " with name " + name)
   },
+
+  getLocationNames:function() {
+    const system = stars.getSystem(w.ship.currentSystem)
+    return system.locations.map(el => el.alias)
+  },
+  getStarNames:function() {
+    return stars.data.map(el => el.alias)
+  },
   add:function(data) {
     this.data.push(data)
     let locs = []

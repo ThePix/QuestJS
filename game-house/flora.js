@@ -787,15 +787,15 @@ createItem("tamarind_pod_prototype", SIZE_CHANGING(), {
   open:function(options) {
     let sharp
     
-    if (options.with === undefined) {
+    if (options.secondItem === undefined) {
       sharp = player.getSharp()
       if (!sharp) return falsemsg('Mandy tries to open the tamarind pod, but it is too tough for her fingernails. She needs something a little sharper.')
     }
     else {
-      if (options.with.npc) return falsemsg("Mandy tries to open the pod with {nm:with:the}, but {pv:with:start} to get annoyed and moves away.", options)
-      if (options.with.loc !== player.name) return falsemsg("Mandy thinks about opening the pod with {nm:with:the}... She would have to be holding it, of course.", options)
-      if (!options.with.sharp) return falsemsg("Mandy tries to open the pod with {nm:with:the} for a few minutes before giving up in frustration.", options)
-      sharp = options.with
+      if (options.secondItem.npc) return falsemsg("Mandy tries to open the pod with {nm:secondItem:the}, but {pv:secondItem:start} to get annoyed and moves away.", options)
+      if (options.secondItem.loc !== player.name) return falsemsg("Mandy thinks about opening the pod with {nm:secondItem:the}... She would have to be holding it, of course.", options)
+      if (!options.secondItem.sharp) return falsemsg("Mandy tries to open the pod with {nm:secondItem:the} for a few minutes before giving up in frustration.", options)
+      sharp = options.secondItem
     }
     
     const count = random.int(3, 5)
@@ -805,6 +805,7 @@ createItem("tamarind_pod_prototype", SIZE_CHANGING(), {
     delete this.loc
     return true
   },
+  openwith:function(options) { this.open(options) },
   smash:function(options) { this.open(options) },
 })
 

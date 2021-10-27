@@ -180,6 +180,10 @@ commands.unshift(new Cmd("JumpStart", {
     w.milton_keynes.loc = 'bridge'
     w.dakota_north.loc = 'bridge'
     
+    w.helmsman_go_to_7iota.hide()
+    w.helmsman_go_to_star.show()
+    w.helmsman_go_to_location.show()
+    
     w.helmsman_go_to_7iota.script()
     //stars.arriveAtSector()
     return world.SUCCESS

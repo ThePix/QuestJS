@@ -905,9 +905,12 @@ test.tests = function() {
   test.assertCmd("close small key", "The small key can't be closed.")
   test.assertCmd("unlock small key", "You can't unlock it.")
   test.assertCmd("lock small key", "You can't lock it.")
+  
+  
+  
 
   test.assertCmd("open cabinet", "The glass cabinet is locked.")
-  test.assertCmd("unlock cabinet", "You do have the right key.")
+  test.assertCmd("unlock cabinet", "You do not have the right key.")
   test.assertCmd("get small key", "You take the small key.")
   test.assertEqual(true, w.glass_cabinet.locked)
   test.assertEqual(true, w.glass_cabinet.closed)
@@ -917,7 +920,9 @@ test.tests = function() {
   test.assertCmd("open cabinet", "It already is.")
   test.assertCmd("unlock cabinet", "It already is.")
   test.assertCmd("lock cabinet", ["You close the glass cabinet and lock it."])
-  test.assertCmd("unlock cabinet", "You unlock the glass cabinet.")
+  test.assertCmd("unlock cabinet with key", "You unlock the glass cabinet.")
+  test.assertCmd("lock cabinet with knife", "You lock the glass cabinet.")
+  test.assertCmd("use key to unlock cabinet", "You unlock the glass cabinet.")
   test.assertCmd("put cabinet in small key", "The small key is not a container.")
   
 

@@ -244,7 +244,7 @@ commands.unshift(new Cmd('TurnWithOar', {
   defmsg:"Touching {nm:item:the} is not going to achieve much.",
 }))
 
-
+/*
 commands.unshift(new Cmd('OpenWith', {
   regexes:[
     /^(?:open|remove|get) (.+) (?:with|using) (.+)$/,
@@ -259,7 +259,7 @@ commands.unshift(new Cmd('OpenWith', {
     if (objects[0][0].name.startsWith('tamarind_pod')) return objects[0][0].openWith(objects[1][0]) ? world.SUCCESS : world.FAILED
     return falsemsg("That is not something Mandy can open like that.")
   }
-}))
+}))*/
 
 
 commands.unshift(new Cmd('GrindUnderHeel', {

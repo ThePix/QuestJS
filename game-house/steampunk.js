@@ -176,8 +176,9 @@ createItem("grating", TAKEABLE(), {
   scenery:true,
   synonyms:['grate'],
   examine:"The grating is metal and about half a metre square{if:grating:scenery:, and fitted over a duct in the south wall of the corridor. It feels a bit warm: and somewhat bent out of shape}.",
-  openWith:function(item) {
-    if (item !== w.crocodile_tooth) return falsemsg("Mandy wonders if she could open the grating with {nm:item:the}. She shakes her head - no, that will not work.")
+  openwith:function(options) {
+    const item = options.secondItem
+    if (item !== w.crocodile_tooth) return falsemsg("Mandy wonders if she could open the grating with {nm:item:the}. She shakes her head - no, that will not work.", {item:item})
     return this.take(options)
   },
   testTake:function(options) {
