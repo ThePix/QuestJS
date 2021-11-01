@@ -688,6 +688,40 @@ complete darkness - can see with dark vision
 utterdark - extinguishes all lights except utterlight
 
 
+illusions
+invisible
+fog
+
+
+need to consider ambient light
+
+10 utterlight - no darkness, no shadows
+9 bright sunlight
+8 normal sunlight
+7 bright day
+6 dark daylight
+5 twilight
+4 moonlit night
+3 dark night
+2 very dark, interior with no lights
+1 complete darkness - can see with dark vision
+0 utterdark - extinguishes all lights except utterlight
+
+
+each room has a getAmbientLighting function
+also consider each item inb the room - this is already done somewhere (_world.js?)
+
+
+need to consider each character's relationship with an item
+is the item held or in a container held?
+is it lit?
+is fog obscuring vision?
+is it invisible?
+is it an illusion?
+is it hidden by an illusion?
+
+
+
 
 True sight
 Darkness
