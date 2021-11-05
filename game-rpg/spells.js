@@ -680,6 +680,20 @@ new SpellSelf("Cloudbusting", {
 
 Lighting and fog
 
+
+we need to give each item responsibility for deciding if it is reachable and/or seeable.
+we need to check the light situation before hand.
+
+
+first pass, collect all relevant items
+- things in the room, in connected rooms, allowing for containers
+- see how each impacts the lighting in the current room
+- see if items can be reached/seen
+
+Before times: 2512, 2564, 2602, 2586, 2657, 2619, 2554
+
+
+
 utterlight - no darkness, no shadows
 daylight - destoyrs vampires
 interior light or bright night

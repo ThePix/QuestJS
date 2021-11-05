@@ -796,6 +796,7 @@ test.tests = function() {
   test.title("Simple object commands (drink the sandwich?)")
   w.ham_and_cheese_sandwich.loc = player.name
   w.ham_and_cheese_sandwich.isLiquid = true
+  world.update()
   test.assertEqual(["Examine", "Drop", "Drink"], w.ham_and_cheese_sandwich.getVerbs())
   test.assertCmd("drink sandwich", ["You eat the ham and cheese sandwich.", "That was great!"]);
 
@@ -854,7 +855,6 @@ test.tests = function() {
   test.assertCmd("put 2 bricks on to the table", "Done.");
   test.assertCmd("inv", "You are carrying five bricks and a knife.");
   test.assertCmd("look", ["The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with two bricks and a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
-  
   test.assertCmd("get the bricks", "You take two bricks.");
   
   test.assertCmd("put 12 bricks on to the table", "Done.");
@@ -1631,6 +1631,7 @@ test.tests = function() {
   test.title("reverse order commands")
   w.knife.loc = player.name
   w.carrot1.loc = player.name
+  world.update()
   test.assertCmd("slice carrot with knife", "Done.")
   test.assertCmd("use knife slice carrot", "Done.")
   test.assertCmd("use knife to slice carrot", "Done.")
@@ -1671,6 +1672,8 @@ test.tests = function() {
   w.honey_pot.loc = 'kitchen'
   delete w.canteen.containedFluidName
   delete w.jug.containedFluidName
+  world.update()
+
   test.assertCmd("x honey", ["A pot of honey."])
   // the honey pot is NOT a source of honey, so this is right
   test.assertCmd("put honey in canteen", ["There's no honey here."])
@@ -1680,6 +1683,7 @@ test.tests = function() {
   test.title("item directions")
   w.Kyle.loc = 'kitchen'
   w.light_switch.switchedon = true
+  world.update()
   test.assertCmd("tell kyle to go through trapdoor", ["Kyle disappears through the trapdoor."])
   test.assertCmd("go through trapdoor", ["You go through the trapdoor, and down the ladder.", "The basement", "A dank room, with piles of crates everywhere.", "You can see a crates, Kyle (holding a clock; wearing a straw boater), a ladder and a light switch here.", "You can go up."])
   test.assertCmd("tell kyle to climb ladder", ["Kyle leaves the basement, heading up."])
