@@ -561,7 +561,6 @@ const lang = {
   say_something:"{nv:char:say:true}, '{show:text}.'",
 
   // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
-  // If the player does SPEAK TO MARY and Mary has some topics, this will be the menu title.
   speak_to_menu_title:function(char) {
     return "Talk to " + lang.getName(char, {article:DEFINITE}) + " about:";
   },

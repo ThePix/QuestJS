@@ -818,7 +818,22 @@ createItem("Kyle", NPC(false),
       showTopic:true,
       alias:"The weather",
       script:function() {
-        msg("You talk to " + this.alias + " about the weather.")
+        msg("You talk to " + this.alias + " about the weather; he asks your opinion...")
+        this.askTopics("Tell Kyle your view on the weather...", w.kyle_response_good, w.kyle_response_bad)
+      },
+    },
+    {
+      alias:"The weather is good",
+      name:'kyle_response_good',
+      script:function() {
+        msg("You tell Kyle you think the weather is good.")
+      },
+    },
+    {
+      alias:"The weather is bad",
+      name:'kyle_response_bad',
+      script:function() {
+        msg("You tell " + this.alias + " the weather is bad; he shakes his head sadly.")
       },
     },
   ],

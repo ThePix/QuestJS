@@ -951,8 +951,8 @@ test.tests = function() {
   test.assertCmd("talk to kyle", "You ask Kyle about the garden, but he's not talking.");
   test.menuResponseNumber = 0
   test.assertCmd("talk to kyle", "You ask Kyle about the garden, but he's STILL not talking.");
-  test.menuResponseNumber = 0
-  test.assertCmd("talk to kyle", "You talk to Kyle about the weather.");
+  test.menuResponseNumber = [0, 1]
+  test.assertCmd("talk to kyle", ["You talk to Kyle about the weather; he asks your opinion...", 'You tell Kyle the weather is bad; he shakes his head sadly.']);
   
 
   test.title("Restricting");
