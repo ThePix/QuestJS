@@ -395,6 +395,7 @@ const lang = {
   no_topics:"{nv:char:have:true} nothing to talk to {nm:item:the} about.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
+  npc_dead:"{nv:char:be:true} dead.",
 
 
   // BUTTON

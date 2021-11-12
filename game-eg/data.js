@@ -965,7 +965,7 @@ createItem("Lara", NPC(true), {
     }
   ],
   greeting: function() {
-    if (this.talkto_count === 1) {
+    if (this.talkto_count === 0) {
       msg("'Hello,' says Lara.");
     } else {
       msg("'You again?' says Lara.");

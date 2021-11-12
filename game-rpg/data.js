@@ -86,9 +86,15 @@ createRoom("practice_room", {
 
 
 createRoom("great_hall", {
-  desc:'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.',
+  desc:'An imposing - and rather cold - room with a high, vaulted roof{if:tapestry.scenery:, and an impressive tapestry hanging from the wall}.',
   east:new Exit('practice_room'),
   north:new Exit('yard'),
+})
+
+createItem("tapestry", TAKEABLE(), {
+  examine:'A huge tapestry, taller than you, and wider than it is tall.',
+  scenery:true,
+  loc:'great_hall',
 })
 
 createRoom("passage", {
@@ -185,8 +191,9 @@ createItem("rabbit", RPG_BEAST(false), {
   health:20,
   ex:"{lore:An example of a monster you can talk to after casting the right spell, and is generally not hostile.:With Lore active, you can learn all about rabbit culture... they like carrots.}",
   talk:function() {
+    log(this.talkto_count)
     switch (this.talkto_count) {
-      case 1 : 
+      case 0 : 
         msg("You say 'Hello,' to the rabbit, 'how is it going?'");
         msg("The rabbit looks at you. 'Need carrots.' It looks plaintively at it round tummy. 'Fading away bunny!");
         break;

@@ -471,7 +471,7 @@ test.tests = function() {
 
   test.title("guards")
   w.practice_room.guarded = true
-  test.assertCmd('w', ['You open the door to the great hall and walk through.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.', 'You can go east or north.'])
+  test.assertCmd('w', ['You open the door to the great hall and walk through.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can go east or north.'])
   
   
 
@@ -514,7 +514,7 @@ test.tests = function() {
   illusion.examine = 'A scary dragon, that is definitely real!'
   player.skillsLearnt = ["Double attack", "Fireball", "Returning", "Teleport", "Mark", "Unillusion", "Summon Frost Elemental", "Dispel", "Healing"]
 
-  test.assertCmd('s', ['You head south.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and tapestries hanging from the walls.', 'You can see a red dragon here.', 'You can go east or north.'])
+  test.assertCmd('s', ['You head south.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see a red dragon here.', 'You can go east or north.'])
   test.assertCmd('cast unillusion', ['You cast the <i>Unillusion</i> spell.', 'The red dragon disappears.'])
   test.assertCmd('cast unillusion', ['You cast the <i>Unillusion</i> spell, but there are no illusions here.'])
 
@@ -619,12 +619,22 @@ test.tests = function() {
 
   test.title("weather II")
 
-  player.skillsLearnt = ["Double attack", "Fireball", "Call rain", "Cloudbusting"]
   test.assertCmd('cast call rain', ['You cast the <i>Call rain</i> spell.', 'It is starting to rain.'])
+  player.skillsLearnt = ["Double attack", "Fireball", "Call rain", "Cloudbusting"]
   test.assertEqual('rain', player.currentWeatherName)
   test.assertCmd('cast call rain', ['You cast the <i>Call rain</i> spell.', 'The <i>Call rain</i> spell is only going to work if it is not already raining.'])
   test.assertCmd('cast Cloudbusting', ['You cast the <i>Cloudbusting</i> spell.', "The clouds are clearing, it is going to get warm."])
   test.assertEqual('clearingToHot', player.currentWeatherName)
 
-  
+
+  test.title("guarding")
+  w.orc.loc = 'great_hall'
+  w.orc.agenda = ['guardScenery:tapestry:The orc draws his sword.', 'basicAttack']
+  test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.'])
+  test.assertCmd("z", "Time passes...")
+  test.assertCmd("get tap", ["You take the tapestry.", ""])
+  test.assertCmd("z", "Time passes...")
+
+
+  /**/
 }
