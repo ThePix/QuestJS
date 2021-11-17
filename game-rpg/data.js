@@ -205,18 +205,31 @@ createItem("rabbit", RPG_BEAST(false), {
 
 
 
+const elementals = [
+  {name:'frost', level:0, desc:"swirling mass of freezing air that chills you to the bone"},
+  {name:'fire', level:2, desc:"burning ball of fire"},
+  {name:'storm', level:1, desc:"sizzling whirlwind of crackling lightning"},
+  {name:'earthmight', level:3, desc:"churning mass of rocks and earth"},
+  {name:'shadow', level:1, desc:"ball of utter darkness"},
+  {name:'rainbow', level:2, desc:"kaleidoscope of colours too painful to look at"},
+]
 
-
-
-
-createItem("frost_elemental_prototype", RPG_ELEMENTAL('frost'), {
-  alias:'frost elemental',
-  damage:"2d4",
-  health:35,
-  signalGroups:['elementals'],
-  ex:"A swirling mass of freezing air that chills you to the bone.",
-})
-
+for (const el of elementals) {
+  createItem("lesser_" + el.name + "_elemental_prototype", RPG_ELEMENTAL(el.name), {
+    alias:"lesser " + el.name + ' elemental',
+    damage:"2d" + (4 + el.level),
+    health:35 + 5 * el.level,
+    signalGroups:['elementals'],
+    ex:'A small ' + el.desc + '.',
+  })
+  createItem("greater_" + el.name + "_elemental_prototype", RPG_ELEMENTAL(el.name), {
+    alias:"greater " + el.name + ' elemental',
+    damage:"3d" + (6 + el.level),
+    health:100 + 10 * el.level,
+    signalGroups:['elementals'],
+    ex:'A large ' + el.desc + '.',
+  })
+}
 
 
 createItem("phantasm_prototype", RPG_PHANTOM(), {

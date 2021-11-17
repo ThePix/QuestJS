@@ -419,17 +419,16 @@ test.tests = function() {
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...', 'The <i>Immunity To Frost</i> effect on you expires.'])
 
-
   test.title("cast Summon Frost Elemental")
-  player.skillsLearnt = ["Double attack", "Fireball", "Summon Frost Elemental"]
-  test.assertCmd('cast Summon Frost Elemental', ['You cast the <i>Summon Frost Elemental</i> spell.', 'The frost elemental appears before you.'])
+  player.skillsLearnt = ["Double attack", "Fireball", "Summon Lesser Frost Elemental"]
+  test.assertCmd('cast Summon Lesser Frost Elemental', ['You cast the <i>Summon Lesser Frost Elemental</i> spell.', 'The lesser frost elemental appears before you.'])
   random.prime([19, 3, 4])
-  test.assertCmd('attack elemental', ['You attack the frost elemental.', 'A hit!', "The attack does 18 hits, the frost elemental's health is now 17."])
+  test.assertCmd('attack elemental', ['You attack the lesser frost elemental.', 'A hit!', "The attack does 18 hits, the lesser frost elemental's health is now 17."])
 
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...',])
-  test.assertCmd('z', ['Time passes...', 'The frost elemental disappears.'])
+  test.assertCmd('z', ['Time passes...', 'The lesser frost elemental disappears.'])
 
 
 
@@ -469,8 +468,6 @@ test.tests = function() {
   
   
 
-  test.title("guards")
-  w.practice_room.guarded = true
   test.assertCmd('w', ['You open the door to the great hall and walk through.', 'The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can go east or north.'])
   
   
@@ -554,13 +551,7 @@ test.tests = function() {
   test.assertEqual(92, w.me.health)
 
 
-  test.title("guards")
   test.assertCmd('e', ['The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, an orc (holding a huge shield), a rabbit, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
-
-  w.orc.attitude = rpg.BELLIGERENT
-  test.assertCmd('e', ['You try to head east, but the orc bars your way. Looks like he is going to attack!'])
-  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.orc.attitude)
-  
   
   
   test.title("scrolls")
@@ -618,6 +609,7 @@ test.tests = function() {
   
 
   test.title("weather II")
+  player.skillsLearnt = ["Fireball", "Call rain", "Cloudbusting"]
 
   test.assertCmd('cast call rain', ['You cast the <i>Call rain</i> spell.', 'It is starting to rain.'])
   player.skillsLearnt = ["Double attack", "Fireball", "Call rain", "Cloudbusting"]
@@ -627,12 +619,29 @@ test.tests = function() {
   test.assertEqual('clearingToHot', player.currentWeatherName)
 
 
+
+  //Monsters attack when...?
+
+  //We can either track attitude or mental stare, or we can track actions through an agenda.
+
+
+  test.title("guards")
+  w.practice_room.guarded = true
+  w.orc.attitude = rpg.BELLIGERENT
+  test.assertCmd('e', ['You try to head east, but the orc bars your way. Looks like he is going to attack!'])
+  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.orc.attitude)
+  
+
+
+
+
+
   test.title("guarding")
   w.orc.loc = 'great_hall'
   w.orc.agenda = ['guardScenery:tapestry:The orc draws his sword.', 'basicAttack']
   test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.'])
   test.assertCmd("z", "Time passes...")
-  test.assertCmd("get tap", ["You take the tapestry.", ""])
+  test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])/*
   test.assertCmd("z", "Time passes...")
 
 

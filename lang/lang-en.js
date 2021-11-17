@@ -511,6 +511,8 @@ const lang = {
   drinkPotion:"{nv:attacker:drink:true} {nm:source:the}, casting the {i:{nm:skill}} spell.",
   defaultEffectExpires:"The {i:{show:effect:alias}} effect on {nm:target:the} expires.",
   damageReport:"The attack does {show:modifiedDamage} hits, {nms:target:the} health is now {show:target:health}.",
+  summonSpellPre:"Summon",
+  summonSpellDesc:function(spell) { return "Summons a " + spell.prototype.alias + "; it will last about " + spell.duration + " turns, unless it is destroyed before then." },
 
   communeWithAnimalSpell:'Commune with animal',
   cannotTalkToBeast:"{nv:char:spend:true} a few minutes telling {nm:item:the} about {pa:char} life, but {pv:item:do} not seem interested. Possibly because {pv:item:be} just a dumb beast.",

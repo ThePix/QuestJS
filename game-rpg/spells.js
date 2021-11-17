@@ -71,7 +71,7 @@ new Spell("Lightning bolt", {
 })
 
 
-
+// Only when raining
 new Spell("Call lightning", {
   level:3,
   description:"A bolt of thunder is called down from the clouds to blast your target.",
@@ -102,7 +102,6 @@ new Spell("Call lightning", {
 //-------  ARMOUR SPELLS  -----------
 // Spells that have an ongoing effect on attacks against the target
 
-
 new Spell("Cursed armour", {
   level:3,
   description:"Can be cast on a foe to reduce the protection armour gives.",
@@ -116,7 +115,6 @@ new Spell("Cursed armour", {
     },
   },
 })
-
 
 new SpellSelf("Stoneskin", {
   level:2,
@@ -151,7 +149,6 @@ new SpellSelf("Steelskin", {
 //-------  ATTACK-MODIFYING SPELLS  -----------
 // Spells that have an ongoing effect on attacks made by the target
 
-
 new SpellSelf("Strength", {
   level:3,
   description:"The target of this spell is made much stronger, able to do far more damage in non-magical attacks.",
@@ -164,7 +161,6 @@ new SpellSelf("Strength", {
     },
   },
 })
-
 
 new Spell("Weakness", {
   level:3,
@@ -192,7 +188,6 @@ new SpellSelf("Focus", {
   },
 })
 
-
 new Spell("Befuddle", {
   level:3,
   description:"The target of this spell will cast attack spells poorly.",
@@ -213,8 +208,6 @@ new Spell("Befuddle", {
 //-------  ENHANCING SPELLS  -----------
 // These spells give the cast an ability, but only in terms of adding the active effect. It is up to authors
 // to create the world so this is meaningful.
-
-
 
 new SpellSelf("Lore", {
   level:2,
@@ -251,7 +244,6 @@ new SpellSelf("Featherfall", {
 
 //-------  ELEMENTAL PROTECTION SPELLS  -----------
 // These spells give the target protection (or vulnerability) to an element for a while
-
 
 
 for (const el of ['Fire', 'Frost', 'Storm']) {
@@ -301,11 +293,7 @@ for (const el of ['Fire', 'Frost', 'Storm']) {
       },
     },
   })
-
 }
-
-
-
 
 
 
@@ -330,7 +318,6 @@ new SpellInanimate("Earthmight Smasher", {
   msgNoTarget:"You have no crush weapon for this spell.",
 })
 
-
 new SpellInanimate("Storm Bow", {
   level:2,
   description:"The Storm Bow spell will temporarily enchant any bow to do extra Storm-based damage.",
@@ -348,7 +335,6 @@ new SpellInanimate("Storm Bow", {
   msgNoTarget:"You have no bow for this spell.",
 })
 
-
 new SpellInanimate("Ice Spear", {
   level:2,
   description:"The Ice Spear spell will temporarily enchant any polearm to do extra Fros-based damage.",
@@ -365,7 +351,6 @@ new SpellInanimate("Ice Spear", {
   },
   msgNoTarget:"You have no bow for this spell.",
 })
-
 
 new SpellInanimate("Flaming Blade", {
   level:2,
@@ -391,9 +376,6 @@ new SpellInanimate("Flaming Blade", {
 //-------  VISAGE SPELLS  -----------
 // Change the player's appearance
 
-
-
-
 new SpellSelf("Kobold Glamour", {
   level:1,
   description:"After casting this spell, the caster will resemble a kobold.",
@@ -413,10 +395,6 @@ new SpellSelf("Kobold Glamour", {
     },
   },
 })
-
-
-
-
 
 
 
@@ -448,8 +426,6 @@ new SpellInanimate("Unlock", {
   msgNoTarget:"{nv:attacker:cast:true} the {i:{nm:skill}} spell, but there are no locked doors.",
 })
 
-
-
 new SpellInanimate("Unillusion", {
   level:2,
   description:"All illusions in this location will disappear.",
@@ -464,9 +440,6 @@ new SpellInanimate("Unillusion", {
   },
   msgNoTarget:"{nv:attacker:cast:true} the {i:{nm:skill}} spell, but there are no illusions here.",
 })
-
-
-
 
 new SpellSelf("Annulment", {
   icon:'annul',
@@ -484,8 +457,6 @@ new SpellSelf("Annulment", {
   },
 })
 
-
-
 new SpellSelf("Dispel", {
   icon:'annul',
   description:"Dispels all elementals across the entire world!",
@@ -494,6 +465,20 @@ new SpellSelf("Dispel", {
     return true
   },
 })
+
+
+
+
+
+//-------  SUMMONING SPELLS  -----------
+// Affect inanimate items in the location
+
+for (const el of elementals) {
+  new SpellSummon(w['lesser_' + el.name + '_elemental_prototype'], { level:2 + el.level, duration:6, })
+  new SpellSummon(w['greater_' + el.name + '_elemental_prototype'], { level:12 + el.level, duration:6, })
+}
+
+new SpellSummon(w.phantasm_prototype, { level:1, duration:6, })
 
 
 
@@ -510,8 +495,6 @@ new SpellSelf("Healing", {
   },
 })
 
-
-
 new Spell("Commune with animal", {
   level:1,
   description:"Can be cast on any beast to allow the caster to talk to it for a limited time.",
@@ -525,8 +508,6 @@ new Spell("Commune with animal", {
     },
   },
 })
-
-
 
 new SpellSelf("Mage Light", {
   level:1,
@@ -546,9 +527,6 @@ new SpellSelf("Mage Light", {
   },
 })
 
-
-
-
 new SpellSelf("Way of the Merchant", {
   level:1,
   description:"The caster gains knowledge of how much items are worth and how much others are prepared to pay for them.",
@@ -567,22 +545,6 @@ new SpellSelf("Way of the Merchant", {
     },
   },
 })
-
-
-
-
-new SpellSummon("Summon Frost Elemental", {
-  level:2,
-  description:"Summons a lesser frost elemental; it will last about a minute, unless it is destroyed before then.",
-  duration:6,
-  prototype:'frost_elemental_prototype',
-})
-
-
-
-
-
-
 
 new SpellSelf("Returning", {
   icon:'moving',
@@ -619,8 +581,6 @@ new SpellSelf("Mark", {
   },
 })
 
-
-
 new SpellSelf("Call rain", {
   description:"Casting this spell will cause it to rain.",
   icon:'weather',
@@ -646,7 +606,6 @@ new SpellSelf("Call rain", {
     return true
   },
 })
-
 
 new SpellSelf("Cloudbusting", {
   description:"Casting this spell will clear the sky of all clouds, at least for a while.",
