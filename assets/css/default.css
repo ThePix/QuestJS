@@ -47,6 +47,10 @@ body {
   background-color: #111;
   color: #eee;
 }
+.narrow-body {
+}
+.very-narrow-body {
+}
 .plain-font-body, .plain-font-body .default-h, .plain-font-body .pane-div {
   font-family: sans-serif ! important;
 }
@@ -124,6 +128,15 @@ pre {
   max-width: 600px;
   margin:0 auto;
 }
+
+.narrow-body #inner {
+  max-width:400px;
+}
+
+.very-narrow-body #inner {
+  max-width:240px;
+}
+
 
 #input input {
   font-family: 'Courier New', Courier, monospace !important;

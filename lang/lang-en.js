@@ -16,6 +16,7 @@ const lang = {
     MetaHint:/^(?:hint|clue)s?$/,
     MetaCredits:/^(?:about|credits|version|info)$/,
     MetaDarkMode:/^(?:dark|dark mode|toggle dark|toggle dark mode)$/,
+    MetaNarrowMode:/^(?:narrow|narrow mode|toggle narrow|toggle narrow mode|mobile|mobile mode|toggle mobile|toggle mobile mode)$/,
     MetaPlainFontMode:/^(?:font|plain font|plain fonts|fonts)$/,
     MetaWarnings:/^warn(?:ing|ings|)$/,
     MetaImages:/^images$/,
@@ -511,8 +512,10 @@ const lang = {
   drinkPotion:"{nv:attacker:drink:true} {nm:source:the}, casting the {i:{nm:skill}} spell.",
   defaultEffectExpires:"The {i:{show:effect:alias}} effect on {nm:target:the} expires.",
   damageReport:"The attack does {show:modifiedDamage} hits, {nms:target:the} health is now {show:target:health}.",
+  wayGuarded:"The way {show:exit:dir} is guarded!",
   summonSpellPre:"Summon",
   summonSpellDesc:function(spell) { return "Summons a " + spell.prototype.alias + "; it will last about " + spell.duration + " turns, unless it is destroyed before then." },
+  
 
   communeWithAnimalSpell:'Commune with animal',
   cannotTalkToBeast:"{nv:char:spend:true} a few minutes telling {nm:item:the} about {pa:char} life, but {pv:item:do} not seem interested. Possibly because {pv:item:be} just a dumb beast.",

@@ -67,7 +67,8 @@ createItem("ice_amulet", WEARABLE(4, ['neck']), {
 createRoom("practice_room", {
   desc:'A large room with straw scattered across the floor. The only exit is west',
   west:new Exit('great_hall'),
-  east:new Exit('passage', {
+  east:new Exit('passage'),
+  /*east:new Exit('passage', {
     simpleUse:function(char) {
       if (w.practice_room.guarded && !w.orc.dead) {
         rpg.broadcast('guards', 'attack', 'practice room exit')
@@ -75,7 +76,7 @@ createRoom("practice_room", {
       }
       return util.defaultSimpleExitUse(char, this)
     }    
-  }),
+  }),*/
   south:new Exit('cupboard', {
     lockedmsg:"It seems to be locked."
   }),
@@ -191,7 +192,6 @@ createItem("rabbit", RPG_BEAST(false), {
   health:20,
   ex:"{lore:An example of a monster you can talk to after casting the right spell, and is generally not hostile.:With Lore active, you can learn all about rabbit culture... they like carrots.}",
   talk:function() {
-    log(this.talkto_count)
     switch (this.talkto_count) {
       case 0 : 
         msg("You say 'Hello,' to the rabbit, 'how is it going?'");

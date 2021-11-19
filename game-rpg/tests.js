@@ -624,24 +624,45 @@ test.tests = function() {
 
   //We can either track attitude or mental stare, or we can track actions through an agenda.
 
+  // how do we flag an exit as guarded?
+  // needs to be on exit or room
+  // needs to be saved
+  // needs to be integrated with rest of Quest
+  // needs to be easy and intuitive - so a setting on the NPC that impacts the room/exit
+  // ... so attribute of NPC called guardingExit
+  // ... or agenda item
+  // Suppose we use an agenda item, which registers the NPC with the exit. When the exit is used, check if registeted guards still have that as the top agenda item, are not dead or suspended.
+  // when the game is saved, the exit is not
+  // when the game is loaded, are agendas done before the player next takes a turn?
 
-  test.title("guards")
-  w.practice_room.guarded = true
-  w.orc.attitude = rpg.BELLIGERENT
-  test.assertCmd('e', ['You try to head east, but the orc bars your way. Looks like he is going to attack!'])
-  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.orc.attitude)
+  test.title("Guarding exit")
+
+  w.orc.setGuard(w.practice_room, "east", "The orc looks at {nm:char:the} suspiciously.")
+  test.assertCmd('z', ['Time passes...'])  // takes a turn for guarding to get applied
+  test.assertEqual('east', w.orc.guardingDir)  
+  test.assertEqual(['orc'], w.practice_room.east.guardedBy)  
+  test.assertEqual([w.orc], w.practice_room.east.isGuarded())  
+  test.assertEqual(['orc'], w.practice_room.east.guardedBy)  
   
-
-
-
-
-
-  test.title("guarding")
+  test.assertCmd('e', ["The way east is guarded!", "The orc looks at you suspiciously."])
   w.orc.loc = 'great_hall'
+  test.assertCmd('e', ["You head east.", "The passage", "A long passage.", "You can go west."])
+  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, south or west."])
+  
+  w.orc.unsetGuard()
+  
+  
+  //w.orc.attitude = rpg.BELLIGERENT
+
+
+
+  test.title("Guarding item")
   w.orc.agenda = ['guardScenery:tapestry:The orc draws his sword.', 'basicAttack']
-  test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.'])
+  w.orc.agenda = ['guardUntil:tapestry:scenery:false:The orc draws his sword.', 'basicAttack']
+  test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.', 'It is starting to get cloudy.'])
   test.assertCmd("z", "Time passes...")
-  test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])/*
+  test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])
+  log('--------------------------------------')
   test.assertCmd("z", "Time passes...")
 
 
