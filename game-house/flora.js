@@ -610,7 +610,7 @@ createItem("grown_tamarind_tree_from_catwalk", {
 
 createRoom("greenhouse_east", {
   alias:'east end of the greenhouse',
-  desc:"{floraDesc}This is a large, circular room, the circumference is made up of flowerbeds, thick with vegetation. In the centre of the room there is a further flowerbed, the most prominent feature of which is a tamarind tree.{once: Her father has tried to grow tamarind, among other exotic bushes, and Mandy is a little surprised she was paying attention enough to recognise this one.} It is considerably larger than any of her father's, which are little more than bushes.|A catwalk circumnavigates the tree a few metres above Mandy's head, but there is no obvious way to access it. There is a door to the east, and the greenhouse extends westward.",
+  desc:"{floraDesc}This is a large, circular room, the circumference is made up of flowerbeds, thick with vegetation. In the centre of the room there is a further flowerbed, the most prominent feature of which is a tamarind tree.{once: Her father has tried to grow tamarind, among other exotic bushes, and Mandy is a little surprised she was paying attention enough to recognise this one.} It is considerably larger than any of her father's, which are little more than bushes.{chamberPotUnderTree}{if:greenhouse_east:sandy: Sand is scattered across the floor.}|A catwalk circumnavigates the tree a few metres above Mandy's head, but there is no obvious way to access it. There is a door to the east, and the greenhouse extends westward.",
   headingAlias:'The Greenhouse (East)',
   windowsface:'north',
   west:new Exit("greenhouse_west"),
@@ -653,6 +653,13 @@ createRoom("greenhouse_east", {
   ],
 })
 
+tp.addDirective("chamberPotUnderTree", function(arr, params) {
+  if (!w.chamber_pot.underTree) return ''
+  if (w.chamber_pot.flipped) return ' There is an upturned chamber pot under the tree.'
+  return ' There is a chamber pot under the tree to catch falling pods.'
+})
+
+
 createItem("tamarind_tree_from_ground", {
   alias:'tamarind tree',
   loc:"greenhouse_east",
@@ -687,6 +694,16 @@ createItem("tamarind_tree_from_ground", {
       return true  
     }
     return falsemsg("{nv:char:be:true} not about to do that!", {char:options.char})
+  },
+})
+
+createItem("sand_greenhouse", {
+  scenery:true,
+  alias:'sand',
+  examine:'The sand is scattered across the floor.',
+  take:function(options) {
+    msg('Mandy tries to scoop up some of the sand, but it is spead too thinly to get more than a few grains.')
+    return false
   },
 })
 
@@ -749,6 +766,16 @@ createItem("tamarind_tree", {
   examine:"The single tamarind tree is a big one, reaching almost to roof of the great greenhouse. From here, Mandy could reach out and touch the leaves of the tree, though the many seed pods are further away.",
   take:function() {
     msg("Mandy leans over the rail, and grabs a solid-looking leaf on the tamarind tree. She gives it a good tug, then another and another, until a ripe pod is dislodged. The pod falls...")
+    if (w.chamber_pot.underTree) {
+      msg("|...And lands neatly in the chamber pot. Mandy smiles in satisfaction.|Suddenly a silvery figure appears from the west, kicks over the chamber pot{ifExists:chamber_pot:containedFluidName: spilling the {show:chamber_pot:containedFluidName} everywhere}, scoops up the pod from the floor, and runs back west.|'Oh, for crying out loud!' Mandy exclaims.")
+      if (w.chamber_pot.containedFluidName === 'sand') {
+        w.greenhouse_east.sandy = true
+        w.sand_greenhouse.loc = 'greenhouse_east'
+      }
+      delete w.chamber_pot.containedFluidName
+      w.chamber_pot.flipped = true
+      return false
+    }
     if (w.Patch.loc === 'greenhouse_east' && w.Patch.hasPod()) return falsemsg("Patch looks very confused as he stares at the pod in his hand, then the pod on the ground, then the pod in his hand again. Then suddenly a silvery figure appears from the west, quickly scoops up the pod from the floor, and runs back west.")
     if (w.Patch.loc !== 'greenhouse_east') return falsemsg("Suddenly a silvery figure appears from the west, quickly scoops up the pod from the floor, and runs back west.{once: 'Shit,' mutters Mandy.}")
       

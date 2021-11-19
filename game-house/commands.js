@@ -458,21 +458,34 @@ commands.unshift(new Cmd('PutUnder', {
   rules:[cmdRules.testManipulate, cmdRules.isHeld],
   objects:[
     {scope:parser.isHeld, items:['chamber_pot']},
-    {scope:parser.isPresent, items:["leaking_pipe"]},
+    {scope:parser.isPresent, items:["leaking_pipe", "tamarind_tree_from_ground"]},
   ],
   script:function(objects) {
-    if (objects[1][0] !== w.leaking_pipe) return falsemsg("Putting stuff under {nm:item:the} is not going to achieve anything.", {item:objects[1][0]})
-    if (objects[0][0] !== w.chamber_pot) return falsemsg("Mandy thinks about putting {nm:item:the} under the leak... Then again, {pv:item:will} just get wet, so maybe not such a good idea.", {item:objects[0][0]})
-    if (w.chamber_pot.containedFluidName) return falsemsg("The chamber pot is already full of " + w.chamber_pot.containedFluidName + " - there is not much point using it to catch drips.")
-    
-    msg("Mandy puts the chamber pot under the leaking pipe, when it will catch the drips.|Drip... drip... drip... It will take a while before the pot is full!")
-    w.chamber_pot.loc = player.loc
-    w.chamber_pot.underLeakState = 1
-    w.chamber_pot.underLeak = true
-    w.chamber_pot.flipped = false
-    w.chamber_pot.scenery = true
-    
-    return world.SUCCESS
+    if (objects[1][0] === w.leaking_pipe) {
+      if (objects[0][0] !== w.chamber_pot) return falsemsg("Mandy thinks about putting {nm:item:the} under the leak... Then again, {pv:item:will} just get wet, so maybe not such a good idea.", {item:objects[0][0]})
+      if (w.chamber_pot.containedFluidName) return falsemsg("The chamber pot is already full of " + w.chamber_pot.containedFluidName + " - there is not much point using it to catch drips.")
+      msg("Mandy puts the chamber pot under the leaking pipe, when it will catch the drips.|Drip... drip... drip... It will take a while before the pot is full!")
+      w.chamber_pot.loc = player.loc
+      w.chamber_pot.underLeakState = 1
+      w.chamber_pot.underLeak = true
+      w.chamber_pot.flipped = false
+      w.chamber_pot.scenery = true
+      return world.SUCCESS
+    }
+
+    if (objects[1][0] === w.tamarind_tree_from_ground) {
+      if (objects[0][0] !== w.chamber_pot) return falsemsg("Mandy thinks about putting {nm:item:the} under the tamarind tree... but decides that is not going to achieve anything.", {item:objects[0][0]})
+      msg("Mandy puts the chamber pot under the tamarind tree - hopefully any falling pods will end up in there.")
+      w.chamber_pot.loc = player.loc
+      w.chamber_pot.underTree = true
+      w.chamber_pot.flipped = false
+      w.chamber_pot.scenery = true
+      return world.SUCCESS
+    }
+
+    else {
+      return falsemsg("Putting stuff under {nm:item:the} is not going to achieve anything.", {item:objects[1][0]})
+    }
   },
 }))
 

@@ -111,6 +111,7 @@ createItem("chamber_pot", SIZE_CHANGING(), VESSEL(), {
   scenery:true,
   underLeakState:0,
   underLeak:false,
+  underTree:false,
   flipped:false,
   msgTake:"Mandy takes the chamber pot, trying desperately not to think about what it has been used for. At least it is empty...",
   desc5:'A chamber pot, useful for... something?{chamber_pot}',
@@ -143,6 +144,7 @@ createItem("chamber_pot", SIZE_CHANGING(), VESSEL(), {
   afterMove:function() {
     this.msgTake = lang.take_successful
     this.underLeak = false
+    this.underTree = false
     this.flipped = false
   },
   use:function() {

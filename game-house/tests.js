@@ -166,14 +166,14 @@ test.tests = function() {
 
   test.title("Telescope Climb")
   test.assertCmd("climb", ["She clambers up the telescope.", "The Observatory (On The Telescope)", "Mandy clings to the top of the mechanism that supports the telescope. From here she can... Not do a lot. The domed roof is too far to touch, and the eyepiece of the telescope is back on the ground. She could perhaps edge west along the telescope itself."])
-  test.assertCmd("e", "She can't go east.")
+  test.assertCmd("e", /She cannot go east/)
 
   w.telescope.azimuth = 0
   test.assertCmd("n", ["Mandy cautiously edges along the telescope to the very end.", "The Observatory (End Of The Telescope)", "Mandy sits -- somewhat precariously -- straddling the telescope. From here she could touch the ceiling, if she really want to."])
   test.assertCmd("n", "Mandy looks at the slot in the ceiling, just beyond the end of the telescope. If that were open, she might be able to get out through it, she muses.")
   w.telescope.roofOpen = true
   test.assertCmd("n", "Mandy considers for a moment a leap of faith from the end of the telescope, out through the slot in the ceiling... No, not a good idea.")
-  test.assertCmd("w", "She can't go west.")
+  test.assertCmd("w", /She cannot go west/)
   test.assertCmd("s", ["Mandy cautiously edges back along the telescope to where it is supported, and clings to the mechanism, feeling decidedly safer.", "The Observatory (On The Telescope)", "Mandy clings to the top of the mechanism that supports the telescope. From here she can... Not do a lot. The domed roof is too far to touch, and the eyepiece of the telescope is back on the ground. She could perhaps edge north along the telescope itself."])
   
   w.telescope.altitude = 7
@@ -183,7 +183,7 @@ test.tests = function() {
   w.telescope.altitude = 2
   w.telescope.roofOpen = false
   test.assertCmd("w", ["Mandy cautiously edges along the telescope to the very end.", "The Observatory (End Of The Telescope)", "Mandy sits -- somewhat precariously -- straddling the telescope. From here she could touch the ceiling, if she really want to."])
-  test.assertCmd("n", "She can't go north.")
+  test.assertCmd("n", /She cannot go north/)
   test.assertCmd("w", "Mandy looks at the slot in the ceiling, just beyond the end of the telescope. If that were open, she might be able to get out through it, she muses.")
   test.assertCmd("e", ["Mandy cautiously edges back along the telescope to where it is supported, and clings to the mechanism, feeling decidedly safer.", "The Observatory (On The Telescope)", "Mandy clings to the top of the mechanism that supports the telescope. From here she can... Not do a lot. The domed roof is too far to touch, and the eyepiece of the telescope is back on the ground. She could perhaps edge west along the telescope itself."])
   test.assertCmd("w", ["Mandy cautiously edges along the telescope to the very end.", "The Observatory (End Of The Telescope)", "Mandy sits -- somewhat precariously -- straddling the telescope. From here she could touch the ceiling, if she really want to."])
@@ -214,6 +214,7 @@ test.tests = function() {
   test.title("Plant seeds")
   test.assertEqual(0, w.grown_tamarind_tree.seedsPlanted)
   w.tamarind_seed.countableLocs[player.name] = 5
+  world.update()
   test.assertCmd("plant 2 seeds in ground", ["Mandy carefully plants two tamarind seeds in the bare earth.",])
   test.assertCmd("put three seeds in earth", ["Mandy carefully plants three tamarind seeds in the bare earth.",])
   test.assertCmd("put phone in earth", ["Mandy wonders if burying the mobile phone is going to achieve anything. Probably not.",])

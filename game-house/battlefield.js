@@ -127,6 +127,15 @@ createItem("sand_item", {
     if (w.sandcastle.loc) return falsemsg("Mandy looks at her sandcastle. Perhaps that is enough playing for now.")
     return w.sandcastle.build()
   },
+  take:function(options) {
+    if (!w.chamber_pot.isHeld()) return falsemsg('Mandy scoops up some sand in her hand, and watches as it slowly falls through her fingers.')
+    if (w.chamber_pot.containedFluidName === 'sand') return falsemsg('Mandy things about getting more sand, but chamber pot is already full, she will not be able to carry more.')
+    if (w.chamber_pot.containedFluidName) return falsemsg('Mandy thinks about getting some sand, but the chamber pot is already full; she would need to empty it first.')
+    
+    msg('Mandy scoops up a load of sand into the chamber pot.')
+    w.chamber_pot.containedFluidName = 'sand'
+    return true
+  },
 })
 
 
