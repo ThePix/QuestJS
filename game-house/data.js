@@ -281,7 +281,7 @@ createItem("generic_panelling", GENERIC(), {
     if (!w.generic_panelling.examinedIn) {
       w.generic_panelling.examinedIn = currentLocation.name
       w.wooden_panel.loc = currentLocation.name
-      msg("Mandy carefully examines the wood panelling, something that has been a long time fascination for her, ever since her parents first dragged her to a stately home. She can still remember the panelling in the drawing room of Pattersleigh House... But that was nine years ago. This is, to be honest, rather inferior. The wood is courser, the contours rather poorly defined. And one panel is loose!")
+      msg("Mandy carefully examines the wood panelling, something that has been a long time fascination for her, ever since her parents first dragged her to a stately home. She can still remember the panelling in the drawing room of Pattersleigh House... But that was nine years ago. This is, to be honest, rather inferior. The wood is coarser, the contours rather poorly defined. And one panel is loose!")
     }
     else {
       const room = w[w.hole_in_wall.loc]

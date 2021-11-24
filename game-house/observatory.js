@@ -145,7 +145,7 @@ createItem("telescope", {
 createItem("controls", SURFACE(), {
   loc:"observatory",
   scenery:true,
-  synonyms:['panel'],
+  synonyms:['panel', 'slim box'],
   alias:"controls",
   examine:"The controls consist of two wheels, one on the left, one on the right, and a lever, all set into a slim box, all in brass, fixed to the wall on the south side of the room.",
 })

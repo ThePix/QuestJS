@@ -11,7 +11,7 @@ findCmd('MetaHint').script = function() {
   return world.SUCCESS_NO_TURNSCRIPTS
 },
 
-
+/*
 findCmd('MetaHelp').script = function() {
   metamsg("Enter commands to navigate the world. Use the compass directions, plus {colour:blue:UP}, {colour:blue:DOWN}, {colour:blue:IN}, {colour:blue:OUT} to move around. Use commands like {colour:blue:GET LETTER} and {colour:blue:DROP PEN} to pick things up and drop them. Use {colour:blue:INVENTORY} (or just {colour:blue:I}) to see what you are carrying.")
   metamsg("It is often important to examine items; use {colour:blue:LOOK AT LETTER} or {colour:blue:EXAMINE BAG} or just {colour:blue:X HOUSE}. Look at descriptions carefully to see what items are there - sometimes it may not be obvious.")
@@ -20,7 +20,7 @@ findCmd('MetaHelp').script = function() {
   metamsg("If you are stuck, use {colour:blue:HINTS}.")
   return world.SUCCESS_NO_TURNSCRIPTS
 },
-
+*/
 
 
 
@@ -100,7 +100,7 @@ commands.unshift(new Cmd('Dance', {
       if (w.Patch.isHere()) msg("Patch gives her a strange look.")
       if (w.tiny_man.isHere()) msg("'You're a rum 'un, and no mistake,' says the tiny man.")
       if (w.Winfield_Malewicz.isHere()) msg("'The ways of young people were decidedly odd in my day,' says Malewicz. 'I see the situation has only deteriorated.'")
-      if (w.clockwork_thespian.isHere()) msg("'Ah, the artist soul, muses the clockwork thespian.")
+      if (w.clockwork_thespian.isHere()) msg("'Ah, the artistic soul,' muses the clockwork thespian.")
     }
     return world.FAILED
   },

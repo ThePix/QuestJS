@@ -826,7 +826,7 @@ createItem("dollshouse", CONTAINER(true), {
       msg("She opens the doll's house. There is the little man; he looks at Mandy. 'You again, eh?'")
     }
     else {
-      msg("She opens the doll's house. Inside, the house is a perfectly furnished, complete with a little man, sat on a chair.")
+      msg("She opens the doll's house. Inside, the house is perfectly furnished, complete with a little man, sat on a chair.")
       let s = "The little man looks at Mandy, a look of surprise on his face. 'Cor blimey, you're a big 'un!' "
       switch (this.openCount) {
         case 0: s += " Apparently he is alive!"; break;

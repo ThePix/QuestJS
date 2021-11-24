@@ -128,7 +128,7 @@ createRoom("steam_corridor", {
   south:new Exit("steam_corridor_duct", {
     alsoDir:['in'],
     simpleUse:function(char) {
-      if (w.grating.closed === 2) return falsemsg("It works in Hollywood... Mandy gives the grating a good pull... It is stuck solid. No way is she getting into the vents without something sharp and strong to prise the grating off the wall.")
+      if (w.grating.scenery) return falsemsg("It works in Hollywood... Mandy gives the grating a good pull... It is stuck solid. No way is she getting into the vents without something sharp and strong to prise the grating off the wall.")
       return util.defaultSimpleExitUse(char, this)
     },
     msg:"Following a fine tradition of Hollywood movies, Mandy climbs into the vent. What can possibly go wrong?",
@@ -167,6 +167,7 @@ createItem("pipes", {
 createItem("vent", {
   loc:"steam_corridor",
   scenery:true,
+  synonyms:['duct'],
   pronouns:lang.pronouns.plural,
   examine:"{if:grating:scenery:The vent behind the grating looks dark:The vent is about half a metre wide and a little higher. There are pipes running through it at the top. It is too dark to see far into it}.",
 })
@@ -753,7 +754,7 @@ createItem("Winfield_Malewicz", NPC(), {
         msg("'Well, that's the starting point.'")
       }
     },
-    { name:'Family',
+    { name:'family',
       test:function(p) { return p.text.match(/family/) && (w.gallery_south_scenery_portraits.examine_count || w.front_hall_scenery_portraits.examine_count) },
       script:function() {
         msg("'I saw all those paintings, are they your family?'")

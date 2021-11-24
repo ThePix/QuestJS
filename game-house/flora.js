@@ -738,7 +738,7 @@ createRoom("greenhouse_catwalk_east", {
   alias:'east end of the greenhouse catwalk',
   headingAlias:'The Greenhouse (East, On Catwalk)',
   windowsface:'north',
-  desc:"{floraDesc}She is standing on a catwalk that circumnavigates the east end of the greenhouse, and is suspended from the roof by steel struts. Looking down she has a wonderful view of the numerous plants and bushes, but especially the huge tamarind tree in the centre of the room, that rises up even higher than the catwalk. From here, Mandy can head west into the other section of the greenhouse or leave the greenhouse altogether be going east.",
+  desc:"{floraDesc}She is standing on a catwalk that circumnavigates the east end of the greenhouse, and is suspended from the roof by steel struts. Looking down she has a wonderful view of the numerous plants and bushes, but especially the huge tamarind tree in the centre of the room, that rises up even higher than the catwalk. From here, Mandy can head west into the other section of the greenhouse or leave the greenhouse altogether by going east.",
   west:new Exit("greenhouse_catwalk_west"),
   east:new Exit("great_gallery"),
   afterFirstEnter:function() {

@@ -1,16 +1,16 @@
 "use strict"
 
-settings.playMode = "play"
+settings.playMode = "dev"
 
 settings.title = "The House on Highfield Lane"
 settings.author = "Andy Joel"
-settings.version = "1.4"
+settings.version = "1.5"
 settings.ifid = "8F79966F-54C6-4DA3-842A-330DBA5D0CB0"
 settings.additionalAbout = {
   'Thanks to':'K.V., Pertex, XanMag, Jade, Mike Russo, Karona, Agnieszka Trzaska, Christopher Merriner, Mike_G, Amanda Walker and Andrew Schultz for beta testing. I would like to particularly pick out K.V., Agnieszka Trzaska and Christopher Merriner who went above and beyond, with any number of helpful suggestions between them.',
   'Also thanks to':'My wife, sister, son and daughter -- Sara, Mags, Richard and Bex -- for testing from an outsider\'s perspective.',
   'Reporting bugs':'Hopefully you will not encounter any issues with the game, but if you do, please e-mail the details to me at <i>the_pix@hotmail.com</i>, or via the IntFiction forum where my user name is "The Pixie".',
-  'Bug reporters':'Thanks to those who did indeed report bugs that have hopefully been sorted in later versions: Rovarsson and Sarah Willson.',
+  'Bug reporters':'Thanks to those who did indeed report bugs that have hopefully been sorted in later versions: Rovarsson and Sarah Willson. Also the anonymous comments left during the competition.',
   'Privacy':'QuestJS games do not send any data to the server (besides the initial HTTP requests for the files) and do not use cookies. They only save data to your hard drive (in a place provided by your browser called localStorage) when you choose to save your game progress (or are recording a transcript).',
   'Compatibility':'This game runs on JavaScript ES2015, and should work fine on any reasonably up-to-date browser. It has been tested on Chrome, Firefox, Edge and Safari; and on Windows, Mac, Ubuntu and Android. If you are reading this, you should be fine... ',
   'QuestJS':'QuestJS is the latest version of Quest, and is also by Andy joel *(aka The Pixie). Learn more about QuestJS {link:here:https://github.com/ThePix/QuestJS/wiki}. Both QuestJS and this game are open-source, and the code is accessible from that site.',

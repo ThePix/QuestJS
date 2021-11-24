@@ -34,7 +34,6 @@ createRoom("theatre", {
     {alias:['junk', 'props'], examine:'There is a table that is upside-down, with two chairs, a grandfather clock and a hatstand on it.'},
     {alias:'table', examine:'The table is wooden, and quite plain.'},
     {alias:'chairs', examine:'The chairs are made of dark wood, and are ornate, if rather shabby.'},
-    {alias:'hatstand', examine:'The hatstand is wooden, and badly made; it is a wonder it is still together.'},
     {
       alias:['grandfather clock','box'], 
       examine:'On closer inspection the grandfather clock is actually a tall, narrow box, painted to look like a clock. There is no back to it; the box is empty.',
@@ -45,12 +44,24 @@ createRoom("theatre", {
 })
 
 
+createItem('hatstand', SURFACE(), {
+  examine:'The hatstand is wooden, and badly made; it is a wonder it is still together.{if:floppy_hat:loc:hatstand: There is a floppy hat on it.}',
+  loc:'theatre',
+  scenery:true,
+  testDropIn:function(options) {
+    if (options.item !== w.floppy_hat) return falsemsg("Mandy can only put hats on the hatstand - the clue is in the name.")
+
+    return true
+  },
+})
+
+
 
 
 createRoom("theatre_stage", {
   windowsface:'none',
   alias:"theatre stage",
-  desc:"{once:They say \"All the world's a stage\", but this bit definitely is, muses Mandy, realising she is indeed standing on a stage:Mandy is standing on a stage}. The curtain is up and bright lights are pointed at her, making it hard to see the rest of the theatre, but the chairs seem to be empty. As theatres go, it is not big, with a small balcony, and only a dozen or so rows in the stalls. Backstage is through the wings, northeast and southeast",
+  desc:"{once:They say \"All the world's a stage\", but this bit definitely is, muses Mandy, realising she is indeed standing on a stage:Mandy is standing on a stage}. The curtain is up and bright lights are pointed at her, making it hard to see the rest of the theatre, but the chairs seem to be empty. As theatres go, it is not big, with a small balcony, and only a dozen or so rows in the stalls. Backstage is through the wings, northeast and southeast.",
   beforeFirstEnter:function() {
     msg("'Oh, what? Hey!' She is startled for a moment to see a figure standing on the stage. She is about to say something more articulate when she realises it is not moving.")
     w.clockwork_thespian.loc = this.name
@@ -61,7 +72,7 @@ createRoom("theatre_stage", {
   scenery:[
     {alias:'lights', examine:'There are about a dozen lights shining directly on to the stage, from three points up on the ceiling. They are too bright for her to see anything behind them.'},
     {alias:'orchestra pit', examine:'Curiously, there is no orchestra pit.'},
-    {alias:['seats', 'audience', 'rows'], examine:'Mandy scans the threatre again. There are perhaps three hundred seats, and they all seem to be empty.'},
+    {alias:['seats', 'audience', 'rows', 'chairs'], examine:'Mandy scans the threatre again. There are perhaps three hundred seats, and they all seem to be empty.'},
     {alias:['balcony', 'gods'], examine:'The balcony looks to have three rows of seats.'},
     {alias:'stalls', examine:'There are about twelve rows of seats in the stalls.'},
     {alias:'curtain', examine:'Above her head, Mandy can see the red curtain.'},

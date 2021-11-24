@@ -241,7 +241,7 @@ createRoom("brass_dining_room", {
 createItem("mannequins", {
   loc:"brass_dining_room",
   scenery:true,
-  examine:"Mandy looks closer at the mannequins. Their skin is a speckled grey that feels cool to the touch, and sounds like wood when knocked. Their faces are only half formed; slight depression to suggest eyes, a vague nose, but no mouth. Some are dressed as men, some as women though there is no indication of gender other than that. The female ones are wearing long dresses, the male ones in black suits; they all look like extras from {i:Downton Abbey} -- apart from the grey complexions.|{once:Did that one just turn its head? Mandy looks again, maybe not.:They are not moving at the moment...}",
+  examine:"Mandy looks closer at the mannequins. Their skin is a speckled grey that feels cool to the touch, and sounds like wood when knocked. Their faces are only half formed; slight depression to suggest eyes, a vague nose, but no mouth. Some are dressed as men, some as women though there is no indication of gender other than that. The female ones are wearing long dresses, the male ones are in black suits; they all look like extras from {i:Downton Abbey} -- apart from the grey complexions.|{once:Did that one just turn its head? Mandy looks again, maybe not.:They are not moving at the moment...}",
   smash:function() {
     if (!this.smashed) {
       this.smashed = true
@@ -414,6 +414,14 @@ createRoom("gallery", ROOM_SET("gallery"), {
     {
       alias:['sunset'],
       examine:"The painting of the sunset is a riot of colour, and really quite striking; it would benefit from better lighting.",
+    },
+    {
+      alias:['stallion'],
+      examine:"The great white stallion is great and white. And a stallion. Some girls are really in to horses, but it was never Mandy's thing.",
+    },
+    {
+      alias:['sabre'],
+      examine:"The sable is long and curved.",
     },
     {
       alias:['greek temple'],
@@ -633,7 +641,7 @@ createItem("mahogany_cabinet", OPENABLE(true), {
   synonyms:['mahogany cabinet', 'desk'],
   shiftable:true,
   examine:function() {
-    let s = "The mahogany bureau looks like it came straight out of \"Antiques Roadshow\". {if:mahogany_cabinet:closed:It has a single door that is lifted up to close it.:The door at the front is pulled down to form a surface to write on, and reveals a curious section at the back with two small drawers on the left and another two or the right, decorated to resemble the towers of a castle with crenelation along the top, and extending across the back of the bureau.}"
+    let s = "The mahogany bureau looks like it came straight out of \"Antiques Roadshow\". {if:mahogany_cabinet:closed:It has a single door that is lifted up to close it.:The door at the front is pulled down to form a surface to write on, and reveals a curious section at the back with two small drawers on the left and another two on the right, decorated to resemble the towers of a castle with crenelation along the top, and extending across the back of the bureau.}"
     if (this.moved) {
       s += " It is standing a little way from the wall and Mandy can just see a hole in the wall behind it a few inches wide."
     }

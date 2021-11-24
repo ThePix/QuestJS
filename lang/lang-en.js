@@ -16,6 +16,7 @@ const lang = {
     MetaHint:/^(?:hint|clue)s?$/,
     MetaCredits:/^(?:about|credits|version|info)$/,
     MetaDarkMode:/^(?:dark|dark mode|toggle dark|toggle dark mode)$/,
+    MetaAutoScrollMode:/^(?:scroll|autoscroll|toggle scroll|toggle autoscroll)$/,
     MetaNarrowMode:/^(?:narrow|narrow mode|toggle narrow|toggle narrow mode|mobile|mobile mode|toggle mobile|toggle mobile mode)$/,
     MetaPlainFontMode:/^(?:font|plain font|plain fonts|fonts)$/,
     MetaWarnings:/^warn(?:ing|ings|)$/,
@@ -651,7 +652,7 @@ const lang = {
 
   helpScript:function() {
     if (settings.textInput) {
-      metamsg("Type commands in the command bar to interact with the world. Using the arrow keys you can scroll up and down though your previous commands.");      
+      metamsg("Type commands in the command bar to interact with the world.");      
       metamsg("{b:Movement:} To move, use the eight compass directions (or just {class:help-eg:N}, {class:help-eg:NE}, etc.). When \"Num Lock\" is on, you can use the number pad for all eight compass directions. Also try - and + for {class:help-eg:UP} and {class:help-eg:DOWN}, / and * for {class:help-eg:IN} and {class:help-eg:OUT}.");
       metamsg("{b:Other commands:} You can also {class:help-eg:LOOK} (or just {class:help-eg:L} or 5 on the number pad), {class:help-eg:HELP} (or {class:help-eg:?}) or {class:help-eg:WAIT} (or {class:help-eg:Z} or the dot on the number pad). Other commands are generally of the form {class:help-eg:GET HAT} or {class:help-eg:PUT THE BLUE TEAPOT IN THE ANCIENT CHEST}. Experiment and see what you can do!");
       metamsg("{b:Using items: }You can use {class:help-eg:ALL} and {class:help-eg:ALL BUT} with some commands, for example {class:help-eg:TAKE ALL}, and {class:help-eg:PUT ALL BUT SWORD IN SACK}. You can also use pronouns, so {class:help-eg:LOOK AT MARY}, then {class:help-eg:TALK TO HER}. The pronoun will refer to the last subject in the last successful command, so after {class:help-eg:PUT HAT AND FUNNY STICK IN THE DRAWER}, '{class:help-eg:IT}' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
@@ -661,10 +662,11 @@ const lang = {
       if (typeof map !== "undefined") s += " Use {class:help-eg:MAP} to toggle/show the map."
       if (typeof imagePane !== "undefined") s += " Use {class:help-eg:IMAGES} to toggle/show the image pane."
       metamsg(s)
-      metamsg("{b:Accessibility:}  Type {class:help-eg:DARK} to toggle dark mode or {class:help-eg:SPOKEN} to toggle the text being read out. Use {class:help-eg:FONT} to toggle all the fonts the author carefully chose to a standard sans-serif font.")
+      metamsg("{b:Accessibility:} Type {class:help-eg:DARK} to toggle dark mode or {class:help-eg:SPOKEN} to toggle the text being read out. Use {class:help-eg:FONT} to toggle replacing all the fonts the author carefully chose to a standard sans-serif font. Use {class:help-eg:SCROLL} to toggle whether the text automatically scrolling.")
+      metamsg("{b:Mobile:} If you are on a mobile phone, type {class:help-eg:NARROW} to reduce the width of the text. Type it again to reduce it even more, and a third time to go back to standard width.")
       metamsg("{b:Shortcuts:} You can often just type the first few characters of an item's name and Quest will guess what you mean.  If fact, if you are in a room with Brian, who is holding a ball, and a box, Quest should be able to work out that {class:help-eg:B,PUT B IN B} mean you want Brian to put the ball in the box.")
       metamsg("You can use the up and down arrows to scroll back though your previous typed commands - especially useful if you realise you spelled something wrong. If you do not have arrow keys, use {class:help-eg:OOPS} to retrieve the last typed command so you can edit it. Use {class:help-eg:AGAIN} or just {class:help-eg:G} to repeat the last typed command.")
-      metamsg("See also {link:here:https://github.com/ThePix/QuestJS/wiki/How-To-Play}, which will open in a new tab.")      
+      metamsg("See also {link:here:https://github.com/ThePix/QuestJS/wiki/How-To-Play} for more details, which will open in a new tab.")      
     }
     if (settings.panes !== "none") {
       if (settings.inventoryPane) {
