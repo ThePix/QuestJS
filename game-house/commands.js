@@ -324,6 +324,7 @@ commands.unshift(new Cmd('Plant', {
     {scope:parser.isHeld},
   ],
   script:function(objects) {
+	  if (player.loc !== "greenhouse_west") return failedmsg("There is no where for Mandy to plant anything here.")
     const obj = objects[0][0]
     if (obj.name.startsWith('tamarind_pod_prototype')) return failedmsg("Mandy thinks about burying the pod, but she is pretty sure her dad would take the seeds out first, and plant them, rather than the pods.")
     if (obj !== w.tamarind_seed) return failedmsg("{pv:item:'be:true} not something Mandy really wants to bury.", {item:obj})

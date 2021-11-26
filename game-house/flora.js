@@ -558,11 +558,22 @@ createRoom("greenhouse_catwalk_west", {
     { alias:['chrysanthemums', 'carnations'], examine:'The chrysanthemums, or perhaps carnations, look beautiful.' },
     { alias:'bottlebush tree', examine:'From this vantage point, Mandy can see the blossoms of the bottlebush tree in detail, and appreciate why it is so called.' },
     { alias:'blossoms', examine:'The blossoms on the bottlebrush resemble a bottlebrush.' },
-    { alias:'pedestal', examine:'From up here, Mandy cannot see much of the pedestal; perhaps if she was down below she could see it better.' },
     { alias:['flower beds', 'flowerbeds', 'flowers', 'plants', 'bushes'], examine:'The flowerbeds below are crammed with flowers and other plants, so much so that the edges are almost obscured.' },
     { alias:'framework', examine:'The metal framework extends all the way to the roof, and Mandy suspects all the way to the floor, though it is hidden by the metal box. She guesses the lift runs inside it.' },
   ],
 })
+
+createItem("pedestal_from_catwalk", SURFACE(), {
+  alias:'pedestal',
+  loc:"greenhouse_catwalk_west",
+  scenery:true,
+  examine:'From up here, Mandy cannot see much of the pedestal; perhaps if she was down below she could see it better.',
+  testDropIn:function(options) {
+    return falsemsg("Mandy cannot reach the pedastal from up here.")
+  },
+})
+
+
 
 createItem("hourglass_from_catwalk", {
   alias:'hourglass',

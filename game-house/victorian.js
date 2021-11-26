@@ -482,7 +482,7 @@ createItem("white_knight", {
       world.enterRoom()
     }
     else {
-      msg(w.chess_pieces.turn)
+      w.chess_pieces.turn
     }
   }
 })
