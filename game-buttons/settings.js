@@ -66,7 +66,7 @@ settings.updateCustomUI = function() {
     log(el.innerHTML)
   }
 
-  el.previousSibling.innerHTML = currentLocation.headingAlias
+  //el.previousSibling.innerHTML = currentLocation.headingAlias
 }
 
 
