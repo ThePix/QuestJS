@@ -586,7 +586,7 @@ createItem("Ostap", CREW(false), {
   baseOxygeUse:9,
 
   // Agenda
-  eventIsActive:function() { return this.status = "okay"; },
+  //eventIsActive:function() { return this.status = "okay"; },
   stopAgenda:function() {
     const agendaLast = this.agenda[this.agenda.length - 1];
     if (agendaLast && /stasisPod/.test(agendaLast)) {

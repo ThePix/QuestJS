@@ -5,3 +5,4 @@ libx/
 assets/images/*.*
 assets/sounds/
 misc/
+*.bak
