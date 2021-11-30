@@ -618,7 +618,7 @@ test.tests = function() {
   test.assertCmd('cast Cloudbusting', ['You cast the <i>Cloudbusting</i> spell.', "The clouds are clearing, it is going to get warm."])
   test.assertEqual('clearingToHot', player.currentWeatherName)
 
-
+  player.currentWeatherDisabled = true
 
   //Monsters attack when...?
 
@@ -659,11 +659,12 @@ test.tests = function() {
   test.title("Guarding item")
   w.orc.agenda = ['guardScenery:tapestry:The orc draws his sword.', 'basicAttack']
   //w.orc.agenda = ['guardUntil:tapestry:scenery:false:The orc draws his sword.', 'basicAttack']
-  test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.', 'It is starting to get cloudy.'])
+  test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.', ])
   test.assertCmd("z", "Time passes...")
   test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])
-  log('--------------------------------------')
-  test.assertCmd("z", "Time passes...")
+  random.prime([16, 7, 4])
+  test.assertCmd("z", ["Time passes...","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 91."])
+  test.assertEqual(91, w.me.health)
 
 
   /**/
