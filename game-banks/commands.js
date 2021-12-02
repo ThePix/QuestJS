@@ -119,7 +119,7 @@ commands.push(new Cmd('Pressurise', {
   regex:/^(?:pressuri[sz]e|pres) (.+)$/,
   attName:'pressure',
   objects:[
-    {scope:isRoomScope},
+    {scope:isRoomScope, extendedScope:true},
   ],
   script:function(objects) { return handlePressurise(player, objects, true) },
   defmsg:'Not something you can pressurise.',
@@ -128,7 +128,7 @@ commands.push(new Cmd('Depressurise', {
   regex:/^(?:depressuri[sz]e|evacuate|depres) (.+)$/,
   attName:'pressure',
   objects:[
-    {scope:isRoomScope},
+    {scope:isRoomScope, extendedScope:true},
   ],
   script:function(objects) { return handlePressurise(player, objects, false) },
   defmsg:'Not something you can evacuate.',
@@ -138,7 +138,7 @@ commands.push(new Cmd('NpcPressurise1', {
   attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {scope:isRoomScope},
+    {scope:isRoomScope, extendedScope:true},
   ],
   script:function(objects) {
     var npc = objects[0][0];
@@ -156,7 +156,7 @@ commands.push(new Cmd('NpcPressurise2', {
   attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {scope:isRoomScope},
+    {scope:isRoomScope, extendedScope:true},
   ],
   script:function(objects) {
     var npc = objects[0][0];
@@ -174,7 +174,7 @@ commands.push(new Cmd('NpcDepressurise1', {
   attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {scope:isRoomScope},
+    {scope:isRoomScope, extendedScope:true},
   ],
   script:function(objects) {
     var npc = objects[0][0]
@@ -192,7 +192,7 @@ commands.push(new Cmd('NpcDepressurise2', {
   attName:'pressure',
   objects:[
     {scope:parser.isHere, attName:"npc"},
-    {scope:isRoomScope},
+    {scope:isRoomScope, extendedScope:true},
   ],
   script:function(objects) {
     var npc = objects[0][0]

@@ -519,7 +519,7 @@ createRoom("top_deck_aft", {
 createRoom("canteen", {
   deckName:'layer4',
   svgId:'rect3979',
-  desc:"The canteen, like everything else of the ship, is pretty small. There is a table, with one short side against the wall, and five plastic [chairs:chair] around it.{table_desc} At the back is the food preparation area; a work surface across the width of the room, with a sink on the right and a hob on the left.",
+  desc:"The canteen, like everything else of the ship, is pretty small. There is a table, with one short side against the wall, and five plastic chairs around it.{table_desc} At the back is the food preparation area; a work surface across the width of the room, with a sink on the right and a hob on the left.",
   vacuum:false,
   port:new Exit('top_deck_forward'),
 });
@@ -531,6 +531,12 @@ createItem("canteen_table", SURFACE(), {
   scenery:true,
   tpDesc:function() { return " The table is bare." },
   examine:"The table is plastic, attached to the wall at one end, and held up by a single leg at the other end.{table_desc}",
+})
+createItem("canteen_chair", FURNITURE({sit:true}), {
+  alias:"chair",
+  loc:"canteen",
+  scenery:true,
+  examine:"The chaits are white and plastic and very basic.",
 })
 
 
