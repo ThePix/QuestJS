@@ -417,6 +417,15 @@ createItem("Xsansi", NPC(true), {
     }    
     
   ],
+  tellOptions:[
+    {
+      test:function(p) { return p.text.match(/.* hot/); }, 
+      script:function() {
+        msg("'You look hot!' you say to Xsansi.")
+        msg("'Internal sensors indicate I am operating within normal temperature profile.'")
+      },
+    },
+  ],
 })
 
 
@@ -536,6 +545,20 @@ createItem("Kyle", CREW(false), {
     },
     
   ],
+  tellOptions:[
+    {
+      test:function(p) { return p.text.match(/.* hot/); }, 
+      script:function() {
+        msg("'You look hot!' you say to Ostap.")
+        if (player.female) {
+          msg("'I'm sorry, I'm sure you're a really nice girl, and all that, I'm not into girls.'")
+        }
+        else {
+          msg("He grins at you. 'Thanks, mate!'")
+        }
+      },
+    },
+  ],
   
   // Satellite deployment
   probeType:'satellite',
@@ -586,7 +609,7 @@ createItem("Ostap", CREW(false), {
   baseOxygeUse:9,
 
   // Agenda
-  //eventIsActive:function() { return this.status = "okay"; },
+  //feventIsActive:function() { return this.status = "okay"; },
   stopAgenda:function() {
     const agendaLast = this.agenda[this.agenda.length - 1];
     if (agendaLast && /stasisPod/.test(agendaLast)) {
@@ -663,6 +686,20 @@ createItem("Ostap", CREW(false), {
       },
     },
     
+  ],
+  tellOptions:[
+    {
+      test:function(p) { return p.text.match(/.* hot/); }, 
+      script:function() {
+        msg("'You look hot!' you say to Ostap.")
+        if (player.female) {
+          msg("'If you're trying to get in my knickers, forget it.'")
+        }
+        else {
+          msg("'If you're trying to get in my knickers, forget it.'")
+        }
+      },
+    },
   ],
   
   // Probe deployment
@@ -909,6 +946,15 @@ createItem("Ha_yoon", CREW(true), {
       script:function() {
         msg("'How is the ship,' you ask Ha-yoon.")
         msg("'Good.'") // !!! more here!
+      },
+    },
+  ],
+  tellOptions:[
+    {
+      test:function(p) { return p.text.match(/.* hot/); }, 
+      script:function() {
+        msg("'You look hot!' you say Ha-yoon.");
+        msg("'If you're trying to get in my knickers, forget it.'");
       },
     },
   ],

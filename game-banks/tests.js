@@ -66,18 +66,18 @@ test.tests = function() {
   test.assertCmd("get jumpsuit", ["You take your jumpsuit.", "The stasis pod drawer slides shut."]);
   test.assertCmd("wear jumpsuit", ["You put on your jumpsuit."]);
 
-  test.assertCmd("open locker", ["You open the locker. Inside the locker you can see a spare spacesuit, a sealant spray and your spacesuit.",])
+  test.assertCmd("open locker", ["You open the locker. Inside it you can see a spare spacesuit, a sealant spray and your spacesuit.",])
   test.assertCmd("get spa", ["You take your spacesuit.",])
   test.assertCmd("wear spa", ["You can't put your spacesuit on over your jumpsuit.",])
   test.assertCmd("remove j", ["You take your jumpsuit off.",])
   test.assertCmd("wear s", ["You put on your spacesuit.","'Satellite I has successfully entered orbit around the planet.' announces Xsansi.",])
   test.assertCmd("s", ["You can't go starboard.",])
-  test.assertCmd("a", ["You head aft.","The cargo bay","The cargo bay is a large, open area, with numerous crates, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",])/*
+  test.assertCmd("a", ["You head aft.","The cargo bay","The cargo bay is a large, open area, with numerous crates, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",])
   test.assertCmd("starboard", ["You head starboard.","The airlock","The airlock is just big enough for two persons wearing spacesuits, and is featureless besides the doors, port and starboard, and the controls.",])
   test.assertCmd("ai, evac airlock", ["'Evacuating the airlock... Room is now under vacuum.'",])
   test.assertCmd("port", "The door to the cargo bay will not open while it is pressurised and the airlock is not.")
 
-/*  
+  
   
   test.start("Planet one")
   
@@ -91,7 +91,7 @@ test.tests = function() {
   test.assertCmd("a", ["You head aft.", "The cargo bay", /^The cargo bay is/]);
   test.assertCmd("u", ["You walk up the narrow stair way to the top deck.", "The top deck aft", /^The top deck is where the living quarters/]);
   test.assertCmd("f", ["You head forward.", "The top deck forward", /^You are standing at the forward end /, "'Satellite I has successfully entered orbit around the planet.' announces Xsansi."]);
-  test.assertCmd("ask ostap about probes", "You can't see anything you might call 'ostap' here.");
+  test.assertCmd("ask ostap about probes", "There doesn't seem to be anything you might call 'ostap' here.");
   test.assertCmd("s", ["You head starboard.", "The canteen", /^The canteen/, "You can see Ostap here."]);
   test.assertCmd("x chair", ["It's just scenery."]);
   test.assertCmd("x table", "The table is plastic, attached to the wall at one end, and held up by a single leg at the other end. The table is bare.");
