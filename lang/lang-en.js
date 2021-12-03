@@ -219,15 +219,6 @@ const lang = {
       /^(?:tell|ask|instruct) (.+) to (?:stop follow|stop following|stop follow me|stop following me|wait|wait here|stay|stay here)$/,
     ],    
     
-    //RPG
-    Attack:/^(?:attack|att) (.+)$/,
-    Search:/^(?:search) (.+)$/,
-    Equip:/^(?:equip|brandish|draw) (.+)$/,
-    Unequip:/^(?:unequip|holster|sheath|put away) (.+)$/,
-    LearnSpell:/^(?:learn) (.+)$/,
-    CastSpell:/^(?:cast|invoke) (.+)$/,
-    CastSpellAt:/^(?:cast|invoke) (.+) (?:at|on) (.+)$/,
-    
     
     //Debug
     DebugWalkThrough:/^wt (.+)$/,
@@ -499,45 +490,7 @@ const lang = {
   error:"Oh dear, I seem to have hit an error trying to handle that (F12 for more details).",
   
   
-  // Purely for RPGs
-  
-  attacking:"{nv:attacker:attack:true} {nm:target:the}.",
-  primarySuccess:"A hit!",
-  primaryFailure:"A miss!",
-  noTarget:'No target found for attack',
-  equip:"{nv:char:draw:true} {nm:item:the}.",
-  unequip:"{nv:char:put:true} away {nm:item:the}.",
-  unequipAndEquip:"{nv:char:put:true} away {show:list}, and equip {nm:item:the}.",
-  castSpell:"{nv:attacker:cast:true} the {i:{nm:skill}} spell.",
-  castSpellFrom:"{nv:attacker:cast:true} the {i:{nm:skill}} spell from {nm:source:the}.",
-  drinkPotion:"{nv:attacker:drink:true} {nm:source:the}, casting the {i:{nm:skill}} spell.",
-  defaultEffectExpires:"The {i:{show:effect:alias}} effect on {nm:target:the} expires.",
-  damageReport:"The attack does {show:modifiedDamage} hits, {nms:target:the} health is now {show:target:health}.",
-  wayGuarded:"The way {show:exit:dir} is guarded!",
-  summonSpellPre:"Summon",
-  summonSpellDesc:function(spell) { return "Summons a " + spell.prototype.alias + "; it will last about " + spell.duration + " turns, unless it is destroyed before then." },
-  
 
-  communeWithAnimalSpell:'Commune with animal',
-  cannotTalkToBeast:"{nv:char:spend:true} a few minutes telling {nm:item:the} about {pa:char} life, but {pv:item:do} not seem interested. Possibly because {pv:item:be} just a dumb beast.",
-  teleport:"{nv:attacker:feel:true} disorientated and the world around {sb:attacker} dissolves. A moment later, {nv:attacker:be} somewhere else.",
-  summoning_successful:"{nv:item:appear:true} before {nm:attacker:the}.",
-  
-  deadAddendum:' {pv:item:be:true} dead.',
-  asleepAddendum:' {pv:item:be:true} sleeping.',
-  injuredAddendum:' {pv:item:be:true} somewhat injured.',
-  badlyInjuredAddendum:' {pv:item:be:true} badly injured.',
-  
-  searchAlive:'{nv:char:think:true} searching {nm:item:the} whilst {pv:item:be} alive and awake is a bad idea.',
-  searchNothing:'{nv:char:search:true} {nm:item:the}, but find nothing.',
-  
-  deathGeneral:'{nv:target:fall:true} down, dead.',
-  deathConstruct:'{nv:target:fall:true} down; it seems to be inactive.',
-  deathUndead:'{nv:target:fall:true} down - no longer undead, merely dead.',
-  deathUndeadNoCorpse:'{nv:target:vanish:true}, apparently defeated.',
-  deathElemental:'{nv:target:disipate:true}, defeated.',
-  deathPhantom:'{nv:target:vanish:true}.',
-  
 
   //----------------------------------------------------------------------------------------------
   // Complex responses (requiring functions)

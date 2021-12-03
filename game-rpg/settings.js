@@ -5,7 +5,7 @@ settings.author = "The Pixie"
 settings.version = "1.1";
 settings.thanks = ["Kyle", "Lara"];
 
-settings.libraries.push('rpg')
+settings.customLibraries.push({folder:'rpg', files:["lang-en", "rpg", "skill", "attack", "item_templates", "npc_templates", "commands",]})
 settings.files.push('spells')
 settings.files.push('weather')
 

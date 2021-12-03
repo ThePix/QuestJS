@@ -18,8 +18,8 @@ test.tests = function() {
   player.currentWeatherDisabled = true
 
   test.title("Elements");
-  test.assertEqual("fire", elements.opposed('frost'))
-  test.assertEqual("frost", elements.opposed('fire'))
+  test.assertEqual("fire", rpg.elements.opposed('frost'))
+  test.assertEqual("frost", rpg.elements.opposed('fire'))
 
 
 
