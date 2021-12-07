@@ -350,20 +350,7 @@ agenda.guardScenery = function(npc, arr) {
   return true
 }
 
-agenda.guardUntil = function(npc, arr) { return agenda.handleGuardUntilWhile(npc, arr, true) }
-  
-agenda.guardWhile = function(npc, arr) { return agenda.handleGuardUntilWhile(npc, arr, false) }
-  
-agenda.handleGuardUntilWhile = function(npc, arr, reverse) {
-  const item = w[arr.shift()]
-  const attName = arr.shift()
-  const value = util.guessMyType(arr.shift())
-  let flag = item[attName] === value
-  if (reverse) flag = !flag
-  if (flag) return false
-  msg(arr.join(':'))
-  return true
-}
+
 
 agenda.ongoingAttack = function(npc, arr) {
   return agenda.basicAttack(npc, arr)

@@ -656,15 +656,67 @@ test.tests = function() {
 
 
 
-  test.title("Guarding item")
+  test.title("Guarding item with guardScenery")
   w.orc.agenda = ['guardScenery:tapestry:The orc draws his sword.', 'basicAttack']
-  //w.orc.agenda = ['guardUntil:tapestry:scenery:false:The orc draws his sword.', 'basicAttack']
+  w.tapestry.oldLoc = w.tapestry.loc
   test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.', ])
   test.assertCmd("z", "Time passes...")
   test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])
   random.prime([16, 7, 4])
   test.assertCmd("z", ["Time passes...","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 91."])
   test.assertEqual(91, w.me.health)
+  w.tapestry.scenery = true
+  w.tapestry.loc = w.tapestry.oldLoc
+
+  
+  test.title("Guarding item with guardUntil")
+  w.orc.agenda = ['waitUntil:tapestry:scenery:false:The orc draws his sword.', 'basicAttack']
+  test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])
+  random.prime([16, 7, 4])
+  test.assertCmd("z", ["Time passes...","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 82."])
+  test.assertEqual(82, w.me.health)
+  w.tapestry.scenery = true
+  w.tapestry.loc = w.tapestry.oldLoc
+  
+  
+  test.title("Guarding item with guardUntilQuick")
+  w.orc.agenda = ['waitUntilNow:tapestry:scenery:false:The orc draws his sword.', 'basicAttack']
+  random.prime([16, 7, 4])
+  test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword.","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 73."])
+  test.assertEqual(73, w.me.health)
+  w.tapestry.scenery = true
+  w.tapestry.loc = w.tapestry.oldLoc
+  w.me.health = 100
+
+  
+  
+
+
+  test.title("Attack agendas")
+  
+  new Spell("Test attack 1", {
+    primarySuccess:"Test attack one was performed",
+    effect:{
+    },
+  })  
+  new Spell("Test attack 2", {
+    primarySuccess:"Test attack two was performed",
+    effect:{
+    },
+  })  
+  
+  w.orc.agenda = ['basicAttack:target:Test attack 1:Test attack 2']
+  random.prime([1, 19])
+  test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
+  random.prime([1, 19])
+  test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
+  random.prime([1, 19])
+  test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
+  random.prime([0, 19])
+  test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 1</i> spell.","Test attack one was performed"])
+  
+
+
 
 
   /**/
