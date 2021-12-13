@@ -21,7 +21,7 @@ class Attack {
     attack.skill = skill
     attack.target = target
     attack.source = source
-
+    
     // Find the skill
     if (attacker === player && skill === undefined && rpg.getSkill) {
       attack.skill = rpg.getSkill()
@@ -152,7 +152,10 @@ class Attack {
   resolve(target, isPrimary, count = 0) {
     this.target = target
     
-    
+    if (isPrimary && !util.testAttribute(this.skill, "suppressAntagonise") && this.target.antagonise) {
+      this.target.antagonise(this.attacker)
+    }
+
     if (target.modAttitudeOnAttack && !this.notAnAttack) target.modAttitudeOnAttack()
 
     if (!this.skill.inanimateTarget) {
@@ -266,6 +269,7 @@ class Attack {
 
   output() {
     settings.output(this.reportTexts)
+    return this
   }
   
   report(s, n) {

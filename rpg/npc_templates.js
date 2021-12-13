@@ -71,19 +71,6 @@ const RPG_TEMPLATE = {
       return 0
     }
   },
-  attitude:rpg.NEUTRAL,
-  modAttitudeOnAttack:function() {
-    if (this.attitude > rpg.HOSTILE) return // already hostile or fearful
-    if (this.attitude > 200) {
-      this.attitude += 100
-    }
-    else if (this.attitude > 100) {
-      this.attitude = rpg.BELLIGERENT_HOSTILE
-    }
-    else if (this.attitude === rpg.TIMID) {
-      this.attitude = rpg.FEARFUL
-    }
-  },
   armour:0,
   isLight:false,  // should this be on default items?
   activeEffects:[],
@@ -113,8 +100,6 @@ const RPG_TEMPLATE = {
   
   getEquippedShield:function() { return null },
   
-  isHostile:function() { return this.attitude > rpg.HOSTILE },
-
   getArmour:function() { return this.armour },
 
   hasEffect:function(name) { return this.activeEffects.includes(name) },
@@ -132,6 +117,7 @@ const RPG_PLAYER = function(female) {
   
   //res.getEquippedWeapon = function() { return this.equipped ? w[this.equipped] : w.weapon_unarmed; }
   
+  res.allegiance = 'friend'
   res.getEquippedWeapon = function() {
     const carried = scopeHeldBy(this)
     return carried.find(el => el.equipped && el.weapon) || w.weapon_unarmed
@@ -161,7 +147,10 @@ const RPG_NPC = function(female) {
 
   for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key]
   
+  //res.aggressive = true
+  res.allegiance = 'foe'
   res.oldRpgOnCreation = res.afterCreation
+  res.attackPattern = ['Basic attack']
   res.afterCreation = function(o) {
     o.oldRpgOnCreation(o)
     if (!o.maxHealth) o.maxHealth = o.health
@@ -174,19 +163,23 @@ const RPG_NPC = function(female) {
   }
   
   res.msgDeath = lang.deathGeneral
+  
+  // An NPC is hostile if aggression is true and it is targeting the given character or an allied one
+  res.isHostile = function(chr) {
+    if (!this.aggressive) return false
+    if (!chr) chr = player
+    if (!this.target) this.target = player.name
+    if (this.target === chr.name) return true
+    if (!this.target) return errormsg("Oh dear, no target set for this NPC")
+    if (chr.allegiance && w[this.target].allegiance === chr.allegiance) return true
+    return false
+  }
+
 
   res.selectSkill = function() {
     return this.skillOptions ? rpg.findSkill(random.fromArray(this.skillOptions)) : defaultSkill 
   }
 
-  // this NPC is going to attack target
-  res.makeAttack = function(target) {
-    const attack = Attack.createAttack(this, target, this.selectSkill(target))
-    if (!attack) return false
-    attack.apply().output()
-    return attack
-  }
-  
   res.examine = function(options) {
     let s
     if (this.dead) {
@@ -228,13 +221,92 @@ const RPG_NPC = function(female) {
     settings.defaultSearch(this)
     return true
   }
-    
+  
+  
+  // Attempt to make an attack on the given target.
+  // Will return the attack itself if an attack is actually made.
+  // Will return true is no attack is made, and the endeavor should be abandoned
+  // (eg the target is dead or lost), or false if no attack is made by it is still
+  // worth trying next turn.
+  // Could come from an agenda, so target could be an array, and hence return values
+  res.performAttack = function(arr) {
+    let target
+    if (Array.isArray(target)) {
+      target = w[arr[0]]
+      arr.shift()
+    }
+    else {
+      target = arr
+      arr = []
+    }
+    if (target.dead) return true
+
+    // Is the target reachable?
+    if (this.loc !== target.loc) {
+      if (this.pursueToAttack) {
+        return !this.pursueToAttack(target)
+      }
+      else {
+        return true
+      }
+    }
+
+    let skill
+    if (this.nextAttack) {
+      skill = rpg.findSkill(this.nextAttack)
+      delete this.nextAttack
+    }
+    else if (arr.length > 0) {
+      skill = rpg.findSkill(random.fromArray(arr))
+    }
+    else if (this.attackPattern) {
+      skill = rpg.findSkill(random.fromArray(this.attackPattern))
+    }
+    else {
+      skill = defaultSkill
+    }
+    const attack = Attack.createAttack(this, target, skill)
+    attack.apply().output()
+    return attack
+  }
+  
+  res.antagonise = function(target) {
+    if (this.signalGroups && this.signalGroups.length) {
+      rpg.broadcastAll('attack', this, target)
+    }
+    else {
+      rpg.broadcastCommunication(this, 'attack', this, target)
+    }      
+  }
+
+  res.endTurn = function(turn) {
+    if (this.dead) return
+    if (this.aggressive && this.target) {
+      // If attacking, ignore agenda, etc.
+      this.performAttack(w[this.target])
+    }
+    else {
+      this.sayTakeTurn()
+      this.doReactions()
+      if (!this.paused && !this.suspended && this.agenda && this.agenda.length > 0) this.doAgenda()
+      if (this.aggressive && this.target && !this.delayAgendaAttack) {
+        // Is the NPC now aggressive? If so, have an attack
+        this.performAttack(w[this.target])
+      }
+      this.delayAgendaAttack = false
+    }
+    this.doEvent(turn)
+  }
+  
   return res;
 }
 
 
-
-
+const RPG_FRIEND = function(female) {
+  const res = RPG_NPC(female)
+  res.aggressive = false
+  res.allegiance = 'friend'
+}
 
 const RPG_CORPOREAL_UNDEAD = function() {
   const res = RPG_NPC();
@@ -342,14 +414,12 @@ const RPG_BEAST = function(female, aggressive) {
   const res = RPG_NPC(female);
 
   res.beast = true
-  res.charmed = false
   res.aggressive = aggressive
   res.testTalk = function() {
     if (this.dead) return falsems(lang.npc_dead)
     if (this.activeEffects.includes(lang.communeWithAnimalSpell)) return true
     return falsemsg(lang.cannotTalkToBeast, {item:this, char:player})
   }
-  res.isHostile = function() { return this.aggressive && !this.charmed }
     
   return res
 }

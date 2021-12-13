@@ -6,7 +6,7 @@ test.resetOnCompletion = false
 test.tests = function() {
   
 
-
+  for (const skill of rpg.list) skill.suppressAntagonise = true
 
 
 
@@ -20,6 +20,43 @@ test.tests = function() {
   test.title("Elements");
   test.assertEqual("fire", rpg.elements.opposed('frost'))
   test.assertEqual("frost", rpg.elements.opposed('fire'))
+
+
+
+  test.title("Finding foes")
+  let l
+  
+  l = rpg.getAll(w.orc)
+  test.assertEqual(4, l.length)
+  test.assertEqual(w.orc, l[0])
+  l = rpg.getAllBut(w.orc)
+  test.assertEqual(3, l.length)
+  test.assertEqual(false, l.includes(w.orc))
+  
+  l = rpg.getFoes(w.orc)
+  test.assertEqual(3, l.length)
+  test.assertEqual(w.orc, l[0])
+  l = rpg.getFoesBut(w.orc)
+  test.assertEqual(2, l.length)
+  test.assertEqual(false, l.includes(w.orc))
+
+  l = rpg.getHostiles(w.orc)
+  test.assertEqual(1, l.length)
+  test.assertEqual(w.orc, l[0])
+  l = rpg.getHostilesBut(w.orc)
+  test.assertEqual(0, l.length)
+  test.assertEqual(false, l.includes(w.orc))
+
+  w.goblin.agressive = true
+  l = rpg.getHostiles(w.orc)
+  test.assertEqual(1, l.length)
+  test.assertEqual(w.orc, l[0])
+  l = rpg.getHostilesBut(w.orc)
+  test.assertEqual(0, l.length)
+  test.assertEqual(false, l.includes(w.orc))
+  delete w.goblin.agressive
+
+
 
 
 
@@ -67,8 +104,7 @@ test.tests = function() {
 
 
 
-  test.title("Attack.createAttack (unarmed) misses");
-  test.assertEqual(rpg.NEUTRAL, w.goblin.attitude)
+  test.title("Attack.createAttack (unarmed) misses")
   let attack = Attack.createAttack(player, w.goblin)
   test.assertEqual('me', attack.attacker.name)
   test.assertEqual([w.goblin], attack.primaryTargets)
@@ -78,15 +114,18 @@ test.tests = function() {
   random.prime(3)
   attack.resolve(w.goblin, true, 0)
   test.assertEqual(40, w.goblin.health)
-  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.goblin.attitude)
-  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.orc.attitude)
-  test.assertEqual(rpg.BELLIGERENT_HOSTILE, w.snotling.attitude)
-
-  
+  w.goblin.aggressive = false
+  w.orc.aggressive = false
+  w.snotling.aggressive = false
 
 
+  // Turn off getting aggressive
+  w.goblin.antagonise = function() {}
+  w.goblin.afterAttack = function() {}
+  w.orc.antagonise = function() {}
 
-  test.title("Attack.createAttack (unarmed)");
+
+  test.title("Attack.createAttack (unarmed)")
   attack = Attack.createAttack(player, w.goblin)
   test.assertEqual('me', attack.attacker.name)
   test.assertEqual([w.goblin], attack.primaryTargets)
@@ -104,7 +143,6 @@ test.tests = function() {
   w.goblin.armour = 0
   w.goblin.health = 40
   
-
 
   test.title("Attack.createAttack (flail)")
   const oldProcessAttack = player.modifyOutgoingAttack
@@ -142,6 +180,7 @@ test.tests = function() {
   attack = Attack.createAttack(player, w.goblin, rpg.findSkill("Defensive attack"))
   random.prime([19, 4, 7])
   attack.apply()
+  //attack.resolve(w.goblin, true, 0)
   test.assertEqual(25, w.goblin.health)
   test.assertEqual(['Defensive'], player.activeEffects)
   test.assertCmd("z", "Time passes...")
@@ -150,9 +189,6 @@ test.tests = function() {
   
   w.goblin.health = 40
   w.flail.equipped = false
-
-
-
 
 
   test.title("Attack.createAttack (bow, defensive)")
@@ -259,7 +295,6 @@ test.tests = function() {
     // For the snotling
     19, 4, 7,
   ])
-
   test.assertCmd('cast Lightning bolt at goblin', ['You cast the <i>Lightning bolt</i> spell.', 'A lightning bolt jumps from your out-reached hand to the goblin!', "The attack does 20 hits, the goblin's health is now 20.", 'A smaller bolt jumps your target, but entirely misses the orc!', 'A smaller bolt jumps your target to the snotling!', "The attack does 11 hits, the snotling's health is now 9."])
   w.goblin.health = 40
   w.snotling.health = 20
@@ -528,9 +563,10 @@ test.tests = function() {
   delete w.goblin.skillOptions
 
 
-  test.title("makeAttack  (goblin)")
-  random.prime([19, 5])
-  attack = w.goblin.makeAttack(player)
+  test.title("performAttack  (goblin)")
+  w.goblin.loc = 'great_hall'
+  random.prime([0, 19, 5])
+  attack = w.goblin.performAttack(player)
   test.assertEqual('goblin', attack.attacker.name)
   test.assertEqual('Basic attack', attack.skill.name)
   test.assertEqual([w.me], attack.primaryTargets)
@@ -538,10 +574,10 @@ test.tests = function() {
   test.assertEqual(0, attack.offensiveBonus)
   test.assertEqual(98, w.me.health)
 
-  test.title("makeAttack  (goblin, fireball)")
+  test.title("performAttack  (goblin, fireball)")
   random.prime([1, 19, 5, 5, 5])
-  w.goblin.skillOptions = ["Double attack", "Ice shard", "Returning", "Teleport", "Mark"]
-  attack = w.goblin.makeAttack(player)
+  w.goblin.attackPattern = ["Double attack", "Ice shard", "Returning", "Teleport", "Mark"]
+  attack = w.goblin.performAttack(player)
   
   test.assertEqual('goblin', attack.attacker.name)
   test.assertEqual('Ice shard', attack.skill.name)
@@ -549,6 +585,7 @@ test.tests = function() {
   test.assertEqual('3d6', attack.damage)
   test.assertEqual(0, attack.offensiveBonus)
   test.assertEqual(92, w.me.health)
+  w.goblin.loc = 'yard'
 
 
   test.assertCmd('e', ['The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, an orc (holding a huge shield), a rabbit, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
@@ -635,6 +672,19 @@ test.tests = function() {
   // when the game is saved, the exit is not
   // when the game is loaded, are agendas done before the player next takes a turn?
 
+
+  for (const skill of rpg.list) delete skill.suppressAntagonise
+
+  w.goblin.antagonise = w.snotling.antagonise
+  w.orc.antagonise = w.snotling.antagonise
+
+
+
+
+
+
+
+
   test.title("Guarding exit")
 
   w.orc.setGuard(w.practice_room, "east", "The orc looks at {nm:char:the} suspiciously.")
@@ -654,60 +704,76 @@ test.tests = function() {
   
   //w.orc.attitude = rpg.BELLIGERENT
 
-
+  w.orc.signalGroups = []
 
   test.title("Guarding item with guardScenery")
-  w.orc.agenda = ['guardScenery:tapestry:The orc draws his sword.', 'basicAttack']
+  w.orc.agenda = ['guardScenery:tapestry:The orc draws his sword.']
   w.tapestry.oldLoc = w.tapestry.loc
   test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.', ])
   test.assertCmd("z", "Time passes...")
   test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])
-  random.prime([16, 7, 4])
+  random.prime([0, 16, 7, 4])
+  
   test.assertCmd("z", ["Time passes...","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 91."])
   test.assertEqual(91, w.me.health)
+  
   w.tapestry.scenery = true
   w.tapestry.loc = w.tapestry.oldLoc
+  w.orc.aggressive = false
+  delete w.orc.target
 
-  
-  test.title("Guarding item with guardUntil")
-  w.orc.agenda = ['waitUntil:tapestry:scenery:false:The orc draws his sword.', 'basicAttack']
+  test.title("Guarding item with waitUntil")
+  w.orc.agenda = ['waitUntil:tapestry:scenery:false:The orc draws his sword.', 'antagonise']
+  test.assertCmd("z", ["Time passes..."])
   test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])
-  random.prime([16, 7, 4])
+  test.assertEqual(false, w.orc.aggressive)
+  test.assertEqual(['antagonise'], w.orc.agenda)
+  random.prime([0, 16, 7, 4])
   test.assertCmd("z", ["Time passes...","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 82."])
+  test.assertEqual([], w.orc.agenda)
+  test.assertEqual(true, w.orc.aggressive)
   test.assertEqual(82, w.me.health)
   w.tapestry.scenery = true
   w.tapestry.loc = w.tapestry.oldLoc
+  w.orc.aggressive = false
+  delete w.orc.target
   
-  
-  test.title("Guarding item with guardUntilQuick")
-  w.orc.agenda = ['waitUntilNow:tapestry:scenery:false:The orc draws his sword.', 'basicAttack']
-  random.prime([16, 7, 4])
+  test.title("Guarding item with waitUntilNow")
+  w.orc.agenda = ['waitUntilNow:tapestry:scenery:false:The orc draws his sword.', 'antagonise']
+  random.prime([0, 16, 7, 4])
+
   test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword.","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 73."])
+
+
   test.assertEqual(73, w.me.health)
   w.tapestry.scenery = true
   w.tapestry.loc = w.tapestry.oldLoc
   w.me.health = 100
 
   
-  
-
-
+ 
   test.title("Attack agendas")
   
   new Spell("Test attack 1", {
     primarySuccess:"Test attack one was performed",
-    effect:{
-    },
-  })  
+  })
   new Spell("Test attack 2", {
     primarySuccess:"Test attack two was performed",
-    effect:{
-    },
+  })  
+  new Spell("Test attack 3A", {
+    primarySuccess:"Test attack three was prepared",
+    afterUse:function(attack) {
+      attack.attacker.nextAttack = "Test attack 3B"
+    }
+  })  
+  new Spell("Test attack 3B", {
+    primarySuccess:"Test attack three was performed",
   })  
   
-  w.orc.agenda = ['basicAttack:target:Test attack 1:Test attack 2']
+  w.orc.attackPattern = ['Test attack 1', 'Test attack 2', "Test attack 3A"]
   random.prime([1, 19])
   test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
+  
   random.prime([1, 19])
   test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
   random.prime([1, 19])
@@ -715,7 +781,26 @@ test.tests = function() {
   random.prime([0, 19])
   test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 1</i> spell.","Test attack one was performed"])
   
+  random.prime([2, 19])
+  test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 3A</i> spell.","Test attack three was prepared"])
+  random.prime([19])
+  test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 3B</i> spell.","Test attack three was performed"])
 
+
+
+
+  test.title("pursueToAttack")
+  w.orc.pursueToAttack = rpg.pursueToAttack
+ 
+  test.assertCmd('n', ['You head north.', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can see eleven arrows, a goblin, a shotgun and Stone of Returning here.', 'You can go north or south.', 'The orc enters the yard from the south.'])
+  random.prime([1, 19])
+  test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
+
+
+  test.title("Befriend")
+  player.skillsLearnt = ["Double attack", "Fireball", "Befriend"]
+  test.assertCmd('cast befriend at orc', ['You cast the <i>Befriend</i> spell.', 'The orc will now regard you as a friend.'])
+  
 
 
 

@@ -207,6 +207,13 @@ test.tests = function() {
   test.assertEqual(false, array.compare([w.coin, w.boots, w.ring], [w.boots, w.ring]));
   test.assertEqual(true, array.compare([w.boots, w.ring], [w.boots, w.ring]));
 
+  test.title("array.intersection");
+  test.assertEqual([1, 2], array.intersection([1, 2, 4, 6, 7], [1, 2, 3]));
+  test.assertEqual([1, 2], array.intersection([1, 2, 4, 6, 7], [3, 2, 1]));
+  test.assertEqual([], array.intersection([], [1, 2, 3]));
+  test.assertEqual([], array.intersection([1, 2, 4, 6, 7], []));
+  test.assertEqual([w.boots, w.ring], array.intersection([w.coin, w.boots, w.ring], [w.boots, w.ring]));
+  test.assertEqual([w.boots, w.ring], array.intersection([w.boots, w.ring], [w.boots, w.ring]));
 
   test.title("array.compareUnordered");
   test.assertEqual(false, array.compareUnordered([1, 2, 4, 6, 7], [1, 2, 3]));

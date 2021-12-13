@@ -13,7 +13,7 @@ class Skill {
       new Effect(this.name, this.effect, data)
       this.targetEffectName = true
     }
-    if (rpg.findSkill(this.name)) throw new Error("Skill/Spell name collision: " + this.name)
+    if (rpg.findSkill(this.name, true)) throw new Error("Skill/Spell name collision: " + this.name)
     rpg.list.push(this)
   }
 
@@ -55,6 +55,7 @@ class SpellSelf extends Spell {
       return [attack.attacker]
     }
     this.noTarget = true
+    this.suppressAntagonise = true
     this.automaticSuccess = true
     this.notAnAttack = true
     this.reportText = "{nv:attacker:cast:true} the {i:{nm:skill}} spell."

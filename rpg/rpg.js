@@ -115,24 +115,6 @@ class Effect {
 
 
 const rpg = {
-  TIMID:1,
-  FEARFUL:2,
-  
-  // These attitudes go to BELLIGERENT_HOSTILE on attack
-  FRIENDLY:101,
-  NEUTRAL:102,
-  
-  // These attitudes go to +100 on attack
-  PROTECTIVE:201,
-  BELLIGERENT:202,
-  AGGRESSIVE:203,
-  
-  // The character will attack
-  HOSTILE:300,  // boundary marker, do not set attitude to this
-  PROTECTIVE_HOSTILE:301,
-  BELLIGERENT_HOSTILE:302,
-  AGGRESSIVE_HOSTILE:303,
-  
   list:[],
   effectsList:[],
   copyToEffect:['element','visage'],
@@ -145,8 +127,10 @@ const rpg = {
     return this.list.find(el => skillName === el.name.toLowerCase() || (el.regex && skillName.match(el.regex))) 
   },
   
-  findSkill:function(skillName) {
-    return this.list.find(el => skillName === el.name)
+  findSkill:function(skillName, suppressErrorMsg) {
+    const skill = this.list.find(el => skillName === el.name)
+    if (!skill && !suppressErrorMsg) return errormsg("Failed to find skill/spell: '" + skillName + "'")
+    return skill
   },
   
 
@@ -160,64 +144,84 @@ const rpg = {
   defaultSpellTestUseable:function(char) { return true },
   defaultSpellAfterUse:function(attack, count) { },
 
-  broadcast:function(group, message, source) {
+  broadcast:function(group, message, source, other) {
     for (const key in w) {
       const o = w[key]
       if (o.signalGroups && o.signalGroups.includes(group)) {
-        if (o.signalResponses[message]) {
-          o.signalResponses[message].bind(o)(source)
-        }
-        else if (rpg.signalResponses[message]) {
-          rpg.signalResponses[message].bind(o)(source)
-        }
-        else {
-          log('WARNING: No response for ' + message)
-        }
+        rpg.broadcastCommunication(o, message, source, other)
       }
     }
   },
-  signalResponses:{
-    test:function(source) { msg("{nv:npc:receive:true} a message from {show:source}.", {npc:this, source:source})},
-    alert:function() { this.alert = true },
-    wake:function() { this.asleep = false },
-    attack:function() { if (this.attitude < rpg.BELLIGERENT_HOSTILE) this.attitude = rpg.BELLIGERENT_HOSTILE },
+  broadcastAll:function(message, source, other) {
+    log(source.name)
+    for (const key in w) {
+      const o = w[key]
+      if (o.signalGroups && source.signalGroups && array.intersection(o.signalGroups, source.signalGroups).length) {
+        log(o.name)
+        rpg.broadcastCommunication(o, message, source, other)
+      }
+    }
   },
+  broadcastCommunication:function(npc, message, source, other) {
+    const name = 'signalResponse_' + message
+    if (npc[name]) {
+      npc[name].bind(npc)(source, other)
+    }
+    else if (rpg[name]) {
+      rpg[name].bind(npc)(source, other)
+    }
+    else {
+      log('WARNING: No response for ' + message)
+    }
+  },  
+  
+  signalResponse_test:function(source) { msg("{nv:npc:receive:true} a message from {show:source}.", {npc:this, source:source})},
+  signalResponse_alert:function() { this.alert = true },
+  signalResponse_wake:function() { this.asleep = false },
+  signalResponse_attack:function(source, target) {
+    this.aggressive = true
+    this.target = target ? target.name : player.name
+  },
+
+
+
 
 
   // These are only suitable for attacks the player (and allies) uses; do not use for foes, they will target each other!
 
-  // Get a list of foes in the current room, with target first (whether a foe or not)
-  getFoes:function(target) {
+  // Get a list of foes in the current room.
+  // A foe is any NPC whose allegiance is NOT friend
+  getFoes:function(target) { return rpg.handleGetting(target, function(o) { return o.allegiance !== 'friend' }, true) },
+  getFoesBut:function(target) { return rpg.handleGetting(target, function(o) { return o.allegiance !== 'friend' }, false) },
+
+  // Get a list of hostiles in the current room.
+  // May not work without a parameter to isHostile.
+  getHostiles:function(target) { return rpg.handleGetting(target, function(o) { return o.isHostile() }, true) },
+  getHostilesBut:function(target) { return rpg.handleGetting(target, function(o) { return o.isHostile() }, false) },
+
+  // Get a list of NPCs in the current room
+  getAll:function(target) { return rpg.handleGetting(target, function() { return true }, true) },
+  getAllBut:function(target) { return rpg.handleGetting(target, function() { return true }, false) },
+
+
+  handleGetting:function(target, fn, includeTarget) {
     const l = scopeHereListed().filter(function(el) {
-      return el.npc && el.isHostile() && el !== target;
-    });
-    if (target !== undefined) l.unshift(target);
+      return el.npc && fn(el) && el !== target;
+    })
+    if (target !== undefined && includeTarget) l.unshift(target)
     return l
   },
 
-  // Get a list of NPCs in the current room, with target first
-  getAll:function(target) {
-    const l = scopeHereListed().filter(function(el) {
-      return el.npc && el !== target;
-    });
-    if (target !== undefined) l.unshift(target);
-    return l
-  },
 
-  // Get a list of foes in the current room, excluding target
-  getFoesBut:function(target) {
-    const l = scopeHereListed().filter(function(el) {
-      return el.npc && el.isHostile() && el !== target;
-    });
-    return l
-  },
-
-  // Get a list of NPCs in the current room, excluding target
-  getAllBut:function(target) {
-    const l = scopeHereListed().filter(function(el) {
-      return el.npc && el !== target;
-    });
-    return l
+  pursueToAttack:function(target) {
+    const exit = w[this.loc].findExit(target.loc)
+    if (!exit) return false  // not in adjacent room, so give up
+    // may want to check NPC can use that exit
+    
+    //log("Move " + npc.name + " to " + dest)
+    this.movingMsg(exit) 
+    this.moveChar(exit)
+    return true
   },
 
   isSpellAvailable:function(char, spell) {
@@ -341,43 +345,56 @@ agenda.guardExit = function(npc, arr) {
   return false
 }
 
-
 agenda.guardScenery = function(npc, arr) {
   const item = w[arr.shift()]
   if (item.scenery) return false
   msg(arr.join(':'))
   if (item.loc && w[item.loc] && (w[item.loc].npc || w[item.loc].player)) npc.target = item.loc
+  npc.antagonise(player)
+  npc.delayAgendaAttack = true
   return true
 }
+agenda.guardSceneryNow = function(npc, arr) {
+  const item = w[arr.shift()]
+  if (item.scenery) return false
+  msg(arr.join(':'))
+  if (item.loc && w[item.loc] && (w[item.loc].npc || w[item.loc].player)) npc.target = item.loc
+  npc.antagonise(player)
+  return true
+}
+
+agenda.antagonise = function(npc, arr) {
+  if (arr.length === 0) {
+    npc.antagonise(player)
+  }
+  else if (arr[0] === 'player') {
+    npc.antagonise(player)
+  }
+  else if (arr[0] === 'target') {
+    npc.antagonise(w[npc.target])
+  }
+  else {
+    const target = w[arr[0]]
+    if (!target) return errormsg("Unknown target set for `antagonise` agenda item: " + arr[0])
+    npc.antagonise(target)
+  }
+  return true
+}
+
+
 
 
 
 agenda.ongoingAttack = function(npc, arr) {
-  return agenda.basicAttack(npc, arr)
+  const attack = npc.performAttack(arr)
+  return typeof attack === 'boolean' ? attack : attack.target.dead
 }
 
 agenda.singleAttack = function(npc, arr) {
-  agenda.basicAttack(npc, arr)
+  npc.performAttack(arr)
   return true
 }
 
-agenda.basicAttack = function(npc, arr) {
-  if (arr.length > 0) {
-    if (arr[0] === 'player') {
-      npc.target = player.name
-    }
-    else if (arr[0] !== 'target') {
-      npc.target = arr[0]
-    }
-    arr.shift()
-  }
-  const target = w[npc.target]
-  if (target.dead) return true
-
-  const skill = arr.length > 0 ? rpg.findSkill(random.fromArray(arr)) : undefined
-  Attack.createAttack(npc, player, skill).apply().output()
-  return target.dead
-}
 
   
 

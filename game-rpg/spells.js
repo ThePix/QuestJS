@@ -461,7 +461,7 @@ new SpellSelf("Dispel", {
   icon:'annul',
   description:"Dispels all elementals across the entire world!",
   targetEffect:function(attack) {
-    rpg.broadcast('elementals', 'destroy', 'player')
+    rpg.broadcast('elementals', 'destroy', player)
     return true
   },
 })
@@ -502,9 +502,57 @@ new Spell("Commune with animal", {
   regex:/commune/,
   duration:5,
   automaticSuccess:true,
+  suppressAntagonise:true,
   effect:{
     start:function(target) {
       return target.beast ? "{nv:attacker:can:true} now talk to {nm:target:the} for a short time." : "{nv:attacker:can:true} talk to {nm:target:the} for a short time (like before the spell...)."
+    },
+  },
+})
+
+new Spell("Befriend", {
+  level:4,
+  description:"Can be cast on any character; the character will see the player as his or her friend, and may, therefore, see former friends as foes.",
+  icon:'befriend',
+  regex:/befriend/,
+  automaticSuccess:true,
+  suppressAntagonise:true,
+  effect:{
+    start:function(target) {
+      target.allegiance = 'friend'
+      target.aggressive = false
+      return "{nv:target:will:true} now regard {nm:attacker:the} as a friend."
+    },
+  },
+})
+
+new Spell("Calm", {
+  level:2,
+  description:"Can be cast on any character; the character will stopping attacking, at least for now.",
+  icon:'befriend',
+  regex:/calm/,
+  automaticSuccess:true,
+  suppressAntagonise:true,
+  effect:{
+    start:function(target) {
+      target.aggressive = false
+      return "{nv:target:be:true} no longer aggressive."
+    },
+  },
+})
+
+new Spell("Enrage", {
+  level:2,
+  description:"Can be cast on any character; the character will attack you and no longer consider you a friend! Use with caution.",
+  icon:'enrage',
+  regex:/enrage/,
+  automaticSuccess:true,
+  effect:{
+    start:function(target) {
+      target.aggressive = true
+      target.target = player.name
+      if (target.allegiance === 'friend') target.allegiance = 'foe'
+      return "{nv:target:look:true} angry at you."
     },
   },
 })

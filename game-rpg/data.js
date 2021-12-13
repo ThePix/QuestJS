@@ -157,7 +157,6 @@ createItem("goblin", RPG_NPC(false), {
   damage:"d8",
   health:40,
   signalGroups:['guards'],
-  afterAttack:function() { rpg.broadcast('guards', 'attack', this.name) },
   ex:"A rather small green humanoid; hairless and dressed in rags.",
 })
 
@@ -191,6 +190,7 @@ createItem("rabbit", RPG_BEAST(false), {
   damage:"2d4",
   health:20,
   ex:"{lore:An example of a monster you can talk to after casting the right spell, and is generally not hostile.:With Lore active, you can learn all about rabbit culture... they like carrots.}",
+  allegiance:'friend',
   talk:function() {
     switch (this.talkto_count) {
       case 0 : 
