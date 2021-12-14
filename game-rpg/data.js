@@ -232,11 +232,27 @@ for (const el of elementals) {
 }
 
 
+for (const el of elementals) {
+  new SpellSummon(w['lesser_' + el.name + '_elemental_prototype'], { level:2 + el.level, duration:6, })
+  new SpellSummon(w['greater_' + el.name + '_elemental_prototype'], { level:12 + el.level, duration:6, })
+}
+
+
 createItem("phantasm_prototype", RPG_PHANTOM(), {
   alias:"phantom",
   damage:"1",
   health:1,
 })
+
+
+//-------  SUMMONING SPELLS  -----------
+// Affect inanimate items in the location
+
+
+
+new SpellSummon(w.phantasm_prototype, { level:1, duration:6, })
+
+
 
 
 /*

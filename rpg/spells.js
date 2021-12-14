@@ -397,6 +397,75 @@ new SpellSelf("Kobold Glamour", {
 })
 
 
+const visages = [
+  {name:'Azure', colour:'blue', skin:'sky blue', hair:'royal blue', eyes:'pale blue'},
+  {name:'Vermilion', colour:'red', skin:'blood red', hair:'blood red', eyes:'pink'},
+  {name:'Viridescent', colour:'green', skin:'deep green', hair:'emerald', eyes:'pale green'},
+
+]
+
+for (const visage of visages) {
+  new SpellSelf(visage.name + " Visage", {
+    visage:visage.colour,
+    description:"After casting this spell, the caster will be " + visage.colour + ".",
+    tactical:"Visage spells are purely visual - there is no change in the caster's stats or general size, and caster will not sound any different.",
+    regex:new RegExp(visage.name.toLowerCase()),
+    effect: {
+      category:'visage',
+      visageData:visage,
+      start:function(target) {
+        if (target.visage === this.visage) {
+          return "{nv:target:have:true} still got " + this.visageData.skin + " skin and " + this.visageData.hair + " hair."
+        }
+        target.visage = this.visage
+        target.visageSkin = this.visageData.skin
+        target.visageHair = this.visageData.hair
+        target.visageEyes = this.visageData.eyes
+        return "{nv:target:have:true} now got " + this.visageData.skin + " skin and " + this.visageData.hair + " hair."
+      },
+      finish:function(target) {
+        delete target.visage
+        delete target.visageSkin
+        delete target.visageHair
+        delete target.visageEyes
+        return "{nms:target:the:true} appearance returns to normal."
+      },
+    },
+  })
+}
+
+
+
+
+
+new SpellSelf("Truesight", {
+  targetEffect:function(attack) {
+    const room = w[attack.attacker.loc]
+    let flag = false
+    for (const o of scopeReachable()) {
+      if (typeof o.truesight === "function") {
+        flag = flag || o.truesight()
+      }
+    }
+    if (!flag) attack.msg("It would seem there are no illusions here.", 1)
+  },
+})
+
+new SpellSelf("Cleanse", {
+  targetEffect:function(attack) {
+    const room = w[attack.attacker.loc]
+    let flag = false
+    for (const o of scopeReachable()) {
+      if (typeof o.cleanse === "function") {
+        flag = flag || o.cleanse()
+      }
+    }
+    if (!flag) attack.msg("Nothing here needs cleaning.", 1)
+  },
+})
+
+
+
 
 
 
@@ -469,16 +538,6 @@ new SpellSelf("Dispel", {
 
 
 
-
-//-------  SUMMONING SPELLS  -----------
-// Affect inanimate items in the location
-
-for (const el of elementals) {
-  new SpellSummon(w['lesser_' + el.name + '_elemental_prototype'], { level:2 + el.level, duration:6, })
-  new SpellSummon(w['greater_' + el.name + '_elemental_prototype'], { level:12 + el.level, duration:6, })
-}
-
-new SpellSummon(w.phantasm_prototype, { level:1, duration:6, })
 
 
 
