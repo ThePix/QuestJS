@@ -37,8 +37,11 @@ const lang = {
     MetaUserComment:/^(?:\*|\;)(.+)$/,
     MetaSave:/^save$/,
     MetaSaveGame:/^(?:save) (.+)$/,
+    MetaFileSaveGame:/^(?:fsave) (.+)$/,
     MetaSaveOverwriteGame:/^(?:save) (.+) (?:overwrite|ow)$/,
+    MetaLoad:/^(?:load|reload|restore)$/,
     MetaLoadGame:/^(?:load|reload|restore) (.+)$/,
+    MetaFileLoadGame:/^(?:fload|freload|frestore)$/,
     MetaDir:/^(?:reload|load|restore|dir|directory|ls|save ls|save dir)$/,
     MetaDeleteGame:/^(?:delete|del) (.+)$/,
     MetaUndo:/^undo$/,
@@ -573,6 +576,8 @@ const lang = {
   sl_already_exists:"File already exists. To overwrite an existing file, use SAVE [filename] OVERWRITE or SAVE [filename] OW.",
   sl_file_not_found:"Load failed: File not found.",
   sl_deleted:"Deleted.",
+  sl_file_loaded:"Loaded file \"{filename}\"",
+  sl_bad_format:"Improperly formatted file. Looks like this might be for a game called \"{show:title}\"?",
 
 
 
@@ -668,13 +673,27 @@ const lang = {
   },
 
   saveLoadScript:function() {
-    metamsg("To save your progress, type SAVE [filename]. By default, if you have already saved the game, you will not be permitted to save with the same filename, to prevent you accidentally saving when you meant to load. However, you can overwrite a file with the same name by using SAVE [filename] OVERWRITE or just SAVE [filename] OW.");
-    metamsg("To load your game, refresh/reload this page in your browser, then type LOAD [filename].");
-    metamsg("To see a list of all your QuestJS save games, type DIR or LS. You can delete a saved file with DELETE [filename] or DEL [filename].");
-    metamsg("Games are saved on your computer in a special area for the browser called \"Web Storage\" or \"LocalStorage\".");
-    metamsg("NOTE: If you clear your browsing data (or have your browser set to do so automatically when the browser is closed) you will lose your saved games.");
+    if (!settings.localStorageDisabled) {
+      metamsg("QuestJS offers players two ways to save your progress - to LocalStorage or to file.")
+
+      metamsg("{b:Saving To LocalStorage}")
+      metamsg("LocalStorage is a part of your computer the browser has set aside; this is the easier way to save.")
+      metamsg("Note, however, that if you clear your browsing data (or have your browser set to do so automatically when the browser is closed) you will lose your saved games. There is also a limit to how much can be saved to LocalStorage, and if this is a big game, you may not be allowed to save to LocalStorage.")
+      metamsg("To save your progress to LocalStorage, type {class:help-eg:SAVE [filename]}. By default, if you have already saved the game, you will not be permitted to save with the same filename, to prevent you accidentally saving when you meant to load. However, you can overwrite a file with the same name by using {class:help-eg:SAVE [filename] OVERWRITE} or just {class:help-eg:SAVE [filename] OW}.");
+      metamsg("To load your game, refresh/reload this page in your browser, then type {class:help-eg:LOAD [filename]}.");
+      metamsg("To see a list of all your QuestJS save games, type {class:help-eg:DIR} or {class:help-eg:LS}. You can delete a saved file with {class:help-eg:DELETE [filename]} or {class:help-eg:DEL [filename]}.")
+
+      metamsg("{b:Saving To File}")
+      metamsg("Alternatively you can save the game as a file on your computer. It is a little more hassle, but probably more reliable.")
+    }
+    metamsg("To save your progress to file, type {class:help-eg:FSAVE [filename]}. The file will be saved to wherever downloaded files get saved on your computer. If there is already a file with that name, the browser will probably append a number to the name.");
+    metamsg("To load your game, refresh/reload this page in your browser, then type {class:help-eg:FLOAD}. A dialog will open up, allowing you to navigate to the downloads folder and select your file.")
+    metamsg("There is no built-in facility to list or delete games saved as files, though you can delete through your normal file manager.")
+
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
+
+
 
   transcriptScript:function() {
     metamsg("The TRANSCRIPT or SCRIPT commands can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.")

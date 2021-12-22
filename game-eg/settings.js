@@ -22,6 +22,8 @@ settings.styleFile = 'style'
 
 //settings.libraries.push('item_links')
 
+//settings.localStorageDisabled = true
+
 settings.textEffectDelay = 100
 
 settings.symbolsForCompass = true
