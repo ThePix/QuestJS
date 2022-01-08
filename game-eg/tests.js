@@ -559,6 +559,20 @@ test.tests = function() {
   w.Buddy.age = 15
   test.assertEqual("Buddy is fifteen.", processText("Buddy is {number:player:age}."))
   
+  test.title("Text processor 12: contents")
+  test.assertEqual("You see nothing.", processText("You see {contents:cardboard_box:,:and:nothing}."))
+  test.assertEqual("You see nothing.", processText("You see {contents:item:,:and:nothing}.", {item:w.cardboard_box}))
+  test.assertEqual("You see nothing.", processText("You see {contents:item:,:and:nothing}.", {item:'cardboard_box'}))
+  w.coin.loc = 'cardboard_box'
+  w.small_key.loc = 'cardboard_box'
+  w.canteen.loc = 'cardboard_box'
+  test.assertEqual("You see a canteen, a coin and a small key.", processText("You see {contents:cardboard_box:,:and:nothing}."))
+  test.assertEqual("You see a canteen - a coin - a small key.", processText("You see {contents:cardboard_box: -:-:nothing}."))
+  w.coin.loc = 'lounge'
+  w.small_key.loc = 'lounge'
+  w.canteen.loc = 'lounge'
+
+
   test.title("Numbers");
   test.assertEqual("fourteen", lang.toWords(14));
   test.assertEqual("minus four hundred and three", lang.toWords(-403));

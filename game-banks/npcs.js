@@ -153,7 +153,7 @@ createItem("Xsansi", NPC(true), {
         if (w.Xsansi.currentPlanet < 3) {
           const list = [];
           for (let key in w) {
-            if (w[key].vacuum === true && !w[key].isSpace) {
+            if (w[key].vacuum === true && !w[key].notOnShip) {
               list.push(w[key].alias);
             }
           }
@@ -190,13 +190,16 @@ createItem("Xsansi", NPC(true), {
         else {
           let s = "Satellites are controlled by Kyle, the mission specialist for communications. They are designed for remote observation of a planet, as well as listening to radio-frequency broadcasts across a broad spectrum. Standard procedure requires that a satellite is launched upon arrival at the planet. It should not be necessary to launch more; one spare is however available if required. "
           if (w.Kyle.deployProbeAction === 0) {
-            s += "'The satellite for {planet} has yet to be deployed.'"
+            s += "The satellite for {planet} has yet to be deployed.'"
+          }
+          else if (w.Kyle.deployProbeAction === 4) {
+            s += "The satellite for {planet} is orbiting the planet.'"
           }
           else if (w.Kyle.deployProbeAction === 5) {
-            s += "'The satellite for {planet} is orbiting the planet.'"
+            s += "The satellite for {planet} is in orbit, and scanning the planet.'"
           }
           else {
-            s += "'The satellite for {planet} is in transit to the planet.'"
+            s += "The satellite for {planet} is in transit to the planet.'"
           }
           msg(s)
         }

@@ -1,6 +1,15 @@
 Notes
 
-The ship damage
+Currently the vacuum system assumes crew members never go in the airlock. sections can only be depressurised if the crew are in stasis.
+
+
+Chapter 1: A Planet to Survey
+
+
+
+
+
+Chapter 2: The Damaged Ship
 
 Need a set of external locations for space walk.
 Need a way to fix the holes
@@ -13,8 +22,7 @@ Option to revive someone to help or do it
 
 
 
-
-The artefact
+Chapter 3: The Artefact
 
 Need to approach it
 
@@ -27,13 +35,13 @@ kyle, (make) ai approach (artefact|ship|vessel)
 
 
 
-The mad AI
+The Chapter 4: The mad AI
 
 
 
 
 
-The colonised planet
+Chapter 5: Beaten To The Post
 
 
 

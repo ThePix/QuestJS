@@ -217,13 +217,21 @@ function handlePressurise(char, objects, pressurise) {
     metamsg("You need to ask Xsansi to pressurise or depressurise any part of the ship.")
     return world.FAILED
   }
+  
   // I am counting these as successes as the player has successfully made the request, even if it was refused
   if (char.name !== "Xsansi") {
+    msg("'{nm:char}, {if:pressurise:pressurise:depressurise} {nm:baseRoom:the},' you say.", {char:char, pressurise:pressurise, baseRoom:baseRoom})
     msg("'You need to ask Xsansi to pressurise or depressurise any part of the ship.'")
     return world.SUCCESS
   }
+  msg("'Xsansi, {if:pressurise:pressurise:depressurise} {nm:baseRoom:the},' you say.", {pressurise:pressurise, baseRoom:baseRoom})
   if (baseRoom.isSpace) {
-    msg("'Scientists estimates the volume of space to be infinite. The ship does not have sufficient air to pressure space.'")
+    if (pressurise) {
+      msg("'Scientists estimates the volume of space to be infinite. The ship does not have sufficient air to pressure space.'")
+    }
+    else {
+      msg("'Space is already depressurised.'")
+    }
     return world.SUCCESS
   }
   const mainRoom = (typeof baseRoom.vacuum === "string" ? w[baseRoom.vacuum] : baseRoom)
@@ -233,6 +241,11 @@ function handlePressurise(char, objects, pressurise) {
   }
   if (!w.Xsansi.pressureOverride && mainRoom.name !== "airlock" && !pressurise) {
     msg("'Safety interlocks prevent depressurising parts of the ship while the crew are active.'")
+    return world.SUCCESS
+  }
+  // !!! Note that this assumes crew members never go in the airlock
+  if (mainRoom.name === "airlock" && !pressurise && player.loc === "airlock" && !w.your_spacesuit.worn) {
+    msg("'Safety interlocks prevent depressurising the airlock whilst personnel are inside it without spacesuits.'")
     return world.SUCCESS
   }
   if (!pressurise) {
@@ -364,8 +377,7 @@ findCmd('MetaHelp').script = function() {
   metamsg("Help is available on a number of topics...")
   metamsg("Do {color:red:HELP GENERAL} or {color:red:? GEN} for general instructions on playing parser games")
   metamsg("{b:Commands to help you play this game:}")
-  metamsg("Do {color:red:HELP GAME} for suggestions on what to actually do. You could also try {color:red:HELP NPC} for how to interacting with other characters, {color:red:HELP PROBE} to learn about deploying probes, and {color:red:HELP STASIS} for more on stasis pods (and hence travel to the next planet).")
-  if (w.Xsansi.currentPlanet !== 0) metamsg("You might want to try {color:red:HELP VACUUM} to discover how to handle the cold vacuum of space of {color:red:HELP SEALANT} for how to use the spray sealant.")
+  metamsg("Do {color:red:HELP GAME} for suggestions on what to actually do. You could also try {color:red:HELP NPC} for how to interacting with other characters, {color:red:HELP PROBE} to learn about deploying probes, and {color:red:HELP STASIS} for more on stasis pods (and hence travel to the next planet). You might want to try {color:red:HELP VACUUM} to discover how to handle the cold vacuum of space of {color:red:HELP SEALANT} for how to use the spray sealant.")
   if (w.alienShip.status > 0) metamsg("You could also do {color:red:HELP DOCKING}.")
   metamsg("{b:Meta-information about the game:}")
   metamsg("Do {color:red:HELP UNIVERSE} for some notes about the universe the game is set in, {color:red:HELP SYSTEM} to read about the game system, and {color:red:HELP CREDITS} for credits.")
@@ -440,7 +452,8 @@ commands.push(new Cmd('HelpSubject', {
       regex:/^(vacuum|d?e?pressur|evacuat)/,
       script:function() {
         metamsg("{b:Vacuum:}")
-        metamsg("Each section of the ship can be pressurised or depressurised by Xsansi, just ask {color:red:XSANSI, PRESSURIZE THE CARGO BAY} or {color:red:AI, DEPRESSURISE ENGINEERING}. You can use {color:red:PRES} and {color:red:DEPRES} as shortcuts too. Note that safety overrides may prevent Xsansi from complying.")
+        metamsg("Each section of the ship can be pressurised or depressurised by Xsansi, just ask {color:red:XSANSI, PRESSURIZE THE CARGO BAY} or {color:red:AI, DEPRESSURISE ENGINEERING}. You can use {color:red:PRES} and {color:red:DEPRES} as shortcuts too. Note that safety overrides may prevent Xsansi from complying. You will be unable to depressurise any room other than the airlock whilst the crew are out of stasis, and you will be unable to depressurise the airlock whilst you are in it unless you have a spacesuit on.")
+        metamsg("You will not be able to move from one area to another if one is pressurised and the other is not.")
         metamsg("To find out what areas are pressurised, {color:red: ASK XSANSI ABOUT WHERE IS PRESSURISED} or {color:red:ASK AI ABOUT VACUUM}.")
       },
     },

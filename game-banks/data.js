@@ -25,7 +25,11 @@ createItem("me", PLAYER(), {
     if (ex.name === '_') return true
     let room2 = w[ex.name]
     if (typeof room2.vacuum === "string") room2 = w[room2.vacuum]
+    
     if (room1.vacuum === room2.vacuum) return true
+    
+    if (room2.name === 'space') return falsemsg("The external airlock door cannot be opened while the airlock is pressurised.")
+    
     msg("The door to " + lang.getName(room2, {article:DEFINITE}) + " will not open while it is " + (room1.vacuum ? 'pressurised' : 'depressurised') + " and " + lang.getName(room1, {article:DEFINITE}) + " is not.")
     return false
   },
@@ -44,7 +48,7 @@ createItem("your_jumpsuit", WEARABLE(2, ["body"]), {
   examine:"Your jumpsuit is tight, but comfortable; a dark grey colour, with a slight metallic sheen.",
   afterMove:function(options) {
     if (options.fromLoc === "stasis_pod_drawer") {
-      w.stasis_pod_drawer.loc = false
+      w.stasis_pod_drawer.closed = true
       msg("The stasis pod drawer slides shut.");
     }
   },
@@ -116,12 +120,12 @@ createItem("stasis_pod", {
   },
 });
 
-createItem("stasis_pod_drawer", CONTAINER(false), {
+createItem("stasis_pod_drawer", CONTAINER(true), {
   alias:"drawer",
   scenery:true,
   loc:"stasis_bay",
   closed:false,
-  examine:"The drawer extends out from the foot of the pod; it is white and quite shallow, and almost the width of the pod.{ifHere:pile_of_vomit: Fortunately, it is well away from the vomit.}",
+  examine:"{if:stasis_pod_drawer:closed:The drawer is flush with the stasis pod, almost invisible.:The drawer extends out from the foot of the pod; it is white and quite shallow, and almost the width of the pod. You can see {contents:stasis_pod_drawer:,:and:nothing} stored in it.{ifHere:pile_of_vomit: Fortunately, it is well away from the vomit.}}",
 });
 
 createItem("stasis_locker", CONTAINER(true), {
@@ -130,10 +134,10 @@ createItem("stasis_locker", CONTAINER(true), {
   loc:"stasis_bay",
   examine:function() {
     if (this.closed) {
-      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: (if there is an emergency, you want the spacesuits by the stasis pods)}.");
+      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored{once: - if there is an emergency, you want the spacesuits by the stasis pods}.");
     }
     else {
-      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored. Inside you can see " + formatList(this.getContents(world.LOOK), {lastJoiner:lang.list_and, article:INDEFINITE}) + ".");
+      msg("This metal locker is taller than you, and just as wide; it is where spacesuits are stored. You can see {contents:stasis_locker:,:and:nothing} stored in it.")
     }
   },
   spray:function(char) {
@@ -147,7 +151,7 @@ createItem("your_spacesuit", WEARABLE(2, ["body"]), {
   loc:"stasis_locker",
   defArticle:"your",
   indefArticle:"your",
-  examine:"Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility. It says \"{nm:player}\" on the back.",
+  examine:"Your spacesuit is a pale grey colour, with bright yellow flashes on the arms and legs for visibility. It says \"{show:player:alias}\" on the back.",
   spray:function(char) {
     msg("")
   },
@@ -248,7 +252,7 @@ createItem("stasis_pod_interior",
 createRoom("cargo_bay", {
   deckName:'layer1',
   svgId:'rect2758',
-  desc:"The cargo bay is a large, open area, with numerous crates, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to port, whilst engineering is aft. The stasis bay is forward, and to starboard, stairs lead up to the top deck, where the living quarters are.",
+  desc:"The cargo bay is a large, open area, with numerous crates, several with their own stasis fields. Yellow lines on the floor indicate access ways to be kept clear. The ship's airlock is to starboard, whilst engineering is aft. The stasis bay is forward, and to port, stairs lead up to the top deck, where the living quarters are.",
   vacuum:false,
   forward:new Exit("stasis_bay"),
   port:new Exit("top_deck_aft", {
@@ -578,6 +582,7 @@ createRoom("space", {
   desc:"You are floating in space, holding on to a handle on the side of the {i:Joseph Banks}. {once:You are very conscious of the fact that heading further out into space would be a {i:very bad idea}, as there would be no way to get back to the ship.} The view takes your breath away; the planet looming over head, and billions of stars. It is amazing to think that each is vastly bigger than the planet, and so far away your mind cannot really comprehend the distance.",
   vacuum:true,
   deckName:'space',
+  isSpace:true,
   notOnShip:true,
   properNoun:true,
   port:new Exit("airlock", {alsoDir:["in"]}),

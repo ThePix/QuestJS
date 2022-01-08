@@ -488,7 +488,8 @@ function updateMap() {
   const currentDeck = w[player.loc].deckName
   document.querySelector('#map').setAttribute('title', 'The Joseph Banks, ' + settings.deckNames[currentDeck]);
   if (!currentDeck) return errormsg("No deckName for " + player.loc)
-  document.querySelector('#' + currentDeck).style.display = 'block'
+  let el = document.querySelector('#' + currentDeck)
+  if (el) el.style.display = 'block'
   for (let key in w) {
     if (w[key].svgId) document.querySelector('#' + w[key].svgId).style.fill = isRoomPressured(w[key]) ? '#777' : '#222'
   }
