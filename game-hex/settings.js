@@ -30,8 +30,8 @@ settings.mapAndImageCollapseAt = 1000
 settings.mapStyle = {
   right:'0',
   top:'0',
-  width:'390px',
-  height:'400px',
+  width:'500px',
+  height:'500px',
   //width:'100px',
   //height:'100px',
   border:'3px black solid',
@@ -52,6 +52,38 @@ settings.mapClick = function(x, y) {
 
 
 settings.mapDrawLabels = true
-settings.mapLabelColour = 'blue'
-settings.mapLabelOffset = 15
-settings.mapLabelRotate = -20
+//settings.mapLabelColour = 'blue'
+settings.mapLabelOffset = -8
+settings.mapLabelRotate = -10
+
+settings.mapXOffset1 = 8
+settings.mapXOffset2 = 16
+settings.mapYOffset = 14
+settings.mapHexStroke = '#fff'
+settings.mapHexStrokeWidth = 4
+settings.mapDefaultColour = 'deepskyblue'
+settings.mapRiverColour = 'dodgerblue'
+
+
+settings.mapReportRepeats = true
+
+settings.mapBiomes = {
+  G:{name:'grassland', colour:'palegreen',},
+  S:{name:'savanna', colour:'yellowgreen',},
+  D:{name:'deciduous forest', colour:'olivedrab',},
+  C:{name:'coniferous forest', colour:'darkgreen',},
+  R:{name:'rain forest', colour:'olive',},
+  M:{name:'marsh', colour:'teal',},
+  C:{name:'chaparral', colour:'burlywood',},
+  H:{name:'heath', colour:'sandybrown',},
+
+  s:{name:'sea', colour:'powderblue',},
+  m:{name:'mountains', colour:'darkgrey',},
+  l:{name:'lavafield', colour:'orange',},
+  d:{name:'desert', colour:'khaki',},
+  t:{name:'tundra', colour:'blanchedalmond',},
+  a:{name:'artic', colour:'white',},
+  r:{name:'reef', colour:'pink',},
+}
+
+
