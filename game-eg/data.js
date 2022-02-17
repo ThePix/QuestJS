@@ -836,6 +836,19 @@ createItem("Kyle", NPC(false),
         msg("You tell " + this.alias + " the weather is bad; he shakes his head sadly.")
       },
     },
+    {
+      alias:"Lead me to the garden",
+      showTopic:true,
+      name:'kyle_to_garden',
+      script:function() {
+        msg("'Can you show me where the garden is?'")
+        msg("'No problem,' says Kyle.")
+        w.Kyle.agenda = [
+          "leadTo:garden",
+          "waitFor:player:'So here we are,' says Kyle.",
+        ]
+      },
+    },
   ],
 
   
