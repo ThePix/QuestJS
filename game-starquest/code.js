@@ -122,7 +122,7 @@ const newVerbs = [
 for (let el of newVerbs) {
   commands.unshift(new Cmd(el.name, {
     regex:new RegExp('^' + el.name.toLowerCase() + ' (.+)$'),
-    attName:el.name.toLowerCase().replace(/ /g, ''),
+    attName:verbify(el.name),
     objects:[
       {scope:el.scopeHeld ? parser.isHeld : parser.isHere},
     ],

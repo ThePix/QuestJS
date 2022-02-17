@@ -72,7 +72,7 @@ const smartPhoneFunctions = ["Contacts", "Take photo", "Photo gallery", "Search 
 for (let el of smartPhoneFunctions) {
   commands.unshift(new Cmd(el, {
     regex:new RegExp('^' + el.toLowerCase() + ' (.+)$'),
-    attName:el.toLowerCase().replace(/ /g, ''),
+    attName:verbify(el),
     objects:[
       {scope:parser.isHeld},
     ],
