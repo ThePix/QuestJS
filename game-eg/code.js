@@ -142,7 +142,7 @@ commands.unshift(new Cmd('EgKick', {
     {special:'ignore'},
     {scope:parser.isPresent}
   ],
-  defmsg:"{pn:char:kick:true} {ob:item}, but nothing happens.",
+  defmsg:"{pv:char:kick:true} {ob:item}, but nothing happens.",
 }));
 
 
