@@ -698,7 +698,7 @@ const lang = {
   transcriptScript:function() {
     metamsg("The TRANSCRIPT or SCRIPT commands can be used to handle recording the input and output. This can be very useful when testing a game, as the author can go back through it and see exactly what happened, and how the user got there.")
     metamsg("Use SCRIPT ON to turn on recording and SCRIPT OFF to turn it off. To clear the stored data, use SCRIPT CLEAR. To clear the old data and turn recording on in one step, use SCRIPT START.")
-    metamsg("Use SCRIPT SHOW to display it - it will appear in a new tab; you will not lose your place in the game. Some browsers (Firefox especially) may block the new tab, but will probably give the option to allow it in a banner at the top. You will prpobably need to do the command again.")
+    metamsg("Use SCRIPT SHOW to display it - it will appear in a new tab; you will not lose your place in the game. Some browsers (Firefox especially) may block the new tab, but will probably give the option to allow it in a banner at the top. You will probably need to do the command again.")
     metamsg("You can add a comment to the transcript by starting your text with an asterisk, {code:*}, or semi-colon, {code:;}, - Quest will record it, but otherwise just ignore it.")
     metamsg("Everything gets saved to \"LocalStorage\", so will be saved between sessions. If you complete the game the text input will disappear, however if you have a transcript recording, a link will be available to access it.");
     metamsg("Transcript is currently: " + (io.transcript ? 'on' : 'off'))
@@ -790,8 +790,8 @@ const lang = {
     male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his", reflexive:"himself"},
     female:{subjective:"she", objective:"her", possessive: "hers", poss_adj: "her", reflexive:"herself"},
     plural:{subjective:"they", objective:"them", possessive: "theirs", poss_adj: "their", reflexive:"themselves"},
-    firstperson:{subjective:"I", objective:"me", possessive: "mine", poss_adj: "my", reflexive:"myself", possessive_name:'my'},
-    secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your", reflexive:"yourself", possessive_name:'your'},
+    firstperson:{subjective:"I", objective:"me", possessive: "mine", poss_adj: "my", reflexive:"myself"},
+    secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your", reflexive:"yourself"},
   },
 
 
@@ -941,10 +941,11 @@ const lang = {
   // Returns "the " if appropriate for this item.
   // If the item has 'defArticle' it returns that; if it has a proper name, returns an empty string.
   addDefiniteArticle:function(item) {
-    if (item.defArticle) {
-      return item.defArticle + " ";
-    }
-    return item.properNoun ? "" : "the ";
+    // test if player exists yet in case this is used during item creation
+    if (player && item.owner === player.name) return player.pronouns.poss_adj + " "
+    if (item.owner) return lang.getName(w[item.owner], {possessive:true}) + " "
+    if (item.defArticle) return item.defArticle + " "
+    return item.properNoun ? "" : "the "
   },
 
   //@DOC
@@ -952,22 +953,15 @@ const lang = {
   // If the item has 'indefArticle' it returns that; if it has a proper name, returns an empty string.
   // If it starts with a vowel, it returns "an ", otherwise "a ".
   addIndefiniteArticle:function(item) {
-    if (item.indefArticle) {
-      return item.indefArticle + " ";
-    }
-    if (item.properNoun) {
-      return "";
-    }
-    if (item.pronouns === lang.pronouns.plural) {
-      return "some ";
-    }
-    if (item.pronouns === lang.pronouns.massnoun) {
-      return "";
-    }
-    if (/^[aeiou]/i.test(item.alias)) {
-      return "an ";
-    }
-    return "a ";
+    // test if player exists yet in case this is used during item creation
+    if (player && item.owner === player.name) return player.pronouns.poss_adj + " "
+    if (item.owner) return lang.getName(w[item.owner], {possessive:true}) + " "
+    if (item.indefArticle) return item.indefArticle + " "
+    if (item.properNoun) return ""
+    if (item.pronouns === lang.pronouns.plural) return "some "
+    if (item.pronouns === lang.pronouns.massnoun) return ""
+    if (/^[aeiou]/i.test(item.alias)) return "an "
+    return "a "
   },
 
   addArticle:function(item, type){

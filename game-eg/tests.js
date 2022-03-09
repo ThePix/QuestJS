@@ -163,6 +163,14 @@ test.tests = function() {
   test.assertEqual("book", lang.getName(w.book));
   test.assertEqual("the book", lang.getName(w.book, {article:DEFINITE}));
   test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
+  w.book.owner = 'Buddy'
+  test.assertEqual("your book", lang.getName(w.book, {article:DEFINITE}));
+  test.assertEqual("Your book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
+  w.book.owner = 'Kyle'
+  test.assertEqual("Kyle's book", lang.getName(w.book, {article:DEFINITE}));
+  test.assertEqual("Kyle's book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
+  delete w.book.owner  
+  
   test.assertEqual("you", lang.getName(w.Buddy));
   test.assertEqual("You", lang.getName(w.Buddy, {article:INDEFINITE, capital:true}));
   test.assertEqual("Five bricks", lang.getName(w.brick, {brick_count:5, capital:true, article:INDEFINITE}));
