@@ -130,7 +130,7 @@ createItem("charger", {
   examine: "A device bigger than a washing machine to charge a torch? It has a compartment and a button. {charger_state}.", 
 })
 
-createItem("charger_compartment", COMPONENT("charger"), CONTAINER(false), {
+createItem("charger_compartment", COMPONENT("charger"), CONTAINER(true), {
   alias:"compartment",
   examine:"The compartment is just the right size for the torch. It is {if:charger_compartment:closed:closed:open}.",
   testDropIn:function(options) {
@@ -145,10 +145,10 @@ createItem("charger_button", COMPONENT("charger"), {
   examine:"A big red button.",
   alias:"button",
   push:function(options) {
-    if (!w.charger_compartment.closed || w.flashlight.loc !== "charger_compartment") return falsemsg("{pv:char:push:true} the button, but nothing happens.", options)
+    if (!w.charger_compartment.closed || w.torch.loc !== "charger_compartment") return falsemsg("{pv:char:push:true} the button, but nothing happens.", options)
 
     msg("{pv:char:push:true} the button. There is a brief hum of power, and a flash.", options)
-    w.flashlight.power = 20
+    w.torch.power = 20
     return true
   },
 })
