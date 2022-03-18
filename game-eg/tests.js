@@ -509,10 +509,17 @@ test.tests = function() {
   test.assertEqual("Kyle is red.", processText("Kyle is {cycleWrap:Kyle:colour:red:green:blue}."))
   test.assertEqual("Kyle is green.", processText("Kyle is {cycleWrap:Kyle:colour:red:green:blue}."))
 
-  w.Kyle.colours = ['red', 'green', 'blue']
   w.Kyle.colour = 1
   test.assertEqual("Kyle is green.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
   test.assertEqual("Kyle is blue.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
+  test.assertEqual("Kyle is red.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
+  test.assertEqual("Kyle is green.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
+  
+  delete w.Kyle.colour
+  test.assertEqual("Kyle is red.", processText("Kyle is {cycle:Kyle:colour:red:green:blue}."))
+  test.assertEqual("Kyle is green.", processText("Kyle is {cycle:Kyle:colour:red:green:blue}."))
+  
+  delete w.Kyle.colour
   test.assertEqual("Kyle is red.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
   test.assertEqual("Kyle is green.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
   
