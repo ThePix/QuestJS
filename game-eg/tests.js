@@ -496,6 +496,28 @@ test.tests = function() {
   test.assertEqual("Kyle is red.", processText("Kyle is {selectEnd:Kyle:colour:green:blue:red}."));
   w.Kyle.colour = 0
 
+  test.title("Text processor 7a: cycle");
+  w.Kyle.colour = 1
+  test.assertEqual("Kyle is green.", processText("Kyle is {cycle:Kyle:colour:red:green:blue}."))
+  test.assertEqual("Kyle is blue.", processText("Kyle is {cycle:Kyle:colour:red:green:blue}."))
+  test.assertEqual("Kyle is .", processText("Kyle is {cycle:Kyle:colour:red:green:blue}."))
+  test.assertEqual("Kyle is .", processText("Kyle is {cycle:Kyle:colour:red:green:blue}."))
+
+  w.Kyle.colour = 1
+  test.assertEqual("Kyle is green.", processText("Kyle is {cycleWrap:Kyle:colour:red:green:blue}."))
+  test.assertEqual("Kyle is blue.", processText("Kyle is {cycleWrap:Kyle:colour:red:green:blue}."))
+  test.assertEqual("Kyle is red.", processText("Kyle is {cycleWrap:Kyle:colour:red:green:blue}."))
+  test.assertEqual("Kyle is green.", processText("Kyle is {cycleWrap:Kyle:colour:red:green:blue}."))
+
+  w.Kyle.colours = ['red', 'green', 'blue']
+  w.Kyle.colour = 1
+  test.assertEqual("Kyle is green.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
+  test.assertEqual("Kyle is blue.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
+  test.assertEqual("Kyle is red.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
+  test.assertEqual("Kyle is green.", processText("Kyle is {cycleWrap:Kyle:colours:colour}."))
+  
+  w.Kyle.colour = 0
+
 
   test.title("Text processor 8: dialogue");
   w.Kyle.dialogueStyle = 'color:magenta'
