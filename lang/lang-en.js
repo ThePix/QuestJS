@@ -780,6 +780,9 @@ const lang = {
   tp_true:'true',
 
 
+  // Use this to stop commands getting saved to the walkthrough - note the space at the end
+  noWalkthroughRegex:/^(script|transcript) /,
+
 
   //----------------------------------------------------------------------------------------------
   // Language constructs
