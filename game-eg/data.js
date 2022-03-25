@@ -41,6 +41,9 @@ createRoom("lounge", {
     {alias:['old settee', 'couch', 'sofa']},
     {alias:'rug', examine:'It might have been blue at one time. Maybe.'},
   ],
+  beforeEnter:function() {
+    msg("'here'")
+  }
 });
 
 
