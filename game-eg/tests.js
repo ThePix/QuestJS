@@ -201,13 +201,29 @@ test.tests = function() {
     test.assertEqual(false, random.chance(0));
   }
   
-  test.title("Random primed")
-  random.prime(19)
-  test.assertEqual(19, random.int())
-  random.prime([3, 8])
-  test.assertEqual(11, random.dice('2d6'))
 
-  
+  test.title("Random dice")
+  random.prime([19, 3])
+  test.assertEqual(22, random.dice('2d20'))
+  random.prime([19, 3])
+  test.assertEqual(25, random.dice('2d20+3'))
+  random.prime([19, 3, 5])
+  test.assertEqual(27, random.dice('2d20+d6'))
+  random.prime([19, 3, 5])
+  test.assertEqual(22, random.dice('3d20-5'))
+  random.prime([19, 3, 5])
+  test.assertEqual(19, random.dice('3d20h2-5'))
+  random.prime([19, 3, 5])
+  test.assertEqual(8, random.dice('3d20L+5'))
+  random.prime([6, 3, 5, 2])
+  test.assertEqual(16, random.dice('3d6E'))
+  random.prime([6, 3, 5, 6, 6, 2])
+  test.assertEqual(28, random.dice('3d6E'))
+  random.prime([6, 3, 5, 3, 2])
+  test.assertEqual(19, random.dice('3d6E5'))
+  test.assertEqual([6, 3, 5, 3, 2], random.diceLog)
+
+
   
   test.title("array.compare");
   test.assertEqual(false, array.compare([1, 2, 4, 6, 7], [1, 2, 3]));
@@ -926,6 +942,8 @@ test.tests = function() {
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("drop clock", "You drop the clock.");
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock and a trapdoor here.", "You can go north or west."]);
+  
+  
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, a canteen, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and a small key here.", "You can go east, south, up or west."]);
  
 
