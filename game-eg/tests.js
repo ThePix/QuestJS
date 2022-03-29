@@ -219,12 +219,19 @@ test.tests = function() {
   test.assertEqual(16, random.dice('3d6E'))
   random.prime([6, 3, 5, 6, 6, 2])
   test.assertEqual(28, random.dice('3d6E'))
+  random.prime([6, 3, 5, 6, 6, 2])
+  test.assertEqual(20, random.dice('3d6e'))
   random.prime([6, 3, 5, 3, 2])
   test.assertEqual(19, random.dice('3d6E5'))
   test.assertEqual([6, 3, 5, 3, 2], random.diceLog)
+  log('--------------------')
+  random.prime([6, 3, 5, 6, 6, 2])
+  test.assertEqual(4, random.dice('6d6C5'))
+  random.prime([6, 3, 5, 6, 6, 2])
+  test.assertEqual(3, random.dice('6d6c5'))
 
 
-  
+  /*
   test.title("array.compare");
   test.assertEqual(false, array.compare([1, 2, 4, 6, 7], [1, 2, 3]));
   test.assertEqual(true, array.compare([1, 2, 4], [1, 2, 4]));
