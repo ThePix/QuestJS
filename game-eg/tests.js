@@ -1481,6 +1481,9 @@ test.tests = function() {
   test.assertCmd("x rope", ["The rope is about 40' long. One end is tied to the broken chair. The other end is held by you."])
   
   test.assertCmd("tie rope to chair", ["It already is."])
+  test.assertCmd("tie chair to rope", ["You cannot attach that to anything."])
+  
+  
   test.assertCmd("untie rope from chair", ["You detach the rope from the broken chair."])
   test.assertCmd("untie rope from chair", ["The rope is not attached to the broken chair."])
   test.assertEqual(['Buddy'], w.rope.locs)
