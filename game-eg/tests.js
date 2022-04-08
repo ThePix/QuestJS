@@ -1769,7 +1769,7 @@ test.tests = function() {
   w.light_switch.switchedon = true
   world.update()
   test.assertCmd("tell kyle to go through trapdoor", ["Kyle disappears through the trapdoor."])
-  test.assertCmd("go through trapdoor", ["You go through the trapdoor, and down the ladder.", "The basement", "A dank room, with piles of crates everywhere.", "You can see a crates, Kyle (holding a clock; wearing a straw boater), a ladder and a light switch here.", "You can go up."])
+  test.assertCmd("go through trapdoor", ["You go through the trapdoor, and down the ladder.", "The basement", "A dank room, with piles of crates everywhere.", "You can see some crates, Kyle (holding a clock; wearing a straw boater), a ladder and a light switch here.", "You can go up."])
   test.assertCmd("tell kyle to climb ladder", ["Kyle leaves the basement, heading up."])
   test.assertCmd("go up ladder", ["You head up.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table, a camera, Kyle (holding a clock; wearing a straw boater) and a trapdoor (open) here.", "You can go down, north or west."])
 

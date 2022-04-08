@@ -489,6 +489,7 @@ const lang = {
   already:"{sb:item:true} already {cj:item:be}.",
   default_examine:"{pv:item:be:true} just your typical, every day {nm:item}.",
   not_enough:"There {ifMoreThan:count:1:are:is} only {show:count} {nm:item}.",
+  it_is_dark:"It is dark.",
   
   error:"Oh dear, I seem to have hit an error trying to handle that (F12 for more details).",
   

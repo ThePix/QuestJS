@@ -429,7 +429,7 @@ createItem("kitchen_sink", {
 
 createRoom("basement", {
   desc:"A dank room, with piles of crates everywhere.",
-  darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
+  //darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
   up:new Exit('kitchen', {isHidden:function() { return false; } }),
   lightSource:function() {
     return w.light_switch.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
@@ -461,6 +461,7 @@ createItem("ladder", {
 createItem("crates", {
   loc:"basement",
   examine:"A bunch of old crates.",
+  pronouns:lang.pronouns.plural,
   move:function() {
     msg("You move the crates, so the light switch is accessible.");
     this.moved = true;
@@ -537,10 +538,14 @@ createRoom("bedroom", {
   hint:"The bedroom has a variety of garments that can be put on - in the right order.",
 })
 
-createItem("wardrobe", DEFAULT_ROOM, {
-  out:new Exit("bedroom"),
+createItem("wardrobe_item", {
+  alias:"wardrobe",
   loc:"bedroom",
   examine:"It is so big you could probably get inside it.",
+})
+
+createRoom("wardrobe", {
+  out:new Exit("bedroom"),
   desc:"Oddly empty of fantasy worlds.",
 })
 

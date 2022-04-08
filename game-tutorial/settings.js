@@ -44,7 +44,7 @@ settings.setup = function() {
   tmsg("This is a simple introduction to text adventures; comments like this will lead you by the hand as you do most of the common things in a text adventures (you can toggle these comments on and off with the TUTORIAL command).")
   tmsg("Text adventures are also known as interactive fiction, and there are numerous formats. This is about parser-based game, which is to say, a game where the user types commands, and the game attempts to parse the command, and update the game world accordingly.")
   tmsg("There is also a huge variety of parser-based games, but most start with some introductory text, as above, and then place the player in a starting location, so let's see where we are...")
-  tmsg("I suggest you type WAIT now (by he way, I will give commands you type in capitals; you can use upper or lower case as you prefer -input is not case sensitive).")
+  tmsg("Then I suggest you type WAIT now (by the way, I will give commands you type in capitals; you can use upper or lower case as you prefer - input is not case sensitive).")
 }
 
 settings.roomTemplate = [
