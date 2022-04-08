@@ -14,17 +14,17 @@ settings.givePlayerAskTellMsg  = false
 settings.symbolsForCompass = true
 settings.ifid = '3749B11B-0AAA-494B-B2C7-19E0A8E6EBCE'
 
-settings.afterSave = function(filename) {
+settings.afterSave = function(filename, toFile) {
   if (hint.before('save')) {
     tmsg("Okay, we were not going to do saving until later, but whatever...")
     w.me.alreadySaved = true
   }
   else if (hint.before('westRobot')) {
     if (filename.toLowerCase() === 'tutorial') {
-      tmsg("Great, we have saved the game - and you even followed my advice for the name. Now let's continue west down this passage.")
+      tmsg("Great, we have saved the game {if:toFile:to file:to LocalStorage} - and you even followed my advice for the name. Now let's continue west down this passage.")
     }
     else {
-      tmsg("Great, we have saved the game - though I am, a bit disappointed that you didn't followed my advice for the name... Oh, well, I guess we better continue west down this passage.")
+      tmsg("Great, we have saved the game {if:toFile:to file:to LocalStorage} - though I am, a bit disappointed that you didn't followed my advice for the name... Oh, well, I guess we better continue west down this passage.")
     }
     hint.now('westRobot')
   }
@@ -42,9 +42,9 @@ settings.intro = [
 
 settings.setup = function() {
   tmsg("This is a simple introduction to text adventures; comments like this will lead you by the hand as you do most of the common things in a text adventures (you can toggle these comments on and off with the TUTORIAL command).")
-  tmsg("Text adventures are also known as interactive fiction, and there are numerous formats. This is about parser-based game, which is to say, a game where the user types commands, and the game attempts to parse the command, and update the game world accordingly.")
+  tmsg("Text adventures are also known as interactive fiction, and there are numerous formats. This is about parser-based games, which is to say, a game where the user types commands, and the game attempts to parse the command, and updates the game world accordingly.")
   tmsg("There is also a huge variety of parser-based games, but most start with some introductory text, as above, and then place the player in a starting location, so let's see where we are...")
-  tmsg("Then I suggest you type WAIT now (by the way, I will give commands you type in capitals; you can use upper or lower case as you prefer - input is not case sensitive).")
+  tmsg("Then I suggest you type WAIT (by the way, I will give commands that you type in capitals; you can use upper or lower case as you prefer - input is not case sensitive).")
 }
 
 settings.roomTemplate = [

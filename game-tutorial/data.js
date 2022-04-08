@@ -47,15 +47,15 @@ createRoom("lounge", {
         break
       case 2:
         tmsg("Some games have commands that tell you about the game or set it up differently to suit the player. In Quest 6 (but not necessarily other games) none of these count as a turn, so try a couple, and when you are done, do WAIT again.")
-        tmsg("Type DARK to toggle dark mode; some users find if easier to see light text on a dark background. Type SPOKEN to toggle hearing the text read out. Type SILENT to toggle the sounds and music (not that there are any in this game).")
+        tmsg("In Quest 6 you can use DARK, FONT or NARROW toggles to change the display. Type SPOKEN to toggle hearing the text read out. Type SILENT to toggle the sounds and music (not that there are any in this game).")
         tmsg("You can also type HELP to see some general instructions. You can also do ABOUT or CREDITS. Less common is the HINT command; if implemented it will give you a clue of what to do next. In this game, as it is a tutorial, it will tell you exactly what to do.")
-        tmsg("For completeness, I will also mention TRANSCRIPT (or just SCRIPT), which will record your game session, and can be useful when testing someone's game. You can also use BRIEF, TERSE and VERBOSE to control how often room descriptions are shown, but I suggest we keep it VERBOSE for this tutorial.")
+        tmsg("For completeness, I will also mention the TRANSCRIPT (or just SCRIPT) commands, which allow you to record your game session, and can be useful when testing someone's game. You can also use BRIEF, TERSE and VERBOSE to control how often room descriptions are shown, but I suggest we keep it VERBOSE for this tutorial.")
         break
       case 3:
         w.kitchen_door.locked = false
         tmsg("Time to move on. Something tells me that door to the north is not locked any more.")
-        tmsg("You might want to look at the room again before we go. Type LOOK or just L. Hopefully it no longer says the door is locked. By the way, in some games you can use the EXITS commands to see what exits are available.")
-        tmsg("Movement in adventure games is done following compass directions. To go north, type GO NORTH, or NORTH or just N.")
+        tmsg("You might want to look at the room again before we go. Type LOOK or just L. Hopefully it no longer says the door is locked. In most games you can use the EXITS commands to see what exits are available.")
+        tmsg("Movement in adventure games is usually done following compass directions. To go north, type GO NORTH, or NORTH or just N.")
         tmsg("You can also use the compass rose at the top left, or, in Quest 6, if your computer has a number pad, ensure \"Num Lock\" is on, and press the up key (i.e., 8).")
         tmsg("So I will see you in the next room...")
         hint.now('northToKitchen')
@@ -125,7 +125,14 @@ createItem("crates", {
     }
   },
   take:function(options) {
+    log(options)
     msg('The crates are too heavy to pick... But you might be able to move them.')
+    if (!this.alreadyDone) {
+      this.alreadyDone = true
+      setTimeout(function() {
+        tmsg("Some things, like thecrate and switch, cannot be picked up, but we may be able to interact with them in other ways. Take the hint, ans MOVE CRATES.")
+      }, 100)
+    }
     return false
   },    
 })
@@ -400,6 +407,7 @@ createRoom("laboratory", {
 createItem("lab_door", OPENABLE(false), {
   examine:"A very solid, steel door.",
   loc:'laboratory',
+  scenery:true,
   open:function(options) {
     if (!this.closed) {
       msg(lang.already, {item:this})
