@@ -471,9 +471,10 @@ test.tests = function() {
   test.assertEqual("Five bricks", processText("{nm:item:count:true}", {item:w.brick, brick_count:5}))
   test.assertEqual("Five bricks", processText("{nm:item:a:true}", {item:w.brick, brick_count:5}))
   test.assertEqual("five bricks", processText("{nm:item:a}", {item:w.brick, item_count:5}))
+  test.assertEqual("a lot of bricks", processText("{nm:item:a}", {item:w.brick, item_count:'infinity'}))
   test.assertEqual("a brick", processText("{nm:item:a}", {item:w.brick, brick_count:1}))
   test.assertEqual("one brick", processText("{nm:item:count}", {item:w.brick, brick_count:1}))
-
+  test.assertEqual("seven bricks", processText("{nm:item:count}", {item:w.brick, brick_count_loc:'lounge'}))
   test.assertEqual("five bricks", processText("{nm:item:a}", {item:w.brick, count:5}))
   test.assertEqual("five bricks and one book", processText("{nm:item:a} and {nm:item2:count}", {item:w.brick, count:5, item2:w.book}))
   w.book.specialCount = 4
