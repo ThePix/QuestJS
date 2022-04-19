@@ -163,7 +163,9 @@ createItem("charger_button", COMPONENT("charger"), {
 createRoom("basement", {
   desc:"A dank room, with piles of crates everywhere.",
   darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
-  up:new Exit('kitchen'),
+  up:new Exit('kitchen', {
+    illuminated:true,
+  }),
   lightSource:function() {
     return w.light_switch.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },

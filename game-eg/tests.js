@@ -471,9 +471,10 @@ test.tests = function() {
   test.assertEqual("Five bricks", processText("{nm:item:count:true}", {item:w.brick, brick_count:5}))
   test.assertEqual("Five bricks", processText("{nm:item:a:true}", {item:w.brick, brick_count:5}))
   test.assertEqual("five bricks", processText("{nm:item:a}", {item:w.brick, item_count:5}))
+  test.assertEqual("a lot of bricks", processText("{nm:item:a}", {item:w.brick, item_count:'infinity'}))
   test.assertEqual("a brick", processText("{nm:item:a}", {item:w.brick, brick_count:1}))
   test.assertEqual("one brick", processText("{nm:item:count}", {item:w.brick, brick_count:1}))
-
+  test.assertEqual("seven bricks", processText("{nm:item:count}", {item:w.brick, brick_count_loc:'lounge'}))
   test.assertEqual("five bricks", processText("{nm:item:a}", {item:w.brick, count:5}))
   test.assertEqual("five bricks and one book", processText("{nm:item:a} and {nm:item2:count}", {item:w.brick, count:5, item2:w.book}))
   w.book.specialCount = 4
@@ -947,6 +948,20 @@ test.tests = function() {
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
   test.assertCmd("drop clock", "You drop the clock.");
   test.assertCmd("look", ["The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock and a trapdoor here.", "You can go north or west."]);
+  
+  
+  
+  test.title("Light and dark");
+  test.assertCmd("open trap", "You open the trapdoor.")
+  test.assertCmd("d", ["You go through the trapdoor, and down the ladder.", "The basement", "It is dark, but you can just see the outline of the trapdoor above you.", "You can go up."])
+  test.assertCmd("u", ["You head up.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock and a trapdoor (open) here.", "You can go down, north or west."])
+  w.light_switch.switchedon = true
+  test.assertCmd("d", ["You go through the trapdoor, and down the ladder.", "The basement", "A dank room, with piles of crates everywhere.", "You can see some crates, a ladder and a light switch here.", "You can go up."])
+  test.assertCmd("u", ["You head up.", "The kitchen", "A clean room. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera, a clock and a trapdoor (open) here.", "You can go down, north or west."])
+  test.assertCmd("close trap", "You close the trapdoor.")
+  w.light_switch.switchedon = false
+  
+  
   
   
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, a canteen, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and a small key here.", "You can go east, south, up or west."]);
