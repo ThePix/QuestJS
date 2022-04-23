@@ -272,7 +272,7 @@ const lang = {
 
   // WEARABLE
   wear_successful:"{nv:char:put:true} on {nm:item:the}.",
-  remove_successful:"{nv:char:take:true} {nm:item:the} off.",
+  remove_successful:"{nv:char:take:true} {nm:item:the-pa::char} off.",
   cannot_wear:"{multi}{nv:char:can't:true} wear {ob:item}.",
   cannot_wear_ensemble:"{multi}Individual parts of an ensemble must be worn and removed separately.",
   not_wearing:"{multi}{nv:char:be:true} not wearing {ob:item}.",
@@ -944,33 +944,53 @@ const lang = {
   //@DOC
   // Returns "the " if appropriate for this item.
   // If the item has 'defArticle' it returns that; if it has a proper name, returns an empty string.
-  addDefiniteArticle:function(item) {
-    // test if player exists yet in case this is used during item creation
-    if (player && item.owner === player.name) return player.pronouns.poss_adj + " "
-    if (item.owner) return lang.getName(w[item.owner], {possessive:true}) + " "
-    if (item.defArticle) return item.defArticle + " "
-    return item.properNoun ? "" : "the "
+  addDefiniteArticle:function(item, options) {
+    return lang.addArticle(item, DEFINITE, options)
   },
 
   //@DOC
   // Returns "a " or "an " if appropriate for this item.
   // If the item has 'indefArticle' it returns that; if it has a proper name, returns an empty string.
   // If it starts with a vowel, it returns "an ", otherwise "a ".
-  addIndefiniteArticle:function(item) {
+  addIndefiniteArticle:function(item, options) {
+    return lang.addArticle(item, INDEFINITE, options)
+  },
+
+  addArticle:function(item, type, options = {}){
+    if (type === 'the') type = DEFINITE
+    if (type === 'a') type = INDEFINITE
+    if (!type || (type !== DEFINITE && type !== INDEFINITE)) return
+    
+    // owned, so handle differently
     // test if player exists yet in case this is used during item creation
     if (player && item.owner === player.name) return player.pronouns.poss_adj + " "
-    if (item.owner) return lang.getName(w[item.owner], {possessive:true}) + " "
+    if (typeof options.poss_adj === 'string') {
+      if (!w[options.poss_adj]) {
+        throw "Oh dear... I am looking to create a possessive in lang.addArticle (probably from lang.getName or formatList), and I cannot find " + options.poss_adj + ". This will not end well."
+      }
+      options.poss_adj = w[options.poss_adj]
+    }
+    if (options.poss_adj === true) {
+      options.poss_adj = item.owner ? w[item.owner] : undefined
+    }
+    if (item.owner && options.poss_adj && options.poss_adj === w[item.owner]) {
+      return options.poss_adj.pronouns.poss_adj + " "
+    }
+    if (item.owner && !options.ignorePossessive) return lang.getName(w[item.owner], {possessive:true}) + " "
+
+    // handle "the"
+    if (type === DEFINITE) {
+      if (item.defArticle) return item.defArticle + " "
+      return item.properNoun ? "" : "the "
+    }
+
+    // handle "a"
     if (item.indefArticle) return item.indefArticle + " "
     if (item.properNoun) return ""
     if (item.pronouns === lang.pronouns.plural) return "some "
     if (item.pronouns === lang.pronouns.massnoun) return ""
     if (/^[aeiou]/i.test(item.alias)) return "an "
     return "a "
-  },
-
-  addArticle:function(item, type){
-    if (!type || (type != DEFINITE && type != INDEFINITE)) return
-    return type === DEFINITE ? lang.addDefiniteArticle(item) : lang.addIndefiniteArticle(item)
   },
 
   getName:function(item, options) {
@@ -1012,7 +1032,7 @@ const lang = {
         s += lang.addDefiniteArticle(item)
       }
       else if (options.article === INDEFINITE) {
-        s += lang.addIndefiniteArticle(item, count)
+        s += lang.addIndefiniteArticle(item, options)
       }
       else if (options.article === COUNT) {
         s += 'one '

@@ -13,14 +13,33 @@ commands.push(new Cmd('Attack', {
 }))
 
 
-commands.push(new Cmd('Search', {
-  npcCmd:true,
-  rules:[cmdRules.isPresent],
-  objects:[
-    {scope:parser.isPresent}
-  ],
-  defmsg:"No point attacking {nm:item:the}."
-}))
+findCmd('Search').script = function(objects) {
+  const obj = objects[0][0]
+  const options = {char:player, item:obj}
+  
+  if (!obj.rpgCharacter && !obj.search) {
+    return failedmsg(lang.searchNothing, options)
+  }
+  else if (!obj.dead && !obj.asleep) {
+    return failedmsg(lang.searchAlive, options)
+  }
+  else if (obj.searched) {
+    msg(lang.searchNothingMore, options)
+  }
+  else if (obj.search) {
+    obj.search(options)
+    obj.searched = true
+  }
+  else if (settings.defaultSearch) {
+    settings.defaultSearch(obj, options)
+    obj.searched = true
+  }
+  else {
+    return failedmsg(lang.searchNothing, options)
+  }
+
+  return world.SUCCESS 
+}
 
 commands.push(new Cmd('Equip', {
   npcCmd:true,

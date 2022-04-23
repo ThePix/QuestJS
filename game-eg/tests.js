@@ -163,16 +163,26 @@ test.tests = function() {
   test.assertEqual("book", lang.getName(w.book));
   test.assertEqual("the book", lang.getName(w.book, {article:DEFINITE}));
   test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
+  
+  test.title("getName - owner");
   w.book.owner = 'Buddy'
   test.assertEqual("your book", lang.getName(w.book, {article:DEFINITE}));
   test.assertEqual("Your book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
   w.book.owner = 'Kyle'
   test.assertEqual("Kyle's book", lang.getName(w.book, {article:DEFINITE}));
   test.assertEqual("Kyle's book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
+  test.assertEqual("His book", lang.getName(w.book, {article:INDEFINITE, capital:true, poss_adj:'Kyle'}));
+  test.assertEqual("His book", lang.getName(w.book, {article:INDEFINITE, capital:true, poss_adj:w.Kyle}));
+  test.assertEqual("Kyle's book", lang.getName(w.book, {article:INDEFINITE, capital:true, poss_adj:w.Lara}));
+  test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true, ignorePossessive:true}));
   delete w.book.owner  
   
+  test.title("getName - you");
   test.assertEqual("you", lang.getName(w.Buddy));
   test.assertEqual("You", lang.getName(w.Buddy, {article:INDEFINITE, capital:true}));
+  
+  
+  test.title("getName = counting");
   test.assertEqual("Five bricks", lang.getName(w.brick, {brick_count:5, capital:true, article:INDEFINITE}));
   test.assertEqual("a brick", lang.getName(w.brick, {brick_count:1, article:INDEFINITE}));
   test.assertEqual("seven bricks", lang.getName(w.brick, {loc:'lounge', article:INDEFINITE}));
@@ -392,6 +402,7 @@ test.tests = function() {
   settings.tpTest = 9
   test.assertEqual("Simple text: 9", processText("Simple text: {show:settings:tpTest}"))
   test.assertEqual("Simple text: nine", processText("Simple text: {number:settings:tpTest}"))
+  test.assertEqual("Simple text: seven", processText("Simple text: {number:val}", {val:7}))
   test.assertEqual("Simple text: yes", processText("Simple text: {if:settings:tpTest:9:yes:no}", {val:8}))
   test.assertEqual("Simple text: no", processText("Simple text: {if:settings:tpTest:8:yes:no}", {val:8}))
 
@@ -461,6 +472,17 @@ test.tests = function() {
   test.assertEqual("Kyle is her bear.", processText("{nv:Kyle:be} {pa:Lara} bear."));
   test.assertEqual("There is Kyle.", processText("There is {nm:chr:a}.", {chr:w.Kyle}));
   test.assertEqual("There is a book.", processText("There is {nm:chr:a}.", {chr:w.book}));
+  log(w.book.owner)
+  test.assertEqual("There is a book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}));
+  w.book.owner = 'Kyle'
+  test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}));
+  test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa::Kyle}.", {chr:w.book}));
+  test.assertEqual("There is Kyle's book.", processText("There is {nm:chr:a-pa::Lara}.", {chr:w.book}));
+  test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa::npc}.", {chr:w.book, npc:w.Kyle}));
+  test.assertEqual("There is Kyle's book.", processText("There is {nm:chr:a-pa::npc}.", {chr:w.book, npc:w.Lara}));
+  
+  delete w.book.owner
+  
   test.assertEqual("Kyle is here.", processText("{nm:chr:the:true} is here.", {chr:w.Kyle}));
   test.assertEqual("The book is here.", processText("{nm:chr:the:true} is here.", {chr:w.book}));
   test.assertEqual("It is your book.", processText("It is {nms:chr:the} book.", {chr:player}));
@@ -1070,7 +1092,8 @@ test.tests = function() {
   test.assertCmd("wear jeans", "You put on the jeans.");
   test.assertCmd("wear shirt", "You put on the shirt.");
   test.assertCmd("remove underwear", "You can't take off your underwear whilst wearing your jeans.");
-  test.assertCmd("remove jeans", "You take the jeans off.");
+  w.jeans.owner = player.name
+  test.assertCmd("remove jeans", "You take your jeans off.");
   test.assertCmd("remove underwear", "You take the underwear off.");
   test.assertCmd("wear jumpsuit", "You can't put the jumpsuit on over your shirt.");
   test.assertCmd("remove shirt", "You take the shirt off.");  
@@ -1078,7 +1101,7 @@ test.tests = function() {
   test.assertCmd("wear coat", "You put on the coat.");
   test.assertCmd("wear underwear", "You can't put the underwear on over your jumpsuit.");
   test.assertCmd("remove coat", "You take the coat off.");  
-  test.assertCmd("drop all", ["You drop the knife.", "You drop the underwear.", "You drop the jeans.", "You drop the shirt.", "You drop the coat.", "Jumpsuit: You are already wearing it.", ]);
+  test.assertCmd("drop all", ["You drop the knife.", "You drop the underwear.", "You drop your jeans.", "You drop the shirt.", "You drop the coat.", "Jumpsuit: You are already wearing it.", ]);
   test.assertCmd("remove jumpsuit", "You take the jumpsuit off.");  
   test.assertCmd("get knife", "You take the knife.");
   
@@ -1428,7 +1451,7 @@ test.tests = function() {
   test.assertCmd("push 1", ["You press the button; the door closes and the lift heads to the first floor. The door opens again."]);
   test.assertEqual("bedroom", w.lift.getTransitDestLocation().name)
   test.assertEqual("button_1", w.lift.getTransitDestButton().name)
-  test.assertCmd("e", ["You head east.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
+  test.assertCmd("e", ["You head east.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, your jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
   w.lift.afterTransitMove = function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); };
   test.assertCmd("push 1", ["You press the button; nothing happens."]);
@@ -1479,7 +1502,7 @@ test.tests = function() {
   
   
   test.title("pre-rope");
-  test.assertCmd("o", ["You head out.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
+  test.assertCmd("o", ["You head out.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, your jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a canteen, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and a small key here.", "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
   

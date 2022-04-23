@@ -6,9 +6,9 @@
 // Give a character a modifyOutgoingAttack function to have it modify an attack the character is making
 // or modifyIncomingAttack for an attack it is receiving
 const RPG_TEMPLATE = {
+  rpgCharacter:true,
   offensiveBonus:0,
   spellCasting:0,
-  dead:false,
   afterLoadForTemplate:function() {
     if (this.agenda && this.agenda[0].startWith('guardExit')) this.setGuardFromAgenda(this.agenda[0].split(':').shift())
     log("loaded!")
@@ -47,7 +47,7 @@ const RPG_TEMPLATE = {
     }
   },
   defensiveBonus:0,
-  spellDefence:0,
+  spellDefensiveBonus:0,
   // call this to flag as dead - no output
   terminate:function() {
     this.dead = true
@@ -150,7 +150,7 @@ const RPG_NPC = function(female) {
   //res.aggressive = true
   res.allegiance = 'foe'
   res.oldRpgOnCreation = res.afterCreation
-  res.attackPattern = ['Basic attack']
+  res.skillOptions = ['Basic attack']
   res.afterCreation = function(o) {
     o.oldRpgOnCreation(o)
     if (!o.maxHealth) o.maxHealth = o.health
@@ -196,7 +196,8 @@ const RPG_NPC = function(female) {
         s = this.exAsleep
       }
       else {
-        s = typeof this.ex === 'string' ? this.ex : this.ex() + lang.asleepAddendum
+        s = typeof this.ex === 'string' ? this.ex : this.ex() 
+        s += lang.asleepAddendum
       }
     }
     else {
@@ -214,56 +215,24 @@ const RPG_NPC = function(female) {
     msg(s, options)
   }
   
-  res.search = function(options) {
-    if (!this.dead && !this.asleep) return falsemsg(lang.searchAlive, options)
-    if (!settings.defaultSearch) return falsemsg(lang.searchNothing, options)
-
-    settings.defaultSearch(this)
-    return true
-  }
-  
+ 
   
   // Attempt to make an attack on the given target.
-  // Will return the attack itself if an attack is actually made.
-  // Will return true is no attack is made, and the endeavor should be abandoned
-  // (eg the target is dead or lost), or false if no attack is made by it is still
-  // worth trying next turn.
-  // Could come from an agenda, so target could be an array, and hence return values
-  res.performAttack = function(arr) {
-    let target
-    if (Array.isArray(target)) {
-      target = w[arr[0]]
-      arr.shift()
-    }
-    else {
-      target = arr
-      arr = []
-    }
-    if (target.dead) return true
+  // Will return the attack itself if an attack is actually made or null otherwise.
+  res.performAttack = function(target) {
+    
+    if (target.dead) return null
 
     // Is the target reachable?
-    if (this.loc !== target.loc) {
-      if (this.pursueToAttack) {
-        return !this.pursueToAttack(target)
-      }
-      else {
-        return true
-      }
-    }
+    if (this.loc !== target.loc) return null
 
     let skill
     if (this.nextAttack) {
       skill = rpg.findSkill(this.nextAttack)
       delete this.nextAttack
     }
-    else if (arr.length > 0) {
-      skill = rpg.findSkill(random.fromArray(arr))
-    }
-    else if (this.attackPattern) {
-      skill = rpg.findSkill(random.fromArray(this.attackPattern))
-    }
     else {
-      skill = defaultSkill
+      skill = this.selectSkill()
     }
     const attack = Attack.createAttack(this, target, skill)
     attack.apply().output()
@@ -280,7 +249,7 @@ const RPG_NPC = function(female) {
   }
 
   res.endTurn = function(turn) {
-    if (this.dead) return
+    if (this.dead) return false
     if (this.aggressive && this.target) {
       // If attacking, ignore agenda, etc.
       this.performAttack(w[this.target])
@@ -314,7 +283,7 @@ const RPG_CORPOREAL_UNDEAD = function() {
   res.pronouns = lang.pronouns.thirdperson
   res.msgDeath = lang.deathUndead
   res.poisonImmunity = true
-  res.poisonImmunityMsg = "Poison has no effect on the undead!"
+  res.msgPoisonImmunity = "Poison has no effect on the undead!"
   return res
 }
 
@@ -338,7 +307,7 @@ const RPG_PHANTOM = function() {
   res.msgDeath = lang.deathPhantom
   res.pronouns = lang.pronouns.thirdperson
   res.poisonImmunity = true
-  res.poisonImmunityMsg = "Poison has no effect for some reason..."
+  res.msgPoisonImmunity = "Poison has no effect for some reason..."
   res.unillusionable = true
   res.unillusion = function(attack) {
     attack.msg("{nv:target:disappear:true}.", 1)
@@ -359,7 +328,7 @@ const RPG_ELEMENTAL = function(element) {
   res.msgDeath = lang.deathElemental
   res.pronouns = lang.pronouns.thirdperson
   res.poisonImmunity = true
-  res.poisonImmunityMsg = "Poison has no effect on elementals!"
+  res.msgPoisonImmunity = "Poison has no effect on elementals!"
   return res
 }
 
@@ -368,7 +337,7 @@ const RPG_CONSTRUCT = function() {
   res.msgDeath = lang.deathConstruct
   res.pronouns = lang.pronouns.thirdperson
   res.poisonImmunity = true
-  res.poisonImmunityMsg = "Poison has no effect on constructs!"
+  res.msgPoisonImmunity = "Poison has no effect on constructs!"
   return res
 }
 
@@ -377,7 +346,7 @@ const RPG_DEMON = function() {
   res.msgDeath = lang.deathConstruct
   res.pronouns = lang.pronouns.thirdperson
   res.poisonImmunity = true
-  res.poisonImmunityMsg = "Poison has no effect on demons!"
+  res.msgPoisonImmunity = "Poison has no effect on demons!"
   return res
 }
 
@@ -417,7 +386,7 @@ const RPG_BEAST = function(female, aggressive) {
   res.aggressive = aggressive
   res.testTalk = function() {
     if (this.dead) return falsems(lang.npc_dead)
-    if (this.activeEffects.includes(lang.communeWithAnimalSpell)) return true
+    if (this.activeEffects.includes(lang.communeWithAnimalEffect)) return true
     return falsemsg(lang.cannotTalkToBeast, {item:this, char:player})
   }
     

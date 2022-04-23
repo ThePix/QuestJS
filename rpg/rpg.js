@@ -338,6 +338,57 @@ util.defaultExitUse = function(char, exit) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+tp.addDirective("armour", function(arr, params) {
+  return (params[arr[0] ? arr[0] : 'item'].armour / settings.armourScaling).toFixed(1)
+})
+
+tp.addDirective("lore", function(arr, params) {
+  return player.activeEffects.includes(lang.loreEffect) ?  arr[1] : arr[0]
+})
+
+tp.addDirective("darkV", function(arr, params) {
+  return player.activeEffects.includes(lang.darkVisionEffect) ?  arr[1] : arr[0]
+})
+
+tp.addDirective("trueV", function(arr, params) {
+  return player.activeEffects.includes(lang.trueVisionEffect) ?  arr[1] : arr[0]
+})
+
+tp.addDirective("befuddled", function(arr, params) {
+  return player.activeEffects.includes(lang.befuddledEffect) ?  arr[1] : arr[0]
+})
+
+tp.addDirective("effect", function(arr, params) {
+  const effect = arr.shift()
+  return player.activeEffects.includes(effect) ?  arr[1] : arr[0]
+})
+
+tp.addDirective("effectOther", function(arr, params) {
+  const char = w[arr.shift()]
+  const effect = arr.shift()
+  return char.activeEffects.includes(effect) ?  arr[1] : arr[0]
+})
+
+
+
+
+
+
+
+
+
+
+
 agenda.ping = function() { log('ping'); return false }
 
 agenda.guardExit = function(npc, arr) {
@@ -384,14 +435,28 @@ agenda.antagonise = function(npc, arr) {
 
 
 
-
+// needs testing to check if it terminates correctly
 agenda.ongoingAttack = function(npc, arr) {
-  const attack = npc.performAttack(arr)
-  return typeof attack === 'boolean' ? attack : attack.target.dead
+  const target = w[arr[0]]
+  arr.shift()
+  const attack = npc.performAttack(target, arr)
+  if (attack = null) {
+    // target is at another location
+    if (this.pursueToAttack) {
+      return !this.pursueToAttack(target)
+    }
+    else {
+      return true
+    }
+  }
+  if (attack.target.dead) return true
+  return false
 }
 
 agenda.singleAttack = function(npc, arr) {
-  npc.performAttack(arr)
+  const target = w[arr[0]]
+  arr.shift()
+  npc.performAttack(target, arr)
   return true
 }
 

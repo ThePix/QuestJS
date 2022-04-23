@@ -576,7 +576,7 @@ test.tests = function() {
 
   test.title("performAttack  (goblin, fireball)")
   random.prime([1, 19, 5, 5, 5])
-  w.goblin.attackPattern = ["Double attack", "Ice shard", "Returning", "Teleport", "Mark"]
+  w.goblin.skillOptions = ["Double attack", "Ice shard", "Returning", "Teleport", "Mark"]
   attack = w.goblin.performAttack(player)
   
   test.assertEqual('goblin', attack.attacker.name)
@@ -624,6 +624,23 @@ test.tests = function() {
   w.snotling.exDead = 'The bloody corpse of a snotling, merciless cut down in his prime.'
   test.assertCmd('x sn', 'The bloody corpse of a snotling, merciless cut down in his prime.')
   test.assertCmd('search sn', 'You search the snotling, but find nothing.')
+  settings.defaultSearch = function(npc, options) {
+    options.gp = 6
+    options.char.money += options.gp
+    log(options)
+    msg("{nv:char:find:true} {number:gp} gold coins on the body.", options)
+  }
+  test.assertCmd('search sn', 'You find six gold coins on the body.')
+  test.assertEqual(6, player.money)
+  test.assertCmd('search sn', 'You search the snotling, but find nothing more.')
+  delete w.snotling.searched
+  w.snotling.search = function(options) {
+    options.char.money += 9
+    msg("{nv:char:find:true} 9 gold coins on the body.", options)
+  }
+  test.assertCmd('search sn', 'You find 9 gold coins on the body.')
+  test.assertEqual(15, player.money)
+  test.assertCmd('search sn', 'You search the snotling, but find nothing more.')
 
 
   test.title("weather")
@@ -770,7 +787,7 @@ test.tests = function() {
     primarySuccess:"Test attack three was performed",
   })  
   
-  w.orc.attackPattern = ['Test attack 1', 'Test attack 2', "Test attack 3A"]
+  w.orc.skillOptions = ['Test attack 1', 'Test attack 2', "Test attack 3A"]
   random.prime([1, 19])
   test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
   
