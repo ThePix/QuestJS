@@ -789,13 +789,13 @@ const lang = {
   // Language constructs
 
   pronouns:{
-    thirdperson:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
-    massnoun:{subjective:"it", objective:"it", possessive: "its", poss_adj: "its", reflexive:"itself"},
-    male:{subjective:"he", objective:"him", possessive: "his", poss_adj: "his", reflexive:"himself"},
-    female:{subjective:"she", objective:"her", possessive: "hers", poss_adj: "her", reflexive:"herself"},
-    plural:{subjective:"they", objective:"them", possessive: "theirs", poss_adj: "their", reflexive:"themselves"},
-    firstperson:{subjective:"I", objective:"me", possessive: "mine", poss_adj: "my", reflexive:"myself"},
-    secondperson:{subjective:"you", objective:"you", possessive: "yours", poss_adj: "your", reflexive:"yourself"},
+    thirdperson:{subjective:"it", objective:"it", possessive: "its", possAdj: "its", reflexive:"itself"},
+    massnoun:{subjective:"it", objective:"it", possessive: "its", possAdj: "its", reflexive:"itself"},
+    male:{subjective:"he", objective:"him", possessive: "his", possAdj: "his", reflexive:"himself"},
+    female:{subjective:"she", objective:"her", possessive: "hers", possAdj: "her", reflexive:"herself"},
+    plural:{subjective:"they", objective:"them", possessive: "theirs", possAdj: "their", reflexive:"themselves"},
+    firstperson:{subjective:"I", objective:"me", possessive: "mine", possAdj: "my", reflexive:"myself"},
+    secondperson:{subjective:"you", objective:"you", possessive: "yours", possAdj: "your", reflexive:"yourself"},
   },
 
 
@@ -963,18 +963,18 @@ const lang = {
     
     // owned, so handle differently
     // test if player exists yet in case this is used during item creation
-    if (player && item.owner === player.name) return player.pronouns.poss_adj + " "
-    if (typeof options.poss_adj === 'string') {
-      if (!w[options.poss_adj]) {
-        throw "Oh dear... I am looking to create a possessive in lang.addArticle (probably from lang.getName or formatList), and I cannot find " + options.poss_adj + ". This will not end well."
+    if (player && item.owner === player.name) return player.pronouns.possAdj + " "
+    if (typeof options.possAdj === 'string') {
+      if (!w[options.possAdj]) {
+        throw "Oh dear... I am looking to create a possessive in lang.addArticle (probably from lang.getName or formatList), and I cannot find " + options.possAdj + ". This will not end well."
       }
-      options.poss_adj = w[options.poss_adj]
+      options.possAdj = w[options.possAdj]
     }
-    if (options.poss_adj === true) {
-      options.poss_adj = item.owner ? w[item.owner] : undefined
+    if (options.possAdj === true) {
+      options.possAdj = item.owner ? w[item.owner] : undefined
     }
-    if (item.owner && options.poss_adj && options.poss_adj === w[item.owner]) {
-      return options.poss_adj.pronouns.poss_adj + " "
+    if (item.owner && options.possAdj && options.possAdj === w[item.owner]) {
+      return options.possAdj.pronouns.possAdj + " "
     }
     if (item.owner && !options.ignorePossessive) return lang.getName(w[item.owner], {possessive:true}) + " "
 
@@ -1015,7 +1015,7 @@ const lang = {
     }
 
     else if (item.pronouns === lang.pronouns.firstperson || item.pronouns === lang.pronouns.secondperson) {
-      s = options.possessive ? item.pronouns.poss_adj : item.pronouns.subjective;
+      s = options.possessive ? item.pronouns.possAdj : item.pronouns.subjective;
     }
 
     else {

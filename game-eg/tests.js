@@ -171,9 +171,9 @@ test.tests = function() {
   w.book.owner = 'Kyle'
   test.assertEqual("Kyle's book", lang.getName(w.book, {article:DEFINITE}));
   test.assertEqual("Kyle's book", lang.getName(w.book, {article:INDEFINITE, capital:true}));
-  test.assertEqual("His book", lang.getName(w.book, {article:INDEFINITE, capital:true, poss_adj:'Kyle'}));
-  test.assertEqual("His book", lang.getName(w.book, {article:INDEFINITE, capital:true, poss_adj:w.Kyle}));
-  test.assertEqual("Kyle's book", lang.getName(w.book, {article:INDEFINITE, capital:true, poss_adj:w.Lara}));
+  test.assertEqual("His book", lang.getName(w.book, {article:INDEFINITE, capital:true, possAdj:'Kyle'}));
+  test.assertEqual("His book", lang.getName(w.book, {article:INDEFINITE, capital:true, possAdj:w.Kyle}));
+  test.assertEqual("Kyle's book", lang.getName(w.book, {article:INDEFINITE, capital:true, possAdj:w.Lara}));
   test.assertEqual("A book", lang.getName(w.book, {article:INDEFINITE, capital:true, ignorePossessive:true}));
   delete w.book.owner  
   
