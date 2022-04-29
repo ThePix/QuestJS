@@ -179,7 +179,7 @@ const rpg = {
   signalResponse_alert:function() { this.alert = true },
   signalResponse_wake:function() { this.asleep = false },
   signalResponse_attack:function(source, target) {
-    this.aggressive = true
+    this.hostile = true
     this.target = target ? target.name : player.name
   },
 
@@ -214,10 +214,12 @@ const rpg = {
 
 
   pursueToAttack:function(target) {
+    log('here')
     const exit = w[this.loc].findExit(target.loc)
     if (!exit) return false  // not in adjacent room, so give up
     // may want to check NPC can use that exit
     
+    log('now here')
     //log("Move " + npc.name + " to " + dest)
     this.movingMsg(exit) 
     this.moveChar(exit)
@@ -230,7 +232,7 @@ const rpg = {
         return el
       }
     }
-    return false
+    return falsemsg(lang.noSourceForSpell, {spell:spell})
   },
 
 
@@ -295,7 +297,12 @@ const rpg = {
 
 
 
-
+io.modulesToInit.push(rpg)
+rpg.init = function() {
+  // this will fire before the game starts and settings.setup(), but after w is populated
+  log(Object.keys(w).length) 
+  
+}
 
 
 
@@ -310,11 +317,10 @@ util.defaultExitUse = function(char, exit) {
   if (!exit) exit = this
   if (char.testMove && !char.testMove(exit)) return false
   const guards = exit.isGuarded()
-  if (guards && guards.length > 0) {
-    msg(lang.wayGuarded, {exit:exit})
+  if (guards) {
     for (const guard of guards) {
-      if (guard.guardingComment) msg(guard.guardingComment, {char:char})
-      if (guard.guardingReaction) msg(guard.guardingReaction(char, this))
+      if (guard.guardingComment) msg(guard.guardingComment, {char:char, exit:this})
+      if (guard.guardingReaction) guard.guardingReaction(char, this)
     }
     return false
   }
@@ -330,137 +336,17 @@ util.defaultExitUse = function(char, exit) {
 }
 
 
-
-
-
-
-// do we need a dead attribute? is it an attribute of NPC? yes and no
-
-
-
-
-
-
-
-
-
-
-
-
-
-tp.addDirective("armour", function(arr, params) {
-  return (params[arr[0] ? arr[0] : 'item'].armour / settings.armourScaling).toFixed(1)
-})
-
-tp.addDirective("lore", function(arr, params) {
-  return player.activeEffects.includes(lang.loreEffect) ?  arr[1] : arr[0]
-})
-
-tp.addDirective("darkV", function(arr, params) {
-  return player.activeEffects.includes(lang.darkVisionEffect) ?  arr[1] : arr[0]
-})
-
-tp.addDirective("trueV", function(arr, params) {
-  return player.activeEffects.includes(lang.trueVisionEffect) ?  arr[1] : arr[0]
-})
-
-tp.addDirective("befuddled", function(arr, params) {
-  return player.activeEffects.includes(lang.befuddledEffect) ?  arr[1] : arr[0]
-})
-
-tp.addDirective("effect", function(arr, params) {
-  const effect = arr.shift()
-  return player.activeEffects.includes(effect) ?  arr[1] : arr[0]
-})
-
-tp.addDirective("effectOther", function(arr, params) {
-  const char = w[arr.shift()]
-  const effect = arr.shift()
-  return char.activeEffects.includes(effect) ?  arr[1] : arr[0]
-})
-
-
-
-
-
-
-
-
-
-
-
-agenda.ping = function() { log('ping'); return false }
-
-agenda.guardExit = function(npc, arr) {
-  npc.setGuardFromAgenda(arr)
-  return false
-}
-
-agenda.guardScenery = function(npc, arr) {
-  const item = w[arr.shift()]
-  if (item.scenery) return false
-  msg(arr.join(':'))
-  if (item.loc && w[item.loc] && (w[item.loc].npc || w[item.loc].player)) npc.target = item.loc
-  npc.antagonise(player)
-  npc.delayAgendaAttack = true
-  return true
-}
-agenda.guardSceneryNow = function(npc, arr) {
-  const item = w[arr.shift()]
-  if (item.scenery) return false
-  msg(arr.join(':'))
-  if (item.loc && w[item.loc] && (w[item.loc].npc || w[item.loc].player)) npc.target = item.loc
-  npc.antagonise(player)
-  return true
-}
-
-agenda.antagonise = function(npc, arr) {
-  if (arr.length === 0) {
-    npc.antagonise(player)
+util.defaultExitIsGuarded = function() {
+  const guards = []
+  const list = this.origin[this.dir + '_guardedBy']
+  //log(this)
+  if (!list) return false
+  for (const s of list) {
+    const guard = w[s]
+    if (guard.isGuarding && guard.isGuarding(this)) guards.push(guard)
   }
-  else if (arr[0] === 'player') {
-    npc.antagonise(player)
-  }
-  else if (arr[0] === 'target') {
-    npc.antagonise(w[npc.target])
-  }
-  else {
-    const target = w[arr[0]]
-    if (!target) return errormsg("Unknown target set for `antagonise` agenda item: " + arr[0])
-    npc.antagonise(target)
-  }
-  return true
+  this.guardedBy = guards.map(el => el.name)
+  if (guards.length === 0) return false
+  return guards
 }
-
-
-
-
-// needs testing to check if it terminates correctly
-agenda.ongoingAttack = function(npc, arr) {
-  const target = w[arr[0]]
-  arr.shift()
-  const attack = npc.performAttack(target, arr)
-  if (attack = null) {
-    // target is at another location
-    if (this.pursueToAttack) {
-      return !this.pursueToAttack(target)
-    }
-    else {
-      return true
-    }
-  }
-  if (attack.target.dead) return true
-  return false
-}
-
-agenda.singleAttack = function(npc, arr) {
-  const target = w[arr[0]]
-  arr.shift()
-  npc.performAttack(target, arr)
-  return true
-}
-
-
-  
-
 

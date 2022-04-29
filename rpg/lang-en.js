@@ -14,6 +14,14 @@ lang.regex.CastSpellAt = /^(?:cast|invoke) (.+) (?:at|on) (.+)$/
 
 // responses
 
+lang.notAFoe = "No point attacking {nm:item:the}."
+lang.notEquippable = "{nv:item:be:true} not something you can equip."
+lang.noSourceForSpell = "You do not have anything you can learn {i:{show:spell:name}} from."
+lang.noSpellCalled = "There is no spell called {show:text}."
+lang.doNotKnowSpell = "You do not know the spell {i:{show:spell:name}}."
+lang.needTargetForSpell = "You need a target for the spell {i:{show:spell:name}}."
+
+lang.learnSpell = "You learn {i:{show:spell:name}} from {nm:item:the}."
 lang.attacking = "{nv:attacker:attack:true} {nm:target:the}."
 lang.primarySuccess = "A hit!"
 lang.primaryFailure = "A miss!"
@@ -30,6 +38,7 @@ lang.wayGuarded = "The way {show:exit:dir} is guarded!"
 lang.summonSpellPre = "Summon"
 lang.summonSpellDesc = function(spell) { return "Summons a " + spell.prototype.alias + "; it will last about " + spell.duration + " turns, unless it is destroyed before then." }
 
+lang.communeWithAnimalSpell = 'Commune with animal'
 lang.cannotTalkToBeast = "{nv:char:spend:true} a few minutes telling {nm:item:the} about {pa:char} life, but {pv:item:do} not seem interested. Possibly because {pv:item:be} just a dumb beast."
 lang.teleport = "{nv:attacker:feel:true} disorientated and the world around {sb:attacker} dissolves. A moment later, {nv:attacker:be} somewhere else."
 lang.summoning_successful = "{nv:item:appear:true} before {nm:attacker:the}."
@@ -47,13 +56,3 @@ lang.deathUndead = '{nv:target:fall:true} down - no longer undead, merely dead.'
 lang.deathUndeadNoCorpse = '{nv:target:vanish:true}, apparently defeated.'
 lang.deathElemental = '{nv:target:disipate:true}, defeated.'
 lang.deathPhantom = '{nv:target:vanish:true}.'
-
-
-
-// Effect names for text processor directives, etc.
-
-lang.communeWithAnimalEffect = 'Commune with animal'
-lang.loreEffect = 'Lore'
-lang.befuddledEffect = 'Befuddled'
-lang.darkVisionEffect = 'Dark vision'
-lang.trueVisionEffect = 'True vision'

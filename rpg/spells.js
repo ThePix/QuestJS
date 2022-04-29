@@ -579,7 +579,7 @@ new Spell("Befriend", {
   effect:{
     start:function(target) {
       target.allegiance = 'friend'
-      target.aggressive = false
+      target.hostile = false
       return "{nv:target:will:true} now regard {nm:attacker:the} as a friend."
     },
   },
@@ -594,8 +594,8 @@ new Spell("Calm", {
   suppressAntagonise:true,
   effect:{
     start:function(target) {
-      target.aggressive = false
-      return "{nv:target:be:true} no longer aggressive."
+      target.hostile = false
+      return "{nv:target:be:true} no longer hostile."
     },
   },
 })
@@ -608,7 +608,7 @@ new Spell("Enrage", {
   automaticSuccess:true,
   effect:{
     start:function(target) {
-      target.aggressive = true
+      target.hostile = true
       target.target = player.name
       if (target.allegiance === 'friend') target.allegiance = 'foe'
       return "{nv:target:look:true} angry at you."

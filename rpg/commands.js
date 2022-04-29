@@ -9,7 +9,7 @@ commands.push(new Cmd('Attack', {
   objects:[
     {scope:parser.isPresent}
   ],
-  defmsg:"No point attacking {nm:item:the}."
+  defmsg:lang.notAFoe
 }))
 
 
@@ -47,7 +47,7 @@ commands.push(new Cmd('Equip', {
   objects:[
     {scope:parser.isHeld}
   ],
-  defmsg:"{nv:item:be:true} not something you can equip.",
+  defmsg:lang.notEquippable,
 }))
 
 
@@ -57,7 +57,7 @@ commands.push(new Cmd('Unequip', {
   objects:[
     {scope:parser.isHeld}
   ],
-  defmsg:"{nv:item:be:true} not something you can equip.",
+  defmsg:lang.notEquippable,
 }))
 
 
@@ -72,13 +72,17 @@ commands.push(new Cmd('LearnSpell', {
   ],
   script:function(objects) {
     const spell = rpg.find(objects[0])
-    if (!spell || !spell.spell) return failedmsg("There is no spell called " + objects[0] + ".")
+    if (!spell || !spell.spell) return failedmsg(lang.noSpellCalled, {text:objects[0]})
       
+    // is there a spell book or whatever at hand to learn the spell from
     const source = rpg.isSpellAvailable(player, spell)
-    if (!source) return failedmsg("You do not have anything you can learn {i:" + spell.name + "} from.")
+    if (!source) return world.FAILED
+    
+    // are there are other restrictions, such as level?
+    if (player.isSpellLearningAllowed && !player.isSpellLearningAllowed(spell, source)) return world.FAILED
     
     player.skillsLearnt.push(spell.name)
-    msg("You learn {i:" + spell.name + "} from " + lang.getName(source, {article:DEFINITE}) + ".")
+    msg(lang.learnSpell, {spell:spell, item:source})
     return world.SUCCESS
   },
 }))
@@ -93,11 +97,14 @@ commands.push(new Cmd('CastSpell', {
   ],
   script:function(objects) {
     const spell = rpg.find(objects[0])
-    if (!spell || !spell.spell) return failedmsg("There is no spell called " + objects[0] + ".")
+    if (!spell || !spell.spell) return failedmsg(lang.noSpellCalled, {text:objects[0]})
       
-    if (!player.skillsLearnt.includes(spell.name)) return failedmsg("You do not know the spell {i:" + spell.name + "}.")
+    if (!player.skillsLearnt.includes(spell.name)) return failedmsg(lang.doNotKnowSpell, {spell:spell})
     
-    if (!spell.noTarget) return failedmsg("You need a target for the spell {i:" + spell.name + "}.")
+    // are there are other restrictions, such as enough mana
+    if (player.isSpellCastingAllowed && !player.isSpellCastingAllowed(spell)) return world.FAILED
+
+    if (!spell.noTarget) return failedmsg(lang.needTargetForSpell, {spell:spell})
 
     const attack = Attack.createAttack(player, player, spell)
     if (!attack) return world.FAILED

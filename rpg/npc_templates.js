@@ -13,28 +13,6 @@ const RPG_TEMPLATE = {
     if (this.agenda && this.agenda[0].startWith('guardExit')) this.setGuardFromAgenda(this.agenda[0].split(':').shift())
     log("loaded!")
   },
-  setGuardFromAgenda(ary) {
-    log(ary)
-    const room = w[ary.shift()]
-    const dir = ary.shift()
-    this.setGuard(room, dir, ary.join(':'))
-  },
-  setGuard(room, dir, comment) {
-    this.guardingLoc = room.name
-    this.guardingDir = dir
-    this.guardingComment = comment
-    if (!room[dir].guardedBy.includes(this.name)) room[dir].guardedBy.push(this.name)
-    //log("Guarding " + dir + " exit of " + room.alias)
-  },
-  unsetGuard() {
-    array.remove(w[this.guardingLoc][this.guardingDir].guardedBy, this.name)
-    delete this.guardingLoc
-    delete this.guardingDir
-  },
-  isGuarding(exit) {
-    if (this.dead) return false
-    return exit.origin.name === this.guardingLoc && exit.dir === this.guardingDir && this.loc === this.guardingLoc
-  },
   getOffensiveBonus:function(skill) {
     if (!skill.statForOffensiveBonus) {
       return this.offensiveBonus
@@ -70,6 +48,18 @@ const RPG_TEMPLATE = {
     else {
       return 0
     }
+  },
+  // Can be called to have the NPC resume its original agenda, as long as
+  // the NPC can return to the starting location and the original settings
+  // were saved.
+  agendaRestart:function() {
+    if (!this.agendaOriginalSettings) return
+    if (this.agendaDoNotResume) return
+    
+    this.agenda = [
+      "guardWalkTo:" + this.agendaOriginalSettings.loc,
+      this.agendaOriginalSettings.action + ":" + this.agendaOriginalSettings.data.join(':'),
+    ]
   },
   armour:0,
   isLight:false,  // should this be on default items?
@@ -147,8 +137,8 @@ const RPG_NPC = function(female) {
 
   for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key]
   
-  //res.aggressive = true
   res.allegiance = 'foe'
+  res.hostile = false
   res.oldRpgOnCreation = res.afterCreation
   res.skillOptions = ['Basic attack']
   res.afterCreation = function(o) {
@@ -166,18 +156,71 @@ const RPG_NPC = function(female) {
   
   // An NPC is hostile if aggression is true and it is targeting the given character or an allied one
   res.isHostile = function(chr) {
-    if (!this.aggressive) return false
+    if (!this.hostile) return false
     if (!chr) chr = player
     if (!this.target) this.target = player.name
     if (this.target === chr.name) return true
     if (!this.target) return errormsg("Oh dear, no target set for this NPC")
-    if (chr.allegiance && w[this.target].allegiance === chr.allegiance) return true
+    if (w[this.target].allegiance === chr.allegiance) return true
     return false
   }
+  res.foeTrackingMode = "follow"
+  res.foeTrackingSpeed = "medium"
+  res.guardActionMode = "preventAndAttack"
+
+  res.setGuard = function(dir, reaction) {
+    this.guardingLoc = this.loc
+    const room = w[this.loc]
+    if (typeof reaction === 'function') {
+      this.guardingReaction = reaction
+      delete this.guardingComment
+    }
+    else {
+      this.guardingComment = reaction
+      delete this.guardingReaction
+    }
+    if (dir) { // false, to guard room
+      this.guardingDir = dir
+      if (!room[dir + '_guardedBy']) room[dir + '_guardedBy'] = []
+      if (!room[dir + '_guardedBy'].includes(this.name)) room[dir + '_guardedBy'].push(this.name)
+      //log("Guarding " + dir + " exit of " + this.guardingLoc)
+    }
+    else {
+      this.isGuardingFunction = function() {
+        // ultimately want this to work for NPCs intruding too
+        if (currentLocation.name === this.guardingLoc) {
+          if (this.guardingComment) msg(this.guardingComment, {char:player, exit:this})
+          if (this.guardingReaction) this.guardingReaction(player, this)
+        }
+      }
+      //if (!room.guardedBy) room.guardedBy = []
+      //if (!room.guardedBy.includes(this.name)) room.guardedBy.push(this.name)
+      //log("Guarding " + this.guardingLoc)
+    }
+  },
+  res.unsetGuard = function() {
+    array.remove(w[this.guardingLoc][this.guardingDir + '_guardedBy'], this.name)
+    delete this.guardingLoc
+    delete this.guardingDir
+    delete this.isGuardingFunction
+  },
+  res.isGuarding = function(exitOrRoom) {
+    if (this.dead) return false
+    if (exitOrRoom.room) {
+      return exitOrRoom.name === this.guardingLoc && this.loc === this.guardingLoc
+    }
+    else {
+      return exitOrRoom.origin.name === this.guardingLoc && exitOrRoom.dir === this.guardingDir && this.loc === this.guardingLoc
+    }
+  },
+
 
 
   res.selectSkill = function() {
-    return this.skillOptions ? rpg.findSkill(random.fromArray(this.skillOptions)) : defaultSkill 
+    //return this.skillOptions ? rpg.findSkill(random.fromArray(this.skillOptions)) : defaultSkill 
+    if (!this.skillOptions) return defaultSkill
+    const skillName = random.fromArray(this.skillOptions)
+    return rpg.findSkill(skillName)
   }
 
   res.examine = function(options) {
@@ -239,27 +282,33 @@ const RPG_NPC = function(female) {
     return attack
   }
   
-  res.antagonise = function(target) {
+  res.antagonise = function(attacker) {
+    if (this.allegiance === 'friend' && attacker === player) {
+      this.allegiance ='foe'
+    }
     if (this.signalGroups && this.signalGroups.length) {
-      rpg.broadcastAll('attack', this, target)
+      rpg.broadcastAll('attack', this, attacker)
     }
     else {
-      rpg.broadcastCommunication(this, 'attack', this, target)
+      rpg.broadcastCommunication(this, 'attack', this, attacker)
     }      
   }
 
   res.endTurn = function(turn) {
     if (this.dead) return false
-    if (this.aggressive && this.target) {
+    if (this.isGuardingFunction) this.isGuardingFunction()
+    if (this.hostile && this.target) {
       // If attacking, ignore agenda, etc.
       this.performAttack(w[this.target])
     }
     else {
       this.sayTakeTurn()
       this.doReactions()
+      log('here1' + this.name)
       if (!this.paused && !this.suspended && this.agenda && this.agenda.length > 0) this.doAgenda()
-      if (this.aggressive && this.target && !this.delayAgendaAttack) {
-        // Is the NPC now aggressive? If so, have an attack
+      log('here2')
+      if (this.hostile && this.target && !this.delayAgendaAttack) {
+        // Is the NPC now hostile? If so, have an attack
         this.performAttack(w[this.target])
       }
       this.delayAgendaAttack = false
@@ -273,7 +322,6 @@ const RPG_NPC = function(female) {
 
 const RPG_FRIEND = function(female) {
   const res = RPG_NPC(female)
-  res.aggressive = false
   res.allegiance = 'friend'
 }
 
@@ -379,14 +427,14 @@ const RPG_FEY = function(female) {
   return res
 }
 
-const RPG_BEAST = function(female, aggressive) {
+const RPG_BEAST = function(female, hostile) {
   const res = RPG_NPC(female);
 
   res.beast = true
-  res.aggressive = aggressive
+  res.hostile = hostile  // !!! needs to be set via agenda
   res.testTalk = function() {
     if (this.dead) return falsems(lang.npc_dead)
-    if (this.activeEffects.includes(lang.communeWithAnimalEffect)) return true
+    if (this.activeEffects.includes(lang.communeWithAnimalSpell)) return true
     return falsemsg(lang.cannotTalkToBeast, {item:this, char:player})
   }
     
