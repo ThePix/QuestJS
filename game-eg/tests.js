@@ -5,6 +5,7 @@ test.resetOnCompletion = false
 
 test.tests = function() {
   
+
   test.title("parser.scoreObjectMatch");
   test.assertEqual(55, parser.scoreObjectMatch("me", w.Buddy, {}));
   test.assertEqual(-1, parser.scoreObjectMatch("me fkh", w.Buddy, {}));
@@ -472,7 +473,6 @@ test.tests = function() {
   test.assertEqual("Kyle is her bear.", processText("{nv:Kyle:be} {pa:Lara} bear."));
   test.assertEqual("There is Kyle.", processText("There is {nm:chr:a}.", {chr:w.Kyle}));
   test.assertEqual("There is a book.", processText("There is {nm:chr:a}.", {chr:w.book}));
-  log(w.book.owner)
   test.assertEqual("There is a book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}));
   w.book.owner = 'Kyle'
   test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}));

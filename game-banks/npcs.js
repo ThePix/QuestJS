@@ -449,7 +449,7 @@ createItem("Kyle", CREW(false), {
         const g = player.getOuterWearable("body")
         return (g === false && this.reactionToUndress < 2)
       },
-      action:function() {
+      script:function() {
         if (player.isFemale) {
           msg("Kyle glances at you briefly. Kind of insulting that he is so uninterested in your naked body.");
         }
@@ -637,7 +637,7 @@ createItem("Ostap", CREW(false), {
     {
       name:'seenNaked',
       test:function() { player.getOuterWearable("body") === false && this.reactionToUndress < 2 },
-      action:function() {
+      script:function() {
         msg("Ostap looks you up and down, and smiles. 'Maybe I will get naked too! So liberating. The others are okay with it?'")
         this.reactionToUndress = 2
       },
@@ -646,7 +646,7 @@ createItem("Ostap", CREW(false), {
     {
       name:'seenInUnderwear',
       test:function() { player.getOuterWearable("body").wear_layer === 1 && this.reactionToUndress < 1 },
-      action:function() {
+      script:function() {
         msg("Ostap looks you up and down, and shrugs.")
         this.reactionToUndress = 1
       },
@@ -766,7 +766,7 @@ createItem("Aada", CREW(true), {
     {
       name:'seenNaked',
       test:function() { player.getOuterWearable("body") === false && this.reactionToUndress < 2 },
-      action:function() {
+      script:function() {
         if (player.isFemale) {
           msg("Aada looks you up and down. 'Very trim!' she notes. 'I bet the guys like the view.'")
           if (w.Kyle.reactionToUndress === 2) {
@@ -920,7 +920,7 @@ createItem("Ha_yoon", CREW(true), {
     {
       name:'seenNaked',
       test:function() { return player.getOuterWearable("body") === false && this.reactionToUndress < 2 },
-      action:function() {
+      script:function() {
         msg("'Captain!' exclaims Ha-yoon when she sees you naked.{ifNot:player:isFemale: 'I'm sure we don't need to see {i:that}!'}");
         this.reactionToUndress = 2;
       },
