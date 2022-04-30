@@ -856,7 +856,28 @@ createItem("Kyle", NPC(false),
     },
   ],
 
-  
+  reactions:[
+    {
+      name:'big_hat',
+      test:function() {
+        return player.getOuterWearable("head") === w.big_hat
+      },
+      script:function() { 
+        msg("'Wow, what a great hat,' Mary says.") 
+      },
+      override:["small_hat"],
+    },
+
+    {
+      name:'small_hat',
+      test:function() {
+        return player.getOuterWearable("head") === w.small_hat
+      },
+      script:function(params) {
+        msg("'What a lovely hat,' " + lang.getName(params.char) + " says.") 
+      },
+    },
+  ],  
 });
 
 
@@ -889,6 +910,16 @@ createItem("straw_boater",
   { loc:"Kyle", examine: "A straw boater.", worn:true }
 );
 
+
+createItem("small_hat",
+  WEARABLE(2, ['head']),
+  { examine: "A small hat." }
+)
+
+createItem("big_hat",
+  WEARABLE(2, ['head']),
+  { examine: "A large hat." }
+)
 
 
 

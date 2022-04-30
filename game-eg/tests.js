@@ -1132,6 +1132,35 @@ test.tests = function() {
   test.assertCmd("use bed", "You lie down on the bed.");
   test.assertCmd("d", ["You get off the bed.", "You head down.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, seven bricks, a canteen, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and a small key here.", "You can go east, south, up or west.",]);  
 
+
+  test.title("NPC reactions 1")
+  test.assertCmd("wait", "Time passes...")
+  w.big_hat.loc = player.name
+  w.big_hat.worn = true
+  test.assertCmd("wait", ["Time passes...", "'Wow, what a great hat,' Mary says."])
+  delete w.big_hat.loc
+  delete w.big_hat.worn
+  w.small_hat.loc = player.name
+  w.small_hat.worn = true
+  test.assertCmd("wait", ["Time passes..."])
+  delete w.small_hat.loc
+  delete w.small_hat.worn
+  delete w.Kyle.reactionFlags  
+
+  test.title("NPC reactions 1")
+  w.small_hat.loc = player.name
+  w.small_hat.worn = true
+  test.assertCmd("wait", ["Time passes...", "'What a lovely hat,' Kyle says."])
+  delete w.small_hat.loc
+  delete w.small_hat.worn
+  w.big_hat.loc = player.name
+  w.big_hat.worn = true
+  test.assertCmd("wait", ["Time passes...", "'Wow, what a great hat,' Mary says."])
+  delete w.big_hat.loc
+  delete w.big_hat.worn
+  delete w.Kyle.reactionFlags  
+
+
   
   test.title("say");
   test.assertCmd("say hello", ["You say, 'Hello.'", "No one seems interested in what you say."]);
@@ -1171,7 +1200,7 @@ test.tests = function() {
   test.assertError(/Trying to find topic/, function() {w.Lara.findTopic("What's the deal with the garden?")})
   test.assertEqual(1, w.Kyle.findTopic("What's the deal with the garden?").nowShow.length)
   
-  
+
   
   test.title("NPC commands 1");
   test.assertCmd("lara,get brick", "'I'm not picking up any bricks,' says Lara indignantly.");
