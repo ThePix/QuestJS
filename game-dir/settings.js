@@ -14,6 +14,8 @@ settings.noTalkTo = false
 settings.setup = function() {
   createAdditionalPane(2, "Go to", 'directions', function() {
     let html = ''
+    if (!currentLocation.dests) return html
+    
     for (const ex of currentLocation.dests) {
       const dest = w[ex.name]
       html += '<div style="margin-bottom: 10px;"><p class="item" onclick="runCmd(\'go to ' + dest.alias.toLowerCase() + '\')">' + dest.headingAlias + '</p></div>'

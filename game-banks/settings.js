@@ -1,6 +1,7 @@
 "use strict";
 
 
+settings.playMode = 'dev'
 
 
 settings.title = "The Voyages of The Joseph Banks"
@@ -17,9 +18,8 @@ settings.noTalkTo = "You can talk to an NPC using either {color:red:ASK [name] A
 settings.noAskTell = false
 settings.givePlayerAskTellMsg = false
 settings.symbolsForCompass  = true
+settings.disableWaitInDevMode = true
 
-
-settings.playMode = 'dev'
 settings.tests = true
 settings.dateTime.start = new Date('April 14, 2387 09:43:00')
 
@@ -148,8 +148,8 @@ for (let back of backgrounds) {
 s += '</select></td></tr></table>'
 
 
-//settings.startingDialogEnabled = settings.playMode !== 'dev'
-settings.startingDialogEnabled = true
+settings.startingDialogEnabled = settings.playMode !== 'dev'
+//settings.startingDialogEnabled = true
 settings.startingDialogTitle = "To start with..."
 settings.startingDialogWidth = 500
 settings.startingDialogHeight = 550

@@ -742,17 +742,17 @@ createItem("Kyle", NPC(false),
   ],
   askOptions:[
     {
-      test:function(p) { return p.text.match(/kyle|himself/); }, 
+      regex:/kyle|himself/, 
       script:function() { msg("'Oh!' says Kyle. 'I suppose I would say: " + this.examine + "'") },
     },
     {
       name:'House',
-      test:function(p) { return p.text.match(/house/); }, 
+      regex:/house/, 
       msg:"'I like it,' says Kyle.",
     },
     {
       name:'Garden',
-      test:function(p) { return p.text.match(/garden/) },
+      regex:/garden/,
       responses:[
         {
           test:function(p) { return w.garden.fixed; },
@@ -786,7 +786,7 @@ createItem("Kyle", NPC(false),
     {
       name:'Swings',
       silent:true,
-      test:function(p) { return p.text.match(/swing/) },
+      regex:/swing/,
       msg:"'The swings are fun!'",
     },
     {

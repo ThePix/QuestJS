@@ -78,7 +78,7 @@ commands.push(new Cmd('Launch', {
   regex:/^(?:launch|deploy) (.+)$/,
   npcCmd:true,
   objects:[
-    {scope:parser.isInWorld},
+    {scope:parser.isInWorld, extendedScope:true},
   ],
   defmsg:"You can't launch that!",
 }));

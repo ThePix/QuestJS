@@ -35,7 +35,7 @@ commands.unshift(new Cmd('GoTo', {
   npcCmd:true,
   regex:/^(?:go to|go) (.+)$/,
   objects:[
-    {scope:parser.isRoom}
+    {scope:parser.isRoom, extendedScope: true}
   ],
   script:function(objects) {
     const room = objects[0][0]

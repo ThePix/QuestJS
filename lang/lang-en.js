@@ -227,6 +227,7 @@ const lang = {
     DebugWalkThrough:/^wt (.+)$/,
     DebugInspect:/^inspect (.+)$/,
     DebugInspectByName:/^inspect2 (.+)$/,
+    DebugWarpName:/^warp (.+)$/,
     DebugTest:/^test$/,
     DebugInspectCommand:/^(?:cmd) (.+)$/,
     DebugListCommands:/^cmds$/,
