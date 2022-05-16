@@ -640,6 +640,9 @@ const lang = {
           metamsg("You can also use the compass rose at the top to move around. Click 'Lk' to look at you current location, 'Z' to wait or '?' for help.")
         }
       }
+      if (settings.collapsibleSidePanes) {
+        metamsg("You can click on the eye symbol by the pane titles to toggle them being visible. This may be useful if there is a lot there, and entries are disappearing off the bottom of your screen, though you may miss that something is here if you are not careful!")
+      }
     }
     if (settings.additionalHelp !== undefined) {
       for (const s of settings.additionalHelp) metamsg(s)
