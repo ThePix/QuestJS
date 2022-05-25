@@ -22,17 +22,24 @@ settings.setup = function() {
     }
     return html
   })
-}
-
-
-settings.roomCreateFunc = function(o) {
-  if (o.dests) {
-    for (const ex of o.dests) {
-      ex.origin = o
-      ex.dir = 'to ' + (o.dirAlias ? o.dirAlias : o.alias)
+  
+  for (const key in w) {
+    const o = w[key]
+    if (o.dests) {
+      for (const ex of o.dests) {
+        const dest = w[ex.name]
+        if (!dest) log('Warning: ' + ex + ' in the destinations for ' + key + ' is not a location.')
+        ex.origin = o
+        ex.dir = 'to ' + (ex.dirAlias ? ex.dirAlias : dest.alias)
+      }
     }
   }
 }
+
+
+
+
+
 
 settings.inventoryPane.push(
   {name:'On Phone To', alt:'onPhoneTo', test:function(item) { return item.name === player.onPhoneTo  } }

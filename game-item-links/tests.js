@@ -354,9 +354,6 @@ test.tests = function() {
   test.title("Text processor 1");
   test.assertEqual("Simple text", processText("Simple text"));
   test.assertEqual("Simple <i>text</i>", processText("Simple {i:text}"));
-  test.assertEqual("Simple <i>Text</i>", processText("Simple {cap:{i:text}}"));
-
-
   test.assertEqual("Simple <span style=\"color:red\">text</span>.", processText("Simple {colour:red:text}."));
   test.assertEqual("Simple <span style=\"color:red\">text with <i>nesting</i></span>.", processText("Simple {colour:red:text with {i:nesting}}."));
   test.assertEqual("Simple text", processText("Simple {random:text}"));
@@ -371,6 +368,7 @@ test.tests = function() {
   player.someOddAtt = 67;
 
   test.assertEqual("Simple text to show capitalisation.", processText("{cap:simple text to show capitalisation.}"));
+  test.assertEqual("Simple Text To Show Capitalisation.", processText("{title:simple text to show capitalisation.}"));
   test.assertEqual("SIMPLE TEXT.", processText("{upper:Simple text.}"));
   test.assertEqual("simple text.", processText("{lower:Simple text.}"));
 

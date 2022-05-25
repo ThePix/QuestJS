@@ -12,14 +12,7 @@ settings.styleFile = 'style'
 
 
 
-settings.roomCreateFunc = function(o) {
-  if (o.dests) {
-    for (const ex of o.dests) {
-      ex.origin = o
-      ex.dir = 'to ' + (o.dirAlias ? o.dirAlias : o.alias)
-    }
-  }
-}
+
 
 settings.afterEnter = function() {
   if (player.onPhoneTo && w[player.onPhoneTo].loc === player.loc) {
@@ -55,6 +48,19 @@ settings.setup = function() {
     s += '</p>'
     return s    
   })
+
+  for (const key in w) {
+    const o = w[key]
+    if (o.dests) {
+      for (const ex of o.dests) {
+        const dest = w[ex.name]
+        if (!dest) log('Warning: ' + ex + ' in the destinations for ' + key + ' is not a location.')
+        ex.origin = o
+        ex.dir = 'to ' + (ex.dirAlias ? ex.dirAlias : dest.alias)
+      }
+    }
+  }
+
   settings.updateCustomUI()
 }
 

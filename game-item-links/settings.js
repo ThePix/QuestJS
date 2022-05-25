@@ -20,8 +20,9 @@ settings.libraries.push('quest')
 settings.libraries.push('roulette')
 settings.styleFile = 'style'
 
+settings.libraries.push('item_links')
 
-//settings.libraries.push('item_links')
+settings.panes = 'none'
 
 //settings.localStorageDisabled = true
 

@@ -9,7 +9,7 @@ createItem("me", PLAYER(), {
 createRoom("lounge", {
   dests:[
     new Exit("kitchen"),
-    new Exit("master_bedroom"),
+    new Exit("master_bedroom", {dirAlias:'the bedroom'}),
   ],
   desc:"A smelly room with an old settee and a tv.",
 })

@@ -980,7 +980,15 @@ const lang = {
     if (item.owner && options.possAdj && options.possAdj === w[item.owner]) {
       return options.possAdj.pronouns.possAdj + " "
     }
-    if (item.owner && !options.ignorePossessive) return lang.getName(w[item.owner], {possessive:true}) + " "
+    // If ignorePossessive is true, just skip this
+    // If it is 'noLink', 
+    if (item.owner && options.ignorePossessive !== true) {
+      const suboptions = {
+        possessive:true,
+        noLink:options.ignorePossessive === 'noLink'
+      }
+      return lang.getName(w[item.owner], suboptions) + " "
+    }
 
     // handle "the"
     if (type === DEFINITE) {
