@@ -66,7 +66,7 @@ createItem("Buddy", NPC(false), {
   receiveItems:[
     {
       test:function() { return true },
-      f:function(options) { 
+      script:function(options) { 
         msg("{multi}Done.", options)
         options.item.loc = this.name
       }
@@ -725,17 +725,17 @@ createItem("Kyle", NPC(false),
   receiveItems:[
     {
       item:w.book, 
-      f:function() { 
+      script:function(p) { 
         msg("'Oh!' says Kyle. 'Is this a book?'")
-        w.book.loc = this.name
+        w.book.loc = p.npc.name
         return true
       }
     },
     {
       test:function() { return true },
-      f:function(options) { 
-        msg("{multi}Done.", options)
-        options.item.loc = this.name
+      script:function(p) { 
+        msg("{multi}Done.", p)
+        p.item.loc = p.npc.name
         return true
       }
     },
@@ -881,28 +881,32 @@ createItem("Kyle", NPC(false),
 });
 
 
+
 createItem("kyle_question", QUESTION(), {
   responses:[
     {
       regex:/^(yes)$/,
-      response:function() {
+      script:function() {
         msg("'Oh, cool,' says Kyle.");
-      }
+      },
     },
     {
       regex:/^(no)$/,
-      response:function() {
+      script:function() {
         msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.");
-      }
+      },
     },
     {
-      response:function() {
+      script:function() {
         msg("'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'");
         w.Kyle.askQuestion("kyle_question");
-      }
+      },
+      disableReset:true,
     },
   ],
 });  
+ 
+
   
 
 createItem("straw_boater",
@@ -931,27 +935,26 @@ createItem("Lara", NPC(true), {
   examine:"A normal-sized bunny.",
   properNoun:true, 
   happy:false,
-  receiveItemsFailMsg:"'That's not a carrot,' Lara points out.",
   receiveItems:[
     {
       item:w.knife, 
-      f:function() { 
+      script:function(p) { 
         msg("'A knife?' says Lara. 'I guess I could use that... for something?'")
-        w.knife.loc = this.name
+        w.knife.loc = p.npc.name
       }
     },
     {
       test:function(options) {
         return options.item.name.startsWith('carrot')
       },
-      f:function(options) { 
+      script:function(options) { 
         msg("'A carrot!' says Lara with delight, before stuffing it in her mouth. 'So, do you have any more?'")
         delete options.item.loc
       }
     },
     {
       item:w.ring,
-      f:function(options) { 
+      script:function(options) { 
         msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
         w.ring.loc = "Lara"
         w.ring.worn = true
@@ -960,10 +963,14 @@ createItem("Lara", NPC(true), {
     },
     {
       item:w.book,
-      f:function(options) { 
+      script:function(options) { 
         msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'")
         w.book.loc = "Lara"
       }
+    },
+    {
+      msg:"'That's not a carrot,' Lara points out.",
+      failed:true,
     },
   ],
   getAgreementTake:function(item) {
@@ -1004,7 +1011,7 @@ createItem("Lara", NPC(true), {
     {
       regex:/^(hi|hello)$/,
       id:"hello",
-      response:function() {
+      script:function() {
         msg("'Oh, hello there,' replies Lara.")
         if (w.Kyle.isHere()) {
           msg("'Have you two met before?' asks Kyle.")
@@ -1231,9 +1238,9 @@ createItem("piggy_suu", NPC(true), {
   receiveItems:[
     {
       test:function() { return true },
-      f:function(options) { 
+      script:function(options) { 
         msg(lang.done_msg, options)
-        options.item.loc = this.name
+        options.item.loc = options.npc.name
         return true
       }
     },
