@@ -1253,6 +1253,7 @@ createItem("Boris", NPC(), {
 
 createItem("timetable", AGENDA_FOLLOWER(), {
   counter:0,
+  abstract:true,
   script:function(n) {
     this.counter += (n[0] ? parseInt(n[0]) : 1) 
   },

@@ -545,11 +545,10 @@ createItem("Winfield_Malewicz", NPC(), {
     w.Winfield_Malewicz_corpse.loc = currentLocation.name
     w.bloody_brick.loc = player.name
   },
-  receiveItemsFailMsg:"Mandy offer {nm:item:the} to Dr Malewicz, who looks at it with disdain. 'what's that for?' he asks.",
   receiveItems:[
     {
       item:w.letter,
-      f:function(options) {
+      script:function(options) {
         msg("Mandy gives the letter to Dr Malewicz 'This is for you; it was in the street.'")
         msg("'A letter?' He turns it over, inspecting the address. 'It is for me! This is most unusual.'") 
         msg("'I know, right? Who sends letters nowadays?'")
@@ -561,6 +560,10 @@ createItem("Winfield_Malewicz", NPC(), {
         w.invite.scenery = true
         return true
       },
+    },
+    {
+      failed:true,
+      msg:"Mandy offer {nm:item:the} to Dr Malewicz, who looks at it with disdain. 'what's that for?' he asks.",
     },
   ],
   askOptions:[

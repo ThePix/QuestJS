@@ -32,24 +32,24 @@ createItem("player", PLAYER(), {
   receiveItems:[
     {
       item:w.boots, 
-      f:function() { 
+      script:function(options) { 
         options.item.loc = player.name
         options.item.worn = false
-        options.char.animated = false
+        options.npc.animated = false
         msg("'Give me the boots,' says Mandy.")
-        msg("{nv:char:look:true} at her in surprise, then sadness. Forlornly he sits on the floor, and slowly pulls off the boots, before handing them to Mandy. Mandy cannot look at his face without feeling guilty.", options)
+        msg("{nv:npc:look:true} at her in surprise, then sadness. Forlornly he sits on the floor, and slowly pulls off the boots, before handing them to Mandy. Mandy cannot look at his face without feeling guilty.", options)
       }
     },
     {
-      test:function(options) { return options.char === w.Patch },
-      f:function(options) {
+      test:function(options) { return options.npc === w.Patch },
+      script:function(options) {
         msg("'Give me {nm:item:the},' says Mandy.|{nv:char:look:true} at {nm:item:the} in his hand, then at Mandy. After a moment's deep thought, he hands her {ob:item}.", options)      
         options.item.loc = player.name
       }
     },
     {
       test:function() { return true },
-      f:function(options) { 
+      script:function(options) { 
         msg("{multi}Done.", options)
         options.item.loc = this.name
       }

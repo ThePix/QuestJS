@@ -384,14 +384,10 @@ createItem("Patch", NPC(false), {
     }
     return false
   },
-  receiveItemsFailMsg:function(options) {
-    options.item.loc = this.loc
-    return falsemsg("Mandy gives {nm:item:the} to {nm:Patch:the}. {nv:Patch:look} at {sb:item} in confusion, before dropping {sb:item} to the floor.", options)
-  },
   receiveItems:[
     {
       item:w.boots,
-      f:function(options) {
+      script:function(options) {
         if (w.boots.size < 5) {
           options.item.loc = this.loc
           return falsemsg("Mandy gives the boots to {nm:npc:the}. He looks at the tiny footwear in confusion, before dropping them on the floor.", options)
@@ -417,6 +413,13 @@ createItem("Patch", NPC(false), {
         options.item.worn = true
         this.animated = true
         msg("Mandy gives the boots to {nm:npc:the}. He looks at the footwear with a big smile, then proceeds to pull on the left boot... Then the right. He looks at them, now on his feet, for a moment, before getting off the bench, and standing upright, ripping of all the wires connecting him to the strange device.", options)
+      },
+    },
+    {
+      failed:true,
+      script:function(options) {
+        options.item.loc = this.loc
+        return falsemsg("Mandy gives {nm:item:the} to {nm:Patch:the}. {nv:Patch:look} at {sb:item} in confusion, before dropping {sb:item} to the floor.", options)
       },
     },
   ],
@@ -1037,11 +1040,10 @@ createItem("tiny_man", NPC(false), {
       }
     },
   ],
-  receiveItemsFailMsg:"Mandy gives {nm:item:the} to the tiny man. 'What'd I want something like that for?' he asks.",
   receiveItems:[
     {
       item:w.boots,
-      f:function(options) {
+      script:function(options) {
         if (w.boots.size !== 4) {
           return falsemsg("Mandy gives {nm:item:the} to the tiny man. 'What'd I want something like that for?' he asks.|'I thought you might be a cobbler elf.'|'A what? Are you taking the piss?'|'No! It's just you're quite... small.|'I'm normal size, I am. You're the freak, lady-giant. I can't fix no giant lady boots; I only do {i:normal-size} footwear.'", options)
         }
@@ -1061,7 +1063,7 @@ createItem("tiny_man", NPC(false), {
     },
     {
       test:function(options) { return options.item.name.startsWith('tamarind_pod_prototype') },
-      f:function(options) {
+      script:function(options) {
         msg("Mandy gives the tamarind pod to the tiny man. 'What'd I want something like that for?' he asks.|'I thought you might be able to cut it open,' says Mandy. 'You know, with your little tools.'|'My what?'|'Er, your normal-sized tools?'")
         if (options.item.size > 4) {
           msg("He shrugs. 'Give it a go.' He grabs and hammer and chisel, and sets about trying to break into the pod.")
@@ -1076,6 +1078,10 @@ createItem("tiny_man", NPC(false), {
         }
         delete options.item.loc
       },
+    },
+    {
+      failed:true,
+      msg:"Mandy gives {nm:item:the} to the tiny man. 'What'd I want something like that for?' he asks.",
     },
   ],
   talkto:function() {

@@ -17,7 +17,7 @@ settings.textEffectDelay = 100
 settings.imagesFolder = 'images/'
 settings.libraries.push('zone')
 settings.libraries.push('quest')
-settings.libraries.push('roulette')
+//settings.libraries.push('roulette')
 settings.styleFile = 'style'
 
 
