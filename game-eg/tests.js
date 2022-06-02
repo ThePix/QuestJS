@@ -629,7 +629,7 @@ test.tests = function() {
 
   test.title("Text processor 12: pa2");
   test.assertEqual("'Please stop!' exclaims Kyle when you rip his book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:player}))
-  test.assertEqual("'Please stop!' exclaims Kyle when Boris rips Kyle's book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:w.Boris}))
+  test.assertEqual("'Please stop!' exclaims Kyle when Snowy rips Kyle's book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:w.Snowy}))
   test.assertEqual("'Please stop!' exclaims Kyle when Kyle rips his book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:w.Kyle}))
 
 
@@ -881,15 +881,15 @@ test.tests = function() {
   test.assertCmd("eat knife", "The knife is not something you can eat.");
   test.assertEqual(["Examine", "Take"], w.ham_and_cheese_sandwich.getVerbs())
   test.assertCmd("get sandwich", "You take the ham and cheese sandwich.");
-  test.assertCmd("x sandwich", "It is just your typical, every day ham and cheese sandwich.")
-  test.assertCmd("x sandwich", "It is just your typical, every day ham and cheese sandwich.")
-  test.assertCmd("x ham and cheese sandwich", "It is just your typical, every day ham and cheese sandwich.")
+  test.assertCmd("x sandwich", "Made of bread, ham and cheese.")
+  test.assertCmd("x sandwich", "Made of bread, ham and cheese.")
+  test.assertCmd("x ham and cheese sandwich", "Made of bread, ham and cheese.")
   test.assertCmd("x sandwich and knife", [
-    "It is just your typical, every day ham and cheese sandwich.",
+    "Made of bread, ham and cheese.",
     "A blunt knife.",
   ])
   test.assertCmd("x ham and cheese sandwich, knife", [
-    "It is just your typical, every day ham and cheese sandwich.",
+    "Made of bread, ham and cheese.",
     "A blunt knife.",
   ])
 
@@ -1168,7 +1168,8 @@ test.tests = function() {
   test.assertCmd("say hello", ["You say, 'Hello.'", "No one seems interested in what you say."]);
   w.Kyle.loc = "dining_room"
   test.assertCmd("w", ["You head west.", "The dining room", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and Lara here.", "You can go east, up or west.",]);
-  test.assertCmd("say hello", ["You say, 'Hello.'", "'Oh, hello there,' replies Lara.", "'Have you two met before?' asks Kyle."]);
+  
+  test.assertCmd("say hello", ["You say, 'Hello.'", "'Oh, hello there,' replies Lara.", "'Have you two met before?' asks Kyle."])
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);

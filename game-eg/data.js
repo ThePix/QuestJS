@@ -194,6 +194,7 @@ createItem("cardboard_box", TAKEABLE(), CONTAINER(true), {
 createItem("ham_and_cheese_sandwich", EDIBLE(false), {
   pattern:'egg|mayo',
   loc:"lounge",
+  examine:"Made of bread, ham and cheese.",
   afterIngest:function() { msg("That was great!"); },
 })
 
@@ -655,6 +656,7 @@ createItem("hook", {
 
 createRoom("far_away", {
   north:new Exit("lounge"),
+  abstract:true,
 });
 
 
@@ -882,29 +884,33 @@ createItem("Kyle", NPC(false),
 
 
 
-createItem("kyle_question", QUESTION(), {
-  responses:[
-    {
-      regex:/^(yes)$/,
-      script:function() {
-        msg("'Oh, cool,' says Kyle.");
-      },
+util.createQuestion("kyle_question", [
+  {
+    regex:/^(yes)$/,
+    script:function() {
+      msg("'Oh, cool,' says Kyle.");
     },
-    {
-      regex:/^(no)$/,
-      script:function() {
-        msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.");
-      },
+  },
+  {
+    regex:/^(no)$/,
+    script:function() {
+      msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.")
     },
-    {
-      script:function() {
-        msg("'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'");
-        w.Kyle.askQuestion("kyle_question");
-      },
-      disableReset:true,
+  },
+  {
+    script:function() {
+      msg("'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'")
+      w.Kyle.askQuestion("kyle_question")
     },
-  ],
-});  
+  },
+], {
+  extraScript:function() {
+    //msg("Kyle looks around excitedly")
+  },
+  expiredScript:function() {
+    msg("'Well, you can keep it secret if you like,' sighs Kyle. 'I suppose.'")
+  },
+})  
  
 
   
@@ -1247,7 +1253,8 @@ createItem("piggy_suu", NPC(true), {
   ],
 })
 
-createItem("Boris", NPC(), { 
+createItem("Snowy", NPC(), {
+  abstract:true,
 })
 
 

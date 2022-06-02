@@ -883,28 +883,26 @@ createItem("Kyle", NPC(false),
 });
 
 
-createItem("kyle_question", QUESTION(), {
-  responses:[
-    {
-      regex:/^(yes)$/,
-      response:function() {
-        msg("'Oh, cool,' says Kyle.");
-      }
+util.createQuestion("kyle_question", [
+  {
+    regex:/^(yes)$/,
+    script:function() {
+      msg("'Oh, cool,' says Kyle.");
     },
-    {
-      regex:/^(no)$/,
-      response:function() {
-        msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.");
-      }
+  },
+  {
+    regex:/^(no)$/,
+    script:function() {
+      msg("'Oh, well, Lara, this is Tester, he or she is testing Quest 6,' says Kyle.");
     },
-    {
-      response:function() {
-        msg("'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'");
-        w.Kyle.askQuestion("kyle_question");
-      }
+  },
+  {
+    script:function() {
+      msg("'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'");
+      w.Kyle.askQuestion("kyle_question");
     },
-  ],
-});  
+  },
+])   
   
 
 createItem("straw_boater",
