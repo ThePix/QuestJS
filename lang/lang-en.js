@@ -210,7 +210,7 @@ const lang = {
       /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
       /^(?:tell|ask|instruct) (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
     ],
-    AskAbout:/^(?:ask) (.+?) (about|what|who|how|why|where|when) (.+)$/,
+    AskAbout:/^(?:ask|consult|consult with) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TellAbout:/^(?:tell) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TalkAbout:[
       /^(?:talk to|talk with|talk|speak to|speak with|speak) (.+?) about (what|who|how|why|where|when) (.+)$/,
