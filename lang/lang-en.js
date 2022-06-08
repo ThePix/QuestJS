@@ -210,7 +210,7 @@ const lang = {
       /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
       /^(?:tell|ask|instruct) (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
     ],
-    AskAbout:/^(?:ask|consult|consult with) (.+?) (about|what|who|how|why|where|when) (.+)$/,
+    AskAbout:/^(?:ask) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TellAbout:/^(?:tell) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TalkAbout:[
       /^(?:talk to|talk with|talk|speak to|speak with|speak) (.+?) about (what|who|how|why|where|when) (.+)$/,
@@ -1078,26 +1078,104 @@ const lang = {
   // Returns the given number in words, so 19 would be returned as 'nineteen'.
   // Numbers uner -2000 and over 2000 are returned as a string of digits,
   // so 2001 is returned as '2001'.
+  toWordsMax:10000,
+  toWordsMillions:['', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion', 'decillion', 'undecillion', 'duodecillion'],
+  
   toWords:function(number) {
     if (typeof number !== "number") {
       errormsg ("toWords can only handle numbers");
       return number;
     }
-    
-    let s = "";
+    number = Math.round(number)
+    //if (number < -lang.toWordsMax || number > lang.toWordsMax) return number.toString()
+
+    let s = ""
+    let negative = false
+    if (number === 0) return 'zero'
     if (number < 0) {
-      s = "minus ";
+      negative = true
       number = -number;
     }
-    if (number < 2000) {
+    
+    const parts = rChunkString(number, 3)
+    let count = 0
+    let commaFlag = false
+    
+    while (parts.length) {
+      const bit = lang._toWords1000(parts.pop())
+      if (bit !== 'zero') {
+        if (count) {
+          s = bit + ' ' + lang.toWordsMillions[count] + (commaFlag ? ',' : '') + ' ' + s
+        }
+        else {
+          s = bit + ' ' + s
+        }
+        commaFlag = true
+      }
+      count++
+    }
+    s = s.trim()
+    
+    return negative ? 'minus ' + s : s
+  },
+  
+  // For internal use, handles integers from 1 to 999 only
+  _toWords1000:function(number) {
+    let s = ''
+    let hundreds = Math.floor(number / 100);
+    number = number % 100;
+    if (hundreds > 0) {
+      s = s + lang.numberUnits[hundreds] + " hundred";
+      if (number > 0) {
+        s = s + " and ";
+      }
+    }
+    
+    if (number < 20) {
+      if (number !== 0 || s === "") {
+        s = s + lang.numberUnits[number];
+      }
+    }
+    else {
+      let units = number % 10;
+      let tens = Math.floor(number / 10) % 10;
+      s = s + lang.numberTens[tens - 2];
+      if (units !== 0) {
+        s = s + '-' + lang.numberUnits[units];
+      }
+    }
+    return (s);
+  },
+
+  //@DOC
+  // Returns the given number in words, as is conventionally said for a year,
+  // so 1924 with return "nineteen twenty-three".
+  // Throws an error if not a number and rounds to the nearest whole number.
+  // Does not properly handle zero - there was no year zero
+  toYear:function(number) {
+    if (typeof number !== "number") {
+      errormsg ("toYear can only handle numbers");
+      return number;
+    }
+    number = Math.round(number)
+    let s = ""
+    let negative = false
+    if (number < 0) {
+      negative = true
+      number = -number;
+    }
+    if (number < 10000) {
       let hundreds = Math.floor(number / 100);
+      log(hundreds)
       number = number % 100;
       if (hundreds > 0) {
-        s = s + lang.numberUnits[hundreds] + " hundred";
+        s += lang.numberUnits[hundreds]
         if (number > 0) {
-          s = s + " and ";
+          s += " "
         }
       }
+      log(s)
+      
       if (number < 20) {
         if (number !== 0 || s === "") {
           s = s + lang.numberUnits[number];
@@ -1115,8 +1193,10 @@ const lang = {
     else {
       s = number.toString();
     }
+    if (negative) s+= ' BCE'
     return (s);
   },
+
 
 
   //@DOC
