@@ -1079,7 +1079,7 @@ const lang = {
   // Numbers uner -2000 and over 2000 are returned as a string of digits,
   // so 2001 is returned as '2001'.
   toWordsMax:10000,
-  toWordsMillions:['', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion', 'decillion', 'undecillion', 'duodecillion'],
+  toWordsMillions:['', ' thousand', ' million', ' billion', ' trillion', ' quadrillion', ' quintillion', ' sextillion', 's eptillion', ' octillion', ' nonillion', ' decillion', ' undecillion', ' duodecillion'],
   
   toWords:function(number) {
     if (typeof number !== "number") {
@@ -1089,7 +1089,6 @@ const lang = {
     number = Math.round(number)
     //if (number < -lang.toWordsMax || number > lang.toWordsMax) return number.toString()
 
-    let s = ""
     let negative = false
     if (number === 0) return 'zero'
     if (number < 0) {
@@ -1099,22 +1098,23 @@ const lang = {
     
     const parts = rChunkString(number, 3)
     let count = 0
-    let commaFlag = false
+    //let commaFlag = false
+    const result = []
     
     while (parts.length) {
       const bit = lang._toWords1000(parts.pop())
       if (bit !== 'zero') {
-        if (count) {
-          s = bit + ' ' + lang.toWordsMillions[count] + (commaFlag ? ',' : '') + ' ' + s
-        }
-        else {
-          s = bit + ' ' + s
-        }
-        commaFlag = true
+        result.unshift(bit + lang.toWordsMillions[count])
       }
       count++
     }
-    s = s.trim()
+    let s = formatList(result, {lastJoiner:'and', doNotSort:true})
+    const md = s.match(/ and /g)
+    if (md && md.length > 1) {
+      const pos = s.lastIndexOf(' and ')
+      s = s.substring(0, pos) + ',' + s.substring(pos)
+    }
+    
     
     return negative ? 'minus ' + s : s
   },
