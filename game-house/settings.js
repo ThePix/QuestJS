@@ -57,7 +57,7 @@ settings.afterLoad = function() {
 settings.customNoExitMsg = function(char, dir) {
   const list = w[player.loc].getExitDirs({excludeLocked:true, excludeScenery:true, excludeAlsoDir:true})
   if (list.length === 1) return "She cannot go " + dir + ". Looks like the only exit is back " + list[0] + "."
-  const listString = formatList(list, {lastJoiner:lang.list_or, nothing:lang.list_nowhere})
+  const listString = formatList(list, {lastSep:lang.list_or, nothing:lang.list_nowhere})
   return "She cannot go " + dir + " - the exits she can see are " + listString + "." 
 }
 

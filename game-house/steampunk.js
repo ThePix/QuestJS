@@ -637,7 +637,7 @@ createItem("Winfield_Malewicz", NPC(), {
         msg("'So how did you know those One D song titles?'");
         msg("'I'm not sure what you're talking about.'");
         let s = "'You were dropping me clues. "
-        s += formatList(w.Winfield_Malewicz.songlist.map(el => "{i:" + el + "}"), {lastJoiner:'and'})
+        s += formatList(w.Winfield_Malewicz.songlist.map(el => "{i:" + el + "}"), {lastSep:'and'})
         s += ". They're all One Direction song titles.'"
         msg(s)
         msg("'I still don't know what you are talk about.'")

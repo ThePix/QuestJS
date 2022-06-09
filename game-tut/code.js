@@ -20,5 +20,5 @@ tp.addDirective("charger_state", function() {
   if (contents.length === 0) {
     return "The compartment is empty"
   }
-  return "The compartment contains " + formatList(contents, {article:INDEFINITE, lastJoiner:'and'})
+  return "The compartment contains " + formatList(contents, {article:INDEFINITE, lastSep:'and'})
 })

@@ -659,7 +659,7 @@ const lang = {
     metamsg("{i:{show:settings:title} version {show:settings:version}} was written by {show:settings:author} using QuestJS (Quest 6) version {show:settings:questVersion}.", {settings:settings})
     if (settings.ifdb) metamsg("IFDB number: " + settings.ifdb)
     if (settings.thanks && settings.thanks.length > 0) {
-      metamsg("{i:Thanks to:} " + formatList(settings.thanks, {lastJoiner:lang.list_and}) + ".")
+      metamsg("{i:Thanks to:} " + formatList(settings.thanks, {lastSep:lang.list_and}) + ".")
     }
     if (settings.additionalAbout !== undefined) {
       for (const key in settings.additionalAbout) metamsg('{i:' + key + ':} ' + settings.additionalAbout[key])

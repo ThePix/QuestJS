@@ -340,13 +340,13 @@ test.tests = function() {
   test.assertEqual('nothing', formatList([], {nothing:'nothing'}))
   test.assertEqual('one', formatList(['one']))
   test.assertEqual('one, two', formatList(['one', 'two']))
-  test.assertEqual('one and two', formatList(['one', 'two'], {lastJoiner:'and'}))
+  test.assertEqual('one and two', formatList(['one', 'two'], {lastSep:'and'}))
   test.assertEqual('one, three, two', formatList(['one', 'two', 'three']))
-  test.assertEqual('one, three and two', formatList(['one', 'two', 'three'], {lastJoiner:'and'}))
+  test.assertEqual('one, three and two', formatList(['one', 'two', 'three'], {lastSep:'and'}))
   settings.oxfordComma = true
   test.assertEqual('one', formatList(['one']))
-  test.assertEqual('one and two', formatList(['one', 'two'], {lastJoiner:'and'}))
-  test.assertEqual('one, three, and two', formatList(['one', 'two', 'three'], {lastJoiner:'and'}))
+  test.assertEqual('one and two', formatList(['one', 'two'], {lastSep:'and'}))
+  test.assertEqual('one, three, and two', formatList(['one', 'two', 'three'], {lastSep:'and'}))
   settings.oxfordComma = false
 
 

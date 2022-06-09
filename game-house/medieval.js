@@ -329,7 +329,7 @@ createItem("Patch", NPC(false), {
     const held = scopeHeldBy(w.Patch)
     array.remove(held, w.boots)
     array.remove(held, w.boots_toe)
-    if (held.length > 0) s += ' He is holding ' + formatList(held, {article:INDEFINITE, lastJoiner:'and'}) + '.'
+    if (held.length > 0) s += ' He is holding ' + formatList(held, {article:INDEFINITE, lastSep:'and'}) + '.'
     if (this.huggingTree) s += '|He is currently hugging a tree.'
     msg(s)
   },
@@ -451,7 +451,7 @@ w.Patch.nameModifierFunctions[0] = function(item, l) {
   const held = scopeHeldBy(w.Patch)
   array.remove(held, w.boots)
   array.remove(held, w.boots_toe)
-  if (held.length > 0) l.push('holding ' + formatList(held, {article:INDEFINITE, lastJoiner:'and'}))
+  if (held.length > 0) l.push('holding ' + formatList(held, {article:INDEFINITE, lastSep:'and'}))
   if (w.Patch.huggingTree) l.push('hugging a tree')
 }
 

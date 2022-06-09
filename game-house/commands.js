@@ -574,7 +574,7 @@ findCmd('Say').script = function(objects) {
       else {
         const uniq = [...new Set(w.Winfield_Malewicz.songlist)];
         let s = "Mandy thinks about what makes her special. Then looks at her bag. Her {i:One Direction} bag. And then there were some of the things Dr Malewicz had said, like "
-        s += formatList(uniq.map(el => "{class:riddle:" + el + "}"), {lastJoiner:'and'})
+        s += formatList(uniq.map(el => "{class:riddle:" + el + "}"), {lastSep:'and'})
         s += ". Had he been channelling the answer in some way?|'One Direction?' she says, tentatively."
         msg(s)
       }

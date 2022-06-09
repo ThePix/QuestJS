@@ -154,7 +154,7 @@ const SPELLBOOK = function(list) {
   res.spellsAvailableToLearn = list
   res.examineX = ''
   res.examine = function() {
-    msg(this.examineX + ' It contains the spells ' + formatList(this.spellsAvailableToLearn.map(el => '<i>' + el + '</i>'), {lastJoiner:lang.list_and}) + '.')
+    msg(this.examineX + ' It contains the spells ' + formatList(this.spellsAvailableToLearn.map(el => '<i>' + el + '</i>'), {lastSep:lang.list_and}) + '.')
   }
   res.icon = () => 'spell12'
   return res 
