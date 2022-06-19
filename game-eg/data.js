@@ -904,7 +904,7 @@ util.createQuestion("kyle_question", [
     },
   },
 ], {
-  extraScript:function() {
+  afterScript:function() {
     //msg("Kyle looks around excitedly")
   },
   expiredScript:function() {
