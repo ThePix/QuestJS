@@ -1425,12 +1425,14 @@ test.tests = function() {
   
   
   test.title("Save/Load 3")
+  tp.old_usedStrings = tp.usedStrings
   tp.usedStrings = ['One', 'Two']
   const tps = tp.getSaveString()
   tp.usedStrings = ['three']
   tp.setLoadString(tps)
   test.assertEqual(['One', 'Two'], tp.usedStrings)
- 
+  tp.usedStrings = tp.old_usedStrings
+
 
   
   test.title("Path finding");

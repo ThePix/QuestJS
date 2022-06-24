@@ -45,6 +45,45 @@ createRoom("lounge", {
 
 
 
+createItem("phone", TAKEABLE(), {
+  examine:'The phone is the elite version, with a polished silver finish.',
+  saveLoadExcludedAtts:['useOptions'],
+  useOptions:[
+    {
+      alias:'Phone Mike',
+      properNoun:true,
+      test:function() { return true },
+      script:function() {
+        msg("You try to phone Mike, but there is no reply.")
+      }
+    },
+    {
+      alias:'Search for "delores mining"', 
+      properNoun:true,
+      test:function() { return player.status > 4 },
+      script:function() {
+        msg('You Google "delores mining" on your phone, and find an interesting article.')
+      }
+    },
+    { 
+      alias:'Nothing', 
+      properNoun:true,
+      test:function() { return true },
+      script:function() {
+      }
+    },
+  ],
+  use:function() {
+    const options = this.useOptions.filter(el => el.test())
+    showDropDown("Use your phone to..?", options, function(result) {
+      result.script()
+    })
+  },
+//  loc:"Buddy",
+})
+
+
+
 createItem("Buddy", NPC(false), { 
   loc:"lounge",
   money:10,
