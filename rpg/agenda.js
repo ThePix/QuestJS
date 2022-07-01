@@ -64,21 +64,12 @@ also befuddlement
 
 agenda.ping = function(npc) { log(npc.name + ': ping'); return false }
 
-/*agenda.guardExit = function(npc, arr) {
-  const dir = ary.shift()
-  npc.setGuard(dir, ary.join(':'))
-  return false
-}
-agenda.guardRoom = function(npc, arr) {
-  npc.setGuard(false, ary.join(':'))
-  return false
-}*/
 
-agenda.guardItem = function(npc, arr) {
+agenda.guardItemNow = function(npc, arr) {
   return agenda._guardItem(npc, arr, true)
 }
 
-agenda.guardItemSlow = function(npc, arr) {
+agenda.guardItem = function(npc, arr) {
   return agenda._guardItem(npc, arr, false)
 }
 
@@ -87,14 +78,9 @@ agenda._guardItem = function(npc, arr, fast) {
   if (item.scenery) return false
   msg(arr.join(':'))
   if (item.loc && w[item.loc] && (w[item.loc].npc || w[item.loc].player)) {
-    npc.target = item.loc
-    if (fast) {
-      npc.antagonise(w[item.loc])
-    }
-    else {
-      log('set ag')
-      npc.agenda = ['null','antagonise:target']
-    }
+    //npc.target = item.loc
+    npc.antagonise(w[item.loc])
+    if (fast) npc.performAttack(w[item.loc])
   }
   return true
 }
@@ -162,6 +148,13 @@ agenda._saveInitial = function(name, npc, arr) {
 }
 
 
+agenda.antagoniseNow = function(npc, arr) {
+  agenda.antagonise(npc, arr)
+  npc.performAttack(w[npc.target])
+  return true
+}
+  
+
 
 agenda.antagonise = function(npc, arr) {
   if (arr.length === 0) {
@@ -180,59 +173,3 @@ agenda.antagonise = function(npc, arr) {
   }
   return true
 }
-
-// needs testing to check if it terminates correctly
-agenda.ongoingAttack = function(npc, arr) {
-  log(arr[0])
-  const target = arr[0] ? (arr[0] === 'player' ? player : w[arr[0]]) : npc.target
-  arr.shift()
-  log(target)
-  const attack = npc.performAttack(target, arr)
-  log(attack)
-  if (attack === null) {
-    log('here')
-    // target is at another location
-    if (npc.pursueToAttack) {
-      log('here')
-      return !npc.pursueToAttack(target)
-    }
-    else {
-      return true
-    }
-  }
-    log('here')
-  if (attack.target.dead) return true
-  return false
-}
-
-agenda.singleAttack = function(npc, arr) {
-  const target = w[arr[0]]
-  arr.shift()
-  npc.performAttack(target, arr)
-  return true
-}
-
-
-  
-/*
-agenda.handleAgendaAttack = function(npc, target, ongoing, arr) {
-
-  const attack = npc.performAttack(target, arr)
-  if (!ongoing) return true
-  log(attack)
-  if (attack === null) {
-    log('here')
-    // target is at another location
-    if (npc.pursueToAttack) {
-      
-      return !npc.pursueToAttack(target)
-    }
-    else {
-      return true
-    }
-  }
-    log('here')
-  if (attack.target.dead) return true
-  return false
-}
-*/

@@ -1,7 +1,7 @@
 "use strict";
 
 
-
+settings.maxNumberOfRings = 2
 
 
 // Authors can overide as desired
@@ -112,6 +112,15 @@ class Effect {
 
 
 
+function spawn(name, loc, options = {}) {
+  if (!loc) loc = player.loc
+  const proto = w[name + '_prototype']
+  if (!proto) return errormsg("Failed to find a prototype for " + name)
+  const o = cloneObject(proto, loc)
+  if (o.mutate) o.mutate(options)
+  return o
+}
+
 
 
 const rpg = {
@@ -138,10 +147,16 @@ const rpg = {
     return this.effectsList.find(el => name === el.name)
   },
 
-  defaultSkillTestUseable:function(char) { return true },
+  defaultSkillTestUseable:function(char) {
+    if (!this.doesNotRequireManipulate && !char.testManipulate()) return false
+    return true 
+  },
   defaultSkillAfterUse:function(attack, count) { },
 
-  defaultSpellTestUseable:function(char) { return true },
+  defaultSpellTestUseable:function(char) {
+    if (!this.doesNotRequireTalk && !char.testTalk()) return false
+    return true 
+  },
   defaultSpellAfterUse:function(attack, count) { },
 
   broadcast:function(group, message, source, other) {
@@ -214,22 +229,24 @@ const rpg = {
 
 
   pursueToAttack:function(target) {
-    log('here')
     const exit = w[this.loc].findExit(target.loc)
     if (!exit) return false  // not in adjacent room, so give up
     // may want to check NPC can use that exit
     
-    log('now here')
     //log("Move " + npc.name + " to " + dest)
     this.movingMsg(exit) 
     this.moveChar(exit)
+    //this.delayAttack = true
     return true
   },
 
   isSpellAvailable:function(char, spell) {
-    for (let el of scopeHeldBy(char)) {
-      if (el.spellsAvailableToLearn && el.spellsAvailableToLearn.includes(spell.name)) {
-        return el
+    for (const key in w) {
+      const o = w[key]
+      if (!o.spellsAvailableToLearn) continue
+      if (!o.spellsCanBeLearnt()) continue
+      if (o.spellsAvailableToLearn.includes(spell.name)) {
+        return o
       }
     }
     return falsemsg(lang.noSourceForSpell, {spell:spell})
@@ -350,3 +367,12 @@ util.defaultExitIsGuarded = function() {
   return guards
 }
 
+
+
+//@DOC
+// Just the same as falsemsg, but the message goes to the console, not the screen
+//     if (notAllowed) return falselog("That is not allowed.")
+util.returnAndLog = function(val, s) {
+  log(s)
+  return val
+}

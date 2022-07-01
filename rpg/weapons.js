@@ -68,6 +68,7 @@ rpg.weaponFlags = {
 rpg.createWeapon = function(data) {
   const name = data.name.toLowerCase().replace(/ |\-/g, '_') + '_prototype'
   const weapon = createItem(name, WEAPON(data.damage))
+  weapon.abstract = true
   weapon.type = rpg.weaponTypeMapping[data.atts[0]]
   if (!weapon.type) log("Weapon type not recognised for " + name + ": " + data.atts)
   weapon.damageType = rpg.weaponDamageMapping[data.atts[1]]

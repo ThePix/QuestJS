@@ -103,3 +103,68 @@ const defaultSkill = new Skill("Basic attack", {
 })
 
 
+new Effect("Spell cooldown", {
+  modifyOutgoingAttack:function(attack, source) {
+    log(source)
+    if (source.cooldown === undefined) return
+    if (!attack.skill) return
+    if (!attack.skill instanceof Spell) return
+    if (!attack.skill.level) return
+
+    log(source.cooldown)
+    if (source.cooldown < 0) {
+      source.cooldown = source.getSpellCooldownDelay(attack.skill)
+    }
+    else {
+      attack.abort('Cooldown still in progress, cannot cast ' + attack.skill.name)
+    }
+  },
+})
+
+
+
+new Effect("Skill cooldown", {
+  modifyOutgoingAttack:function(attack, source) {
+    if (source.cooldown === undefined) return
+    if (!attack.skill) return
+    if (attack.skill instanceof Spell) return
+    if (!attack.skill.level) return
+
+    if (source.cooldown < 0) {
+      source.cooldown = source.getSkillCooldownDelay(attack.skill)
+    }
+    else {
+      attack.abort('Cooldown still in progress, cannot cast ' + attack.skill.name)
+    }
+  },
+})
+
+
+new Effect("Limited mana", {
+  modifyOutgoingAttack:function(attack, source) {
+    if (source.mana === undefined) return
+    if (!attack.skill) return
+    if (!attack.skill instanceof Spell) return
+    if (!attack.skill.level) {
+      log('no level')
+      log(attack.skill)
+      return
+    }
+    if (source.mana >= attack.skill.level) {
+      source.mana -= attack.skill.level
+    }
+    else {
+      attack.abort('Insufficient mana to cast ' + attack.skill.name)
+    }
+  },
+})
+
+
+
+new Effect("Fire and forget", {
+  modifyOutgoingAttack:function(attack, source) {
+    if (!attack.skill) return
+    if (!attack.skill instanceof Spell) return
+    array.remove(source.skillsLearnt, attack.skill.name)
+  },
+})
