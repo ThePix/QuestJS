@@ -1081,26 +1081,23 @@ const lang = {
   toWordsMax:10000,
   toWordsMillions:['', ' thousand', ' million', ' billion', ' trillion', ' quadrillion', ' quintillion', ' sextillion', 's eptillion', ' octillion', ' nonillion', ' decillion', ' undecillion', ' duodecillion'],
   
-  toWords:function(number) {
-    if (typeof number !== "number") {
-      errormsg ("toWords can only handle numbers");
-      return number;
-    }
+  toWords:function(number, noun) {
+    if (typeof number !== "number") return errormsg ("toWords can only handle numbers")
     number = Math.round(number)
     //if (number < -lang.toWordsMax || number > lang.toWordsMax) return number.toString()
 
     let negative = false
-    if (number === 0) return 'zero'
+    if (number === 0) return noun ? 'zero ' + lang.getPlural(noun) : 'zero'
     if (number < 0) {
       negative = true
       number = -number;
     }
-    
+   
     const parts = rChunkString(number, 3)
     let count = 0
     //let commaFlag = false
     const result = []
-    
+   
     while (parts.length) {
       const bit = lang._toWords1000(parts.pop())
       if (bit !== 'zero') {
@@ -1114,9 +1111,11 @@ const lang = {
       const pos = s.lastIndexOf(' and ')
       s = s.substring(0, pos) + ',' + s.substring(pos)
     }
-    
-    
-    return negative ? 'minus ' + s : s
+   
+   
+    if (negative) s = 'minus ' + s
+    if (!noun) return s
+    return s + ' ' + (number === 1 ? noun : lang.getPlural(noun))
   },
   
   // For internal use, handles integers from 1 to 999 only

@@ -408,6 +408,9 @@ test.tests = function() {
   test.assertEqual("Simple text: seven", processText("Simple text: {number:val}", {val:7}))
   test.assertEqual("Simple text: yes", processText("Simple text: {if:settings:tpTest:9:yes:no}", {val:8}))
   test.assertEqual("Simple text: no", processText("Simple text: {if:settings:tpTest:8:yes:no}", {val:8}))
+  test.assertEqual("Simple text: nine logs", processText("Simple text: {number:settings:tpTest:log}"))
+  test.assertEqual("Simple text: seven stadia", processText("Simple text: {number:val:stadium}", {val:7}))
+  test.assertEqual("Simple text: one stadium", processText("Simple text: {number:val:stadium}", {val:1}))
 
   test.title("Text processor 2b show");
   test.assertEqual("Simple text: ", processText("Simple text: {show:item:att_does_not_exist}", {item:w.book}))
