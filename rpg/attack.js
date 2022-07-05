@@ -116,10 +116,15 @@ class Attack {
   }
   
   
+  abort(s) {
+    msg(s)
+    this.aborted = true
+  }
+  
   // Once we have an attack object set up, call this to apply the attack to each target.
   // Creates a clone of this attack and calls resolve on it for each target to do the real work
   apply() {
-    if (this.abort) {
+    if (this.aborted) {
       this.skill.afterUse(this, -1)
       return this
     }
@@ -241,9 +246,7 @@ class Attack {
     
     // handle death
     if (target.health <= 0) {
-      if (target.afterDeath) target.afterDeath(this)
-      this.msg(target.msgDeath, 1)
-      target.terminate()
+      target.terminate(this)
     }
     
     if (target.afterAttack) target.afterAttack(this, true)
@@ -268,7 +271,7 @@ class Attack {
   }
 
   output() {
-    settings.output(this.reportTexts)
+    if (!this.aborted) settings.output(this.reportTexts)
     return this
   }
   

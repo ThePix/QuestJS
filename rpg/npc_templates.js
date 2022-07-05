@@ -9,6 +9,7 @@ const RPG_TEMPLATE = {
   rpgCharacter:true,
   offensiveBonus:0,
   spellCasting:0,
+  maxNumberOfRings:settings.maxNumberOfRings,
   afterLoadForTemplate:function() {
     if (this.agenda && this.agenda[0].startWith('guardExit')) this.setGuardFromAgenda(this.agenda[0].split(':').shift())
     log("loaded!")
@@ -27,15 +28,31 @@ const RPG_TEMPLATE = {
   defensiveBonus:0,
   spellDefensiveBonus:0,
   // call this to flag as dead - no output
-  terminate:function() {
+  terminate:function(attack) {
+    if (this.dead) return
+
+    if (this.afterDeath) this.afterDeath(this)
+    if (attack) {
+      attack.msg(this.msgDeath, 1)
+    }
+    else {
+      msg(this.msgDeath, 1)
+    }
+
     this.dead = true
     this.suspended = true
     if (this.noCorpse) {
       rpg.destroy(this)
     }
   },
+  testManipulate:function() {
+    if (this.dead) return falsemsg(lang.npc_dead)
+    if (this.manipulateProhibited) return falsemsg(this.manipulateProhibited)
+    return true
+  },
   testTalk:function() {
-    if (this.dead) return falsems(lang.npc_dead)
+    if (this.dead) return falsemsg(lang.npc_dead)
+    if (this.talkProhibited) return falsemsg(this.talkProhibited)
     return true
   },
   getDefensiveBonus:function(skill) {
@@ -72,6 +89,7 @@ const RPG_TEMPLATE = {
   petrified:false,
   blinded:false,
   signalResponses:{},
+  cooldown:-1,
 
   // player attacks this
   attack:function(options) {
@@ -94,8 +112,28 @@ const RPG_TEMPLATE = {
 
   hasEffect:function(name) { return this.activeEffects.includes(name) },
   
+  getCooldownDelay:function(skill) { return skill.level ? skill.level : 0 },
+  
   lightSource:function() { return this.isLight ? world.LIGHT_FULL : world.LIGHT_NONE },
 
+  isSpellLearningAllowed:function(spell) {
+    if (!spell instanceof Spell) return errormsg("That is not a spell: " + spell.name)
+    if (!this.maxSpellLevel) return true
+    if (!spell.level) return errormsg("Spell has no level: " + spell.name)
+
+    const options = {char:this, spell:spell}
+    if (spell.level > this.maxSpellLevel()) return falsemsg(lang.cannotLearnSpellLevel, options)
+    if (this.maxSpellPoints) {
+      let count = 0
+      for (const name of this.skillsLearnt) {
+        const skill = rpg.findSkill(name)
+        if (!skill instanceof Spell) continue
+        count += skill.level
+      }
+      if ((count + spell.level) > this.maxSpellPoints()) return falsemsg(lang.cannotLearnSpellLimit, options)
+    }
+    return true
+  },
 }
 
 
@@ -127,6 +165,12 @@ const RPG_PLAYER = function(female) {
 
   res.afterCreation = function(o) {
     if (!o.maxHealth) o.maxHealth = o.health
+  }
+
+  res.endTurn = function(turn) {
+    log('here')
+    this.cooldown--
+    this.doEvent(turn) 
   }
 
   return res;
@@ -224,13 +268,13 @@ const RPG_NPC = function(female) {
   }
 
   res.examine = function(options) {
-    let s
+    let s = typeof this.ex === 'function' ? this.ex() : this.ex
+    if (!s) return util.returnAndLog(undefined, 'Warning for ' + this.name + ': The "ex" attribute for this NPC is neither a string nor a function')
     if (this.dead) {
       if (this.exDead) {
         s = this.exDead
       }
       else {
-        s = typeof this.ex === 'string' ? this.ex : this.ex()
         s += lang.deadAddendum
       }
     }
@@ -239,12 +283,10 @@ const RPG_NPC = function(female) {
         s = this.exAsleep
       }
       else {
-        s = typeof this.ex === 'string' ? this.ex : this.ex() 
         s += lang.asleepAddendum
       }
     }
     else {
-      s = typeof this.ex === 'string' ? this.ex : this.ex()
       if (this.health < this.maxHealth / 5) {
         s += lang.badlyInjuredAddendum
       }
@@ -295,23 +337,30 @@ const RPG_NPC = function(female) {
   }
 
   res.endTurn = function(turn) {
-    if (this.dead) return false
-    if (this.isGuardingFunction) this.isGuardingFunction()
-    if (this.hostile && this.target) {
-      // If attacking, ignore agenda, etc.
-      this.performAttack(w[this.target])
+    if (this.dead) return
+    this.sayTakeTurn()
+    this.doReactions()
+    this.cooldown--
+
+    // Do we attack?
+    // if isGuardingFunction function we let that handle it
+    // if agenda, let that handle it
+    // otherwise if hoistile and has target, then attack
+    // (unless delayAttack is true, eg the NPC has already acted)
+    if (this.isGuardingFunction) {
+      this.isGuardingFunction()
     }
-    else {
-      this.sayTakeTurn()
-      this.doReactions()
-      log('here1' + this.name)
-      if (!this.paused && !this.suspended && this.agenda && this.agenda.length > 0) this.doAgenda()
-      log('here2')
-      if (this.hostile && this.target && !this.delayAgendaAttack) {
-        // Is the NPC now hostile? If so, have an attack
-        this.performAttack(w[this.target])
+    else if (!this.paused && !this.suspended && this.agenda && this.agenda.length > 0) {
+      this.doAgenda()
+    }
+    else if (this.hostile && this.target) {
+      // Is the NPC now hostile? If so, have an attack
+      const target = w[this.target]
+      const attack = this.performAttack(target)
+      if (attack === null) {
+        // target is at another location
+        if (this.pursueToAttack) this.pursueToAttack(target)
       }
-      this.delayAgendaAttack = false
     }
     this.doEvent(turn)
   }

@@ -94,8 +94,7 @@ new Effect("Ammo consumer", {
     const item = w[source.ammo]
     if (!item) return errormsg("The weapon " + source.name + " has an unknown ammo set: " + source.ammo)
     if (item.countAtLoc(player.name) < 1) {
-      attack.msg("Out of ammo!", 1)
-      attack.abort = true
+      attack.abort("Out of ammo!")
     }
     else {
       item.takeFrom(player.name, 1)
@@ -109,8 +108,7 @@ new Effect("Ammo tracker", {
   modifyOutgoingAttack:function(attack, source) {
     if (!source.equipped) return
     if (attack.weapon.ammo === 0) {
-      attack.msg("Out of ammo!", 1)
-      attack.abort = true
+      attack.abort("Out of ammo!")
     }
     else {
       attack.weapon.ammo--
@@ -124,8 +122,7 @@ rpg.add(new Effect("Deteriorating", {
   // really needs to be on success only
   modifyOutgoingAttack:function(attack) {
     if (attack.weapon.ammo === 0) {
-      attack.msg("Out of ammo!")
-      attack.abort = true
+      attack.abort("Out of ammo!")
     }
     else {
       attack.weapon.ammo--
@@ -134,8 +131,37 @@ rpg.add(new Effect("Deteriorating", {
 }))
 */
 
+
+const RING = function() {
+  const res = WEARABLE()
+  res.ring = true
+  //res.icon = () => 'ring12'
+  res.testWear = function(options) {
+    if (!this.testWearForRing(options)) return false
+    return true
+  }
+  res.testWearForRing = function(options) {
+    options.count = 0
+    for (const key in w) {
+      const o = w[key]
+      if (o.ring && o.loc === options.char.name && o.worn) options.count++
+    }
+    if (options.count < options.char.maxNumberOfRings) return true
+    msg(lang.ringTooMany, options)
+    return false
+  }
+  return res;
+}
+
+const AMULET = function() {
+  const res = WEARABLE(0, ['amulet'])
+  return res;
+}  
+
+
+
 const SHIELD = function(bonus) {
-  const res = Object.assign({}, EQUIPPABLE())
+  const res = EQUIPPABLE()
   res.shield = true
   res.shieldBonus = bonus
   res.match = function(item) { return item.shield }
@@ -152,14 +178,29 @@ const SPELLBOOK = function(list) {
   const res = Object.assign({}, TAKEABLE_DICTIONARY)
   res.spellbook = true
   res.spellsAvailableToLearn = list
+  res.spellsCanBeLearnt = function() { return this.loc === player.name }
   res.examineX = ''
   res.examine = function() {
-    msg(this.examineX + ' It contains the spells ' + formatList(this.spellsAvailableToLearn.map(el => '<i>' + el + '</i>'), {lastSep:lang.list_and}) + '.')
+    msg(this.examineX + ' It contains the spells ' + formatList(this.spellsAvailableToLearn.map(el => '<i>' + el + '</i>'), {lastJoiner:lang.list_and}) + '.')
   }
   res.icon = () => 'spell12'
   return res 
 }
 
+
+
+const SPELLFONT = function(list) {
+  const res = {}
+  res.spellfont = true
+  res.spellsAvailableToLearn = list
+  res.spellsCanBeLearnt = function() { return this.loc === player.loc }
+  res.examineX = ''
+  res.examine = function() {
+    msg(this.examineX + ' It contains the spells ' + formatList(this.spellsAvailableToLearn.map(el => '<i>' + el + '</i>'), {lastJoiner:lang.list_and}) + '.')
+  }
+  res.icon = () => 'spell12'
+  return res 
+}
 
 
 
@@ -219,6 +260,7 @@ createItem("weapon_unarmed", WEAPON(), {
   offensiveBonus:-2,
   alias:"unarmed",
   scenery:true,
+  abstract:true,
   isLocatedAt:function(loc, situation) {
     return (situation === world.PARSER || situation === world.ALL) && loc === player.name
   },

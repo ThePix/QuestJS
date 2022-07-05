@@ -16,10 +16,13 @@ lang.regex.CastSpellAt = /^(?:cast|invoke) (.+) (?:at|on) (.+)$/
 
 lang.notAFoe = "No point attacking {nm:item:the}."
 lang.notEquippable = "{nv:item:be:true} not something you can equip."
+lang.ringTooMany = "{nv:item:can:true} not be put on; already wearing {number:count} rings."
 lang.noSourceForSpell = "You do not have anything you can learn {i:{show:spell:name}} from."
 lang.noSpellCalled = "There is no spell called {show:text}."
 lang.doNotKnowSpell = "You do not know the spell {i:{show:spell:name}}."
 lang.needTargetForSpell = "You need a target for the spell {i:{show:spell:name}}."
+lang.cannotLearnSpellLevel = "You cannot learn {i:{show:spell:name}}; it is too complex for you right now."
+lang.cannotLearnSpellLimit = "You cannot learn {i:{show:spell:name}}; you have too many spells already memorised."
 
 lang.learnSpell = "You learn {i:{show:spell:name}} from {nm:item:the}."
 lang.attacking = "{nv:attacker:attack:true} {nm:target:the}."

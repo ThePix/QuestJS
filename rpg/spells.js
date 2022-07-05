@@ -87,12 +87,10 @@ new Spell("Call lightning", {
     if (player.currentWeatherDisabled) return
     const weather = weatherTypes[player.currentWeatherName]
     if (!weather.outside()) {
-      attack.abort = true
-      attack.msg("The <i>Call lightning</i> spell can only be used outside.", 1)
+      attack.abort("The <i>Call lightning</i> spell can only be used outside.")
     }
     if (weather.wetness < 1) {
-      attack.abort = true
-      attack.msg("The <i>Call lightning</i> spell can only be used when it is raining.", 1)
+      attack.abort("The <i>Call lightning</i> spell can only be used when it is raining.")
     }
   },
 })
@@ -200,6 +198,7 @@ new Spell("Befuddle", {
     },
   },
 })
+
 
 
 
@@ -395,6 +394,9 @@ new SpellSelf("Kobold Glamour", {
     },
   },
 })
+
+
+
 
 
 const visages = [
@@ -616,6 +618,27 @@ new Spell("Enrage", {
   },
 })
 
+
+new SpellSelf("Mute", {
+  level:4,
+  description:"After casting this spell, the target will be unable to speak.",
+  tactical:"Whilst muted, the target will be unable to cast most spells. Lasts five turns.",
+  regex:/mute/,
+  duration:3,
+  effect: {
+    category:'enhancement',
+    start:function(target) {
+      target.talkProhibited = true
+      return "{nv:target:can:true} no longer talk."
+    },
+    finish:function(target) {
+      target.talkProhibited = false
+      return "{nv:target:can:true} talk again."
+    },
+  },
+})
+
+
 new SpellSelf("Mage Light", {
   level:1,
   description:"The caster glows, illuminating the location.",
@@ -695,12 +718,10 @@ new SpellSelf("Call rain", {
     if (player.currentWeatherDisabled) return
     const weather = weatherTypes[player.currentWeatherName]
     if (!weather.outside()) {
-      attack.abort = true
-      attack.msg("The <i>Call rain</i> spell can only be used outside.", 1)
+      attack.abort("The <i>Call rain</i> spell can only be used outside.")
     }
     if (weather.wetness > 0) {
-      attack.abort = true
-      attack.msg("The <i>Call rain</i> spell is only going to work if it is not already raining.", 1)
+      attack.abort("The <i>Call rain</i> spell is only going to work if it is not already raining.")
     }
   },
   targetEffect:function(attack) {
@@ -721,12 +742,10 @@ new SpellSelf("Cloudbusting", {
     if (player.currentWeatherDisabled) return
     const weather = weatherTypes[player.currentWeatherName]
     if (!weather.outside()) {
-      attack.abort = true
-      attack.msg("The <i>Cloudbusting</i> spell can only be used outside.", 1)
+      attack.abort("The <i>Cloudbusting</i> spell can only be used outside.")
     }
     if (weather.name === 'hot') {
-      attack.abort = true
-      attack.msg("The <i>Cloudbusting</i> spell is only going to work if there are clouds around", 1)
+      attack.abort("The <i>Cloudbusting</i> spell is only going to work if there are clouds around")
     }
   },
   targetEffect:function(attack) {
