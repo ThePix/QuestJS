@@ -235,7 +235,7 @@ const ONE_USE_ITEM = function(spellName, requiresTarget) {
 
 const SCROLL = function(spellName, requiresTarget) {
   const res = Object.assign({}, ONE_USE_ITEM(spellName, requiresTarget))
-  res.reportText = lang.castSpellFrom
+  res.msgAttack = lang.castSpellFrom
   res.msgDestroy = 'The scroll crumbles to dust.'
   return res 
 }
@@ -243,7 +243,7 @@ const SCROLL = function(spellName, requiresTarget) {
 
 const POTION = function(spellName) {
   const res = Object.assign({}, ONE_USE_ITEM(spellName, false))
-  res.reportText = lang.drinkPotion
+  res.msgAttack = lang.drinkPotion
   res.drink = function(options) { return this.use(options) }
   res.ingest = function(options) { return this.use(options) }
   return res 
@@ -252,7 +252,7 @@ const POTION = function(spellName) {
 
 
 
-
+/*
 
 createItem("weapon_unarmed", WEAPON(), {
   image:"fist",
@@ -266,3 +266,4 @@ createItem("weapon_unarmed", WEAPON(), {
   },
 })
 
+*/

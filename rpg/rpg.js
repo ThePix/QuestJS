@@ -24,58 +24,6 @@ settings.output = function(reportTexts) {
 
 
 
-settings.afterTurn.push(function() {
-  for (const key in w) {
-    const obj = w[key]
-    
-    
-
-    // handle limited duration active effects
-    if (obj.activeEffects) {
-      for (let name of obj.activeEffects) {
-        if (obj['countdown_' + name]) {
-          obj['countdown_' + name]--
-          if (obj['countdown_' + name] <= 0) {
-            msg(rpg.findEffect(name).terminate(obj))
-          }
-        }
-      }
-    }
-
-    // handle limited duration summoned creatures
-    if (obj.summonedCountdown) {
-      obj.summonedCountdown--
-      if (obj.summonedCountdown <= 0) {
-        if (obj.isHere()) msg("{nv:item:disappear:true}.", {item:obj})
-        rpg.destroy(obj)
-      }
-    }
-  }
-
-  // Determine lighting and fog/smoke in room
-  currentLocation.rpgLighting = game.dark ? rpg.DARK : rpg.LIGHT
-  if (!currentLocation.rpgFog) currentLocation.rpgFog = 0
-  let targetFog = currentLocation.defaultFog ? currentLocation.defaultFog : 0
-  if (currentLocation.activeEffects) {
-    for (const effectName of currentLocation.activeEffects) {
-      const effect = rpg.findEffect(effectName)
-      if (effect.fogEffect) targetFog *= effect.fogEffect
-      if (effect.lightEffect) {
-        if (effect.lightEffect === rpg.UTTERLIGHT) currentLocation.rpgLighting = rpg.UTTERLIGHT
-        if (effect.lightEffect === rpg.UTTERDARK && currentLocation.rpgLighting !== rpg.UTTERLIGHT) currentLocation.rpgLighting = rpg.UTTERDARK
-        if (effect.lightEffect === rpg.LIGHT && currentLocation.rpgLighting !== rpg.UTTERLIGHT && currentLocation.rpgLighting !== rpg.UTTERDARK) currentLocation.rpgLighting = rpg.DARK
-        if (effect.lightEffect === rpg.LIGHT && currentLocation.rpgLighting !== rpg.UTTERLIGHT && currentLocation.rpgLighting !== rpg.UTTERDARK && currentLocation.rpgLighting !== rpg.LIGHT) currentLocation.rpgLighting = rpg.DARK
-      }
-    }
-    game.dark = (currentLocation.rpgLighting === rpg.UTTERDARK || currentLocation.rpgLighting === rpg.DARK) // !!! This could have bad consequences!
-  }
-  if (targetFog > currentLocation.rpgFog) currentLocation.rpgFog++
-  if (targetFog < currentLocation.rpgFog) currentLocation.rpgFog--
-  
-})
-
-
-
 
 
 
@@ -113,13 +61,25 @@ class Effect {
 
 
 function spawn(name, loc, options = {}) {
+  if (!name.endsWith('_prototype')) name += '_prototype'
   if (!loc) loc = player.loc
-  const proto = w[name + '_prototype']
+  const proto = w[name]
   if (!proto) return errormsg("Failed to find a prototype for " + name)
-  const o = cloneObject(proto, loc)
-  if (o.mutate) o.mutate(options)
+  const count = options.count ? options.count : 1
+  let o
+  for (let i = 0; i < count; i++) {
+    o = cloneObject(proto, loc)
+    if (options.package) options.package(o)
+    if (o.mutate) o.mutate(options)
+    if (options.target) {
+      o.hostile = true
+      o.target = options.target
+    }
+  }
   return o
 }
+
+
 
 
 
@@ -290,8 +250,8 @@ const rpg = {
       {name:'shadow', opposed:'rainbow'},
       {name:'rainbow', opposed:'shadow'},
 
-      {name:'divine', opposed:'necrotic'},
-      {name:'necrotic', opposed:'divine'},
+//      {name:'divine', opposed:'necrotic'},
+//      {name:'necrotic', opposed:'divine'},
 
       {name:'chaos', opposed:'law'},
       {name:'law', opposed:'chaos'},
@@ -315,10 +275,99 @@ const rpg = {
 
 
 io.modulesToInit.push(rpg)
+io.modulesToUpdate.push(rpg)
+
 rpg.init = function() {
-  // this will fire before the game starts and settings.setup(), but after w is populated
-  log(Object.keys(w).length) 
-  
+  for (const key in w) {
+    const o = w[key]
+    if (o.rpgCharacter && o.weapon) {
+      const weapon = w[o.weapon]
+      if (!weapon) {
+        log("WARNING: weapon " + o.weapon + " not found for " + o.name)
+        continue
+      }
+      if (weapon.name.endsWith('_prototype')) {
+        const clone = spawn(weapon.name, o.name, o.weaponData)
+        delete o.weaponData
+        o.weapon = clone.name
+      }
+      else {
+        if (weapon.loc && weapon.loc !== o.name) {
+          log("WARNING: weapon " + weapon.name + " seems to have 'loc' set to " + weapon.loc + ", but is assigned to " + o.name)
+          continue
+        }
+        weapon.loc = o.name
+      }
+    }
+    if (o.rpgCharacter && o.shield) {
+      const shield = w[o.shield]
+      if (!shield) {
+        log("WARNING: shield " + o.shield + " not found for " + o.name)
+        continue
+      }
+      if (shield.name.endsWith('_prototype')) {
+        const clone = spawn(shield.name, o.name, o.shieldData)
+        delete o.shieldData
+        o.shield = clone.name
+      }
+      else {
+        if (shield.loc && shield.loc !== o.name) {
+          log("WARNING: shield " + shield.name + " seems to have 'loc' set to " + shield.loc + ", but is assigned to " + o.name)
+          continue
+        }
+        shield.loc = o.name
+      }
+    }
+  }
+}
+
+rpg.update = function() {
+  for (const key in w) {
+    const obj = w[key]
+    
+    
+
+    // handle limited duration active effects
+    if (obj.activeEffects) {
+      for (let name of obj.activeEffects) {
+        if (obj['countdown_' + name]) {
+          obj['countdown_' + name]--
+          if (obj['countdown_' + name] <= 0) {
+            msg(rpg.findEffect(name).terminate(obj))
+          }
+        }
+      }
+    }
+
+    // handle limited duration summoned creatures
+    if (obj.summonedCountdown) {
+      obj.summonedCountdown--
+      if (obj.summonedCountdown <= 0) {
+        if (obj.isHere()) msg("{nv:item:disappear:true}.", {item:obj})
+        rpg.destroy(obj)
+      }
+    }
+  }
+
+  // Determine lighting and fog/smoke in room
+  currentLocation.rpgLighting = game.dark ? rpg.DARK : rpg.LIGHT
+  if (!currentLocation.rpgFog) currentLocation.rpgFog = 0
+  let targetFog = currentLocation.defaultFog ? currentLocation.defaultFog : 0
+  if (currentLocation.activeEffects) {
+    for (const effectName of currentLocation.activeEffects) {
+      const effect = rpg.findEffect(effectName)
+      if (effect.fogEffect) targetFog *= effect.fogEffect
+      if (effect.lightEffect) {
+        if (effect.lightEffect === rpg.UTTERLIGHT) currentLocation.rpgLighting = rpg.UTTERLIGHT
+        if (effect.lightEffect === rpg.UTTERDARK && currentLocation.rpgLighting !== rpg.UTTERLIGHT) currentLocation.rpgLighting = rpg.UTTERDARK
+        if (effect.lightEffect === rpg.LIGHT && currentLocation.rpgLighting !== rpg.UTTERLIGHT && currentLocation.rpgLighting !== rpg.UTTERDARK) currentLocation.rpgLighting = rpg.DARK
+        if (effect.lightEffect === rpg.LIGHT && currentLocation.rpgLighting !== rpg.UTTERLIGHT && currentLocation.rpgLighting !== rpg.UTTERDARK && currentLocation.rpgLighting !== rpg.LIGHT) currentLocation.rpgLighting = rpg.DARK
+      }
+    }
+    game.dark = (currentLocation.rpgLighting === rpg.UTTERDARK || currentLocation.rpgLighting === rpg.DARK) // !!! This could have bad consequences!
+  }
+  if (targetFog > currentLocation.rpgFog) currentLocation.rpgFog++
+  if (targetFog < currentLocation.rpgFog) currentLocation.rpgFog--
 }
 
 

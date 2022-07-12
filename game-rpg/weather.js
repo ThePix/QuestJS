@@ -33,17 +33,21 @@ currentWeatherTotal
 */
 
 
-settings.afterTurn.push(function() {
-  if (player.currentWeatherDisabled) return
-  if (player.currentWeatherName) {
-    weatherTypes[player.currentWeatherName].turn()
+
+const weather = {
+  update:function() {
+    if (player.currentWeatherDisabled) return
+    if (player.currentWeatherName) {
+      weatherTypes[player.currentWeatherName].turn()
+    }
+    else {
+      player.currentWeatherName = Object.keys(weatherTypes)[0]
+      player.currentWeatherCount = 0
+      player.currentWeatherTotal = weatherTypes[player.currentWeatherName].getNumberOfTurns()
+    }  
   }
-  else {
-    player.currentWeatherName = Object.keys(weatherTypes)[0]
-    player.currentWeatherCount = 0
-    player.currentWeatherTotal = weatherTypes[player.currentWeatherName].getNumberOfTurns()
-  }  
-})
+}
+io.modulesToUpdate.push(weather)
 
 const weatherTypes = {}
 
@@ -57,6 +61,7 @@ class Weather {
   
   turn() {
     player.currentWeatherCount++
+    log(player.currentWeatherCount)
     if (this.wetness) {
       if (!player.currentWeatherWetness) player.currentWeatherWetness = 0
       player.currentWeatherWetness += this.wetness
@@ -66,6 +71,7 @@ class Weather {
       if (this.wetness > 60) this.wetness--
     }
     if (player.currentWeatherCount >= player.currentWeatherTotal) {
+      log('here')
       const currentName = this.getNext()
       const current = weatherTypes[currentName]
       player.currentWeatherName = currentName

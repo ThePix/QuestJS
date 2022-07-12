@@ -1,10 +1,9 @@
 "use strict";
 
-
+//Generic class for skills; you should not use directly
 class Skill {
   constructor(name, data) {
     this.name = name
-    this.reportText = lang.attacking
     this.offensiveBonus = 0
     for (let key in data) this[key] = data[key]
     if (!this.alias) this.alias = name
@@ -13,7 +12,7 @@ class Skill {
       new Effect(this.name, this.effect, data)
       this.targetEffectName = true
     }
-    if (rpg.findSkill(this.name, true)) throw new Error("Skill/Spell name collision: " + this.name)
+    if (rpg.findSkill(this.name, true)) throw new Error("Skill name collision: " + this.name)
     rpg.list.push(this)
   }
 
@@ -24,12 +23,29 @@ class Skill {
 
 }
 
-class MonsterAttack extends Skill {
+
+// All attacks are divided between spells, weapon attacks and natural attacks
+// If you need to usae a weapon, it is a weapon attack
+// If you need to learn a spell first, it is a spell
+// Otherwise, it is a natural attack
+
+class WeaponAttack extends Skill {
+  constructor(name, data) {
+    super(name, data)
+    this.msgAttack = lang.attacking
+    this.statForOffensiveBonus = 'offensiveBonus'
+  }
+  testUseable(char) { return true }
+  afterUse(attack, count) { }
+}
+
+
+class NaturalAttack extends Skill {
   constructor(name, data) {
     super(name, data)
     this.noWeapon = true
-    this.reportText = lang.castSpell
-    this.statForOffensiveBonus = 'spellCasting'
+    this.msgAttack = lang.attacking
+    this.statForOffensiveBonus = 'offensiveBonus'
   }
   testUseable(char) { return true }
   afterUse(attack, count) { }
@@ -41,7 +57,7 @@ class Spell extends Skill {
     super(name, data)
     this.spell = true
     this.noWeapon = true
-    this.reportText = lang.castSpell
+    this.msgAttack = lang.castSpell
     this.statForOffensiveBonus = 'spellCasting'
   }
   testUseable(char) { return rpg.defaultSpellTestUseable(char) }
@@ -58,7 +74,7 @@ class SpellSelf extends Spell {
     this.suppressAntagonise = true
     this.automaticSuccess = true
     this.notAnAttack = true
-    this.reportText = "{nv:attacker:cast:true} the {i:{nm:skill}} spell."
+    this.msgAttack = "{nv:attacker:cast:true} the {i:{nm:skill}} spell."
   }
 }
 
@@ -96,9 +112,23 @@ class SpellInanimate extends Spell {
 
 
 
-const defaultSkill = new Skill("Basic attack", {
+const defaultWeaponAttack = new WeaponAttack("Basic attack", {
   primarySuccess:lang.primarySuccess,
   primaryFailure:lang.primaryFailure,
+  modifyOutgoingAttack:function(attack) {},
+})
+
+const defaultNaturalAttack = new NaturalAttack("Bash attack", {
+  primarySuccess:lang.primarySuccess,
+  primaryFailure:lang.primaryFailure,
+  modifyOutgoingAttack:function(attack) {},
+})
+
+const unarmedAttack = new NaturalAttack("Punch attack", {
+  primarySuccess:lang.primarySuccess,
+  primaryFailure:lang.primaryFailure,
+  damage:'d4',
+  offensiveBonus:0,
   modifyOutgoingAttack:function(attack) {},
 })
 
@@ -106,39 +136,52 @@ const defaultSkill = new Skill("Basic attack", {
 new Effect("Spell cooldown", {
   modifyOutgoingAttack:function(attack, source) {
     log(source)
-    if (source.cooldown === undefined) return
+    if (source.spellCooldown === undefined) return
     if (!attack.skill) return
     if (!attack.skill instanceof Spell) return
     if (!attack.skill.level) return
 
-    log(source.cooldown)
-    if (source.cooldown < 0) {
-      source.cooldown = source.getSpellCooldownDelay(attack.skill)
+    log(source.spellCooldown)
+    if (source.spellCooldown < 0) {
+      source.spellCooldown = source.getSpellCooldownDelay(attack.skill)
     }
     else {
-      attack.abort('Cooldown still in progress, cannot cast ' + attack.skill.name)
+      attack.abort(processText("Cooldown still in progress, cannot cast {show:skill:name} ({number:count:turn} remaining)", {skill:attack.skill, count:source.spellCooldown + 1}))
     }
   },
 })
 
-
-
-new Effect("Skill cooldown", {
+new Effect("Weapon attack cooldown", {
   modifyOutgoingAttack:function(attack, source) {
-    if (source.cooldown === undefined) return
+    if (source.weaponAttackCooldown === undefined) return
     if (!attack.skill) return
     if (attack.skill instanceof Spell) return
     if (!attack.skill.level) return
 
-    if (source.cooldown < 0) {
-      source.cooldown = source.getSkillCooldownDelay(attack.skill)
+    if (source.weaponAttackCooldown < 0) {
+      source.weaponAttackCooldown = source.getWeaponAttackCooldownDelay(attack.skill)
     }
     else {
-      attack.abort('Cooldown still in progress, cannot cast ' + attack.skill.name)
+      attack.abort('Cooldown still in progress, cannot cast ' + attack.skill.name + " (" + source.weaponAttackCooldown + " turns remaining)")
     }
   },
 })
 
+new Effect("Natural attack cooldown", {
+  modifyOutgoingAttack:function(attack, source) {
+    if (source.naturalAttackCooldown === undefined) return
+    if (!attack.skill) return
+    if (attack.skill instanceof Spell) return
+    if (!attack.skill.level) return
+
+    if (source.naturalAttackCooldown < 0) {
+      source.naturalAttackCooldown = source.getNaturalAttackCooldownDelay(attack.skill)
+    }
+    else {
+      attack.abort('Cooldown still in progress, cannot cast ' + attack.skill.name + " (" + source.naturalAttackCooldown + " turns remaining)")
+    }
+  },
+})
 
 new Effect("Limited mana", {
   modifyOutgoingAttack:function(attack, source) {
@@ -158,8 +201,6 @@ new Effect("Limited mana", {
     }
   },
 })
-
-
 
 new Effect("Fire and forget", {
   modifyOutgoingAttack:function(attack, source) {

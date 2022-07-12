@@ -31,7 +31,7 @@ const RPG_TEMPLATE = {
   terminate:function(attack) {
     if (this.dead) return
 
-    if (this.afterDeath) this.afterDeath(this)
+    if (this.afterDeath) this.afterDeath(attack)
     if (attack) {
       attack.msg(this.msgDeath, 1)
     }
@@ -89,7 +89,9 @@ const RPG_TEMPLATE = {
   petrified:false,
   blinded:false,
   signalResponses:{},
-  cooldown:-1,
+  spellCooldown:-1,
+  weaponAttackCooldown:-1,
+  naturalAttackCooldown:-1,
 
   // player attacks this
   attack:function(options) {
@@ -104,15 +106,17 @@ const RPG_TEMPLATE = {
 
   modifyOutgoingAttack:function(attack) { },
   
-  getEquippedWeapon:function() { return this },
+  getEquippedWeapon:function() { return this.weapon ? w[this.weapon] : this },
   
-  getEquippedShield:function() { return null },
+  getEquippedShield:function() { return this.shield ? w[this.shield] : null },
   
   getArmour:function() { return this.armour },
 
   hasEffect:function(name) { return this.activeEffects.includes(name) },
   
-  getCooldownDelay:function(skill) { return skill.level ? skill.level : 0 },
+  getSpellCooldownDelay:function(skill) { return skill.level ? skill.level : 0 },
+  getWeaponAttackCooldownDelay:function(skill) { return skill.level ? skill.level : 0 },
+  getNaturalAttackCooldownDelay:function(skill) { return skill.level ? skill.level : 0 },
   
   lightSource:function() { return this.isLight ? world.LIGHT_FULL : world.LIGHT_NONE },
 
@@ -146,9 +150,18 @@ const RPG_PLAYER = function(female) {
   //res.getEquippedWeapon = function() { return this.equipped ? w[this.equipped] : w.weapon_unarmed; }
   
   res.allegiance = 'friend'
+  
+  res.selectSkill = function() {
+    const weapon = this.getEquippedWeapon()
+    return weapon ? defaultWeaponAttack : unarmedAttack
+  }
+  
   res.getEquippedWeapon = function() {
-    const carried = scopeHeldBy(this)
-    return carried.find(el => el.equipped && el.weapon) || w.weapon_unarmed
+    return world.find(function(o, options) {
+      return o.equipped && o.weapon && o.loc === options.char.name
+    }, {char:this})
+    //const carried = scopeHeldBy(this)
+    //return carried.find(el => el.equipped && el.weapon)// || w.weapon_unarmed
   }
 
   res.getEquippedShield = function() {
@@ -168,8 +181,9 @@ const RPG_PLAYER = function(female) {
   }
 
   res.endTurn = function(turn) {
-    log('here')
-    this.cooldown--
+    this.spellCooldown--
+    this.weaponAttackCooldown--
+    this.naturalAttackCooldown--
     this.doEvent(turn) 
   }
 
@@ -261,13 +275,13 @@ const RPG_NPC = function(female) {
 
 
   res.selectSkill = function() {
-    //return this.skillOptions ? rpg.findSkill(random.fromArray(this.skillOptions)) : defaultSkill 
-    if (!this.skillOptions) return defaultSkill
+    if (!this.skillOptions) return this.doesNotUseWeapons ? defaultNaturalAttack : defaultWeaponAttack
     const skillName = random.fromArray(this.skillOptions)
     return rpg.findSkill(skillName)
   }
 
-  res.examine = function(options) {
+  res.examine = function(options = {}) {
+    if (!options.char) options.item = this
     let s = typeof this.ex === 'function' ? this.ex() : this.ex
     if (!s) return util.returnAndLog(undefined, 'Warning for ' + this.name + ': The "ex" attribute for this NPC is neither a string nor a function')
     if (this.dead) {
@@ -287,6 +301,11 @@ const RPG_NPC = function(female) {
       }
     }
     else {
+      options.weapon = this.getEquippedWeapon()
+      if (options.weapon !== this) {
+        options.shield = this.getEquippedShield()
+        s += options.shield ? lang.wieldingWeaponAndShield : lang.wieldingWeaponOnly
+      }
       if (this.health < this.maxHealth / 5) {
         s += lang.badlyInjuredAddendum
       }

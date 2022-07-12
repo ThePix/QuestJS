@@ -4,7 +4,7 @@ settings.playMode = "play"
 
 settings.title = "The House on Highfield Lane"
 settings.author = "Andy Joel"
-settings.version = "1.6"
+settings.version = "1.7"
 settings.ifid = "8F79966F-54C6-4DA3-842A-330DBA5D0CB0"
 settings.additionalAbout = {
   'Thanks to':'K.V., Pertex, XanMag, Jade, Mike Russo, Karona, Agnieszka Trzaska, Christopher Merriner, Mike_G, Amanda Walker and Andrew Schultz for beta testing. I would like to particularly pick out K.V., Agnieszka Trzaska and Christopher Merriner who went above and beyond, with any number of helpful suggestions between them.',

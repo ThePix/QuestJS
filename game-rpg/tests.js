@@ -62,14 +62,14 @@ test.tests = function() {
 
 
   test.title("Equip")
-  test.assertEqual('unarmed', player.getEquippedWeapon().alias)
+  test.assertEqual(null, player.getEquippedWeapon())
   test.assertCmd("i", "You are carrying a flail, an ice amulet, a knife and a long bow.");
   test.assertCmd("equip knife", "You draw the knife.");
-  test.assertCmd("i", "You are carrying a flail, an ice amulet, a knife (equipped) and a long bow.");
+  test.assertCmd("i", "You are carrying a flail, an ice amulet, a knife (equipped) and a long bow.")
   test.assertEqual('knife', player.getEquippedWeapon().alias)
   test.assertCmd("equip knife", "It already is.");
   test.assertCmd("drop knife", "You drop the knife.");
-  test.assertEqual('unarmed', player.getEquippedWeapon().alias)
+  test.assertEqual(null, player.getEquippedWeapon())
   test.assertEqual(undefined, player.equipped)
   test.assertCmd("take knife", "You take the knife.");
   test.assertCmd("unequip knife", "It already is.");
@@ -109,7 +109,7 @@ test.tests = function() {
   test.assertEqual('me', attack.attacker.name)
   test.assertEqual([w.goblin], attack.primaryTargets)
   test.assertEqual('d4', attack.damage)
-  test.assertEqual(1, attack.offensiveBonus)
+  test.assertEqual(3, attack.offensiveBonus)
 
   random.prime(3)
   attack.resolve(w.goblin, true, 0)
@@ -130,7 +130,7 @@ test.tests = function() {
   test.assertEqual('me', attack.attacker.name)
   test.assertEqual([w.goblin], attack.primaryTargets)
   test.assertEqual('d4', attack.damage)
-  test.assertEqual(1, attack.offensiveBonus)
+  test.assertEqual(3, attack.offensiveBonus)
 
   random.prime([19, 4])
   attack.resolve(w.goblin, true, 0)
@@ -261,6 +261,7 @@ test.tests = function() {
   test.assertCmd('learn fireball', ['You learn <i>Fireball</i> from the spellbook.'])
   test.assertEqual(["Double attack", "Fireball"], player.skillsLearnt) 
   //goblin, orc, snotling, rabbit
+  
 
   random.prime([19, 4, 4, 19, 2, 2, 4, 4])
   test.assertCmd('cast fireball', ['You cast the <i>Fireball</i> spell.', 'The room is momentarily filled with fire.', 'The goblin reels from the explosion.', "The attack does 8 hits, the goblin's health is now 32.", 'The orc reels from the explosion.', "The attack does 4 hits, the orc's health is now 56.", 'The snotling ignores it.', 'The rabbit ignores it.'])
@@ -458,7 +459,7 @@ test.tests = function() {
   player.skillsLearnt = ["Double attack", "Fireball", "Summon Lesser Frost Elemental"]
   test.assertCmd('cast Summon Lesser Frost Elemental', ['You cast the <i>Summon Lesser Frost Elemental</i> spell.', 'The lesser frost elemental appears before you.'])
   random.prime([19, 3, 4])
-  test.assertCmd('attack elemental', ['You attack the lesser frost elemental.', 'A hit!', "The attack does 18 hits, the lesser frost elemental's health is now 17."])
+  test.assertCmd('attack elemental', ['You attack the lesser frost elemental.', 'A hit!', "The attack does 18 hits, the lesser frost elemental's health is now 27."])
 
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...',])
@@ -487,7 +488,7 @@ test.tests = function() {
   test.assertEqual(true, player.isLight)
   test.assertEqual(world.LIGHT_FULL, player.lightSource())
   test.assertCmd('s', ['You head south.', 'The cupboard', 'A large storeroom, with no windows.', 'You can go north.'])
-  test.assertCmd('n', ['You head north.', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin, an orc (holding a huge shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
+  test.assertCmd('n', ['You head north.', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin, an orc (holding a broad sword and a wall shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
 
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...', 'You stop shining.'])
@@ -499,7 +500,7 @@ test.tests = function() {
   test.assertCmd('cast Teleport', ['You cast the <i>Teleport</i> spell.', 'The <i>Teleport</i> spell has no effect - no location has been marked!'])
   test.assertCmd('cast Mark', ['You cast the <i>Mark</i> spell.', 'This location is marked for future use.'])
   test.assertCmd('cast Returning', ['You cast the <i>Returning</i> spell.', 'The air swirls around you, and everything blurs...', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can see fourteen arrows and Stone of Returning here.', 'You can go north or south.'])
-  test.assertCmd('cast Teleport', ['You cast the <i>Teleport</i> spell.', 'The air swirls around you, and everything blurs...', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin, an orc (holding a huge shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
+  test.assertCmd('cast Teleport', ['You cast the <i>Teleport</i> spell.', 'The air swirls around you, and everything blurs...', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin, an orc (holding a broad sword and a wall shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
   
   
 
@@ -588,7 +589,7 @@ test.tests = function() {
   test.assertEqual(92, w.me.health)
   w.goblin.loc = 'yard'
 
-  test.assertCmd('e', ['The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, an orc (holding a huge shield), a rabbit, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
+  test.assertCmd('e', ['The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, an orc (holding a broad sword and a wall shield), a rabbit, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
   
   
   test.title("scrolls")
@@ -647,16 +648,14 @@ test.tests = function() {
   player.currentWeatherDisabled = false
 
   const hotWeather = weatherTypes['hot']
-  random.prime(0)
+  random.prime([0, 1])
   test.assertEqual('hot', hotWeather.getNext())
   
   test.assertCmd('wait', ['Time passes...'])
   test.assertEqual('hot', player.currentWeatherName)
   test.assertCmd('wait', ['Time passes...'])
   test.assertEqual('hot', player.currentWeatherName)
-  test.assertCmd('wait', ['Time passes...'])
-  test.assertEqual('hot', player.currentWeatherName)
-  random.prime(1)
+  log('-----')
   test.assertCmd('wait', ['Time passes...', "It is starting to get cloudy."])
   test.assertEqual('cloudingOver', player.currentWeatherName)
   
@@ -704,10 +703,10 @@ test.tests = function() {
   test.title("Guarding exit")
 
   w.orc.setGuard("east", "The orc looks at {nm:char:the} suspiciously.")
-  test.assertCmd('z', ['Time passes...'])  // takes a turn for guarding to get applied
+  test.assertCmd('z', ['Time passes...'])  // takes a turn for guarding to get applied/*
   test.assertEqual('east', w.orc.guardingDir)  
   test.assertEqual(['orc'], w.practice_room.east_guardedBy)  
-  test.assertEqual([w.orc], w.practice_room.east.isGuarded())  
+  test.assertEqual([w.orc], w.practice_room.east.isGuarded())
   
   test.assertCmd('e', ["The orc looks at you suspiciously."])
   
@@ -727,7 +726,7 @@ test.tests = function() {
   test.assertEqual([], w.practice_room.east_guardedBy)  
   test.assertEqual(false, w.practice_room.east.isGuarded())  
   test.assertCmd('e', ["You head east.", "The passage", "A long passage.", "You can go west."])
-  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, an orc (holding a huge shield), a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, south or west."])
+  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, an orc (holding a broad sword and a wall shield), a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, south or west."])
   
   
   
@@ -739,27 +738,25 @@ test.tests = function() {
   test.assertEqual(undefined, w.orc.guardingDir)
 
 
-  test.assertCmd('e', ["You head east.", "The passage", "A long passage.", "You can see an orc (holding a huge shield) here.", "You can go west.", "The orc eyes you suspiciously."])
+  test.assertCmd('e', ["You head east.", "The passage", "A long passage.", "You can see an orc (holding a broad sword and a wall shield) here.", "You can go west.", "The orc eyes you suspiciously."])
   test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, south or west."])
 
 
 
 
   
-  //w.orc.attitude = rpg.BELLIGERENT
 
   w.orc.loc = 'great_hall'
   w.orc.signalGroups = []
+  delete w.orc.isGuardingFunction
 
   test.title("Guarding item with guardItem")
-  w.orc.agenda = ['guardItemSlow:tapestry:The orc draws his sword.']
+  w.orc.agenda = ['guardItem:tapestry:The orc draws his sword.']
   w.tapestry.oldLoc = w.tapestry.loc
-  test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a huge shield) here.', 'You can go east or north.', ])
+  test.assertCmd('w', ['The great hall', 'An imposing - and rather cold - room with a high, vaulted roof, and an impressive tapestry hanging from the wall.', 'You can see an orc (holding a broad sword and a wall shield) here.', 'You can go east or north.', ])
   test.assertCmd("z", "Time passes...")
   
-  log(w.orc.agenda)
   test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])
-  log(w.orc.agenda)
   random.prime([0, 16, 7, 4])
   
   test.assertCmd("z", ["Time passes...","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 91."])
@@ -773,11 +770,11 @@ test.tests = function() {
   delete w.orc.target
 
   test.title("Guarding item with waitUntil")
-  w.orc.agenda = ['waitUntil:tapestry:scenery:false:The orc draws his sword.', 'antagonise']
+  w.orc.agenda = ['waitUntil:tapestry:scenery:false:The orc draws his sword.', 'antagoniseNow']
   test.assertCmd("z", ["Time passes..."])
   test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword."])
   test.assertEqual(false, w.orc.hostile)
-  test.assertEqual(['antagonise'], w.orc.agenda)
+  test.assertEqual(['antagoniseNow'], w.orc.agenda)
   random.prime([0, 16, 7, 4])
   test.assertCmd("z", ["Time passes...","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 82."])
   test.assertEqual([], w.orc.agenda)
@@ -789,7 +786,7 @@ test.tests = function() {
   delete w.orc.target
   
   test.title("Guarding item with waitUntilNow")
-  w.orc.agenda = ['waitUntilNow:tapestry:scenery:false:The orc draws his sword.', 'antagonise']
+  w.orc.agenda = ['waitUntilNow:tapestry:scenery:false:The orc draws his sword.', 'antagoniseNow']
   random.prime([0, 16, 7, 4])
 
   test.assertCmd("get tap", ["You take the tapestry.", "The orc draws his sword.","The orc attacks you.","A hit!", "The attack does 9 hits, your health is now 73."])
@@ -845,26 +842,19 @@ test.tests = function() {
 
   test.title("pursueToAttack")
   w.orc.pursueToAttack = rpg.pursueToAttack
-  w.orc.agenda = ['ongoingAttack:player']
+  w.orc.agenda = ['antagoniseNow:player']
   w.orc.hostile = true
-  log('-----------------------')
-  log(w.orc.agenda)
-  log(w.orc.suspended)
-  log(w.orc.paused)
- 
-  test.assertCmd('n', ['You head north.', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can see eleven arrows, a goblin, a shotgun and Stone of Returning here.', 'You can go north or south.', 'The orc enters the yard from the south.'])
-  log(w.orc.agenda)
-  log(w.orc.suspended)
-  log(w.orc.paused)
-/*  random.prime([1, 19])
-  log('-----------------------')
+
+  test.assertCmd('n', ['You head north.', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can see eleven arrows, a goblin, a shotgun and Stone of Returning here.', 'You can go north or south.'])
+  test.assertCmd('z', ['Time passes...', 'The orc enters the yard from the south.'])
+  random.prime([1, 19])
   test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
 
   test.title("Befriend")
-  player.skillsLearnt = ["Double attack", "Fireball", "Befriend"]/*
+  player.skillsLearnt = ["Double attack", "Fireball", "Befriend"]
   test.assertCmd('cast befriend at orc', ['You cast the <i>Befriend</i> spell.', 'The orc will now regard you as a friend.'])
   
-  test.assertCmd("z", ["Time passes...","The orc casts the <i>Test attack 2</i> spell.","Test attack two was performed"])
+  test.assertCmd("z", ["Time passes...",])
 
   /**/
 

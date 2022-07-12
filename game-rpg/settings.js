@@ -5,7 +5,7 @@ settings.author = "The Pixie"
 settings.version = "1.1";
 settings.thanks = ["Kyle", "Lara"];
 
-settings.customLibraries.push({folder:'rpg', files:["lang-en", "rpg", "skill", "attack", "item_templates", "npc_templates", "commands", "spells", "weapons", "agenda"]})
+settings.customLibraries.push({folder:'rpg', files:["lang-en", "rpg", "skill", "attack", "item_templates", "npc_templates", "commands", "spells", "weapons", "monsters", "agenda"]})
 settings.files.push('weather')
 
 settings.statusPane = false;
@@ -28,6 +28,11 @@ settings.output = function(report) {
 }
 
 
+
+
+settings.getLocationDescriptionAttName = function() {
+  return player.apocalypse && currentLocation.apocDesc ? "apocDesc" : "desc"
+}
 
 
 
@@ -86,7 +91,7 @@ settings.dateTime = {
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
-  player.skillsLearnt = ["Double attack", "Fireball"]
+  player.skillsLearnt = ["Double attack", "Fireball", "Stoneskin"]
   createAdditionalPane(1, "Spells", 'spells-known', function() {
     let html = ''
     for (const name of player.skillsLearnt) {
@@ -97,7 +102,6 @@ settings.setup = function() {
 
   player.hitpoints = 20
   player.status = "You are feeling fine"
-  player.skillsLearnt = ["Double attack", "Fireball"]
   //settings.updateCustomUI()
   w.rabbit.setLeader(player)
 }

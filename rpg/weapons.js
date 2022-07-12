@@ -1,9 +1,10 @@
 
-const weapons = [
+rpg.weapons = [
   {name:"Dagger", damage:"d6", atts:"msFT", desc:"Can be concealed"},
   {name:"Short sword", damage:"2d6", atts:"msF", desc:"Use if you want to go first; bonus to initiative"},
   {name:"Broad sword", damage:"2d8", atts:"ms", desc:"Also sword, etc. Good general purpose weapon"},
   {name:"Sabre", damage:"3d6", atts:"ms", desc:"Also scimitar, etc. Good for unarmoured foes"},
+  {name:"Rapier", damage:"d10", atts:"mp", desc:"A light weapon, good for slipping past armour"},
   {name:"Two-handed sword", damage:"3d8", atts:"MsX", desc:"Requires skill, but does good damage, especially to unarmed foes"},
   {name:"Wood axe", damage:"d8", atts:"maST", desc:"Cheap and readily available!"},
   {name:"Battle axe", damage:"d10", atts:"maS", desc:"Good against armoured foes, but slow"},
@@ -68,6 +69,7 @@ rpg.weaponFlags = {
 rpg.createWeapon = function(data) {
   const name = data.name.toLowerCase().replace(/ |\-/g, '_') + '_prototype'
   const weapon = createItem(name, WEAPON(data.damage))
+  weapon.alias = data.name.toLowerCase()
   weapon.abstract = true
   weapon.type = rpg.weaponTypeMapping[data.atts[0]]
   if (!weapon.type) log("Weapon type not recognised for " + name + ": " + data.atts)
@@ -79,6 +81,25 @@ rpg.createWeapon = function(data) {
   return weapon
 }
 
-for (const data of weapons) {
+for (const data of rpg.weapons) {
   rpg.createWeapon(data)
+}
+log("Added " + rpg.weapons.length + " basic weapons")
+
+
+rpg.shields = [
+  {name:"target", size:1, desc:"A small target shield."},
+  {name:"small", size:2, desc:"A small shield."},
+  {name:"full", size:3, desc:"A full shield."},
+  {name:"wall", size:4, desc:"A wall shield."},
+
+
+]
+
+
+for (const data of rpg.shields) {
+  createItem(data.name + "_shield_prototype", SHIELD(data.size), {
+    examine:data.desc,
+    alias:data.name + ' shield',
+  })
 }

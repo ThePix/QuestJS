@@ -27,8 +27,8 @@ class Attack {
       attack.skill = rpg.getSkill()
       skillUI.resetButtons()
     }
-    if (!attack.skill) attack.skill = defaultSkill
-    attack.reportText = (source && source.reportText) ? source.reportText : attack.skill.reportText
+    if (!attack.skill) attack.skill = attacker.selectSkill()
+    attack.msgAttack = (source && source.msgAttack) ? source.msgAttack : attack.skill.msgAttack
 
     if (!attack.skill.testUseable(attack.attacker)) return false
 
@@ -56,9 +56,9 @@ class Attack {
     attack.secondarySuccess = attack.skill.secondarySuccess //|| 'A hit!'
     attack.secondaryFailure = attack.skill.secondaryFailure //|| 'A miss!'
 
-    //log(attack.reportText)
+    //log(attack.msgAttack)
     //log({attacker:attacker, skill:attack.skill, target:attack.primaryTargets[0], source:source})
-    msg(attack.reportText, {attacker:attacker, skill:attack.skill, target:attack.primaryTargets[0], source:source})
+    msg(attack.msgAttack, {attacker:attacker, skill:attack.skill, target:attack.primaryTargets[0], source:source, weapon:attack.weapon})
 
     // Get the weapon (for most monsters, the monster IS the weapon)
     // Base the attack on the weapon
