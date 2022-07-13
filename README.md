@@ -1,5 +1,7 @@
 This is a full re-write of Quest, an interactive fiction app, to pure JavaScript. An experimental game can be found [here](http://textadventures.co.uk/games/view/48pkf40on0soigganjtatq/first-steps).
 
+### A Successor to Quest 5
+
 Quest 5 is written in C#, with some Visual Basic, has its own scripting language, ASL, and also uses JavaScript for the UI. Players can either download a dedicated player/editor or use the web version, in the latter case the game runs on the textadventures.co.uk server. In contrast, Quest 6 is written entirely JavaScript, and runs in the player's browser. This means:
 
 _Better for players_
@@ -26,14 +28,14 @@ No, but it is under development. It is in another repository [here](https://gith
 However, you do not need a dedicated editor to create games, and the Wiki includes a tutorial that will take you through how you can already create a game.
 
 
-### Will it be possible to convert existing games?
+### Will it be possible to convert existing Quest games?
 
 Originally the answer was a definite no, however during developmenmt of the editor it became apparent that an XML file would be good to support blockly, so I have changed my position somewhat. The editor will now convert most things, but not ASL code currently.
 
 
-### What does Quest 6 code look like?
+### What does QuestJS code look like?
 
-This is what the code for Quest 6 looks like. It creates a player, two rooms and a hat.
+This is what the code for QuestJS looks like. It creates a player, two rooms and a hat.
 
 ```javascript
 createItem("me", PLAYER(), { 
@@ -44,7 +46,7 @@ createItem("me", PLAYER(), {
 
 
 createRoom("lounge", {
-  desc:'A small room with an [old settee:couch:sofa] and a [tv:telly].',
+  desc:'A small room with an old settee and a tv.',
   east:new Exit('kitchen'),
 })
 
@@ -65,7 +67,7 @@ createItem("hat", WEARABLE(), {
 ```
 
 
-### What do Quest 6 games look like?
+### What do QuestJS games look like?
 
 Here are some examples:
 
