@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Quest 5 to QuestJS Convertor</title>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    style-src 'unsafe-inline' 'self';
+    font-src 'self';
+    script-src 'unsafe-inline' 'self';
+    img-src 'self';"
+  >
+  <script src="UtilQToQJS.js"></script>
+</head>
+
+
+
+<body>
+
+<h1 id="loading">Q5 to QJS Convertor</h1>
+<p>
+<input type="button" value="Commands" onclick="output(commands)" />
+<input type="button" value="Functions" onclick="output(functions)" />
+<input type="button" value="Objects" onclick="output(objects)" />
+<input type="button" value="Settings" onclick="output(settings)" />
+<input type="button" value="Styles" onclick="output(styles)" />
+</p>
+
+<div id="input">
+<textarea id="text-in" style="width:100%;height:40vh" placeholder="Paste the entire .aslx file here"></textarea>
+</div>
+<div id="comment" style="color:blue;padding:5px">
+Paste the contents of the .aslx file from your Quest 5 game into the top box. Then click each button in turn to see the code for QuestQS. The text here will change to indicate what to do with it. Note that the conversion is not perfect; it will still take some effort to get this up and running.<br/>Ensure you copy the entire contents of the lower box, not just the bit that is visible. Click in the box, then do [ctrl]-A to select all.
+</div>
+<div id="output">
+<textarea id="text-out" readonly style="width:100%;height:40vh"></textarea>
+</div>
+
+</body>
+</html>
