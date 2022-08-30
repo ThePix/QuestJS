@@ -12,6 +12,7 @@ const lang = {
     // Regular Expressions for Commands
     
     // Meta commands
+    MetaHello:/^(?:hello|hi|yo)$|^\?$/,
     MetaHelp:/^help$|^\?$/,
     MetaHint:/^(?:hint|clue)s?$/,
     MetaCredits:/^(?:about|credits|version|info)$/,
@@ -53,7 +54,7 @@ const lang = {
     MetaTopicsNote:/^topics?$/,
 
     // Kind of meta    
-    Look:/^l$|^look$/,
+    Look:/^l$|^look$|^describe (?:room|the room|location|the location|where i am|here)$/,
     Exits:/^exits$/,
     Map:/^map$/,
     Inv:/^inventory$|^inv$|^i$/,
@@ -65,7 +66,7 @@ const lang = {
     PurchaseFromList:/^buy$|^purchase$/,
     
     // Use item
-    Examine:/^(?:examine|exam|ex|x) (.+)$/,
+    Examine:/^(?:examine|exam|ex|x|describe) (.+)$/,
     LookAt:/^(?:look at|look|l) (.+)$/,
     LookOut:/^(?:look out of|look out) (.+)$/,
     LookBehind:/^(?:look behind|check behind) (.+)$/,
@@ -229,9 +230,9 @@ const lang = {
     DebugInspectByName:/^inspect2 (.+)$/,
     DebugWarpName:/^warp (.+)$/,
     DebugTest:/^test$/,
-    DebugInspectCommand:/^(?:cmd) (.+)$/,
-    DebugListCommands:/^cmds$/,
-    DebugListCommands2:/^cmds2$/,
+    DebugInspectCommand:/^(?:cmd|command) (.+)$/,
+    DebugListCommands:/^(?:cmd|command)s$/,
+    DebugListCommands2:/^(?:cmd|command)s2$/,
     DebugParserToggle:/^parser$/,
     DebugStats:/^stats?$/,
     DebugHighlight:/^highlight$/,
@@ -610,9 +611,17 @@ const lang = {
 
 
 
+  helloScript:function() {
+    metamsg("Hi!")
+    metamsg("If you are wondering what to do, typing HELP will give you a quick guide at how to get going. In fact, we can do that now...")
+    metamsg(">HELP")
+    wait()
+    return lang.helpScript()
+  },
+  
   helpScript:function() {
     if (settings.textInput) {
-      metamsg("Type commands in the command bar to interact with the world.");      
+      metamsg("Type commands at the prompt to interact with the world.");      
       metamsg("{b:Movement:} To move, use the eight compass directions (or just {class:help-eg:N}, {class:help-eg:NE}, etc.). When \"Num Lock\" is on, you can use the number pad for all eight compass directions. Also try - and + for {class:help-eg:UP} and {class:help-eg:DOWN}, / and * for {class:help-eg:IN} and {class:help-eg:OUT}.");
       metamsg("{b:Other commands:} You can also {class:help-eg:LOOK} (or just {class:help-eg:L} or 5 on the number pad), {class:help-eg:HELP} (or {class:help-eg:?}) or {class:help-eg:WAIT} (or {class:help-eg:Z} or the dot on the number pad). Other commands are generally of the form {class:help-eg:GET HAT} or {class:help-eg:PUT THE BLUE TEAPOT IN THE ANCIENT CHEST}. Experiment and see what you can do!");
       metamsg("{b:Using items: }You can use {class:help-eg:ALL} and {class:help-eg:ALL BUT} with some commands, for example {class:help-eg:TAKE ALL}, and {class:help-eg:PUT ALL BUT SWORD IN SACK}. You can also use pronouns, so {class:help-eg:LOOK AT MARY}, then {class:help-eg:TALK TO HER}. The pronoun will refer to the last subject in the last successful command, so after {class:help-eg:PUT HAT AND FUNNY STICK IN THE DRAWER}, '{class:help-eg:IT}' will refer to the funny stick (the hat and the stick are subjects of the sentence, the drawer was the object).");
@@ -1092,12 +1101,12 @@ const lang = {
       negative = true
       number = -number;
     }
-   
+    
     const parts = rChunkString(number, 3)
     let count = 0
     //let commaFlag = false
     const result = []
-   
+    
     while (parts.length) {
       const bit = lang._toWords1000(parts.pop())
       if (bit !== 'zero') {
@@ -1111,8 +1120,8 @@ const lang = {
       const pos = s.lastIndexOf(' and ')
       s = s.substring(0, pos) + ',' + s.substring(pos)
     }
-   
-   
+    
+    
     if (negative) s = 'minus ' + s
     if (!noun) return s
     return s + ' ' + (number === 1 ? noun : lang.getPlural(noun))
@@ -1381,6 +1390,24 @@ lang.createVerbWith = function(name, options = {}) {
     defmsg:options.defmsg
   }))
 }
+
+
+
+
+
+lang.questions = [
+  { q:'who am i', script:function() { parser.parse('look me'); return world.SUCCESS_NO_TURNSCRIPTS }},
+  { q:'who are (?:u|you)', script:function() { metamsg('Me? I am the parser. I am going to try to understand your commands, and then hopefully the protagonist will act on them in the game world.'); return world.SUCCESS_NO_TURNSCRIPTS }},
+  { q:'who is (?:|the )(?:player|protagonist)', script:function() { metamsg('The protagonist is a character in the game world, but a special one - one that you control directly. He or she is your proxy, acting on your behalf, so if you want to know what he or she is like, try WHO AM I?.'); return world.SUCCESS_NO_TURNSCRIPTS }},
+  { q:'what am i', script:function() { parser.parse('look me'); return world.SUCCESS_NO_TURNSCRIPTS }},
+  { q:'what (?:(?:have i got|do i have)(?:| on me| with me)|am i (?:carry|hold)ing)', script:function() { parser.parse('inv'); return world.SUCCESS_NO_TURNSCRIPTS }},
+  { q:'where am i', script:function() { parser.parse('look'); return world.SUCCESS_NO_TURNSCRIPTS }},
+  { q:'what do i do', script:function() { parser.parse('help'); return world.SUCCESS_NO_TURNSCRIPTS }},
+  { q:'(?:what do i do now|where do i go)', script:function() { parser.parse('hint'); return world.SUCCESS_NO_TURNSCRIPTS }},
+]
+
+
+
 
 
 
