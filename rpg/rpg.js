@@ -1,6 +1,6 @@
 "use strict";
 
-
+settings.armourScaling = 10
 settings.maxNumberOfRings = 2
 
 
