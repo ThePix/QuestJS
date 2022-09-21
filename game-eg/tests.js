@@ -359,14 +359,26 @@ test.tests = function() {
 
   test.assertEqual("Simple <span style=\"color:red\">text</span>.", processText("Simple {colour:red:text}."));
   test.assertEqual("Simple <span style=\"color:red\">text with <i>nesting</i></span>.", processText("Simple {colour:red:text with {i:nesting}}."));
-  test.assertEqual("Simple text", processText("Simple {random:text}"));
-  test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:yes:no}"));
+  test.assertEqual("Simple text", processText("Simple {random:text}"))
+  test.assertEqual("Simple text: no", processText("Simple text: {if:player:someOddAtt:yes:no}"))
   player.someOddAtt = 67;
   test.assertEqual("Simple text: 67", processText("Simple text: {show:player:someOddAtt}"));
+  test.assertEqual("Simple text: 67", processText("Simple text: {showOrNot:player:none:someOddAtt}"))
   player.someOddAtt = 0;
-  test.assertEqual("Simple text: 0", processText("Simple text: {show:player:someOddAtt}"));
-  player.someOddAtt = undefined;
-  test.assertEqual("Simple text: ", processText("Simple text: {show:player:someOddAtt}"));
+  test.assertEqual("Simple text: 0", processText("Simple text: {show:player:someOddAtt}"))
+  test.assertEqual("Simple text: 0", processText("Simple text: {showOrNot:player:none:someOddAtt}"))
+  player.someOddAtt = undefined
+  test.assertEqual("Simple text: ", processText("Simple text: {show:player:someOddAtt}"))
+  test.assertEqual("Simple text: none", processText("Simple text: {showOrNot:player:none:someOddAtt}"))
+  player.someOddAtt = function() { return 'house' }
+  test.assertEqual("Simple text: house", processText("Simple text: {show:player:someOddAtt}"))
+  test.assertEqual("Simple text: house", processText("Simple text: {showOrNot:player:none:someOddAtt}"))
+  player.someOddAtt = function() { return null }
+  test.assertEqual("Simple text: ", processText("Simple text: {show:player:someOddAtt}"))
+  test.assertEqual("Simple text: none", processText("Simple text: {showOrNot:player:none:someOddAtt}"))
+  player.someOddAtt = function() { return w.boots }
+  test.assertEqual("Simple text: boots", processText("Simple text: {show:player:someOddAtt:name}"))
+  test.assertEqual("Simple text: boots", processText("Simple text: {showOrNot:player:none:someOddAtt:alias}"))
 
   player.someOddAtt = 67;
 

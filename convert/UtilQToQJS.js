@@ -20,6 +20,8 @@ const jsReplacements = [
   {asl: /do ?\(([a-zA-Z0-9_.]+), ~\)/, js: '$1[~]()'},
   {asl: /foreach \(([a-zA-Z0-9_]+), ([a-zA-Z0-9_.()]+)\)/, js: 'for (let $1 of $2)'},
   {asl: /otherwise/, js: 'else'},
+  
+  {asl: /game.pov/, js: 'player'},
 
   {asl: /HasString ?\(([a-zA-Z0-9_.]+), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "string"'},
   {asl: /HasInt ?\(([a-zA-Z0-9_.]+), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "number"'},
