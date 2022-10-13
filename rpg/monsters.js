@@ -532,10 +532,23 @@ rpg.monsters = [
       { name:"advanced construct", ex:"An advanced automaton, rather bigger than you, and not so slow, with glowing red eyes."},
       { name:"brass man", ex:"A sophisticated brass automaton, with glowing red eyes."},
       { name:"brass soldier", ex:"A sophisticated brass automaton, with glowing red eyes, designed for warfare."},
-      { name:"iron golem", ex:"A sophisticated iron automaton, with glowing red eyes, designed for warfare."},
+      { name:"iron soldier", ex:"A sophisticated iron automaton, with glowing red eyes, designed for warfare."},
       { name:"bronze sentinel", ex:"A sophisticated bronze automaton, with glowing red eyes, designed for warfare."},
       { name:"steel sentinel", ex:"A sophisticated steel automaton, with glowing red eyes, designed for warfare."},
       { name:"colossus", ex:"A huge, steel automaton, with glowing red eyes, designed for warfare."},
+    ]
+  },
+  {
+    name:"golem_archetype",
+    template:RPG_CONSTRUCT(),
+    health:3,
+    instances:[
+      { name:"slime golem", ex:"A vaguely man-shaped blob of slime."},
+      { name:"tar golem", ex:"A humanoid figure of blachest tar."},
+      { name:"wood golem", ex:"Carved from a single piece of wood, man-shaped and animated."},
+      { name:"stone golem", ex:"Sculpted from a single block of stone, man-shaped and animated."},
+      { name:"iron golem", ex:"Forged as a single piece, this huge man-shaped creature is nevettheless quite flexible."},
+      { name:"mithril golem", ex:"Slick and silver, this humanoid mirror moves with alarming speed."},
     ]
   },
   {
@@ -648,7 +661,7 @@ for (const el of rpg.monsters) {
     const name = el.instances[i].name.replace(/ /g, '_') + "_prototype"
     //log(name)
     createItem(name, el.template, {
-      name:el.instances[i].name,
+      name:name,
       alias:el.instances[i].name,
       ex:el.instances[i].ex,
       element:el.element,
@@ -659,7 +672,6 @@ for (const el of rpg.monsters) {
     })
     count++
   }
-  log(el.instances.length)
 }
 log("Added " + count + " levelled monsters from " + rpg.monsters.length + " groups")
 
@@ -687,6 +699,9 @@ log("Added " + count + " elementals for " + rpg.elements.list.length + " element
 
 
 
+
+
+
 function spawnLevelled(name, loc, level, options) {
   const group = rpg.monsters.find(el => el.name === name)
   log(group)
@@ -707,6 +722,9 @@ function spawnElemental(name, loc, level, options) {
 
 
 for (const el of rpg.elements.list) {
-  new SpellSummon(w['lesser_' + el.name + '_elemental_prototype'], { level:2 + el.level, duration:6, })
-  new SpellSummon(w['greater_' + el.name + '_elemental_prototype'], { level:12 + el.level, duration:6, })
+  new SpellSummon(w['lesser_' + el.name + '_elemental_prototype'], 2 + el.level, 6, {})
+  new SpellSummon(w['greater_' + el.name + '_elemental_prototype'], 12 + el.level, 6, {})
 }
+
+
+

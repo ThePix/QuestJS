@@ -45,7 +45,7 @@ const EQUIPPABLE = function() {
       msg(lang.equip, options)
     }
     else {
-      options.list = formatList(equipped, {article:DEFINITE, joiner:lang.list_and})
+      options.list = formatList(equipped, {article:DEFINITE, lastSep:lang.list_and})
       msg(lang.unequipAndEquip, options)
       for (let el of equipped) el.equipped = false
     }
@@ -65,10 +65,9 @@ const EQUIPPABLE = function() {
   
 
 
-const WEAPON = function(damage, weaponType) {
+const WEAPON = function(damage) {
   const res = Object.assign({}, EQUIPPABLE())
   res.weapon = true
-  res.weaponType = weaponType
   res.damage = damage
   res.match = function(item) { return item.weapon }
   res.icon = () => 'weapon12'
@@ -79,8 +78,8 @@ const WEAPON = function(damage, weaponType) {
 
 
 
-const LIMITED_AMMO_WEAPON = function(damage, weaponType, ammo) {
-  const res = Object.assign({}, WEAPON(damage, weaponType))
+const LIMITED_AMMO_WEAPON = function(damage, ammo) {
+  const res = Object.assign({}, WEAPON(damage))
   res.ammo = ammo
   res.activeEffects.push(typeof ammo === 'number' ? "Ammo tracker" : "Ammo consumer")
   return res;
@@ -94,7 +93,7 @@ new Effect("Ammo consumer", {
     const item = w[source.ammo]
     if (!item) return errormsg("The weapon " + source.name + " has an unknown ammo set: " + source.ammo)
     if (item.countAtLoc(player.name) < 1) {
-      attack.abort("Out of ammo!")
+      attack.abort(lang.outOfAmmo)
     }
     else {
       item.takeFrom(player.name, 1)
@@ -108,7 +107,7 @@ new Effect("Ammo tracker", {
   modifyOutgoingAttack:function(attack, source) {
     if (!source.equipped) return
     if (attack.weapon.ammo === 0) {
-      attack.abort("Out of ammo!")
+      attack.abort(lang.outOfAmmo)
     }
     else {
       attack.weapon.ammo--
@@ -122,7 +121,7 @@ rpg.add(new Effect("Deteriorating", {
   // really needs to be on success only
   modifyOutgoingAttack:function(attack) {
     if (attack.weapon.ammo === 0) {
-      attack.abort("Out of ammo!")
+      attack.abort(lang.outOfAmmo)
     }
     else {
       attack.weapon.ammo--
@@ -184,6 +183,10 @@ const SPELLBOOK = function(list) {
     msg(this.examineX + ' It contains the spells ' + formatList(this.spellsAvailableToLearn.map(el => '<i>' + el + '</i>'), {lastJoiner:lang.list_and}) + '.')
   }
   res.icon = () => 'spell12'
+  if (!res.identify) res.identify = function() { 
+    const list = formatList(this.spellsAvailableToLearn, {lastSep:lang.list_and})
+    return lang.spellbookIdentifyTemplate.replace('#', list)
+  }
   return res 
 }
 

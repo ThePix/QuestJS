@@ -9,3 +9,4 @@ createItem("me", PLAYER(), {
 createRoom("lounge", {
   desc:"The lounge is boring, the author really needs to put stuff in it.",
 })
+

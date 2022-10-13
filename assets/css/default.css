@@ -381,6 +381,7 @@ span.compass-button {
 #dialog {
   display:none;
   z-index:10;
+  position:fixed;
 }
 
 .toggle {

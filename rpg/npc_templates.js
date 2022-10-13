@@ -7,15 +7,15 @@
 // or modifyIncomingAttack for an attack it is receiving
 const RPG_TEMPLATE = {
   rpgCharacter:true,
-  offensiveBonus:0,
-  spellCasting:0,
-  maxNumberOfRings:settings.maxNumberOfRings,
   afterLoadForTemplate:function() {
     if (this.agenda && this.agenda[0].startWith('guardExit')) this.setGuardFromAgenda(this.agenda[0].split(':').shift())
     log("loaded!")
   },
+  
+  offensiveBonus:0,
   getOffensiveBonus:function(skill) {
     if (!skill.statForOffensiveBonus) {
+      if (skill.type && this['offensiveBonus_' + skill.type]) return this['offensiveBonus_' + skill.type]
       return this.offensiveBonus
     }
     else if (this[skill.statForOffensiveBonus] !== undefined) {
@@ -26,37 +26,9 @@ const RPG_TEMPLATE = {
     }
   },
   defensiveBonus:0,
-  spellDefensiveBonus:0,
-  // call this to flag as dead - no output
-  terminate:function(attack) {
-    if (this.dead) return
-
-    if (this.afterDeath) this.afterDeath(attack)
-    if (attack) {
-      attack.msg(this.msgDeath, 1)
-    }
-    else {
-      msg(this.msgDeath, 1)
-    }
-
-    this.dead = true
-    this.suspended = true
-    if (this.noCorpse) {
-      rpg.destroy(this)
-    }
-  },
-  testManipulate:function() {
-    if (this.dead) return falsemsg(lang.npc_dead)
-    if (this.manipulateProhibited) return falsemsg(this.manipulateProhibited)
-    return true
-  },
-  testTalk:function() {
-    if (this.dead) return falsemsg(lang.npc_dead)
-    if (this.talkProhibited) return falsemsg(this.talkProhibited)
-    return true
-  },
   getDefensiveBonus:function(skill) {
     if (!skill.statForDefensiveBonus) {
+      if (skill.type && this['defensiveBonus_' + skill.type]) return this['defensiveBonus_' + skill.type]
       return this.defensiveBonus
     }
     else if (this[skill.statForDefensiveBonus] !== undefined) {
@@ -66,6 +38,28 @@ const RPG_TEMPLATE = {
       return 0
     }
   },
+
+  // call this whenever the health changes to test if it is dead, and if so deal with it
+  checkHealth:function(attack) {
+    if (this.health <= 0) {
+      this.terminate(attack)
+    }
+  },
+  
+  testActivity:function(activityName, report) {
+    const activity = rpg.activities.find(el => el.name === activityName)
+    if (!activity) return errormsg("Trying to find unknown activity: " + activityName)
+    if (this.dead) return report ? falsemsg(lang.npc_dead) : false
+    for (const el of rpg.situations) {
+      if (this[el] && !activity['allow_' + el]) return report ? falsemsg(lang['npc_' + el]) : false
+    }
+    if (this.blinded) delete this.target
+    return true
+  },
+
+  
+ 
+  
   // Can be called to have the NPC resume its original agenda, as long as
   // the NPC can return to the starting location and the original settings
   // were saved.
@@ -80,18 +74,17 @@ const RPG_TEMPLATE = {
   },
   armour:0,
   isLight:false,  // should this be on default items?
-  activeEffects:[],
-  skillsLearnt:[],
   
   dead:false,
   asleep:false,
   stunned:0,
   petrified:false,
   blinded:false,
-  signalResponses:{},
+  
   spellCooldown:-1,
   weaponAttackCooldown:-1,
   naturalAttackCooldown:-1,
+  maxNumberOfRings:settings.maxNumberOfRings,
 
   // player attacks this
   attack:function(options) {
@@ -106,13 +99,23 @@ const RPG_TEMPLATE = {
 
   modifyOutgoingAttack:function(attack) { },
   
-  getEquippedWeapon:function() { return this.weapon ? w[this.weapon] : this },
+  getEquippedWeapon:function() { return this.weapon ? w[this.weapon] : null },
   
   getEquippedShield:function() { return this.shield ? w[this.shield] : null },
   
   getArmour:function() { return this.armour },
 
   hasEffect:function(name) { return this.activeEffects.includes(name) },
+  
+  applyActiveEffects:function(attName, attack, duration) {
+    for (const el of this.activeEffects) {
+      const effect = rpg.findEffect(el)
+      if(effect[attName]) {
+        const s = effect[attName](this, attack, duration)
+        attack ? attack.msg(s) : msg(s)
+      }
+    }
+  },
   
   getSpellCooldownDelay:function(skill) { return skill.level ? skill.level : 0 },
   getWeaponAttackCooldownDelay:function(skill) { return skill.level ? skill.level : 0 },
@@ -146,14 +149,21 @@ const RPG_PLAYER = function(female) {
   const res = PLAYER(female)
   
   for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key]
-  
-  //res.getEquippedWeapon = function() { return this.equipped ? w[this.equipped] : w.weapon_unarmed; }
+  res.activeEffects = []
+  res.skillsLearnt = []
+  res.signalResponses = {}
   
   res.allegiance = 'friend'
+  res.damage = 'd4'
   
+  res.testManipulate = function(item, commandName) { return this.testActivity('manipulate', true) }
+  res.testTalk = function() { return this.testActivity('talk', true) }
+  res.testMove = function(exit) { return this.testActivity('move', true) }
+  res.testPosture = function(commandName) { return this.testActivity('posture', true) }
+
   res.selectSkill = function() {
     const weapon = this.getEquippedWeapon()
-    return weapon ? defaultWeaponAttack : unarmedAttack
+    return weapon ? defaultWeaponAttack : defaultNaturalAttack
   }
   
   res.getEquippedWeapon = function() {
@@ -187,13 +197,31 @@ const RPG_PLAYER = function(female) {
     this.doEvent(turn) 
   }
 
-  return res;
+  res.terminate = function(attack) {
+    if (this.dead) return
+
+    if (attack) {
+      attack.msg(this.msgDeath, 1)
+      attack.output()
+    }
+    else {
+      msg(this.msgDeath, 1)
+    }
+    blankLine()
+    metamsg(lang.gameOverMsg)
+    io.finish()
+  }
+
+  return res
 }
 
 const RPG_NPC = function(female) {
   const res = NPC(female)
 
   for (let key in RPG_TEMPLATE) res[key] = RPG_TEMPLATE[key]
+  res.activeEffects = []
+  res.skillsLearnt = []
+  res.signalResponses = {}
   
   res.allegiance = 'foe'
   res.hostile = false
@@ -204,12 +232,18 @@ const RPG_NPC = function(female) {
     if (!o.maxHealth) o.maxHealth = o.health
     o.verbFunctions.push(function(o, verbList) {
       verbList.push(lang.verbs.attack)
+      if (settings.targetVerb && player.target !== o.name) verbList.push(lang.verbs.target)
     })
     o.nameModifierFunctions.push(function(o, list) {
       if (o.dead) list.push(lang.invModifiers.dead)
     })
   }
   
+  res.testManipulate = function(item, commandName) { return this.testActivity('manipulate') }
+  res.testTalk = function() { return this.testActivity('talk') }
+  res.testMove = function(exit) { return this.testActivity('move') }
+  res.testPosture = function(commandName) { return this.testActivity('posture') }
+
   res.msgDeath = lang.deathGeneral
   
   // An NPC is hostile if aggression is true and it is targeting the given character or an allied one
@@ -272,13 +306,51 @@ const RPG_NPC = function(female) {
     }
   },
 
+  res.terminate = function(attack) {
+    if (this.dead) return
 
+    if (this.afterDeath) this.afterDeath(attack)
+    if (attack) {
+      attack.msg(this.msgDeath, 1)
+    }
+    else {
+      msg(this.msgDeath, 1)
+    }
 
-  res.selectSkill = function() {
-    if (!this.skillOptions) return this.doesNotUseWeapons ? defaultNaturalAttack : defaultWeaponAttack
+    this.dead = true
+    this.suspended = true
+    if (this.noCorpse) {
+      rpg.destroy(this)
+    }
+  }
+
+  // Chose a skill or retrn null if none suitable
+  // If the character has "skillOptions" attribute, a skill is chosen from there, otherwise a default is used
+  // Takes account of wherher attack or spell casting is prohibited
+  res.selectSkill = function(target) {
+    const weapon = this.getEquippedWeapon()
+    if (!this.skillOptions) {
+      if (!this.testManipulate()) return null
+      return weapon ? defaultWeaponAttack : defaultNaturalAttack
+    }
+    
+    const skills = this.getAllowedSkills(weapon)
+    
+    if (skills.length === 0) return null
+    
     const skillName = random.fromArray(this.skillOptions)
     return rpg.findSkill(skillName)
   }
+  
+  res.getAllowedSkills = function(weapon) {
+    let skills = this.skillOptions.map(el => rpg.findSkill(el))
+    skills = skills.filter(el => el.testUseable(this))
+    for (const activity of rpg.activities) {
+      if (!this.testActivity(activity.name)) skills = skills.filter(el => el.activityType !== activity.name)
+    }
+    return skills
+  }  
+  
 
   res.examine = function(options = {}) {
     if (!options.char) options.item = this
@@ -302,7 +374,7 @@ const RPG_NPC = function(female) {
     }
     else {
       options.weapon = this.getEquippedWeapon()
-      if (options.weapon !== this) {
+      if (options.weapon) {
         options.shield = this.getEquippedShield()
         s += options.shield ? lang.wieldingWeaponAndShield : lang.wieldingWeaponOnly
       }
@@ -339,7 +411,7 @@ const RPG_NPC = function(female) {
       skill = this.selectSkill()
     }
     const attack = Attack.createAttack(this, target, skill)
-    attack.apply().output()
+    if (attack) attack.apply().output()
     return attack
   }
   
@@ -398,7 +470,6 @@ const RPG_CORPOREAL_UNDEAD = function() {
   res.element = 'necrotic'
   res.pronouns = lang.pronouns.thirdperson
   res.msgDeath = lang.deathUndead
-  res.poisonImmunity = true
   res.msgPoisonImmunity = "Poison has no effect on the undead!"
   return res
 }
@@ -408,7 +479,7 @@ const RPG_NON_CORPOREAL_UNDEAD = function() {
   res.noCorpse = true
   res.msgDeath = lang.deathUndeadNoCorpse
   res.modifyIncomingAttack = function(attack) {
-    if (attack.element || attack.isMagic || attack.spell) {
+    if (attack.element || attack.isMagic || attack.type === 'spell') {
       attack.damageMultiplier = 0
       attack.primarySuccess = attack.primarySuccess.replace(/[.!]/, ", but it passes straight through {sb:target}.")
     }
@@ -422,9 +493,7 @@ const RPG_PHANTOM = function() {
   res.noCorpse = true
   res.msgDeath = lang.deathPhantom
   res.pronouns = lang.pronouns.thirdperson
-  res.poisonImmunity = true
   res.msgPoisonImmunity = "Poison has no effect for some reason..."
-  res.unillusionable = true
   res.unillusion = function(attack) {
     attack.msg("{nv:target:disappear:true}.", 1)
     if (this.clonePrototype) {
@@ -443,7 +512,6 @@ const RPG_ELEMENTAL = function(element) {
   res.noCorpse = true
   res.msgDeath = lang.deathElemental
   res.pronouns = lang.pronouns.thirdperson
-  res.poisonImmunity = true
   res.msgPoisonImmunity = "Poison has no effect on elementals!"
   return res
 }
@@ -452,7 +520,6 @@ const RPG_CONSTRUCT = function() {
   const res = RPG_NPC()
   res.msgDeath = lang.deathConstruct
   res.pronouns = lang.pronouns.thirdperson
-  res.poisonImmunity = true
   res.msgPoisonImmunity = "Poison has no effect on constructs!"
   return res
 }
@@ -461,7 +528,6 @@ const RPG_DEMON = function() {
   const res = RPG_NPC()
   res.msgDeath = lang.deathConstruct
   res.pronouns = lang.pronouns.thirdperson
-  res.poisonImmunity = true
   res.msgPoisonImmunity = "Poison has no effect on demons!"
   return res
 }
@@ -511,6 +577,71 @@ const RPG_BEAST = function(female, hostile) {
 
 
 
+
+
+
+new Effect("No Spells", {
+})
+
+new Effect("No Movement", {
+})
+
+new Effect("Burning", {
+  endOfTurn:function(o) {
+    const hits = random.dice("d4+1")
+    o.health -= hits
+    return processText("{nv:char:take:true} {number:hits:point} of damage due to being on fire.", {char:o, hits:hits})
+  },
+})
+
+new Effect("Burning badly", {
+  endOfTurn:function(o) {
+    const hits = random.dice("2d4+2")
+    o.health -= hits
+    return processText("{nv:char:take:true} {number:hits:point} of damage due to being on fire.", {char:o, hits:hits})
+  },
+})
+
+new Effect("Electrifying", {
+})
+
+new Effect("Reflecting", {
+})
+
+// will attack friends and enemies at random
+new Effect("Confused", {
+})
+
+// will attack friends and enemies at random
+new Effect("Charmed", {
+})
+
+// will attack friends and enemies at random
+new Effect("Stunned", {
+})
+
+// will attack friends and enemies at random
+new Effect("Paralysed", {
+})
+
+// everyone attacks this char
+new Effect("Targeted", {
+})
+
+// needs to be exclusive with burning
+new Effect("Frozen", {
+  modifyIncomingAttack:function(attack) {
+    attack.damageMultiplier += 1
+  },
+})
+
+new Effect("Poisoned", {
+  endOfTurn:function(o) {
+    const hits = random.dice("d4+1")
+    o.health -= hits
+    return processText("{nv:char:take:true} {number:hits:point} of damage due to being on fire.", {char:o, hits:hits})
+  },
+})
 
 
 

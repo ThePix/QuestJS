@@ -27,10 +27,21 @@ class Attack {
       attack.skill = rpg.getSkill()
       skillUI.resetButtons()
     }
-    if (!attack.skill) attack.skill = attacker.selectSkill()
+    if (!attack.skill) attack.skill = attacker.selectSkill(target)
+    if (!attack.skill) {
+      if (attack.attacker === player) {
+        msg(lang.cannotAttack, {char:attack.attacker})
+      }
+      else { // may want to remove this?
+        log(attack.attacker.name + " cannot attack this turn")
+      }
+      return false
+    }
+    if (!attack.attacker.testActivity(attack.skill.activityType, true)) return false
+    if (!attack.skill.testUseable(attack.attacker)) return false
+
     attack.msgAttack = (source && source.msgAttack) ? source.msgAttack : attack.skill.msgAttack
 
-    if (!attack.skill.testUseable(attack.attacker)) return false
 
     // Set targets
     if (attack.skill.noTarget) {
@@ -58,7 +69,6 @@ class Attack {
 
     //log(attack.msgAttack)
     //log({attacker:attacker, skill:attack.skill, target:attack.primaryTargets[0], source:source})
-    msg(attack.msgAttack, {attacker:attacker, skill:attack.skill, target:attack.primaryTargets[0], source:source, weapon:attack.weapon})
 
     // Get the weapon (for most monsters, the monster IS the weapon)
     // Base the attack on the weapon
@@ -66,18 +76,23 @@ class Attack {
     attack.msg('Offensive bonus', 4)
     if (attack.skill.noWeapon) {
       attack.offensiveBonus = attack.skill.offensiveBonus
-      attack.damage = attack.skill.damage
+      attack.damage = attack.skill.damage || attacker.damage
       attack.element = attack.skill.element
       attack.report('From skill:', attack.offensiveBonus)
     }
     else {
       attack.weapon = attacker.getEquippedWeapon()
+      if (!attack.weapon) return errormsg("Got no weapon for a weapon attack - this should be checked before we get here!")
       attack.offensiveBonus = attack.weapon.offensiveBonus || 0
       attack.damage = attack.weapon.damage
       attack.element = attack.weapon.element
       attack.report('From weapon:', attack.offensiveBonus)
     }
+    // Now take into account the attacker's stats
+    attack.offensiveBonus += attacker.getOffensiveBonus(attack.skill)
+    attack.report('After attacker bonus:', attack.offensiveBonus)
     
+    if (attack.skill.noDamage) delete attack.damage   // do not want to be using default damage when healing yourself
     if (attack.damage) attack.setDamageAtts(attack.damage)
     if (attack.skill.secondaryDamage) attack.setDamageAtts(attack.skill.secondaryDamage, 'secondaryDamage')
     
@@ -85,9 +100,6 @@ class Attack {
     if (attack.skill.modifyOutgoingAttack) attack.skill.modifyOutgoingAttack(attack)
     attack.report('After skill:', attack.offensiveBonus)
       
-    // Now take into account the attacker's stats
-    attack.offensiveBonus += attacker.getOffensiveBonus(attack.skill)
-    attack.report('After attacker bonus:', attack.offensiveBonus)
     attacker.modifyOutgoingAttack(attack)
     attack.report('After attacker mods:', attack.offensiveBonus)
     
@@ -111,6 +123,11 @@ class Attack {
     if (room.modifyOutgoingAttack) room.modifyOutgoingAttack(attack)
     attack.applyActiveEffects(room, false)
     attack.report('After room effects:', attack.offensiveBonus)
+
+    if (!attack.aborted) {
+      msg(attack.msgAttack, {attacker:attacker, skill:attack.skill, target:attack.primaryTargets[0], source:source, weapon:attack.weapon})
+    }
+    //log(attack)
 
     return attack
   }
@@ -160,8 +177,6 @@ class Attack {
     if (isPrimary && !util.testAttribute(this.skill, "suppressAntagonise") && this.target.antagonise) {
       this.target.antagonise(this.attacker)
     }
-
-    if (target.modAttitudeOnAttack && !this.notAnAttack) target.modAttitudeOnAttack()
 
     if (!this.skill.inanimateTarget) {
       // Now take into account the target's active spell
@@ -223,18 +238,7 @@ class Attack {
     if (this.skill.targetEffect) this.skill.targetEffect(this, target, isPrimary, count)
 
     if (this.skill.targetEffectName) {
-      const effect = rpg.findEffect(this.skill.targetEffectName === true ? this.skill.name : this.skill.targetEffectName)
-      if (!target.hasEffect(effect)) {
-        if (effect.category) {
-          for (let name of target.activeEffects) {
-            const eff = rpg.findEffect(name)
-            if (eff.category === effect.category) {
-              this.msg(eff.terminate(target))
-            }
-          }
-        }
-        effect.apply(this, target, this.skill.duration)
-      }
+      rpg.applyEffect(this.skill.targetEffectName === true ? this.skill.name : this.skill.targetEffectName, target, this, this.skill.duration)
     }
 
     if (isPrimary) {
@@ -243,13 +247,14 @@ class Attack {
     else {
       this.applyDamage(target, 'secondaryDamage')
     }
+
+    if (target.afterAttack) target.afterAttack(this, true)
     
     // handle death
     if (target.health <= 0) {
       target.terminate(this)
     }
     
-    if (target.afterAttack) target.afterAttack(this, true)
     return true
   }
 
@@ -267,6 +272,7 @@ class Attack {
   }
 
   msg(s, n) {
+    if (this.skill.automaticSuccess && n > 1) return
     this.reportTexts.push({t:processText(s, this), level:n || 1})
   }
 
@@ -316,8 +322,9 @@ class Attack {
       if (damage < 1) damage = 1;
       this.report("Damage before multiplier:", damage)
       this.modifiedDamage = this[prefix + 'Multiplier'] * damage
-      this.report("Total damage:", this.modifiedDamage)
-      target.health -= this.modifiedDamage
+      this.roundedDamage = Math.round(this.modifiedDamage)
+      this.report("Total damage (to nearest whole number):", this.roundedDamage)
+      target.health -= this.roundedDamage
       this.msg(lang.damageReport, 1)
     }
   }

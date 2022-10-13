@@ -1,8 +1,11 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat|ZCOOL+XiaoWei');
+@import url('https://fonts.googleapis.com/css2?family=Imbue:opsz,wght@10..100,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Henny+Penny&family=Imbue:opsz,wght@10..100,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Henny+Penny&family=Imbue:opsz,wght@10..100,300&family=Norican&display=swap');
+
 
 body {
   color: black;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Imbue', serif;
   background-color: white;
 }
 
@@ -13,7 +16,16 @@ body {
   margin-left: 160px; /* Same as the width of the sidebar */
   margin-right: 160px; /* Same as the width of the sidebar */
   padding: 0px 10px;
-  font-family: 'ZCOOL XiaoWei', serif;
+  font-size:16pt;
+}
+
+.default-h {  
+  font-family: 'Henny Penny', serif;
+  font-family: 'Norican', serif;
+}
+
+.default-pre {  
+  font-size:10pt;
 }
 
 
@@ -21,8 +33,40 @@ body {
   cursor: pointer;
   color:blue;
 }
-  
 
+
+#right-status {
+  width:158px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+#right-status a.link {
+  font-size:9pt;
+  padding:2px;
+  width:22px;
+  height:16px;
+  cursor: pointer;
+  color: #000000;
+  vertical-align: middle;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-decoration: none;
+  border: 1px solid black;
+  border-radius: 2px;
+  background-color:#ddd;
+}
+
+
+#compass-table {
+  font-size:9pt;
+}
+
+
+#dialog {
+  font-size:14pt;
+}
 
 
 /* The command bar  */
@@ -52,7 +96,7 @@ body {
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 5px;
   font-size: 9pt;
-  font-family: 'Montserrat', sans-serif;;
+  font-family: 'Imbue', sans-serif;;
 }
 .side-panes-left {
   left: 0;
@@ -70,15 +114,11 @@ body {
   border:black solid 1px;
 }  
 
-/*
 .pane-div {
-  background-color: #ffff00;
-  width:150px;
-  margin-left:5px;
-  border: black solid 1px;
-  border-radius: 3px;
+  font-family: 'Imbue', serif;
+  font-size: 12pt;
 }
-*/
+
 
 
 
@@ -184,6 +224,22 @@ span.compass-button {
 #dialog {
   display:none;
 }
+
+
+
+.effect-generic {
+  background-color:#a0a0ff;
+}
+.effect-spell {
+  background-color:#ffffa0;
+}
+.effect-curse {
+  background-color:#ffa0a0;
+}
+.effect-status {
+  background-color:#a0ffa0;
+}
+  
 
 
 

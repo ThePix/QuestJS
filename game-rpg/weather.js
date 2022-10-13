@@ -24,7 +24,7 @@ currentWeatherName
 currentWeatherCount
 currentWeatherTotal
 
-  ___   _   _   ____     ___   _____      _______     ___
+  ___   _   _   ____     ___   _____        _______     ___
  / _ \ | | | | |  __|  / ___| |_   _|      |__   __|  / ___|
 | | | || | | | | |_   | |__     | |           | |    | |__
 | | | || | | | |  _|   \__ \    | |           | |     \__ \
@@ -61,7 +61,7 @@ class Weather {
   
   turn() {
     player.currentWeatherCount++
-    log(player.currentWeatherCount)
+    //log(player.currentWeatherCount)
     if (this.wetness) {
       if (!player.currentWeatherWetness) player.currentWeatherWetness = 0
       player.currentWeatherWetness += this.wetness
@@ -71,7 +71,7 @@ class Weather {
       if (this.wetness > 60) this.wetness--
     }
     if (player.currentWeatherCount >= player.currentWeatherTotal) {
-      log('here')
+      //log('here')
       const currentName = this.getNext()
       const current = weatherTypes[currentName]
       player.currentWeatherName = currentName

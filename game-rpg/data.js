@@ -9,10 +9,14 @@ createItem("me", RPG_PLAYER(), {
   loc:"practice_room",
   regex:/^(me|myself|player)$/,
   health:100,
+  mana:50,
+  maxMana:50,
+  //activeEffects:['Not attuned'],
   //activeEffects:['Spell cooldown'],
   spellCasting:5,
   offensiveBonus:3,
   level:3,
+  skillsLearnt:["Attune to fire", "Fireball"],
   
   getSpellCooldownDelay:function(skill) {
     return 2 * skill.level - this.level
@@ -24,21 +28,23 @@ createItem("me", RPG_PLAYER(), {
 
 
 
-createItem("knife", WEAPON("d4+2", "blade"), {
+createItem("knife", WEAPON("d4+2"), {
   loc:"me",
+  weaponClass:'Blade',
   image:"knife",
   examine:"An example of a poor weapon.",
   offensiveBonus:-2,
 });
 
-createItem("flail", WEAPON("2d10+4", "crush"), {
+createItem("flail", WEAPON("2d10+4"), {
   loc:"me",
   image:"flail",
   examine:"An example of a good weapon.",
 });
 
-createItem("long_bow", LIMITED_AMMO_WEAPON("2d8", "bow", "arrow"), {
+createItem("long_bow", LIMITED_AMMO_WEAPON("2d8", "arrow"), {
   loc:"me",
+  weaponClass:'Bow',
   examine:"An example of a bow.",
 })
 
@@ -47,7 +53,7 @@ createItem("arrow", COUNTABLE({yard:14}), {
 })
 
 
-createItem("flaming_sword", WEAPON("3d6+2", "blade"), {
+createItem("flaming_sword", WEAPON("3d6+2"), {
   //loc:"me",
   image:"sword",
   examine:"An example of a magic weapon.",
@@ -148,6 +154,24 @@ createItem("small_key", KEY(), {
   loc:"practice_room",
 })
 
+createItem("statue_hunter", {
+  alias:'statue of a hunter',
+  examine:'A marble statue of a naked man, casually holding a bow.',
+  transform_stone_golem:function(o) {
+    o.ex = 'A stone golem; it resembles a man, and is carrying a bow.'
+  },
+  //loc:"practice_room",
+})
+
+createItem("statue_lion", {
+  alias:'statue of a lion',
+  examine:'A marble statue of a lion rampant.',
+  transform_stone_golem:function(o) {
+    o.ex = 'A stone golem in the form of a lion.'
+  },
+  //loc:"yard",
+})
+
 createRoom("yard", {
   desc:'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.',
   yesWeather:true,
@@ -180,11 +204,17 @@ createRoom("lake_swimming", {
 
 createItem("goblin", RPG_NPC(false), {
   loc:"practice_room",
-  damage:"d8",
+  damage:"d4",
   health:40,
   signalGroups:['guards'],
+  weapon:'goblin_dagger',
   ex:"A rather small green humanoid; hairless and dressed in rags.",
 })
+
+createItem("goblin_dagger", WEAPON('d8'), {
+  examine:'A crude, but viscious knife.',
+});
+
 
 /*
 createItem("goblin_shaman", RPG_NPC(true), {
@@ -205,6 +235,8 @@ createItem("orc", RPG_NPC(false), {
   //weapon:'orc_sword',
   weapon:'broad_sword_prototype',
   shield:"wall_shield_prototype",
+  offensiveBonus:1,
+  offensiveBonus_weapon:4,
   signalResponses:{
     wake:function() {
       msg("He rolls over and goes back to sleep.")
@@ -247,17 +279,6 @@ createItem("rabbit", RPG_BEAST(false), {
 });
 
 
-/*
-const elementals = [
-  {name:'frost', level:0, desc:"swirling mass of freezing air that chills you to the bone"},
-  {name:'fire', level:2, desc:"burning ball of fire"},
-  {name:'storm', level:1, desc:"sizzling whirlwind of crackling lightning"},
-  {name:'earthmight', level:3, desc:"churning mass of rocks and earth"},
-  {name:'shadow', level:1, desc:"ball of utter darkness"},
-  {name:'rainbow', level:2, desc:"kaleidoscope of colours too painful to look at"},
-]
-*/
-
 
 
 
@@ -275,7 +296,7 @@ createItem("phantasm_prototype", RPG_PHANTOM(), {
 
 
 
-new SpellSummon(w.phantasm_prototype, { level:1, duration:6, })
+new SpellSummon(w.phantasm_prototype, 1, 6, {})
 
 
 
@@ -354,7 +375,7 @@ createItem("boots", WEARABLE(2, ['feet']), {
   pronouns:lang.pronouns.plural,
 });
 
-createItem("shotgun", LIMITED_AMMO_WEAPON("2d10+4", 'firearm', 1), {
+createItem("shotgun", LIMITED_AMMO_WEAPON("2d10+4", 1), {
   loc:"practice_room",
   ammo:1,
   examine:"An example of a limited ammo weapon.",
@@ -406,6 +427,26 @@ new Effect("Defensive", {
 
 
 
+new WeaponAttack("Never mind the armour", {
+  level:2,
+  description:"Maximise your attacks against unarmoured foes.",
+  tactical:"On a successful attack, do one additional damage roll, but on dice with three less sides",
+  modifyOutgoingAttack:function(attack) {
+    attack.damageNumber++
+    attack.damageSides -= 3
+  },
+})
+
+new WeaponAttack("Find the weak point", {
+  level:2,
+  description:"Maximise your attacks against armoured foes.",
+  tactical:"On a successful attack, use dice with three more sides, but roll one less of them",
+  modifyOutgoingAttack:function(attack) {
+    attack.damageNumber--
+    attack.damageSides += 3
+  },
+})
+
 new WeaponAttack("Double attack", {
   level:2,
   description:"Two attacks is better than one - though admittedky less accurate.",
@@ -418,11 +459,14 @@ new WeaponAttack("Double attack", {
 
 new WeaponAttack("Sweeping attack", {
   level:1,
-  description:"You attack you foe with a flourish that may do minor damage to the others who assail you.",
+  description:"You attack your foe with a flourish that may do minor damage to the others who assail you.",
   tactical:"Attack one foe as normal. In addition, attack any other foe -2; on a success do 4 damage.", 
   getSecondaryTargets:rpg.getFoesBut,
   testUseable:function(char) {
-    if (!char.equipped.weaponType === 'blade') return falsemsg("This skill is only useable with a bladed weapon.")
+    if (!char.equipped.weaponType === 'blade') {
+      if (char === player) msg("This skill is only useable with a bladed weapon.")
+      return false
+    }
     return rpg.defaultSkillTestUseable(char)
   },
   modifyOutgoingAttack:function(attack) {
@@ -439,7 +483,22 @@ new WeaponAttack("Defensive attack", {
   description:"Make a cautious attack, careful to maintain your defense, at the expense of your attack.",
   tactical:"Attack one foe with a -2 penalty, but any attacks on you will suffer a -3 penalty until your next turn.",
   testUseable:function(char) {
-    if (char.getEquippedWeapon().weaponType === 'bow') return falsemsg("This skill is not useable with a bow.")
+    const weapon = char.getEquippedWeapon()
+    if (!weapon) {
+      if (char === player) msg("This skill is not useable without an equipped weapon.")
+      return false
+    }
+
+    if (weapon.weaponClass === 'Bow') {
+      if (char === player) msg("This skill is not useable with a bow.")
+      return false
+    }
+
+    if (weapon.weaponClass === 'Firearm') {
+      if (char === player) msg("This skill is not useable with a firearm.")
+      return false
+    }
+
     return rpg.defaultSkillTestUseable(char)
   },
   modifyOutgoingAttack:function(attack) {
@@ -447,7 +506,7 @@ new WeaponAttack("Defensive attack", {
   },
   afterUse:function(attack, count) {
     const effect = rpg.findEffect('Defensive')
-    effect.apply(attack, attack.attacker, 1)
+    effect.apply(attack.attacker, attack, 1)
     rpg.defaultSkillAfterUse(attack, count)
   }
 })

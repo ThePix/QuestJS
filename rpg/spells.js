@@ -5,22 +5,36 @@
 // Spells that cause instant damage to the target
 
 
-new Spell("Ice shard", {
-  level:3,
-  description:"A blast of frost power blasts your target.",
-  tactical:"On a successful hit, target takes 3d6.",
-  damage:'3d6',
-  icon:'ice-shard',
-  tooltip:"A shard of ice pierces your foe!",
-  primarySuccess:"A shard of ice jumps from {nms:attacker:the} finger to {nm:target:the}!",
-  modifyOutgoingAttack:function(attack) {
-    attack.element = "frost";
-  },
-})
+new SpellElementalAttack("Ice shard", 'frost', '2d6', 'A shard of ice')
+
+new SpellElementalAttack("Ice spear", 'frost', '5d6', 'An icicle bristling with frost magic')
+
+new SpellElementalAttack("Firedart", 'fire', '3d4', 'A small ball of fire')
+
+new SpellElementalAttack("Spark", 'storm', '4', 'A spark of electricity')
+
+new SpellElementalAttack("Shock", 'storm', 'd12', 'An arc of electricity')
+
+new SpellElementalAttack("Lightning bolt", 'storm', '3d12', 'A bolt of lightning')
+
+new SpellElementalAttack("Void ball", 'shadow', '2d4+2', 'A glob of utter darkness')
+
+new SpellElementalAttack("Void vomit", 'shadow', '3d6+4', 'A splurge of utter darkness')
+
+new SpellElementalAttack("Light ball", 'rainbow', 'd12', 'A ball of intense light')
+
+new SpellElementalAttack("Rainbow blast", 'rainbow', '4d12', 'A great dazzling ball of rainbow colour')
+
+
+
+
+
+
+
 
 new Spell("Fireball", {
   noTarget:true,
-  level:3,
+  level:4,
   description:"A ball of fire engulfs the room.",
   tactical:"Targets all in the location except you; on a successful hit, target takes 2d6.",
   damage:'2d6',
@@ -36,9 +50,12 @@ new Spell("Fireball", {
 
 new Spell("Psi-blast", {
   level:5,
+  regex:/^(psi|psi\-blast|psiblast)$/,
   description:"A blast of pure mental energy blasts your target.",
-  tactical:"On a successful hit, target takes 3d6; ignores armour.",
+  tactical:"On a successful hit, target takes 3d6; ignores armour. This spell is entirely mental, so can be cast without anyone knowing, even with no hands or voice.",
   damage:'3d6',
+  activityType:'castSpellMind',
+  suppressAntagonise:true,
   icon:'psi-blast',
   tooltip:"A blast of mental energy (ignores armour)",
   primarySuccess:"A blast of raw psi-energy sends {nm:target:the} reeling.",
@@ -48,7 +65,7 @@ new Spell("Psi-blast", {
   },
 })
 
-new Spell("Lightning bolt", {
+new Spell("Lightning blast", {
   level:5,
   description:"A blast of lightning leaps to your target - and perhaps his comrades too.",
   tactical:"On a successful hit, target takes 3d6 and his allies take 2d6.",
@@ -97,6 +114,34 @@ new Spell("Call lightning", {
 
 
 
+for (const el of rpg.elements.list) {
+  new SpellSelf("Attune to " + el.name, {
+    level:1,
+    description:"Allows you to attune to the element of " + el.name + ".",
+    primarySuccess:"{nv:target:be:true} now attuned to the element of " + el.name + ".",
+    effect:{
+      attunedElement:el.name,
+      doNotList:true,
+      category:'elemental_attunement',
+      modifyOutgoingAttack:function(attack) {
+        if (attack.skill.type === 'spell' && attack.element && attack.element !== this.attunedElement ) attack.abort("That spell cannot be cast whilst attuned to the element of " + this.attunedElement + ".")
+      },
+      start:function(target) { target.attunedElement = this.attunedElement },
+    },
+  })
+}
+
+
+new Effect("Not attuned", {
+  category:'elemental_attunement',
+  doNotList:true,
+  modifyOutgoingAttack:function(attack) {
+    if (attack.skill.type === 'spell' && attack.element) attack.abort("That spell cannot be cast whilst not attuned to the element of " + attack.element + ".")
+  },
+  suppressFinishMsg:true,
+})
+
+
 //-------  ARMOUR SPELLS  -----------
 // Spells that have an ongoing effect on attacks against the target
 
@@ -107,6 +152,7 @@ new Spell("Cursed armour", {
   primarySuccess:"{nms:target:the:true} armour is reduced.",
   icon:'unarmour',
   effect:{
+    css:'curse',
     category:'armour',
     modifyOutgoingAttack:function(attack) {
       attack.armourModifier = (attack.armourModifier > 2 ? attack.armourModifier - 2 : 0)
@@ -114,8 +160,23 @@ new Spell("Cursed armour", {
   },
 })
 
+new SpellSelf("Barkskin", {
+  level:2,
+  element:'earthmight',
+  description:"Can be cast on yourself to give protection to all physical and many elemental attacks.",
+  tactical:"Adds 1 to your armour.",
+  primarySuccess:"Your skin becomes as hard as bark - and yet still just as flexible.",
+  effect:{
+    category:'armour',
+    modifyIncomingAttack:function(attack) {
+      attack.armourModifier += 1
+    },
+  },
+})
+
 new SpellSelf("Stoneskin", {
   level:2,
+  element:'earthmight',
   description:"Can be cast on yourself to give protection to all physical and many elemental attacks.",
   tactical:"Adds 2 to your armour.",
   primarySuccess:"Your skin becomes as hard as stone - and yet still just as flexible.",
@@ -129,6 +190,7 @@ new SpellSelf("Stoneskin", {
 
 new SpellSelf("Steelskin", {
   level:4,
+  element:'earthmight',
   description:"Can be cast on yourself to give protection to all physical and many elemental attacks.",
   tactical:"Adds 3 to your armour.",
   primarySuccess:"Your skin becomes as hard as steel - and yet still just as flexible.",
@@ -155,7 +217,7 @@ new SpellSelf("Strength", {
   effect:{
     category:'enhancement',
     modifyOutgoingAttack:function(attack) {
-      if (!attack.skill.spell) attack.damageModifier *= 2
+      if (attack.skill.type !== 'spell') attack.damageModifier *= 2
     },
   },
 })
@@ -168,7 +230,7 @@ new Spell("Weakness", {
   effect:{
     category:'enhancement',
     modifyOutgoingAttack:function(attack) {
-      if (!attack.skill.spell) attack.damageModifier /= 2
+      if (attack.skill.type !== 'spell') attack.damageModifier /= 2
     },
   },
 })
@@ -181,7 +243,7 @@ new SpellSelf("Focus", {
   effect:{
     category:'enhancement',
     modifyOutgoingAttack:function(attack) {
-      if (!attack.skill.spell) attack.offensiveBonus += 3
+      if (attack.skill.type !== 'spell') attack.offensiveBonus += 3
     },
   },
 })
@@ -194,7 +256,7 @@ new Spell("Befuddle", {
   effect:{
     category:'enhancement',
     modifyOutgoingAttack:function(attack) {
-      if (!attack.skill.spell) attack.offensiveBonus -= 3
+      if (attack.skill.type !== 'spell') attack.offensiveBonus -= 3
     },
   },
 })
@@ -245,7 +307,7 @@ new SpellSelf("Featherfall", {
 // These spells give the target protection (or vulnerability) to an element for a while
 
 
-for (const el of ['Fire', 'Frost', 'Storm']) {
+for (const el of ['Fire', 'Frost', 'Storm', 'Rainbow', 'Shadow']) {
   new SpellSelf("Protection From " + el, {
     level:4,
     description:"Can be cast on yourself to give protection to all " + el + "-based attacks.",
@@ -304,7 +366,7 @@ new SpellInanimate("Earthmight Smasher", {
   level:2,
   description:"The Earthmight Smasher spell will temporarily enchant any crushing weapon to do extra Earthmight-based damage.",
   tactical:"Can be cast on any crushing weapon the player is holding. The weapon will then do Earthmight damage, and an additional 6 damage.",
-  getTargets:function(attack) { return scopeReachable().filter(el => el.weaponType === 'crush' && el.loc === attack.attacker.name) },
+  getTargets:function(attack) { return scopeHeldBy().filter(el => el.weaponClass === 'Crushing' && el.loc === attack.attacker.name) },
   targetEffect:function(attack, item) {
     attack.msg(processText("{nm:item:the:true} now has earthmight pounding in it.", {item:item}), 1)
   },
@@ -321,7 +383,7 @@ new SpellInanimate("Storm Bow", {
   level:2,
   description:"The Storm Bow spell will temporarily enchant any bow to do extra Storm-based damage.",
   tactical:"Can be cast on any bow the player is holding. The weapon will then do Storm damage, and an additional 6 damage.",
-  getTargets:function(attack) { return scopeReachable().filter(el => el.weaponType === 'bow' && el.loc === attack.attacker.name) },
+  getTargets:function(attack) { return scopeHeldBy().filter(el => el.weaponClass === 'Bow' && el.loc === attack.attacker.name) },
   targetEffect:function(attack, item) {
     attack.msg(processText("{nm:item:the:true} now fizzles with electrical energy.", {item:item}), 1)
   },
@@ -338,7 +400,7 @@ new SpellInanimate("Ice Spear", {
   level:2,
   description:"The Ice Spear spell will temporarily enchant any polearm to do extra Fros-based damage.",
   tactical:"Can be cast on any polearm the player is holding. The weapon will then do frost damage, and the damage dice type will be increased by 3 (so a d6 will become d9).",
-  getTargets:function(attack) { return scopeReachable().filter(el => el.weaponType === 'polearm' && el.loc === attack.attacker.name) },
+  getTargets:function(attack) { return scopeHeldBy().filter(el => el.weaponClass === 'Polearm' && el.loc === attack.attacker.name) },
   targetEffect:function(attack, item) {
     attack.msg(processText("{nm:item:the:true} has frost over it.", {item:item}), 1)
   },
@@ -355,7 +417,7 @@ new SpellInanimate("Flaming Blade", {
   level:2,
   description:"The Flaming Blade spell will temporarily enchant any bladed weapon to do extra Fire-based damage.",
   tactical:"Can be cast on any blade the player is holding. The weapon will then do fire damage, and the number of damage dice type will be increased by 1.",
-  getTargets:function(attack) { return scopeReachable().filter(el => el.weaponType === 'blade' && el.loc === attack.attacker.name) },
+  getTargets:function(attack) { return scopeHeldBy().filter(el => el.weaponClass === 'Blade' && el.loc === attack.attacker.name) },
   targetEffect:function(attack, item) {
     attack.msg(processText("{nm:item:the:true} now has fire along its blade.", {item:item}), 1)
   },
@@ -367,6 +429,50 @@ new SpellInanimate("Flaming Blade", {
   },
   msgNoTarget:"You have no bladed weapon for this spell.",
 })
+
+new SpellInanimate("Axe of Shadows", {
+  level:3,
+  description:"The Axe of Shadows spell will temporarily enchant any bladed weapon to do extra Shadow-based damage.",
+  tactical:"Can be cast on any axe the player is holding. The weapon will then do shadow damage, and the number of damage dice type will be increased by 1.",
+  getTargets:function(attack) { return scopeHeldBy().filter(el => el.weaponClass === 'Axe' && el.loc === attack.attacker.name) },
+  targetEffect:function(attack, item) {
+    attack.msg(processText("{nm:item:the:true} now has void-shadows dancing along its blade.", {item:item}), 1)
+  },
+  effect:{
+    modifyOutgoingAttack:function(attack) {
+      attack.element = "shadow"
+      attack.damageNumber++
+    },
+  },
+  msgNoTarget:"You have no axe for this spell.",
+})
+
+new SpellInanimate("Rainbow gun", {
+  level:5,
+  description:"The Rainbow gun spell will temporarily enchant any firearm to do extra Rainbow-based damage.",
+  tactical:"Can be cast on any firearm the player is holding. The weapon will then do Rainbow damage, and the damage will be increased by 5.",
+  getTargets:function(attack) { return scopeHeldBy().filter(el => el.weaponClass === 'Firearm' && el.loc === attack.attacker.name) },
+  targetEffect:function(attack, item) {
+    attack.msg(processText("{nm:item:the:true} is now glowing.", {item:item}), 1)
+  },
+  effect:{
+    modifyOutgoingAttack:function(attack) {
+      attack.element = "rainbow"
+      attack.damageBonus++
+    },
+  },
+  msgNoTarget:"You have no firearm for this spell.",
+})
+
+
+
+
+
+new SpellSummon(w.fire_sword_prototype, 7, 6, {})
+
+new SpellSummon(w.ice_spear_prototype, 7, 6, {})
+
+new SpellSummon(w.earth_club_prototype, 7, 6, {})
 
 
 
@@ -474,6 +580,19 @@ new SpellSelf("Cleanse", {
 //-------  ENVIRONMENTAL SPELLS  -----------
 // Affect inanimate items in the location
 
+new SpellInanimate("Identify", {
+  level:2,
+  description:"Any special items in this location will be identified.",
+  getTargets:function(attack) { 
+    const list = scopeReachable().filter(el => el.identify)    
+    return list//.concat(scopeHeld().filter(el => el.identify))
+  },
+  targetEffect:function(attack, item) {
+    msg(item.isAtLoc(player) ? "- {nm:item:a:true} held by {nm:player:the}: {show:item:identify}" : "- {nm:item:a:true}: {show:item:identify}", {item:item})
+  },
+  msgNoTarget:"{nv:attacker:cast:true} the {i:{nm:skill}} spell, but there is nothing here that it can find.",
+})
+
 new SpellInanimate("Unlock", {
   level:2,
   description:"All locks in this location will unlock.",
@@ -502,8 +621,8 @@ new SpellInanimate("Unillusion", {
   description:"All illusions in this location will disappear.",
   automaticSuccess:true,
   getTargets:function(attack) { 
-    const list = scopeHereParser().filter(el => el.unillusionable)
-    if (currentLocation.unillusionable) list.push(currentLocation)
+    const list = scopeHereParser().filter(el => el.unillusion)
+    if (currentLocation.unillusion) list.push(currentLocation)
     return list
   },
   targetEffect:function(attack, item) {
@@ -514,7 +633,7 @@ new SpellInanimate("Unillusion", {
 
 new SpellSelf("Annulment", {
   icon:'annul',
-  description:"Cancels all spell (and other) effects of the caster, good or bad.",
+  description:"Cancels all spell (and other) effects on the caster, good or bad.",
   targetEffect:function(attack) {
     if (attack.target.activeEffects.length === 0) {
       attack.msg("The {i:Annulment} spell has no effect - no effects to annul!")
@@ -524,6 +643,7 @@ new SpellSelf("Annulment", {
       const s = rpg.findEffect(el).terminate(attack.target)
       attack.msg(s)
     }
+    rpg.setEffectFlags(attack.target)
     return true
   },
 })
@@ -619,21 +739,37 @@ new Spell("Enrage", {
 })
 
 
-new SpellSelf("Mute", {
+new Spell("Mute", {
   level:4,
   description:"After casting this spell, the target will be unable to speak.",
   tactical:"Whilst muted, the target will be unable to cast most spells. Lasts five turns.",
   regex:/mute/,
-  duration:3,
+  duration:5,
   effect: {
     category:'enhancement',
+    flags:['mute'],
     start:function(target) {
-      target.talkProhibited = true
       return "{nv:target:can:true} no longer talk."
     },
     finish:function(target) {
-      target.talkProhibited = false
       return "{nv:target:can:true} talk again."
+    },
+  },
+})
+
+new Spell("Blind", {
+  level:7,
+  description:"After casting this spell, the target will be unable to see.",
+  tactical:"Whilst blinded, the target will be unable to cast most spells or attack. Lasts five turns.",
+  duration:5,
+  effect: {
+    category:'enhancement',
+    flags:['blinded'],
+    start:function(target) {
+      return "{nv:target:can:true} no longer see."
+    },
+    finish:function(target) {
+      return "{nv:target:can:true} see again."
     },
   },
 })
@@ -690,12 +826,15 @@ new SpellSelf("Returning", {
 new SpellSelf("Teleport", {
   icon:'moving',
   description:"Casting this spell instantly moves the caster to a location previously stored with the <i>Mark</i> spell.",
-  targetEffect:function(attack) {
-    if (!attack.target.activeTeleportLocation) {
-      attack.msg("The {i:Teleport} spell has no effect - no location has been marked!")
-      return
+  testUseable:function(char) {
+    if (!char.activeTeleportLocation) {
+      if (char === player) msg("The {i:Teleport} spell can only be used once a location has been marked!")
+      return false
     }
-    msg("The air swirls around you, and everything blurs...")
+    return rpg.defaultSpellTestUseable(char)
+  },
+  targetEffect:function(attack) {
+    msg(attack.target === player ? "The air swirls around {nm:char:the}, and everything blurs..." : "The air swirls around {nm:char:the}, and {pv:char:disappear}...", {char:attack.target})
     rpg.teleport(attack.target, attack.target.activeTeleportLocation)
     return true
   },
@@ -761,6 +900,41 @@ new SpellSelf("Cloudbusting", {
 
 
 
+
+
+
+new SpellSelf("Demon shape", {
+  description:"Can be cast on yourself to give yourself the attributes of a demon.",
+  tactical:"Adds 2 to your armour.",
+  primarySuccess:"Your skin becomes as hard as stone - and yet as flexible as it was.",
+  effect:{
+    category:'armour',
+    modifyIncomingAttack:function(attack) {
+      attack.armourModifier += 2
+    },
+  },
+})
+
+
+
+
+
+new SpellTransformInanimate("Animate statues", {
+  level:2,
+  description:"Targeted statue will become a stone golem.",
+  prototype:'stone_golem',
+  msgNoTarget:"{nv:attacker:cast:true} the {i:{nm:skill}} spell, but there are no statues here.",
+})
+
+
+
+
+
+
+log("Added " + rpg.list.filter(el => el.type === 'spell').length + " spells")
+
+
+
 /*
 
 Lighting and fog
@@ -769,13 +943,6 @@ Lighting and fog
 we need to give each item responsibility for deciding if it is reachable and/or seeable.
 we need to check the light situation before hand.
 
-
-first pass, collect all relevant items
-- things in the room, in connected rooms, allowing for containers
-- see how each impacts the lighting in the current room
-- see if items can be reached/seen
-
-Before times: 2512, 2564, 2602, 2586, 2657, 2619, 2554
 
 
 
@@ -834,25 +1001,35 @@ Phantom
 Darkvision
 Utterdark vision
 Fog
+*/
 
 
 
+
+/*
 Summon weapon/shield
 
 Merchant's tongue
 
-Repel undead
-
 Extinguish
 
 Command
-
-Befriend
 
 Sleep
 
 Beast form
 
 Breathe under water
+
+Create or raise undead
+
+Repel undead
+
+Web
+
+Status effects
+Shocked/burning/stunned/frozen/weakened/strengthen/
+
+Curse/remove curse
 
 */
