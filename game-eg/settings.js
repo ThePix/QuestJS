@@ -16,7 +16,6 @@ settings.textEffectDelay = 100
 
 settings.imagesFolder = 'images/'
 settings.libraries.push('zone')
-settings.libraries.push('quest')
 //settings.libraries.push('roulette')
 settings.styleFile = 'style'
 
@@ -38,7 +37,7 @@ settings.status = [
   function() { return '<td colspan="2">' + player.status + "</td>"; },
 ]
 
-settings.intro = "This is a quick example of what can be done in Quest 6.|Your objective is to turn on the light in the basement, but there are, of course, numerous hoops to jump through.|If you are successful, see if you can do it again, but getting {popup:Kyle:This is an example of a pop-up.} to do everything. It is {dateTime}. You should find that you can tell an NPC to do pretty much anything (except look at things for you and talk to people for you).|There is now a sizeable desert to the west you can explore too.|Learn more about Quest 6 {link:here:https://github.com/ThePix/QuestJS/wiki}."
+settings.intro = "This is a quick example of what can be done in Quest 6.|Your objective is to turn on the light in the basement, but there are, of course, numerous hoops to jump through.|If you are successful, see if you can do it again, but getting {popup:Kyle:This is an example of a pop-up.} to do everything. You should find that you can tell an NPC to do pretty much anything (except look at things for you and talk to people for you).|There is  a sizeable desert to the west you can explore too.|Learn more about Quest 6 {link:here:https://github.com/ThePix/QuestJS/wiki}."
 
 settings.mapDrawLabels=true
 

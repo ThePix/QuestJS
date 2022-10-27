@@ -10,6 +10,14 @@ body {
 }
 
 
+.quest {
+  color: #008;
+}
+
+.dark-body .quest {
+  color: #88f;
+}
+
 
 /* Style page content */
 #main {

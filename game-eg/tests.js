@@ -380,6 +380,8 @@ test.tests = function() {
   test.assertEqual("Simple text: boots", processText("Simple text: {show:player:someOddAtt:name}"))
   test.assertEqual("Simple text: boots", processText("Simple text: {showOrNot:player:none:someOddAtt:alias}"))
 
+
+
   player.someOddAtt = 67;
 
   test.assertEqual("Simple text to show capitalisation.", processText("{cap:simple text to show capitalisation.}"));
@@ -418,11 +420,14 @@ test.tests = function() {
   test.assertEqual("Simple text: 9", processText("Simple text: {show:settings:tpTest}"))
   test.assertEqual("Simple text: nine", processText("Simple text: {number:settings:tpTest}"))
   test.assertEqual("Simple text: seven", processText("Simple text: {number:val}", {val:7}))
-  test.assertEqual("Simple text: yes", processText("Simple text: {if:settings:tpTest:9:yes:no}", {val:8}))
-  test.assertEqual("Simple text: no", processText("Simple text: {if:settings:tpTest:8:yes:no}", {val:8}))
+
   test.assertEqual("Simple text: nine logs", processText("Simple text: {number:settings:tpTest:log}"))
   test.assertEqual("Simple text: seven stadia", processText("Simple text: {number:val:stadium}", {val:7}))
   test.assertEqual("Simple text: one stadium", processText("Simple text: {number:val:stadium}", {val:1}))
+
+
+  test.assertEqual("Simple text: yes", processText("Simple text: {if:settings:tpTest:9:yes:no}", {val:8}))
+  test.assertEqual("Simple text: no", processText("Simple text: {if:settings:tpTest:8:yes:no}", {val:8}))
 
   test.title("Text processor 2b show");
   test.assertEqual("Simple text: ", processText("Simple text: {show:item:att_does_not_exist}", {item:w.book}))
@@ -973,7 +978,7 @@ test.tests = function() {
   test.assertCmd("drop 4 bricks", "You drop four bricks.");
   test.assertCmd("inv", "You are carrying a knife.");
   test.assertCmd("get 10 bricks", "You take seven bricks, that is all there is.");
-  test.assertCmd("e", ["You head east.", "The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west.", "A fresh smell here!"]);
+  test.assertCmd("e", ["You head east.", "The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner, it seems strangely familar.", "You can see a big kitchen table (with a jug on it), a camera and a trapdoor here.", "You can go north or west.", "A fresh smell here!"]);
   test.assertCmd("put 2 bricks on to the table", "Done.");
   test.assertCmd("inv", "You are carrying five bricks and a knife.");
   test.assertCmd("look", ["The kitchen", "A clean room, a clock hanging on the wall. There is a sink in the corner.", "You can see a big kitchen table (with two bricks and a jug on it), a camera and a trapdoor here.", "You can go north or west."]);
@@ -1439,6 +1444,7 @@ test.tests = function() {
   test.assertEqual(29, w[clone.name].cloneCounter)
   
   
+  
   test.title("Save/Load 3")
   tp.old_usedStrings = tp.usedStrings
   tp.usedStrings = ['One', 'Two']
@@ -1447,7 +1453,6 @@ test.tests = function() {
   tp.setLoadString(tps)
   test.assertEqual(['One', 'Two'], tp.usedStrings)
   tp.usedStrings = tp.old_usedStrings
-
 
   
   test.title("Path finding");
@@ -1906,16 +1911,19 @@ test.tests = function() {
   w.ham_and_cheese_sandwich.loc = player.name
 
 
+  test.title("give plus 3")
   test.assertCmd("give kyle knife ham sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
   test.assertEqual('Kyle', w.knife.loc)
   test.assertEqual('Kyle', w.canteen.loc)
   test.assertEqual('Kyle', w.ham_and_cheese_sandwich.loc)
+  log('------------')
   test.assertCmd("kyle, give piggy knife ham sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
+  
   test.assertEqual(player.name, w.knife.loc)
   test.assertEqual(player.name, w.canteen.loc)
   test.assertEqual(player.name, w.ham_and_cheese_sandwich.loc)
 
-  test.title("give plus 3")
+  test.title("give plus 4")
   test.assertCmd("give kyle knife ham and cheese sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
   test.assertEqual('Kyle', w.knife.loc)
   test.assertEqual('Kyle', w.canteen.loc)
@@ -1941,17 +1949,7 @@ test.tests = function() {
 
 
 
-/*
-  test.title("quests")
-  test.assertCmd("talk to buddy", ["'Hey, Buddy,' you say.", "'Hey yourself! Say, could you get me a carrot?'","Quest started: <i>A carrot for Buddy</i>", "Go find a carrot."])
-  let res = quest.getState('A carrot for Buddy', w.Buddy)
-  test.assertEqual(0, res.progress)
-  test.assertEqual(quest.ACTIVE, res.state)
-  
-*/  
-  
-  
-  
+
   
   
   

@@ -29,10 +29,10 @@ createItem("knife",
 
 
 createRoom("lounge", {
-  desc:'A smelly room with an old settee and a tv. There is a tatty rug on the floor.{if:player:name:piggy_suu: This is Piggy-Suu\'s favourite room.}',
+  desc:'A smelly room{once:, which is unfortunate as it is the first,} with an old settee and a tv. There is a tatty rug on the floor.{if:player:name:piggy_suu: This is Piggy-Suu\'s favourite room.}',
   mapColour:'silver',
   east:new Exit('kitchen'),
-  west:new Exit("dining_room"),
+  west:new Link("dining_room"),
   south:new Exit("conservatory"),
   up:new Exit("bedroom"),
   hint:"There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).",
@@ -41,45 +41,6 @@ createRoom("lounge", {
     {alias:['old settee', 'couch', 'sofa']},
     {alias:'rug', examine:'It might have been blue at one time. Maybe.'},
   ],
-});
-
-
-
-createItem("phone", TAKEABLE(), {
-  examine:'The phone is the elite version, with a polished silver finish.',
-  saveLoadExcludedAtts:['useOptions'],
-  useOptions:[
-    {
-      alias:'Phone Mike',
-      properNoun:true,
-      test:function() { return true },
-      script:function() {
-        msg("You try to phone Mike, but there is no reply.")
-      }
-    },
-    {
-      alias:'Search for "delores mining"', 
-      properNoun:true,
-      test:function() { return player.status > 4 },
-      script:function() {
-        msg('You Google "delores mining" on your phone, and find an interesting article.')
-      }
-    },
-    { 
-      alias:'Nothing', 
-      properNoun:true,
-      test:function() { return true },
-      script:function() {
-      }
-    },
-  ],
-  use:function() {
-    const options = this.useOptions.filter(el => el.test())
-    showDropDown("Use your phone to..?", options, function(result) {
-      result.script()
-    })
-  },
-//  loc:"Buddy",
 })
 
 
@@ -105,9 +66,9 @@ createItem("Buddy", NPC(false), {
   receiveItems:[
     {
       test:function() { return true },
-      script:function(options) { 
-        msg("{multi}Done.", options)
-        options.item.loc = this.name
+      script:function(p) { 
+        msg("{multi}Done.", p)
+        util.giveItem(p)
       }
     },
   ],
@@ -305,7 +266,7 @@ createItem("flashlight", TAKEABLE(), SWITCHABLE(false, 'providing light'), {
 
 createRoom("dining_room", {
   desc:'An old-fashioned room.',
-  east:new Exit('lounge'),
+  //east:new Exit('lounge'),
   west:new Exit('lift'),
   up:new Exit("dining_room_on_stool", {mapIgnore:true}),
   alias:"dining room",
@@ -395,7 +356,7 @@ createRoom("attic", {
 
 
 createRoom("kitchen", {
-  desc:'A clean room{if:clock:scenery:, a clock hanging on the wall}. There is a sink in the corner.',
+  desc:'A clean room{if:clock:scenery:, a clock hanging on the wall}. There is a sink in the corner{once:, it seems strangely familar}.',
   west:new Exit("lounge"),
   down:new Exit('basement', {
     isHidden:function() { return w.trapdoor.closed; },
@@ -768,7 +729,8 @@ createItem("Kyle", NPC(false),
       item:w.book, 
       script:function(p) { 
         msg("'Oh!' says Kyle. 'Is this a book?'")
-        w.book.loc = p.npc.name
+        p.item.moveToFrom(p, 'Kyle', player)
+        util.giveItem(p)
         return true
       }
     },
@@ -776,7 +738,7 @@ createItem("Kyle", NPC(false),
       test:function() { return true },
       script:function(p) { 
         msg("{multi}Done.", p)
-        p.item.loc = p.npc.name
+        util.giveItem(p)
         return true
       }
     },
@@ -943,7 +905,7 @@ util.createQuestion("kyle_question", [
     },
   },
 ], {
-  afterScript:function() {
+  extraScript:function() {
     //msg("Kyle looks around excitedly")
   },
   expiredScript:function() {
@@ -985,32 +947,33 @@ createItem("Lara", NPC(true), {
       item:w.knife, 
       script:function(p) { 
         msg("'A knife?' says Lara. 'I guess I could use that... for something?'")
-        w.knife.loc = p.npc.name
+        util.giveItem(p)
       }
     },
     {
-      test:function(options) {
-        return options.item.name.startsWith('carrot')
+      test:function(p) {
+        return p.item.name.startsWith('carrot')
       },
-      script:function(options) { 
+      script:function(p) { 
         msg("'A carrot!' says Lara with delight, before stuffing it in her mouth. 'So, do you have any more?'")
-        delete options.item.loc
+        util.giveItem(p)
+        delete p.item.loc
       }
     },
     {
       item:w.ring,
-      script:function(options) { 
+      script:function(p) { 
         msg("'Oh, my,' says Lara. 'How delightful.' She slips the ring on her finger, then hands you a key.")
-        w.ring.loc = "Lara"
+        util.giveItem(p)
         w.ring.worn = true
-        w.garage_key.loc = options.char.name
+        w.garage_key.loc = p.char.name
       }
     },
     {
       item:w.book,
-      script:function(options) { 
+      script:function(p) { 
         msg("'Hmm, a book about carrots,' says Lara. 'Thanks.'")
-        w.book.loc = "Lara"
+        util.giveItem(p)
       }
     },
     {
@@ -1283,9 +1246,10 @@ createItem("piggy_suu", NPC(true), {
   receiveItems:[
     {
       test:function() { return true },
-      script:function(options) { 
-        msg(lang.done_msg, options)
-        options.item.loc = options.npc.name
+      script:function(p) { 
+        msg(lang.done_msg, p)
+        log(p)
+        util.giveItem(p)
         return true
       }
     },

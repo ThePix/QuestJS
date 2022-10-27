@@ -34,13 +34,13 @@ createItem("knife", WEAPON("d4+2"), {
   image:"knife",
   examine:"An example of a poor weapon.",
   offensiveBonus:-2,
-});
+})
 
 createItem("flail", WEAPON("2d10+4"), {
   loc:"me",
   image:"flail",
   examine:"An example of a good weapon.",
-});
+})
 
 createItem("long_bow", LIMITED_AMMO_WEAPON("2d8", "arrow"), {
   loc:"me",
@@ -269,15 +269,47 @@ createItem("rabbit", RPG_BEAST(false), {
   talk:function() {
     switch (this.talkto_count) {
       case 0 : 
-        msg("You say 'Hello,' to the rabbit, 'how is it going?'");
-        msg("The rabbit looks at you. 'Need carrots.' It looks plaintively at it round tummy. 'Fading away bunny!");
-        break;
-      default: msg("You wonder what you can talk to the rabbit about."); break;
+        msg("You say 'Hello,' to the rabbit, 'how is it going?'")
+        msg("The rabbit looks at you. 'Need carrots.' She looks plaintively at her round tummy. 'Fading away bunny!")
+        quest.get('A carrot for Lara').start()
+        break
+      default: msg("You wonder what you can talk to the rabbit about."); break
     }
     return true
   },  
-});
+  receiveItems:[
+    {
+      test:function(p) {
+        return p.item.name === 'carrot'
+      },
+      script:function(p) { 
+        msg("'A carrot!' says Lara with delight, before stuffing it in her mouth. 'So, do you have any more?'")
+        util.giveItem(p)
+      }
+    },
+    {
+      msg:"'That's not a carrot,' Lara points out.",
+      failed:true,
+    },
+  ],
 
+})
+
+
+
+
+createItem("carrot", TAKEABLE(), {
+  //loc:"practice_room",
+  examine:"A large carrot.",
+  afterMove:function(options) {
+    if (options.toLoc === player.name) {
+      quest.get('A carrot for Lara').next()
+    }
+    if (options.toLoc === 'rabbit') {
+      quest.get('A carrot for Lara').next('carrot given')
+    }
+  },
+})
 
 
 

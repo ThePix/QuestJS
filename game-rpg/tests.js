@@ -403,10 +403,42 @@ test.tests = function() {
   player.skillsLearnt = ["Double attack", "Fireball", "Commune with animal"]
   test.assertCmd('talk to rabbit', [/You spend a few minutes telling the rabbit/])
   test.assertCmd('cast commune on rabbit', ['You cast the <i>Commune with animal</i> spell.', 'You can now talk to the rabbit for a short time.'])
-  test.assertCmd('talk to rabbit', [/You say \'Hello,\' to the rabbit/, /Fading away bunny/])
+  test.assertCmd('talk to rabbit', [/You say \'Hello,\' to the rabbit/, /Fading away bunny/, /Quest started/, 'Go find a carrot.'])
   test.assertCmd('z', ['Time passes...'])
   test.assertCmd('z', ['Time passes...'])
   test.assertCmd('z', ['Time passes...', 'The <i>Commune with animal</i> effect on the rabbit expires.'])
+
+  test.title("quests 1")
+  // talking to the rabbit will have started the quest
+  const q = quest.get('A carrot for Lara')
+  test.assertEqual(quest.ACTIVE, q.state())
+  test.assertEqual('Go find a carrot.', q.stage().text)
+  test.assertCmd('z', ['Time passes...'])
+  w.carrot.loc = 'practice_room'
+  test.assertCmd('z', ['Time passes...'])
+
+  test.title("quests 2")
+  test.assertCmd('get carrot', ['You take the carrot.', /Quest progress/, 'Give the carrot to Lara.', /Now you have the carrot you better/])
+  test.assertEqual(quest.ACTIVE, q.state())
+
+  test.assertCmd('q', ['Active Quests', 'Active: <i>A carrot for Lara</i>', 'Give the carrot to Lara.', '[Do QUESTS ALL to include completed and failed quests]'])
+  test.assertCmd('q all', ['All Quests', 'Active: <i>A carrot for Lara</i>', 'Give the carrot to Lara.'])
+
+  test.assertCmd('z', ['Time passes...'])
+  test.assertCmd('z', ['Time passes...'])
+
+  test.title("quests 3")
+  test.assertCmd('give carrot to rabbit', ["'A carrot!' says Lara with delight, before stuffing it in her mouth. 'So, do you have any more?'", /Quest completed/])
+  test.assertEqual(quest.SUCCESS, q.state())
+  test.assertEqual(false, q.stage())
+
+  test.assertCmd('q', ['Active Quests', 'None', '[Do QUESTS ALL to include completed and failed quests]'])
+  test.assertCmd('q all', ['All Quests', 'Success: <i>A carrot for Lara</i>'])
+
+  delete w.carrot.loc
+
+
+
 
 
 
@@ -939,6 +971,19 @@ test.tests = function() {
   w.goblin.activeTeleportLocation = 'yard'  // can now teleport
   test.assertEqual(true, rpg.findSkill('Teleport').testUseable(w.goblin))
   test.assertEqual(1, w.goblin.getAllowedSkills(w.goblin.getEquippedWeapon()).length)
+  
+
+
+/*
+  test.title("quests")
+  test.assertCmd("talk to buddy", ["'Hey, Buddy,' you say.", "'Hey yourself! Say, could you get me a carrot?'","Quest started: <i>A carrot for Buddy</i>", "Go find a carrot."])
+  let res = quest.getState('A carrot for Buddy', w.Buddy)
+  test.assertEqual(0, res.progress)
+  test.assertEqual(quest.ACTIVE, res.state)
+  
+*/  
+  
+  
   
 
 
