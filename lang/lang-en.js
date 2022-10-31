@@ -205,6 +205,7 @@ const lang = {
     NpcUntieFrom:[/^(.+), ?(?:untie|unfasten|detach) (.+) (?:frm) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:untie|unfasten|detach) (.+) (?:from) (.+)$/],
     UseWith:/^(?:use) (.+) (?:with|on) (.+)$/,
 
+    LookExit:/^(?:look|peer|l|glance) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
 
     PushExit:/^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
     NpcPushExit:[
@@ -443,6 +444,8 @@ const lang = {
   // Movement
   go_successful:"{nv:char:head:true} {show:dir}.",
   not_that_way:"{nv:char:can't:true} go {show:dir}.",
+  no_look_that_way:"{nv:char:can't:true} see an exit {show:dir}.",
+  default_look_exit:"{nv:char:look:true} {show:dir}; definitely an exit that way.",
   can_go:"{nv:char:think:true} {pv:char:can} go {exits}.",
   cannot_go_in:"{pv:item:be:true} not something {nv:char:can} get inside.",
   cannot_go_out:"{pv:item:be:true} not something from which {nv:char:can} go out.",

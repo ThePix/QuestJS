@@ -850,6 +850,19 @@ test.tests = function() {
   
 
 
+  test.title("Look direction")
+  test.assertCmd("l north", "You look north, imagining another exit that way, a portal out of this mad house.")
+  test.assertCmd("l east", "Though the doorway to the east, you can see the kitchen. is there something on the table?")
+  test.assertCmd("l south", "Though the dooyway to the south you see the conservatory.")
+  test.assertCmd("l west", "You look west; definitely an exit that way.")
+  test.assertCmd("l ne", "You can't go northeast.")
+  
+  lang.default_look_exit = "{nv:char:look:true} {show:dir}, and can see {nm:dest:the}."
+  test.assertCmd("l west", "You look west, and can see the dining room.")
+  
+  lang.default_look_exit = "{nv:char:look:true} {show:dir}; definitely an exit that way."
+
+
 
   test.title("Look inside")
   test.assertCmd("look inside cabinet", "Inside the glass cabinet you can see a jewellery box and an ornate doll.")
@@ -1916,7 +1929,6 @@ test.tests = function() {
   test.assertEqual('Kyle', w.knife.loc)
   test.assertEqual('Kyle', w.canteen.loc)
   test.assertEqual('Kyle', w.ham_and_cheese_sandwich.loc)
-  log('------------')
   test.assertCmd("kyle, give piggy knife ham sandwich canteen", ["Knife: Done.", "Ham and cheese sandwich: Done.", "Canteen: Done."])
   
   test.assertEqual(player.name, w.knife.loc)

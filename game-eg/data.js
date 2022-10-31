@@ -33,7 +33,12 @@ createRoom("lounge", {
   mapColour:'silver',
   east:new Exit('kitchen'),
   west:new Link("dining_room"),
-  south:new Exit("conservatory"),
+  south:new Exit("conservatory", {look:'Though the dooyway to the south you see the conservatory.'}),
+  look_north:function() {
+    msg("You look north, imagining another exit that way, a portal out of this mad house.")
+    return true
+  },
+  look_east:'Though the doorway to the east, you can see the kitchen. is there something on the table?',
   up:new Exit("bedroom"),
   hint:"There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).",
   scenery:[
@@ -285,7 +290,10 @@ createItem("lift_item", {
 createItem("chair", FURNITURE({sit:true}), {
   loc:"dining_room", examine:"A wooden chair.",
   afterPostureOn:function(options) {
-    msg("The chair makes a strange noise when {nv:char:sit} on it.", options)
+    if (options.posture === "sitting") {
+      msg("The chair makes a strange noise when {nv:char:sit} on it.", options)
+    }
+    
   },
 })
 
@@ -1248,7 +1256,6 @@ createItem("piggy_suu", NPC(true), {
       test:function() { return true },
       script:function(p) { 
         msg(lang.done_msg, p)
-        log(p)
         util.giveItem(p)
         return true
       }
