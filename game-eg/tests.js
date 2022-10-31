@@ -855,7 +855,7 @@ test.tests = function() {
   test.assertCmd("l east", "Though the doorway to the east, you can see the kitchen. is there something on the table?")
   test.assertCmd("l south", "Though the dooyway to the south you see the conservatory.")
   test.assertCmd("l west", "You look west; definitely an exit that way.")
-  test.assertCmd("l ne", "You can't go northeast.")
+  test.assertCmd("l ne", "You can't see an exit northeast.")
   
   lang.default_look_exit = "{nv:char:look:true} {show:dir}, and can see {nm:dest:the}."
   test.assertCmd("l west", "You look west, and can see the dining room.")
