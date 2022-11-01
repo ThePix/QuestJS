@@ -809,6 +809,7 @@ const lang = {
     massnoun:{subjective:"it", objective:"it", possessive: "its", possAdj: "its", reflexive:"itself"},
     male:{subjective:"he", objective:"him", possessive: "his", possAdj: "his", reflexive:"himself"},
     female:{subjective:"she", objective:"her", possessive: "hers", possAdj: "her", reflexive:"herself"},
+    nonbinary:{subjective:"they", objective:"them", possessive: "theirs", possAdj: "their", reflexive:"themselves"},
     plural:{subjective:"they", objective:"them", possessive: "theirs", possAdj: "their", reflexive:"themselves"},
     firstperson:{subjective:"I", objective:"me", possessive: "mine", possAdj: "my", reflexive:"myself"},
     secondperson:{subjective:"you", objective:"you", possessive: "yours", possAdj: "your", reflexive:"yourself"},
