@@ -390,7 +390,7 @@ const lang = {
   topics_none_found:"No suggestions for what to ask or tell {nm:item:the} available.",
   topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {show:list}.",
   topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {show:list}.",
-  cannot_talk_to:"{nv:char:chat:true} to {nm:item:the} for a few moments, before releasing that {pv:item:be} not about to reply.",
+  cannot_talk_to:"{nv:char:chat:true} to {nm:item:the} for a few moments, before realizing that {pv:item:be} not about to reply.",
   no_topics:"{nv:char:have:true} nothing to talk to {nm:item:the} about.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
@@ -444,7 +444,7 @@ const lang = {
   // Movement
   go_successful:"{nv:char:head:true} {show:dir}.",
   not_that_way:"{nv:char:can't:true} go {show:dir}.",
-  no_look_that_way:"{nv:char:can't:true} see an exit {show:dir}.",
+  no_look_that_way:"{nv:char:can't:true} see anything of interest {show:dir}.",
   default_look_exit:"{nv:char:look:true} {show:dir}; definitely an exit that way.",
   can_go:"{nv:char:think:true} {pv:char:can} go {exits}.",
   cannot_go_in:"{pv:item:be:true} not something {nv:char:can} get inside.",
