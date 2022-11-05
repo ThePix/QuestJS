@@ -483,6 +483,7 @@ const lang = {
   no_listen:"{pv:char:can't:true} hear anything of note here.",
   nothing_there:"{nv:char:be:true} sure there's nothing there.",
   nothing_inside:"There's nothing to see inside.",
+  not_open:"You have to open it first.",
   it_is_empty:"{pv:container:be:true} empty.",
   not_here:"{pv:item:be:true} not here.",
   char_has_it:"{multi}{nv:holder:have:true} {ob:item}.",

@@ -855,7 +855,7 @@ test.tests = function() {
   test.assertCmd("l east", "Though the doorway to the east, you can see the kitchen. is there something on the table?")
   test.assertCmd("l south", "Though the dooyway to the south you see the conservatory.")
   test.assertCmd("l west", "You look west; definitely an exit that way.")
-  test.assertCmd("l ne", "You can't see an exit northeast.")
+  test.assertCmd("l ne", "You can't see anything of interest northeast.")
   
   lang.default_look_exit = "{nv:char:look:true} {show:dir}, and can see {nm:dest:the}."
   test.assertCmd("l west", "You look west, and can see the dining room.")
@@ -1025,6 +1025,20 @@ test.tests = function() {
   
   
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, some boots, a canteen, a cardboard box, a coin, a flashlight, a garage key, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and a small key here.", "You can go east, south, up or west."]);
+  
+  
+  test.title("Looking in a container");
+  test.assertCmd("put knife in box", "Done.");
+  test.assertCmd("x box", "A big cardboard box.");
+  test.assertCmd("look inside box", "Inside the cardboard box you can see a knife.");
+  test.assertCmd("close box", "You close the cardboard box.");
+  test.assertCmd("look inside box", "You have to open it first.");
+  test.assertCmd("open box", "You open the cardboard box. Inside it you can see a knife.");
+  test.assertCmd("get knife", "You take the knife.");
+
+
+
+
  
 
   test.title("Simple object commands (bricks and a box)");
@@ -1227,7 +1241,7 @@ test.tests = function() {
   test.assertCmd("topics kyle", ["Some suggestions for what to ask Kyle about: Fountain; Garden; House; Park; Swings."])
 
   test.assertCmd("ask chair about hats", 'You can ask it about hats all you like, but it is not about to reply.')
-  test.assertCmd("talk to chair", 'You chat to the chair for a few moments, before releasing that it is not about to reply.')
+  test.assertCmd("talk to chair", 'You chat to the chair for a few moments, before realizing that it is not about to reply.')
 
 
   
