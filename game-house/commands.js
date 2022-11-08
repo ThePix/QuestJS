@@ -66,25 +66,26 @@ lang.createVerbWith('Open', {held:true})
 
 
 
-commands.unshift(new Cmd('Rude', {
+new Cmd('Rude', {
   regex:/^(?:fuck|shag|shit|crap|damn|wank|frig)/,
   objects:[],
   script:function() { 
     parsermsg("Well, I <i>certainly</i> don't even know where to begin with <i>that</i>. Honestly, what were you thinking!") 
     return world.FAILED
   },
-}))
+})
 
 
-commands.unshift(new Cmd('Xyzzy', {
+new Cmd('Xyzzy', {
   regex:/^(?:say |)xyzzy$/,
   objects:[],
   script:function() { 
     msg("Mandy starts to hum \"Story of life\" while you try to work out what to do. Odd to think it is five years when that came out, she muses. She was just starting at Kyderbrook High, and she when she heard Marcy Dillons singing it, and found she was a fellow Directioner, they had become good friends.")
     return world.FAILED
   },
-}))
-commands.unshift(new Cmd('Dance', {
+})
+
+new Cmd('Dance', {
   regex:/^dance$/,
   objects:[],
   script:function() {
@@ -104,8 +105,9 @@ commands.unshift(new Cmd('Dance', {
     }
     return world.FAILED
   },
-}))
-commands.unshift(new Cmd('Sing', {
+})
+
+new Cmd('Sing', {
   regex:/^sing$/,
   objects:[
   ],
@@ -123,8 +125,9 @@ commands.unshift(new Cmd('Sing', {
     }
     return world.FAILED
   },
-}))
-commands.unshift(new Cmd('Act', {
+})
+
+new Cmd('Act', {
   regex:/^act$/,
   objects:[
   ],
@@ -150,8 +153,9 @@ commands.unshift(new Cmd('Act', {
     }
     return world.FAILED
   },
-}))
-commands.unshift(new Cmd('Jump', {
+})
+
+new Cmd('Jump', {
   regexes:[
     /^jump$/,
     /^jump (?:off|from)(?: the catwalk| catwalk|)$/,
@@ -168,8 +172,9 @@ commands.unshift(new Cmd('Jump', {
     }
     return world.FAILED
   },
-}))
-commands.unshift(new Cmd('Shout', {
+})
+
+new Cmd('Shout', {
   regex:/^(?:shout|yell|holler|cry out)$/,
   objects:[
   ],
@@ -178,14 +183,14 @@ commands.unshift(new Cmd('Shout', {
 
     return world.FAILED
   },
-}))
+})
 
 
 
 
 
 
-commands.unshift(new Cmd('ThrowAtPod', {
+new Cmd('ThrowAtPod', {
   regexes:[
     /^(?:throw|lob|hurl) (.+) at (?:pods?|tree)$/,
     /^(?:hit|knock) (?:pods?|tree) with (.+)$/,
@@ -227,12 +232,12 @@ commands.unshift(new Cmd('ThrowAtPod', {
     obj.moveToFrom({item:obj, char:player}, "greenhouse_east")
     return failedmsg(s + '{ifMoreThan:player:throwAtPodTries:2:She starts to wonder if chucking things at the pod is going to work. Perhaps she needs another idea.}')
   }
-}))
+})
 
 
 
 
-commands.unshift(new Cmd('TurnWithOar', {
+new Cmd('TurnWithOar', {
   regexes:[
     /^(?:turn|shift|rotate|move) (.+) (?:with|using) oar$/,
     /^use oar to (?:turn|shift|rotate|move) (.+)$/,
@@ -242,10 +247,10 @@ commands.unshift(new Cmd('TurnWithOar', {
   ],
   attName:'turn',
   defmsg:"Touching {nm:item:the} is not going to achieve much.",
-}))
+})
 
 /*
-commands.unshift(new Cmd('OpenWith', {
+new Cmd('OpenWith', {
   regexes:[
     /^(?:open|remove|get) (.+) (?:with|using) (.+)$/,
     {regex:/^use (.+) to (?:open|remove|get) (.+)$/, mod:{reverse:true}},
@@ -259,10 +264,10 @@ commands.unshift(new Cmd('OpenWith', {
     if (objects[0][0].name.startsWith('tamarind_pod')) return objects[0][0].openWith(objects[1][0]) ? world.SUCCESS : world.FAILED
     return falsemsg("That is not something Mandy can open like that.")
   }
-}))*/
+})*/
 
 
-commands.unshift(new Cmd('GrindUnderHeel', {
+new Cmd('GrindUnderHeel', {
   regexes:[
     /^(?:grind) (.+?) (?:under|into) (?:heel|your heel|foot|your foot|ground|the ground)$/,
     /^(?:grind) (.+?)$/,
@@ -272,7 +277,7 @@ commands.unshift(new Cmd('GrindUnderHeel', {
     {scope:parser.isHere},
   ],
   defmsg:"Grinding {nm:item:the} is not going to achieve much.",
-}))
+})
 
 
 
@@ -287,7 +292,7 @@ for (const s of helpStrs2) {
   helpStr += '|' + s.replace('*', 'mandy ')
 }
 
-commands.unshift(new Cmd('NpcHelp', {
+new Cmd('NpcHelp', {
   regexes:[
       new RegExp('^(.+), ?(?:' + helpStr + ')$'),
       new RegExp('^(?:tell|ask|instruct) (.+) to (?:' + helpStr + ')$'),
@@ -304,7 +309,7 @@ commands.unshift(new Cmd('NpcHelp', {
     if (currentLocation.name === "greenhouse_east" || (currentLocation.name === "greenhouse_west" && w.grown_tamarind_tree.growthTime > 8))
     msg("Okay, so he is not so bright, but if she was more specific... She cannot just climb up him, but what if he was hugging the tree? Could she then climb the tree?")
   },
-}))
+})
 
 
 
@@ -315,7 +320,7 @@ commands.unshift(new Cmd('NpcHelp', {
 
 
 
-commands.unshift(new Cmd('Plant', {
+new Cmd('Plant', {
   regexes:[
     /^(?:plant|bury) (.+) in (?:earth|ground|soil|bare earth|bare ground)$/,
     /^(?:plant|bury) (.+)$/,
@@ -332,9 +337,9 @@ commands.unshift(new Cmd('Plant', {
     objects.push([w.bare_earth])
     return handleInOutContainer(player, objects, "drop", handleSingleDropInContainer)
   },
-}))
+})
 
-commands.unshift(new Cmd('Shift', {
+new Cmd('Shift', {
   regex:/^(?:shift|move) (.+)$/,
   objects:[
     {scope:parser.isHere},
@@ -348,9 +353,9 @@ commands.unshift(new Cmd('Shift', {
 
     return obj.shift() ? world.SUCCESS : world. FAILED
   },
-}))
+})
 
-commands.unshift(new Cmd('Invert', {
+new Cmd('Invert', {
   regexes:[
     /^(?:invert|turn over) (.+)$/,
     /^turn (.+) over$/,
@@ -363,9 +368,9 @@ commands.unshift(new Cmd('Invert', {
     if (!obj.turn) return failedmsg("Mandy thinks about turning {nm:item:the} upside-down, but decides it is fine the way it is.", {item:obj})
     return obj.turn() ? world.SUCCESS : world. FAILED
   },
-}))
+})
 
-commands.unshift(new Cmd('BurstBalloon', {
+new Cmd('BurstBalloon', {
   rules:[cmdRules.isHeld],
   regexes:[
     /^use (.+) to (?:burst|break|cut|puncture|pierce|stab|pop) (.+)$/,
@@ -383,9 +388,9 @@ commands.unshift(new Cmd('BurstBalloon', {
     
     return failedmsg("Mandy takes a few stabs at {nm:item:the} with {nm:item2:the}, but does not achieve anything", {item:objects[1][0], item2:objects[0][0]})
   },
-}))
+})
 
-commands.unshift(new Cmd('BurstBalloonOnly', {
+new Cmd('BurstBalloonOnly', {
   regex:/^(?:burst|break|cut|puncture|pierce|stab|pop) (.+?)$/,
   objects:[
     {scope:parser.isPresent, attName:'burst'},
@@ -398,29 +403,29 @@ commands.unshift(new Cmd('BurstBalloonOnly', {
 
     return failedmsg("Mandy takes a few stabs at {nm:item:the}, but does not achieve anything", {item:obj})
   },
-}))
+})
 
-commands.unshift(new Cmd('WakeUp', {
+new Cmd('WakeUp', {
   regex:/^(?:wake|wake up|awaken)$/,
   objects:[
   ],
   script:function(objects) {
     return failedmsg("This must be a dream, thinks Mandy. Like Alice in Wonderland, she will wake up in a shower of playing cards or something; she cannot quite remember how that ended. She pinches herself, but nothing happens, other than a painful sensation in her arm. Damn.")
   },
-}))
+})
 
 
-commands.unshift(new Cmd('Fly', {
+new Cmd('Fly', {
   regex:/^(?:try to fly|fly)$/,
   objects:[
   ],
   script:function(objects) {
     return failedmsg("Mandy jumps into the air... and quickly returns to the ground. Had to be worth a try. It would be annoying to discover this was a dream and she could have just flown everywhere.")
   },
-}))
+})
 
 
-commands.unshift(new Cmd('ConfrontFears', {
+new Cmd('ConfrontFears', {
   regex:/^confront (?:her |your |my |)fears?$/,
   objects:[
   ],
@@ -436,12 +441,12 @@ commands.unshift(new Cmd('ConfrontFears', {
     }
     return world.SUCCESS;
   },
-}))
+})
 
 
 
 
-commands.unshift(new Cmd('PhoneAFriend', {
+new Cmd('PhoneAFriend', {
   regex:/^(?:phone|call) (?:someone|a friend|friend|police|cops|parents|her parents)$/,
   objects:[
   ],
@@ -449,12 +454,12 @@ commands.unshift(new Cmd('PhoneAFriend', {
     w.mobile_phone.use()
     return world.FAILED;
   },
-}))
+})
 
 
 
 
-commands.unshift(new Cmd('PutUnder', {
+new Cmd('PutUnder', {
   regex:/^(?:put|place|drop) (.+) (?:under|beneath|below) (.+)$/,
   rules:[cmdRules.testManipulate, cmdRules.isHeld],
   objects:[
@@ -488,7 +493,7 @@ commands.unshift(new Cmd('PutUnder', {
       return falsemsg("Putting stuff under {nm:item:the} is not going to achieve anything.", {item:objects[1][0]})
     }
   },
-}))
+})
 
 
 

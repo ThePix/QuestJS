@@ -148,7 +148,7 @@ quest.listActive = function() {
   questmsg("[Do QUESTS ALL to include completed and failed quests]")
 }
 
-commands.unshift(new Cmd('MetaQuests', {
+new Cmd('MetaQuests', {
   rules:[cmdRules.isPresent],
   regex:/^(?:quest|quests|q)$/,
   objects:[
@@ -157,9 +157,9 @@ commands.unshift(new Cmd('MetaQuests', {
     quest.listActive()
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}))
+})
 
-commands.unshift(new Cmd('MetaQuestsAll', {
+new Cmd('MetaQuestsAll', {
   rules:[cmdRules.isPresent],
   regex:/^(?:quest|quests|q) all$/,
   objects:[
@@ -168,6 +168,6 @@ commands.unshift(new Cmd('MetaQuestsAll', {
     quest.listAll()
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}))
+})
   
   

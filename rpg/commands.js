@@ -31,7 +31,7 @@ TAKEABLE_DICTIONARY.retrieve = function(options) {
 
 
 
-commands.push(new Cmd('Target', {
+new Cmd('Target', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   objects:[
@@ -45,15 +45,15 @@ commands.push(new Cmd('Target', {
     return world.SUCCESS_NO_TURNSCRIPTS
   },
   defmsg:lang.notAFoe
-}))
+})
 
-commands.push(new Cmd('Attack', {
+new Cmd('Attack', {
   rules:[cmdRules.isPresent],
   objects:[
     {scope:parser.isPresent}
   ],
   defmsg:lang.notAFoe
-}))
+})
 
 
 findCmd('Search').script = function(objects) {
@@ -84,50 +84,50 @@ findCmd('Search').script = function(objects) {
   return world.SUCCESS 
 }
 
-commands.push(new Cmd('Equip', {
+new Cmd('Equip', {
   npcCmd:true,
   rules:[cmdRules.isHeld],
   objects:[
     {scope:parser.isHeld}
   ],
   defmsg:lang.notEquippable,
-}))
+})
 
 
-commands.push(new Cmd('Unequip', {
+new Cmd('Unequip', {
   npcCmd:true,
   rules:[cmdRules.isHeld],
   objects:[
     {scope:parser.isHeld}
   ],
   defmsg:lang.notEquippable,
-}))
+})
 
 
-commands.push(new Cmd('Stow', {
+new Cmd('Stow', {
   npcCmd:true,
   rules:[cmdRules.isHeld],
   objects:[
     {scope:parser.isHeld}
   ],
   defmsg:lang.notStowable,
-}))
+})
 
 parser.isStowed = function(item) {
   return item.isAtLoc('_storage')
 }
-commands.push(new Cmd('Retrieve', {
+new Cmd('Retrieve', {
   npcCmd:true,
   objects:[
     {scope:parser.isStowed, extendedScope:true}
   ],
   defmsg:lang.notStowable,
-}))
+})
 
 
 lang.exit_list[14] = {name:'Retrieve', abbrev:'R', type:'nocmd', symbol:'fa-suitcase'}
 
-commands.push(new Cmd('RetrieveMenu', {
+new Cmd('RetrieveMenu', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   objects:[
@@ -196,11 +196,11 @@ commands.push(new Cmd('RetrieveMenu', {
     log(document.querySelector("#dialog-button").innerHTML)
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}))
+})
 
 
 
-commands.push(new Cmd('LearnSpell', {
+new Cmd('LearnSpell', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   objects:[
@@ -221,11 +221,11 @@ commands.push(new Cmd('LearnSpell', {
     msg(lang.learnSpell, {spell:spell, item:source})
     return world.SUCCESS
   },
-}))
+})
 
 
 
-commands.push(new Cmd('CastSpell', {
+new Cmd('CastSpell', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   objects:[
@@ -255,13 +255,13 @@ commands.push(new Cmd('CastSpell', {
     attack.apply().output()
     return world.SUCCESS
   },
-}))
+})
 
 
 
 
 
-commands.push(new Cmd('CastSpellAt', {
+new Cmd('CastSpellAt', {
   npcCmd:true,
   //antiRegexes:lang.regex.CastSpellAtAntiRegex,
   rules:[cmdRules.isPresent],
@@ -283,10 +283,10 @@ commands.push(new Cmd('CastSpellAt', {
     attack.apply().output()
     return world.SUCCESS
   },
-}))
+})
 
 
-commands.push(new Cmd('DebugRPG', {
+new Cmd('DebugRPG', {
   regex:/^rpg$/,
   objects:[
   ],
@@ -295,7 +295,7 @@ commands.push(new Cmd('DebugRPG', {
     metamsg("All output from attacks will now be seen.");
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}))
+})
 
 
 

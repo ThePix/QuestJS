@@ -3,7 +3,7 @@
 
 
 /*
-commands.push(new Cmd('Kick', {
+new Cmd('Kick', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   regex:/^(kick) (.+)$/,
@@ -15,9 +15,9 @@ commands.push(new Cmd('Kick', {
     msg("{pv:char:kick:true} {ob:item:the}, but nothing happens.", options);
     return false;
   },
-}));
+})
 
-commands.push(new Cmd('Move', {
+new Cmd('Move', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   regex:/^(move) (.+)$/,
@@ -29,13 +29,13 @@ commands.push(new Cmd('Move', {
     msg("{pv:char:be:true} not something you can move.", options);
     return false;
   },
-}));
+})
 */
 
 
 // kyle, in stasis
 
-commands.push(new Cmd('Get in pod1', {
+new Cmd('Get in pod1', {
   regex:/^(.+), ?(?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
   npcCmd:true,
   attName:"stasis",
@@ -43,8 +43,8 @@ commands.push(new Cmd('Get in pod1', {
     {scope:parser.isHere, attName:"npc"},
   ],
   defmsg:"That's not about to get in a stasis!",
-}));
-commands.push(new Cmd('Get in pod2', {
+})
+new Cmd('Get in pod2', {
   regex:/^(?:tell|ask|instruct) (.+) to (?:get in|go in|in) (?:stasis pod|stasis|pod)$/,
   npcCmd:true,
   attName:"stasis",
@@ -52,9 +52,9 @@ commands.push(new Cmd('Get in pod2', {
     {scope:parser.isHere, attName:"npc"},
   ],
   defmsg:"That's not about to get in a stasis!",
-}));
+})
 
-commands.push(new Cmd('Stop1', {
+new Cmd('Stop1', {
   regex:/^(.+), (?:stop|halt|forget it)$/,
   npcCmd:true,
   attName:"stopAgenda",
@@ -62,8 +62,8 @@ commands.push(new Cmd('Stop1', {
     {scope:parser.isHere, attName:"npc"},
   ],
   defmsg:"That's not doing anything!",
-}));
-commands.push(new Cmd('Stop2', {
+})
+new Cmd('Stop2', {
   regex:/^(?:tell|ask|instruct) (.+) to (?:stop|halt|forget it)$/,
   npcCmd:true,
   attName:"stopAgenda",
@@ -71,30 +71,30 @@ commands.push(new Cmd('Stop2', {
     {scope:parser.isHere, attName:"npc"},
   ],
   defmsg:"That's not doing anything",
-}));
+})
 
 
-commands.push(new Cmd('Launch', {
+new Cmd('Launch', {
   regex:/^(?:launch|deploy) (.+)$/,
   npcCmd:true,
   objects:[
     {scope:parser.isInWorld, extendedScope:true},
   ],
   defmsg:"You can't launch that!",
-}));
+})
 
-commands.push(new Cmd('Revive', {
+new Cmd('Revive', {
   regex:/^(?:revive|wake|awaken) (.+)$/,
   npcCmd:true,
   objects:[
     {scope:parser.isInWorld},
   ],
   defmsg:"You can't revive that!",
-}));
+})
 
 
 
-commands.push(new Cmd('Spray', {
+new Cmd('Spray', {
   regex:/^(?:spray) (.+)$/,
   rules:[
     function(cmd, char, item, multiple) {
@@ -113,9 +113,9 @@ commands.push(new Cmd('Spray', {
     {scope:parser.isHere},
   ],
   defmsg:"You can't spray that!",
-}));
+})
 
-commands.push(new Cmd('Pressurise', {
+new Cmd('Pressurise', {
   regex:/^(?:pressuri[sz]e|pres) (.+)$/,
   attName:'pressure',
   objects:[
@@ -123,8 +123,8 @@ commands.push(new Cmd('Pressurise', {
   ],
   script:function(objects) { return handlePressurise(player, objects, true) },
   defmsg:'Not something you can pressurise.',
-}));
-commands.push(new Cmd('Depressurise', {
+})
+new Cmd('Depressurise', {
   regex:/^(?:depressuri[sz]e|evacuate|depres) (.+)$/,
   attName:'pressure',
   objects:[
@@ -132,8 +132,8 @@ commands.push(new Cmd('Depressurise', {
   ],
   script:function(objects) { return handlePressurise(player, objects, false) },
   defmsg:'Not something you can evacuate.',
-}));
-commands.push(new Cmd('NpcPressurise1', {
+})
+new Cmd('NpcPressurise1', {
   regex:/^(.+), ?(?:pressuri[sz]e|pres) (.+)$/,
   attName:'pressure',
   objects:[
@@ -150,8 +150,8 @@ commands.push(new Cmd('NpcPressurise1', {
     objects.shift();
     return handlePressurise(npc, objects, true);
   },
-}));
-commands.push(new Cmd('NpcPressurise2', {
+})
+new Cmd('NpcPressurise2', {
   regex:/^(?:tell|ask|instruct) (.+) to (?:pressuri[sz]e|pres) (.+)$/,
   attName:'pressure',
   objects:[
@@ -168,8 +168,8 @@ commands.push(new Cmd('NpcPressurise2', {
     objects.shift();
     return handlePressurise(npc, objects, true);
   },
-}));
-commands.push(new Cmd('NpcDepressurise1', {
+})
+new Cmd('NpcDepressurise1', {
   regex:/^(.+), ?(?:depressuri[sz]e|evacuate|depres|evac) (.+)$/,
   attName:'pressure',
   objects:[
@@ -186,8 +186,8 @@ commands.push(new Cmd('NpcDepressurise1', {
     objects.shift()
     return handlePressurise(npc, objects, false)
   },
-}))
-commands.push(new Cmd('NpcDepressurise2', {
+})
+new Cmd('NpcDepressurise2', {
   regex:/^(?:tell|ask|instruct) (.+) to (?:depressuri[sz]e|evacuate|depres) (.+)$/,
   attName:'pressure',
   objects:[
@@ -204,7 +204,7 @@ commands.push(new Cmd('NpcDepressurise2', {
     objects.shift()
     return handlePressurise(npc, objects, false)
   },
-}))
+})
 
 
 function handlePressurise(char, objects, pressurise) {
@@ -265,7 +265,7 @@ function handlePressurise(char, objects, pressurise) {
 
 
 
-commands.push(new Cmd('Approach', {
+new Cmd('Approach', {
   regex:/^approach (.+)$/,
   objects:[
     {scope:'isShip'},
@@ -291,9 +291,9 @@ commands.push(new Cmd('Approach', {
     w.alienShip.status = 2;
     return world.SUCCESS
   },
-}));
+})
 
-commands.push(new Cmd('Scan', {
+new Cmd('Scan', {
   regex:/^scan (.+)$/,
   objects:[
     {scope:'isShip'},
@@ -323,7 +323,7 @@ commands.push(new Cmd('Scan', {
     w.alienShip.status = 2
     return world.SUCCESS
   },
-}))
+})
 
 function isShip(item) {
   return item.isShip
@@ -332,7 +332,7 @@ function isShip(item) {
 
 
 
-commands.push(new Cmd('ProbeStatus', {
+new Cmd('ProbeStatus', {
   regex:/^probes?$/,
   script:function() {
     const arr = getProbes();
@@ -353,20 +353,20 @@ commands.push(new Cmd('ProbeStatus', {
     metamsg("Active:" + currentPlanet().eventIsActive());
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
-}));
+})
 
 
 
 
 
-commands.unshift(new Cmd('MapUpdate', {
+new Cmd('MapUpdate', {
   regex:/^map?$/,
   script:function() {
     updateMap()
     metamsg("Done")
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}));
+})
 
 
 
@@ -385,7 +385,7 @@ findCmd('MetaHelp').script = function() {
   return world.SUCCESS_NO_TURNSCRIPTS
 }
 
-commands.push(new Cmd('HelpSubject', {
+new Cmd('HelpSubject', {
   regex:/^(?:\?|help) (.*)$/,
   objects:[
     {special:'text'},
@@ -492,4 +492,4 @@ commands.push(new Cmd('HelpSubject', {
       },
     },
   ]
-}));
+})

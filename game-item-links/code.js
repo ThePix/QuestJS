@@ -19,7 +19,7 @@ quest.create('A carrot for Buddy', [
 
 
 
-commands.unshift(new Cmd('TestInput', {
+new Cmd('TestInput', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   regex:/^inp/,
@@ -40,11 +40,11 @@ commands.unshift(new Cmd('TestInput', {
       })
     })*/
   }
-}));
+})
 
 
 
-commands.unshift(  new Cmd('TextReveal', {
+new Cmd('TextReveal', {
   regex:/^reveal$/,
   script:function() {
     msg("Some text")
@@ -59,28 +59,28 @@ commands.unshift(  new Cmd('TextReveal', {
     wait(3, "Wait three seconds...")
     msg("... and done!")/**/
   },
-}));
+})
   
-commands.unshift(  new Cmd('Image', {
+new Cmd('Image', {
   regex:/^img$/,
   script:function() {
     msg("Some more text.")
     picture('favicon.png')
   },
-}));
+})
   
-commands.unshift(  new Cmd('Audio', {
+new Cmd('Audio', {
   regex:/^beep$/,
   script:function() {
     msg("Can you hear this?")
     sound('hrn06.wav')
   },
-}));
+})
   
 
 
 
-commands.unshift(  new Cmd('Alpha', {
+new Cmd('Alpha', {
   regex:/^alpha$/,
   script:function() {
     msg("Some text in Greek: {encode:391:3AC:The quick brown fox jumped over the lazy dog}.")
@@ -94,12 +94,12 @@ commands.unshift(  new Cmd('Alpha', {
     msg("Some text in Javan {encode:A985:A985:The quick brown fox jumped over the lazy dog}.")
     msg("Some text in Nko {encode:7C1:7C1:The quick brown fox jumped over the lazy dog}.")
   },
-}));
+})
 
 
 
 
-commands.unshift(new Cmd('DialogTest', {
+new Cmd('DialogTest', {
   npcCmd:true,
   regex:/^(?:dialog) (.*)$/,
   objects:[
@@ -114,11 +114,11 @@ commands.unshift(new Cmd('DialogTest', {
     })
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}))
+})
 
 
 
-commands.unshift(new Cmd('TextTest', {
+new Cmd('TextTest', {
   npcCmd:true,
   regex:/^(?:text)$/,
   objects:[
@@ -129,12 +129,12 @@ commands.unshift(new Cmd('TextTest', {
     }, "Go")
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}))
+})
 
 
 
 
-commands.unshift(new Cmd('EgKick', {
+new Cmd('EgKick', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   regex:/^(kick) (.+)$/,
@@ -143,11 +143,11 @@ commands.unshift(new Cmd('EgKick', {
     {scope:parser.isPresent}
   ],
   defmsg:"{pv:char:kick:true} {ob:item}, but nothing happens.",
-}));
+})
 
 
 
-commands.unshift(new Cmd('EgCharge', {
+new Cmd('EgCharge', {
   npcCmd:true,
   rules:[cmdRules.isHeld],
   regex:/^(?:charge|power) (.+)$/,
@@ -155,10 +155,10 @@ commands.unshift(new Cmd('EgCharge', {
     {scope:parser.isHeld}
   ],
   defmsg:"{pv:item:'be:true} not something you can charge.",
-}))
+})
 
 
-commands.unshift(new Cmd('EgMove', {
+new Cmd('EgMove', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   regex:/^(move) (.+)$/,
@@ -167,7 +167,7 @@ commands.unshift(new Cmd('EgMove', {
     {scope:parser.isHere}
   ],
   defmsg:"{pv:item:'be:true} not something you can move.",
-}));
+})
 
 findCmd('MetaHint').script = function() {
   if (w[player.loc].hint) {
@@ -238,7 +238,7 @@ lang.createVerbWith("Slice", {held:true, ing:'Slicing'})
 
 /*
 // This is not a properly written command, it is just to test the item order can be reversed.
-commands.unshift(new Cmd('SliceCarrot', {
+new Cmd('SliceCarrot', {
   rules:[cmdRules.isHeld],
   regexes:[/^use (.+) to slice (.+)$/, /^use (.+) slice (.+)$/, {regex:/slice (.+) with (.+)/, mod:{reverse:true}}],
   objects:[

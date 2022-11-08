@@ -3,7 +3,7 @@
 
 parser.isRoom =function(o) { return o.room }
 
-commands.unshift(new Cmd('GoTo', {
+new Cmd('GoTo', {
   npcCmd:true,
   regex:/^(?:go to|go) (.+)$/,
   objects:[
@@ -20,7 +20,7 @@ commands.unshift(new Cmd('GoTo', {
     }
     return failedmsg("{pv:item:be:true} not a destination you can get to from here.", {item:room})
   },
-}))
+})
 
 
 
@@ -31,19 +31,19 @@ parser.isContact = function(o) { return o.contact }
 const smartPhoneFunctions = ["Contacts", "Take photo", "Photo gallery", "Search internet", "Hang up", "News feed"]
 
 for (let el of smartPhoneFunctions) {
-  commands.unshift(new Cmd(el, {
+  new Cmd(el, {
     regex:new RegExp('^' + el.toLowerCase() + ' (.+)$'),
     attName:verbify(el),
     objects:[
       {scope:parser.isHeld},
     ],
     defmsg:"{pv:item:'be:true} not something you can do that with.",
-  }))
+  })
 }
 
 
 
-commands.unshift(new Cmd('Phone', {
+new Cmd('Phone', {
   npcCmd:true,
   regex:/^(?:telephone|phone|call|contact) (.+)$/,
   objects:[
@@ -52,11 +52,11 @@ commands.unshift(new Cmd('Phone', {
   script:function(objects) {
     return w.phone.makeCall(objects[0][0]) ? world.SUCCESS : world.FAILED
   },
-}))
+})
 
 
 
-commands.unshift(new Cmd('HangUp', {
+new Cmd('HangUp', {
   npcCmd:true,
   regex:/^(?:hang up|end call)$/,
   objects:[
@@ -66,7 +66,7 @@ commands.unshift(new Cmd('HangUp', {
     w.phone.hangUp()
     return world.SUCCESS
   },
-}))
+})
 
 
 
@@ -74,7 +74,7 @@ commands.unshift(new Cmd('HangUp', {
 
 
 
-commands.unshift(new Cmd('DialogTest', {
+new Cmd('DialogTest', {
   npcCmd:true,
   regex:/^(?:dialog) (.*)$/,
   objects:[
@@ -89,5 +89,5 @@ commands.unshift(new Cmd('DialogTest', {
     })
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}))
+})
 

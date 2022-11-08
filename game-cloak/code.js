@@ -28,7 +28,7 @@ findCmd('MetaHelp').script = function() {
 
 
 
-commands.push(new Cmd('HangUp', {
+new Cmd('HangUp', {
   regex:/^(?:hang up|hang) (.+?)(?: on the hook| on hook|)$/,
   objects:[
     {scope:parser.isHeld},
@@ -49,5 +49,5 @@ commands.push(new Cmd('HangUp', {
       return world.SUCCESS
     }
   }  
-}))
+})
 

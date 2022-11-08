@@ -1,14 +1,14 @@
 "use strict"
 
 /*
-commands.unshift(new Cmd('Charge', {
+new Cmd('Charge', {
   npcCmd:true,
   regex:/^(?:charge|power) (.+)$/,
   objects:[
     {scope:parser.isHeld}
   ],
   defmsg:"{pv:item:'be:true} not something you can charge.",
-}))
+})
 */
 
 

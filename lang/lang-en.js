@@ -1362,14 +1362,14 @@ lang.createVerb = function(name, options = {}) {
   if (options.ing === undefined) options.ing = name + 'ing'
   if (options.defmsg === undefined) options.defmsg = options.ing + " {nm:item:the} is not going to achieve much."
   if (options.defmsg === true) options.defmsg = "{pv:item:'be:true} not something you can do that with."
-  commands.unshift(new Cmd(name, {
+  new Cmd(name, {
     regex:new RegExp("^(?:" + options.words + ") (.+)$"),
     objects:[
       {scope:options.held ? parser.isHeld : parser.isHere},
     ],
     npcCmd:true,
     defmsg:options.defmsg
-  }))
+  })
 }
 
 
@@ -1379,7 +1379,7 @@ lang.createVerbWith = function(name, options = {}) {
   if (options.ing === undefined) options.ing = name + 'ing'
   if (options.defmsg === undefined) options.defmsg = options.ing + " {nm:item:the} is not going to achieve much."
   if (options.defmsg === true) options.defmsg = "{pv:item:'be:true} not something you can do that with."
-  commands.unshift(new Cmd(name + "With", {
+  new Cmd(name + "With", {
     regexes:[
       new RegExp("^(?:" + options.words + ") (.+) (?:using|with) (.+)$"),
       { regex:new RegExp("^(?:use|with|using) (.+) to (?:" + options.words + ") (.+)$"), mod:{reverse:true}},
@@ -1393,7 +1393,7 @@ lang.createVerbWith = function(name, options = {}) {
     npcCmd:true,
     withScript:true,
     defmsg:options.defmsg
-  }))
+  })
 }
 
 

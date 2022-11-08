@@ -214,17 +214,17 @@ findCmd('MetaSave').script = function() {
 
 
 
-commands.push(new Cmd('Crowbar', {
+new Cmd('Crowbar', {
   regex:/^(crowbar|level) (.+)$/,
   objects:[
     {special:'ignore'},
     {scope:parser.isHere},
   ],
   defmsg:"That's not something you can crowbar open.",
-}));
+})
 
 
-commands.unshift(new Cmd('Move', {
+new Cmd('Move', {
   npcCmd:true,
   rules:[cmdRules.isPresent],
   regex:/^(move) (.+)$/,
@@ -233,11 +233,11 @@ commands.unshift(new Cmd('Move', {
     {scope:parser.isHere}
   ],
   defmsg:"{pv:item:'be:true} not something you can move.",
-}));
+})
 
 
 
-commands.push(new Cmd('Tutorial', {
+new Cmd('Tutorial', {
   regex:/^tutorial$/,
   objects:[
   ],
@@ -246,7 +246,7 @@ commands.push(new Cmd('Tutorial', {
     msg(lang.done_msg)
     return world.SUCCESS_NO_TURNSCRIPTS
   },
-}));
+})
 
 
 const wrapScript = function(obj1, obj2) {
@@ -269,7 +269,7 @@ const unwrapScript = function(obj1, obj2) {
 }
 
 
-commands.unshift(new Cmd('Wrap1', {
+new Cmd('Wrap1', {
   // wrap fist in newspaper
   regex:/^(?:wrap|cover) (.+) (?:with|in) (.+)$/,
   objects:[
@@ -277,9 +277,9 @@ commands.unshift(new Cmd('Wrap1', {
     {scope:parser.isHeld},
   ],
   script:function(objects) { wrapScript(objects[0][0], objects[1][0]) },
-}));
+})
 
-commands.unshift(new Cmd('Wrap2', {
+new Cmd('Wrap2', {
   // wrap newspaper round fist
   regex:/^(?:wrap) (.+) (?:round|around) (.+)$/,
   objects:[
@@ -287,9 +287,9 @@ commands.unshift(new Cmd('Wrap2', {
     {scope:parser.isHeld},
   ],
   script:function(objects) { wrapScript(objects[1][0], objects[0][0]) },
-}));
+})
 
-commands.unshift(new Cmd('Unwrap1', {
+new Cmd('Unwrap1', {
   // unwrap fist
   regex:/^(?:unwrap|uncover) (.+)$/,
   objects:[
@@ -297,9 +297,9 @@ commands.unshift(new Cmd('Unwrap1', {
     {scope:parser.isHeld},
   ],
   script:function(objects) { unwrapScript(objects[0][0], w.old_newspaper) },
-}));
+})
 
-commands.unshift(new Cmd('Unwrap2', {
+new Cmd('Unwrap2', {
   // take newspaper off fist
   regex:/^(?:take|remove) (.+) (?:off|from) (.+)$/,
   objects:[
@@ -307,11 +307,11 @@ commands.unshift(new Cmd('Unwrap2', {
     {scope:parser.isHeld},
   ],
   script:function(objects) { unwrapScript(objects[1][0], objects[0][0]) },
-}));
+})
 
 
 
-commands.unshift(new Cmd('ThrowThrough', {
+new Cmd('ThrowThrough', {
   // throw rope out window
   regex:/^(?:throw|chuck|hurl|toss|pitch|lob|heave) (.+) (?:out of|out|through) (.+)$/,
   objects:[
@@ -327,7 +327,7 @@ commands.unshift(new Cmd('ThrowThrough', {
     dest.throwThrough(item)
     return world.SUCCESS
   },
-}));
+})
 
 
 const smashWithScript = function(item, dest) {
@@ -349,7 +349,7 @@ const smashWithScript = function(item, dest) {
 }
 
 
-commands.unshift(new Cmd('SmashWith', {
+new Cmd('SmashWith', {
   // throw rope out window
   regex:/^(?:smash|break|destroy) (.+) (?:with|using) (.+)$/,
   objects:[
@@ -359,10 +359,10 @@ commands.unshift(new Cmd('SmashWith', {
   script:function(objects) { 
     return smashWithScript(objects[1][0], objects[0][0])
   },
-}));
+})
 
 
-commands.unshift(new Cmd('UseToSmash', {
+new Cmd('UseToSmash', {
   // throw rope out window
   regex:/^(?:use|using) (.+?) (?:to |)(?:smash|break|destroy) (.+)$/,
   objects:[
@@ -372,11 +372,11 @@ commands.unshift(new Cmd('UseToSmash', {
   script:function(objects) { 
     return smashWithScript(objects[0][0], objects[1][0])
   },
-}));
+})
 
 
 
-commands.unshift(new Cmd('Attack', {
+new Cmd('Attack', {
   // throw rope out window
   regex:/^(?:attack|kick|punch|hit|strike|kill) (.+?)$/,
   objects:[
@@ -395,12 +395,12 @@ commands.unshift(new Cmd('Attack', {
     }
     return world.FAILED
   },
-}));
+})
 
 
 
 
-commands.unshift(new Cmd('TieUp', {
+new Cmd('TieUp', {
   // throw rope out window
   regex:/^(?:tie up|tie|bind) (.+?)$/,
   objects:[
@@ -423,13 +423,13 @@ commands.unshift(new Cmd('TieUp', {
     }
     return world.FAILED
   },
-}));
+})
 
 
 
 
 
-commands.push(new Cmd('RudeCommand', {
+new Cmd('RudeCommand', {
   // throw rope out window
   regex:/^(?:fuck|facefuck|face-fuck|face fuck|bugger|shag|suck|suck off|assfuck|ass-fuck|ass fuck|rape|ass-rape|ass rape) (.+?)$/,
   objects:[
@@ -443,7 +443,7 @@ commands.push(new Cmd('RudeCommand', {
     }
     return world.FAILED
   },
-}));
+})
 
 
 
@@ -452,7 +452,7 @@ commands.push(new Cmd('RudeCommand', {
 
 
 /*
-commands.unshift(new Cmd('ThrowAt', {
+new Cmd('ThrowAt', {
   // throw computer at window
   regex:/^(?:wrap|cover) (.+) (?:with|in) (.+)$/,
   objects:[
@@ -460,5 +460,5 @@ commands.unshift(new Cmd('ThrowAt', {
     {scope:parser.isHeld},
   ],
   script:function(objects) { wrapScript(objects[0][0], objects[1][0]) },
-}));
+})
 */
