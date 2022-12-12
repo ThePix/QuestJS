@@ -162,7 +162,7 @@ new Cmd('EgMove', {
   ],
   defmsg:"{pv:item:'be:true} not something you can move.",
 })
-
+/*
 findCmd('MetaHint').script = function() {
   if (w[player.loc].hint) {
     metamsg(w[player.loc].hint);
@@ -208,8 +208,15 @@ findCmd('MetaHint').script = function() {
     }
   }
 }
- 
+ */
 
+
+settings.hintSheetData = [
+  {q:'Stuck in the library?', a:'kill goblin'},
+  {q:'Stuck at the dorm courtyard?', a:'pull the torch'},
+  {q:'Bothered by the witch?', a:'wear the pearl necklace'},
+]
+                
 
 
 

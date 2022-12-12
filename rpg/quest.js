@@ -14,6 +14,7 @@ const quest = {
   SUCCESS:4,
   data:[],
   stateNames:['', 'Active', 'Moot', 'Failed', 'Success'],
+  terminateComments:['', '', 'Quest Now Moot', 'Quest Failed', 'Quest Successfully Completed'],
   endTurn:function() {
     // only doing current player
     for (const q of this.data) {
@@ -26,9 +27,16 @@ const quest = {
       }
     }
   },
+  init:function() {
+    // only doing current player
+    for (const q of this.data) {
+      if (q.init) q.init()
+    }
+  },
 }
 
 settings.modulesToEndTurn.push(quest)
+io.modulesToInit.push(quest)
 
 
 class Quest {
@@ -41,6 +49,7 @@ class Quest {
     const already = quest.get(this.key)
     if (already) return errormsg("Name collision for Quest: " + name)
     quest.data.push(this)
+    if (settings.questInit) settings.questInit(this)
   }
 
 
@@ -56,15 +65,18 @@ class Quest {
     if (char[this.stateName] && !restart) return false // quest already started
     char[this.stateName] = quest.ACTIVE
     char[this.progressName] = 0
-    this.comment(char, "Quest started")
-    return true
+
+    return this._stage(char, "Quest started")
+
   }
 
+  // get the state of this quest for the given character (defaults to player)
   state(char) {
     if (!char) char = player
     return char[this.stateName]
   }
 
+  // get the stage of this quest for the given character (defaults to player)
   stage(char) {
     if (!char) char = player
     if (char[this.stateName] !== quest.ACTIVE) return false
@@ -72,6 +84,7 @@ class Quest {
   }
 
   next(char, label) {
+    // resolve some defaults
     if (typeof char === 'string' && !label) {
       label = char
       char = player
@@ -80,6 +93,7 @@ class Quest {
       char = player
     }
     
+    // if a label, go to the step, otherwise next step
     if (char[this.stateName] !== quest.ACTIVE) return false
     if (label === undefined) {
       char[this.progressName]++
@@ -89,23 +103,29 @@ class Quest {
       if (stageIndex === -1) return errormsg('Could not find stage with label "' + label + '" in quest :' + this.name)
       char[this.progressName] = stageIndex
     }
+    return this._stage(char, "Quest progress")
+  }
+  
+  _stage(char, s) {
     if (this.stages.length <= char[this.progressName]) return this.complete(char)
-    this.comment(char, "Quest progress")
     const stage = this.stage(char)
-    if (stage && stage.intro) questmsg(stage.intro)
+    if (!stage.silent) this.comment(char, s)
+    if (stage.func) questmsg(stage.func(char))
+    if (stage.intro) questmsg(stage.intro)
+    // may want option to end quest here
+    if (stage.finish) this.terminate(char, stage.finish)
     return true
   }
 
-
-  complete(char) { return this.terminate(char, quest.SUCCESS, "Quest completed") }
-  fail(char) { return this.terminate(char, quest.FAILED, "Quest failed") }
-  moot(char) { return this.terminate(char, quest.MOOT, "Quest now moot") }
+  complete(char) { return this.terminate(char, quest.SUCCESS) }
+  fail(char) { return this.terminate(char, quest.FAILED) }
+  moot(char) { return this.terminate(char, quest.MOOT) }
     
-  terminate(char, state, comment) {
+  terminate(char, state) {
     if (!char) char = player
     if (char[this.stateName] !== quest.ACTIVE) return false
     char[this.stateName] = state
-    this.comment(char, comment)
+    this.comment(char, quest.terminateComments[state])
     return true
   }
 
@@ -122,6 +142,14 @@ quest.get = function(name) {
   return quest.data.find(el => el.name === name || el.key === name)
 }
 
+
+quest.getActive = function() {
+  const l = []
+  for (const q of quest.data) {
+    if (player[q.stateName] === quest.ACTIVE) l.push(q)
+  }
+  return l
+}
 
 quest.listAll = function() {
   questmsg('All Quests')

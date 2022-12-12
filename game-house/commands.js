@@ -6,10 +6,7 @@
 const showMap = function() { return failedmsg(lang.no_map) }
 
 
-findCmd('MetaHint').script = function() {
-  metamsg("Hints can be found on {link:this page:" + folder + "/hints.html}, in the form of InvisiClues, so you can avoid seeing spoilers you do want to see. The page will open in a new tab, so will not affect your playing of the game.")
-  return world.SUCCESS_NO_TURNSCRIPTS
-},
+
 
 /*
 findCmd('MetaHelp').script = function() {

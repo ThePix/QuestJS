@@ -43,6 +43,8 @@ settings.roomTemplate = [
   "{ifNot:settings:playMode:play:{ifExists:currentLocation:todo:{class:todo:{show:currentLocation:todo}}}}",
 ]
 
+settings.hintInvisiClues = true
+
 settings.fluids = ['sand', 'water']
 settings.saveLoadExcludedAtts.push('silverSighting')
 

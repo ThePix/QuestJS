@@ -12,6 +12,7 @@ const lang = {
     // Regular Expressions for Commands
     
     // Meta commands
+    MetaUnfinish:/^unfinish?$/,
     MetaHello:/^(?:hello|hi|yo)$|^\?$/,
     MetaHelp:/^help$|^\?$/,
     MetaHint:/^(?:hint|clue)s?$/,
@@ -602,6 +603,7 @@ const lang = {
   transcript_already_on:"Transcript is already turned on.",
   transcript_already_off:"Transcript is already turned off.",
   transcript_finish:"To see the transcript, click {cmd:SCRIPT SHOW:here}.",
+  finish_options:"You might like to {cmd:UNFINISH THEN UNDO:UNDO} your last action, or {cmd:UNFINISH THEN RESTART:RESTART} (and perhaps load a saved game).",
   new_tab_failed:"I am unable to create a new tab. This is probably because your browser is blocking me! There may be a banner across the top of the screen where you can give permission. You will need to do the command again.",
   undo_disabled:"Sorry, UNDO is not enabled in this game.",
   undo_not_available:"There are no saved game-states to UNDO back to.",
@@ -711,6 +713,10 @@ const lang = {
     return world.SUCCESS_NO_TURNSCRIPTS;
   },
 
+
+  hintSheet:'Hint Sheet',
+  hintSheetIntro:"To use this hint sheet, start to read through the list of questions to see if there is one dealing with the place where you're stuck in the game. To decode a hint, substitute the numbers in the hint for the numbered words in the 'dictionary' at the bottom of the hint sheet. <i>To get back to your game, just go to its tab.</i>",
+  linkHintInvisiClues:"Hints can be found on {link:this page:" + folder + "/hints.html}, in the form of InvisiClues, so you can avoid seeing spoilers you do want to see. The page will open in a new tab, so will not affect your playing of the game.",
 
 
   transcriptScript:function() {
