@@ -1,4 +1,4 @@
-This is a full re-write of Quest, an interactive fiction app, to pure JavaScript. An experimental game can be found [here](http://textadventures.co.uk/games/view/48pkf40on0soigganjtatq/first-steps).
+This is a full re-write of Quest, an interactive fiction app, to pure JavaScript. An example game that was entered for IFcomp 2021 can be found [here]([http://textadventures.co.uk/games/view/48pkf40on0soigganjtatq/first-steps](https://textadventures.co.uk/games/view/idu7hlna7k2h24ib4ymmrg/the-house-on-highfield-lane)).
 
 ### A Successor to Quest 5
 
