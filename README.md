@@ -78,4 +78,4 @@ Here are some examples:
 
 ### Where do I learn more?
 
-Take a look at the [Wiki](https://github.com/ThePix/QuestJS/wiki) to see the full documentation.
+Take a look at the [Wiki](https://github.com/ThePix/QuestJS/wiki) to see the full documentation. You will find a tutorial that will explain everything from what you need to download, to how to publish your new game.
