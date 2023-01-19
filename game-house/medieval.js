@@ -371,7 +371,8 @@ createItem("Patch", NPC(false), {
     msg("{nv:npc:nod:true} his head.", {npc:this})
     return true
   },
-  testFollowTo:function(room) {
+  testFollowTo:function(exit) {
+    const room = w[exit.name]
     if (room && !room.noFollow) return true
     msg("Mandy realises Patch is no longer following her.")
     this.setLeader()
