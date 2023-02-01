@@ -325,6 +325,9 @@ const lang = {
   cannot_sell_here:"{nv:char:can't:true} sell {nm:item:the} here.",
 
 
+  // BACKDROP
+  default_scenery:"It's just part of the scenery, nothing to worry abot.",
+
   // FURNITURE
   sit_on_successful:"{nv:char:sit:true} on {nm:item:the}.",
   stand_on_successful:"{nv:char:stand:true} on {nm:item:the}.",
@@ -497,6 +500,7 @@ const lang = {
   default_examine:"{pv:item:be:true} just your typical, every day {nm:item}.",
   not_enough:"There {ifMoreThan:count:1:are:is} only {show:count} {nm:item}.",
   it_is_dark:"It is dark.",
+  abort_cmds:"Abandoning later commands",
   
   error:"Oh dear, I seem to have hit an error trying to handle that (F12 for more details).",
   

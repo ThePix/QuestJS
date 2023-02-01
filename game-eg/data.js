@@ -1,6 +1,42 @@
 "use strict";
 
-  
+
+
+
+
+createItem("wall", BACKSCENE(), { 
+  alias:"walls",
+})
+
+createItem("floor", BACKSCENE(), {
+  synonyms:["ground"],
+})
+
+createItem("ceiling", BACKSCENE(), {
+})
+
+
+
+
+
+
+
+setRegion('interior', {
+  smell:'There is a faint musty smell, with just a hint of polish.',
+  listen:'It is eerily quiet...',
+  floor:"The floor is wooden, and well-polished.",
+  wall:"The walls are all paneled in wood.",
+  ceiling:"The ceiling is white, with simple decorations along each side.",  
+})
+
+
+
+
+
+
+
+
+
 
 
 
@@ -46,6 +82,8 @@ createRoom("lounge", {
     {alias:['old settee', 'couch', 'sofa']},
     {alias:'rug', examine:'It might have been blue at one time. Maybe.'},
   ],
+  examine_wall:'A fine example of a feature wall.',
+  listen:'The clocks ticks...',
 })
 
 
@@ -84,6 +122,9 @@ util.changePOV(w.Buddy)
 
 
 
+
+
+
 createRoom("dining_room_on_stool", {
   desc:'Stood on a stool, in an old-fashioned room.',
   east:new Exit('lounge', {mapIgnore:true}),
@@ -105,23 +146,19 @@ createItem("book", TAKEABLE(), READABLE(true), {
   loc:"lounge",
   examine:"A leather-bound book.",
   read:function(options) {
-    if (cmdRules.isHeld(null, options)) {
-      if (options.char === w.Lara) {
-        msg ("'Okay.' Lara spends a few minutes reading the book.");
-        msg ("'I meant, read it to me.'");
-        msg ("'All of it?'");
-        msg ("'Quick summary.'");
-        msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
-      }
-      else {
-        msg ("It is not in a language {pv:char:understand}.", options)
-      }
-      parser.abort()
-      return true;
-    }          
-    else {
-      return false;
+    if (options.char.name !== this.loc) return falsemsg('{nv:char:do:true} not have {ob:item}.', options)
+      
+    if (options.char === w.Lara) {
+      msg ("'Okay.' Lara spends a few minutes reading the book.");
+      msg ("'I meant, read it to me.'");
+      msg ("'All of it?'");
+      msg ("'Quick summary.'");
+      msg ("'It is all about carrots. The basic gist is that all carrots should be given to me.' You are not entirely sure you believe her.")
     }
+    else {
+      msg ("It is not in a language {pv:char:understand}.", options)
+    }
+    return true;
   },
   lookinside:"The book has pages and pages of text, but you do not even recognise the alphabet.",
   watchedStringAttribute:'yellow',
@@ -646,6 +683,15 @@ createItem("rope", ROPE(3), {
 
 
 
+
+setRegion('outside', {
+  smell:'The air is fresh!',
+  listen:'You hear birds sing.',
+})
+
+
+
+
 createRoom("garden", {
   desc:"Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.",
   mapColour:'green',
@@ -1076,14 +1122,14 @@ createItem("Lara_carrots",
 );
 
 
-
+/*
 createItem("walls", {
   examine:"They're walls, what are you expecting?",
   regex:/^wall$/,
   scenery:true,
   isLocatedAt:function(loc) { return w[loc].room },
 })
-
+*/
 
 createItem("brick", COUNTABLE({lounge:7, dining_room:1}), {
   examine:"A brick is a brick.",

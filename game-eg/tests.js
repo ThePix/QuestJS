@@ -533,6 +533,15 @@ test.tests = function() {
   delete w.book.getDisplayName
 
 
+  test.title("Text processor 5c: list")
+  test.assertEqual("You can see Kyle.", processText("You can see {list:list}.", {list:[w.Kyle]}))
+  test.assertEqual("You can see book.", processText("You can see {list:list}.", {list:[w.book]}))
+  test.assertEqual("You can see a book and Kyle.", processText("You can see {list:list:a}.", {list:[w.book, w.Kyle]}))
+  test.assertEqual("The book, the jug and Kyle.", processText("{list:list:the:true}.", {list:[w.book, w.Kyle, w.jug]}))
+  test.assertEqual("The book, Kyle and the milk jug.", processText("{list:list:the:true}.", {list:[w.book, w.Kyle, 'the milk jug']}))
+
+
+
   test.title("Text processor 6: show");
   test.assertEqual("Kyle is a bear.", processText("{Kyle.alias} is a bear."));
   test.assertEqual("Kyle is a bear.", processText("{show:Kyle:alias} is a bear."));
@@ -873,8 +882,8 @@ test.tests = function() {
   test.assertCmd("look inside boots", "There's nothing to see inside.")
   test.assertCmd("look inside book", "The book has pages and pages of text, but you do not even recognise the alphabet.")
 
-  test.assertCmd("smell", "You can't smell anything here.")
-  test.assertCmd("listen", "You can't hear anything of note here.")
+  test.assertCmd("smell", "There is a faint musty smell, with just a hint of polish.")
+  test.assertCmd("listen", "The clocks ticks...")
   test.assertCmd("smell knife", "The knife has no smell.")
   test.assertCmd("listen to knife", "The knife is not making any noise.")
   test.assertCmd("read knife", "Nothing worth reading there.")
@@ -893,10 +902,23 @@ test.tests = function() {
   
   test.title("Concatenated commands")
   test.assertCmd("drop knife, and then get it", ["You drop the knife.", "You take the knife."]);
-  test.assertCmd("get book.read it.drop book", ["You take the book.", "It is not in a language you understand.", "Abandoning later commands: drop book"]);
+  w.book.old_read = w.book.read
+  w.book.read = function(options) {
+    if (this.isHeld()) {
+      msg ("It is not in a language {pv:char:understand}.", options)
+      parser.abort()
+      return true
+    }
+    else {
+      msg ("You don't have it.")
+      return false
+    }
+  },
   
+  test.assertCmd("get book.read it.drop book", ["You take the book.", "It is not in a language you understand.", "Abandoning later commands: drop book"]);
   test.assertCmd("drop book.read it.drop book", ["You drop the book.", "You don't have it.", "You don't have it."]);
   test.assertCmd("*drop book.read it.drop book", ["Comment: drop book.read it.drop book"]);
+  w.book.read = w.book.old_read
   
   
 
@@ -1137,7 +1159,7 @@ test.tests = function() {
   
   
   test.title("Wear/remove");
-  test.assertCmd("u", ["You head up.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west.",]);
+  test.assertCmd("u", ["You head up.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, some jeans, a jumpsuit, a shirt, some underwear and a wardrobe here.", "You can go down, in or west.",]);
   
   test.assertCmd("get all", ["Wardrobe: You can't take it.", "You take the underwear.", "You take the jeans.", "You take the shirt.", "You take the coat.", "You take the jumpsuit.", ]);
   test.assertCmd("wear underwear", "You put on the underwear.");
@@ -1534,7 +1556,7 @@ test.tests = function() {
   test.assertCmd("push 1", ["You press the button; the door closes and the lift heads to the first floor. The door opens again."]);
   test.assertEqual("bedroom", w.lift.getTransitDestLocation().name)
   test.assertEqual("button_1", w.lift.getTransitDestButton().name)
-  test.assertCmd("e", ["You head east.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, your jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
+  test.assertCmd("e", ["You head east.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, your jeans, a jumpsuit, a shirt, some underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east."]);
   w.lift.afterTransitMove = function(toLoc, fromLoc) { msg("MOVING to " + toLoc + " from " + fromLoc); };
   test.assertCmd("push 1", ["You press the button; nothing happens."]);
@@ -1585,7 +1607,7 @@ test.tests = function() {
   
   
   test.title("pre-rope");
-  test.assertCmd("o", ["You head out.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, your jeans, a jumpsuit, a shirt, underwear and a wardrobe here.", "You can go down, in or west."]);
+  test.assertCmd("o", ["You head out.", "The bedroom", "A large room, with a big bed and a wardrobe.", "You can see a coat, your jeans, a jumpsuit, a shirt, some underwear and a wardrobe here.", "You can go down, in or west."]);
   test.assertCmd("d", ["You head down.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", "You can see a book, a book, a book, seven bricks, a canteen, a cardboard box (containing some boots), a coin, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and a small key here.", "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
   

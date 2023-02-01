@@ -531,6 +531,7 @@ util.returnAndLog = function(val, s) {
 if (settings.storage) {
   settings.placeholderLocations.push('_storage')
   rpg.listStowed = function() { return scopeBy(el => el.loc === '_storage') }
+  lang.exit_list[14] = {name:'Retrieve', abbrev:'R', type:'nocmd', symbol:'fa-suitcase'}
 }
 
 

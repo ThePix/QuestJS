@@ -22,7 +22,7 @@ TAKEABLE_DICTIONARY.stow = function(options) {
   
 TAKEABLE_DICTIONARY.retrieve = function(options) {
   if (this.loc !== "_storage") return falsemsg(lang.notStowed, options)
-  if (this.testRetrieve && !this.testRetrieve(options)) return false
+  if (player.unableToRetrieveFromStorage) return failedmsg(player.unableToRetrieveFromStorage)
   msg(this.msgRetrieve || lang.msgRetrieve, options)
   this.moveToFrom(options, "name", "_storage")
   return true
@@ -125,7 +125,6 @@ new Cmd('Retrieve', {
 })
 
 
-lang.exit_list[14] = {name:'Retrieve', abbrev:'R', type:'nocmd', symbol:'fa-suitcase'}
 
 new Cmd('RetrieveMenu', {
   npcCmd:true,
@@ -135,9 +134,10 @@ new Cmd('RetrieveMenu', {
   ],
   script:function(objects) {
     const objs = rpg.listStowed()
-    log(document.querySelector("#dialog-button").innerHTML)
-    log(objs)
+    //log(document.querySelector("#dialog-button").innerHTML)
+    //log(objs)
     if (objs.length === 0) return failedmsg(lang.nothingStored)
+    if (player.unableToRetrieveFromStorage) return failedmsg(player.unableToRetrieveFromStorage)
     
 
     let html = ''
@@ -170,8 +170,9 @@ new Cmd('RetrieveMenu', {
     document.body.querySelector('#dialog-content').innerHTML = html
     io.disable()
     const diag = document.querySelector("#dialog")
-    settings.startingDialogOnClick = function() {
-      settings.startingDialogEnabled = true
+    document.querySelector("#dialog-button").onclick = function() {
+      //log('clicked')
+      //settings.startingDialogEnabled = true
       const nodes = document.querySelectorAll('#dialog-content input[type=checkbox]')
       const objs = []
       for (const node of nodes) {
@@ -181,19 +182,23 @@ new Cmd('RetrieveMenu', {
         }
       }
       if (objs.length) {
-        let flag = false
         for (const o of objs) {
-          flag = true
-          o.retrieve({char:player, item: o})
+          o.moveToFrom({char:player, item:o}, "name", "_storage")
         }
-        if (flag) world.endTurn(world.SUCCESS)
+        msg(lang.msgBulkRetrieve, {char:player, list:objs})
+        world.endTurn(world.SUCCESS)
       }
+      document.querySelector("#dialog").style.display = 'none'
+      io.enable()
       if (settings.textInput) document.querySelector('#textbox').focus()
     }
     diag.style.width = (80 + 120 * noCols) + 'px'
     diag.style.display = 'block'
-    diag.show()
-    log(document.querySelector("#dialog-button").innerHTML)
+    diag.style.position = 'fixed'
+    diag.style.top =  '50%'
+    diag.style.left = '50%'
+    diag.style.transform = 'translate(-50%, -50%)'
+    //log(document.querySelector("#dialog-button").innerHTML)
     return world.SUCCESS_NO_TURNSCRIPTS
   },
 })

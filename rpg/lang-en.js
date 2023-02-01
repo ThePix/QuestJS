@@ -46,6 +46,7 @@ lang.cannotAttack = "{nv:target:be:true} not able to make an attack right now."
 
 lang.msgStow = "{nv:char:stow:true} {nm:item:the} in {pa:char} pack."
 lang.msgRetrieve = "{nv:char:retrieve:true} {nm:item:the} from {pa:char} pack."
+lang.msgBulkRetrieve = "{nv:char:retrieve:true} {list:list:the} from {pa:char} pack."
 lang.targeting = "{nv:char:target:true} {nm:target:the}."
 lang.learnSpell = "You learn {i:{show:spell:name}} from {nm:item:the}."
 lang.attacking = "{nv:attacker:attack:true} {nm:target:the}."
