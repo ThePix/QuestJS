@@ -693,7 +693,7 @@ setRegion('outside', {
 
 
 createRoom("garden", {
-  desc:"Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.",
+  desc:"Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east.",
   mapColour:'green',
   east:new Exit("conservatory"),
   west:new Exit("road"),
@@ -701,10 +701,17 @@ createRoom("garden", {
   visibleFromPrefix:"Through the window you can see",
 })
 
-createItem("hook", { 
+createItem("hook", {
   loc:"garden", 
-  scenery:true,
+  scenery:'There is a hook on the wall.',
   examine:"A rusty hook, on the wall of the house.",
+  attachable:true,
+})
+
+createItem("flower", TAKEABLE(), {
+  loc:"garden", 
+  scenery:'A flower seems to be winking at you.',
+  examine:"A sunflower you think.",
   attachable:true,
 })
 

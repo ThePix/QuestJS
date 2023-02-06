@@ -265,7 +265,7 @@ settings.levelUp = function() {
 
 
 
-//settings.startingDialogEnabled  = true;
+settings.startingDialogEnabled  = true;
 
 settings.maxPoints = 12
 settings.skills = [

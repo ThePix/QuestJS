@@ -1516,8 +1516,19 @@ test.tests = function() {
   
   test.assertCmd("w", ["You head west.", "The lounge", "A smelly room with an old settee and a tv. There is a tatty rug on the floor.", /^You can see/, "You can go east, south, up or west."]);
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", /You can see/, "You can go north or west."]);
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur here.", "You can go east or west."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall. A flower seems to be winking at you.", "You can see Arthur here.", "You can go east or west."]);
   
+
+
+  test.title("Scenery descriptions")
+  test.assertCmd("x flower", "A sunflower you think.")
+  test.assertCmd("get it", "You take the flower.")
+  test.assertCmd("l", ["The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur here.", "You can go east or west."]);
+  test.assertCmd("drop it", "You drop the flower.")
+  test.assertCmd("l", ["The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur and a flower here.", "You can go east or west."]);
+  
+  
+
   
   test.title("Agendas");
   test.assertCmd("talk to arthur", ["'Hey, wake up,' you say to Arthur.", "'What?' he says, opening his eyes. 'Oh, it's you.'"]);
@@ -1637,7 +1648,7 @@ test.tests = function() {
   test.assertEqual(false, w.rope.isUltimatelyHeldBy(w.lounge))
 
   test.title("rope - room two");
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate and Lara here.", "You can go east or west.", "The rope unwinds behind you."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate, a flower and Lara here.", "You can go east or west.", "The rope unwinds behind you."]);
   test.assertEqual(['conservatory', 'garden', 'Buddy'], w.rope.locs)
   test.assertCmd("tie rope to crate", ["That is not something you can attach the rope to."])
   test.assertCmd("untie rope from crate", ["The rope is not attached to the crate."])
@@ -1666,7 +1677,7 @@ test.tests = function() {
   test.assertCmd("s", ["You head south.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west.", "You wind in the rope."]);
   test.assertCmd("x rope", ["The rope is about 40' long. One end is held by you. The other end heads into the garden."])
   test.assertEqual(['Buddy', 'conservatory', 'garden'], w.rope.locs)
-  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate, Lara and a rope here.", "You can go east or west.", "You wind in the rope."]);
+  test.assertCmd("w", ["You head west.", "The garden", "Very overgrown. The garden opens onto a road to the west, whilst the conservatory is east. There is a hook on the wall.", "You can see Arthur, a crate, a flower, Lara and a rope here.", "You can go east or west.", "You wind in the rope."]);
   test.assertEqual(['Buddy', 'garden'], w.rope.locs)
   test.assertCmd("untie rope", ["You detach the rope from the hook."])
   test.assertEqual(['Buddy'], w.rope.locs)
