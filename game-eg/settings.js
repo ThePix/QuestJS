@@ -20,6 +20,8 @@ settings.libraries.push('zone')
 settings.styleFile = 'style'
 
 
+//settings.sceneryOnNewLine = true
+
 //settings.libraries.push('item_links')
 
 //settings.localStorageDisabled = true

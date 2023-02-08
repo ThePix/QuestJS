@@ -592,6 +592,13 @@ const lang = {
   sl_bad_format:"Improperly formatted file. Looks like this might be for a game called \"{show:title}\"?",
 
 
+  // Achievements
+  
+  ach_none_yet:"No achievements yet!",
+  ach_list_intro:"You got {if:count:1:this single, solitary achievement:these achievements}!",
+  ach_list_item:"{show:text} ({date:date})",
+  ach_got_one:"You got an achievement!|{show:text}",
+
 
   spoken_on:"Game mode is now 'spoken'. Type INTRO to hear the introductory text.",
   spoken_off:"Game mode is now 'unspoken'.",
