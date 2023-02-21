@@ -472,7 +472,7 @@ function output(data) {
 
     let s = ''
     for (const el of data) s += el.to_js()
-    document.querySelector('#comment').innerHTML = data[0]._
+    document.querySelector('#comment').innerHTML = data.length > 0 ? data[0]._ : 'None found'
     document.querySelector('#text-out').value = s
   } catch(e) {
     if (document.querySelector('#text-in').value.length === 0) {
@@ -567,7 +567,7 @@ class Command {
   }
 
   to_js() {
-    let s = "\n\ncommands.unshift(new Cmd('" + this.name + "', {\n"
+    let s = "\n\nnew Cmd('" + this.name + "', {\n"
     s += "  // CONVERTER: Check this!!!\n"
     s += "  regex:/(?:" + this.pattern + ")"
     if (this.hasObjectInPattern) s += " (.+)"
@@ -578,7 +578,7 @@ class Command {
     s += "  script:"
     s += convert_script("      " + this.script, ['objects'], 2)
     s += ",\n"
-    s += "}))"
+    s += "})"
     return s
   }
 }
