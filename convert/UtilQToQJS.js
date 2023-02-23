@@ -16,23 +16,41 @@ const jsReplacements = [
   {asl: / or /, js: ' || '},
   {asl: /\bnot /, js: '!'},
   {asl: / \<\> /, js: ' !== '},
-  {asl: /do ?\(([a-zA-Z0-9_.]+), ([a-zA-Z_]+)\)/, js: '$1[$2]()'},
-  {asl: /do ?\(([a-zA-Z0-9_.]+), ~\)/, js: '$1[~]()'},
+  {asl: /do ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z_]+)\)/, js: '$1[$2]()'},
+  {asl: /do ?\(([a-zA-Z0-9_ .]+?), ~\)/, js: '$1[~]()'},
   {asl: /foreach \(([a-zA-Z0-9_]+), ([a-zA-Z0-9_.()]+)\)/, js: 'for (let $1 of $2)'},
   {asl: /otherwise/, js: 'else'},
-  
-  {asl: /game.pov/, js: 'player'},
 
-  {asl: /HasString ?\(([a-zA-Z0-9_.]+), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "string"'},
-  {asl: /HasInt ?\(([a-zA-Z0-9_.]+), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "number"'},
-  {asl: /HasBoolean ?\(([a-zA-Z0-9_.]+), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "boolean"'},
-  {asl: /HasScript ?\(([a-zA-Z0-9_.]+), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "function"'},
-  {asl: /GetBoolean ?\(([a-zA-Z0-9_.]+), ([a-zA-Z0-9_]+)\)/g, js: '$1[$2]'},
-  {asl: /HasString ?\(([a-zA-Z0-9_.]+), ~\)/g, js: 'typeof $1[~] === "string"'},
-  {asl: /HasInt ?\(([a-zA-Z0-9_.]+), ~\)/g, js: 'typeof $1[~] === "number"'},
-  {asl: /HasBoolean ?\(([a-zA-Z0-9_.]+), ~\)/g, js: 'typeof $1[~] === "boolean"'},
-  {asl: /HasScript ?\(([a-zA-Z0-9_.]+), ~\)/g, js: 'typeof $1[~] === "function"'},
-  {asl: /GetBoolean ?\(([a-zA-Z0-9_.]+), ~\)/g, js: '$1[~]'},
+  {asl: /HasString ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "string"'},
+  {asl: /HasInt ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "number"'},
+  {asl: /HasBoolean ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "boolean"'},
+  {asl: /HasScript ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z0-9_]+)\)/g, js: 'typeof $1[$2] === "function"'},
+  {asl: /GetBoolean ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z0-9_]+)\)/g, js: '$1[$2]'},
+  {asl: /HasString ?\(([a-zA-Z0-9_ .]+?), ~\)/g, js: 'typeof $1[~] === "string"'},
+  {asl: /HasInt ?\(([a-zA-Z0-9_ .]+?), ~\)/g, js: 'typeof $1[~] === "number"'},
+  {asl: /HasBoolean ?\(([a-zA-Z0-9_ .]+?), ~\)/g, js: 'typeof $1[~] === "boolean"'},
+  {asl: /HasScript ?\(([a-zA-Z0-9_ .]+?), ~\)/g, js: 'typeof $1[~] === "function"'},
+  {asl: /GetBoolean ?\(([a-zA-Z0-9_ .]+?), ~\)/g, js: '$1[~]'},
+  
+  
+  //SetObjectFlagOff (line of wire, "lineclosed")
+  {asl: /SetObjectFlagOn ?\(([a-zA-Z0-9_ .]+?), \"([a-zA-Z0-9_]+)\"\)/g, js: '$1.$2 = true'},
+  {asl: /SetObjectFlagOff ?\(([a-zA-Z0-9_ .]+?), \"([a-zA-Z0-9_]+)\"\)/g, js: '$1.$2 = false'},
+  {asl: /MoveObject ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z0-9_]+)\)/g, js: '$1.moveToFrom({char:player, item:$1}, $2'},
+  {asl: /AddToInventory ?\(([a-zA-Z0-9_ .]+?)\)/g, js: '$1.moveToFrom({char:player, item:$1}, player'},
+  {asl: /IncreaseScore ?\((0-9]+?)\)/g, js: 'player.score += $1'},
+  {asl: /DecreaseScore ?\((0-9]+?)\)/g, js: 'player.score -= $1'},
+  
+  {asl: /ScopeReachable ?\(\)/g, js: 'scopeReachable()'},
+  {asl: /ScopeReachableForRoom ?\(([a-zA-Z0-9_ .]+?)\)/g, js: 'scopeBy(o => o.isAtLoc($1) || o.isAtLoc(player))'},
+  {asl: /ScopeReachableNotHeldForRoom ?\(([a-zA-Z0-9_ .]+?)\)/g, js: 'scopeBy(o => o.isAtLoc($1))'},
+  {asl: /ScopeInventory ?\(\)/g, js: 'scopeBy(o => o.isHeld())'},
+  {asl: /Got ?\(([a-zA-Z0-9_ .]+?)\)/g, js: '$1.isHeld()'},
+  
+  {asl: /EnableTimer ?\(([a-zA-Z0-9_ .]+?)\)/g, js: '$1.eventActive = true'},
+  {asl: /DisableTimer ?\(([a-zA-Z0-9_ .]+?)\)/g, js: '$1.eventActive = false'},
+  
+  {asl: /    finish\b/g, js: '    io.finish()'},
 
 
   {asl: /if \(([a-zA-Z_]+)\.parent = ([a-zA-Z_]+)\)/, js: 'if ($1.isAtLoc("$2"))'},
@@ -40,8 +58,8 @@ const jsReplacements = [
   {asl: /([a-zA-Z_.]+) = $1 \+ /g, js: '$1 += '},
   {asl: /([a-zA-Z_.]+) = $1 \- /g, js: '$1 -= '},
 
-  {asl: /GetDisplayName ?\(([a-zA-Z0-9_.]+)\)/g, js: 'lang.getName($1,{})'},
-  {asl: /GetDisplayAlias ?\(([a-zA-Z0-9_.]+)\)/g, js: 'lang.getName($1,{})'},
+  {asl: /GetDisplayName ?\(([a-zA-Z0-9_ .]+?)\)/g, js: 'lang.getName($1,{})'},
+  {asl: /GetDisplayAlias ?\(([a-zA-Z0-9_ .]+?)\)/g, js: 'lang.getName($1,{})'},
   {asl: /([a-zA-Z0-9_]+)\.alias/g, js: 'lang.getName($1,{})'},
   {asl: /([a-zA-Z0-9_]+)\.article/g, js: '$1.pronouns.objective'},
   {asl: /([a-zA-Z0-9_]+)\.gender/g, js: '$1.pronouns.subjective'},
@@ -167,6 +185,11 @@ const q5 = ["look", "description",
   "nomovement", "nomanipulation", "novision", "nosound", "novoice",
   "healedmsg",
   "alt",
+  "dropmsg", "takemsg", "ondrop", "ontake",
+  "openmsg", "closemsg", "onopen", "onclose",
+  "lockmsg", "unlockmsg", "onlock", "onunlock",
+  "switchoffmsg", "switchonmsg", "onswitchoff", "onswitchon",
+  "displayverbs", "inventoryverbs",
 ]
 const q6 = ["examine", "desc",
   "beforeFirstEnter", "beforeEnter", "afterEnter", "afterFirstEnter", "onExit",
@@ -174,6 +197,11 @@ const q6 = ["examine", "desc",
   "nomovement", "nomanipulation", "novision", "nosound", "novoice",
   "healedmsg",
   "synonyms",
+  "msgDrop", "msgTake", "afterDrop", "afterTake",
+  "msgOpen", "msgClose", "afterOpen", "afterClose",
+  "msgLock", "msgUnlock", "afterLock", "afterUnlock",
+  "msgSwitchOff", "msgSwitchOn", "afterSwitchOff", "afterSwitchOn",
+  "hereVerbs", "heldVerbs",
 ]
 
 
@@ -268,7 +296,7 @@ const convert_line = function(s, indent, objectList, variables) {
 
 
 
-const convert_script = function(s, variables = [], indent) {
+const convert_script = function(s, variables = [], indent, firstLine) {
   const objectList = []
   for (const el of objects) {
     objectList.push({regex: /\b#{el.name}\b/, w_name: "w." + el.name, name: el.name })
@@ -276,6 +304,7 @@ const convert_script = function(s, variables = [], indent) {
 
   const code = s.startsWith('<![CDATA[') ? s.substring(9, -1) : s
   const lines = ["function(" + variables.join(', ') + ") {", "    // CONVERTER: Check this code!!!"]
+  if (firstLine) lines.push(firstLine)
   let varFlag = false
   let inCase = false
 
@@ -323,6 +352,7 @@ const convert_script = function(s, variables = [], indent) {
 const objects = []
 const functions = []
 const commands = []
+const timers = []
 const settings = []
 const styles = []
   
@@ -364,14 +394,23 @@ const iterate = function(el, parent) {
     if (thing.tagName === "game") {
       new Setting(thing, parent)
     }
+    else if (thing.tagName === "verb") {
+      new Verb(thing, parent)
+    }
     else if (thing.tagName === "command") {
       new Command(thing, parent)
+    }
+    else if (thing.tagName === "timer") {
+      new Timer(thing, parent)
     }
     else if (thing.tagName === "function") {
       new Function(thing)
     }
     else if (thing.tagName === "object") {
       new Obj(thing, parent)
+    }
+    else if (['type', 'delegate'].includes(thing.tagName)) {
+      // not supported 
     }
     else if (thing.tagName === "exit") {
       if (!parent.addExit) {
@@ -460,6 +499,7 @@ function output(data) {
   objects.length = 0
   functions.length = 0
   commands.length = 0
+  timers.length = 0
   settings.length = 0
   styles.length = 0
   
@@ -472,7 +512,7 @@ function output(data) {
 
     let s = ''
     for (const el of data) s += el.to_js()
-    document.querySelector('#comment').innerHTML = data.length > 0 ? data[0]._ : 'None found'
+    document.querySelector('#comment').innerHTML = data[0]._
     document.querySelector('#text-out').value = s
   } catch(e) {
     if (document.querySelector('#text-in').value.length === 0) {
@@ -516,7 +556,7 @@ class Setting {
       s += "settings.description = " + this.description + "\n"
     }
     if (this.start) {
-      s += "settings.setup = script:"
+      s += "settings.setup = "
       s += convert_script("      " + this.start.value, [], 0)
       s += ",\n\n"
     }
@@ -551,33 +591,110 @@ class Style {
 }
 
 
+function resolvePattern(o) {
+  if (o.pattern.match('#object')) {
+    o.pattern = o.pattern.replace(/#object\d?#/g, '(.+)')
+    o.hasObjectInPattern = true
+  }
+  if (o.pattern.match('#text')) {
+    o.pattern = o.pattern.replace(/#text\d?#/g, '(.+)')
+    o.hasObjectInPattern = true
+    o.patternIsText = true
+  }
+  o.pattern = o.pattern.replace(/;/g, '|')
+  o.pattern = o.pattern.replace(/\?/g, '\\?')  
+}
+
+
+const cmdHelp = 'Paste this into the code.js file, together with the functions. If there is nothing here, then you have no custom commands. Check each script! Quest 5 usually uses "object" as the variable, and the convert assumes that is always the case. If a command uses more than one object (or text) you will need to add them to the "objects" attribute and change the variables in the script.'
 
 class Command {
   constructor(obj) {
-    this.name = obj.getAttribute("name").toString().replace(/ /g, '_').replace(/\W/g, '')
+    this.name = obj.getAttribute("name") ? obj.getAttribute("name").toString().replace(/ /g, '_').replace(/\W/g, '') : 'UnnamedCommand'
     iterate(obj, this)
-    if (this.pattern.match('#object')) {
-      this.pattern = this.pattern.replace(/#object\d?#/g, '(.+)').replace(/;/g, '|')
-      this.hasObjectInPattern
-    }
-    this.pattern = this.pattern.replace(/;/g, '|')
-    this.pattern = this.pattern.replace(/\?/g, '\\?')
-    this._ = 'Paste this into the code.js file, together with the functions. If there is nothing here, then you have no custom commands. Check each script; Quest 5 usually uses "object" as the variable, you will probably need to change that to objects[0][0] or add "const object = objects[0][0]" at the top of the script.'
+    resolvePattern(this)
+    this._ = cmdHelp
     commands.push(this)
   }
 
   to_js() {
     let s = "\n\nnew Cmd('" + this.name + "', {\n"
-    s += "  // CONVERTER: Check this!!!\n"
     s += "  regex:/(?:" + this.pattern + ")"
-    if (this.hasObjectInPattern) s += " (.+)"
+    if (!this.hasObjectInPattern) s += " (.+)"
+    s += "$/,\n"
+    s += "  objects:[\n"
+    if (this.patternIsText) {
+      s += "    {special:'text'},\n"
+    }
+    else {
+      s += "    {scope:parser.isHere},\n"
+    }
+    s += "  ],\n"
+    s += "  script:"
+    s += convert_script("      " + this.script, ['objects'], 2, 'const object = objects[0][0]')
+    s += ",\n"
+    s += "})"
+    return s
+  }
+}
+
+
+/*
+  <verb name="speak">
+    <pattern>speak to #object#; speak #object#; talk to #object#; talk #object#</pattern>
+    <property>speak</property>
+    <defaulttemplate>DefaultSpeakTo</defaulttemplate>
+  </verb>
+
+*/
+class Verb {
+  constructor(obj) {
+    this.name = obj.getAttribute("name") ? obj.getAttribute("name").toString().replace(/ /g, '_').replace(/\W/g, '') : 'UnnamedVerb'
+    iterate(obj, this)
+    resolvePattern(this)
+    if (obj.getAttribute("defaultexpression")) {
+      this.defmsg = obj.getAttribute("defaultexpression").toString()
+    }
+    this.attName = obj.getAttribute("property") ? obj.getAttribute("property").toString() : this.name
+    this._ = cmdHelp
+    commands.push(this)
+  }
+
+  to_js() {
+    let s = "\n\nnew Cmd('" + this.name + "', {\n"
+    s += "  regex:/(?:" + this.pattern + ")"
+    if (!this.hasObjectInPattern) s += " (.+)"
     s += "$/,\n"
     s += "  objects:[\n"
     s += "    {scope:parser.isHere},\n"
     s += "  ],\n"
-    s += "  script:"
+    s += '  attName:"' + this.attName + '",\n'
+    s += '  defmsg:"' + this.defmsg + '",\n'
+    s += "})"
+    return s
+  }
+}
+
+
+
+
+
+class Timer {
+  constructor(obj) {
+    this.name = obj.getAttribute("name") ? obj.getAttribute("name").toString().replace(/ /g, '_').replace(/\W/g, '') : 'UnnamedVerb'
+    iterate(obj, this)
+    this._ = 'Paste this into the data.js file, together with the objects. If there is nothing here, then you have no timers. Check each script! '
+    this.number = timers.length
+    timers.push(this)
+  }
+
+  to_js() {
+    let s = "\n\ncreateItem('event" + this.number + "', {\n"
+    s += "  eventScript:"
     s += convert_script("      " + this.script, ['objects'], 2)
     s += ",\n"
+    s += '  eventPeriod:"' + this.interval + '",\n'
+    s += '  eventActive:"' + (this.enabled ? 'true' : 'false') + '",\n'
     s += "})"
     return s
   }
