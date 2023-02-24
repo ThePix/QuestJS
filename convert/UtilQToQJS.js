@@ -270,11 +270,13 @@ const convert_line = function(s, indent, objectList, variables) {
   }
   
   // equals
-  if (code.match(/^\s*(else|if)/)) {
-    code = code.replace(" = ", " === ")
-    code = code.replace(" == ", " === ")
-    code = code.replace(" != ", " !== ")
-    code = code.replace(" <> ", " !== ")
+  if (s.match(/^\s*(else|if)/)) {
+    code = code.replace(/ = /g, " === ")
+    code = code.replace(/ == /g, " === ")
+    code = code.replace(/ != /g, " !== ")
+    code = code.replace(/ <> /g, " !== ")
+    code = code.replace(/ and /g, " && ")
+    code = code.replace(/ or /g, " || ")
   }
   
   // Any new variables here?
@@ -420,7 +422,7 @@ const iterate = function(el, parent) {
       }
       parent.addExit(thing)
     }
-    else if (thing.tagName === "inherit") {
+    else if (thing.tagName === "inherit" && parent.templates) {
       const typeName = ary.shift()
       parent.templates.push(typeName)
     }
