@@ -666,7 +666,7 @@ class Verb {
     if (!this.hasObjectInPattern) s += " (.+)"
     s += "$/,\n"
     s += "  objects:[\n"
-    s += "    {scope:parser.isHere},\n"
+    s += "    {scope:parser.isPresent},\n"
     s += "  ],\n"
     s += '  attName:"' + this.attName + '",\n'
     s += '  defmsg:"' + this.defmsg + '",\n'
