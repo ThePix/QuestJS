@@ -1684,6 +1684,15 @@ test.tests = function() {
   test.assertCmd("drop rope", ["You drop the rope."])
 
 
+
+  test.title("Back scene")
+  test.assertCmd("x sky", "The sky is blue.")
+  w.garden.addendum_examine_sky = 'A cloud is obscuring the sun.'
+  test.assertCmd("x sky", "The sky is blue. A cloud is obscuring the sun.")
+  w.garden.examine_sky = 'The sky is green.'
+  test.assertCmd("x sky", "The sky is green. A cloud is obscuring the sun.")
+  test.assertCmd("smell", "The air is fresh!")
+
   
   
   test.title("Get all (nothing)");

@@ -36,8 +36,8 @@ const jsReplacements = [
   //SetObjectFlagOff (line of wire, "lineclosed")
   {asl: /SetObjectFlagOn ?\(([a-zA-Z0-9_ .]+?), \"([a-zA-Z0-9_]+)\"\)/g, js: '$1.$2 = true'},
   {asl: /SetObjectFlagOff ?\(([a-zA-Z0-9_ .]+?), \"([a-zA-Z0-9_]+)\"\)/g, js: '$1.$2 = false'},
-  {asl: /MoveObject ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z0-9_]+)\)/g, js: '$1.moveToFrom({char:player, item:$1}, $2'},
-  {asl: /AddToInventory ?\(([a-zA-Z0-9_ .]+?)\)/g, js: '$1.moveToFrom({char:player, item:$1}, player'},
+  {asl: /MoveObject ?\(([a-zA-Z0-9_ .]+?), ([a-zA-Z0-9_]+)\)/g, js: '$1.moveToFrom({char:player, item:$1}, $2)'},
+  {asl: /AddToInventory ?\(([a-zA-Z0-9_ .]+?)\)/g, js: '$1.moveToFrom({char:player, item:$1}, player)'},
   {asl: /IncreaseScore ?\((0-9]+?)\)/g, js: 'player.score += $1'},
   {asl: /DecreaseScore ?\((0-9]+?)\)/g, js: 'player.score -= $1'},
   

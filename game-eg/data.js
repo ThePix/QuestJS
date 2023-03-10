@@ -15,6 +15,9 @@ createItem("floor", BACKSCENE(), {
 createItem("ceiling", BACKSCENE(), {
 })
 
+createItem("sky", BACKSCENE(), {
+})
+
 
 
 
@@ -687,6 +690,7 @@ createItem("rope", ROPE(3), {
 setRegion('outside', {
   smell:'The air is fresh!',
   listen:'You hear birds sing.',
+  sky:'The sky is blue.',
 })
 
 
