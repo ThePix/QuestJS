@@ -969,16 +969,16 @@ createItem("Lara", NPC(true), {
       msg:"'That's not a carrot,' Lara points out.",
     },
   ],
-  getAgreementTake:function(item) {
-    if (item === w.brick) {
+  getAgreementTake:function(options) {
+    if (options.item === w.brick) {
       msg("'I'm not picking up any bricks,' says Lara indignantly.")
       return false
     }
     return true
   },
-  getAgreementGo:function(ex) {
+  getAgreementGo:function(options) {
     if (!this.happy) {
-      msg("'I'm not going " + ex.dir + ",' says Lara indignantly. 'I don't like that room.'")
+      msg("'I'm not going " + options.exit.dir + ",' says Lara indignantly. 'I don't like that room.'")
       return false
     }
     return true

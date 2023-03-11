@@ -221,6 +221,7 @@ const GENERIC = function() {
       return false
     },
     examine:function() {
+      if (!world.isCreated) return
       const room = w[player.loc]
       if (typeof room['examine_' + this.alias] === 'function') {
         room['examine_' + this.alias]()
@@ -278,6 +279,7 @@ createItem("generic_panelling", GENERIC(), {
     return zones[w[loc].zone].panelling || w[loc].panelling
   },
   examine:function() {
+    if (!world.isCreated) return
     if (!w.generic_panelling.examinedIn) {
       w.generic_panelling.examinedIn = currentLocation.name
       w.wooden_panel.loc = currentLocation.name

@@ -910,9 +910,9 @@ createItem("tiny_man", NPC(false), {
     msg("'Follow me,' says Mandy to {nm:npc:the}.", {npc:obj})
     return falsemsg("'If it's all the same to you, I'll stay here.'")
   },
-  getAgreement:function(verb, item) {
+  getAgreement:function(verb, options) {
    if (verb !== 'Repair') return falsemsg("'Sorry, lady-giant, I've got to much to do here. In fact I best get on.'")
-    if (item !== w.boots && item !== w.tiny_shoes) return falsemsg("'Sorry, lady-giant, I can do shoes, maybe boots at a push, but... No, not that.'")
+    if (options.item !== w.boots && options.item !== w.tiny_shoes) return falsemsg("'Sorry, lady-giant, I can do shoes, maybe boots at a push, but... No, not that.'")
     return true
   },
   take:function() {

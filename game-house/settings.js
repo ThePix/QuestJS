@@ -1,6 +1,6 @@
 "use strict"
 
-settings.playMode = "play"
+settings.playMode = "dev"
 
 settings.title = "The House on Highfield Lane"
 settings.author = "Andy Joel"
