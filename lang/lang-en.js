@@ -83,6 +83,7 @@ const lang = {
     Remove2:/^take (?:my |your |his |her |)(.+) off$/,
     Read:/^(?:read|r) (.+)$/,
     SmellItem:/^(?:smell|sniff) (.+)$/,
+    TasteItem:/^(?:taste|lick|tongue) (.+)$/,
     ListenToItem:/^(?:listen to|listen) (.+)$/,
     Purchase:/^(?:purchase|buy) (.+)$/,
     Sell:/^(?:sell) (.+)$/,
@@ -399,6 +400,7 @@ const lang = {
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
   npc_dead:"{nv:char:be:true} dead.",
+  search_npc_failure:"{nv:char:suspect:true} {nv:item:will} not appreciate {ob:char} going through {pa:item} pockets.",
 
 
   // BUTTON
@@ -464,6 +466,7 @@ const lang = {
   cannot_smash:"{nv:item:be:true} not something {nv:char:can} break.",
   cannot_turn:"{nv:item:be:true} not something {nv:char:can} turn.",
   cannot_look_out:"Not something {nv:char:can} look out of.",
+  cannot_taste:"It is not a good idea to go round licking everything!",
   cannot_smell:"{nv:item:have:true} no smell.",
   cannot_listen:"{nv:item:be:true} not making any noise.",
 
@@ -485,7 +488,7 @@ const lang = {
   // General command fails
   no_smell:"{pv:char:can't:true} smell anything here.",
   no_listen:"{pv:char:can't:true} hear anything of note here.",
-  nothing_there:"{nv:char:be:true} sure there's nothing there.",
+  nothing_there:"{nv:char:be:true} sure there is nothing there.",
   nothing_inside:"There's nothing to see inside.",
   not_open:"You have to open it first.",
   it_is_empty:"{pv:container:be:true} empty.",
@@ -614,7 +617,7 @@ const lang = {
   transcript_already_on:"Transcript is already turned on.",
   transcript_already_off:"Transcript is already turned off.",
   transcript_finish:"To see the transcript, click {cmd:SCRIPT SHOW:here}.",
-  finish_options:"You might like to {cmd:UNFINISH THEN UNDO:UNDO} your last action, or {cmd:UNFINISH THEN RESTART:RESTART} (and perhaps load a saved game).",
+  finish_options:"You might like to {cmd:UNFINISH:UNDO} your last action, or {cmd:RESTART:RESTART} (and perhaps load a saved game).",
   new_tab_failed:"I am unable to create a new tab. This is probably because your browser is blocking me! There may be a banner across the top of the screen where you can give permission. You will need to do the command again.",
   undo_disabled:"Sorry, UNDO is not enabled in this game.",
   undo_not_available:"There are no saved game-states to UNDO back to.",
