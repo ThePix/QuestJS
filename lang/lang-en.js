@@ -62,6 +62,7 @@ const lang = {
 
     // Misc
     Wait:/^wait$|^z$/,
+    Climb:/^climb$/,
     Smell:/^smell$|^sniff$/,
     Listen:/^listen$/,
     PurchaseFromList:/^buy$|^purchase$/,
@@ -111,6 +112,9 @@ const lang = {
       /^(?:unlock) (.+) (?:with|using) (.+)$/,
       {regex:/^(?:use|with|using) (.+?) (?:to unlock|unlock) (.+)$/, mod:{reverse:true}},
     ],
+    
+    ClimbUpVerb:/^(?:climb up|climb|go up|ascend) (.+)$/,
+    ClimbDownVerb:/^(?:climb down|go down|descend) (.+)$/,
     Push:/^(?:push|press) (.+)$/,
     Pull:/^(?:pull|drag) (.+)$/,
     Fill:/^(?:fill) (.+)$/,
@@ -458,6 +462,9 @@ const lang = {
   cannot_go_up:"{pv:item:be:true} not something {nv:char:can} go up.",
   cannot_go_down:"{pv:item:be:true} not something {nv:char:can} go down.",
   cannot_go_through:"{pv:item:be:true} not something {nv:char:can} get through.",
+  cannot_climb_item:"{pv:item:'be:true} not something you can climb.",
+  cannot_climb:"There is nothing you can climb here.",
+  climb_ambiguity:"You will need to specify whether you want to climb up or down here.",
 
 
   // General cannot Messages
@@ -560,23 +567,41 @@ const lang = {
   
   // Use when the NPC leaves a room; will give a message if the player can observe it
   npc_leaving_msg:function(npc, exit) {
-    let flag = npc.inSight(exit.origin)
+    let flag = npc.inSight(exit.origin, 'moving', w[exit.name])
     if (!flag) return
-    if (exit.npcLeaveMsg) { return exit.npcLeaveMsg(npc) }
+    const options = {room:exit.origin, npc:npc, dir:exit.dir, mod:flag}
+    if (typeof exit.npcLeaveMsg === 'function') { return exit.npcLeaveMsg(options) }
+    if (typeof exit.npcLeaveMsg === 'string') { return msg(exit.npcLeaveMsg, options) }
     let s = typeof flag === 'string' ? flag + " {nv:npc:leave}" : "{nv:npc:leave:true}"
     s += " {nm:room:the}, heading {show:dir}."
-    msg(s, {room:exit.origin, npc:npc, dir:exit.dir})
+    msg(s, options)
   },
 
   // the NPC has already been moved, so npc.loc is the destination
   npc_entering_msg:function(npc, exit) {
-    let flag = npc.inSight(w[exit.name])
+    const loc = w[exit.name]
+    if (!loc) return errormsg('Hmm, not finding a location called "' + exit.name + '" when moving an NPC.')
+      
+    let flag = npc.inSight(loc, 'moving', exit.origin)
     if (!flag) return
-    if (exit.npcEnterMsg) { return exit.npcEnterMsg(npc) }
+    const options = {room:loc, npc:npc, dir:exit.reverseNice(), mod:flag}
+    if (typeof exit.npcEnterMsg === 'function') { return exit.npcEnterMsg(options) }
+    if (typeof exit.npcEnterMsg === 'string') { return msg(exit.npcEnterMsg, options) }
     let s = typeof flag === 'string' ? flag + " {nv:npc:enter}" : "{nv:npc:enter:true}"
     s += " {nm:room:the} from {show:dir}."
-    msg(s, {room:w[exit.name], npc:npc, dir:exit.reverseNice()})
+    msg(s, options)
   },
+  
+  
+  npc_enter_up_stairs:"{nv:npc:come:true} up #.",
+  npc_leave_up_stairs:"{nv:npc:go:true} up #.",
+  npc_enter_down_stairs:"{nv:npc:come:true} down #.",
+  npc_leave_down_stairs:"{nv:npc:go:true} down #.",
+  npc_enter_climb_up:"{nv:npc:climb:true} up #.",
+  npc_leave_climb_up:"{nv:npc:climb:true} up #.",
+  npc_enter_climb_down:"{nv:npc:climb:true} down #.",
+  npc_leave_climb_down:"{nv:npc:climb:true} down #.",
+  
 
   //----------------------------------------------------------------------------------------------
   // Meta-command responses
@@ -883,19 +908,22 @@ const lang = {
     {name:'north', abbrev:'N', niceDir:"the north", type:'compass', key:104, x:0 ,y:1, z:0, opp:'south', symbol:'fa-arrow-up'}, 
     {name:'northeast', abbrev:'NE', niceDir:"the northeast", type:'compass', key:105, x:1 ,y:1, z:0, opp:'southwest', symbol:'fa-arrow-up', rotate:45}, 
     {name:'in', abbrev:'In', alt:'enter', niceDir:"inside", type:'inout', key:111, opp:'out', symbol:'fa-sign-in-alt'}, 
-    {name:'up', abbrev:'U', niceDir:"above", type:'vertical', key:109, x:0 ,y:0, z:1, opp:'down', symbol:'fa-arrow-up'},
+    {name:'up', alt:'ascend', abbrev:'U', niceDir:"above", type:'vertical', key:109, x:0 ,y:0, z:1, opp:'down', symbol:'fa-arrow-up'},
     
     {name:'west', abbrev:'W', niceDir:"the west", type:'compass', key:100, x:-1 ,y:0, z:0, opp:'east', symbol:'fa-arrow-left'}, 
     {name:'Look', abbrev:'L', type:'nocmd', key:101, symbol:'fa-eye'}, 
     {name:'east', abbrev:'E', niceDir:"the east", type:'compass', key:102, x:1 ,y:0, z:0, opp:'west', symbol:'fa-arrow-right'}, 
     {name:'out', abbrev:'Out', alt:'exit|o|leave', niceDir:"outside", type:'inout', key:106,opp:'in', symbol:'fa-sign-out-alt'}, 
-    {name:'down', abbrev:'Dn', alt:'d', niceDir:"below", type:'vertical', key:107, x:0 ,y:0, z:-1, opp:'up', symbol:'fa-arrow-down'}, 
+    {name:'down', abbrev:'Dn', alt:'d|descend', niceDir:"below", type:'vertical', key:107, x:0 ,y:0, z:-1, opp:'up', symbol:'fa-arrow-down'}, 
 
     {name:'southwest', abbrev:'SW', niceDir:"the southwest", type:'compass', key:97, x:-1 ,y:-1, z:0, opp:'northeast', symbol:'fa-arrow-down', rotate:45}, 
     {name:'south', abbrev:'S', niceDir:"the south", type:'compass', key:98, x:0 ,y:-1, z:0, opp:'north', symbol:'fa-arrow-down'}, 
     {name:'southeast', abbrev:'SE', niceDir:"the southeast", type:'compass', key:99, x:1 ,y:-1, z:0, opp:'northwest', symbol:'fa-arrow-right', rotate:45}, 
     {name:'Wait', abbrev:'Z', type:'nocmd', key:110, symbol:'fa-clock'}, 
-    {name:'Help', abbrev:'?', type:'nocmd', symbol:'fa-info'}, 
+    {name:'Help', abbrev:'?', type:'nocmd', symbol:'fa-info'},
+
+    {name:'climb_up', alt:'climb up', abbrev:'Cl', niceDir:"above", type:'vertical', x:0 ,y:0, z:1, opp:'down', not_that_way:'Nothing to climb here.'},
+    {name:'climb_down', alt:'climb down', abbrev:'CD', niceDir:"below", type:'vertical', x:0 ,y:0, z:-1, opp:'up', not_that_way:'Nothing to climb down here.'},
   ],
 
   numberUnits:"zero;one;two;three;four;five;six;seven;eight;nine;ten;eleven;twelve;thirteen;fourteen;fifteen;sixteen;seventeen;eighteen;nineteen;twenty".split(";"),

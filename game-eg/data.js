@@ -78,12 +78,13 @@ createRoom("lounge", {
     return true
   },
   look_east:'Though the doorway to the east, you can see the kitchen. is there something on the table?',
-  up:new Exit("bedroom"),
+  northeast:new StairsUp("bedroom", 'lounge_scenery_stairs'),
   hint:"There is a lot in this room! The bricks can be picked up by number (try GET 3 BRICKS). The book can be read. The coin is stuck to the floor. There are containers too. Kyle is an NPC; you can tell him to do nearly anything the player character can do (everything except looking and talking).",
   scenery:[
     'tv',
     {alias:['old settee', 'couch', 'sofa']},
     {alias:'rug', examine:'It might have been blue at one time. Maybe.'},
+    'stairs',
   ],
   examine_wall:'A fine example of a feature wall.',
   listen:'The clocks ticks...',
@@ -409,11 +410,11 @@ createRoom("kitchen", {
   down:new Exit('basement', {
     isHidden:function() { return w.trapdoor.closed; },
     msg:"You go through the trapdoor, and down the ladder.",
-    npcLeaveMsg:function(char) {
-      msg("{nv:char:disappear:true} through the trapdoor.", {char:char});
+    npcLeaveMsg:function(options) {
+      msg("{nv:npc:disappear:true} through the trapdoor.", options);
     },
-    npcEnterMsg:function(char) {
-      msg("{nv:char:come:true} through the trapdoor, and {cj:char:climb} down the ladder to join you in the basement.", {char:char});
+    npcEnterMsg:function(options) {
+      msg("{nv:npc:come:true} through the trapdoor, and {cj:char:climb} down the ladder to join you in the basement.", options);
     },
   }),
   north:new Exit("garage"),
@@ -479,7 +480,7 @@ createItem("kitchen_sink", {
 createRoom("basement", {
   desc:"A dank room, with piles of crates everywhere.",
   darkDesc:"It is dark, but you can just see the outline of the trapdoor above you.",
-  up:new Exit('kitchen', {illuminated:true }),
+  up:new ClimbExit('kitchen', 'ladder', {illuminated:true }),
   lightSource:function() {
     return w.light_switch.switchedon ? world.LIGHT_FULL : world.LIGHT_NONE;
   },
@@ -505,7 +506,6 @@ createItem("light_switch", SWITCHABLE(false), {
 createItem("ladder", {
   loc:"basement",
   examine:"A ladder, fixed to the wall, leading to the trapdoor.",
-  goUpDirection:'up',
 })
 createItem("crates", {
   loc:"basement",
@@ -581,10 +581,13 @@ createItem("charger_button", COMPONENT("charger"), BUTTON(), {
 
 createRoom("bedroom", {
   desc:"A large room, with a big bed and a wardrobe.",
-  down:new Exit("lounge"),
+  southwest:new StairsDown("lounge", 'bedroom_scenery_stairs'),
   in:new Exit("wardrobe"),
   west:new Exit('lift'),
   hint:"The bedroom has a variety of garments that can be put on - in the right order.",
+  scenery:[
+    'stairs',
+  ],
 })
 
 createItem("wardrobe_item", {
@@ -1333,4 +1336,3 @@ createItem("timetable", AGENDA_FOLLOWER(), {
   },
   check:function() { return this.flag },
 })
-
