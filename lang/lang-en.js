@@ -799,7 +799,8 @@ const lang = {
       metamsg("You can add your own comments to the transcript by starting a command with *.")
     }
     else {    
-      metamsg("A transcript will be automatically recorded. As this game has no text input, you will need to access the transcript through the developer tools. Press F12 to show the tools, and click on the \"Console\" tab. Type <code>io.scriptShow()</code> and press return. the transcript should appear in a new tab.")
+      metamsg("A transcript will be automatically recorded. As this game has no text input, you will need to access the transcript through the developer tools. Press F12 to show the tools, and click on the \"Console\" tab. Type <code>saveLoad.transcriptShow()</code> and press return. The transcript should appear in a new tab.")
+      metamsg("You can add comments to the transcript too. Copy-and-paste <code>c(\"test comment\")</code> into the console and press return, and you should see the comment in the text. You can use the up and down arrows to scroll through inputs in the console, so you can go back to an earlier comment and edit that to make a new one to ensure you get the bracks and quotes right. Note that you cannot use double-quotes in your comments.")
     }
     metamsg("If you have not already done so, I recommend checking to ensure you can see the transcript before progressing too far though the game.")
     metamsg("PLEASE NOTE: Transcripts and save games are saved in LocalStorage; if you have this set to be deleted when you close your browser, you will lose all progress!")
@@ -855,10 +856,19 @@ const lang = {
     massnoun:{subjective:"it", objective:"it", possessive: "its", possAdj: "its", reflexive:"itself"},
     male:{subjective:"he", objective:"him", possessive: "his", possAdj: "his", reflexive:"himself"},
     female:{subjective:"she", objective:"her", possessive: "hers", possAdj: "her", reflexive:"herself"},
-    nonbinary:{subjective:"they", objective:"them", possessive: "theirs", possAdj: "their", reflexive:"themselves"},
+    nonbinary:{subjective:"they", objective:"them", possessive: "theirs", possAdj: "their", reflexive:"themself"},
     plural:{subjective:"they", objective:"them", possessive: "theirs", possAdj: "their", reflexive:"themselves"},
     firstperson:{subjective:"I", objective:"me", possessive: "mine", possAdj: "my", reflexive:"myself"},
     secondperson:{subjective:"you", objective:"you", possessive: "yours", possAdj: "your", reflexive:"yourself"},
+    
+    neNemNir:{subjective:"ne", objective:"nem", possessive: "nir", possAdj: "nirs", reflexive:"nemself"},
+    veVerVis:{subjective:"ve", objective:"ver", possessive: "vis", possAdj: "vis", reflexive:"verself"},
+    spivak:{subjective:"ey", objective:"em", possessive: "eir", possAdj: "eirs", reflexive:"emself"},
+    zeHirHir:{subjective:"ze", objective:"hir", possessive: "hir", possAdj: "hirs", reflexive:"hirself"},
+    zeZirZir:{subjective:"ze", objective:"zir", possessive: "zir", possAdj: "zirs", reflexive:"zirself"},
+    xeXemXyr:{subjective:"xe", objective:"xem", possessive: "xyr", possAdj: "xyrs", reflexive:"xemself"},
+    perPerPers:{subjective:"per", objective:"per", possessive: "pers", possAdj: "pers", reflexive:"perself"},
+
   },
 
 

@@ -12,6 +12,8 @@ settings.tests = true
 settings.playMode = 'dev'
 settings.reportAllSvg = true
 
+//settings.textInput = false
+
 settings.textEffectDelay = 100
 
 settings.imagesFolder = 'images/'
