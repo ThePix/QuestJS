@@ -95,7 +95,7 @@ createItem("letter", TAKEABLE(), {  // cannot get dropped in size change rooms
     if (this.scenery) {
       msg("The letter is face-down; Mandy would have to pick it up to see the address.")
     }
-    else if (currentLocation.zone === 'external') {
+    else if (currentLocation._region === 'external') {
       msg("Mandy turns the letter over. It is addressed to \"Dr Winfield Malewicz, 23 Highfield Lane, Westleigh\". {i:That must be who lives in The House,} she thinks. Perhaps she should deliver it. She feels a little terrified at the prospect, but that is ridiculous -- it is only a house. Mrs Kennedy is always saying you should confront your fears head-on in Personal Development lessons.")
     }
     else if (this.addressread) {

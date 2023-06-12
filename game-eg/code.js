@@ -162,6 +162,17 @@ new Cmd('EgMove', {
   ],
   defmsg:"{pv:item:'be:true} not something you can move.",
 })
+
+
+
+const cmd = findCmd("OneWord")
+cmd.regexes.push(/^(act)$/)
+cmd.regexes.push(/^(perform)$/)
+lang.no_act = "You do a quick scene from Hamlet because... it seems a good idea?"
+lang.oneWordSubsts.perform = 'act'
+
+
+
 /*
 findCmd('MetaHint').script = function() {
   if (w[player.loc].hint) {

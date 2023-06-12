@@ -48,9 +48,11 @@ settings.hintInvisiClues = true
 settings.fluids = ['sand', 'water']
 settings.saveLoadExcludedAtts.push('silverSighting')
 
-settings.roomCreateFunc = function(o) {
-  o.zone = zone
-}
+//settings.roomCreateFunc = function(o) {
+//  o._region = zone
+//  log(o._region)
+//  log(o)
+//}
 
 settings.afterLoad = function() {
   parser.pronouns = {}

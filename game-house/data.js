@@ -18,10 +18,10 @@ createItem("player", PLAYER(), {
     return null
   },
   talkto:function() {
-    if (currentLocation.zone === 'external') {
+    if (currentLocation._region === 'external') {
       msg("'Can I really just go in that scary house?' Mandy asks herself.|'Of course I can!' she replies confidently.|'Yeah, well, it's not you doing it.'|'Well, obviously it is, because I'm you. You're talking to yourself, stupid!'|'Well, yes, I guess...'")
     }
-    else if (currentLocation.zone === 'normality') {
+    else if (currentLocation._region === 'normality') {
       msg("'So I did it, I escaped the scary house,' Mandy says herself.|'Of course you did!' she replies. 'I never had a doubt!'|'Well I did, and that means you did, because you are me.'|'Err...'|Mandy grins in triumph; at last she had won an argument with herself.")
     }
     else {
@@ -145,19 +145,19 @@ createItem("shakespeare_book", {
     }
   },
   afterCarry:function() {
-    if (this.zone !== currentLocation.zone) {
-      this.zone = currentLocation.zone
-      this.setAlias("copy of \"" + this.names[this.zone] + "\"", {listAlias:this.names[this.zone]})
+    if (this._region !== currentLocation._region) {
+      this._region = currentLocation._region
+      this.setAlias("copy of \"" + this.names[this._region] + "\"", {listAlias:this.names[this._region]})
       if (w.uniform.wet > 0) w.uniform.wet--
     }
   },
 })
 
 
-createItem("folder", {
+/*createItem("folder", {
   loc:"school_bag",
   scenery:true,
-})
+})*/
 
 
 createItem("uniform", {
@@ -215,9 +215,9 @@ const GENERIC = function() {
     parserPriority:-15,
     isLocatedAt:function(loc, situation) {
       const room = w[loc]
-      if (!room.zone) return false
+      if (!room._region) return false
       if (w[loc + '_' + this.alias]) return false
-      if (zones[room.zone][this.alias]) return true
+      if (zones[room._region][this.alias]) return true
       return false
     },
     examine:function() {
@@ -230,7 +230,7 @@ const GENERIC = function() {
         msg(room['examine_' + this.alias])
       }
       else {
-        msg(zones[room.zone][this.alias])
+        msg(zones[room._region][this.alias])
       }
     }  
   }  

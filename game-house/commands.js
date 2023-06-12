@@ -427,7 +427,7 @@ new Cmd('ConfrontFears', {
   objects:[
   ],
   script:function(objects) {
-    if (currentLocation.zone === 'external') {
+    if (currentLocation._region === 'external') {
       msg("{i:Right,} thinks Mandy, {i:I can do this. All I have to do is go in the house, and hand over the letter.} She looks at the house again, trying to convince herself it is not laughing at her.")
     }
     else if (currentLocation.name === 'lounge') {
@@ -496,13 +496,13 @@ new Cmd('PutUnder', {
 
 
 
-
+/*
 findCmd('Smell').script = function() {
   if (currentLocation.smell) {
     printOrRun(player, currentLocation, "smell");
   }
   else {
-    msg(zones[currentLocation.zone].smell)
+    msg(zones[currentLocation._region].smell)
   }
   return world.SUCCESS;
 }
@@ -512,10 +512,10 @@ findCmd('Listen').script = function() {
     printOrRun(player, currentLocation, "listen");
   }
   else {
-    msg(zones[currentLocation.zone].listen)
+    msg(zones[currentLocation._region].listen)
   }
   return world.SUCCESS;
-}
+}*/
 
 findCmd('Say').script = function(objects) {
   const text = objects[1]

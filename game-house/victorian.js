@@ -979,7 +979,7 @@ createItem("boots", SIZE_CHANGING(), {
     else {
       msg(this['desc' + this.size] + (this.mended ? ' They look in good condition, now they have been mended.' : ' The toe of the right boot is coming away from the sole.'))
     }
-    return true
+    //return true
   },
   enteritem:function() {
     if (w.boots.size < 6) return falsemsg("The boots are too small for Mandy to get inside.")

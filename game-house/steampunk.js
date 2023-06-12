@@ -15,7 +15,6 @@ register('steampunk', {
 
 
 
-
 createRoom("steam_hall", ROOM_SET("steam hall"), {
   windowsface:'south',
   in:new Exit('lift', {
@@ -106,6 +105,7 @@ createItem("lift_shaft_item", {
   alias:'lift shaft',
   loc:'lift_shaft',
   synonyms:['elevator shaft'],
+  examine:'A shaft... for a lift.',
   goInDirection:'up',
   scenery:true,
 })

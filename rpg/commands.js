@@ -12,6 +12,10 @@ findCmd('MetaHelp').script = function() {
 }
 
 
+
+findCmd("Hit").matchItems = function() { this.tmp = {score:parser.NO_MATCH} }
+
+
  
 TAKEABLE_DICTIONARY.stow = function(options) {
   if (this.testStow && !this.testStow(options)) return false
@@ -52,6 +56,7 @@ new Cmd('Attack', {
   objects:[
     {scope:parser.isPresent}
   ],
+  attName:'attack',
   defmsg:lang.notAFoe
 })
 

@@ -948,6 +948,16 @@ createItem("Kyle", NPC(false),
         msg("'What a lovely hat,' " + lang.getName(params.char) + " says.") 
       },
     },
+
+    {
+      name:'after dance',
+      test:function() {
+        return player._hasJust === 'dance'
+      },
+      script:function(params) {
+        msg("Kyle looks at you strangely.") 
+      },
+    },
   ],  
 });
 

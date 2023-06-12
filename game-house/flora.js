@@ -204,7 +204,7 @@ max number of grow turns is 13
     else {
       msg(this['desc' + this.size])
     }
-    return true
+    //return true
   },
   protrusionDescriptions:[
     '','','','',
@@ -505,10 +505,10 @@ createRoom("up_a_tree", {
   down:new Exit("greenhouse_west", {msg:'Mandy carefully climbs back down.'}),
 })
 
-createRoom("up_a_tree_item", {
+createItem("up_a_tree_item", {
   alias:'tamarind tree',
   loc:"up_a_tree",
-  examine:"The tree is a few metres tall, but the higher branches are too think to support Mandy.",
+  examine:"The tree is a few metres tall, but the higher branches are too thin to support Mandy.",
   goDownDirection:'down',
 })
 
@@ -531,7 +531,7 @@ createRoom("up_a_tall_tree", {
   }),
 })
 
-createRoom("up_a_tall_tree_item", {
+createItem("up_a_tall_tree_item", {
   alias:'tamarind tree',
   loc:"up_a_tree",
   examine:"The substantial tree is several metres tall, strong enough to support Mandy even this far up.",

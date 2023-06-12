@@ -410,9 +410,9 @@ createItem("Patch", NPC(false), {
           w.boots.rejectedForStone = true
           return false
         }
-        options.item.loc = this.name
+        options.item.loc = 'Patch'
         options.item.worn = true
-        this.animated = true
+        w.Patch.animated = true
         msg("Mandy gives the boots to {nm:npc:the}. He looks at the footwear with a big smile, then proceeds to pull on the left boot... Then the right. He looks at them, now on his feet, for a moment, before getting off the bench, and standing upright, ripping of all the wires connecting him to the strange device.", options)
       },
     },

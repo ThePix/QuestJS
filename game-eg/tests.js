@@ -2031,9 +2031,20 @@ test.tests = function() {
 
 
 
+  test.title("change pronouns")
+ 
   
+  w.book.owner = 'Kyle'
+  test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}))
+  w.Kyle.changePronouns(lang.pronouns.female)
+  test.assertEqual("There is her book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}))
   
+  const saveStr = saveLoad.saveTheWorld("Comment!!!")
+  w.Kyle.changePronouns(lang.pronouns.thirdperson)
+  test.assertEqual("There is its book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}))
   
+  saveLoad.loadTheWorld(saveStr, 4)
+  test.assertEqual("There is her book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}))
   
   
   

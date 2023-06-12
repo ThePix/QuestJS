@@ -3,7 +3,7 @@
 // regular expressions
 
 lang.regex.Target = /^(?:target|t) (.+)$/
-lang.regex.Attack = /^(?:attack|att) (.+)$/
+lang.regex.Attack = /^(?:attack|att|strike|hit) (.+)$/
 lang.regex.Search = /^(?:search) (.+)$/
 lang.regex.Stow = /^(?:stow|store|pack) (.+)$/
 lang.regex.Retrieve = /^(?:retrieve|unpack) (.+)$/

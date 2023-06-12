@@ -101,7 +101,7 @@ test.tests = function() {
   test.assertCmd("x book", ["Mandy glances at her copy of \"Antony and Cleopatra\". She really should get around to actually reading it some time, what with an exam on it in just a few weeks."])
   test.assertCmd("x Antony", /Mandy glances at her copy of /)
   test.assertCmd("x Antony and Cleopatra", /Mandy glances at her copy of /)
-  w.highfield_lane.zone = 'steampunk'
+  w.highfield_lane._region = 'steampunk'
   w.shakespeare_book.afterCarry()
 
   test.assertCmd("x book", ["Mandy glances at her copy of \"Antony and Cleopatra\". Wait, this is not the same book! This is a copy of \"Love's Labour's Lost\". What has happened to \"Antony and Cleopatra\"? Ms Coulter will be furious."])
@@ -110,7 +110,7 @@ test.tests = function() {
   test.assertCmd("x Antony", /Mandy looks at the book she now has/)
 
 
-  w.highfield_lane.zone = 'external'
+  w.highfield_lane._region = 'external'
   w.shakespeare_book.afterCarry()
 
 

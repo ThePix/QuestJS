@@ -63,9 +63,23 @@ const lang = {
     // Misc
     Wait:/^wait$|^z$/,
     Climb:/^climb$/,
-    Smell:/^smell$|^sniff$/,
-    Listen:/^listen$/,
+    Back:/^back$|^go back$|^return$/,
+    //Smell:/^smell$|^sniff$/,
+    //Listen:/^listen$/,
     PurchaseFromList:/^buy$|^purchase$/,
+    //OneWord:/^(pray|jump|sing|dance|listen|smell|sniff|whistle)$/,
+    OneWord:[
+      /^(pray)$/,
+      /^(jump)$/,
+      /^(sing)$/,
+      /^(dance)$/,
+      /^(listen)$/,
+      /^(smell)$/,
+      /^(sniff)$/,
+      /^(whistle)$/,
+      /^(sleep)$/,
+      /^(nap)$/,
+    ],
     
     // Use item
     Examine:/^(?:examine|exam|ex|x|describe) (.+)$/,
@@ -76,11 +90,11 @@ const lang = {
     LookInside:/^(?:look inside|look in) (.+)$/,
     LookThrough:/^(?:look|peek|peer) (?:down|through) (.+)$/,
     Search:/^(?:search) (.+)$/,
-    Take:/^(?:take|get|pick up|pick|t|grab) (.+)$/,
+    Take:/^(?:take|get|pick up|pick|t|grab|hold|carry) (.+)$/,
     Drop:/^(?:drop|d|discard) (.+)$/,
     Wear2:/^put (?:my |your |his |her |)(.+) on$/,
     Wear:/^(?:wear|don|put on) (?:my |your |his |her |)(.+)$/,
-    Remove:/^(?:remove|doff|take off|unwear) (?:my |your |his |her |)(.+)$/,
+    Remove:/^(?:remove|doff|take off|unwear|disrobe) (?:my |your |his |her |)(.+)$/,
     Remove2:/^take (?:my |your |his |her |)(.+) off$/,
     Read:/^(?:read|r) (.+)$/,
     SmellItem:/^(?:smell|sniff) (.+)$/,
@@ -88,20 +102,20 @@ const lang = {
     ListenToItem:/^(?:listen to|listen) (.+)$/,
     Purchase:/^(?:purchase|buy) (.+)$/,
     Sell:/^(?:sell) (.+)$/,
-    Smash:/^(?:smash|break|destroy|burst|pierce|puncture|bust) (.+)$/,
-    Turn:/^(?:turn|rotate|twist) (.+)$/,
-    TurnLeft:/^(?:turn|rotate|twist) (.+) (?:left|anticlockwise|anti-clockwise|widdershins)$/,
-    TurnRight:/^(?:turn|rotate|twist) (.+) (?:right|clockwise)$/,
+    Smash:/^(?:smash|break|destroy|burst|pierce|puncture|bust|crack|wreck) (.+)$/,
+    Turn:/^(?:turn|rotate|twist|screw|unscrew) (.+)$/,
+    TurnLeft:/^(?:turn|rotate|twist|screw|unscrew) (.+) (?:left|anticlockwise|anti-clockwise|widdershins)$/,
+    TurnRight:/^(?:turn|rotate|twist|screw|unscrew) (.+) (?:right|clockwise)$/,
     SwitchOn:/^(?:turn on|switch on|active|enable) (.+)$/,
     SwitchOn2:/^(?:turn|switch) (.+) on$/,
     SwitchOff2:/^(?:turn|switch|deactivate|disable) (.+) off$/,
     SwitchOff:/^(?:turn off|switch off) (.+)$/,
-    Open:/^(?:open) (.+)$/,
+    Open:/^(?:open|unwrap) (.+)$/,
     OpenWith:[
       /^(?:open) (.+) (?:with|using) (.+)$/,
       {regex:/^(?:use|with|using) (.+?) (?:to open|open) (.+)$/, mod:{reverse:true}},
     ],
-    Close:/^(?:close) (.+)$/,
+    Close:/^(?:close|cover|shut) (.+)$/,
     Lock:/^(?:lock) (.+)$/,
     LockWith:[
       /^(?:lock) (.+) (?:with|using) (.+)$/,
@@ -113,15 +127,17 @@ const lang = {
       {regex:/^(?:use|with|using) (.+?) (?:to unlock|unlock) (.+)$/, mod:{reverse:true}},
     ],
     
-    ClimbUpVerb:/^(?:climb up|climb|go up|ascend) (.+)$/,
+    ClimbUpVerb:/^(?:climb up|climb|go up|ascend|scale) (.+)$/,
     ClimbDownVerb:/^(?:climb down|go down|descend) (.+)$/,
     Push:/^(?:push|press) (.+)$/,
     Pull:/^(?:pull|drag) (.+)$/,
     Fill:/^(?:fill) (.+)$/,
     Empty:/^(?:empty|discharge|decant|pour out|pour) (.+)$/,
     Eat:/^(eat|feed on|feed|partake of|partake|dine on|dine) (.+)$/,
-    Drink:/^(drink|imbibe|quaff|guzzle|knock back|swig|swill|sip|down|chug) (.+)$/,
+    Drink:/^(drink|imbibe|quaff|guzzle|knock back|swig|swill|sip|down|chug|swallow) (.+)$/,
     Ingest:/^(consume|swallow|ingest) (.+)$/,
+    Hit:/^(attack|strike|hit|kick|hurt|fight|punch|murder|kill|slaughter) (.+)$/,
+    Clean:/^(clean|rub|dust|polish|shine) (.+)$/,
     Sit:/^(?:sit down|sit)$/,
     Recline:/^(?:recline|lie down|lie)$/,
     SitOn:/^(?:sit on|sit upon|sit) (.+)$/,
@@ -195,8 +211,8 @@ const lang = {
     NpcPutIn:[/^(.+), ?(?:put|place|drop|insert) (.+) (?:in to|into|in|on to|onto|on) (.+)$/, /^(?:tell|ask|instruct) (.+) to (?:put|place|drop) (.+) (?:in to|into|in|on to|onto|on) (.+)$/],
     TakeOut:/^(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/,
     NpcTakeOut:[/^(.+), ?(?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/, /^(?:tell|ask|instruct) (.+) to (?:take|get|remove) (.+) (?:from|out of|out|off of|off) (.+)$/],
-    GiveTo:/^(?:give|offer|proffer) (.+) (?:to) (.+)$/,
-    NpcGiveTo:[/^(.+), ?(?:give|offer|proffer) (.+) (?:to) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give|offer|proffer) (.+) (?:to) (.+)$/],
+    GiveTo:/^(?:give|offer|proffer|feed) (.+) (?:to) (.+)$/,
+    NpcGiveTo:[/^(.+), ?(?:give|offer|proffer|feed) (.+) (?:to) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give|offer|proffer) (.+) (?:to) (.+)$/],
     Give:/^(?:give|offer|proffer) (.+)$/,
     NpcGive:[/^(.+), ?(?:give|offer|proffer) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give|offer|proffer) (.+)$/],
     //NpcGiveToMe:[/^(.+), ?(?:give) me (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:give) me (.+)$/],
@@ -277,6 +293,9 @@ const lang = {
   cannot_eat:"{nv:item:be:true} not something {nv:char:can} eat.",
   cannot_drink:"{nv:item:be:true} not something {nv:char:can} drink.",
   cannot_ingest:"{nv:item:be:true} not something {nv:char:can} ingest.",
+  
+  
+  
 
 
   // WEARABLE
@@ -400,7 +419,7 @@ const lang = {
   topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {show:list}.",
   topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {show:list}.",
   cannot_talk_to:"{nv:char:chat:true} to {nm:item:the} for a few moments, before realizing that {pv:item:be} not about to reply.",
-  no_topics:"{nv:char:have:true} nothing to talk to {nm:item:the} about.",
+  no_topics:"{nv:char:have:true} nothing {ifMoreThan:item:talkto_count:0:further }to talk to {nm:item:the} about right now.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
   npc_dead:"{nv:char:be:true} dead.",
@@ -462,6 +481,8 @@ const lang = {
   cannot_go_up:"{pv:item:be:true} not something {nv:char:can} go up.",
   cannot_go_down:"{pv:item:be:true} not something {nv:char:can} go down.",
   cannot_go_through:"{pv:item:be:true} not something {nv:char:can} get through.",
+  no_back:"You would have to go somewhere before you can come back.",
+  cannot_back:"You don't seem to be able to go back that way.",
   cannot_climb_item:"{pv:item:'be:true} not something you can climb.",
   cannot_climb:"There is nothing you can climb here.",
   climb_ambiguity:"You will need to specify whether you want to climb up or down here.",
@@ -470,12 +491,14 @@ const lang = {
   // General cannot Messages
   cannot_read:"Nothing worth reading there.",
   cannot_use:"No obvious way to use {ob:item}.",
-  cannot_smash:"{nv:item:be:true} not something {nv:char:can} break.",
+  cannot_smash:"{if:item:npc:That is not very nice.:{nv:item:be:true} not something {nv:char:can} break.}",
   cannot_turn:"{nv:item:be:true} not something {nv:char:can} turn.",
   cannot_look_out:"Not something {nv:char:can} look out of.",
   cannot_taste:"It is not a good idea to go round licking everything!",
   cannot_smell:"{nv:item:have:true} no smell.",
   cannot_listen:"{nv:item:be:true} not making any noise.",
+  cannot_attack:"{if:item:npc:Surely {nv:char:do} not want to do that to {nm:item:the}!:Needless vandalism will achive nothing.}",
+  cannot_clean:"{if:item:npc:{nv:item:can:true} sort out {pa:item} own personal hygiene.:Someone else can do the housework, you focus on your mission.}",
 
 
   // General command messages
@@ -492,9 +515,23 @@ const lang = {
   no_receiver:"There's no one here to give things to.",
 
 
-  // General command fails
+  //generic one word commands
+  oneWordSubsts:{
+    sniff:'smell',
+    nap:'sleep',
+  },
+  //when translating to another language, you need to translate the verb too, so no_sens for French instead of no_smell
   no_smell:"{pv:char:can't:true} smell anything here.",
   no_listen:"{pv:char:can't:true} hear anything of note here.",
+  no_pray:"{pv:char:pray:true} to every god you know, but none seem to offer any help.",
+  no_sing:"{pv:char:sing:true} a {random:short:jolly:mournful:dire:rousing} {random:ballad:song:ditty:aria:athem}. Were you hoping something might happen?",
+  no_dance:"{pv:char:dance:true} a {random:vigorous:sexy:energetic} {random:tango:waltz:rhumba:jig}. Kind of sad on {pa:char} own, but there you go.",
+  no_whistle:"{pv:char:sing:true} a {random:short:jolly:mournful:dire:rousing} {random:ballad:song:ditty:aria:athem}. Were you hoping something might happen?",
+  no_jump:"{pv:char:jump:true} up... and promptly return to the ground. What were you expecting?",
+  no_sleep:"No time for sleeping!",
+  
+  
+  // General command fails
   nothing_there:"{nv:char:be:true} sure there is nothing there.",
   nothing_inside:"There's nothing to see inside.",
   not_open:"You have to open it first.",
@@ -852,24 +889,34 @@ const lang = {
   // Language constructs
 
   pronouns:{
-    thirdperson:{subjective:"it", objective:"it", possessive: "its", possAdj: "its", reflexive:"itself"},
-    massnoun:{subjective:"it", objective:"it", possessive: "its", possAdj: "its", reflexive:"itself"},
-    male:{subjective:"he", objective:"him", possessive: "his", possAdj: "his", reflexive:"himself"},
-    female:{subjective:"she", objective:"her", possessive: "hers", possAdj: "her", reflexive:"herself"},
-    nonbinary:{subjective:"they", objective:"them", possessive: "theirs", possAdj: "their", reflexive:"themself"},
-    plural:{subjective:"they", objective:"them", possessive: "theirs", possAdj: "their", reflexive:"themselves"},
-    firstperson:{subjective:"I", objective:"me", possessive: "mine", possAdj: "my", reflexive:"myself"},
-    secondperson:{subjective:"you", objective:"you", possessive: "yours", possAdj: "your", reflexive:"yourself"},
+    firstperson: {subjective:"I",    objective:"me",   possPro: "mine",   possAdj: "my",    reflexive:"myself",     handleAs:'me'},
+    secondperson:{subjective:"you",  objective:"you",  possPro: "yours",  possAdj: "your",  reflexive:"yourself",   handleAs:'you'},
+    thirdperson: {subjective:"it",   objective:"it",   possPro: "its",    possAdj: "its",   reflexive:"itself",     handleAs:'it'},
+    one:         {subjective:"one",  objective:"one",  possPro: "one's",  possAdj: "one's", reflexive:"oneself",     handleAs:'it'},
+    massnoun:    {subjective:"it",   objective:"it",   possPro: "its",    possAdj: "its",   reflexive:"itself",     handleAs:'it'},
+    plural:      {subjective:"they", objective:"them", possPro: "theirs", possAdj: "their", reflexive:"themselves", handleAs:'they'},
     
-    neNemNir:{subjective:"ne", objective:"nem", possessive: "nir", possAdj: "nirs", reflexive:"nemself"},
-    veVerVis:{subjective:"ve", objective:"ver", possessive: "vis", possAdj: "vis", reflexive:"verself"},
-    spivak:{subjective:"ey", objective:"em", possessive: "eir", possAdj: "eirs", reflexive:"emself"},
-    zeHirHir:{subjective:"ze", objective:"hir", possessive: "hir", possAdj: "hirs", reflexive:"hirself"},
-    zeZirZir:{subjective:"ze", objective:"zir", possessive: "zir", possAdj: "zirs", reflexive:"zirself"},
-    xeXemXyr:{subjective:"xe", objective:"xem", possessive: "xyr", possAdj: "xyrs", reflexive:"xemself"},
-    perPerPers:{subjective:"per", objective:"per", possessive: "pers", possAdj: "pers", reflexive:"perself"},
-
+    male:        {subjective:"he",   objective:"him",  possPro: "his",    possAdj: "his",   reflexive:"himself",    handleAs:'it'},
+    female:      {subjective:"she",  objective:"her",  possPro: "hers",   possAdj: "her",   reflexive:"herself",    handleAs:'it'},
+    nonbinary:   {subjective:"they", objective:"them", possPro: "theirs", possAdj: "their", reflexive:"themself",   handleAs:'it'},
+    neNem:       {subjective:"ne",   objective:"nem",  possPro: "nirs",   possAdj: "nir",   reflexive:"nemself",    handleAs:'it'},
+    veVer:       {subjective:"ve",   objective:"ver",  possPro: "vis",    possAdj: "vis",   reflexive:"verself",    handleAs:'it'},
+    spivak:      {subjective:"ey",   objective:"em",   possPro: "eirs",   possAdj: "eir",   reflexive:"emself",     handleAs:'it'},
+    xeXem:       {subjective:"xe",   objective:"xem",  possPro: "xyrs",   possAdj: "xyr",   reflexive:"xemself",    handleAs:'it'},
+    perPer:      {subjective:"per",  objective:"per",  possPro: "pers",   possAdj: "pers",  reflexive:"perself",    handleAs:'it'},
+    zeHir:       {subjective:"ze",   objective:"hir",  possPro: "hirs",   possAdj: "hir",   reflexive:"hirself",    handleAs:'it'},
+    zheZhir:     {subjective:"zhe",  objective:"zhim", possPro: "zhers",  possAdj: "zher",  reflexive:"zhimself",   handleAs:'it'},
+    zeZir:       {subjective:"ze",   objective:"zir",  possPro: "zirs",   possAdj: "zir",   reflexive:"zirself",    handleAs:'it'},
+    zeZem:       {subjective:"ze",   objective:"zem",  possPro: "zes",    possAdj: "zes",   reflexive:"zemirself",  handleAs:'it'},
+    faeFaer:     {subjective:"fae",  objective:"fae",  possPro: "faers",  possAdj: "faer",  reflexive:"faerself",   handleAs:'it'},
+    aeAer:       {subjective:"ae",   objective:"ae",   possPro: "aers",   possAdj: "aer",   reflexive:"aerself",    handleAs:'it'},
   },
+
+// There are a lot of non-binay prooun sets, and this is just a selection
+// Sources:
+// https://en.wikipedia.org/wiki/Gender_neutrality_in_languages_with_gendered_third-person_pronouns
+// https://uwm.edu/lgbtrc/support/gender-pronouns/
+
 
 
   // Display verbs used in the side panel
@@ -1330,12 +1377,10 @@ const lang = {
   // Returns the verb properly conjugated for the item, so "go" with a ball would return
   // "goes", but "go" with the player (if using second person pronouns).
   conjugate:function(item, verb, options = {}) {
-    let gender = item.pronouns.subjective;
-    if (gender === "he" || gender === "she") { gender = "it"; }
-    const arr = lang.conjugations[gender.toLowerCase()];
+    const arr = lang.conjugations[item.pronouns.handleAs]
 
     if (!arr) {
-      errormsg("No conjugations found: conjugations_" + gender.toLowerCase());
+      errormsg("No conjugations found: conjugations_" + item.pronouns.handleAs)
       return verb;
     }
     for (let conj of arr) {

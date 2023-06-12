@@ -563,13 +563,13 @@ parser.specialText.integer = {
 //  ----------- SUPPORT FOR ZONES ---------------------------
 
 const zones = {}
-let zone
+//let zone
 
 const register = function(name, data) {
   w.uniform.uniforms[name] = data.uniform
   w.shakespeare_book.names[name] = data.book
   zones[name] = data
-  zone = name
+  region = name
 }
 
 
@@ -639,7 +639,7 @@ const SIZE_CHANGING = function() {
     else {
       msg(this['desc' + this.size])
     }
-    return true
+    //return true
   }
 
   res.take = function(options) {
