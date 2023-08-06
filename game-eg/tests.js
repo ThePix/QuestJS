@@ -477,6 +477,16 @@ test.tests = function() {
   test.assertEqual("Simple text: no", processText("Simple text: {ifPlayer:obj:yes:no}", {obj:w.Lara}))
 
 
+  test.title("Text processor 3a");
+  test.assertEqual("We have saved the game to LocalStorage.", processText("We have saved the game{if:*:toFile: to LocalStorage}.", {toFile:true}))
+  test.assertEqual("We have saved the game.", processText("We have saved the game{if:*:toFile: to LocalStorage}.", {toFile:false}))
+  test.assertEqual("We have saved the game to LocalStorage.", processText("We have saved the game{if:*:toFile:to file: to LocalStorage}.", {toFile:'to file'}))
+  test.assertEqual("We have saved the game.", processText("We have saved the game{if:*:toFile:to file: to LocalStorage}.", {toFile:'not'}))
+  test.assertEqual("*We have saved the game to LocalStorage.", processText("*We have saved the game{if:*:toFile:1: to LocalStorage}.", {toFile:1}))
+  test.assertEqual("We have saved the game.", processText("We have saved the game{if:toFile:1: to LocalStorage}.", {toFile:0}))
+
+
+
 
 
   test.title("Text processor 4");
@@ -655,6 +665,14 @@ test.tests = function() {
   test.assertEqual(" Lara is not.", processText("{ifHeld:book:He is here.} Lara is not."));
   test.assertEqual("He is here. Lara is not.", processText("{ifNotHeld:book:He is here.} Lara is not."));
   test.assertEqual(" Lara is not.", processText("{ifNotHeld:knife:He is here.} Lara is not."));
+
+
+  test.title("Text processor 11a: at");
+  test.assertEqual("He is here. Lara is not.", processText("{ifAt:lounge:He is here.} Lara is not."));
+  test.assertEqual("He is here. Lara is not.", processText("{ifNotAt:kitchen:He is here.} Lara is not."));
+  test.assertEqual(" Lara is not.", processText("{ifAt:kitchen:He is here.} Lara is not."));
+  test.assertEqual(" Lara is not.", processText("{ifNotAt:lounge:He is here.} Lara is not."));
+
 
   test.title("Text processor 12: pa2");
   test.assertEqual("'Please stop!' exclaims Kyle when you rip his book to shred.", processText("'Please stop!' exclaims {nm:chr1:the} when {nv:chr2:rip} {pa2:chr1:chr2} book to shred.", {chr1:w.Kyle, chr2:player}))
@@ -1119,7 +1137,7 @@ test.tests = function() {
   
 
 
-  test.title("Simple object commands (cabinet and box)")
+  test.title("Simple object commands (cabinet and box 2)")
   test.assertCmd("open cabinet", ["You open the glass cabinet. Inside it you can see a jewellery box (containing a ring) and an ornate doll."])
 
   test.assertCmd("pick up cardboard box", "You take the cardboard box.")
@@ -1239,7 +1257,7 @@ test.tests = function() {
   test.title("say");
   test.assertCmd("say hello", ["You say, 'Hello.'", "No one seems interested in what you say."]);
   w.Kyle.loc = "dining_room"
-  test.assertCmd("w", ["You head west.", "The dining room", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and Lara here.", "You can go east, up or west.",]);
+  test.assertCmd("w", ["You head west.", "The dining room", "An old-fashioned room.", "You can see a brick, a chair, a computer, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll), Kyle (wearing a straw boater) and Lara here.", "You can go east, up or west.",]);
   test.assertCmd("say hello", ["You say, 'Hello.'", "'Oh, hello there,' replies Lara.", "'Have you two met before?' asks Kyle."]);
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
   test.assertCmd("say nothing", ["You say, 'Nothing.'", "'I don't know what that means,' says Kyle. 'It's a simple yes-no question.'"]);
@@ -1287,7 +1305,7 @@ test.tests = function() {
   test.assertCmd("lara,stand up", "Lara gets off the chair.");
   test.assertCmd("lara,sit on chair", ["Lara sits on the chair.", "The chair makes a strange noise when Lara sits on it."]);
   
-  test.assertCmd("l", ["The dining room", "An old-fashioned room.", "You can see a brick, a chair, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and Lara (sitting on the chair) here.", "You can go east, up or west.",]);  
+  test.assertCmd("l", ["The dining room", "An old-fashioned room.", "You can see a brick, a chair, a computer, a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) and Lara (sitting on the chair) here.", "You can go east, up or west.",]);  
   
   test.title("NPC commands 1.1");
   w.Lara.testPosture = function() { msg("She is turned to stone."); return false; }
@@ -1580,7 +1598,7 @@ test.tests = function() {
   };
   w.lift.transitAutoMove = true;
   w.lift.afterEnter = w.lift.transitOfferMenu;
-  test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east.", "The lift is out of order", "The dining room", "An old-fashioned room.", "You can see a brick, a chair and a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) here.", "You can go east, up or west."]);
+  test.assertCmd("w", ["You head west.", "The lift", "A curious lift.", "You can go east.", "The lift is out of order", "The dining room", "An old-fashioned room.", "You can see a brick, a chair, a computer and a glass cabinet (containing a jewellery box (containing a ring) and an ornate doll) here.", "You can go east, up or west."]);
   
   
   test.title("Push");
@@ -1658,7 +1676,16 @@ test.tests = function() {
   test.assertCmd("get rope", ['It is tied to something.'])
 
 
+  test.title("rope - alt examine")
+  w.rope.examine = function(options) {
+    msg("The rope is about 40' long." + options.add)
+  }
+  test.assertCmd("x rope", ["The rope is about 40' long. One end heads into the conservatory. The other end is tied to the hook."], true)
 
+  w.rope.examine = function() {
+    return "The rope is about 40' long."
+  }
+  test.assertCmd("x rope", ["The rope is about 40' long. One end heads into the conservatory. The other end is tied to the hook."], true)
 
   test.title("rope - room one again");
   test.assertCmd("e", ["You head east.", "The conservatory", "A light airy room.", "You can see a broken chair and a rope here.", "You can go north or west."]);
@@ -2045,6 +2072,105 @@ test.tests = function() {
   
   saveLoad.loadTheWorld(saveStr, 4)
   test.assertEqual("There is her book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}))
+  
+  
+
+  
+  test.title("action commands 1")
+  test.assertCmd("x cam", ["A cheap digital camera."])
+  new CmdAction({
+    name:'Examine',
+    test:function() { return true },
+    script:function() { msg("Weird..."); return world.ABORT_SUCCESS },
+  })
+  test.assertCmd("x knife", ["Weird..."])
+  test.assertCmd("x cam", ["Weird..."])
+  test.assertCmd("x cam and knife", ["Weird..."])
+  test.assertCmd("get cam", ["You take the camera."])
+  cmdActions.length = 0
+  
+  
+
+
+  test.title("action commands 2")
+  test.assertCmd("x cam", ["A cheap digital camera."])
+  new CmdAction({
+    name:'Examine',
+    test:function(item, objects) { 
+      return item.name === 'camera' 
+    },
+    script:function(item, objects, multiple) { msg(multiple ? "Camera: Weird..." : "Weird..."); return world.SUCCESS },
+  })
+  test.assertCmd("x knife", ["A blunt knife."])
+  test.assertCmd("x cam", ["Weird..."])
+  test.assertCmd("x cam and knife", ["Camera: Weird...", "A blunt knife."])
+  cmdActions.length = 0
+
+  
+
+
+  test.title("action commands 3")
+  test.assertCmd("x cam", ["A cheap digital camera."])
+  new CmdAction({
+    name:'Examine',
+    test:function(item, objects) { 
+      return item.name === 'camera' 
+    },
+    script:function(item, objects, multiple) { msg(multiple ? "Camera: Weird..." : "Weird..."); return world.SUCCESS },
+  })
+  new CmdAction({
+    name:'Examine',
+    test:function() { return true },
+    script:function() { msg("Odd."); return world.FAILED },
+  })
+  test.assertCmd("x knife", ["Odd."])
+  test.assertCmd("x cam", ["Weird..."])
+  test.assertCmd("x cam and knife", ["Camera: Weird...", "Odd."])
+  cmdActions.length = 0
+
+
+
+  test.title("action commands 4")
+  new CmdAction({
+    name:'Say',
+    ignoreItems:true,
+    test:function(item, objects) {
+      return player.inLimbo
+    },
+    script:function(objects) {
+      const text = objects[1]
+      msg("You try to say '" + text + "', but no words come out of your mouth.") 
+      return world.ABORT_FAILED 
+    },
+  })
+  test.assertCmd("say hello", ["You say, 'Hello.'", "No one seems interested in what you say."])
+  player.inLimbo = true
+  test.assertCmd("say hello", ["You try to say 'hello', but no words come out of your mouth."])
+  cmdActions.length = 0
+  player.inLimbo = false
+
+  
+  test.title("action commands 5")
+  new CmdAction({
+    name:'OneWord',
+    ignoreItems:true,
+    test:function(objects) {
+      return player.inLimbo && objects[0] === 'pray'
+    },
+    script:function(objects) {
+      msg("You pray, wondering if the gods can hear you when you are here.") 
+      return world.ABORT_FAILED 
+    },
+  })
+  test.assertCmd("pray", ["You pray to every god you know, but none seem to offer any help."])
+  player.inLimbo = true
+  test.assertCmd("pray", ["You pray, wondering if the gods can hear you when you are here."])
+  cmdActions.length = 0
+  player.inLimbo = false
+
+  
+
+  
   
   
   

@@ -407,7 +407,7 @@ rpg.init = function() {
       })
     }
   }
-  io.updateUIItems() // changed diplay verbs, so need to update
+  //io.updateUIItems() // changed diplay verbs, so need to update
 }
 
 

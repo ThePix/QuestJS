@@ -265,7 +265,6 @@ test.tests = function() {
 
 
 
-
   test.title("learn fireball")
   
   const spell = rpg.find('fireball')
@@ -356,7 +355,6 @@ test.tests = function() {
   
 
 
-
   test.title("learn ongoing spells")
   test.assertCmd('get spellbook', ['You take the spellbook.'])
   test.assertCmd('learn steelskin', ['You learn <i>Steelskin</i> from the spellbook.'])
@@ -375,7 +373,6 @@ test.tests = function() {
 
 
 
-
   test.title("ongoing spells expire")
   player['countdown_Steelskin'] = 3
   test.assertCmd('z', ['Time passes...',])
@@ -389,8 +386,6 @@ test.tests = function() {
   
 
 
-
-
   test.title("cast unlock")
   player.skillsLearnt = ["Double attack", "Fireball", "Unlock"]
   test.assertCmd('cast unlock', ['You cast the <i>Unlock</i> spell.', 'The door to the south unlocks.', 'The practice room door unlocks.', 'The chest unlocks.'])
@@ -398,12 +393,11 @@ test.tests = function() {
 
 
 
-
   test.title("cast Commune with animal")
   player.skillsLearnt = ["Double attack", "Fireball", "Commune with animal"]
   test.assertCmd('talk to rabbit', [/You spend a few minutes telling the rabbit/])
   test.assertCmd('cast commune on rabbit', ['You cast the <i>Commune with animal</i> spell.', 'You can now talk to the rabbit for a short time.'])
-  test.assertCmd('talk to rabbit', [/You say \'Hello,\' to the rabbit/, /Fading away bunny/, /Quest started/, 'Go find a carrot.'])
+  test.assertCmd('talk to rabbit', [/You say \'Hello,\' to the rabbit/, /Fading away bunny/, /Quest started/, 'Go find a carrot.', /carrot/])
   test.assertCmd('z', ['Time passes...'])
   test.assertCmd('z', ['Time passes...'])
   test.assertCmd('z', ['Time passes...', 'The <i>Commune with animal</i> effect on the rabbit expires.'])
@@ -417,6 +411,9 @@ test.tests = function() {
   w.carrot.loc = 'practice_room'
   test.assertCmd('z', ['Time passes...'])
 
+
+
+
   test.title("quests 2")
   test.assertCmd('get carrot', ['You take the carrot.', /Quest progress/, 'Give the carrot to Lara.', /Now you have the carrot you better/])
   test.assertEqual(quest.ACTIVE, q.state())
@@ -428,7 +425,7 @@ test.tests = function() {
   test.assertCmd('z', ['Time passes...'])
 
   test.title("quests 3")
-  test.assertCmd('give carrot to rabbit', ["'A carrot!' says Lara with delight, before stuffing it in her mouth. 'So, do you have any more?'", /Quest completed/])
+  test.assertCmd('give carrot to rabbit', ["'A carrot!' says Lara with delight, before stuffing it in her mouth. 'So, do you have any more?'", /Quest Successfully Completed/])
   test.assertEqual(quest.SUCCESS, q.state())
   test.assertEqual(false, q.stage())
 
@@ -436,7 +433,6 @@ test.tests = function() {
   test.assertCmd('q all', ['All Quests', 'Success: <i>A carrot for Lara</i>'])
 
   delete w.carrot.loc
-
 
 
 
@@ -485,7 +481,6 @@ test.tests = function() {
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...', 'The <i>Immunity To Frost</i> effect on you expires.'])
-
 
 
 
@@ -551,7 +546,6 @@ test.tests = function() {
 
 
   w.rabbit.setLeader()
-
 
 
   test.title("cast Mage Light")
@@ -704,11 +698,14 @@ test.tests = function() {
     options.char.money += options.gp
     msg("{nv:char:find:true} {number:gp} gold coins on the body.", options)
   }
+  delete w.snotling.searched
   test.assertCmd('search sn', 'You find six gold coins on the body.')
   test.assertEqual(6, player.money)
   test.assertCmd('search sn', 'You search the snotling, but find nothing more.')
+
+
   delete w.snotling.searched
-  w.snotling.search = function(options) {
+  w.snotling.searchWhenDead = function(options) {
     options.char.money += 9
     msg("{nv:char:find:true} 9 gold coins on the body.", options)
   }

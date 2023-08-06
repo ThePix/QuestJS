@@ -22,6 +22,10 @@ settings.libraries.push('zone')
 settings.styleFile = 'style'
 
 
+//settings.exit_states.push('Cursed')
+
+
+
 //settings.sceneryOnNewLine = true
 
 //settings.libraries.push('item_links')

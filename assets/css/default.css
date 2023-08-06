@@ -65,10 +65,6 @@ ol, ul {
 	list-style: square inside;
 }
 
-#cursor {
-  margin-left: 5px;
-}
-
 pre {
   padding-left: 10px;
   color:#888;
@@ -138,6 +134,21 @@ pre {
 }
 
 
+#input {
+  display:flex;
+}
+
+#cursor {
+  margin-left: 5px;
+  float:left;
+  position: relative;
+}
+
+#inner-input {
+  overflow:hidden;
+  flex:1 0 0;
+}
+
 #input input {
   font-family: 'Courier New', Courier, monospace !important;
   font-size: 16px;
@@ -204,6 +215,12 @@ pre {
   text-align: justify;
 }
 
+#text-dialog {
+  width: 95%; 
+}
+.dark-body #text-dialog {
+  color: white; 
+}
 
 /***
 * The command bar
@@ -381,7 +398,6 @@ span.compass-button {
 #dialog {
   display:none;
   z-index:10;
-  position:fixed;
 }
 
 .toggle {

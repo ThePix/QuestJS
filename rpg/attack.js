@@ -195,6 +195,7 @@ class Attack {
     this.msg(processText("---\nTargeting {nm:target:the}...", {skill:this.skill, attacker:this.attacker, target:target}), 3)
     if (this.element) this.msg("Element: " + this.element, 3)
   
+
     // Is the target affected (hit)?
     if (this.skill.automaticSuccess || !target.getDefensiveBonus) {
       this.msg("Automatic success", 4)

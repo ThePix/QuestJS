@@ -58,6 +58,24 @@ const RPG_TEMPLATE = {
   },
 
   
+  search:function(options) {
+    const obj = options.item
+    if (!obj.dead && !obj.asleep) return falsemsg(lang.searchAlive, options)
+    if (obj.searched) return falsemsg(lang.searchNothingMore, options)
+    if (obj.searchWhenDead) {
+      obj.searchWhenDead(options)
+      obj.searched = true
+    }
+    else if (settings.defaultSearch) {
+      settings.defaultSearch(obj, options)
+      obj.searched = true
+    }
+    else {
+      msg(lang.searchNothing, options)
+      obj.searched = true
+    }
+    return true
+  },
  
   
   // Can be called to have the NPC resume its original agenda, as long as
@@ -231,8 +249,14 @@ const RPG_NPC = function(female) {
     o.oldRpgOnCreation(o)
     if (!o.maxHealth) o.maxHealth = o.health
     o.verbFunctions.push(function(o, verbList) {
-      verbList.push(lang.verbs.attack)
-      if (settings.targetVerb && player.target !== o.name) verbList.push(lang.verbs.target)
+      if (o.dead) {
+        verbList.pop()
+        verbList.push(lang.verbs.search)
+      }
+      else {
+        verbList.push(lang.verbs.attack)
+        if (settings.targetVerb && player.target !== o.name) verbList.push(lang.verbs.target)
+      }
     })
     o.nameModifierFunctions.push(function(o, list) {
       if (o.dead) list.push(lang.invModifiers.dead)

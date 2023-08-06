@@ -60,34 +60,14 @@ new Cmd('Attack', {
   defmsg:lang.notAFoe
 })
 
-
+/*
 findCmd('Search').script = function(objects) {
   const obj = objects[0][0]
   const options = {char:player, item:obj}
-  
-  if (!obj.rpgCharacter && !obj.search) {
-    return failedmsg(lang.searchNothing, options)
-  }
-  else if (!obj.dead && !obj.asleep) {
-    return failedmsg(lang.searchAlive, options)
-  }
-  else if (obj.searched) {
-    msg(lang.searchNothingMore, options)
-  }
-  else if (obj.search) {
-    obj.search(options)
-    obj.searched = true
-  }
-  else if (settings.defaultSearch) {
-    settings.defaultSearch(obj, options)
-    obj.searched = true
-  }
-  else {
-    return failedmsg(lang.searchNothing, options)
-  }
 
-  return world.SUCCESS 
-}
+  if (!obj.search) return failedmsg(lang.searchNothing, options)
+  return obj.search(options) ? world.SUCCESS : world.FAILED
+}*/
 
 new Cmd('Equip', {
   npcCmd:true,

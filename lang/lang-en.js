@@ -112,19 +112,19 @@ const lang = {
     SwitchOff:/^(?:turn off|switch off) (.+)$/,
     Open:/^(?:open|unwrap) (.+)$/,
     OpenWith:[
-      /^(?:open) (.+) (?:with|using) (.+)$/,
-      {regex:/^(?:use|with|using) (.+?) (?:to open|open) (.+)$/, mod:{reverse:true}},
+      /^(?:open) (?<item>.+) (?:with|using) (?<obj>.+)$/,
+      /^(?:use|with|using) (?<obj>.+?) (?:to open|open) (?<item>.+)$/,
     ],
     Close:/^(?:close|cover|shut) (.+)$/,
     Lock:/^(?:lock) (.+)$/,
     LockWith:[
-      /^(?:lock) (.+) (?:with|using) (.+)$/,
-      {regex:/^(?:use|with|using) (.+?) (?:to lock|lock) (.+)$/, mod:{reverse:true}},
+      /^(?:lock) (?<item>.+) (?:with|using) (?<obj>.+)$/,
+      /^(?:use|with|using) (?<obj>.+?) (?:to lock|lock) (?<item>.+)$/,
     ],
     Unlock:/^(?:unlock) (.+)$/,
     UnlockWith:[
-      /^(?:unlock) (.+) (?:with|using) (.+)$/,
-      {regex:/^(?:use|with|using) (.+?) (?:to unlock|unlock) (.+)$/, mod:{reverse:true}},
+      /^(?:unlock) (?<item>.+) (?:with|using) (?<obj>.+)$/,
+      /^(?:use|with|using) (?<obj>.+?) (?:to unlock|unlock) (?<item>.+)$/,
     ],
     
     ClimbUpVerb:/^(?:climb up|climb|go up|ascend|scale) (.+)$/,
@@ -133,11 +133,15 @@ const lang = {
     Pull:/^(?:pull|drag) (.+)$/,
     Fill:/^(?:fill) (.+)$/,
     Empty:/^(?:empty|discharge|decant|pour out|pour) (.+)$/,
-    Eat:/^(eat|feed on|feed|partake of|partake|dine on|dine) (.+)$/,
-    Drink:/^(drink|imbibe|quaff|guzzle|knock back|swig|swill|sip|down|chug|swallow) (.+)$/,
-    Ingest:/^(consume|swallow|ingest) (.+)$/,
-    Hit:/^(attack|strike|hit|kick|hurt|fight|punch|murder|kill|slaughter) (.+)$/,
-    Clean:/^(clean|rub|dust|polish|shine) (.+)$/,
+    
+    // Vari-verbs
+    // Want the verb saved, but for convenience we have it at the end
+    Eat:[{regex:/^(eat|feed on|feed|partake of|partake|dine on|dine|nibble) (.+)$/, mod:{reverse:true}}],
+    Drink:[{regex:/^(drink|imbibe|quaff|guzzle|knock back|swig|swill|sip|down|chug) (.+)$/, mod:{reverse:true}}],
+    Ingest:[{regex:/^(consume|swallow|ingest) (.+)$/, mod:{reverse:true}}],
+    Hit:[{regex:/^(attack|strike|hit|kick|hurt|fight|punch|murder|kill|slaughter) (.+)$/, mod:{reverse:true}}],
+    Clean:/^(?<verb>clean|rub|dust|polish|shine) (?<item>.+)$/,
+    
     Sit:/^(?:sit down|sit)$/,
     Recline:/^(?:recline|lie down|lie)$/,
     SitOn:/^(?:sit on|sit upon|sit) (.+)$/,
@@ -264,8 +268,8 @@ const lang = {
   // This will be added to the start of the regex of a command to make an NPC command
   // The saved capture group is the NPC's name
   tell_to_prefixes:{
-    1:'(?:tell|ask|instruct) (.+) to ',   // TELL KYLE TO GET SPOON
-    2:'(.+), ?',                 // KYLE, GET SPOON
+    1:'(?:tell|ask|instruct) (?<char>.+) to ',   // TELL KYLE TO GET SPOON
+    2:'(?<char>.+), ?',                 // KYLE, GET SPOON
   },
 
 
@@ -419,7 +423,7 @@ const lang = {
   topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {show:list}.",
   topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {show:list}.",
   cannot_talk_to:"{nv:char:chat:true} to {nm:item:the} for a few moments, before realizing that {pv:item:be} not about to reply.",
-  no_topics:"{nv:char:have:true} nothing {ifMoreThan:item:talkto_count:0:further }to talk to {nm:item:the} about right now.",
+  no_topics:"That's not going to have much to say about anything.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
   npc_dead:"{nv:char:be:true} dead.",
@@ -428,6 +432,7 @@ const lang = {
 
   // BUTTON
   press_button_successful:"{nv:char:push:true} {nm:item:the}.",
+
 
   // SHIFTABLE
   push_exit_successful:"{nv:char:push:true} {nm:item:the} {show:dir}.",
@@ -691,6 +696,7 @@ const lang = {
   yes_regex:/^(y|yes)$/i,
   
 
+  disambigToCmd:"Not matching that to an option, so guessing it is a different command...?",
 
 
   helloScript:function() {
@@ -947,6 +953,7 @@ const lang = {
     fill:"Fill",
     empty:"Empty",
     turn:"Turn",
+    search:"Search",
   },
   
   // Flag the state of an item in a list
@@ -1126,7 +1133,7 @@ const lang = {
 
   getName:function(item, options) {
     if (!options) options = {}
-    if (!item.alias) item.alias = item.name
+    const alias = item.alias ? item.alias : item.name
     let s = ''
     // The count needs to be an item specific attribute because there could be several items in a list
     // and we need to be clear which item the count belongs to
@@ -1172,7 +1179,7 @@ const lang = {
         s += item.getAdjective()
       }
       if (!count || count === 1) {
-        s += (options.enhanced && item.enhancedAlias ? item.enhancedAlias : item.alias)
+        s += (options.enhanced && item.enhancedAlias ? item.enhancedAlias : alias)
       }
       else {
         s += item.pluralAlias

@@ -265,7 +265,7 @@ settings.levelUp = function() {
 
 
 
-settings.startingDialogEnabled  = true;
+//settings.startingDialogEnabled  = true
 
 settings.maxPoints = 12
 settings.skills = [
@@ -284,23 +284,29 @@ settings.professions = [
   {name:"Moon temple", bonus:"charisma", text:"You are the child of the high priestess of the moon goddess, and have lived in the temple almost exclusively."},
   {name:"Thieves' guild", bonus:"charisma", text:"Orphaned at an earlier age, you took to petty theft just to survive. Refusing to join the guild was not an option."},
   {name:"Military", bonus:"charisma", text:"With both parents as career soldiers, it was natural you too would follow in their footsteps."},
-  {name:"Academia", bonus:"charisma", text:"Your bookish parents left you pretty much to yourself - meaning you could read any book you liked!"},
-  {name:"Barbarian", bonus:"charisma", text:"A member of a fierce warrior tribe that values honour highly, but treats magic with deep suspicion."},
+  {name:"Academic", bonus:"charisma", text:"Your bookish parents left you pretty much to yourself - meaning you could read any book you liked!"},
+  {name:"Barbarian", bonus:"intelligence", text:"A member of a fierce warrior tribe that values honour highly, but treats magic with deep suspicion."},
   {name:"Dwarf", bonus:"charisma", text:"Dwarves like drinking, mining and gold. But surey there is more to them than that?"},
-  {name:"High elf", bonus:"charisma", text:"High elves live in wondrous cities, and usually keep themselves to themselves. Some call the aloof and arrogant..."},
+  {name:"High elf", bonus:"charisma", text:"High elves live in wondrous cities, and usually keep themselves to themselves. Some call them aloof and arrogant..."},
   {name:"Wood elf", bonus:"charisma", text:"Wood elves live in enchanted woods, and will go to any length to protect them."},
-  {name:"Dark elf", bonus:"charisma", text:"Dark elves live in underground cities, but are otherwise like high elves... aloof and arrogant."},
+  {name:"Dark elf", bonus:"charisma", text:"Dark elves live in underground cities, but are otherwise like high elves... which is to say aloof and arrogant."},
 ]
 
 settings.getPointsTable = function() {
+  let flag = false
   let s = '<table>'
   for (const sk of settings.skills) {
-    s += '<tr><td width="40%">' + sk + '</td><td width="20%" id="points-' + sk + '">'
+    s += '<tr><td width="60">' + sk + '</td><td width="30" id="points-' + sk + '">'
     s += typeof player === 'object' ? player[sk+ '_old'] : 0
-    s += '</td><td width="40%">'
+    s += '</td><td width="60">'
     s += '<input type="button" value="-" onclick="settings.pointsAdjust(\'' + sk + '\', false)" />'
     s += '<input type="button" value="+" onclick="settings.pointsAdjust(\'' + sk + '\', true)" />'
-    s += '</td></tr>'
+    s += '</td>'
+    if (!flag) {
+      flag = true
+      s += '<td width="120" rowspan="' + settings.skills.length + '">Click the buttons to assign points to different skill areas. You have ' + settings.maxPoints + ' points to spend in total.</td>'
+    }
+    s += '</tr>'
   }
   s += '<tr><td>Total</td><td id="points-total">0/' + (typeof player === 'object' ? player.points : settings.maxPoints) + '</td><td>'
   s += '</td></tr>'
@@ -327,9 +333,7 @@ for (const s of settings.professions) {
 settings.startingDialogHtml += '</select></p>'
 settings.startingDialogHtml += '<div style="height:100px"><p id="background-text"></p></div>'
 
-settings.startingDialogHtml += '<table><tr><td>'
 settings.startingDialogHtml += settings.getPointsTable()
-settings.startingDialogHtml += '</td><td width="40%">Click the buttons to assign points to different skill areas. You have ' + settings.maxPoints + ' points to spend in total.</td></tr></table>'
 
 
 

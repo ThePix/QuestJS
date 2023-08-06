@@ -241,6 +241,10 @@ createItem("ham_and_cheese_sandwich", EDIBLE(false), {
   pattern:'egg|mayo',
   loc:"lounge",
   examine:"Made of bread, ham and cheese.",
+  //eat:function(options) {
+  //  msg("You think about whether you should " + options.verb + " the sandwich, but decide to save it for later.")
+  //  return false    
+  //},
   afterIngest:function() { msg("That was great!"); },
 })
 
@@ -335,6 +339,17 @@ createItem("chair", FURNITURE({sit:true}), {
       msg("The chair makes a strange noise when {nv:char:sit} on it.", options)
     }
     
+  },
+})
+
+createItem("computer", {
+  loc:"dining_room",
+  examine:"A high-spec gaming computer.",
+  use:function() {
+    msg("You use the computer. It asks for a password.")
+    parser.overrideWith(function(s) {
+      msg("You entered: " + s)
+    }, "{colour:blue:[Enter password] >}", '#')
   },
 })
 
