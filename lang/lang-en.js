@@ -51,6 +51,7 @@ const lang = {
     MetaOops:/^(?:oops)$/,
     MetaRestart:/^restart$/,
     MetaScore:/^score$/,
+    MetaAchievements:/^(?:achievements|achievement|achieve|ach)(| all| com\w*| out\w*)$/,
     MetaPronouns:/^pronouns$/,
     MetaTopicsNote:/^topics?$/,
 
@@ -664,10 +665,17 @@ const lang = {
 
   // Achievements
   
-  ach_none_yet:"No achievements yet!",
+  ach_none_yet:"No achievements yet (and possibly none implemented)!",
   ach_list_intro:"You got {if:count:1:this single, solitary achievement:these achievements}!",
   ach_list_item:"{show:text} ({date:date})",
-  ach_got_one:"You got an achievement!|{show:text}",
+  ach_got_one:"You got an achievement: {show:ach:alias}",
+  // These are used in achievements.js only
+  ach_got_one_with_details:"You got an achievement!|{show:ach:alias} - {show:ach:afterDetails}",
+  ach_explain:"Use ACH ALL to see all achievements, ACH OUT to see just outstandings or ACH COM to just see completed.",
+  ach_none:"There are no achievements set up; perhaps you need to achieve them first?",
+  ach_no_out:"There are no outstanding achievements; you've done them all.",
+  ach_no_com:"There are no completed achievements; you've got them all to do (or there are none implemented).",
+
 
 
   spoken_on:"Game mode is now 'spoken'. Type INTRO to hear the introductory text.",
