@@ -555,7 +555,7 @@ test.tests = function() {
   test.assertEqual(true, player.isLight)
   test.assertEqual(world.LIGHT_FULL, player.lightSource())
   test.assertCmd('s', ['You head south.', 'The cupboard', 'A large storeroom, with no windows.', 'You can go north.'])
-  test.assertCmd('n', ['You head north.', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin (holding a goblin dagger), an orc (holding a broad sword and a wall shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
+  test.assertCmd('n', ['You head north.', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin (holding a goblin dagger), an orc (holding a broad sword and a wall shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, north, south or west.'])
 
   test.assertCmd('z', ['Time passes...',])
   test.assertCmd('z', ['Time passes...', 'You stop shining.'])
@@ -567,7 +567,7 @@ test.tests = function() {
   test.assertCmd('cast Teleport', ['The <i>Teleport</i> spell can only be used once a location has been marked!'])
   test.assertCmd('cast Mark', ['You cast the <i>Mark</i> spell.', 'This location is marked for future use.'])
   test.assertCmd('cast Returning', ['You cast the <i>Returning</i> spell.', 'The air swirls around you, and everything blurs...', 'The yard', 'A large open area in front of the Great Hall, which is to the south. There is a lake to the north, and you can see an island in the lake.', 'You can see fourteen arrows and Stone of Returning here.', 'You can go north or south.'])
-  test.assertCmd('cast Teleport', ['You cast the <i>Teleport</i> spell.', 'The air swirls around you, and everything blurs...', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin (holding a goblin dagger), an orc (holding a broad sword and a wall shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
+  test.assertCmd('cast Teleport', ['You cast the <i>Teleport</i> spell.', 'The air swirls around you, and everything blurs...', 'The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, a goblin (holding a goblin dagger), an orc (holding a broad sword and a wall shield), a rabbit, a shotgun, a small key, a snotling and a spellbook here.', 'You can go east, north, south or west.'])
   
   
 
@@ -657,7 +657,7 @@ test.tests = function() {
   test.assertEqual(92, w.me.health)
   w.goblin.loc = 'yard'
 
-  test.assertCmd('e', ['The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, an orc (holding a broad sword and a wall shield), a rabbit, a small key, a snotling and a spellbook here.', 'You can go east, south or west.'])
+  test.assertCmd('e', ['The practice room', 'A large room with straw scattered across the floor. The only exit is west', 'You can see some boots, a chest, an orc (holding a broad sword and a wall shield), a rabbit, a small key, a snotling and a spellbook here.', 'You can go east, north, south or west.'])
   
   
   test.title("scrolls")
@@ -717,18 +717,20 @@ test.tests = function() {
   test.title("weather")
   settings.weatherReportsAssumeYes = true
   player.currentWeatherDisabled = false
+  player.currentWeatherCount = 0
 
   const hotWeather = weatherTypes['hot']
-  random.prime([0, 1])
+  //random.prime([0, 1])
+  random.prime([0, 1]) 
+  // first is used in test 1 getNext
+  // second is used to set next to "clouding over"
   test.assertEqual('hot', hotWeather.getNext())
-  
   test.assertCmd('wait', ['Time passes...'])
   test.assertEqual('hot', player.currentWeatherName)
   test.assertCmd('wait', ['Time passes...'])
   test.assertEqual('hot', player.currentWeatherName)
   test.assertCmd('wait', ['Time passes...', "It is starting to get cloudy."])
   test.assertEqual('cloudingOver', player.currentWeatherName)
-  
 
   test.title("weather II")
   player.skillsLearnt = ["Fireball", "Call rain", "Cloudbusting"]
@@ -787,7 +789,7 @@ test.tests = function() {
   
   w.orc.loc = 'great_hall'
   test.assertCmd('e', ["You head east.", "The passage", "A long passage.", "You can go west."])
-  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, south or west."])
+  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, north, south or west."])
   w.orc.loc = 'practice_room'
   
   w.orc.unsetGuard()
@@ -796,7 +798,7 @@ test.tests = function() {
   test.assertEqual([], w.practice_room.east_guardedBy)  
   test.assertEqual(false, w.practice_room.east.isGuarded())  
   test.assertCmd('e', ["You head east.", "The passage", "A long passage.", "You can go west."])
-  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, an orc (holding a broad sword and a wall shield), a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, south or west."])
+  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, an orc (holding a broad sword and a wall shield), a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, north, south or west."])
   
   
   
@@ -809,7 +811,7 @@ test.tests = function() {
 
 
   test.assertCmd('e', ["You head east.", "The passage", "A long passage.", "You can see an orc (holding a broad sword and a wall shield) here.", "You can go west.", "The orc eyes you suspiciously."])
-  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, south or west."])
+  test.assertCmd('w', ["You head west.", "The practice room", "A large room with straw scattered across the floor. The only exit is west", "You can see some boots, a chest, a rabbit, a small key, a snotling (dead) and a spellbook here.", "You can go east, north, south or west."])
 
 
 

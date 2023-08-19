@@ -606,7 +606,7 @@ new SpellInanimate("Unlock", {
   targetEffect:function(attack, ex) {
     if (ex instanceof Exit) {
       attack.msg("The door to " + ex.nice() + " unlocks.", 1)
-      ex.setLock(false)
+      ex.setLocked(false)
     }
     else {
       attack.msg(processText("{nv:item:unlock:true}.", {item:ex}), 1)

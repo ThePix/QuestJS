@@ -8,6 +8,20 @@
 
 
 
+new Cmd('TalkToAdverb', {
+  regexes:[
+    /^(?:talk to|speak to|talk|speak) (?<npc>.+) (?<adverb>.+)$/,
+    /^(?<adverb>.+) (?:talk to|speak to|talk|speak) (?<npc>.+)$/,
+  ],
+  objects:{
+    npc:{scope:parser.isNpcAndHere},
+    adverb:{special:'adverb'},
+  },
+  script:function(objects) {
+    msg('You talk to {nm:npc:the} {show:text}.', {npc:objects[0][0], text:objects[1]})
+    return world.SUCCESS
+  },
+})
 
 
 

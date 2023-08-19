@@ -1,12 +1,15 @@
 "use strict";
 
-settings.title = "A First RPG...";
+settings.title = "A First RPG..."
 settings.author = "The Pixie"
-settings.version = "1.1";
-settings.thanks = ["Kyle", "Lara"];
+settings.version = "1.1"
+settings.thanks = ["Kyle", "Lara"]
 
-settings.customLibraries.push({folder:'rpg', files:["lang-en", "rpg", "skill", "attack", "item_templates", "npc_templates", "commands", "weapons", "monsters", "agenda", "spells", "quest"]})
+
+settings.customLibraries.push({folder:'rpg', files:["lang-en", "rpg", "skill", "attack", "item_templates", "npc_templates", "commands", "weapons", "monsters", "agenda", "spells", "quest", "weather"]})
+
 settings.files.push('weather')
+settings.files.push("random-dungeon")
 
 settings.status = [
   "<td width=\"30%\">Health:</td><td width=\"70%\">{show:player:health}/{show:player:maxHealth}</td>",
@@ -154,7 +157,7 @@ settings.setup = function() {
   inner.style.marginRight = 'auto'
   
 
-
+  dungeon.generate()
 
 
   //settings.updateCustomUI()

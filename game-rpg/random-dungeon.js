@@ -71,7 +71,7 @@ const dungeon = {
         data.roomType = key
         data.template = {}
         data.scenery = true
-        data.isLocatedAt = function(loc, situation) { return w[loc].roomType === this.roomType }
+        data.isLocatedAt = function(loc, situation) { return w[loc].roomType === data.roomType }
         const item = dungeon.createDungeonItem(data)
       }
 
@@ -79,9 +79,9 @@ const dungeon = {
         data.roomType = key
         data.template = {}
         data.scenery = true
-        data.isLocatedAt = function(loc, situation) { return w[loc]['r_' + this.room_flag] }
+        data.isLocatedAt = function(loc, situation) { return w[loc]['r_' + data.room_flag] }
         data.apply = function(room) {
-          room['r_' + this.flag] = true
+          room['r_' + data.flag] = true
           if (this.func) this.func(room)
           if (this.desc) room.desc += ' ' + this.desc
         }

@@ -200,6 +200,7 @@ const lang = {
     
     // Misc again
     Say:/^(say|shout|whisper|holler|scream|yell) (.+)$/,
+    Tone:/^(?:tone|mood|attitude) (.+)$/,
     Stand:/^stand$|^stand up$|^get up$/,
     NpcStand:[/^(.+), ?(?:stand|stand up|get up)$/, /^(?:tell|ask|instruct) (.+) to (?:stand|stand up|get up)$/],
     GetFluid:/^(?:get|take|scoop|pick|grab)(?:| up) (.+)$/,
@@ -232,13 +233,27 @@ const lang = {
     NpcUntieFrom:[/^(.+), ?(?:untie|unfasten|detach) (.+) (?:frm) (.+)$/, /^(?:tell|ask|instruct) (.+) to ?(?:untie|unfasten|detach) (.+) (?:from) (.+)$/],
     UseWith:/^(?:use) (.+) (?:with|on) (.+)$/,
 
-    LookExit:/^(?:look|peer|l|glance) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+
+
+
+    /*LookExit:/^(?:look|peer|l|glance) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
 
     PushExit:/^(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
     NpcPushExit:[
       /^(.+), ?(push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
       /^(?:tell|ask|instruct) (.+) to (push|pull|move|shift) (.+) (northwest|nw|north|n|northeast|ne|in|in|enter|i|up|u|west|w|east|e|out|out|exit|o|down|dn|d|southwest|sw|south|s|southeast|se)$/,
+    ],*/
+    LookExit:/^(?:look|peer|l|glance) (.+)$/,
+
+    PushExit:/^(push|pull|move|shift) (.+) (.+)$/,
+    NpcPushExit:[
+      /^(.+), ?(push|pull|move|shift) (.+) (.+)$/,
+      /^(?:tell|ask|instruct) (.+) to (push|pull|move|shift) (.+) (.+)$/,
     ],
+    
+    
+    
+    
     AskAbout:/^(?:ask) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TellAbout:/^(?:tell) (.+?) (about|what|who|how|why|where|when) (.+)$/,
     TalkAbout:[
@@ -322,6 +337,11 @@ const lang = {
   lock_successful:"{nv:char:lock:true} {nm:container:the}.",
   unlock_successful:"{nv:char:unlock:true} {nm:container:the}.",
   close_and_lock_successful:"{nv:char:close:true} {nm:container:the} and {cj:char:lock} {sb:container}.",
+  open_successful_item:"{nv:char:open:true} {nm:item:the}.",
+  close_successful_item:"{nv:char:close:true} {nm:item:the}.",
+  lock_successful_item:"{nv:char:lock:true} {nm:item:the}.",
+  unlock_successful_item:"{nv:char:unlock:true} {nm:item:the}.",
+  close_and_lock_successful_item:"{nv:char:close:true} {nm:item:the} and {cj:char:lock} {sb:item}.",
   cannot_open:"{nv:item:can't:true} be opened.",
   cannot_open_with:"{nv:player:can't:true} open that with {nm:secondItem:the}.",
   cannot_lock_with:"{nv:player:can't:true} lock that with {nm:secondItem:the}.",
@@ -334,6 +354,7 @@ const lang = {
   container_recursion:"What? {nv:char:want:true} to put {nm:item:the} in {nm:container:the} when {nm:container:the} is already in {nm:item:the}? That's just too freaky for me.",
   not_inside:"{nv:item:be:true} not inside that.",
   locked:"{nv:container:be:true} locked.",
+  locked_item:"{nv:item:be:true} locked.",
   no_key:"{nv:char:do:true} not have the right key.",
   locked_exit:"That way is locked.",
   open_and_enter:"{nv:char:open:true} the {show:doorName} and walk through.",
@@ -427,6 +448,8 @@ const lang = {
   no_topics:"That's not going to have much to say about anything.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
+  not_a_tone:'I don\'t know of a tone/mood/attitude "{show:text}".',
+  tone_is_now:"The player's tone is now {show:text}.",
   npc_dead:"{nv:char:be:true} dead.",
   search_npc_failure:"{nv:char:suspect:true} {nv:item:will} not appreciate {ob:char} going through {pa:item} pockets.",
 
@@ -492,6 +515,7 @@ const lang = {
   cannot_climb_item:"{pv:item:'be:true} not something you can climb.",
   cannot_climb:"There is nothing you can climb here.",
   climb_ambiguity:"You will need to specify whether you want to climb up or down here.",
+  not_a_direction:'Hmm, I was expecting a direction there, and got "{show:text}" instead.',
 
 
   // General cannot Messages
@@ -554,6 +578,7 @@ const lang = {
   not_enough:"There {ifMoreThan:count:1:are:is} only {show:count} {nm:item}.",
   it_is_dark:"It is dark.",
   abort_cmds:"Abandoning later commands",
+  not_implemented:'Looks likes that feature is not a part of this game.',
   
   error:"Oh dear, I seem to have hit an error trying to handle that (F12 for more details).",
   
@@ -669,7 +694,6 @@ const lang = {
   ach_list_intro:"You got {if:count:1:this single, solitary achievement:these achievements}!",
   ach_list_item:"{show:text} ({date:date})",
   ach_got_one:"You got an achievement: {show:ach:alias}",
-  // These are used in achievements.js only
   ach_got_one_with_details:"You got an achievement!|{show:ach:alias} - {show:ach:afterDetails}",
   ach_explain:"Use ACH ALL to see all achievements, ACH OUT to see just outstandings or ACH COM to just see completed.",
   ach_none:"There are no achievements set up; perhaps you need to achieve them first?",

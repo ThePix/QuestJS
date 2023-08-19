@@ -869,9 +869,12 @@ test.tests = function() {
 
 
   test.title("Look at scenery")
+  test.assertEqual(undefined, w.lounge_scenery_oldsettee.examine_count)
   test.assertCmd("look at settee", "It's just scenery.")
+  test.assertEqual(1, w.lounge_scenery_oldsettee.examine_count)
   test.assertCmd("x old settee", "It's just scenery.")
   test.assertCmd("examine couch", "It's just scenery.")
+  test.assertEqual(3, w.lounge_scenery_oldsettee.examine_count)
   test.assertCmd("look at tv", "It's just scenery.")
   test.assertCmd("look at rug", "It might have been blue at one time. Maybe.")
   
@@ -1077,9 +1080,13 @@ test.tests = function() {
   test.assertCmd("get knife", "You take the knife.");
 
 
+  test.title("Custom parser special");
+  test.assertCmd("talk to kyle quickly", "You talk to Kyle quickly.");
+  test.assertCmd("talk to kyle q", "You talk to Kyle quickly.");
+  test.assertCmd("q talk to kyle", "You talk to Kyle quickly.");
+  test.assertCmd("qx talk to kyle", 'Not recognising the adverb "qx".');
 
 
- 
 
   test.title("Simple object commands (bricks and a box)");
   test.assertEqual(false, parser.isContained(w.brick));

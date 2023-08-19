@@ -38,6 +38,8 @@ settings.symbolsForCompass = true
 
 settings.fluids = ['water', 'honey', 'lemonade']
 
+
+
 settings.status = [
   "hitpoints",
   function() { return "<td>Spell points:</td><td>3</td>"; },
@@ -52,6 +54,11 @@ settings.mapDrawLabels=true
 // This function will be called at the start of the game, so can be used
 // to introduce your game.
 settings.setup = function() {
+  parser.generateSpecialText(
+    'adverb',
+    [['carefully', 'cautiously', 'c'], ['quickly', 'fast', 'q'], 'elegantly'],
+    'Not recognising the adverb "{show:text}".'
+  )
   player.hitpoints = 20;
   player.status = "You are feeling fine";
   io.updateStatus()
