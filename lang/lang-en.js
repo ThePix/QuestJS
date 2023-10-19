@@ -64,6 +64,7 @@ const lang = {
     // Misc
     Wait:/^wait$|^z$/,
     Climb:/^climb$/,
+    Up:/^(?:up|u)$/,  // could be GO UP or STAND UP so handle separately
     Back:/^back$|^go back$|^return$/,
     //Smell:/^smell$|^sniff$/,
     //Listen:/^listen$/,
@@ -600,7 +601,7 @@ const lang = {
     if (!char.postureFurniture && char.posture === "standing") return ""
     const options = {char:char}
     if (w[char.postureFurniture]) options.item = w[char.postureFurniture]
-    char.posture = false
+    char.posture = "standing"
     char.postureFurniture = false
     return processText(options.item ? "{nv:char:get:true} off {nm:item:the}." : "{nv:char:stand:true} up.", options)
   },
@@ -1199,7 +1200,7 @@ const lang = {
         s += lang.toWords(count) + ' '
       }
       else if (options.article === DEFINITE) {
-        s += lang.addDefiniteArticle(item)
+        s += lang.addDefiniteArticle(item, options)
       }
       else if (options.article === INDEFINITE) {
         s += lang.addIndefiniteArticle(item, options)

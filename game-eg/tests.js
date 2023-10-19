@@ -498,16 +498,18 @@ test.tests = function() {
 
 
 
-  test.title("Text processor 5: nm, nv, etc.");
-  test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:'Kyle'}));
-  test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:w.Kyle}));
-  test.assertEqual("Kyle is your bear.", processText("{nv:Kyle:be} {pa:Buddy} bear."));
-  test.assertEqual("Kyle is her bear.", processText("{nv:Kyle:be} {pa:Lara} bear."));
-  test.assertEqual("There is Kyle.", processText("There is {nm:chr:a}.", {chr:w.Kyle}));
-  test.assertEqual("There is a book.", processText("There is {nm:chr:a}.", {chr:w.book}));
-  test.assertEqual("There is a book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}));
+  test.title("Text processor 5: nm, nv, etc.")
+  test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:'Kyle'}))
+  test.assertEqual("Kyle is a bear.", processText("{nv:chr:be} a bear.", {chr:w.Kyle}))
+  test.assertEqual("Kyle is your bear.", processText("{nv:Kyle:be} {pa:Buddy} bear."))
+  test.assertEqual("Kyle is her bear.", processText("{nv:Kyle:be} {pa:Lara} bear."))
+  test.assertEqual("There is Kyle.", processText("There is {nm:chr:a}.", {chr:w.Kyle}))
+  test.assertEqual("There is a book.", processText("There is {nm:chr:a}.", {chr:w.book}))
+  test.assertEqual("There is a book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}))
   w.book.owner = 'Kyle'
-  test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}));
+  test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa}.", {chr:w.book}))
+  test.assertEqual("There is his book.", processText("There is {nm:chr:the-pa}.", {chr:w.book}))
+  
   test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa::Kyle}.", {chr:w.book}));
   test.assertEqual("There is Kyle's book.", processText("There is {nm:chr:a-pa::Lara}.", {chr:w.book}));
   test.assertEqual("There is his book.", processText("There is {nm:chr:a-pa::npc}.", {chr:w.book, npc:w.Kyle}));

@@ -4,7 +4,7 @@ createRoom('room_prototype', EXIT_FAKER(), {
 
   paintedOnDoor:function(char) {
     char.msg(lang.stop_posture(char))
-    msg("You try the door to the " + this.dir + " but it is just painedt on!")
+    msg("You try the door to the " + this.dir + " but it is just painted on!")
     return false
   },
 

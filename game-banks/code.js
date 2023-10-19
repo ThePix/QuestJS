@@ -80,7 +80,7 @@ const CREW = function(isFemale) {
     if (this.posture === "reclining" && this.loc === "stasis_bay") {
       s += " {pv:char:be:true} lying in his stasis pod.";
     }
-    else if (this.posture) {
+    else if (this.posture !== 'standing') {
       s += " {pv:char:be:true} " + this.posture + ".";
     }
     msg(this.desc + s, tpParams);
