@@ -437,6 +437,7 @@ const lang = {
   cannot_wait:"'Wait here,' {nv:char:say} to {nm:item:the}. Being an inanimate object, {nv:char:feel} pretty confident it will do as it is told.",
   already_following:"'I'm already following you!'",
   already_waiting:"'I'm already waiting!'",
+  npc_agrees:"{nv:npc:nod:true} {pa:npc} head."
 
   cannot_ask_about:"{nv:char:can:true} ask {ob:item} about {show:text} all {pv:char:like}, but {pv:item:be} not about to reply.",
   cannot_tell_about:"{nv:char:can:true} tell {ob:item} about {show:text} all {pv:char:like}, but {pv:item:be} not interested.",
