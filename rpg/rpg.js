@@ -492,7 +492,7 @@ util.defaultExitUse = function(char, exit) {
   }
   
   if (exit.isLocked()) {
-    return falsemsg(exit.lockedmsg ? exit.lockedmsg : lang.locked_exit, {char:char, exit:exit})
+    return falsemsg(exit.msgLocked ? exit.msgLocked : lang.locked_exit, {char:char, exit:exit})
   }
   if (exit.testExit && !exit.testExit(char, exit)) return false
   for (const el of char.getCarrying()) {

@@ -437,7 +437,7 @@ const lang = {
   cannot_wait:"'Wait here,' {nv:char:say} to {nm:item:the}. Being an inanimate object, {nv:char:feel} pretty confident it will do as it is told.",
   already_following:"'I'm already following you!'",
   already_waiting:"'I'm already waiting!'",
-  npc_agrees:"{nv:npc:nod:true} {pa:npc} head."
+  npc_agrees:"{nv:npc:nod:true} {pa:npc} head.",
 
   cannot_ask_about:"{nv:char:can:true} ask {ob:item} about {show:text} all {pv:char:like}, but {pv:item:be} not about to reply.",
   cannot_tell_about:"{nv:char:can:true} tell {ob:item} about {show:text} all {pv:char:like}, but {pv:item:be} not interested.",
@@ -757,6 +757,9 @@ const lang = {
       metamsg("{b:Mobile:} If you are on a mobile phone, type {class:help-eg:NARROW} to reduce the width of the text. Type it again to reduce it even more, and a third time to go back to standard width.")
       metamsg("{b:Shortcuts:} You can often just type the first few characters of an item's name and Quest will guess what you mean.  If fact, if you are in a room with Brian, who is holding a ball, and a box, Quest should be able to work out that {class:help-eg:B,PUT B IN B} mean you want Brian to put the ball in the box.")
       metamsg("You can use the up and down arrows to scroll back though your previous typed commands - especially useful if you realise you spelled something wrong. If you do not have arrow keys, use {class:help-eg:OOPS} to retrieve the last typed command so you can edit it. Use {class:help-eg:AGAIN} or just {class:help-eg:G} to repeat the last typed command.")
+      if (settings.doubleClickWords) {
+        metamsg("Double click on a word to add it to the input line. You can do this with any word at all in the main text, whether the game will understand it or not - it is just a quick way to make a command, not a kint about the implementation of the game.")
+      }
       metamsg("See also {link:here:https://github.com/ThePix/QuestJS/wiki/How-To-Play} for more details, which will open in a new tab.")      
     }
     if (settings.panes !== "none") {

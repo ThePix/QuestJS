@@ -110,7 +110,7 @@ createRoom("practice_room", {
     }    
   }),*/
   south:new Exit('cupboard', {
-    lockedmsg:"It seems to be locked."
+    msgLocked:"It seems to be locked."
   }),
   exit_locked_south:true,
 });

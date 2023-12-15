@@ -38,6 +38,49 @@ test.tests = function() {
   test.assertEqual('analyses', lang.getPlural('analysis'))
   
   
+  settings.outputPostProcessor = function(s) {
+    const words = []
+    let word = ''
+    let inTag = false
+
+    for (const c of s) {
+      if (c === '<' && !inTag) {
+        inTag = true
+        word += c
+      }
+      else if (c === '>' && inTag) {
+        inTag = false
+        word += c
+      }
+      else if (inTag) {
+        word += c
+      }
+      else if (c === ' ') {
+        words.push(word)
+        word = ''
+      }
+      else {
+        word += c
+      }
+    }
+
+    words.push(word)
+    const wordsPlus = words.map(el => '<span class="test">' + el + '</span>')
+    return wordsPlus.join(' ')
+  }
+  
+  /*
+  test.assertEqual('<span class="test">bill</span> <span class="test">and</span> <span class="test">ben</span>', settings.outputPostProcessor('bill and ben'))
+  test.assertEqual('<span class="test">bill</span> <span class="test"><i>and</i></span> <span class="test">ben</span>', settings.outputPostProcessor('bill <i>and</i> ben'))
+  test.assertEqual('<span class="test">bill</span> <span class="test"><span style="color:blue">and</span></span> <span class="test">ben</span>', settings.outputPostProcessor('bill <span style="color:blue">and</span> ben'))
+  test.assertEqual('<span class="test">bill</span> <span class="test"><span style="color:blue">a</span>nd</span> <span class="test">ben</span>', settings.outputPostProcessor('bill <span style="color:blue">a</span>nd ben'))
+  
+
+  test.assertEqual('<span class="test">bill</span> <span class="test"><i>and</i></span> <span class="test"><i>ben</i></span>', settings.outputPostProcessor('bill <i>and ben</i>'))
+  */
+
+  
+  
   
   
   test.title("parser.itemSetup")
