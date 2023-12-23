@@ -447,6 +447,7 @@ const lang = {
   topics_ask_list:"Some suggestions for what to ask {nm:item:the} about: {show:list}.",
   topics_tell_list:"Some suggestions for what to tell {nm:item:the} about: {show:list}.",
   cannot_talk_to:"{nv:char:chat:true} to {nm:item:the} for a few moments, before realizing that {pv:item:be} not about to reply.",
+  no_topics_now:"{nv:player:do:true} not have much to say to {nm:item:the} right now.",
   no_topics:"That's not going to have much to say about anything.",
   not_able_to_hear:"Doubtful {nv:item:will} be interested in anything {sb:char} has to say.",
   npc_no_interest_in:"{nv:char:have:true} no interest in that subject.",
