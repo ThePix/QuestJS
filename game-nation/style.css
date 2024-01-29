@@ -1,0 +1,20 @@
+#next-turn {
+  text-align: center;
+  padding: 5px;
+}
+
+#next-turn [type="button"] {
+  color:red;
+  border-radius: 6px;
+  height:24px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+#next-turn [type="button"]:hover {
+  background-color: yellow;
+  color: black;
+}
+
+
+
