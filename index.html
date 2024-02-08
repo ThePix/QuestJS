@@ -12,19 +12,23 @@
   >
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
   
+
+  <script>
+    let folder = 'game/'
+    let loaded = false
+    if (window.location.search) folder = 'game-' + window.location.search.substring(1) + '/'
+    const qeditor = false
+    const resourcesFolder = ''
+  </script>
+
   <script src="lib/_util.js"></script>
   <script src="lib/_settings.js"></script>
+
   <script>
-    let folder = 'game'
-    let loaded = false
-    if (window.location.search)
-    folder += '-' + window.location.search.substring(1)
-
-
     const myScript = document.createElement("script")
     myScript.setAttribute("src", folder + '/settings.js')
     myScript.onload = function() {
-      settings.writeScript(folder)
+      settings.writeScript(folder, "", "")
     }
     myScript.onerror = function() {
       console.log("Failed to load file \"" + folder + "/settings.js\".")
