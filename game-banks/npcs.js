@@ -49,6 +49,23 @@ createItem("Xsansi", NPC(true), {
     },
     
     {
+      name:"myself",
+      test:function(p) {
+        return p.text.match(new RegExp("^me$|myself|" + player.alias), "i"); 
+        }, 
+      script:function() {
+        msg("'Tell me about myself, Xsansi,' you say.");
+        if (w.Xsansi.currentPlanet < 3) {
+          msg(processText(w.Xsansi.crewStatusTemplate, {char:player, room:w[player.loc]}))
+          w.Xsansi.locate = null
+        }
+        else {
+          msg("'I take it you have lost yourself, and want me to tell you where you are? I have navigated this bucket of bolts across half the galaxy, heaven forbid you could find your own way to canteen.'");
+        }
+      },
+    },
+    
+    {
       name:"kyle",
       test:function(p) { return p.text.match(/kyle/); }, 
       script:function() {
@@ -65,7 +82,7 @@ createItem("Xsansi", NPC(true), {
     
     {
       name:"aada",
-      test:function(p) { return p.text.match(/house/); }, 
+      test:function(p) { return p.text.match(/aada/); }, 
       script:function() {
         msg("'Tell me about Aada, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
@@ -80,7 +97,7 @@ createItem("Xsansi", NPC(true), {
     
     {
       name:"ha_yoon",
-      test:function(p) { return p.text.match(/ha-yoon|ha yoon|ha|yoon/); }, 
+      test:function(p) { return p.text.match(/ha-yoon|ha yoon|^ha$|^yoon$/); }, 
       script:function() {
         msg("'Tell me about Ha-yoon, Xsansi,' you say.");
         if (w.Xsansi.currentPlanet < 3) {
@@ -282,12 +299,12 @@ createItem("Xsansi", NPC(true), {
       name:"itinerary",
       test:function(p) { return p.text.match(/itinerary|stars|planets|route|destinations/); }, 
       script:function() {
-        msg("'Remind me of the itinerary, Xsansi,' you say.");
+        msg("'Remind me of the itinerary, Xsansi,' you say.")
         if (w.Xsansi.currentPlanet < 3) {
           for (let i = w.Xsansi.currentPlanet; i < PLANETS.length; i++) {
-            let s = "'Item " + (i + 1) + ": " + PLANETS[i].starDesc;
-            if (i + 2 === PLANETS.length) s += "'";
-            msg(s);
+            let s = "'Item " + (i + 1) + ": " + PLANETS[i].starDesc
+            if (i + 2 === PLANETS.length) s += "'"
+            msg(s)
           }
         }
         else {
@@ -478,20 +495,30 @@ createItem("Kyle", CREW(false), {
   },
   askOptions:[
     {
+      test:function(p) { return p.text.match(/satel/); }, 
+      script:function() {
+        msg("'What's the deal with the satellite?' you ask Kyle.");
+        msg("'I just laurnch them. Ask Xsansi for up to the minute data.'")
+      }
+    },
+    
+    {
       test:function(p) { return p.text.match(/newcastle/); }, 
       script:function() {
         msg("'What's Newcastle like?' you ask Kyle.");
         msg("'It's... okay. But no better than that. I guess it's too close to Sydney, and anything interesting goes there, so its kinda dull.'");
         trackRelationship(w.Kyle, 1, "background2");
-      }},
+      }
+    },
     
     {
       test:function(p) { return p.text.match(/sydney/); }, 
-      esponse:function() {
+      script:function() {
         msg("'What's Sydney like?' you ask Kyle.");
         msg("'It's great! Really great nightlife, just so lively. Everyone said when they banned vehicles from the CBD, back in '68, it would die a death, but I think it made it even better.'");
         trackRelationship(w.Kyle, 1, "background2");
-      }},
+      }
+    },
     
     {
       name:"radioSignals", 

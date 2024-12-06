@@ -1,5 +1,8 @@
 "use strict"
 
+// A quest has state and progress. The state is active, failed, etc. The progress indicates what step we are at.
+
+
 
 function questmsg(s, params) {
   _msg(s, params || {}, {cssClass:"quest", tag:'p'});
@@ -33,6 +36,11 @@ const quest = {
       if (q.init) q.init()
     }
   },
+  find:function(alias) {
+    for (const q of this.data) {
+      if (q.alias.toLowerCase() === alias.toLowerCase()) return q
+    }
+  },
 }
 
 settings.modulesToEndTurn.push(quest)
@@ -42,7 +50,7 @@ io.modulesToInit.push(quest)
 class Quest {
   constructor(name, data) {
     this.name = name
-    this.key = name.replace(/ /g, '_').replace(/[^a-zA-Z0-9_]/g, '')
+    this.key = name.replace(/ /g, '_').replace(/[^a-zA-Z0-9_]/g, '').toLowerCase()
     for (const key in data) { this[key] = data[key] }
     this.stateName = 'quest_state_' + this.key
     this.progressName = 'quest_progress_' + this.key
@@ -57,7 +65,7 @@ class Quest {
     questmsg((s ? s : quest.stateNames[char[this.stateName]]) + ": {i:" + this.name + "}")
     const state = char[this.stateName]
     const progress = char[this.progressName]
-    if (state && this.stages[progress]) questmsg(this.stages[progress].text)
+    if (state && this.stages[progress] && this.stages[progress].text) questmsg(this.stages[progress].text)
   }
 
   start(char, restart) {

@@ -149,7 +149,7 @@ s += '</select></td></tr></table>'
 
 
 settings.startingDialogEnabled = settings.playMode !== 'dev'
-//settings.startingDialogEnabled = true
+settings.startingDialogEnabled = true
 settings.startingDialogTitle = "To start with..."
 settings.startingDialogWidth = 500
 settings.startingDialogHeight = 550
