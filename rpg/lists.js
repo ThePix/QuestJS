@@ -5,7 +5,7 @@ rpg.lists = {
   stones:["alabaster", "soapstone", "chlorite", "wonderstone", "limestone", "onyx", "obsidian", "marble", "moonstone", "coral", "amber"],
   metals:[
     "mithril",
-    "high gold".
+    "high gold",
     "royal gold",
     "gold",
     "crown gold",
@@ -24,7 +24,7 @@ rpg.lists = {
     "brass",
     "white copper",
     "copper",
-    "cast iron".
+    "cast iron",
     "wrought iron",
     "iron",
     "pewter",
